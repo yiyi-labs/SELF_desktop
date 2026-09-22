@@ -1,0 +1,15 @@
+{
+  "source": "HarmonyOS UiTest screenCapture + component bounds",
+  "bounds": {
+    "left": 2034,
+    "right": 2562,
+    "top": 872,
+    "bottom": 1292
+  },
+  "whiteBottleBodyMedian": 200.66666666666666,
+  "expectedRange": [
+    125,
+    235
+  ],
+  "pass": true
+}

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5.0)
 project(self_native)
 set(CMAKE_CXX_STANDARD 17)
-add_library(self_native SHARED napi.cpp RendererSession.cpp ImagePipeline.cpp GltfAssetLoader.cpp RegionSelection.cpp)
+add_library(self_native SHARED napi.cpp RendererSession.cpp ProductScene.cpp ImagePipeline.cpp GltfAssetLoader.cpp RegionSelection.cpp)
 target_compile_options(self_native PRIVATE -Wall -Wextra -Werror=return-type)
 target_link_libraries(self_native PUBLIC libace_napi.z.so libace_ndk.z.so libEGL.so libGLESv3.so libnative_window.so libnative_vsync.so libhilog_ndk.z.so libimage_source.so libpixelmap.so libimage_packer.so)

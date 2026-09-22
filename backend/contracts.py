@@ -1,5 +1,6 @@
 """Only proposals cross this boundary. Authorization and pixels remain on the phone."""
 from typing import Literal
+from product_catalog import allowed_refs, requests_product_effect
 from pydantic import BaseModel, ConfigDict, Field
 
 class StrictModel(BaseModel):
@@ -28,6 +29,7 @@ class Snapshot(StrictModel):
     viewRevision: int = Field(ge=0)
     view: dict[str, float] = Field(max_length=8)
     userText: str = Field(min_length=1, max_length=2000)
+    productContextIds: list[str] = Field(default_factory=list, max_length=3)
     regions: list[Region] = Field(max_length=32)
     layers: list[Layer] = Field(max_length=8)
     protectedRegionIds: list[str] = Field(max_length=32)
@@ -48,18 +50,22 @@ class Plan(StrictModel):
     decision: Literal["edit", "explain", "clarify", "support"]
     shortMessage: str = Field(min_length=1, max_length=400)
     operations: list[Operation] = Field(max_length=1)
-    explanationRefs: list[str] = Field(max_length=0, description="Must be []. No source evidence is registered. Region IDs, preset IDs and layer IDs are NOT evidence references.")
+    explanationRefs: list[str] = Field(max_length=3, description="Only productId from supplied productInformation. Information only, not evidence of a calibrated effect. Without productInformation use [].")
     question: str = Field(max_length=200, description="Must be empty for edit/explain/support. Only decision=clarify may contain a question; a clarify plan must have operations=[]. Authorization confirmation is handled by the app, not this field.")
 
 PRESETS = {"rose": {"color": [0.66, 0.12, 0.30]}, "terracotta": {"color": [0.65, 0.25, 0.18]}}
 LEVELS = {"none": 0.0, "light": 0.18, "medium": 0.32, "strong": 0.5}
 
 def validate_plan(plan: Plan, snapshot: Snapshot) -> Plan:
+    if plan.decision == 'edit' and (requests_product_effect(snapshot.userText,snapshot.productContextIds) or plan.explanationRefs):
+        # There are currently zero experimentally calibrated product profiles.
+        # Product facts/INCI cannot authorize a generic tint as a product result.
+        raise ValueError('product_effect_not_calibrated')
     if plan.decision != "edit" and plan.operations:
         raise ValueError("non-edit operation")
     if plan.decision == "edit" and len(plan.operations) != 1:
         raise ValueError("one operation required")
-    if plan.explanationRefs:  # No calibrated SKU/evidence is currently registered for model actions.
+    if set(plan.explanationRefs) - allowed_refs(snapshot.userText,snapshot.productContextIds):
         raise ValueError("unregistered evidence")
     if plan.decision != "clarify" and plan.question:
         raise ValueError("unexpected question")
@@ -68,6 +74,8 @@ def validate_plan(plan: Plan, snapshot: Snapshot) -> Plan:
     for op in plan.operations:
         if op.regionId not in regions:
             raise ValueError("unknown region")
+        if op.operation == 'set_digital_tint' and snapshot.annotatedRegionId and op.regionId != snapshot.annotatedRegionId:
+            raise ValueError('selected_region_mismatch')
         if op.productProfileId:
             raise ValueError("uncalibrated product")
         if op.operation == "set_digital_tint":

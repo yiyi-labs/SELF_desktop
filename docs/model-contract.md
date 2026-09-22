@@ -1,3 +1,5 @@
+> 2026-09-22 本轮更新：所有新的外观计划须经过模型；撤销/取消/恢复保留本地。平板模拟器真实 UI 云端编辑闭环已通过，证据见 [本轮验收](validation-overhaul.md)。`explanationRefs` 只可引用本次检索提供的最多3条大陆产品信息 ID；没有相关需求时检索为空，不默认展示前三项。可选 `productContextIds` 保留上一轮已核验的产品指代，换话题后不沿用旧推荐。前后端都拒绝产品请求/引用被转成通用染色，当前标定效果列表为空。下文的“引用必须空”“完整云端闭环未验证”和17项测试是历史状态；本轮后端离线测试为25项，历史失败保留。
+
 # DeepSeek 候选编辑协议 v1
 
 截至 2026-09-22 官方[模型表](https://api-docs.deepseek.com/quick_start/pricing/)将 `deepseek-flash` 对应 DeepSeek-V4.1-Flash，支持 Vision 与 Tool Calls；`deepseek-v4-pro` 没有 Vision。本项目默认使用前者，不从旧 alias 推断能力。官方[Vision 指南](https://api-docs.deepseek.com/guides/vision/)确认 Chat Completions 的 `image_url` data URL 输入。工具指南本轮复查超时，早先读取结果及生产请求结构仍需通过真实调用验证。

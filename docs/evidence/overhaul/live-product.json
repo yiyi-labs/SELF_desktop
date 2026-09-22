@@ -1,0 +1,42 @@
+{
+  "testedAt": "2026-09-22T12:38:15.236470+00:00",
+  "input": "original nonpersonal 32x32 color fixture",
+  "test": "mainland information does not become a calibrated edit",
+  "result": {
+    "schemaVersion": 1,
+    "requestId": "cn-product-1790080695",
+    "snapshotId": "cn-product-1790080695",
+    "assetId": "sample",
+    "assetVersion": "v1",
+    "textureVersion": "t1",
+    "sceneRevision": 2,
+    "regionVersion": 1,
+    "plan": {
+      "decision": "explain",
+      "shortMessage": "已核实资料仅有：水光小白瓶，大陆渠道页面标题记录为50ml，来源为京东自营旗舰店商品标题，采集于2026-09-22，属商品条目信息，非品牌配方认证，在售状态未核实。配方（INCI）、浓度、功效校准、配方版本、SPF等字段均为空，因此无法说明配方或浓度，也无证据支持任何真实上脸效果；我不会代为推断。若你愿意，可提供包装成分表以便逐项核对。按你的要求，本次不提出编辑。",
+      "operations": [],
+      "explanationRefs": [
+        "olay-cn-waterglow-50ml"
+      ],
+      "question": ""
+    },
+    "modelEvidence": {
+      "requestedModel": "deepseek-flash",
+      "returnedModel": "deepseek-flash",
+      "systemFingerprint": "aeb56401ca74e127821c4f9126dcb669",
+      "elapsedMs": 1297,
+      "usage": {
+        "prompt_tokens": 2111,
+        "completion_tokens": 229,
+        "total_tokens": 2340,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 2111
+      },
+      "providerResponseId": "a7a4fd9d-42d2-4708-86f1-8c5dccf5fc67"
+    }
+  },
+  "pass": true
+}

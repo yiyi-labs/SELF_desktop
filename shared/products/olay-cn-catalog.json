@@ -1,0 +1,245 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": "cn-channel-20260922",
+  "coverage": "partial",
+  "coverageNote": "中国大陆资料 · 8条渠道条目，非完整在售目录。品牌官网未提供可核实的完整SKU与配方数据；未核实实时库存和产品效果参数。",
+  "officialBrandSite": "https://www.olay.com.cn/",
+  "brandSiteAuthority": "https://www.pg.com.cn/brands/",
+  "records": [
+    {
+      "productId": "olay-cn-red-cream-gen6",
+      "brand": "OLAY",
+      "name": "第六代超红瓶面霜",
+      "region": "中国大陆渠道资料",
+      "market": "CN-mainland",
+      "formulaVersion": "完整配方及配方版本尚未核实",
+      "specification": "未核实净含量",
+      "usageSummary": "页面标题出现第六代；不能与第五代或油霜、水霜合并为同一配方。 使用方式请以所购包装为准。",
+      "source": "https://olay.jd.com/view_search-404604-26670202-99-1-24-1.html",
+      "retrievedAt": "2026-09-22",
+      "evidenceType": "京东自营旗舰店商品标题；非品牌配方认证",
+      "materialRights": "SELF原创矢量类别插图；未复制官网图片或商标图形，OLAY字样仅用于识别品牌",
+      "allowedViews": [
+        "channel-information"
+      ],
+      "calibrationProfile": "",
+      "illustration": "red-jar.svg",
+      "keywords": [
+        "超红瓶",
+        "红瓶",
+        "面霜"
+      ],
+      "recordKind": "listing",
+      "availability": "not-verified",
+      "inci": null,
+      "formulaRevision": null,
+      "physicalParameters": null,
+      "efficacyCalibration": null
+    },
+    {
+      "productId": "olay-cn-darkspot-gen4-80ml",
+      "brand": "OLAY",
+      "name": "第4代淡斑小白瓶",
+      "region": "中国大陆渠道资料",
+      "market": "CN-mainland",
+      "formulaVersion": "完整配方及配方版本尚未核实",
+      "specification": "80 ml（页面标题）",
+      "usageSummary": "页面标题标示第4代及80ml；完整成分、浓度和所购批次仍需核对。 使用方式请以所购包装为准。",
+      "source": "https://olay.jd.com/view_search-404604-26670202-99-1-24-1.html",
+      "retrievedAt": "2026-09-22",
+      "evidenceType": "京东自营旗舰店商品标题；非品牌配方认证",
+      "materialRights": "SELF原创矢量类别插图；未复制官网图片或商标图形，OLAY字样仅用于识别品牌",
+      "allowedViews": [
+        "channel-information"
+      ],
+      "calibrationProfile": "",
+      "illustration": "white-pump.svg",
+      "keywords": [
+        "淡斑",
+        "小白瓶",
+        "80ml"
+      ],
+      "recordKind": "listing",
+      "availability": "not-verified",
+      "inci": null,
+      "formulaRevision": null,
+      "physicalParameters": null,
+      "efficacyCalibration": null
+    },
+    {
+      "productId": "olay-cn-waterglow-50ml",
+      "brand": "OLAY",
+      "name": "水光小白瓶",
+      "region": "中国大陆渠道资料",
+      "market": "CN-mainland",
+      "formulaVersion": "完整配方及配方版本尚未核实",
+      "specification": "50 ml（页面标题）",
+      "usageSummary": "只记录页面标示的名称和容量，不从产品名称推导即时肤色变化。 使用方式请以所购包装为准。",
+      "source": "https://olay.jd.com/view_search-404604-26670202-99-1-24-1.html",
+      "retrievedAt": "2026-09-22",
+      "evidenceType": "京东自营旗舰店商品标题；非品牌配方认证",
+      "materialRights": "SELF原创矢量类别插图；未复制官网图片或商标图形，OLAY字样仅用于识别品牌",
+      "allowedViews": [
+        "channel-information"
+      ],
+      "calibrationProfile": "",
+      "illustration": "white-pump.svg",
+      "keywords": [
+        "水光",
+        "50ml"
+      ],
+      "recordKind": "listing",
+      "availability": "not-verified",
+      "inci": null,
+      "formulaRevision": null,
+      "physicalParameters": null,
+      "efficacyCalibration": null
+    },
+    {
+      "productId": "olay-cn-whitening-set",
+      "brand": "OLAY",
+      "name": "美白水乳套装",
+      "region": "中国大陆渠道资料",
+      "market": "CN-mainland",
+      "formulaVersion": "完整配方及配方版本尚未核实",
+      "specification": "未核实套装各单品净含量",
+      "usageSummary": "套装不是一个配方；页面导航另有第2代系列，不据此给套装推断版本。 使用方式请以所购包装为准。",
+      "source": "https://olay.jd.com/view_search-404604-26670202-99-1-24-1.html",
+      "retrievedAt": "2026-09-22",
+      "evidenceType": "京东自营旗舰店商品标题；非品牌配方认证",
+      "materialRights": "SELF原创矢量类别插图；未复制官网图片或商标图形，OLAY字样仅用于识别品牌",
+      "allowedViews": [
+        "channel-information"
+      ],
+      "calibrationProfile": "",
+      "illustration": "white-set.svg",
+      "keywords": [
+        "水乳",
+        "美白水乳"
+      ],
+      "recordKind": "listing",
+      "availability": "not-verified",
+      "inci": null,
+      "formulaRevision": null,
+      "physicalParameters": null,
+      "efficacyCalibration": null
+    },
+    {
+      "productId": "olay-cn-black-serum-series",
+      "brand": "OLAY",
+      "name": "淡纹黑管精华",
+      "region": "中国大陆渠道资料",
+      "market": "CN-mainland",
+      "formulaVersion": "完整配方及配方版本尚未核实",
+      "specification": "系列，未确认具体SKU",
+      "usageSummary": "导航所列系列；当前售卖规格和配方未确认。 使用方式请以所购包装为准。",
+      "source": "https://olay.jd.com/view_search-404604-26670202-99-1-24-1.html",
+      "retrievedAt": "2026-09-22",
+      "evidenceType": "京东自营旗舰店系列导航；非品牌配方认证",
+      "materialRights": "SELF原创矢量类别插图；未复制官网图片或商标图形，OLAY字样仅用于识别品牌",
+      "allowedViews": [
+        "channel-information"
+      ],
+      "calibrationProfile": "",
+      "illustration": "black-tube.svg",
+      "keywords": [
+        "黑管",
+        "精华"
+      ],
+      "recordKind": "series",
+      "availability": "not-verified",
+      "inci": null,
+      "formulaRevision": null,
+      "physicalParameters": null,
+      "efficacyCalibration": null
+    },
+    {
+      "productId": "olay-cn-black-cream-series",
+      "brand": "OLAY",
+      "name": "淡纹黑管面霜",
+      "region": "中国大陆渠道资料",
+      "market": "CN-mainland",
+      "formulaVersion": "完整配方及配方版本尚未核实",
+      "specification": "系列，未确认具体SKU",
+      "usageSummary": "导航所列系列；当前售卖规格和配方未确认。 使用方式请以所购包装为准。",
+      "source": "https://olay.jd.com/view_search-404604-26670202-99-1-24-1.html",
+      "retrievedAt": "2026-09-22",
+      "evidenceType": "京东自营旗舰店系列导航；非品牌配方认证",
+      "materialRights": "SELF原创矢量类别插图；未复制官网图片或商标图形，OLAY字样仅用于识别品牌",
+      "allowedViews": [
+        "channel-information"
+      ],
+      "calibrationProfile": "",
+      "illustration": "black-jar.svg",
+      "keywords": [
+        "黑管",
+        "面霜"
+      ],
+      "recordKind": "series",
+      "availability": "not-verified",
+      "inci": null,
+      "formulaRevision": null,
+      "physicalParameters": null,
+      "efficacyCalibration": null
+    },
+    {
+      "productId": "olay-cn-red-cream-trial",
+      "brand": "OLAY",
+      "name": "超红瓶油霜／水霜便携装",
+      "region": "中国大陆渠道资料",
+      "market": "CN-mainland",
+      "formulaVersion": "完整配方及配方版本尚未核实",
+      "specification": "多变体条目，未核实净含量",
+      "usageSummary": "商品标题包含多个变体，尚不能拆成已核实SKU。 使用方式请以所购包装为准。",
+      "source": "https://olay.jd.com/view_search-404604-26670202-99-1-24-1.html",
+      "retrievedAt": "2026-09-22",
+      "evidenceType": "京东自营旗舰店商品标题；非品牌配方认证",
+      "materialRights": "SELF原创矢量类别插图；未复制官网图片或商标图形，OLAY字样仅用于识别品牌",
+      "allowedViews": [
+        "channel-information"
+      ],
+      "calibrationProfile": "",
+      "illustration": "red-jar.svg",
+      "keywords": [
+        "油霜",
+        "水霜",
+        "便携"
+      ],
+      "recordKind": "listing",
+      "availability": "not-verified",
+      "inci": null,
+      "formulaRevision": null,
+      "physicalParameters": null,
+      "efficacyCalibration": null
+    },
+    {
+      "productId": "olay-cn-darkspot-ampoule",
+      "brand": "OLAY",
+      "name": "淡斑小白瓶次抛",
+      "region": "中国大陆渠道资料",
+      "market": "CN-mainland",
+      "formulaVersion": "完整配方及配方版本尚未核实",
+      "specification": "未核实每支净含量与支数",
+      "usageSummary": "页面标题所列次抛资料；不将普通瓶装与次抛的配方视为相同。 使用方式请以所购包装为准。",
+      "source": "https://olay.jd.com/view_search-404604-26670202-99-1-24-1.html",
+      "retrievedAt": "2026-09-22",
+      "evidenceType": "京东自营旗舰店商品标题；非品牌配方认证",
+      "materialRights": "SELF原创矢量类别插图；未复制官网图片或商标图形，OLAY字样仅用于识别品牌",
+      "allowedViews": [
+        "channel-information"
+      ],
+      "calibrationProfile": "",
+      "illustration": "white-ampoule.svg",
+      "keywords": [
+        "次抛",
+        "淡斑"
+      ],
+      "recordKind": "listing",
+      "availability": "not-verified",
+      "inci": null,
+      "formulaRevision": null,
+      "physicalParameters": null,
+      "efficacyCalibration": null
+    }
+  ]
+}

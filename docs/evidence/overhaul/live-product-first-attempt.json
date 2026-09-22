@@ -1,0 +1,7 @@
+{
+  "testedAt": "2026-09-22T12:35:16.845149+00:00",
+  "input": "original nonpersonal 32x32 color fixture",
+  "test": "mainland information does not become a calibrated edit",
+  "pass": false,
+  "error": "invalid_plan"
+}

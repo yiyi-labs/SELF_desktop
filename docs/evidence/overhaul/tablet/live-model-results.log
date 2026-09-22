@@ -1,0 +1,47 @@
+start ability successfully.
+
+OHOS_REPORT_SUM: 1
+OHOS_REPORT_STATUS: class=SELFNativeModelLive
+
+
+OHOS_REPORT_STATUS: class=SELFNativeModelLive
+OHOS_REPORT_STATUS: current=1
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=1
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=publicSampleImageModelConsentNativeCommitAndBill
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeModelLive
+OHOS_REPORT_STATUS: current=1
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=1
+OHOS_REPORT_STATUS: stack=Cannot get SourceMap info, dump raw stack:
+=====================Backtrace========================#00 pc 00007f02142b5dff [Unknown]
+#01 pc 00007f0210d1ecb8 [Unknown]
+#02 pc 00007f02106d337a [Unknown]
+#03 pc 00007f02104d9251 [Unknown]
+#04 pc 00007f02104d85e9 [Unknown]
+#05 pc 00007f0210595a30 [Unknown]
+#06 pc 00007f0210b59d42 [Unknown]
+#07 pc 00007f0210b58f2e [Unknown]
+#08 pc 00007f0210b06916 [Unknown]
+#09 pc 00007f02088001f1 [Unknown]
+OHOS_REPORT_STATUS: stream=Error in publicSampleImageModelConsentNativeCommitAndBill, Component not exist matching: {selfMatcher=[{attrName:visible; value:true; Pattern:0},{attrName:text; value:仅本次发送图像并理解; Pattern:0},]}
+OHOS_REPORT_STATUS: test=publicSampleImageModelConsentNativeCommitAndBill
+OHOS_REPORT_STATUS_CODE: -1
+OHOS_REPORT_STATUS: consuming=7491
+
+
+OHOS_REPORT_STATUS: class=SELFNativeModelLive
+OHOS_REPORT_STATUS: suiteconsuming=7491
+
+
+OHOS_REPORT_RESULT: stream=Tests run: 1, Failure: 0, Error: 1, Pass: 0, Ignore: 0
+OHOS_REPORT_CODE: 0
+OHOS_REPORT_STATUS: taskconsuming=7491
+
+TestFinished-ResultCode: 0
+TestFinished-ResultMsg: your test finished!!!
+user test finished.

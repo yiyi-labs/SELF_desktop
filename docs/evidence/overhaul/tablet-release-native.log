@@ -1,0 +1,128 @@
+D:\STUDY\College\mine\olay\scripts\check-native-pixels.py:84: DeprecationWarning: Image.Image.getdata is deprecated and will be removed in Pillow 14 (2027-10-15). Use get_flattened_data instead.
+  red=sum(r>g*1.5 and r>b*1.2 and r>40 for r,g,b in closed.getdata())
+{
+  "exif1": {
+    "dimensions": [
+      33,
+      49
+    ],
+    "cornerMaxError": 0,
+    "pass": true
+  },
+  "exif2": {
+    "dimensions": [
+      33,
+      49
+    ],
+    "cornerMaxError": 0,
+    "pass": true
+  },
+  "exif3": {
+    "dimensions": [
+      33,
+      49
+    ],
+    "cornerMaxError": 0,
+    "pass": true
+  },
+  "exif4": {
+    "dimensions": [
+      33,
+      49
+    ],
+    "cornerMaxError": 0,
+    "pass": true
+  },
+  "exif5": {
+    "dimensions": [
+      49,
+      33
+    ],
+    "cornerMaxError": 0,
+    "pass": true
+  },
+  "exif6": {
+    "dimensions": [
+      49,
+      33
+    ],
+    "cornerMaxError": 0,
+    "pass": true
+  },
+  "exif7": {
+    "dimensions": [
+      49,
+      33
+    ],
+    "cornerMaxError": 0,
+    "pass": true
+  },
+  "exif8": {
+    "dimensions": [
+      49,
+      33
+    ],
+    "cornerMaxError": 0,
+    "pass": true
+  },
+  "oddWidthPNGExact": true,
+  "editChangedBounds": [
+    329,
+    444,
+    419,
+    471
+  ],
+  "repeatAbsoluteExact": true,
+  "rotationChanged": true,
+  "protectedWithoutGrantExactBaseline": true,
+  "singleGrantChangesPixels": true,
+  "laterUngrantOperationCannotChangeProtection": true,
+  "cleanSnapshotMatchesEffectiveExport": true,
+  "annotationSeparateFromClean": true,
+  "invalidGLBLeavesEffectiveImage": true,
+  "actualSelectionTexels": 68637,
+  "actualPhotoSelectionTexels": 171,
+  "photoCenteredRectangle": {
+    "bounds": [
+      7,
+      20,
+      25,
+      28
+    ],
+    "complete": true
+  },
+  "v2ProtectedExact": true,
+  "v2AbsoluteRepeatExact": true,
+  "v2Changed": true,
+  "v2DiffersFromLegacy": true,
+  "legacyMultilayerCPUContract": {
+    "samples": 16,
+    "maxChannelError": 0,
+    "pass": true
+  },
+  "faceUnchangedAfterProductScenes": true,
+  "product-red-jar": {
+    "real3DFramesDiffer": true,
+    "openAndRotate": true
+  },
+  "product-black-jar": {
+    "real3DFramesDiffer": true,
+    "openAndRotate": true
+  },
+  "product-white-pump": {
+    "real3DFramesDiffer": true,
+    "openAndRotate": true
+  },
+  "product-black-tube": {
+    "real3DFramesDiffer": true,
+    "openAndRotate": true
+  },
+  "product-white-set": {
+    "real3DFramesDiffer": true,
+    "openAndRotate": true
+  },
+  "product-white-ampoule": {
+    "real3DFramesDiffer": true,
+    "openAndRotate": true
+  }
+}

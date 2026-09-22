@@ -9,6 +9,7 @@ export interface EditOperation {
   plannerSource?: string;
   snapshotId?: string;
   protectionException?: string;
+  compositingVersion?: string;
 }
 export interface RegionRecord {
   regionId: string;

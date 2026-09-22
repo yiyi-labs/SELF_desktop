@@ -12,6 +12,9 @@ export class PlannerService {
     if(text==='颜色淡一点'||text==='淡一点')return {action:'lighter',text:'把当前颜色调淡，其他地方不动'};
     if(text==='换一种颜色')return {action:'changeColor',text:'换一个通用数字颜色'};
     if(text==='取消')return {action:'cancel',text:'已取消候选建议'};
+    if(text==='不想要'||text==='我不想要'||text==='算了'||text==='不要了')return {action:'cancel',text:'已取消等待与候选；如要去掉已生效的效果，可以点撤销。'};
+    if(text==='重做')return {action:'redo',text:''};
+    if(text==='恢复原图'||text==='回到原始')return {action:'reset',text:''};
     if(text==='撤销')return {action:'undo',text:''};
     if(text==='这次保留这里'||text==='这里别动')return {action:'protect',text:'只在本次保护圈选范围'};
     if(text==='以后保留这里')return {action:'preference',text:'明确保存这处范围的长期偏好'};

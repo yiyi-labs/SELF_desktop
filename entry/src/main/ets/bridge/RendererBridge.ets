@@ -3,6 +3,7 @@ import { SceneView } from '../domain/EditPlan';
 export interface MessagePayload {
   view?: SceneView;
   motion?: boolean;
+  animate?:boolean;
   palette?: string;
   transferId?: string;
   kind?: string;
@@ -20,6 +21,7 @@ export interface MessagePayload {
   webgl2?: boolean;
 }
 export interface RenderOperation {
+  compositingVersion?:string;
   protectionException?: string;
   operationId: string;
   regionId: string;

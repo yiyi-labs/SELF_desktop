@@ -9,6 +9,8 @@ interface NativeEvent {type:string;message?:string;}
 interface CaptureSplit {split:number;}
 interface ProbeView {yaw:number;pitch:number;panX:number;}
 interface BackendHealth {modelConfigured:boolean;}
+interface ProbeImageSize {width:number;height:number;}
+interface ProductStats {ready:boolean;lidProgress:number;animationFrames:number;}
 @Entry
 @Component
 struct NativeEsProbe {
@@ -20,6 +22,8 @@ struct NativeEsProbe {
  private context:common.UIAbilityContext=this.getUIContext().getHostContext() as common.UIAbilityContext;
  private bound:boolean=false;
  private async run():Promise<void>{this.probeRunning=true;try{
+  const feather=await native.request(this.sessionKey,JSON.stringify({type:'FEATHER_PROBE'}));console.info('SELF_FEATHER_PROBE '+feather.json);
+  const capability=await native.request(this.sessionKey,JSON.stringify({type:'RECON_SUPPORT'}));console.info('SELF_RECON_SUPPORT '+capability.json);
   const probe=await native.request(this.sessionKey,JSON.stringify({type:'PROBE'}));this.save('native-probe.png',probe.bytes);console.info('SELF_ES_PROBE '+probe.json);
   for(let i=1;i<=8;i++){const fixture=await this.context.resourceManager.getRawFileContent('native-fixtures/orientation-'+i+'.jpg');const normalized=await native.request(this.sessionKey,JSON.stringify({type:'NORMALIZE'}),fixture.buffer as ArrayBuffer);this.save('orientation-'+i+'.png',normalized.bytes);console.info('SELF_EXIF '+i+' '+normalized.json);}
   const odd=await this.context.resourceManager.getRawFileContent('native-fixtures/odd-stride.png');const normalizedOdd=await native.request(this.sessionKey,JSON.stringify({type:'NORMALIZE'}),odd.buffer as ArrayBuffer);this.save('odd-stride.png',normalizedOdd.bytes);
@@ -45,18 +49,58 @@ struct NativeEsProbe {
   await native.request(this.sessionKey,JSON.stringify({type:'EDIT',operations,anchorOperations:[],protectionId:'lip',protectionRuleId:'probe-rule'}));
   const later=await native.request(this.sessionKey,JSON.stringify({type:'EXPORT',width:768,height:1024}));this.save('protected-later.png',later.bytes);
   await native.request(this.sessionKey,JSON.stringify({type:'EDIT',operations:[],anchorOperations:[],protectionId:''}));
+  const modern:RenderOperation[]=[{operationId:'modern',regionId:'lip',color:[.66,.12,.30],absoluteStrength:.32,compositingVersion:'perceptual-v2'}];
+  const modernResult=await native.request(this.sessionKey,JSON.stringify({type:'EDIT',operations:modern,anchorOperations:[],protectionId:'protectionTest',animate:true}));console.info('SELF_V2_CHECK '+modernResult.json);
+  await new Promise<void>((resolve:()=>void)=>{setTimeout(resolve,1200);});
+  this.save('v2-edit.png',(await native.request(this.sessionKey,JSON.stringify({type:'EXPORT',width:768,height:1024}))).bytes);
+  await native.request(this.sessionKey,JSON.stringify({type:'EDIT',operations:modern,anchorOperations:[],protectionId:'protectionTest'}));
+  this.save('v2-repeat.png',(await native.request(this.sessionKey,JSON.stringify({type:'EXPORT',width:768,height:1024}))).bytes);
+  await native.request(this.sessionKey,JSON.stringify({type:'EDIT',operations:modern,anchorOperations:[],protectionId:'lip'}));
+  this.save('v2-blocked.png',(await native.request(this.sessionKey,JSON.stringify({type:'EXPORT',width:768,height:1024}))).bytes);
+  await native.request(this.sessionKey,JSON.stringify({type:'EDIT',operations:[],anchorOperations:[],protectionId:''}));
   await native.request(this.sessionKey,JSON.stringify({type:'VIEW',yaw:.65}));const side=await native.request(this.sessionKey,JSON.stringify({type:'EXPORT',width:768,height:1024}));this.save('native-side.png',side.bytes);await native.request(this.sessionKey,JSON.stringify({type:'VIEW',yaw:0}));
   let malformedRejected=false;try{await native.request(this.sessionKey,JSON.stringify({type:'LOAD',kind:'glb'}),new Uint8Array([0,1,2,3]).buffer as ArrayBuffer);}catch(e){malformedRejected=true;}
   if(!malformedRejected)throw new Error('Malformed GLB accepted');const afterReject=await native.request(this.sessionKey,JSON.stringify({type:'EXPORT',width:768,height:1024}));this.save('after-invalid-glb.png',afterReject.bytes);
-  await native.request(this.sessionKey,JSON.stringify({type:'LOAD',kind:'photo'}),odd.buffer as ArrayBuffer);
+  const photoLoaded=await native.request(this.sessionKey,JSON.stringify({type:'LOAD',kind:'photo'}),odd.buffer as ArrayBuffer);
+  this.save('legacy-photo-base.png',(await native.request(this.sessionKey,JSON.stringify({type:'EXPORT',width:768,height:1024}))).bytes);
+  const photoSize=JSON.parse(photoLoaded.json) as ProbeImageSize;
+  const fullMask=new Uint8Array(photoSize.width*photoSize.height);fullMask.fill(255);
+  await native.request(this.sessionKey,JSON.stringify({type:'MASK',id:'legacy-full'}),fullMask.buffer as ArrayBuffer);
+  const legacyLayers:RenderOperation[]=[{operationId:'legacy-first',regionId:'legacy-full',color:[.66,.12,.30],absoluteStrength:.5},{operationId:'legacy-second',regionId:'legacy-full',color:[.65,.25,.18],absoluteStrength:.5}];
+  await native.request(this.sessionKey,JSON.stringify({type:'EDIT',operations:legacyLayers,anchorOperations:[],protectionId:''}));
+  this.save('legacy-photo-layers.png',(await native.request(this.sessionKey,JSON.stringify({type:'EXPORT',width:768,height:1024}))).bytes);
+  await native.request(this.sessionKey,JSON.stringify({type:'EDIT',operations:[],anchorOperations:[],protectionId:''}));
   const photoSelection=await native.request(this.sessionKey,JSON.stringify({type:'SELECT',points:[[.42,.42],[.58,.42],[.58,.58],[.42,.58]]}));
   const photoPixels=new Uint8Array(photoSelection.bytes).filter((v:number)=>v>0).length;if(photoPixels===0)throw new Error('Photo lasso is empty');this.save('photo-selection.mask',photoSelection.bytes);
   await native.request(this.sessionKey,JSON.stringify({type:'VIEW',yaw:.6,pitch:.3,panX:.4}));const actualView=await native.request(this.sessionKey,JSON.stringify({type:'GET_VIEW'}));const view=JSON.parse(actualView.json) as ProbeView;if(view.yaw!==0||view.pitch!==0||Math.abs(view.panX-.4)>.00001)throw new Error('Photo view is not flat');
   const photoPNG=await native.request(this.sessionKey,JSON.stringify({type:'EXPORT',width:768,height:1024}));this.save('native-photo.png',photoPNG.bytes);console.info('SELF_ES_PHOTO '+JSON.stringify({selectedPixels:photoPixels,view,malformedRejected}));
   await native.request(this.sessionKey,JSON.stringify({type:'LOAD',kind:'glb'}),glb.buffer as ArrayBuffer);await native.request(this.sessionKey,JSON.stringify({type:'VIEW'}));
+  await this.productProbe();
   const stats=await native.request(this.sessionKey,JSON.stringify({type:'STATS'}));console.info('SELF_ES_STATS '+stats.json);console.info('SELF_ES_PROBE_FINISHED');
   this.message='原生 GLB 已加载 · 示例资产';await this.networkProbe(odd.buffer as ArrayBuffer);
  }catch(e){this.message=String(e);console.error('SELF_ES_FAIL '+String(e));}finally{this.probeRunning=false;}}
+ private async productProbe():Promise<void>{
+  for(const style of ['red-jar','black-jar','white-pump','black-tube','white-set','white-ampoule']){
+   for(const lid of [false,true]){const bytes=await this.context.resourceManager.getRawFileContent('products/3d/'+style+(lid?'-lid.glb':'-body.glb'));await native.request(this.sessionKey,JSON.stringify({type:'PRODUCT_LOAD',lid}),bytes.buffer as ArrayBuffer);}
+   this.save('product-'+style+'-closed.png',(await native.request(this.sessionKey,JSON.stringify({type:'EXPORT',width:400,height:400}))).bytes);
+   await native.request(this.sessionKey,JSON.stringify({type:'PRODUCT_LID',open:true,motion:true,direction:style==='black-tube'?-1:1}));
+   await new Promise<void>((resolve:()=>void)=>{setTimeout(resolve,300);});
+   this.save('product-'+style+'-moving.png',(await native.request(this.sessionKey,JSON.stringify({type:'EXPORT',width:400,height:400}))).bytes);
+   await new Promise<void>((resolve:()=>void)=>{setTimeout(resolve,750);});
+   this.save('product-'+style+'-open.png',(await native.request(this.sessionKey,JSON.stringify({type:'EXPORT',width:400,height:400}))).bytes);
+   const stats=JSON.parse((await native.request(this.sessionKey,JSON.stringify({type:'PRODUCT_STATS'}))).json) as ProductStats;
+   if(!stats.ready||stats.lidProgress!==1||stats.animationFrames===0)throw new Error('Product animation did not finish');
+   await native.request(this.sessionKey,JSON.stringify({type:'PRODUCT_VIEW',yaw:.6,pitch:-.22}));
+   this.save('product-'+style+'-side.png',(await native.request(this.sessionKey,JSON.stringify({type:'EXPORT',width:400,height:400}))).bytes);
+   await native.request(this.sessionKey,JSON.stringify({type:'PRODUCT_LID',open:false,motion:false}));
+   const stopped=JSON.parse((await native.request(this.sessionKey,JSON.stringify({type:'PRODUCT_STATS'}))).json) as ProductStats;
+   if(stopped.lidProgress!==0)throw new Error('Product reduce-motion failed');
+   console.info('SELF_PRODUCT_PROBE '+JSON.stringify({style,stats,reducedMotionClosed:true}));
+  }
+  let editRejected=false;try{await native.request(this.sessionKey,JSON.stringify({type:'EDIT',operations:[]}));}catch(e){editRejected=true;}if(!editRejected)throw new Error('Product accepted face edit');
+  await native.request(this.sessionKey,JSON.stringify({type:'PRODUCT_END'}));
+  this.save('face-after-products.png',(await native.request(this.sessionKey,JSON.stringify({type:'EXPORT',width:768,height:1024}))).bytes);
+ }
  private async networkProbe(fixture:ArrayBuffer):Promise<void>{
   const request=http.createHttp();
   try{const response=await request.request('http://127.0.0.1:8787/health',{expectDataType:http.HttpDataType.STRING,connectTimeout:3000,readTimeout:3000,usingCache:false});

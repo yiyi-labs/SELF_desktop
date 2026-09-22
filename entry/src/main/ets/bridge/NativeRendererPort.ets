@@ -2,6 +2,7 @@ import native, { NativeResult } from 'libself_native.so';
 import { Envelope, MessagePayload } from './RendererBridge';
 import { SceneView } from '../domain/EditPlan';
 interface NativeEvent {type:string;message?:string;generation?:number;}
+interface ReconstructionStatus {message:string;}
 interface Dimensions {width:number;height:number;}
 interface CaptureInfo {split:number;width:number;height:number;view:SceneView;}
 export interface NativeCapture {images:ArrayBuffer[];view:SceneView;width:number;height:number;}
@@ -10,13 +11,15 @@ interface NativeCommand {
  yaw?:number;pitch?:number;distance?:number;panX?:number;panY?:number;points?:number[][];
  operations?:Object[];anchorOperations?:Object[];protectionId?:string;original?:boolean;
  protectionRuleId?:string;
- motion?:boolean;palette?:string;
+ motion?:boolean;palette?:string;animate?:boolean;
 }
 /** Single production renderer. Ordered commands copy bytes before crossing to the GL thread. */
 export class NativeRendererPort {
  sessionId:string='native-'+Date.now();assetId:string='sample-lee';assetVersion:string='lee-r186-self2';revision:number=0;ready:boolean=false;
  onMessage:(message:Envelope)=>void=()=>{};onBytes:(kind:string,bytes:ArrayBuffer)=>void=()=>{};
  onStroke:(points:number[][])=>void=()=>{};
+ onSelectionAnchor:(x:number,y:number,halfWidth:number)=>void=()=>{};onToolChanged:(tool:string)=>void=()=>{};
+ private penStroke:boolean=false;
  private queue:Promise<void>=Promise.resolve();private bound:boolean=false;private epoch:number=0;
  private view:SceneView={yaw:0,pitch:0,distance:16,panX:0,panY:0};private tool:string='NAVIGATE';private stroke:number[][]=[];
  private previousX:number=0;private previousY:number=0;private pinch:number=0;
@@ -44,7 +47,7 @@ export class NativeRendererPort {
  send(type:string,payload:MessagePayload,requestId:string=''):void{
   if(!this.ready)throw new Error('原生镜面尚未就绪');
   if(type==='INIT'){this.epoch++;this.cancelStroke();this.emit('INITIALIZED',{});return;}
-  if(type==='RENDER_AUTHORIZED_PLAN'){const rev=this.revision;this.enqueue({type:'EDIT',operations:payload.operations||[],anchorOperations:payload.anchorOperations||[],protectionId:payload.protectionId||'',protectionRuleId:payload.protectionRuleId||''},undefined,()=>this.emit('RENDER_SUCCEEDED',{},requestId,rev));return;}
+  if(type==='RENDER_AUTHORIZED_PLAN'){const rev=this.revision;this.enqueue({type:'EDIT',operations:payload.operations||[],anchorOperations:payload.anchorOperations||[],protectionId:payload.protectionId||'',protectionRuleId:payload.protectionRuleId||'',animate:payload.animate||false},undefined,()=>this.emit('RENDER_SUCCEEDED',{},requestId,rev));return;}
   if(type==='VIEW_SET'&&payload.view){this.view=payload.view;this.enqueue({type:'VIEW',yaw:this.view.yaw,pitch:this.view.pitch,distance:this.view.distance,panX:this.view.panX,panY:this.view.panY},undefined,()=>this.emit('VIEW_CHANGED',{view:this.view}));return;}
   if(type==='SET_TOOL'){this.cancelStroke();this.tool=payload.tool||'NAVIGATE';this.enqueue({type:'TOOL',tool:this.tool},undefined);return;}
   if(type==='VIEW_ORBIT'){this.enqueue({type:'ORBIT'},undefined);return;}
@@ -57,10 +60,12 @@ export class NativeRendererPort {
  private cancelStroke():void{this.stroke=[];this.pinch=0;this.onStroke([]);}
  touch(event:TouchEvent,width:number,height:number):void{
   if(!this.ready||this.tool==='DETAIL'||width<=0||height<=0)return;
-  if(event.type===TouchType.Cancel){this.cancelStroke();return;}
+  if(event.type===TouchType.Cancel){this.cancelStroke();this.penStroke=false;return;}
+  if(event.type===TouchType.Down&&event.sourceTool===SourceTool.Pen){this.penStroke=true;this.send('SET_TOOL',{tool:'LASSO'});this.onToolChanged('LASSO');}
   const points=event.touches;
+  if(this.penStroke&&event.sourceTool!==SourceTool.Pen)return;
   if(points.length>=2){this.stroke=[];this.onStroke([]);const distance=Math.hypot(points[0].x-points[1].x,points[0].y-points[1].y);if(this.pinch>0&&this.tool==='NAVIGATE'){this.view.distance=Math.max(10,Math.min(25,this.view.distance*this.pinch/distance));this.send('VIEW_SET',{view:this.view});}this.pinch=distance;return;}
-  if(event.type===TouchType.Up){if(this.stroke.length>=3&&this.tool==='LASSO'){const polygon=this.stroke.slice();this.enqueue({type:'SELECT',points:polygon},undefined,(r:NativeResult)=>this.onBytes('selection',r.bytes));}this.cancelStroke();return;}
+  if(event.type===TouchType.Up){if(this.stroke.length>=3&&this.tool==='LASSO'){const polygon=this.stroke.slice();const xs=polygon.map((p:number[])=>p[0]),ys=polygon.map((p:number[])=>p[1]);this.onSelectionAnchor((Math.min(...xs)+Math.max(...xs))/2,(Math.min(...ys)+Math.max(...ys))/2,(Math.max(...xs)-Math.min(...xs))/2);this.enqueue({type:'SELECT',points:polygon},undefined,(r:NativeResult)=>this.onBytes('selection',r.bytes));}this.cancelStroke();this.penStroke=false;return;}
   if(points.length!==1)return;const p=points[0];
   if(event.type===TouchType.Down){this.pinch=0;this.previousX=p.x;this.previousY=p.y;if(this.tool==='LASSO')this.stroke=[[p.x/width,p.y/height]];return;}
   if(this.pinch>0)return; // Remaining finger after a pinch waits for a new stroke.
@@ -69,6 +74,7 @@ export class NativeRendererPort {
    this.previousX=p.x;this.previousY=p.y;
   }
  }
+ async reconstructionSupport():Promise<string>{await this.queue;const r=await native.request(this.sessionId,JSON.stringify({type:'RECON_SUPPORT'}));console.info('SELF_RECON_SUPPORT '+r.json);return (JSON.parse(r.json) as ReconstructionStatus).message;}
  async snapshot(width:number=768,height:number=1024):Promise<ArrayBuffer>{await this.queue;const result=await native.request(this.sessionId,JSON.stringify({type:'EXPORT',width,height}));return result.bytes;}
  async currentView():Promise<SceneView>{await this.queue;const result=await native.request(this.sessionId,JSON.stringify({type:'GET_VIEW'}));this.view=JSON.parse(result.json) as SceneView;this.emit('VIEW_CHANGED',{view:this.view});return this.view;}
  async capture(regionId:string):Promise<NativeCapture>{await this.queue;const result=await native.request(this.sessionId,JSON.stringify({type:'SNAPSHOT',regionId,width:768,height:1024}));const info=JSON.parse(result.json) as CaptureInfo;const images:ArrayBuffer[]=[result.bytes.slice(0,info.split)];if(result.bytes.byteLength>info.split)images.push(result.bytes.slice(info.split));return {images,view:info.view,width:info.width,height:info.height};}

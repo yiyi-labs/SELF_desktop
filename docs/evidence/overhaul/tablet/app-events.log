@@ -1,0 +1,2 @@
+09-22 20:27:28.840 18363 18363 I A03d00/JSAPP: SELF_LASSO_MODEL_GATE {"realTouch":true,"cloudConsent":true,"declinedWithoutCandidate":true}
+09-22 20:28:13.698 18769 18769 I A03d00/JSAPP: SELF_LIVE_MODEL_COMMIT {"sourceKind":"MESH","model":"DeepSeek · deepseek-flash","preset":"rose","strength":0.18,"renderCommitted":true,"billCount":1,"compositingVersion":"perceptual-v2"}

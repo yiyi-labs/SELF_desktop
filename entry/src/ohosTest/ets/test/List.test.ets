@@ -10,16 +10,45 @@ import { abilityDelegatorRegistry } from '@kit.TestKit';
 import { Driver, ON, PointerMatrix } from '@ohos.UiTest';
 import { common } from '@kit.AbilityKit';
 import stressSuite from './Stress.test';
+import liveModelSuite from './LiveModel.test';
+import experienceSuite from './Experience.test';
+import productSuite from './Product.test';
 import { fileIo as fs } from '@kit.CoreFileKit';
-import { SavedWorkspace } from '../../../main/ets/domain/EditPlan';
+import { CandidatePlan, SavedWorkspace } from '../../../main/ets/domain/EditPlan';
+// Contract fixture only. UI paths cannot call this helper and real model tests use PlannerClient.
+class ModelFixtureSession extends SessionStore {
+  propose(kind:string,regionId:string,presetId:string='rose',strength:number=.25,replacesLast:boolean=false):CandidatePlan {
+    const p=super.propose(kind,regionId,presetId,strength,replacesLast);p.plannerSource='DeepSeek · test-fixture';p.snapshotId='test-snapshot';return p;
+  }
+}
+async function openWorks(driver:Driver):Promise<void>{
+  const direct=await driver.findComponent(ON.text('作品'));
+  if(direct){await direct.click();return;}
+  await (await driver.findComponent(ON.text('工具'))).click();await driver.delayMs(300);
+  await (await (await driver.findComponent(ON.type('Scroll'))).scrollSearch(ON.text('作品与记录'))).click();
+}
+async function exportFrame(driver:Driver):Promise<void>{
+  const direct=await driver.findComponent(ON.text('导出'));
+  if(direct){await direct.click();return;}
+  await (await driver.findComponent(ON.text('工具'))).click();await (await driver.waitForComponent(ON.text('保存当前画面 PNG'),5000)).click();
+}
 function session():SessionStore{
-  const s=new SessionStore();
+  const s=new ModelFixtureSession();
   s.regions.push({regionId:'lip',assetId:s.assetId,assetVersion:s.assetVersion,width:1024,height:1024,semantic:'confirmed-lips',fileName:'lip.mask'});
   return s;
 }
 export default function testsuite(){
-  stressSuite();
+  stressSuite();liveModelSuite();experienceSuite();productSuite();
   describe('SELFNativePolicy',()=>{
+    it('localNewEffectCannotBypassModelButRestoreRemainsLocal',0,()=>{
+      const s=new SessionStore();s.regions=session().regions;const plan=s.propose('lipTint','lip');let rejected=false;
+      try{s.authorize(plan.planId);}catch(e){rejected=true;}expect(rejected).assertTrue();expect(s.pending===undefined).assertTrue();expect(s.operations.length).assertEqual(0);
+      s.reset();expect(s.succeeded(s.pendingRequest,s.revision)).assertTrue();expect(s.operations.length).assertEqual(0);
+    });
+    it('mainlandCatalogHasNoFabricatedCalibration',0,()=>{
+      const products=ProductRepository.records();expect(products.length).assertEqual(8);
+      expect(products.every((p)=>p.region==='中国大陆渠道资料'&&p.calibrationProfile==='')).assertTrue();
+    });
     it('oneOperationExceptionDoesNotUnlockPolicy',0,()=>{
       const s=session();s.protect('lip',false,true);const key=s.protectionKey();
       s.authorize(s.propose('lipTint','lip').planId,true);s.succeeded(s.pendingRequest,s.revision);
@@ -89,29 +118,37 @@ export default function testsuite(){
       const context=(await app.getCurrentTopAbility()).context;const assets=new AssetStore(context),works=new WorkspaceStore(context,assets);const before=works.list().map((w:WorkItem)=>w.id);
       const exportPath=context.filesDir+'/self-export.png';const priorExport=fs.accessSync(exportPath)?assets.readFile(exportPath):undefined;let createdId='';
       try{
-        await (await driver.findComponent(ON.text('工具'))).click();await (await driver.waitForComponent(ON.text('建议轻唇色'),5000)).click();await (await driver.waitForComponent(ON.text('试一下'),5000)).click();await driver.delayMs(1300);
+        // Saving the unmodified view requires no model call.
         const r=await (await driver.findComponent(ON.id('self-native-mirror'))).getBounds();await driver.swipe(Math.round(r.left+(r.right-r.left)*.44),Math.round((r.top+r.bottom)*.5),Math.round(r.left+(r.right-r.left)*.54),Math.round((r.top+r.bottom)*.5),500);await driver.delayMs(500);
-        await (await driver.findComponent(ON.text('工具'))).click();await driver.delayMs(300);await (await (await driver.findComponent(ON.type('Scroll'))).scrollSearch(ON.text('作品与记录'))).click();await driver.delayMs(300);
+        await openWorks(driver);await driver.delayMs(300);
         await (await driver.findComponent(ON.text('保存当前作品'))).click();await driver.delayMs(700);
         const created=works.list().filter((w:WorkItem)=>!before.includes(w.id));expect(created.length).assertEqual(1);createdId=created[0].id;
-        const saved=JSON.parse(fs.readTextSync(context.filesDir+'/works/'+createdId+'/workspace.json')) as SavedWorkspace;expect(saved.snapshots[saved.cursor].operations.length>0).assertTrue();expect(Math.abs(saved.view?.yaw||0)>.01).assertTrue();
-        await (await driver.findComponent(ON.id('open-'+createdId))).click();await driver.delayMs(1500);await (await driver.waitForComponent(ON.text('导出 PNG'),5000)).click();await driver.delayMs(1500);
+        const saved=JSON.parse(fs.readTextSync(context.filesDir+'/works/'+createdId+'/workspace.json')) as SavedWorkspace;expect(saved.snapshots[saved.cursor].operations.length).assertEqual(0);expect(Math.abs(saved.view?.yaw||0)>.01).assertTrue();
+        await (await driver.findComponent(ON.id('open-'+createdId))).click();await driver.delayMs(1500);await exportFrame(driver);await driver.delayMs(1500);
         const png=assets.readFile(exportPath);expect(png.length>10000).assertTrue();expect(png[0]).assertEqual(137);expect(png[1]).assertEqual(80);
-        await (await driver.findComponent(ON.text('工具'))).click();await driver.delayMs(300);await (await (await driver.findComponent(ON.type('Scroll'))).scrollSearch(ON.text('作品与记录'))).click();await driver.delayMs(300);await (await driver.findComponent(ON.id('delete-'+createdId))).click();await driver.delayMs(500);
+        await openWorks(driver);await driver.delayMs(300);await (await driver.findComponent(ON.id('delete-'+createdId))).click();await driver.delayMs(500);
         expect(works.list().some((w:WorkItem)=>w.id===createdId)).assertFalse();expect(before.every((id:string)=>works.list().some((w:WorkItem)=>w.id===id))).assertTrue();console.info('SELF_UI_WORKFLOW '+JSON.stringify({save:true,reopen:true,deleteOnlyCreated:true,exportPNGBytes:png.length,savedYaw:saved.view?.yaw}));await driver.pressBack();
       }finally{if(createdId&&!before.includes(createdId))works.delete(createdId);if(priorExport)assets.writeAtomic(exportPath,priorExport.buffer as ArrayBuffer);else if(fs.accessSync(exportPath))fs.unlinkSync(exportPath);}
     });
-    it('realTouchLassoAndLocalConsent',0,async()=>{
+    it('realTouchLassoThenModelConsentDeclineKeepsOriginal',0,async()=>{
       const delegator=abilityDelegatorRegistry.getAbilityDelegator();await delegator.startAbility({bundleName:'com.self.mirror',abilityName:'EntryAbility'});
       const driver=Driver.create();await driver.delayMs(2500);
-      const lasso=await driver.findComponent(ON.text('圈选'));await lasso.click();
+      const lasso=await driver.findComponent(ON.id('lasso-tool'));await lasso.click();
       const surface=await driver.findComponent(ON.id('self-native-mirror'));const r=await surface.getBounds();
       const matrix=PointerMatrix.create(1,33);for(let i=0;i<33;i++){const angle=i/32*Math.PI*2;matrix.setPoint(0,i,{x:Math.round(r.left+(r.right-r.left)*(.5+.13*Math.cos(angle))),y:Math.round(r.top+(r.bottom-r.top)*(.43+.08*Math.sin(angle)))});}
       expect(await driver.injectMultiPointerAction(matrix,500)).assertTrue();await driver.delayMs(1200);
-      await driver.assertComponentExist(ON.text('圈选已完成。可在工具中选择局部试色或“这里别动”。'));
-      await (await driver.findComponent(ON.text('结束'))).click();await (await driver.findComponent(ON.text('工具'))).click();await driver.delayMs(600);await (await driver.waitForComponent(ON.text('局部试色'),5000)).click();
-      await driver.assertComponentExist(ON.text('试一下'));await (await driver.findComponent(ON.text('试一下'))).click();await driver.delayMs(1700);
-      await driver.assertComponentExist(ON.text('已应用通用数字表达 · 非产品实测'));await (await driver.findComponent(ON.text('撤销'))).click();await driver.delayMs(1200);
+      await driver.assertComponentExist(ON.text('你想如何看待这里？可以聊聊、试一点颜色，也可以保留。'));
+      const popup=await (await driver.findComponent(ON.id('conversation-card'))).getBounds();
+      const mirror=await (await driver.findComponent(ON.id('self-native-mirror'))).getBounds();
+      expect(popup.left>=mirror.left&&popup.right<=mirror.right&&popup.top>=mirror.top&&popup.bottom<=mirror.bottom).assertTrue();
+      await driver.screenCapture((await delegator.getCurrentTopAbility()).context.filesDir+'/lasso-popup.png');
+      await (await driver.findComponent(ON.text('想试一点变化'))).click();
+      await driver.waitForComponent(ON.text('仅本次发送图像并理解'),5000);
+      await driver.assertComponentExist(ON.text('仅本次发送图像并理解'));
+      expect(!!(await driver.findComponent(ON.id('apply-candidate')))).assertFalse();
+      await (await driver.findComponent(ON.text('暂不发送，保留现在'))).click();await driver.delayMs(700);
+      expect(!!(await driver.findComponent(ON.id('apply-candidate')))).assertFalse();
+      console.info('SELF_LASSO_MODEL_GATE '+JSON.stringify({realTouch:true,cloudConsent:true,declinedWithoutCandidate:true}));
     });
   });
 }

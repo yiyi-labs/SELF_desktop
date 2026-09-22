@@ -1,0 +1,59 @@
+start ability successfully.
+
+OHOS_REPORT_SUM: 2
+OHOS_REPORT_STATUS: class=SELFNativeExperience
+
+
+OHOS_REPORT_STATUS: class=SELFNativeExperience
+OHOS_REPORT_STATUS: current=1
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=2
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=penCircleWithoutToolbarAndWindowRotation
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeExperience
+OHOS_REPORT_STATUS: current=1
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=2
+OHOS_REPORT_STATUS: stack=    at AssertException @ohos/hypium (oh_modules/.ohpm/@ohos+hypium@1.0.25/oh_modules/@ohos/hypium/src/main/service.js:75:9)
+    at anonymous @ohos/hypium (oh_modules/.ohpm/@ohos+hypium@1.0.25/oh_modules/@ohos/hypium/src/main/service.js:1149:37)
+    at anonymous entry (entry/src/ohosTest/ets/test/Experience.test.ets:21:57)
+OHOS_REPORT_STATUS: stream=Error in penCircleWithoutToolbarAndWindowRotation, expect true, actualValue is false
+OHOS_REPORT_STATUS: test=penCircleWithoutToolbarAndWindowRotation
+OHOS_REPORT_STATUS_CODE: -2
+OHOS_REPORT_STATUS: consuming=8217
+
+
+OHOS_REPORT_STATUS: class=SELFNativeExperience
+OHOS_REPORT_STATUS: current=2
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=2
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=keyboardInputCanRequestModelWithoutExecuting
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeExperience
+OHOS_REPORT_STATUS: current=2
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=2
+OHOS_REPORT_STATUS: stack=    at anonymous entry (entry/src/ohosTest/ets/test/Experience.test.ets:38:88)
+OHOS_REPORT_STATUS: stream=Error in keyboardInputCanRequestModelWithoutExecuting, TypeError: Cannot read property click of null
+OHOS_REPORT_STATUS: test=keyboardInputCanRequestModelWithoutExecuting
+OHOS_REPORT_STATUS_CODE: -1
+OHOS_REPORT_STATUS: consuming=8008
+
+
+OHOS_REPORT_STATUS: class=SELFNativeExperience
+OHOS_REPORT_STATUS: suiteconsuming=16225
+
+
+OHOS_REPORT_RESULT: stream=Tests run: 2, Failure: 1, Error: 1, Pass: 0, Ignore: 0
+OHOS_REPORT_CODE: -1
+OHOS_REPORT_STATUS: taskconsuming=16225
+
+TestFinished-ResultCode: 0
+TestFinished-ResultMsg: your test finished!!!
+user test finished.

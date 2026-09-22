@@ -1,0 +1,43 @@
+{
+  "testedAt": "2026-09-22T13:51:14.652299+00:00",
+  "input": "original nonpersonal 32x32 color fixture",
+  "test": "mainland information does not become a calibrated edit",
+  "result": {
+    "schemaVersion": 1,
+    "requestId": "cn-product-1790085074",
+    "snapshotId": "cn-product-1790085074",
+    "assetId": "sample",
+    "assetVersion": "v1",
+    "textureVersion": "t1",
+    "sceneRevision": 2,
+    "regionVersion": 1,
+    "plan": {
+      "decision": "explain",
+      "shortMessage": "我没有 OLAY 水光小白瓶的任何可校准效果数据，因此无法用它的\"真实参数\"来改你圈出的唇部区域——通用数字染色同样不代表产品效果，我不会那样做。现有资料只登记了商品名称和容量，未含成分、浓度或功效参数，不能推导外观变化。你圈出的区域已登记为唇部，如只需要数字试色（非产品实测），我可以按指定预设和强度调整现有图层。",
+      "operations": [],
+      "explanationRefs": [
+        "olay-cn-waterglow-50ml"
+      ],
+      "question": ""
+    },
+    "modelEvidence": {
+      "requestedModel": "deepseek-flash",
+      "returnedModel": "deepseek-flash",
+      "systemFingerprint": "aeb56401ca74e127821c4f9126dcb669",
+      "elapsedMs": 1469,
+      "usage": {
+        "prompt_tokens": 2181,
+        "completion_tokens": 209,
+        "total_tokens": 2390,
+        "prompt_tokens_details": {
+          "cached_tokens": 1152
+        },
+        "prompt_cache_hit_tokens": 1152,
+        "prompt_cache_miss_tokens": 1029
+      },
+      "providerResponseId": "ec712d74-3f9b-4ca5-aa43-92f43e5d2ce9"
+    }
+  },
+  "pass": true,
+  "userText": "请根据 OLAY 水光小白瓶50ml 的真实产品参数，修改我圈出的地方，不要只是通用染色。"
+}

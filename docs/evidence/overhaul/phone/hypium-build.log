@@ -1,0 +1,261 @@
+> hvigor WARN: The version number of the 'entry' module does not comply with the SemVer specification.
+               This will affect the installation and publication by ohpm.
+               Make sure the value of version in the oh-package.json5 file of the module complies with the SemVer specification.
+> hvigor [32mFinished :entry:ohosTest@PreBuild... after 140 ms [39m
+> hvigor [32mFinished :entry:ohosTest@CreateModuleInfo... after 1 ms [39m
+> hvigor [32mFinished :entry:ohosTest@GenerateMetadata... after 5 ms [39m
+> hvigor [32mFinished :entry:ohosTest@ConfigureCmake... after 1 ms [39m
+> hvigor [32mUP-TO-DATE :entry:ohosTest@MergeProfile...  [39m
+> hvigor [32mUP-TO-DATE :entry:ohosTest@CreateBuildProfile...  [39m
+> hvigor [32mFinished :entry:ohosTest@PreCheckSyscap... after 1 ms [39m
+> hvigor [32mUP-TO-DATE :entry:ohosTest@GenerateOhosTestTemplate...  [39m
+> hvigor [32mUP-TO-DATE :entry:ohosTest@GeneratePkgContextInfo...  [39m
+> hvigor [32mFinished :entry:ohosTest@GeneratePkgSdkInfo... after 5 ms [39m
+> hvigor [32mFinished :entry:ohosTest@ProcessIntegratedHsp... after 1 ms [39m
+> hvigor [32mFinished :entry:ohosTest@BuildNativeWithCmake... after 1 ms [39m
+> hvigor [32mFinished :entry:ohosTest@MakePackInfo... after 4 ms [39m
+> hvigor [32mFinished :entry:ohosTest@SyscapTransform... after 5 ms [39m
+> hvigor [32mFinished :entry:ohosTest@ProcessProfile... after 114 ms [39m
+> hvigor [32mUP-TO-DATE :entry:ohosTest@ProcessRouterMap...  [39m
+> hvigor [32mUP-TO-DATE :entry:ohosTest@ProcessShareConfig...  [39m
+> hvigor [32mFinished :entry:ohosTest@ProcessStartupConfig... after 4 ms [39m
+> hvigor [32mFinished :entry:ohosTest@BuildNativeWithNinja... after 1 ms [39m
+> hvigor [32mUP-TO-DATE :entry:ohosTest@ProcessResource...  [39m
+> hvigor [32mUP-TO-DATE :entry:ohosTest@GenerateLoaderJson...  [39m
+> hvigor [32mUP-TO-DATE :entry:ohosTest@ProcessLibs...  [39m
+> hvigor WARN: Warning: 'start_window_background' conflict, first declared.
+at D:\STUDY\College\mine\olay\entry\src\main\resources\base\element\color.json
+but declared again.
+at D:\STUDY\College\mine\olay\entry\.test\default\intermediates\src\ohosTest\resources\base\element\color.json
+
+> hvigor [32mFinished :entry:ohosTest@CompileResource... after 306 ms [39m
+> hvigor [32mUP-TO-DATE :entry:ohosTest@DoNativeStrip...  [39m
+> hvigor [32mFinished :entry:ohosTest@OhosTestBuildJS... after 6 ms [39m
+> hvigor [32mUP-TO-DATE :entry:ohosTest@CacheNativeLibs...  [39m
+> hvigor WARN: WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:23:75
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:27:16
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:28:25
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:30:84
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:32:17
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:36:39
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:38:21
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:38:40
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:38:60
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:39:8
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:39:24
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:47:84
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:49:21
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:50:12
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:50:53
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:56:25
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:56:45
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:58:117
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:58:137
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:18:24
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:25:8
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:34:50
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:38:14
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:38:49
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:40:70
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:46:41
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:48:26
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:48:137
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:49:8
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:64:64
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:65:27
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:66:51
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:71:135
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:71:155
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:75:29
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:78:67
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:78:91
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:82:84
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:82:101
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:83:80
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:83:97
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:22:29
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:23:27
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:24:23
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:24:53
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:24:74
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:25:30
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:25:64
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:25:96
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:28:29
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:29:27
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:30:23
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:30:53
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:30:81
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:30:127
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:119:125
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:119:133
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:119:141
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:119:166
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:119:172
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:119:197
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:119:205
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:119:213
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:119:238
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:119:244
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:135:132
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:135:140
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:135:148
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:135:195
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:135:202
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:135:211
+ This API is unavailable to tablet(earlier than API level 20).
+
+
+> hvigor [32mFinished :entry:ohosTest@OhosTestCompileArkTS... after 6 s 127 ms [39m
+> hvigor [32mFinished :entry:ohosTest@OhosTestCopyMockConfigJson... after 1 ms [39m
+> hvigor [32mFinished :entry:ohosTest@GeneratePkgModuleJson... after 3 ms [39m
+> hvigor [32mFinished :entry:ohosTest@ProcessCompiledResources... after 1 ms [39m
+> hvigor [32mFinished :entry:ohosTest@PackageHap... after 529 ms [39m
+> hvigor [32mFinished :entry:ohosTest@PackingCheck... after 8 ms [39m
+> hvigor WARN: No signingConfig found for product default
+> hvigor [32mFinished :entry:ohosTest@SignHap... after 3 ms [39m
+> hvigor [32mFinished :entry:ohosTest@CollectDebugSymbol... after 2 ms [39m
+> hvigor [32mFinished :entry:assembleHap... after 1 ms [39m
+> hvigor [32mBUILD SUCCESSFUL in 14 s 831 ms [39m
+
+35 tasks in total: 24 executed, 11 up-to-date

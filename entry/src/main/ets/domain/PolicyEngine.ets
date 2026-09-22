@@ -18,6 +18,7 @@ export class PolicyEngine {
     if(!authorizationId) { throw new Error('缺少本次授权'); }
     const operation: EditOperation={operationId:plan.planId,kind:plan.kind,regionId:plan.regionId,presetId:plan.presetId,color:PolicyEngine.colors(plan.presetId),absoluteStrength:plan.strength,authorizationId};
     operation.plannerSource=plan.plannerSource||'本地操作';operation.snapshotId=plan.snapshotId;
+    operation.compositingVersion='perceptual-v2';
     return operation;
   }
   static productSimulationAllowed(calibrationProfile: string, allowedViews: string[]): boolean {

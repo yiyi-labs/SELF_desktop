@@ -1,0 +1,4 @@
+09-22 21:48:52.216 10965 10965 I A03d00/JSAPP: SELF_WINDOW {"width":1440,"wide":true}
+09-22 21:49:00.689 10965 10965 I A03d00/JSAPP: SELF_PRODUCT_READY olay-cn-waterglow-50ml {"ready":true,"triangles":960,"vertices":582}
+09-22 21:49:07.605 10965 10965 I A03d00/JSAPP: SELF_PRODUCT_READY olay-cn-waterglow-50ml {"ready":true,"triangles":960,"vertices":582}
+09-22 21:49:13.474 10965 10965 I A03d00/JSAPP: SELF_PRODUCT_UI {"onlyModelReferencedProduct":true,"product":"olay-cn-waterglow-50ml","twoSurfaceReopens":true,"lidAndRotation":true,"stackedFormulaCard":true}

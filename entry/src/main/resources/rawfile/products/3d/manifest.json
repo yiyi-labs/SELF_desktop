@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "license": "Original SELF geometry and label typesetting; OLAY name for identification only. No product photo copied.",
+  "representation": "approximate 3D appearance, not verified physical dimensions or mechanisms",
+  "models": [
+    {
+      "style": "red-jar",
+      "body": {
+        "file": "red-jar-body.glb",
+        "vertices": 1261,
+        "triangles": 2304,
+        "sha256": "819f6b7c7dce6304243dfb05eacf61681b29d91a3bfe1b51452ec690be91beb9"
+      },
+      "lid": {
+        "file": "red-jar-lid.glb",
+        "vertices": 776,
+        "triangles": 1344,
+        "sha256": "35f8079f9dbd3abeb9034c3aeb9722c6336468bef27bca2acf94b95e2462a7de"
+      },
+      "openDirection": 1
+    },
+    {
+      "style": "black-jar",
+      "body": {
+        "file": "black-jar-body.glb",
+        "vertices": 1261,
+        "triangles": 2304,
+        "sha256": "d7f4da84b9a0c4f9d013c20e1e92ba2ba6ff51bd15ef03637b62de2e1a2b7a3d"
+      },
+      "lid": {
+        "file": "black-jar-lid.glb",
+        "vertices": 776,
+        "triangles": 1344,
+        "sha256": "db4f2f5bcc6c8ec220e667cc71d02f6526755cde0199ce42e269f4b9b6cfc5ce"
+      },
+      "openDirection": 1
+    },
+    {
+      "style": "white-pump",
+      "body": {
+        "file": "white-pump-body.glb",
+        "vertices": 1067,
+        "triangles": 1920,
+        "sha256": "1cba2753f9559d16eb2593c2e4488bfa3d48dfe4d9af5d43d57fd37abce4611f"
+      },
+      "lid": {
+        "file": "white-pump-lid.glb",
+        "vertices": 582,
+        "triangles": 960,
+        "sha256": "c78d958aa4f6ef83254afee40e2329267caaaad8ce49316e7e422235fcfecd5a"
+      },
+      "openDirection": 1
+    },
+    {
+      "style": "black-tube",
+      "body": {
+        "file": "black-tube-body.glb",
+        "vertices": 679,
+        "triangles": 1152,
+        "sha256": "373246b9f3375e77a308593a6452bb841d03a6552a84d3a8ec4c235b1738dab3"
+      },
+      "lid": {
+        "file": "black-tube-lid.glb",
+        "vertices": 582,
+        "triangles": 960,
+        "sha256": "aa90e181638a59d786a4c1f5664fa7f288bc2ba64daebe486e90f96959adcbc3"
+      },
+      "openDirection": -1
+    },
+    {
+      "style": "white-set",
+      "body": {
+        "file": "white-set-body.glb",
+        "vertices": 2134,
+        "triangles": 3840,
+        "sha256": "bc67d008c168a59ef0388e0f5d3d26502094e8ec023ffc01d56f6647fdd3fffb"
+      },
+      "lid": {
+        "file": "white-set-lid.glb",
+        "vertices": 1164,
+        "triangles": 1920,
+        "sha256": "a7930b4ea1a79b2f7207bdd9f04cd0e028cbe99620e6daf8f1aa0afc2d1a2682"
+      },
+      "openDirection": 1
+    },
+    {
+      "style": "white-ampoule",
+      "body": {
+        "file": "white-ampoule-body.glb",
+        "vertices": 776,
+        "triangles": 1344,
+        "sha256": "21db29126c5594be4b4ccbdb70674ad7cf7b99b1a6e670fe5b4c21cb62324396"
+      },
+      "lid": {
+        "file": "white-ampoule-lid.glb",
+        "vertices": 582,
+        "triangles": 960,
+        "sha256": "a9e1f2936bd6001e5576f1877354415d09f59f6a9f9c0ee71f4512a93d309cbc"
+      },
+      "openDirection": 1
+    }
+  ]
+}

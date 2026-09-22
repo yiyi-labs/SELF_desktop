@@ -1,0 +1,42 @@
+{
+  "testedAt": "2026-09-22T12:36:51.437408+00:00",
+  "input": "original nonpersonal 32x32 color fixture",
+  "test": "mainland information does not become a calibrated edit",
+  "pass": false,
+  "error": "invalid_plan",
+  "syntheticProbeResponseOnly": {
+    "model": "deepseek-flash",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "tool_calls": [
+            {
+              "index": 0,
+              "id": "call_00_T4lU5Zikc9wdvc0ow4If6015",
+              "type": "function",
+              "function": {
+                "name": "propose_edit_plan",
+                "arguments": "{\"decision\": \"explain\", \"shortMessage\": \"已登记资料里，与你问的「水光小白瓶」对应的是 olay-cn-waterglow-50ml：仅记录页面标题所示的名称「水光小白瓶」和容量 50 ml（中国大陆渠道），来源为京东自营旗舰店商品标题，属于商品列表信息，非品牌配方认证，在售情况亦未核实。\\n\\n因此：\\n· 配方：资料中 inci 字段为 null，没有成分表，无法提供配方信息。\\n· 浓度：没有浓度、剂量或配方版本（formulaRevision 为 null）记录，无法说明任何成分含量。\\n· 真实上脸效果：无功效校准数据，也没有关于即时肤色变化或护肤效果的证据；资料明确说明不从产品名称推导效果。\\n\\n我可以模拟数字试色（比如唇部色块的观感），但数字试色不是品牌实测，也不能代表真实护肤功效，所以任何真实效果我都无法模拟或呈现。使用方式请以所购包装为准。\\n\\n另有两条同页登记条目：olay-cn-darkspot-gen4-80ml（第4代淡斑小白瓶 80 ml）与 olay-cn-red-cream-gen6（第六代超红瓶面霜，净含量未核实），同样只有标题级信息，且代际不能合并为同一配方。\", \"operations\": [], \"explanationRefs\": [\"olay-cn-waterglow-50ml\", \"olay-cn-darkspot-gen4-80ml\", \"olay-cn-red-cream-gen6\"], \"question\": \"\"}"
+              }
+            }
+          ]
+        },
+        "logprobs": null,
+        "finish_reason": "tool_calls"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 2261,
+      "completion_tokens": 411,
+      "total_tokens": 2672,
+      "prompt_tokens_details": {
+        "cached_tokens": 1024
+      },
+      "prompt_cache_hit_tokens": 1024,
+      "prompt_cache_miss_tokens": 1237
+    }
+  }
+}

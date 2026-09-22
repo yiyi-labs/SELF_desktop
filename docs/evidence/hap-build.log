@@ -1,15 +1,15 @@
 > hvigor [32mUP-TO-DATE :entry:default@PreBuild...  [39m
-> hvigor [32mFinished :entry:default@CreateModuleInfo... after 2 ms [39m
+> hvigor [32mFinished :entry:default@CreateModuleInfo... after 1 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@GenerateMetadata...  [39m
-> hvigor [32mFinished :entry:default@ConfigureCmake... after 45 ms [39m
+> hvigor [32mFinished :entry:default@ConfigureCmake... after 43 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@MergeProfile...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@CreateBuildProfile...  [39m
 > hvigor [32mFinished :entry:default@PreCheckSyscap... after 1 ms [39m
-> hvigor [32mFinished :entry:default@GeneratePkgSdkInfo... after 6 ms [39m
-> hvigor [32mFinished :entry:default@ProcessIntegratedHsp... after 2 ms [39m
-> hvigor [32mFinished :entry:default@BuildNativeWithCmake... after 49 ms [39m
+> hvigor [32mFinished :entry:default@GeneratePkgSdkInfo... after 3 ms [39m
+> hvigor [32mFinished :entry:default@ProcessIntegratedHsp... after 1 ms [39m
+> hvigor [32mFinished :entry:default@BuildNativeWithCmake... after 29 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@MakePackInfo...  [39m
-> hvigor [32mFinished :entry:default@SyscapTransform... after 15 ms [39m
+> hvigor [32mFinished :entry:default@SyscapTransform... after 9 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@GeneratePkgContextInfo...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@ProcessProfile...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@ProcessRouterMap...  [39m
@@ -17,43 +17,62 @@
 > hvigor [32mFinished :entry:default@ProcessStartupConfig... after 2 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@ProcessResource...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@GenerateLoaderJson...  [39m
-> hvigor [32mFinished :entry:default@CompileResource... after 249 ms [39m
-> hvigor [32mFinished :entry:default@BuildJS... after 6 ms [39m
-> hvigor [32mFinished :entry:default@BuildNativeWithNinja... after 93 ms [39m
+> hvigor [32mFinished :entry:default@CompileResource... after 252 ms [39m
+> hvigor [32mFinished :entry:default@BuildJS... after 3 ms [39m
+> hvigor [32mFinished :entry:default@BuildNativeWithNinja... after 108 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@ProcessLibs...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@DoNativeStrip...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@CacheNativeLibs...  [39m
-> hvigor WARN: WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/entryability/EntryAbility.ets:7:11
+> hvigor WARN: WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/entryability/EntryAbility.ets:8:100
+ This API is unavailable to 2in1.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/entryability/EntryAbility.ets:9:11
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:53:29
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:55:29
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:54:19
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:56:19
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:89:16
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:91:16
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:95:54
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:97:54
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:95:100
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:97:100
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:96:19
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:98:19
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:104:56
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:106:56
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:105:13
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:107:13
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:106:21
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:108:21
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/PlannerClient.ets:37:33
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/ProductFactsDeck.ets:19:13
+ The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
+ It is recommended to use apiAvailable to safeguard API compatibility.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/ProductFactsDeck.ets:21:61
+ The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
+ It is recommended to use apiAvailable to safeguard API compatibility.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/ProductFactsDeck.ets:21:107
+ The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
+ It is recommended to use apiAvailable to safeguard API compatibility.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/ProductFactsDeck.ets:21:151
+ The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
+ It is recommended to use apiAvailable to safeguard API compatibility.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/PlannerClient.ets:38:33
  Function may throw exceptions. Special handling is required.
 
 WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:23:75
@@ -191,25 +210,67 @@ WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/Am
 WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AmbientAudio.ets:37:49
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/NativeEsProbe.ets:73:64
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:12:57
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/NativeEsProbe.ets:73:172
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:13:15
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/NativeEsProbe.ets:73:208
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:18:11
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:18:31
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:18:54
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:18:82
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:22:12
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:22:32
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:24:19
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:24:79
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:35:21
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:35:42
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:35:69
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/NativeEsProbe.ets:84:82
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/NativeEsProbe.ets:117:64
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/NativeEsProbe.ets:117:172
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/NativeEsProbe.ets:117:208
  Function may throw exceptions. Special handling is required.
 
 
-> hvigor [32mFinished :entry:default@CompileArkTS... after 5 s 897 ms [39m
-> hvigor [32mFinished :entry:default@GeneratePkgModuleJson... after 4 ms [39m
+> hvigor [32mFinished :entry:default@CompileArkTS... after 3 s 365 ms [39m
+> hvigor [32mFinished :entry:default@GeneratePkgModuleJson... after 2 ms [39m
 > hvigor [32mFinished :entry:default@ProcessCompiledResources... after 1 ms [39m
-> hvigor [32mFinished :entry:default@PackageHap... after 495 ms [39m
-> hvigor [32mFinished :entry:default@PackingCheck... after 9 ms [39m
+> hvigor [32mFinished :entry:default@PackageHap... after 564 ms [39m
+> hvigor [32mFinished :entry:default@PackingCheck... after 8 ms [39m
 > hvigor WARN: No signingConfig found for product default
-> hvigor [32mFinished :entry:default@SignHap... after 3 ms [39m
-> hvigor [32mFinished :entry:default@CollectDebugSymbol... after 2 ms [39m
+> hvigor [32mFinished :entry:default@SignHap... after 2 ms [39m
+> hvigor [32mFinished :entry:default@CollectDebugSymbol... after 1 ms [39m
 > hvigor [32mFinished :entry:assembleHap... after 1 ms [39m
-> hvigor [32mBUILD SUCCESSFUL in 13 s 965 ms [39m
+> hvigor [32mBUILD SUCCESSFUL in 9 s 836 ms [39m
 
 33 tasks in total: 19 executed, 14 up-to-date

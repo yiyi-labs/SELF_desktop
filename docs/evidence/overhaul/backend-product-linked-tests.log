@@ -1,0 +1,28 @@
+test_edit_cannot_also_request_clarification (test_contracts.Contracts.test_edit_cannot_also_request_clarification) ... ok
+test_explanation_reference_must_exist (test_contracts.Contracts.test_explanation_reference_must_exist) ... ok
+test_image_is_real_image_block_not_text (test_contracts.Contracts.test_image_is_real_image_block_not_text) ... ok
+test_invalid_image_rejected (test_contracts.Contracts.test_invalid_image_rejected) ... ok
+test_new_tint_cannot_reuse_existing_layer_id (test_contracts.Contracts.test_new_tint_cannot_reuse_existing_layer_id) ... ok
+test_remove_checks_matching_layer (test_contracts.Contracts.test_remove_checks_matching_layer) ... ok
+test_support_cannot_edit (test_contracts.Contracts.test_support_cannot_edit) ... ok
+test_truncated_empty_duplicate_wrong_tool (test_contracts.Contracts.test_truncated_empty_duplicate_wrong_tool) ... ok
+test_unknown_and_extra_fields (test_contracts.Contracts.test_unknown_and_extra_fields) ... ok
+test_upload_denial_is_rejected (test_contracts.Contracts.test_upload_denial_is_rejected) ... ok
+test_valid_candidate_has_no_authorization (test_contracts.Contracts.test_valid_candidate_has_no_authorization) ... ok
+test_auth_rejects_before_planner (test_http.HttpBoundary.test_auth_rejects_before_planner) ... ok
+test_content_length_validation (test_http.HttpBoundary.test_content_length_validation) ... ok
+test_denied_upload_extra_fields_no_upstream (test_http.HttpBoundary.test_denied_upload_extra_fields_no_upstream) ... ok
+test_duplicate_is_idempotent_and_changed_payload_rejected (test_http.HttpBoundary.test_duplicate_is_idempotent_and_changed_payload_rejected) ... ok
+test_failure_does_not_cache_or_keep_inflight (test_http.HttpBoundary.test_failure_does_not_cache_or_keep_inflight) ... ok
+test_inflight_and_rate_limit (test_http.HttpBoundary.test_inflight_and_rate_limit) ... ok
+test_generic_tint_cannot_smuggle_product_card (test_product_catalog.ProductFacts.test_generic_tint_cannot_smuggle_product_card) ... ok
+test_no_fabricated_parameters (test_product_catalog.ProductFacts.test_no_fabricated_parameters) ... ok
+test_only_supplied_information_can_be_cited (test_product_catalog.ProductFacts.test_only_supplied_information_can_be_cited) ... ok
+test_product_request_cannot_become_generic_tint (test_product_catalog.ProductFacts.test_product_request_cannot_become_generic_tint) ... ok
+test_real_request_context_includes_unknowns_and_source (test_product_catalog.ProductFacts.test_real_request_context_includes_unknowns_and_source) ... ok
+test_regular_conversation_does_not_inject_products (test_product_catalog.ProductFacts.test_regular_conversation_does_not_inject_products) ... ok
+
+----------------------------------------------------------------------
+Ran 23 tests in 0.231s
+
+OK

@@ -1,0 +1,63 @@
+{
+  "data": [
+    {
+      "id": "8b8ded6de2",
+      "type": "imageGroup",
+      "title": "主图",
+      "isShow": true,
+      "content": [
+        {
+          "isShow": true,
+          "imageUrl": "https://storage.pg.com.cn/v2/files/53d406565db241bdb8668b3f5a8fb90a",
+          "parameters": [
+            {
+              "key": "alt",
+              "name": "替代文本",
+              "value": "Olay官网，Olay，总有爱你的那1瓶。扫码关注Olay公众号，收获超值惊喜",
+              "isVisibleInSimpleMode": true
+            }
+          ],
+          "clickAction": "none",
+          "trackParameter": "",
+          "assetOriginWidth": 1920,
+          "assetOriginHeight": 1080,
+          "clickActionParameters": {}
+        }
+      ],
+      "parameters": [],
+      "rotateImage": false,
+      "rotateInterval": "",
+      "rotateAspectRatio": ""
+    },
+    {
+      "id": "ff2e7fca89",
+      "type": "text",
+      "title": "ICP备案号",
+      "advice": "",
+      "isShow": true,
+      "content": "粤ICP备05017514号",
+      "textTitle": "",
+      "parameters": [],
+      "clickAction": "openH5",
+      "trackParameter": "",
+      "clickActionParameters": {
+        "url": "https://beian.miit.gov.cn/#/Integrated/index"
+      }
+    },
+    {
+      "id": "6662dc8ba6",
+      "type": "text",
+      "title": "联网备案号",
+      "advice": "",
+      "isShow": true,
+      "content": "粤公网安备44011602000385号",
+      "textTitle": "",
+      "parameters": [],
+      "clickAction": "openH5",
+      "trackParameter": "",
+      "clickActionParameters": {
+        "url": "http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44011602000385"
+      }
+    }
+  ]
+}

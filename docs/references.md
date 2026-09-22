@@ -48,3 +48,17 @@ Three.js0.186.0 及旧浏览器代码仅保留作迁移参照；示例 GLB 仍�
 用户新指令优先原生、参考 Remy，并保留原版设计。新增 NativeMirrorProbe / NativeProbeAbility 为本项目编写的 SDK 调用与诊断代码，未复制官方样例实现。所用 Scene.load、Camera、Component3D、Node rotation 等声明来自本机 DevEco 26.0.0.821 / HarmonyOS SDK 26.0.0.105；SDK 文件未随源码包复制。
 
 原生 SDK 文件、Remy 一手材料、格式分工和失败门槛详见 [native-reconstruction-review.md](native-reconstruction-review.md)。没有采用 Remy 私有 API 或代码，没有新增 Remy/KIRI 商业素材。Blender、COLMAP、OpenMVS 均仅作方案比较，没有引入运行依赖或声明已完成重建。
+
+
+# 本轮大陆产品及原生交互补充（2026-09-22）
+
+- 新增来源、实际 SDK 声明和使用范围见 [本轮实现说明](overhaul-implementation.md)。原生代码延续已有 C++ ES3 引擎；没有复制华为完整应用示例，没有引入 Blender、COLMAP、OpenMVS 或 Remy 私有运行包。
+- 生产产品库已替换为 `shared/products/olay-cn-catalog.json` 的8条大陆渠道条目；上文美国 Super Serum 记录是历史引用，未把美国成分套用于大陆。品牌官网入口由宝洁中国官网确认；商品名称与部分规格来自京东自营旗舰店，明确标注渠道证据与未核实字段。
+- `entry/src/main/resources/rawfile/products/{red-jar,white-pump,black-tube,black-jar,white-set,white-ampoule}.svg` 为本轮原创矢量类别插图。未使用网页产品图片、官方包装图形或临床图；名称用于识别，未宣称品牌合作。`serum.svg` 是既有自主示意资源，生产目录不引用美国旧条目。
+- 后端模型候选与真实调用记录以 `model-contract.md` 顶部更新、`validation-overhaul.md` 为准；上文“未接入任意云模型”为更早阶段的历史状态，不适用于当前 DeepSeek 实现。
+
+## 最新产品展示补充
+
+产品 UI 已不使用上述 SVG。`scripts/build-product-models.py`、`ProductScene.cpp/.h`、`ProductCard.ets`、`ProductFactsDeck.ets` 为 SELF 自主实现，生成六组独立瓶身/盖子 GLB（贴图内嵌），逐文件哈希和原创声明见 `rawfile/products/3d/manifest.json`。未复制商业照片或官方包装图形；仅使用 OLAY 文字识别品牌。旋转、灯光和分体开合是真实原生渲染；几何、材质、盖子机构只是近似示意，并非实测商品参数。Arial 使用本机系统字体生成位图，没有分发字体文件。
+
+本轮设计阅读 [华为设计官网](https://developer.huawei.com/consumer/cn/design)及 [HarmonyOS 7 官方页面](https://consumer.huawei.com/cn/harmonyos-7/)，采用柔和光感、材质层次、堆叠卡片和响应式布局的方向。未复制官方素材，未宣称获得官方设计认证或已经验证真机流畅度。实现使用本机商业 SDK26 的 ArkUI 与 GLES3，不用 OpenHarmony 示例版本表证明商业兼容。

@@ -1,3 +1,5 @@
+> 此页保留原生迁移阶段的实测记录。后续模型强制候选、平板宽屏、手写笔、混色v2、相机和大陆产品库结果见 [本轮验收](validation-overhaul.md)，不要把历史结果当本轮全量验收。
+
 # 当前原生版本验收记录
 
 日期：2026-09-22；正式规范为 `SELF_HarmonyOS_Native_DeepSeek_Codex_20260922.md`。仅将真实执行项列为通过。证据目录 `evidence/native-es3/`，旧 `emulator/`、`emulator-full/`、`api26/` 是旧 Web/Component3D 记录，不能移作当前原生证据。

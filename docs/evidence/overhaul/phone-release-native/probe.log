@@ -1,0 +1,28 @@
+09-22 22:17:09.452 11219 11219 I A03d00/JSAPP: SELF_ES_EVENT {"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139914532354816,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"type":"READY"}
+09-22 22:17:09.457 11219 11219 I A03d00/JSAPP: SELF_FEATHER_PROBE {"center":255,"monotonic":true,"narrowCenter":127,"outsideTexels":0,"softTexels":1472}
+09-22 22:17:09.458 11219 11219 I A03d00/JSAPP: SELF_RECON_SUPPORT {"available":false,"message":"当前设备未提供原生空间重建库。已录视频会保留，但不能在此设备生成个人3D。"}
+09-22 22:17:09.502 11219 11219 I A03d00/JSAPP: SELF_ES_PROBE {"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139914532354816,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"pngRoundtripExact":true,"rgba8Fbo":true}
+09-22 22:17:09.515 11219 11219 I A03d00/JSAPP: SELF_EXIF 1 {"height":49,"width":33}
+09-22 22:17:09.520 11219 11219 I A03d00/JSAPP: SELF_EXIF 2 {"height":49,"width":33}
+09-22 22:17:09.523 11219 11219 I A03d00/JSAPP: SELF_EXIF 3 {"height":49,"width":33}
+09-22 22:17:09.526 11219 11219 I A03d00/JSAPP: SELF_EXIF 4 {"height":49,"width":33}
+09-22 22:17:09.529 11219 11219 I A03d00/JSAPP: SELF_EXIF 5 {"height":33,"width":49}
+09-22 22:17:09.534 11219 11219 I A03d00/JSAPP: SELF_EXIF 6 {"height":33,"width":49}
+09-22 22:17:09.541 11219 11219 I A03d00/JSAPP: SELF_EXIF 7 {"height":33,"width":49}
+09-22 22:17:09.544 11219 11219 I A03d00/JSAPP: SELF_EXIF 8 {"height":33,"width":49}
+09-22 22:17:09.662 11219 11219 I A03d00/JSAPP: SELF_ES_GLB {"height":1024,"triangles":17684,"vertices":9279,"width":1024}
+09-22 22:17:10.141 11219 11219 I A03d00/JSAPP: SELF_ES_SELECTION 40442
+09-22 22:17:10.453 11219 11219 I A03d00/JSAPP: SELF_ES_EDIT {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":861320,"protectedPixels":887}
+09-22 22:17:11.224 11219 11219 I A03d00/JSAPP: SELF_ES_SNAPSHOT {"height":1024,"split":470635,"view":{"distance":16.0,"panX":0.0,"panY":0.0,"pitch":0.0,"yaw":0.0},"width":768}
+09-22 22:17:11.842 11219 11219 I A03d00/JSAPP: SELF_ES_EXCEPTION {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":862207,"protectedPixels":0}
+09-22 22:17:12.938 11219 11219 I A03d00/JSAPP: SELF_V2_CHECK {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":861320,"protectedPixels":887}
+09-22 22:17:16.382 11219 11219 I A03d00/JSAPP: SELF_ES_PHOTO {"selectedPixels":45,"view":{"distance":16,"panX":0.4000000059604645,"panY":0,"pitch":0,"yaw":0},"malformedRejected":true}
+09-22 22:17:17.776 11219 11219 I A03d00/JSAPP: SELF_PRODUCT_PROBE {"style":"red-jar","stats":{"animationFrames":26,"lidProgress":1,"ready":true},"reducedMotionClosed":true}
+09-22 22:17:19.061 11219 11219 I A03d00/JSAPP: SELF_PRODUCT_PROBE {"style":"black-jar","stats":{"animationFrames":53,"lidProgress":1,"ready":true},"reducedMotionClosed":true}
+09-22 22:17:20.318 11219 11219 I A03d00/JSAPP: SELF_PRODUCT_PROBE {"style":"white-pump","stats":{"animationFrames":80,"lidProgress":1,"ready":true},"reducedMotionClosed":true}
+09-22 22:17:21.589 11219 11219 I A03d00/JSAPP: SELF_PRODUCT_PROBE {"style":"black-tube","stats":{"animationFrames":107,"lidProgress":1,"ready":true},"reducedMotionClosed":true}
+09-22 22:17:22.864 11219 11219 I A03d00/JSAPP: SELF_PRODUCT_PROBE {"style":"white-set","stats":{"animationFrames":134,"lidProgress":1,"ready":true},"reducedMotionClosed":true}
+09-22 22:17:24.146 11219 11219 I A03d00/JSAPP: SELF_PRODUCT_PROBE {"style":"white-ampoule","stats":{"animationFrames":160,"lidProgress":1,"ready":true},"reducedMotionClosed":true}
+09-22 22:17:24.284 11219 11219 I A03d00/JSAPP: SELF_ES_STATS {"cpuSubmitAndSwapP50Ms":2.887818,"cpuSubmitAndSwapP95Ms":30.280685,"cpuSubmitOver50Ms":0,"frames":208,"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139914532354816,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"renderStartIntervalOver50Ms":0,"renderStartIntervalP50Ms":0.0,"renderStartIntervalP95Ms":0.0,"transitionFrames":17}
+09-22 22:17:24.284 11219 11219 I A03d00/JSAPP: SELF_ES_PROBE_FINISHED
+09-22 22:17:24.409 11219 11219 I A03d00/JSAPP: SELF_NETWORKKIT {"healthStatus":200,"modelConfigured":true,"paidCall":"not attempted in connectivity probe"}

@@ -1,0 +1,374 @@
+Prepared three original stereo ambient loops; default playback is off.
+Copied checked-in GLB, masks, manifests, licenses and original audio into native rawfile resources.
+> hvigor [32mUP-TO-DATE :entry:default@PreBuild...  [39m
+> hvigor [32mFinished :entry:default@CreateModuleInfo... after 1 ms [39m
+> hvigor [32mUP-TO-DATE :entry:default@GenerateMetadata...  [39m
+> hvigor [32mFinished :entry:default@ConfigureCmake... after 50 ms [39m
+> hvigor [32mUP-TO-DATE :entry:default@MergeProfile...  [39m
+> hvigor [32mUP-TO-DATE :entry:default@CreateBuildProfile...  [39m
+> hvigor [32mFinished :entry:default@PreCheckSyscap... after 1 ms [39m
+> hvigor [32mFinished :entry:default@GeneratePkgSdkInfo... after 5 ms [39m
+> hvigor [32mFinished :entry:default@ProcessIntegratedHsp... after 1 ms [39m
+> hvigor [32mFinished :entry:default@BuildNativeWithCmake... after 47 ms [39m
+> hvigor [32mUP-TO-DATE :entry:default@MakePackInfo...  [39m
+> hvigor [32mFinished :entry:default@SyscapTransform... after 13 ms [39m
+> hvigor [32mUP-TO-DATE :entry:default@GeneratePkgContextInfo...  [39m
+> hvigor [32mUP-TO-DATE :entry:default@ProcessProfile...  [39m
+> hvigor [32mUP-TO-DATE :entry:default@ProcessRouterMap...  [39m
+> hvigor [32mUP-TO-DATE :entry:default@ProcessShareConfig...  [39m
+> hvigor [32mFinished :entry:default@ProcessStartupConfig... after 3 ms [39m
+> hvigor [32mUP-TO-DATE :entry:default@ProcessResource...  [39m
+> hvigor [32mUP-TO-DATE :entry:default@GenerateLoaderJson...  [39m
+> hvigor [32mFinished :entry:default@CompileResource... after 257 ms [39m
+> hvigor [32mFinished :entry:default@BuildJS... after 6 ms [39m
+> hvigor WARN: When performing compilation for the x86_64 architecture:
+clang++: warning: argument unused during compilation: '--gcc-toolchain=C:/Program Files/Huawei/DevEco Studio/sdk/default/openharmony/native/llvm' [-Wunused-command-line-argument]
+clang++: warning: argument unused during compilation: '--gcc-toolchain=C:/Program Files/Huawei/DevEco Studio/sdk/default/openharmony/native/llvm' [-Wunused-command-line-argument]
+clang++: warning: argument unused during compilation: '--gcc-toolchain=C:/Program Files/Huawei/DevEco Studio/sdk/default/openharmony/native/llvm' [-Wunused-command-line-argument]
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:69:354: warning: missing field 'bytes' initializer [-Wmissing-field-initializers]
+  return enqueue([this,asset=std::move(asset),lid]{check(surface_!=EGL_NO_SURFACE,"Product surface unavailable");productMode_=true;motion_=orbit_=transitioning_=false;product_.load(asset,lid);glCheck("Product load");dirty_=true;schedule();return Result{{{"ready",product_.ready()},{"vertices",asset.vertices.size()},{"triangles",asset.indices.size()/3}}};}).get();
+                                                                                                                                                                                                                                                                                                                                                                 ^
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:77:132: warning: missing field 'bytes' initializer [-Wmissing-field-initializers]
+  return {{{"outsideTexels",outside},{"softTexels",soft},{"center",f[64*w+64]},{"narrowCenter",narrow[64*w+60]},{"monotonic",true}}};
+                                                                                                                                   ^
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:83:166: warning: missing field 'bytes' initializer [-Wmissing-field-initializers]
+  if(!library)return {{{"available",false},{"message","褰撳墠璁惧鏈彁渚涘師鐢熺┖闂撮噸寤哄簱銆傚凡褰曡棰戜細淇濈暀锛屼絾涓嶈兘鍦ㄦ璁惧鐢熸垚涓汉3D銆�"}}};
+                                                                                                                                  ^
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:86:312: warning: missing field 'bytes' initializer [-Wmissing-field-initializers]
+  return {{{"available",status==0},{"status",status},{"message",status==0?"璁惧鎻愪緵楂樻柉閲嶅缓鑳藉姏锛涘叾PLY缁撴灉灏氭湭鎺ュ叆鏈綉鏍肩紪杈戝櫒锛屼笉鑳界洿鎺ュ綋鎴愬彲缂栬緫GLB銆�":"璁惧鏈€氳繃鍘熺敓閲嶅缓鑳藉姏妫€鏌ワ紙"+std::to_string(status)+"锛夈€傝棰戦噰闆嗕笌涓汉閲嶅缓鏄笉鍚屾楠ゃ€�"}}};
+                                                                                                                                                                                                                                                     ^
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:90:491: warning: missing field 'bytes' initializer [-Wmissing-field-initializers]
+  result=enqueue([this,next=std::move(next)]()mutable{check(surface_!=EGL_NO_SURFACE,"Native surface unavailable");asset_=std::move(next);masks_.clear();featherMasks_.clear();operations_=Json::array();anchors_=Json::array();protectId_.clear();protectRule_.clear();hasAsset_=true;if(asset_.photo)yaw_=pitch_=0;upload();dirty_=true;schedule();return Result{{{"width",asset_.image.width},{"height",asset_.image.height},{"vertices",asset_.vertices.size()},{"triangles",asset_.indices.size()/3}}};}).get();
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ^
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:210:146: warning: missing field 'bytes' initializer [-Wmissing-field-initializers]
+ if(type=="PRODUCT_STATS")return {{{"ready",product_.ready()},{"lidProgress",product_.progress()},{"animationFrames",product_.animationFrames()}}};
+                                                                                                                                                 ^
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:213:46: warning: missing field 'images' initializer [-Wmissing-field-initializers]
+ if(type=="ECHO")return {Json::object(),bytes};
+                                             ^
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:214:118: warning: missing field 'images' initializer [-Wmissing-field-initializers]
+ if(type=="NORMALIZE"){auto img=decodeImage(bytes);return {{{"width",img.width},{"height",img.height}},encodePNG(img)};}
+                                                                                                                     ^
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:215:407: warning: missing field 'bytes' initializer [-Wmissing-field-initializers]
+ if(type=="LOAD"){Asset next=j.value("kind","")=="glb"?loadGLB(bytes):photoAsset(bytes);asset_=std::move(next);masks_.clear();featherMasks_.clear();operations_=Json::array();anchors_=Json::array();protectId_.clear();hasAsset_=true;upload();dirty_=true;schedule();return {{{"width",asset_.image.width},{"height",asset_.image.height},{"vertices",asset_.vertices.size()},{"triangles",asset_.indices.size()/3}}};}
+                                                                                                                                                                                                                                                                                                                                                                                                                      ^
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:217:128: warning: missing field 'bytes' initializer [-Wmissing-field-initializers]
+ if(type=="GET_VIEW"){orbit_=false;return {{{"yaw",yaw_},{"pitch",pitch_},{"distance",distance_},{"panX",panX_},{"panY",panY_}}};}
+                                                                                                                               ^
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:235:202: warning: missing field 'images' initializer [-Wmissing-field-initializers]
+  dirty_=true;schedule();return {{{"checkedWidth",cw},{"checkedHeight",ch},{"protectedPixels",protectedPixels},{"nonAuthorizedPixels",unchanged},{"maxProtectedError",0},{"maxNonAuthorizedError",0}}, {}};
+                                                                                                                                                                                                         ^
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:243:131: warning: missing field 'images' initializer [-Wmissing-field-initializers]
+ else if(type=="SELECT"){orbit_=false;return {{{"width",asset_.image.width},{"height",asset_.image.height}},select(j.at("points"))};}
+                                                                                                                                  ^
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:245:800: warning: missing field 'bytes' initializer [-Wmissing-field-initializers]
+ else if(type=="STATS"){auto sorted=frameTimes_,intervals=frameIntervals_;std::sort(sorted.begin(),sorted.end());std::sort(intervals.begin(),intervals.end());return {{{"transitionFrames",transitionFrames_},{"frames",frameCount_},{"cpuSubmitAndSwapP50Ms",sorted.empty()?0:sorted[sorted.size()/2]},{"cpuSubmitAndSwapP95Ms",sorted.empty()?0:sorted[size_t((sorted.size()-1)*.95)]},{"cpuSubmitOver50Ms",std::count_if(sorted.begin(),sorted.end(),[](double t){return t>50;})},{"renderStartIntervalP50Ms",intervals.empty()?0:intervals[intervals.size()/2]},{"renderStartIntervalP95Ms",intervals.empty()?0:intervals[size_t((intervals.size()-1)*.95)]},{"renderStartIntervalOver50Ms",std::count_if(intervals.begin(),intervals.end(),[](double t){return t>50;})},{"generation",generation_},{"graphics",lastInfo_}}};}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ^
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:256:83: warning: missing field 'images' initializer [-Wmissing-field-initializers]
+ return {{{"rgba8Fbo",true},{"pngRoundtripExact",true},{"graphics",lastInfo_}},png};
+                                                                                  ^
+14 warnings generated.
+
+> hvigor WARN: When performing compilation for the arm64-v8a architecture:
+clang++: warning: argument unused during compilation: '--gcc-toolchain=C:/Program Files/Huawei/DevEco Studio/sdk/default/openharmony/native/llvm' [-Wunused-command-line-argument]
+clang++: warning: argument unused during compilation: '--gcc-toolchain=C:/Program Files/Huawei/DevEco Studio/sdk/default/openharmony/native/llvm' [-Wunused-command-line-argument]
+clang++: warning: argument unused during compilation: '--gcc-toolchain=C:/Program Files/Huawei/DevEco Studio/sdk/default/openharmony/native/llvm' [-Wunused-command-line-argument]
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:69:354: warning: missing field 'bytes' initializer [-Wmissing-field-initializers]
+  return enqueue([this,asset=std::move(asset),lid]{check(surface_!=EGL_NO_SURFACE,"Product surface unavailable");productMode_=true;motion_=orbit_=transitioning_=false;product_.load(asset,lid);glCheck("Product load");dirty_=true;schedule();return Result{{{"ready",product_.ready()},{"vertices",asset.vertices.size()},{"triangles",asset.indices.size()/3}}};}).get();
+                                                                                                                                                                                                                                                                                                                                                                 ^
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:77:132: warning: missing field 'bytes' initializer [-Wmissing-field-initializers]
+  return {{{"outsideTexels",outside},{"softTexels",soft},{"center",f[64*w+64]},{"narrowCenter",narrow[64*w+60]},{"monotonic",true}}};
+                                                                                                                                   ^
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:83:166: warning: missing field 'bytes' initializer [-Wmissing-field-initializers]
+  if(!library)return {{{"available",false},{"message","褰撳墠璁惧鏈彁渚涘師鐢熺┖闂撮噸寤哄簱銆傚凡褰曡棰戜細淇濈暀锛屼絾涓嶈兘鍦ㄦ璁惧鐢熸垚涓汉3D銆�"}}};
+                                                                                                                                  ^
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:86:312: warning: missing field 'bytes' initializer [-Wmissing-field-initializers]
+  return {{{"available",status==0},{"status",status},{"message",status==0?"璁惧鎻愪緵楂樻柉閲嶅缓鑳藉姏锛涘叾PLY缁撴灉灏氭湭鎺ュ叆鏈綉鏍肩紪杈戝櫒锛屼笉鑳界洿鎺ュ綋鎴愬彲缂栬緫GLB銆�":"璁惧鏈€氳繃鍘熺敓閲嶅缓鑳藉姏妫€鏌ワ紙"+std::to_string(status)+"锛夈€傝棰戦噰闆嗕笌涓汉閲嶅缓鏄笉鍚屾楠ゃ€�"}}};
+                                                                                                                                                                                                                                                     ^
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:90:491: warning: missing field 'bytes' initializer [-Wmissing-field-initializers]
+  result=enqueue([this,next=std::move(next)]()mutable{check(surface_!=EGL_NO_SURFACE,"Native surface unavailable");asset_=std::move(next);masks_.clear();featherMasks_.clear();operations_=Json::array();anchors_=Json::array();protectId_.clear();protectRule_.clear();hasAsset_=true;if(asset_.photo)yaw_=pitch_=0;upload();dirty_=true;schedule();return Result{{{"width",asset_.image.width},{"height",asset_.image.height},{"vertices",asset_.vertices.size()},{"triangles",asset_.indices.size()/3}}};}).get();
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ^
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:210:146: warning: missing field 'bytes' initializer [-Wmissing-field-initializers]
+ if(type=="PRODUCT_STATS")return {{{"ready",product_.ready()},{"lidProgress",product_.progress()},{"animationFrames",product_.animationFrames()}}};
+                                                                                                                                                 ^
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:213:46: warning: missing field 'images' initializer [-Wmissing-field-initializers]
+ if(type=="ECHO")return {Json::object(),bytes};
+                                             ^
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:214:118: warning: missing field 'images' initializer [-Wmissing-field-initializers]
+ if(type=="NORMALIZE"){auto img=decodeImage(bytes);return {{{"width",img.width},{"height",img.height}},encodePNG(img)};}
+                                                                                                                     ^
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:215:407: warning: missing field 'bytes' initializer [-Wmissing-field-initializers]
+ if(type=="LOAD"){Asset next=j.value("kind","")=="glb"?loadGLB(bytes):photoAsset(bytes);asset_=std::move(next);masks_.clear();featherMasks_.clear();operations_=Json::array();anchors_=Json::array();protectId_.clear();hasAsset_=true;upload();dirty_=true;schedule();return {{{"width",asset_.image.width},{"height",asset_.image.height},{"vertices",asset_.vertices.size()},{"triangles",asset_.indices.size()/3}}};}
+                                                                                                                                                                                                                                                                                                                                                                                                                      ^
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:217:128: warning: missing field 'bytes' initializer [-Wmissing-field-initializers]
+ if(type=="GET_VIEW"){orbit_=false;return {{{"yaw",yaw_},{"pitch",pitch_},{"distance",distance_},{"panX",panX_},{"panY",panY_}}};}
+                                                                                                                               ^
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:235:202: warning: missing field 'images' initializer [-Wmissing-field-initializers]
+  dirty_=true;schedule();return {{{"checkedWidth",cw},{"checkedHeight",ch},{"protectedPixels",protectedPixels},{"nonAuthorizedPixels",unchanged},{"maxProtectedError",0},{"maxNonAuthorizedError",0}}, {}};
+                                                                                                                                                                                                         ^
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:243:131: warning: missing field 'images' initializer [-Wmissing-field-initializers]
+ else if(type=="SELECT"){orbit_=false;return {{{"width",asset_.image.width},{"height",asset_.image.height}},select(j.at("points"))};}
+                                                                                                                                  ^
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:245:800: warning: missing field 'bytes' initializer [-Wmissing-field-initializers]
+ else if(type=="STATS"){auto sorted=frameTimes_,intervals=frameIntervals_;std::sort(sorted.begin(),sorted.end());std::sort(intervals.begin(),intervals.end());return {{{"transitionFrames",transitionFrames_},{"frames",frameCount_},{"cpuSubmitAndSwapP50Ms",sorted.empty()?0:sorted[sorted.size()/2]},{"cpuSubmitAndSwapP95Ms",sorted.empty()?0:sorted[size_t((sorted.size()-1)*.95)]},{"cpuSubmitOver50Ms",std::count_if(sorted.begin(),sorted.end(),[](double t){return t>50;})},{"renderStartIntervalP50Ms",intervals.empty()?0:intervals[intervals.size()/2]},{"renderStartIntervalP95Ms",intervals.empty()?0:intervals[size_t((intervals.size()-1)*.95)]},{"renderStartIntervalOver50Ms",std::count_if(intervals.begin(),intervals.end(),[](double t){return t>50;})},{"generation",generation_},{"graphics",lastInfo_}}};}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ^
+D:/STUDY/College/mine/olay/entry/src/main/cpp/RendererSession.cpp:256:83: warning: missing field 'images' initializer [-Wmissing-field-initializers]
+ return {{{"rgba8Fbo",true},{"pngRoundtripExact",true},{"graphics",lastInfo_}},png};
+                                                                                  ^
+14 warnings generated.
+
+> hvigor [32mFinished :entry:default@BuildNativeWithNinja... after 3 s 700 ms [39m
+> hvigor [32mFinished :entry:default@ProcessLibs... after 69 ms [39m
+> hvigor [32mFinished :entry:default@DoNativeStrip... after 101 ms [39m
+> hvigor [32mFinished :entry:default@CacheNativeLibs... after 12 ms [39m
+> hvigor WARN: WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/entryability/EntryAbility.ets:8:100
+ This API is unavailable to 2in1.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/entryability/EntryAbility.ets:9:11
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:55:29
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:56:19
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:91:16
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:97:54
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:97:100
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:98:19
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:106:56
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:107:13
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:108:21
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/ProductFactsDeck.ets:19:13
+ The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
+ It is recommended to use apiAvailable to safeguard API compatibility.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/ProductFactsDeck.ets:21:61
+ The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
+ It is recommended to use apiAvailable to safeguard API compatibility.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/ProductFactsDeck.ets:21:107
+ The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
+ It is recommended to use apiAvailable to safeguard API compatibility.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/ProductFactsDeck.ets:21:151
+ The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
+ It is recommended to use apiAvailable to safeguard API compatibility.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/PlannerClient.ets:38:33
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:23:75
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:27:16
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:28:25
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:30:84
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:32:17
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:36:39
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:38:21
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:38:40
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:38:60
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:39:8
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:39:24
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:47:84
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:49:21
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:50:12
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:50:53
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:56:25
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:56:45
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:58:117
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:58:137
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:18:24
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:25:8
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:34:50
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:38:14
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:38:49
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:40:70
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:46:41
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:48:26
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:48:137
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:49:8
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:64:64
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:65:27
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:66:51
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:71:135
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:71:155
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:75:29
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:78:67
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:78:91
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:82:84
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:82:101
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:83:80
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:83:97
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AmbientAudio.ets:24:49
+ The system capacity of this api 'media' is not supported on all devices
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AmbientAudio.ets:24:55
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AmbientAudio.ets:25:41
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AmbientAudio.ets:37:49
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:12:57
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:13:15
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:18:11
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:18:31
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:18:54
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:18:82
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:22:12
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:22:32
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:24:19
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:24:79
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:35:21
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:35:42
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:35:69
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/NativeEsProbe.ets:84:82
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/NativeEsProbe.ets:117:64
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/NativeEsProbe.ets:117:172
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/NativeEsProbe.ets:117:208
+ Function may throw exceptions. Special handling is required.
+
+
+> hvigor [32mFinished :entry:default@CompileArkTS... after 4 s 845 ms [39m
+> hvigor [32mFinished :entry:default@GeneratePkgModuleJson... after 3 ms [39m
+> hvigor [32mFinished :entry:default@ProcessCompiledResources... after 1 ms [39m
+> hvigor [32mFinished :entry:default@PackageHap... after 563 ms [39m
+> hvigor [32mFinished :entry:default@PackingCheck... after 8 ms [39m
+> hvigor WARN: No signingConfig found for product default
+> hvigor [32mFinished :entry:default@SignHap... after 2 ms [39m
+> hvigor [32mFinished :entry:default@CollectDebugSymbol... after 2 ms [39m
+> hvigor [32mFinished :entry:assembleHap... after 1 ms [39m
+> hvigor [32mBUILD SUCCESSFUL in 13 s 338 ms [39m
+
+33 tasks in total: 22 executed, 11 up-to-date

@@ -1,0 +1,55 @@
+start ability successfully.
+
+OHOS_REPORT_SUM: 2
+OHOS_REPORT_STATUS: class=SELFNativeExperience
+
+
+OHOS_REPORT_STATUS: class=SELFNativeExperience
+OHOS_REPORT_STATUS: current=1
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=2
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=penCircleWithoutToolbarAndWindowRotation
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeExperience
+OHOS_REPORT_STATUS: current=1
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=2
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=penCircleWithoutToolbarAndWindowRotation
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=8572
+
+
+OHOS_REPORT_STATUS: class=SELFNativeExperience
+OHOS_REPORT_STATUS: current=2
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=2
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=keyboardInputCanRequestModelWithoutExecuting
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeExperience
+OHOS_REPORT_STATUS: current=2
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=2
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=keyboardInputCanRequestModelWithoutExecuting
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=7918
+
+
+OHOS_REPORT_STATUS: class=SELFNativeExperience
+OHOS_REPORT_STATUS: suiteconsuming=16490
+
+
+OHOS_REPORT_RESULT: stream=Tests run: 2, Failure: 0, Error: 0, Pass: 2, Ignore: 0
+OHOS_REPORT_CODE: 0
+OHOS_REPORT_STATUS: taskconsuming=16490
+
+TestFinished-ResultCode: 0
+TestFinished-ResultMsg: your test finished!!!
+user test finished.

@@ -33,6 +33,7 @@ export class SessionStore {
     if(this.pending) { throw new Error('上一项修改尚未完成'); }
     const p=this.candidate;
     if(!p || p.planId!==planId) { throw new Error('候选方案已取消或过期'); }
+    if(!p.plannerSource?.startsWith('DeepSeek · ')||!p.snapshotId){throw new Error('新的外观修改必须先由模型提出候选');}
     if(p.baseSceneRevision!==undefined&&p.baseSceneRevision!==this.sceneRevision)throw new Error('候选生成后区域或规则已改变，请重新提出');
     PolicyEngine.validate(p,this.assetId,this.assetVersion,this.revision,this.regions,this.sourceKind);
     const ops=this.operations.slice();
@@ -73,7 +74,7 @@ export class SessionStore {
   serialize(id: string,label: string): SavedWorkspace {
     if(this.pending) { throw new Error('渲染成功后才能保存作品'); }
     const s: SavedWorkspace={schemaVersion:1,workspaceId:id,label,assetId:this.assetId,assetVersion:this.assetVersion,sourceKind:this.sourceKind,sourceFile:this.sourceFile,width:this.width,height:this.height,regions:this.regions,snapshots:this.snapshots,cursor:this.cursor,protection:this.protection,savedAt:Date.now()};
-    s.view=this.view;s.sceneRevision=this.sceneRevision;s.regionVersion=this.regionVersion;s.textureVersion=this.textureVersion;s.renderPipelineVersion='self-native-linear-tint-v1';return JSON.parse(JSON.stringify(s)) as SavedWorkspace;
+    s.view=this.view;s.sceneRevision=this.sceneRevision;s.regionVersion=this.regionVersion;s.textureVersion=this.textureVersion;s.renderPipelineVersion='self-native-per-operation-v2';return JSON.parse(JSON.stringify(s)) as SavedWorkspace;
   }
   restore(s: SavedWorkspace): void {
     if(s.schemaVersion!==1 || s.cursor<0 || s.cursor>=s.snapshots.length) { throw new Error('不支持这个作品版本'); }

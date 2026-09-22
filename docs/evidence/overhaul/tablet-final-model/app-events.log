@@ -1,0 +1,2 @@
+09-22 20:57:32.235  8845  8845 I A03d00/JSAPP: SELF_WINDOW {"width":1440,"wide":true}
+09-22 20:57:39.179  8845  8845 I A03d00/JSAPP: SELF_LIVE_MODEL_COMMIT {"sourceKind":"MESH","model":"DeepSeek · deepseek-flash","preset":"rose","strength":0.18,"renderCommitted":true,"billCount":1,"compositingVersion":"perceptual-v2"}
