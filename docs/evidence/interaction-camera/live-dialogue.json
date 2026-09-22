@@ -1,0 +1,89 @@
+{
+  "status": "passed",
+  "error": "",
+  "source": "Public CC-BY-3 scan; no webcam media uploaded. Two real HTTPS vision/tool calls.",
+  "calls": [
+    {
+      "schemaVersion": 1,
+      "requestId": "dialogue-1790092680",
+      "snapshotId": "dialogue-1790092680",
+      "assetId": "sample",
+      "assetVersion": "v1",
+      "textureVersion": "t1",
+      "sceneRevision": 2,
+      "regionVersion": 1,
+      "plan": {
+        "decision": "clarify",
+        "shortMessage": "目前可选的有两种：柔玫瑰偏红润，暖陶棕偏暖橘。",
+        "operations": [],
+        "explanationRefs": [],
+        "question": "你想试哪一种？",
+        "choices": [
+          "柔玫瑰",
+          "暖陶棕"
+        ]
+      },
+      "modelEvidence": {
+        "requestedModel": "deepseek-flash",
+        "returnedModel": "deepseek-flash",
+        "systemFingerprint": "aeb56401ca74e127821c4f9126dcb669",
+        "elapsedMs": 1484,
+        "usage": {
+          "prompt_tokens": 2797,
+          "completion_tokens": 148,
+          "total_tokens": 2945,
+          "prompt_tokens_details": {
+            "cached_tokens": 1792
+          },
+          "prompt_cache_hit_tokens": 1792,
+          "prompt_cache_miss_tokens": 1005
+        },
+        "providerResponseId": "6dd9bd5b-d31a-4fe7-8137-bf0754222cc2"
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "requestId": "dialogue-1790092680-next",
+      "snapshotId": "dialogue-1790092680-next",
+      "assetId": "sample",
+      "assetVersion": "v1",
+      "textureVersion": "t1",
+      "sceneRevision": 2,
+      "regionVersion": 1,
+      "plan": {
+        "decision": "edit",
+        "shortMessage": "好，柔玫瑰，淡淡的。可以先看看这一点变化。",
+        "operations": [
+          {
+            "operation": "set_digital_tint",
+            "regionId": "selected-cheek",
+            "presetId": "rose",
+            "intensityLevel": "light",
+            "layerId": "",
+            "productProfileId": ""
+          }
+        ],
+        "explanationRefs": [],
+        "question": "",
+        "choices": []
+      },
+      "modelEvidence": {
+        "requestedModel": "deepseek-flash",
+        "returnedModel": "deepseek-flash",
+        "systemFingerprint": "aeb56401ca74e127821c4f9126dcb669",
+        "elapsedMs": 1610,
+        "usage": {
+          "prompt_tokens": 2832,
+          "completion_tokens": 159,
+          "total_tokens": 2991,
+          "prompt_tokens_details": {
+            "cached_tokens": 1792
+          },
+          "prompt_cache_hit_tokens": 1792,
+          "prompt_cache_miss_tokens": 1040
+        },
+        "providerResponseId": "aef06a66-5eef-4a6e-b3f8-a0cab016c69e"
+      }
+    }
+  ]
+}

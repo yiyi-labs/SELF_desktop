@@ -1,1 +1,12 @@
-{"string":[{"name":"module_desc","value":"本地面容数字表达"}]}
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "本地面容数字表达"
+    },
+    {
+      "name": "camera_reason",
+      "value": "用于你主动开启的面容预览与本地视频采集"
+    }
+  ]
+}

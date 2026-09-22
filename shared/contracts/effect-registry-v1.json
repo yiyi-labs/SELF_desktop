@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "presets": {
     "rose": {
+      "displayName": "柔玫瑰",
       "color": [
         0.66,
         0.12,
@@ -9,6 +10,7 @@
       ]
     },
     "terracotta": {
+      "displayName": "暖陶棕",
       "color": [
         0.65,
         0.25,

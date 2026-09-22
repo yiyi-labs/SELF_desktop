@@ -25,18 +25,16 @@ export default function experienceSuite(){
     console.info('SELF_EXPERIENCE '+JSON.stringify({injectedPen:true,penSelectedWithoutToolbar:true,popupWithinWindow:true,rotationChangedWidth:true}));
    }finally{await appWindow.setPreferredOrientation(window.Orientation.AUTO_ROTATION_RESTRICTED);await driver.setDisplayRotation(initial);}
   });
-  it('cameraPickerCanReturnWithoutReplacingSample',0,async()=>{
+  it('nativeCameraEntryReturnsWithoutReplacingSample',0,async()=>{
    const app=abilityDelegatorRegistry.getAbilityDelegator();await app.startAbility({bundleName:'com.self.mirror',abilityName:'EntryAbility'});
-   const driver=Driver.create();await driver.delayMs(1800);const path=(await app.getCurrentTopAbility()).context.filesDir;
+   const driver=Driver.create();await driver.delayMs(1800);
    const direct=await driver.findComponent(ON.text('拍摄'));
    if(direct)await direct.click();else{await (await driver.findComponent(ON.text('工具'))).click();await (await driver.waitForComponent(ON.text('拍摄面容视频'),5000)).click();}
-   await (await driver.findComponent(ON.text('打开相机 · 拍摄视频'))).click();await driver.delayMs(3000);
-   await driver.screenCapture(path+'/experience-camera.png');await driver.dumpLayout(path+'/experience-camera-layout.json');
-   await driver.pressBack();await driver.delayMs(1200);
-   await driver.screenCapture(path+'/experience-camera-return.png');
-   await driver.assertComponentExist(ON.text('拍摄面容'));
-   await driver.pressBack();await driver.assertComponentExist(ON.text('示例面容 · 数字表达'));
-   console.info('SELF_CAMERA_PICKER '+JSON.stringify({launchAndReturn:true,sourceUnchanged:true,reconstruction:false}));
+   await (await driver.waitForComponent(ON.text('打开相机 · 拍摄视频'),5000)).click();
+   await driver.waitForComponent(ON.id('camera-preview-active'),15000);await driver.assertComponentExist(ON.id('camera-preview-active'));
+   // Camera pixels are private: this test deliberately does not take screenshots.
+   await driver.pressBack();await driver.delayMs(800);await driver.assertComponentExist(ON.text('示例面容 · 数字表达'));
+   console.info('SELF_CAMERA_ENTRY '+JSON.stringify({nativePreview:true,sourceUnchanged:true,reconstruction:false}));
   });
   it('keyboardInputCanRequestModelWithoutExecuting',0,async()=>{
    const app=abilityDelegatorRegistry.getAbilityDelegator();await app.startAbility({bundleName:'com.self.mirror',abilityName:'EntryAbility'});
@@ -45,8 +43,8 @@ export default function experienceSuite(){
     const input=await driver.findComponent(ON.id('conversation-input'));await input.inputText('试试唇色');await driver.delayMs(800);
     expect(await input.getText()).assertEqual('试试唇色');await driver.screenCapture(path+'/experience-keyboard.png');
     await (await driver.findComponent(ON.text('发送'))).click();
-    await driver.waitForComponent(ON.text('仅本次发送图像并理解'),5000);
-    await (await driver.findComponent(ON.text('暂不发送，保留现在'))).click();
+    await driver.waitForComponent(ON.text('开启并发送'),5000);
+    await (await driver.findComponent(ON.text('暂不发送'))).click();
     console.info('SELF_KEYBOARD '+JSON.stringify({inputReadback:true,modelConsentShown:true,noUpload:true}));
    }catch(e){await driver.screenCapture(path+'/experience-keyboard-failure.png');throw new Error(String(e));}
   });

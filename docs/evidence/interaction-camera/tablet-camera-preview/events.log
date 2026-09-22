@@ -1,0 +1,6 @@
+09-22 23:37:59.112 21280 21280 I A03d00/JSAPP: SELF_CAMERA_DEVICES [{"position":1,"type":1,"connection":0},{"position":2,"type":1,"connection":0}]
+09-22 23:37:59.136 21280 21280 I A03d00/JSAPP: SELF_CAMERA_ENCODERS [{"mimeType":"audio/mp4a-latm","type":"audio","bitRate":{"min":1,"max":500000},"channels":{"min":1,"max":8},"sampleRate":[7350,8000,11025,12000,16000,22050,24000,32000,44100,48000,64000,88200,96000]}]
+09-22 23:37:59.136 21280 21280 I A03d00/JSAPP: SELF_CAMERA_PROFILES [{"format":3,"frameRateRange":{"min":30,"max":60},"size":{"width":1280,"height":720}}]
+09-22 23:37:59.407 21280 21280 I A03d00/JSAPP: SELF_CAMERA_READY {"width":1280,"height":720,"fps":30,"position":2,"recording":false,"canRecord":false}
+09-22 23:37:59.454 21280 21280 I A03d00/JSAPP: SELF_CAMERA_PREVIEW_STARTED
+09-22 23:38:00.558 21280 21280 I A03d00/JSAPP: SELF_CAMERA_TEST {"nativePreview":true,"recording":false,"reason":"no_video_encoder","reconstruction":false}

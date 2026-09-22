@@ -1,25 +1,25 @@
 > hvigor [32mUP-TO-DATE :entry:default@PreBuild...  [39m
 > hvigor [32mFinished :entry:default@CreateModuleInfo... after 1 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@GenerateMetadata...  [39m
-> hvigor [32mFinished :entry:default@ConfigureCmake... after 43 ms [39m
+> hvigor [32mFinished :entry:default@ConfigureCmake... after 59 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@MergeProfile...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@CreateBuildProfile...  [39m
 > hvigor [32mFinished :entry:default@PreCheckSyscap... after 1 ms [39m
-> hvigor [32mFinished :entry:default@GeneratePkgSdkInfo... after 3 ms [39m
+> hvigor [32mFinished :entry:default@GeneratePkgSdkInfo... after 6 ms [39m
 > hvigor [32mFinished :entry:default@ProcessIntegratedHsp... after 1 ms [39m
-> hvigor [32mFinished :entry:default@BuildNativeWithCmake... after 29 ms [39m
+> hvigor [32mFinished :entry:default@BuildNativeWithCmake... after 43 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@MakePackInfo...  [39m
-> hvigor [32mFinished :entry:default@SyscapTransform... after 9 ms [39m
+> hvigor [32mFinished :entry:default@SyscapTransform... after 11 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@GeneratePkgContextInfo...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@ProcessProfile...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@ProcessRouterMap...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@ProcessShareConfig...  [39m
-> hvigor [32mFinished :entry:default@ProcessStartupConfig... after 2 ms [39m
+> hvigor [32mFinished :entry:default@ProcessStartupConfig... after 3 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@ProcessResource...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@GenerateLoaderJson...  [39m
-> hvigor [32mFinished :entry:default@CompileResource... after 252 ms [39m
-> hvigor [32mFinished :entry:default@BuildJS... after 3 ms [39m
-> hvigor [32mFinished :entry:default@BuildNativeWithNinja... after 108 ms [39m
+> hvigor [32mFinished :entry:default@CompileResource... after 251 ms [39m
+> hvigor [32mFinished :entry:default@BuildJS... after 4 ms [39m
+> hvigor [32mFinished :entry:default@BuildNativeWithNinja... after 94 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@ProcessLibs...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@DoNativeStrip...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@CacheNativeLibs...  [39m
@@ -56,6 +56,57 @@ WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/Rend
 WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:108:21
  Function may throw exceptions. Special handling is required.
 
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/NativeMirrorSurface.ets:22:34
+ The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
+ It is recommended to use apiAvailable to safeguard API compatibility.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/NativeMirrorSurface.ets:22:50
+ The 'stroke' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
+ It is recommended to use apiAvailable to safeguard API compatibility.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:39:24
+ The system capacity of this api 'media' is not supported on all devices
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:42:68
+ The system capacity of this api 'media' is not supported on all devices
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:55:57
+ The system capacity of this api 'media' is not supported on all devices
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:56:25
+ The system capacity of this api 'media' is not supported on all devices
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:58:24
+ To use this API, you need to apply for the permissions: ohos.permission.MICROPHONE
+This permission is required only if audio recording is involved. [since 12]
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:79:23
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:83:47
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:84:47
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:85:18
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:87:17
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:87:94
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:87:150
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:100:37
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:100:62
+ Function may throw exceptions. Special handling is required.
+
 WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/ProductFactsDeck.ets:19:13
  The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
@@ -72,7 +123,7 @@ WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/Produ
  The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/PlannerClient.ets:38:33
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/PlannerClient.ets:40:33
  Function may throw exceptions. Special handling is required.
 
 WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:23:75
@@ -262,15 +313,15 @@ WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/Nativ
  Function may throw exceptions. Special handling is required.
 
 
-> hvigor [32mFinished :entry:default@CompileArkTS... after 3 s 365 ms [39m
-> hvigor [32mFinished :entry:default@GeneratePkgModuleJson... after 2 ms [39m
+> hvigor [32mFinished :entry:default@CompileArkTS... after 5 s 128 ms [39m
+> hvigor [32mFinished :entry:default@GeneratePkgModuleJson... after 3 ms [39m
 > hvigor [32mFinished :entry:default@ProcessCompiledResources... after 1 ms [39m
-> hvigor [32mFinished :entry:default@PackageHap... after 564 ms [39m
-> hvigor [32mFinished :entry:default@PackingCheck... after 8 ms [39m
+> hvigor [32mFinished :entry:default@PackageHap... after 609 ms [39m
+> hvigor [32mFinished :entry:default@PackingCheck... after 9 ms [39m
 > hvigor WARN: No signingConfig found for product default
 > hvigor [32mFinished :entry:default@SignHap... after 2 ms [39m
-> hvigor [32mFinished :entry:default@CollectDebugSymbol... after 1 ms [39m
+> hvigor [32mFinished :entry:default@CollectDebugSymbol... after 2 ms [39m
 > hvigor [32mFinished :entry:assembleHap... after 1 ms [39m
-> hvigor [32mBUILD SUCCESSFUL in 9 s 836 ms [39m
+> hvigor [32mBUILD SUCCESSFUL in 13 s 150 ms [39m
 
 33 tasks in total: 19 executed, 14 up-to-date

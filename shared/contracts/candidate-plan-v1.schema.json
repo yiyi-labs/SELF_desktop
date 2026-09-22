@@ -98,6 +98,15 @@
       "maxLength": 200,
       "title": "Question",
       "type": "string"
+    },
+    "choices": {
+      "description": "Only for clarify: 2 or 3 short Chinese choices answering ONE question, no numeric prefixes. Otherwise []. Never ask to choose a region when annotatedRegionId is already supplied.",
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 3,
+      "title": "Choices",
+      "type": "array"
     }
   },
   "required": [

@@ -1,0 +1,85 @@
+{
+  "source": "Public CC-BY-3 sample, original nonpersonal test utterances. Tone requires human review; assertions cover no edits/products and concise reply.",
+  "cases": [
+    {
+      "case": "nose-concern",
+      "input": "我不太喜欢自己的鼻子，看起来很奇怪，但也不想被改成别人的样子。",
+      "status": "passed",
+      "result": {
+        "schemaVersion": 1,
+        "requestId": "voice-nose-concern-1790093178",
+        "snapshotId": "voice-nose-concern-1790093178",
+        "assetId": "sample",
+        "assetVersion": "v1",
+        "textureVersion": "t1",
+        "sceneRevision": 2,
+        "regionVersion": 1,
+        "plan": {
+          "decision": "support",
+          "shortMessage": "谢谢你愿意说这些。想保留自己的样子，这本身就很好，这次我们先不改动这里。",
+          "operations": [],
+          "explanationRefs": [],
+          "question": "",
+          "choices": []
+        },
+        "modelEvidence": {
+          "requestedModel": "deepseek-flash",
+          "returnedModel": "deepseek-flash",
+          "systemFingerprint": "aeb56401ca74e127821c4f9126dcb669",
+          "elapsedMs": 1969,
+          "usage": {
+            "prompt_tokens": 1956,
+            "completion_tokens": 136,
+            "total_tokens": 2092,
+            "prompt_tokens_details": {
+              "cached_tokens": 896
+            },
+            "prompt_cache_hit_tokens": 896,
+            "prompt_cache_miss_tokens": 1060
+          },
+          "providerResponseId": "a80d3826-997c-48cf-8933-744827adf6ca"
+        }
+      }
+    },
+    {
+      "case": "keep-mole",
+      "input": "这颗痣我想留着，只想聊聊，不用修改。",
+      "status": "passed",
+      "result": {
+        "schemaVersion": 1,
+        "requestId": "voice-keep-mole-1790093180",
+        "snapshotId": "voice-keep-mole-1790093180",
+        "assetId": "sample",
+        "assetVersion": "v1",
+        "textureVersion": "t1",
+        "sceneRevision": 2,
+        "regionVersion": 1,
+        "plan": {
+          "decision": "support",
+          "shortMessage": "好，那就留着，这次什么都不改。想聊什么我都在，慢慢说就好。",
+          "operations": [],
+          "explanationRefs": [],
+          "question": "",
+          "choices": []
+        },
+        "modelEvidence": {
+          "requestedModel": "deepseek-flash",
+          "returnedModel": "deepseek-flash",
+          "systemFingerprint": "aeb56401ca74e127821c4f9126dcb669",
+          "elapsedMs": 1531,
+          "usage": {
+            "prompt_tokens": 1949,
+            "completion_tokens": 135,
+            "total_tokens": 2084,
+            "prompt_tokens_details": {
+              "cached_tokens": 896
+            },
+            "prompt_cache_hit_tokens": 896,
+            "prompt_cache_miss_tokens": 1053
+          },
+          "providerResponseId": "37978830-eae2-413d-9648-665d04458f22"
+        }
+      }
+    }
+  ]
+}

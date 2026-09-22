@@ -36,7 +36,7 @@ class RendererSession {
  std::array<float,16> matrix(int width,int height) const;
  static void vsyncCallback(long long,void*);
  std::thread thread_;std::mutex mutex_;std::condition_variable wake_;std::deque<std::shared_ptr<Job>> jobs_;bool stopping_=false,tick_=false;
- OH_NativeVSync* vsync_=nullptr;bool scheduled_=false,dirty_=false,foreground_=true,orbit_=false;double orbitPhase_=0;
+ OH_NativeVSync* vsync_=nullptr;bool scheduled_=false,dirty_=false,foreground_=true,orbit_=false;double orbitPhase_=0;float orbitYaw_=0,orbitPitch_=0;
  EGLDisplay display_=EGL_NO_DISPLAY;EGLContext context_=EGL_NO_CONTEXT;EGLSurface surface_=EGL_NO_SURFACE;OHNativeWindow* window_=nullptr;
  GLuint program_=0,backgroundProgram_=0,vao_=0,vbo_=0,ebo_=0,texture_=0,maskArray_=0,protection_=0,annotation_=0;
  GLuint transitionProgram_=0,transitionTexture_=0;bool transitioning_=false;double transitionStart_=0;uint64_t transitionFrames_=0;

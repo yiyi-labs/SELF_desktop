@@ -1,3 +1,5 @@
+> 最新平板版本：见 [对话、沉浸视觉与相机核验](docs/interaction-camera-validation.md)。起始页面可打开原生摄像头预览；当前模拟器没有视频编码器，不能录制 MP4 或生成个人3D。后续调试使用平板。
+
 # SELF：当前原生版本
 
 这是对现有工程的增量迁移。原版柔和界面、包名、音乐、作品和偏好保留；正式镜面已换为 HarmonyOS 原生 C++ EGL/OpenGL ES3。用户提供的新规范是 `SELF_HarmonyOS_Native_DeepSeek_Codex_20260922.md`。

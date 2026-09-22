@@ -62,3 +62,5 @@ Three.js0.186.0 及旧浏览器代码仅保留作迁移参照；示例 GLB 仍�
 产品 UI 已不使用上述 SVG。`scripts/build-product-models.py`、`ProductScene.cpp/.h`、`ProductCard.ets`、`ProductFactsDeck.ets` 为 SELF 自主实现，生成六组独立瓶身/盖子 GLB（贴图内嵌），逐文件哈希和原创声明见 `rawfile/products/3d/manifest.json`。未复制商业照片或官方包装图形；仅使用 OLAY 文字识别品牌。旋转、灯光和分体开合是真实原生渲染；几何、材质、盖子机构只是近似示意，并非实测商品参数。Arial 使用本机系统字体生成位图，没有分发字体文件。
 
 本轮设计阅读 [华为设计官网](https://developer.huawei.com/consumer/cn/design)及 [HarmonyOS 7 官方页面](https://consumer.huawei.com/cn/harmonyos-7/)，采用柔和光感、材质层次、堆叠卡片和响应式布局的方向。未复制官方素材，未宣称获得官方设计认证或已经验证真机流畅度。实现使用本机商业 SDK26 的 ArkUI 与 GLES3，不用 OpenHarmony 示例版本表证明商业兼容。
+
+本轮相机、对话与背景使用范围见 [对话与平板相机核验](interaction-camera-validation.md)：本机 API26 Camera Kit/Media Kit 的声明与官方说明核对，原生采集类、GLSL 氛围和圈选反馈自主实现；没有复制 SDK 文件或新第三方资产。

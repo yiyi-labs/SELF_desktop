@@ -13,7 +13,7 @@ export default function productSuite(){
    expect(!!(await driver.findComponent(ON.id('product-card')))).assertFalse();
    await (await driver.findComponent(ON.id('conversation-input'))).inputText('请只介绍OLAY水光小白瓶50ml的已核实资料，不修改面容。');await driver.delayMs(700);
    await (await driver.findComponent(ON.text('发送'))).click();
-   await (await driver.waitForComponent(ON.text('仅本次发送图像并理解'),5000)).click();
+   await (await driver.waitForComponent(ON.text('开启并发送'),5000)).click();
    await driver.waitForComponent(ON.id('product-lid').enabled(true),55000);
    await driver.assertComponentExist(ON.text('水光小白瓶'));
    for(let round=0;round<2;round++){

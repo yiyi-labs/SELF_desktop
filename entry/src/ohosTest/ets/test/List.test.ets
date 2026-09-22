@@ -13,6 +13,7 @@ import stressSuite from './Stress.test';
 import liveModelSuite from './LiveModel.test';
 import experienceSuite from './Experience.test';
 import productSuite from './Product.test';
+import cameraSuite from './Camera.test';
 import { fileIo as fs } from '@kit.CoreFileKit';
 import { CandidatePlan, SavedWorkspace } from '../../../main/ets/domain/EditPlan';
 // Contract fixture only. UI paths cannot call this helper and real model tests use PlannerClient.
@@ -38,7 +39,7 @@ function session():SessionStore{
   return s;
 }
 export default function testsuite(){
-  stressSuite();liveModelSuite();experienceSuite();productSuite();
+  stressSuite();liveModelSuite();experienceSuite();productSuite();cameraSuite();
   describe('SELFNativePolicy',()=>{
     it('localNewEffectCannotBypassModelButRestoreRemainsLocal',0,()=>{
       const s=new SessionStore();s.regions=session().regions;const plan=s.propose('lipTint','lip');let rejected=false;
@@ -137,16 +138,16 @@ export default function testsuite(){
       const surface=await driver.findComponent(ON.id('self-native-mirror'));const r=await surface.getBounds();
       const matrix=PointerMatrix.create(1,33);for(let i=0;i<33;i++){const angle=i/32*Math.PI*2;matrix.setPoint(0,i,{x:Math.round(r.left+(r.right-r.left)*(.5+.13*Math.cos(angle))),y:Math.round(r.top+(r.bottom-r.top)*(.43+.08*Math.sin(angle)))});}
       expect(await driver.injectMultiPointerAction(matrix,500)).assertTrue();await driver.delayMs(1200);
-      await driver.assertComponentExist(ON.text('你想如何看待这里？可以聊聊、试一点颜色，也可以保留。'));
+      await driver.assertComponentExist(ON.text('想说说这里，还是试一点变化？也可以就这样。'));
       const popup=await (await driver.findComponent(ON.id('conversation-card'))).getBounds();
       const mirror=await (await driver.findComponent(ON.id('self-native-mirror'))).getBounds();
       expect(popup.left>=mirror.left&&popup.right<=mirror.right&&popup.top>=mirror.top&&popup.bottom<=mirror.bottom).assertTrue();
       await driver.screenCapture((await delegator.getCurrentTopAbility()).context.filesDir+'/lasso-popup.png');
       await (await driver.findComponent(ON.text('想试一点变化'))).click();
-      await driver.waitForComponent(ON.text('仅本次发送图像并理解'),5000);
-      await driver.assertComponentExist(ON.text('仅本次发送图像并理解'));
+      await driver.waitForComponent(ON.text('开启并发送'),5000);
+      await driver.assertComponentExist(ON.text('开启并发送'));
       expect(!!(await driver.findComponent(ON.id('apply-candidate')))).assertFalse();
-      await (await driver.findComponent(ON.text('暂不发送，保留现在'))).click();await driver.delayMs(700);
+      await (await driver.findComponent(ON.text('暂不发送'))).click();await driver.delayMs(700);
       expect(!!(await driver.findComponent(ON.id('apply-candidate')))).assertFalse();
       console.info('SELF_LASSO_MODEL_GATE '+JSON.stringify({realTouch:true,cloudConsent:true,declinedWithoutCandidate:true}));
     });

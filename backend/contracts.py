@@ -1,5 +1,6 @@
 """Only proposals cross this boundary. Authorization and pixels remain on the phone."""
-from typing import Literal
+from typing import Literal, Annotated
+import re
 from product_catalog import allowed_refs, requests_product_effect
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -17,6 +18,11 @@ class Layer(StrictModel):
     presetId: str
     intensityLevel: Literal["none", "light", "medium", "strong"]
 
+class DialogueTurn(StrictModel):
+    userText: str = Field(max_length=2000)
+    reply: str = Field(max_length=400)
+    choices: list[Annotated[str, Field(min_length=1,max_length=60)]] = Field(default_factory=list, max_length=3)
+
 class Snapshot(StrictModel):
     schemaVersion: Literal[1] = 1
     requestId: str = Field(min_length=1, max_length=100, pattern=r"^[a-zA-Z0-9_-]+$")
@@ -30,6 +36,8 @@ class Snapshot(StrictModel):
     view: dict[str, float] = Field(max_length=8)
     userText: str = Field(min_length=1, max_length=2000)
     productContextIds: list[str] = Field(default_factory=list, max_length=3)
+    dialogue: list[DialogueTurn] = Field(default_factory=list, max_length=3)
+    resolvedChoice: str = Field(default="", max_length=60)
     regions: list[Region] = Field(max_length=32)
     layers: list[Layer] = Field(max_length=8)
     protectedRegionIds: list[str] = Field(max_length=32)
@@ -52,11 +60,47 @@ class Plan(StrictModel):
     operations: list[Operation] = Field(max_length=1)
     explanationRefs: list[str] = Field(max_length=3, description="Only productId from supplied productInformation. Information only, not evidence of a calibrated effect. Without productInformation use [].")
     question: str = Field(max_length=200, description="Must be empty for edit/explain/support. Only decision=clarify may contain a question; a clarify plan must have operations=[]. Authorization confirmation is handled by the app, not this field.")
+    choices: list[str] = Field(default_factory=list, max_length=3, description="Only for clarify: 2 or 3 short Chinese choices answering ONE question, no numeric prefixes. Otherwise []. Never ask to choose a region when annotatedRegionId is already supplied.")
 
-PRESETS = {"rose": {"color": [0.66, 0.12, 0.30]}, "terracotta": {"color": [0.65, 0.25, 0.18]}}
+PRESETS = {"rose": {"displayName": "柔玫瑰", "color": [0.66, 0.12, 0.30]}, "terracotta": {"displayName": "暖陶棕", "color": [0.65, 0.25, 0.18]}}
 LEVELS = {"none": 0.0, "light": 0.18, "medium": 0.32, "strong": 0.5}
 
+def listening_only(text: str) -> bool:
+    # Explicit discussion / no-transformation intent. This narrows capabilities,
+    # never manufactures an edit or a psychological diagnosis.
+    return bool(re.search(r'只想聊聊|不用修改|先不要.*编辑|不想.{0,12}(?:改成|变成).{0,8}别人',text))
+
 def validate_plan(plan: Plan, snapshot: Snapshot) -> Plan:
+    if listening_only(snapshot.userText) and plan.decision=='edit':
+        raise ValueError('conversation_only')
+    # Display labels are a deterministic presentation mapping, never an edit rewrite.
+    def display(text):
+        for key, preset in PRESETS.items():
+            text = re.sub(r"\b"+key+r"\b", preset["displayName"], text, flags=re.I)
+        if re.search(r"regionId|presetId|layerId|set_digital_tint|region-[\w-]+", text):
+            raise ValueError("internal_identifier_in_reply")
+        return text
+    plan.shortMessage = display(plan.shortMessage)
+    plan.question = display(plan.question)
+    if listening_only(snapshot.userText) and re.search(r'我(?:会|已经)?记(?:着|住)|已(?:经)?(?:保存|保护)|以后(?:一直|都会)',plan.shortMessage):
+        # No preference-write tool exists here. Keep the acknowledgement truthful;
+        # this presentation fallback cannot create or authorize an operation.
+        plan.shortMessage='这次先保留你现在的样子，我们慢慢聊。'
+    if plan.decision=='clarify' and plan.question:
+        # The dedicated question is rendered once beside the choices. Remove
+        # duplicate question sentences from the acknowledgement, not the plan.
+        statement=re.sub(r'[^。！？.!?]*[？?]','',plan.shortMessage).strip()
+        if statement:plan.shortMessage=statement
+    plan.choices = [display(choice) for choice in plan.choices]
+    if plan.choices and (plan.decision != "clarify" or not plan.question or len(plan.choices)<2 or len(set(plan.choices))!=len(plan.choices) or any(not c.strip() or len(c)>60 for c in plan.choices)):
+        raise ValueError("invalid_choices")
+    if snapshot.resolvedChoice:
+        if not snapshot.dialogue or snapshot.resolvedChoice not in snapshot.dialogue[-1].choices:
+            raise ValueError("stale_choice")
+    if re.fullmatch(r"[1-3]", snapshot.userText.strip()) and plan.decision == "edit":
+        index = int(snapshot.userText.strip())-1
+        if not snapshot.dialogue or index>=len(snapshot.dialogue[-1].choices) or snapshot.resolvedChoice!=snapshot.dialogue[-1].choices[index]:
+            raise ValueError("ambiguous_numeric_reply")
     if plan.decision == 'edit' and (requests_product_effect(snapshot.userText,snapshot.productContextIds) or plan.explanationRefs):
         # There are currently zero experimentally calibrated product profiles.
         # Product facts/INCI cannot authorize a generic tint as a product result.
@@ -72,6 +116,9 @@ def validate_plan(plan: Plan, snapshot: Snapshot) -> Plan:
     regions = {r.regionId for r in snapshot.regions}
     layers = {r.layerId: r for r in snapshot.layers}
     for op in plan.operations:
+        selected_presets=[key for key,preset in PRESETS.items() if preset['displayName'] in snapshot.resolvedChoice or re.search(r'\b'+key+r'\b',snapshot.resolvedChoice,re.I)]
+        if op.operation=='set_digital_tint' and len(selected_presets)==1 and op.presetId!=selected_presets[0]:
+            raise ValueError('choice_preset_mismatch')
         if op.regionId not in regions:
             raise ValueError("unknown region")
         if op.operation == 'set_digital_tint' and snapshot.annotatedRegionId and op.regionId != snapshot.annotatedRegionId:

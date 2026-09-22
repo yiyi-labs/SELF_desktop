@@ -1,5 +1,36 @@
 {
   "$defs": {
+    "DialogueTurn": {
+      "additionalProperties": false,
+      "properties": {
+        "userText": {
+          "maxLength": 2000,
+          "title": "Usertext",
+          "type": "string"
+        },
+        "reply": {
+          "maxLength": 400,
+          "title": "Reply",
+          "type": "string"
+        },
+        "choices": {
+          "items": {
+            "maxLength": 60,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 3,
+          "title": "Choices",
+          "type": "array"
+        }
+      },
+      "required": [
+        "userText",
+        "reply"
+      ],
+      "title": "DialogueTurn",
+      "type": "object"
+    },
     "Layer": {
       "additionalProperties": false,
       "properties": {
@@ -133,6 +164,28 @@
       "maxLength": 2000,
       "minLength": 1,
       "title": "Usertext",
+      "type": "string"
+    },
+    "productContextIds": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 3,
+      "title": "Productcontextids",
+      "type": "array"
+    },
+    "dialogue": {
+      "items": {
+        "$ref": "#/$defs/DialogueTurn"
+      },
+      "maxItems": 3,
+      "title": "Dialogue",
+      "type": "array"
+    },
+    "resolvedChoice": {
+      "default": "",
+      "maxLength": 60,
+      "title": "Resolvedchoice",
       "type": "string"
     },
     "regions": {

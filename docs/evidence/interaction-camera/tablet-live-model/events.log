@@ -1,0 +1,2 @@
+09-22 23:43:09.955 25293 25293 I A03d00/JSAPP: SELF_LIVE_MODEL_COMMIT {"sourceKind":"MESH","model":"DeepSeek · deepseek-flash","preset":"rose","strength":0.18,"renderCommitted":true,"billCount":1,"compositingVersion":"perceptual-v2"}
+09-22 23:43:14.161 25293 25293 I A03d00/JSAPP: SELF_CLOUD_SESSION {"secondSendWithoutConsentModal":true}

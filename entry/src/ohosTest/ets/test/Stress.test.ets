@@ -11,7 +11,7 @@ export default function stressSuite(){
    // below only restore that already authorized history; no repeated paid calls.
    const idea=await driver.findComponent(ON.text('唇色想法'));
    if(idea)await idea.click();else{await (await driver.findComponent(ON.text('工具'))).click();await (await driver.waitForComponent(ON.text('让模型规划唇色'),5000)).click();}
-   await (await driver.waitForComponent(ON.text('仅本次发送图像并理解'),5000)).click();
+   await (await driver.waitForComponent(ON.text('开启并发送'),5000)).click();
    await (await driver.waitForComponent(ON.id('apply-candidate'),55000)).click();await driver.delayMs(1000);
    const started=Date.now();let cycles=0;
    while(Date.now()-started<600000){
@@ -23,7 +23,7 @@ export default function stressSuite(){
     await (await driver.findComponent(ON.text('撤销'))).click();await driver.delayMs(900);
     await (await driver.findComponent(ON.id('conversation-input'))).inputText('重做');await driver.delayMs(300);
     await (await driver.findComponent(ON.text('发送'))).click();await driver.delayMs(1200);
-    await driver.assertComponentExist(ON.text('已应用通用数字表达 · 非产品实测'));
+    await driver.assertComponentExist(ON.text('这一点变化已经做好了，喜欢就留下。'));
     await (await driver.findComponent(ON.text('氛围'))).click();
     // The success subtitle can be unchanged during replay. Wait for the actual
     // panel rather than scroll-searching a possibly still-visible canvas row.

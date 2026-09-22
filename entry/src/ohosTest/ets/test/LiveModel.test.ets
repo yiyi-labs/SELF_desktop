@@ -17,13 +17,13 @@ export default function liveModelSuite(){
    const context=(await app.getCurrentTopAbility()).context,assets=new AssetStore(context),works=new WorkspaceStore(context,assets);
    const before=works.list().map((w:WorkItem)=>w.id);let created='';
    try{
-    const idea=await driver.findComponent(ON.text('唇色想法'));
-    if(idea)await idea.click();else{await (await driver.findComponent(ON.text('工具'))).click();await (await driver.waitForComponent(ON.text('让模型规划唇色'),5000)).click();}
-    await driver.waitForComponent(ON.text('仅本次发送图像并理解'),5000);
+    await (await driver.findComponent(ON.id('conversation-input'))).inputText('请在已确认唇区新增一层轻柔的柔玫瑰通用数字颜色。');
+    await (await driver.findComponent(ON.text('发送'))).click();
+    await driver.waitForComponent(ON.text('开启并发送'),5000);
     expect(!!(await driver.findComponent(ON.id('apply-candidate')))).assertFalse();
-    await (await driver.findComponent(ON.text('仅本次发送图像并理解'))).click();
+    await (await driver.findComponent(ON.text('开启并发送'))).click();
     await (await driver.waitForComponent(ON.id('apply-candidate'),55000)).click();
-    await driver.waitForComponent(ON.text('已应用通用数字表达 · 非产品实测'),10000);
+    await driver.waitForComponent(ON.text('这一点变化已经做好了，喜欢就留下。'),10000);
     await driver.delayMs(1000);
     const direct=await driver.findComponent(ON.text('作品'));
     if(direct)await direct.click();else{await (await driver.findComponent(ON.text('工具'))).click();await (await (await driver.findComponent(ON.type('Scroll'))).scrollSearch(ON.text('作品与记录'))).click();}
@@ -34,7 +34,13 @@ export default function liveModelSuite(){
     expect(operations[0].plannerSource?.startsWith('DeepSeek · ')).assertTrue();expect(!!operations[0].snapshotId).assertTrue();
     expect(operations[0].compositingVersion).assertEqual('perceptual-v2');
     console.info('SELF_LIVE_MODEL_COMMIT '+JSON.stringify({sourceKind:saved.sourceKind,model:operations[0].plannerSource,preset:operations[0].presetId,strength:operations[0].absoluteStrength,renderCommitted:true,billCount:operations.length,compositingVersion:operations[0].compositingVersion}));
-    await driver.pressBack();await (await driver.waitForComponent(ON.text('撤销').enabled(true),5000)).click();await driver.delayMs(800);
+    await driver.pressBack();await (await driver.waitForComponent(ON.id('conversation-input'),5000)).inputText('先不用改，我想保留现在，简单回应即可。');
+    await (await driver.findComponent(ON.text('发送'))).click();await driver.delayMs(400);
+    expect(!!(await driver.findComponent(ON.id('cloud-enable-send')))).assertFalse();
+    expect(!!(await driver.findComponent(ON.text('云端理解')))).assertFalse();
+    const cancel=await driver.findComponent(ON.text('取消这次请求'));if(cancel)await cancel.click();
+    console.info('SELF_CLOUD_SESSION '+JSON.stringify({secondSendWithoutConsentModal:true}));
+    await (await driver.waitForComponent(ON.text('撤销').enabled(true),5000)).click();await driver.delayMs(800);
    }catch(e){await driver.screenCapture(context.filesDir+'/live-model-failure.png');throw new Error(String(e));}finally{if(created&&!before.includes(created))works.delete(created);}
   });
  });

@@ -5,7 +5,7 @@ from pathlib import Path
 CATALOG = json.loads((Path(__file__).resolve().parents[1] / 'shared/products/olay-cn-catalog.json').read_text(encoding='utf-8'))
 
 def lookup(user_text: str, context_ids: list[str] | None = None) -> list[dict]:
-    continuation = any(word in user_text for word in ('这款','这个','它','试一下','试试','淡一点','参数','效果'))
+    continuation = user_text.strip() in ('1','2','3') or any(word in user_text for word in ('这款','这个','它','试一下','试试','淡一点','参数','效果'))
     explicit = any(word in user_text.lower() for word in ['olay','玉兰油','产品','护肤','小白瓶','超红瓶','黑管'])
     if not explicit and not (continuation and context_ids):return []
     score = lambda p: sum(k.lower() in user_text.lower() for k in p['keywords'])

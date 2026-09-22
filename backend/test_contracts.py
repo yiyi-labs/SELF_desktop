@@ -24,6 +24,38 @@ def response(value):
         "name":"propose_edit_plan","arguments":json.dumps(value)}}]}}]}
 
 class Contracts(unittest.TestCase):
+    def test_explicit_listening_cannot_propose_edit(self):
+        s=snapshot().model_copy(update={'userText':'这颗痣我想留着，只想聊聊，不用修改。'})
+        self.assertRaises(ModelFailure,parse_response,response(plan()),s)
+        p=plan();p.update(decision='support',shortMessage='我记着你的偏好，以后都会保留。',operations=[])
+        self.assertEqual(parse_response(response(p),s).shortMessage,'这次先保留你现在的样子，我们慢慢聊。')
+    def test_chinese_display_and_structured_choices(self):
+        p=plan();p.update(decision='clarify',shortMessage='可以慢慢选。想选什么颜色？',operations=[],question='想选哪种颜色？',choices=['rose','terracotta'])
+        value=parse_response(response(p),snapshot())
+        self.assertEqual(value.choices,['柔玫瑰','暖陶棕'])
+        self.assertEqual(value.shortMessage,'可以慢慢选。')
+        p['choices']=['rose'];self.assertRaises(ModelFailure,parse_response,response(p),snapshot())
+
+    def test_numeric_reply_needs_bound_previous_choice(self):
+        s=snapshot().model_copy(update={'userText':'1'})
+        self.assertRaises(ModelFailure,parse_response,response(plan()),s)
+        s=Snapshot.model_validate({**s.model_dump(),'resolvedChoice':'柔玫瑰','dialogue':[{'userText':'试色','reply':'选择颜色','choices':['柔玫瑰','暖陶棕']}]})
+        self.assertEqual(parse_response(response(plan()),s).decision,'edit')
+        wrong=plan();wrong['operations'][0]['presetId']='terracotta'
+        self.assertRaises(ModelFailure,parse_response,response(wrong),s)
+        s.resolvedChoice='暖陶棕';self.assertRaises(ModelFailure,parse_response,response(plan()),s)
+
+    def test_selected_region_beats_other_registered_regions(self):
+        s=Snapshot.model_validate({**snapshot().model_dump(),'annotatedRegionId':'cheek','regions':[{'regionId':'lip','description':'唇部'},{'regionId':'cheek','description':'当前圈选'}]})
+        self.assertRaises(ModelFailure,parse_response,response(plan()),s)
+        p=plan();p['operations'][0]['regionId']='cheek'
+        self.assertEqual(parse_response(response(p),s).operations[0].regionId,'cheek')
+
+    def test_numeric_product_followup_cannot_become_generic_tint(self):
+        s=Snapshot.model_validate({**snapshot().model_dump(),'userText':'1','productContextIds':['olay-cn-waterglow-50ml'],
+          'dialogue':[{'userText':'介绍这款产品','reply':'想了解什么','choices':['效果','配方']}],'resolvedChoice':'效果'})
+        self.assertRaises(ModelFailure,parse_response,response(plan()),s)
+
     def test_valid_candidate_has_no_authorization(self):
         self.assertEqual(parse_response(response(plan()),snapshot()).operations[0].regionId,"lip")
     def test_unknown_and_extra_fields(self):
