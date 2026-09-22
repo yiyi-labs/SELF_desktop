@@ -1,0 +1,38 @@
+{
+  "httpStatus": 200,
+  "model": "deepseek-flash",
+  "id": "f49878ee-5bd1-47b6-a1b8-6da2e5caf678",
+  "usage": {
+    "prompt_tokens": 1552,
+    "completion_tokens": 203,
+    "total_tokens": 1755,
+    "prompt_tokens_details": {
+      "cached_tokens": 640
+    },
+    "prompt_cache_hit_tokens": 640,
+    "prompt_cache_miss_tokens": 912
+  },
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "",
+        "tool_calls": [
+          {
+            "index": 0,
+            "id": "call_00_Ppve5LlMI3sGGiOU0EfG8364",
+            "type": "function",
+            "function": {
+              "name": "propose_edit_plan",
+              "arguments": "{\"decision\": \"edit\", \"shortMessage\": \"图中为白色背景上 1 个纯红色实心圆形。主色为红色，因此按规则选 rose，为已登记 lip 区域提议轻度数字试色。这是数字试色，非品牌实测或真实功效。\", \"operations\": [{\"operation\": \"set_digital_tint\", \"regionId\": \"lip\", \"presetId\": \"rose\", \"intensityLevel\": \"light\", \"layerId\": \"layer-1\"}], \"explanationRefs\": [\"lip\", \"rose\", \"layer-1\"], \"question\": \"\"}"
+            }
+          }
+        ]
+      },
+      "logprobs": null,
+      "finish_reason": "tool_calls"
+    }
+  ],
+  "validationError": "unregistered evidence"
+}

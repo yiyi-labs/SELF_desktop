@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "profile": "SELF static textured mesh v1",
+  "bytes": 553116,
+  "sha256": "73a72351740e4c281b23e405a0e662f074f22ad4cc7184db0ec15c4ed06ce96a",
+  "structurallyCompatible": true,
+  "errors": [],
+  "unverified": [
+    "native rendering / material appearance",
+    "analytic editable UV overlap and seam audit",
+    "capture coverage / reconstruction fidelity",
+    "occlusion-correct lasso / protected pixel equality / PNG on native device"
+  ],
+  "validator": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "vertices": 9279,
+  "triangles": 17684
+}

@@ -1,0 +1,19 @@
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f3f1f5;color:#4c435c;font-family:HarmonyOS Sans,system-ui,sans-serif}
+body{--violet:203,187,227;--peach:238,211,190;--mint:198,225,214}
+body[data-palette=warm]{--violet:220,195,214;--peach:248,212,177;--mint:220,228,204}
+body[data-palette=clear]{--violet:182,210,223;--peach:220,223,219;--mint:188,225,211}
+#atmosphere{position:absolute;inset:0;overflow:hidden;pointer-events:none;--pointer-x:50%;--pointer-y:42%;background:radial-gradient(ellipse at var(--pointer-x) var(--pointer-y),rgba(255,255,255,.82),transparent 55%),linear-gradient(155deg,#f3f1f5,#f2eee9 60%,#f3f1f5)}
+.wash{position:absolute;width:95%;height:72%;border-radius:50%;filter:blur(45px);opacity:.52;will-change:transform;animation:drift 24s ease-in-out infinite alternate}
+.wash-one{left:-40%;top:7%;background:radial-gradient(ellipse,rgba(var(--violet),.85),transparent 72%)}
+.wash-two{right:-37%;top:2%;background:radial-gradient(ellipse,rgba(var(--peach),.9),rgba(var(--mint),.3) 50%,transparent 73%);animation-delay:-9s}
+.light-ring{position:absolute;width:86%;height:70%;left:7%;top:3%;border-radius:50%;box-shadow:inset 2px 1px 4px rgba(255,255,255,.75),-12px 0 50px rgba(var(--violet),.17),15px 0 55px rgba(var(--peach),.24);opacity:.7;animation:breathe 14s ease-in-out infinite alternate}
+.floor-light{position:absolute;width:60%;height:6%;bottom:8%;left:20%;border-radius:50%;background:rgba(var(--violet),.15);filter:blur(16px)}
+.particle{position:absolute;left:var(--x);top:var(--y);width:var(--size);height:var(--size);border-radius:50%;background:#fff;box-shadow:0 0 8px rgba(255,255,255,.9);opacity:.5;animation:float var(--duration) ease-in-out var(--delay) infinite alternate}
+#mirror,#selection{display:block;position:absolute;width:100%;height:100%;inset:0}#mirror{touch-action:none}#selection{pointer-events:none}
+#status{position:absolute;top:26px;left:28px;right:28px;font-size:13px;line-height:1.6;pointer-events:none;text-align:center}#status:empty{display:none}
+.still *{animation-play-state:paused!important;will-change:auto!important}
+.graphics-unavailable #status{top:35%;padding:20px;border-radius:24px;background:#ffffffcc;font-size:16px}
+@keyframes drift{from{transform:translate3d(-3%,2%,0) scale(.95)}to{transform:translate3d(9%,-4%,0) scale(1.06)}}
+@keyframes breathe{from{transform:scale(.98);opacity:.5}to{transform:scale(1.02);opacity:.78}}
+@keyframes float{from{transform:translate3d(0,0,0);opacity:.2}to{transform:translate3d(7px,-24px,0);opacity:.65}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

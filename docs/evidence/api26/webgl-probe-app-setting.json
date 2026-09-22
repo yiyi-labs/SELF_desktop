@@ -1,0 +1,110 @@
+{
+  "date": "2026-09-22T00:48:25.818Z",
+  "userAgent": "Mozilla/5.0 (Phone; OpenHarmony 7.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36  ArkWeb/7.0.0.105 Mobile",
+  "url": "resource://rawfile/renderer/index.html",
+  "status": "Error: 此环境没有 WebGL2，无法打开编辑器",
+  "webgl2Interface": "function",
+  "results": [
+    {
+      "kind": "webgl2",
+      "options": {},
+      "available": false,
+      "error": "disabled by enterprise policy or commandline switch"
+    },
+    {
+      "kind": "webgl2",
+      "options": {
+        "antialias": false
+      },
+      "available": false,
+      "error": "disabled by enterprise policy or commandline switch"
+    },
+    {
+      "kind": "webgl2",
+      "options": {
+        "antialias": false,
+        "powerPreference": "high-performance"
+      },
+      "available": false,
+      "error": "disabled by enterprise policy or commandline switch"
+    },
+    {
+      "kind": "webgl",
+      "options": {},
+      "available": false,
+      "error": "disabled by enterprise policy or commandline switch"
+    }
+  ],
+  "gpu": {
+    "gpu": {
+      "devices": [
+        {
+          "vendorId": 0,
+          "deviceId": 0,
+          "vendorString": "ARM",
+          "deviceString": "Mali-G77",
+          "driverVendor": "",
+          "driverVersion": "4.6.0"
+        }
+      ],
+      "auxAttributes": {
+        "amdSwitchable": false,
+        "canSupportThreadedTextureMailbox": false,
+        "directRenderingVersion": "",
+        "displayType": "DEFAULT",
+        "glExtensions": "GL_OES_EGL_image GL_OES_EGL_image_external GL_OES_EGL_sync GL_OES_depth24 GL_OES_depth32 GL_OES_texture_float GL_OES_texture_float_linear GL_OES_texture_half_float GL_OES_texture_half_float_linear GL_OES_compressed_ETC1_RGB8_texture GL_OES_depth_texture GL_OES_EGL_image_external_essl3 GL_KHR_texture_compression_astc_ldr GL_KHR_texture_compression_astc_hdr GL_OES_vertex_array_object GL_EXT_color_buffer_float GL_EXT_color_buffer_half_float GL_OES_element_index_uint GL_OES_texture_float_linear GL_OES_compressed_paletted_texture GL_OES_packed_depth_stencil GL_OES_texture_npot GL_OES_rgb8_rgba8 GL_OES_framebuffer_object GL_ARB_texture_non_power_of_two GL_OES_blend_func_separate GL_OES_blend_equation_separate GL_OES_blend_subtract GL_OES_byte_coordinates GL_OES_point_size_array GL_OES_point_sprite GL_OES_single_precision GL_OES_stencil_wrap GL_OES_texture_env_crossbar GL_OES_texture_mirrored_repeat GL_OES_texture_cube_map GL_OES_draw_texture GL_OES_fbo_render_mipmap GL_OES_stencil8 GL_EXT_blend_minmax GL_OES_standard_derivatives GL_EXT_robustness GL_EXT_copy_image GL_EXT_texture_buffer GL_OES_vertex_half_float GL_KHR_blend_equation_advanced GL_EXT_shader_io_blocks GL_EXT_texture_sRGB_decode GL_KHR_debug GL_OES_sample_shading GL_OES_sample_variables GL_OES_texture_stencil8 GL_EXT_geometry_shader GL_EXT_gpu_shader5 GL_OES_shader_multisample_interpolation GL_EXT_tessellation_shader GL_EXT_texture_border_clamp GL_EXT_texture_cube_map_array GL_OES_shader_image_atomic GL_EXT_draw_buffers_indexed GL_OES_texture_storage_multisample_2d_array GL_EXT_primitive_bounding_box GL_OES_primitive_bounding_box GL_KHR_robustness GL_KHR_robust_buffer_access_behavior GL_OES_copy_image GL_EXT_draw_elements_base_vertex GL_OES_geometry_shader GL_OES_shader_io_blocks GL_OES_texture_border_clamp GL_OES_texture_buffer GL_OES_texture_cube_map_array GL_OES_surfaceless_context GL_OES_texture_compression_astc GL_EXT_texture_format_BGRA8888",
+        "glImplementationParts": "(gl=egl-gles2,angle=none)",
+        "glRenderer": "Mali-G77",
+        "glResetNotificationStrategy": 0,
+        "glVendor": "ARM",
+        "glVersion": "OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)",
+        "glWsExtensions": "",
+        "glWsVendor": "",
+        "glWsVersion": "",
+        "hardwareSupportsVulkan": false,
+        "inProcessGpu": true,
+        "initializationTime": 0.18724,
+        "isAsan": false,
+        "isClangCoverage": false,
+        "jpegDecodeAcceleratorSupported": false,
+        "maxMsaaSamples": "16",
+        "optimus": false,
+        "passthroughCmdDecoder": false,
+        "pixelShaderVersion": "3.10",
+        "processCrashCount": 0,
+        "sandboxed": false,
+        "skiaBackendType": "GaneshGL",
+        "subpixelFontRendering": true,
+        "targetCpuBits": 64,
+        "vertexShaderVersion": "3.10",
+        "visibilityCallbackCallCount": 0
+      },
+      "featureStatus": {
+        "2d_canvas": "enabled",
+        "direct_rendering_display_compositor": "enabled_on",
+        "gpu_compositing": "enabled",
+        "multiple_raster_threads": "enabled_on",
+        "opengl": "enabled_on",
+        "rasterization": "enabled_force",
+        "raw_draw": "disabled_off_ok",
+        "skia_graphite": "disabled_off",
+        "video_decode": "enabled",
+        "vulkan": "disabled_off",
+        "webgl": "enabled",
+        "webgl2": "enabled",
+        "webgpu": "disabled_off",
+        "webnn": "disabled_off"
+      },
+      "driverBugWorkarounds": [
+        "enable_webgl_timer_query_extensions",
+        "disabled_extension_GL_KHR_blend_equation_advanced",
+        "disabled_extension_GL_KHR_blend_equation_advanced_coherent"
+      ],
+      "videoDecoding": [],
+      "videoEncoding": []
+    },
+    "modelName": "",
+    "modelVersion": "",
+    "commandLine": "/system/bin/web_render --disable-chrome-login-prompt --in-process-gpu --disable-dev-shm-usage --off-screen-frame-rate=60 --no-unsandboxed-zygote --no-zygote --enable-features=UseOzonePlatform -ozone-platform=headless --no-sandbox --use-mobile-user-agent --enable-gpu-rasterization --enable-viewport --disable-3d-apis --browser-subprocess-path=/system/bin/web_render --zygote-cmd-prefix=/system/bin/web_render --enable-touch-drag-drop --virtual-pixel-ratio=3.500000 --gpu-rasterization-msaa-sample-count=1 --enable-aggressive-domstorage-flushing --ohos-enable-drdc --enable-media-stream --user-data-dir=/data/storage/el2/base --bundle-installation-dir=/data/storage/el1/bundle --lang=zh- --user-api-version=260000026 --user-hap-path=/data/storage/el1/bundle/entry.hap --ohos-temp-dir=/data/storage/el2/base/haps/entry/temp --init-background-color=-1 --socket-idle-timeout=300 --renderer-process-limit=20 --ohos-enable-simple-backend-is-default --ohos-enable-set-http-cache-max-size --ohos-enable-double-tap-for-platform --ohos-enable-http-cache-simple --ohos-enable-printing --ohos-enable-calc-tablet-mode --ohos-user-agent-value=Phone --bundle-name=com.self.mirror --enable-cache-data-dir-migration=false --enable-cache-data-dir-separation --ohos-enable-gwp-asan-type=renderer --force-enable-metrics-reporting --force-msbb-setting-on-for-ukm --uma-server-url=://uma --ukm-server-url=://ukm --enable-logging --enable-logging=stderr --v=2 --no-sandbox --log-severity=info --disable-features=BackForwardCache,SideBySide,GlicActorUi,LensOverlay,FencedFrames --flag-switches-begin --flag-switches-end --gpu-preferences=UAAAAAAAAAAoAQAAAAAAAAAAAAAAAGAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAAAAAAAAABgAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAgAAAAAAAAA --lang=zh-CN "
+  }
+}

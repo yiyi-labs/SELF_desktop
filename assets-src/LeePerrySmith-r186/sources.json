@@ -1,0 +1,55 @@
+{
+  "files": [
+    {
+      "file": "LeePerrySmith.glb",
+      "path": "examples/models/gltf/LeePerrySmith/LeePerrySmith.glb",
+      "bytes": 404976,
+      "source": "https://raw.githubusercontent.com/mrdoob/three.js/r186/examples/models/gltf/LeePerrySmith/LeePerrySmith.glb",
+      "sha256": "402b8a8ac9f03232e6d64b5962929703a069daf99d3c49ac8eb0e48bedc9c576"
+    },
+    {
+      "file": "Map-COL.jpg",
+      "path": "examples/models/gltf/LeePerrySmith/Map-COL.jpg",
+      "bytes": 148269,
+      "source": "https://raw.githubusercontent.com/mrdoob/three.js/r186/examples/models/gltf/LeePerrySmith/Map-COL.jpg",
+      "sha256": "e976d73b31407f8d0967412bf468019ed26a5d5a32cf5811aabff7e816458a65"
+    },
+    {
+      "file": "LeePerrySmith_License.txt",
+      "path": "examples/models/gltf/LeePerrySmith/LeePerrySmith_License.txt",
+      "bytes": 364,
+      "source": "https://raw.githubusercontent.com/mrdoob/three.js/r186/examples/models/gltf/LeePerrySmith/LeePerrySmith_License.txt",
+      "sha256": "7cf4da43a6ae6d32f7f7d063fe129a19468af6f4fe7c53b937f83959709fcb50"
+    },
+    {
+      "file": "webgl_decals.html",
+      "path": "examples/webgl_decals.html",
+      "bytes": 7897,
+      "source": "https://raw.githubusercontent.com/mrdoob/three.js/r186/examples/webgl_decals.html",
+      "sha256": "56ed46841bc5230626ff89bd49afb441de4d820dfb520f9cbdd8361673429f5b"
+    },
+    {
+      "file": "webgl_multiple_scenes_comparison.html",
+      "path": "examples/webgl_multiple_scenes_comparison.html",
+      "bytes": 4328,
+      "source": "https://raw.githubusercontent.com/mrdoob/three.js/r186/examples/webgl_multiple_scenes_comparison.html",
+      "sha256": "784961d69233c8625fac9180a9db1601235eb4d0bc797151d756fe4385a6d996"
+    },
+    {
+      "file": "LICENSE",
+      "path": "LICENSE",
+      "bytes": 1081,
+      "source": "https://raw.githubusercontent.com/mrdoob/three.js/r186/LICENSE",
+      "sha256": "8b378ebe60e2fe500158cb0ac71cb5e8b7d92953c2abcc63a0eb90499653b5bc"
+    },
+    {
+      "file": "package.json",
+      "path": "package.json",
+      "bytes": 3672,
+      "source": "https://raw.githubusercontent.com/mrdoob/three.js/r186/package.json",
+      "sha256": "ab4ff6950aab522dfe6980f19914a5eb2cadb689a36c6c44f4d3869c5e46dc89"
+    }
+  ],
+  "tag": "r186",
+  "retrievedAt": "2026-09-21T15:17:08.4109335Z"
+}

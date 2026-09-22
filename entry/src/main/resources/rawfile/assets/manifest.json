@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "assetId": "sample-lee",
+  "version": "lee-r186-self2",
+  "sourceKind": "MESH",
+  "label": "示例面容 · Lee Perry-Smith",
+  "baselineKind": "bakedAppearance",
+  "attribution": "Infinite, 3D Head Scan by Lee Perry-Smith; based on www.triplegangers.com",
+  "license": "CC-BY-3.0",
+  "orientation": {
+    "front": "+Z",
+    "up": "+Y",
+    "scale": 1,
+    "unit": "original scan units (not calibrated metres)"
+  },
+  "mesh": 0,
+  "primitive": 0,
+  "uvSet": 0,
+  "uvVersion": "r186-v-flipped-on-pack-v1",
+  "textureVersion": "LeePerrySmith-Map-COL-r186-original",
+  "regionRefs": [
+    "lip",
+    "editable",
+    "protectionTest"
+  ],
+  "supportedOperations": [
+    "localTint",
+    "lipTint"
+  ],
+  "renderPipelineVersion": "self-linear-tint-v1",
+  "maskWidth": 1024,
+  "maskHeight": 1024,
+  "sha256": "73a72351740e4c281b23e405a0e662f074f22ad4cc7184db0ec15c4ed06ce96a",
+  "limitations": [
+    "Closed-mouth sample only",
+    "Conservative manually authored regions",
+    "Not a personal reconstruction",
+    "UV overlap exists outside registered editable region; prohibit whole-surface editing"
+  ]
+}

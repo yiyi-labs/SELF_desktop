@@ -1,0 +1,266 @@
+These are common Emulator commands used in various situations: 
+Emulator [-start <name> [-instancePath <path> -imageRoot <path> -bootMode <mode> -noWindow]] 
+         [-create <name> -deviceType <type> -osVersion <version> [-instancePath <path> -imageRoot <path>
+            -screenProfile <model> -screen <config> -storage <size> -memory <size> -hotBoot <true/false>]]
+         [-delete <name> [-instancePath <path> -force]] 
+         [-imageList [-deviceType <type> -downloaded <true/false> -http_proxy <url>]]
+         [-install -deviceType <type> -osVersion <version> [-imageRoot <path> -http_proxy <url> -force]] 
+         [-uninstall -deviceType <type> -osVersion <version> [-imageRoot <path> -force]] 
+         [-logZip <name> -logPath <path>] 
+         [-stop <name>] 
+         [-version] 
+         [-list [-details]] 
+         [-screenProfileList [-deviceType <type> -details -update -http_proxy <url>]] 
+         [-license [accept]] 
+         [-config [-instancePath <path> -imageRoot <path> -http_proxy <url>]] 
+         [-unset <instancePath/imageRoot/http_proxy>] 
+         [-instance <name> [-shake|-foldedState <foldstate>|-rotation <left/right>|-power|-volume <up/down>|
+            -screenshot [-screenshotPath <path>]|-battery <level>|-batteryStatus <status>|
+            -gps -latitude <latitude>/-longitude <longitude>/-altitude <altitude>/-city <city>/-bearing <bearing>|
+            -outdoorRunning|-outdoorCycling|-drivingNavigation|-sensor -light <light>/-steps <steps>/
+            -heartrate <heartrate>|-uiLayout [-i] [-a]|
+            -click <widgetId|toX toY>|-slide "<widgetId> <direction|toX toY>|<x1 y1 x2 y2>"|
+            |-fill "<widgetId> <text>"]]
+
+-license:              Display all license agreements, use "accept" to auto-accept
+-start/-hvd:           Start the emulator (HarmonyOS software service agreement must be accepted)
+-noWindow:             Start the emulator without GUI window
+-stop:                 Stop the emulator
+-instancePath/-path:   Emulator instance directory
+-imageRoot:            Emulator image root directory
+-list:                 List all emulator instances
+-version:              Show emulator version
+-hdcPort:              Specify hdc port (10000~16555)
+-logZip:               Collect the emulator logs
+-logPath:              Directory for collected logs
+-create:               Create a new emulator instance
+-delete:               Delete the specified emulator instance
+-deviceType:           Specify emulator device type
+-osVersion:            Specify HarmonyOS image version
+-screenProfile:        Specify screen profile model
+-screen:               Specify screen configuration
+-storage:              Virtual storage size in GBs (2~1023, default: 6)
+-memory:               Virtual memory size in GBs (2~32, default: 4)
+-hotBoot:              Enable or disable emulator Quick Boot feature
+-details:              Display detailed information
+-imageList:            List available emulator images
+-screenProfileList:    List all device types and models that support custom screen profiles
+-downloaded:           List downloaded emulator image versions
+-install:              Download emulator image for specified [deviceType] and [osVersion]
+-uninstall:            Remove emulator image for specified [deviceType] and [osVersion]
+-config:               Set default config (instancePath, imageRoot, http_proxy)
+-unset:                Remove default config
+-http_proxy:           Network proxy configuration
+-force:                Skip interaction and forcibly execute the command
+-bootMode:             Boot mode:coldboot(boot with data) reset(boot with data reset) snapshot(quick boot)
+-instance:             Specify an instance for scenario simulation
+-shake:                Scenario-based simulated shake
+-volume:               Controlling the volume up and down.
+-power:                Simulates the power button.
+-rotation:             Control rotation left and right.
+-screenshot:           Capturing emulator screenshots.
+-screenshotPath:       Specify a screenshot path.
+-foldedState:          Switch the folded product's folding state
+-battery:              Change battery level
+-batteryStatus:        Change battery status
+-gps:                  Change the gps parameters, it must be followed by one of the parameters: -city,
+                           -latitude, -longitude, -altitude, -bearing.
+-latitude:             Change the gps latitude parameter, float in [-90.0, 90.0] (inclusive)
+-longitude:            Change the gps longitude parameter, float in [-180.0, 180.0] (inclusive)
+-altitude:             Change the gps altitude parameter, float in [-10000.0, 10000.0] meters
+-city:                 Modify GPS parameters based on the city name, string (e.g., "Beijing")
+-bearing:              Change the gps bearing parameter, float in [0.00, 359.99] degrees, with 2 decimal
+                           precision. 0=North, clockwise
+-outdoorRunning:       Change the gps parameters to perform a running scenario simulation
+-outdoorCycling:       Change the gps parameters to perform a cycling scenario simulation
+-drivingNavigation:    Change the gps parameters to perform a driving scenario simulation
+-sensor:               Controls the emulator to change the sensor parameters, it must be followed by one
+                           of the parameters: -light, -steps, -heartrate.
+-light                 Change the sensor light parameter, float in [0.0, 100000.0] (inclusive).
+-steps                 Change the sensor steps parameter, integer in [0, 100000] (inclusive).
+-heartrate             Change the sensor heartrate parameter, integer in [0, 255] (inclusive).
+-uiLayout:             Analyze the current screen and extract widget tree to markdown file.
+-click:                Click a widget by its ID or absolute coordinates.
+-slide:                Slide a widget by direction or target coordinates.
+-fill:                 Fill text into a widget (e.g., text input fields).
+
+========= help for create
+-deviceType:
+    Specify the emulator device type.
+    Supported values:
+      Phone | Foldable | WideFold | TripleFold | Tablet | 2in1 | 2in1 Foldable | Wearable | WearableKid | TV | Car
+
+-osVersion:
+    Specify the HarmonyOS image version for the emulator.
+    Format: HarmonyOS <version>(<api_version>) [BetaX]
+    Examples:
+      "HarmonyOS 6.0.0(20)"
+      "HarmonyOS 6.0.1(21) Beta1"
+
+-screenProfile:
+    Specify a predefined screen model (e.g. "Mate 70 Pro").
+    If both -screenProfile and -screen are specified, -screen takes precedence.
+    If neither is specified, a default model is selected based on -deviceType.
+
+-screen:
+    Specify a custom screen configuration.
+    Parameter order: width height dpi size
+      Phone / Tablet / 2in1:
+        "width height dpi size"
+        Example: "1080 2340 480 6.5"
+      Foldable devices:
+        "unfolded_width unfolded_height unfolded_dpi unfolded_size" "folded_width folded_height folded_dpi folded_size"
+        Example: "2200 2480 480 7.8" "1080 2480 480 6.4"
+    Notes:
+      - Width, height and DPI must be integers.
+      - Size (diagonal) is a floating-point number with up to 2 decimal places.
+
+
+========= help for Scenario
+-instance:
+    Specifies an emulator for scenario-based simulation
+    Examples:
+      "Emulator -instance <Emulator Name> -shake"
+-shake:
+    Specify the emulator to shake.
+-rotation:
+    Specify the emulator to rotate.
+    Examples:
+      "Emulator -instance <Emulator Name> -rotation left/right"
+-power:
+    Specify the emulator to simulate screen on/off
+-volume:
+    Specify the emulator to control the volume level
+    Examples:
+      "Emulator -instance <Emulator Name> -volume up/down"
+-screenshot:
+    Specify the emulator to screenshot.
+-screenshotPath:
+    Specify the path for saving the screenshot.(Optional)
+    Examples:
+      "Emulator -instance <Emulator Name> -screenshot -screenshotPath <Path>"
+-foldedState:
+    Controlling different folding forms of the foldable device
+    Examples:
+      "Emulator -instance <Emulator Name> -foldedState left-folded-right-half-folded"
+    Parameter Description:
+     FoldableFold | Pura X Max:
+       open:                                      Fully expanded state
+       half-open:                                 Semi-Folded State
+       close:                                     Fully folded State
+     WideFold (Except for Pura X Max):
+       open:                                      Fully expanded state
+       close:                                     Fully folded State
+     2in1FoldableFold:
+       open:                                      Landscape unfolded state
+       vertical-open:                             Portrait unfolded state
+       half-open:                                 Semi-Folded State
+       close:                                     Magnetic Attachment
+     TripleFold:
+       single:                                    Single-screen state
+       double:                                    Double-screen state
+       triple:                                    Triple-screen state
+       left-folded-right-half-folded
+       left-half-folded-right-expanded
+       left-expanded-right-folded
+       left-half-folded-right-folded
+       left-expanded-right-half-folded
+       left-half-folded-right-half-folded
+-battery:
+    Specify the emulator to change battery level. Accepts an integer value between 0 and 100.
+    Examples:
+      "Emulator -instance <Emulator Name> -battery 90"
+-batteryStatus:
+    Specify the emulator to change battery charge status. Valid values: 0 (no charge), 1 (charging).
+    Examples:
+      "Emulator -instance <Emulator Name> -batteryStatus 1"
+-gps:
+    Controls the emulator to change the gps parameters: latitude, longitude, altitude, city and bearing,
+    it must be followed by one of the parameters: -latitude, -longitude, -altitude, -city, -bearing.
+    These parameters can be combined, but city takes the highest priority. If city is specified alongside
+    longitude, latitude, or altitude, the latter three parameters will be ignored.
+-latitude:
+    Change the gps latitude parameter, float in [-90.0, 90.0] (inclusive).
+    Examples:
+       "Emulator -instance <Emulator Name> -gps -latitude 39.915599"
+-longitude:
+    Change the gps longitude parameter, float in [-180.0, 180.0] (inclusive).
+    Examples:
+       "Emulator -instance <Emulator Name> -gps -longitude 116.400244"
+-altitude:
+    Change the gps altitude parameter, float in [-10000.0, 10000.0] meters.
+    Examples:
+       "Emulator -instance <Emulator Name> -gps -altitude 45.49"
+-city:
+    Modify GPS parameters based on the city name, string (e.g., Beijing). In Mainland China, 
+    the supported cities are: Beijing, Tianjin, Shanghai, Chongqing, Zhengzhou, Shijiazhuang, Taiyuan, 
+    Jinan, Changsha, Wuhan, Harbin, Changchun, Shenyang, Nanjing, Hangzhou, Fuzhou, Hefei, Nanchang, 
+    Xian, Guangzhou, Chengdu, Guiyang, Haikou, Taipei, Kunming, Lanzhou, Xining, Hohhot, Urumqi, 
+    Lhasa, Yinchuan, Nanning, Hong Kong and Macao; input is case-insensitive. For overseas locations,
+    the supported cities are: Beijing, Shanghai, New York, London, Paris, Moscow; input is also
+    case-insensitive for these locations.
+    Examples:
+       "Emulator -instance <Emulator Name> -gps -city Beijing"
+-bearing:
+    Change the gps bearing parameter, float in [0.0, 359.99] degrees with 2 decimal precision. 0=North,
+    clockwise.
+    Examples:
+       "Emulator -instance <Emulator Name> -gps -bearing 4.24"
+-outdoorRunning:
+    Running scenario simulation. Control the simulator to update GPS parameters (latitude, longitude, 
+    altitude, bearing) according to the timeline of a completed outdoor running scenario.
+    Examples:
+        "Emulator -instance <Emulator Name> -outdoorRunning"
+-outdoorCycling:
+    Cycling scenario simulation. Control the simulator to update GPS parameters (latitude, longitude, 
+    altitude, bearing) according to the timeline of a completed outdoor cycling scenario.
+    Examples:
+        "Emulator -instance <Emulator Name> -outdoorCycling"
+-drivingNavigation:
+    Driving scenario simulation. Control the simulator to update GPS parameters (latitude, longitude, 
+    altitude, bearing) according to the timeline of a completed outdoor driving scenario.
+    Examples:
+        "Emulator -instance <Emulator Name> -drivingNavigation"
+-sensor:
+    Controls the emulator to change the sensor parameters: light, steps and heartrate, it must be
+    followed by one of the parameters: -light, -steps, -heartrate.
+-light: 
+    Change the sensor light parameter, float in [0.0, 100000.0] (inclusive).
+    Examples:
+        "Emulator -instance <Emulator Name> -sensor -light 20.3"
+-steps: 
+    Change the sensor steps parameter, integer in [0, 100000] (inclusive).
+    Examples:
+        "Emulator -instance <Emulator Name> -sensor -steps 23000"
+-heartrate: 
+    Change the sensor heartrate parameter, integer in [0, 255] (inclusive).
+    Examples:
+        "Emulator -instance <Emulator Name> -sensor -heartrate 75"
+-uiLayout:
+    Analyze the current screen and extract widget tree to markdown file.
+    The output file is saved to: <hvdPath>/uiLayout/analysis.md
+-i:
+    Show only interactive widgets (clickable, focusable, etc.).
+    Use with -uiLayout: -uiLayout -i
+-a:
+    Include UX information (text styles, colors, etc.).
+    Use with -uiLayout: -uiLayout -a
+-click <widgetId>:
+    Click a widget by its ID (obtained from -uiLayout output).
+    Examples:
+        "Emulator -instance <Emulator Name> -click 100"
+-click "<x> <y>":
+    Click at absolute screen coordinates.
+    Example: -click "100 200"
+-slide "<widgetId> <direction>":
+    Slide a widget by direction (up/down/left/right) from its center.
+    Example: -slide "100 up"
+-slide "<widgetId> <toX> <toY>":
+    Slide a widget from its center to target coordinates.
+    Example: -slide "100 300 500"
+-slide "<x1> <y1> <x2> <y2>":
+    Slide from one coordinate to another (absolute positions).
+    Example: -slide "100 200 300 400"
+-fill "<widgetId> <text>":
+    Fill text into a widget (e.g., text input fields).
+    Example: -fill "100 Emulator"

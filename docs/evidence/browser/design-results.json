@@ -1,0 +1,18 @@
+{
+  "environment": "Desktop Chrome, emulated prefers-reduced-motion; NOT native HarmonyOS accessibility settings",
+  "date": "2026-09-21T16:07:03.777Z",
+  "checks": [
+    {
+      "name": "decorative particles animate outside the face shader",
+      "status": "passed"
+    },
+    {
+      "name": "OS reduced motion freezes active orbit and decorative particles",
+      "status": "passed"
+    },
+    {
+      "name": "manual rotation remains available with reduced motion; lasso prevents rotation",
+      "status": "passed"
+    }
+  ]
+}

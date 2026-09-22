@@ -1,0 +1,51 @@
+09-22 00:23:20.278  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"","assetId":"","assetVersion":"","requestId":"","revision":0,"type":"READY","payload":{"webgl2":true,"arrayBuffer":true,"three":"0.186.0"}}
+09-22 00:23:20.293  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":0,"type":"INITIALIZED","payload":{}}
+09-22 00:23:20.396  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":0,"type":"ASSET_REGISTERED","payload":{"width":1024,"height":1024}}
+09-22 00:23:20.397  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":0,"type":"TRANSFER_ACCEPTED","payload":{"transferId":"bytes-1790007800294-66747"}}
+09-22 00:23:20.397  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":0,"type":"TRANSFER_ACCEPTED","payload":{"transferId":"bytes-1790007800314-22617"}}
+09-22 00:23:20.399  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":0,"type":"TRANSFER_ACCEPTED","payload":{"transferId":"bytes-1790007800331-1065"}}
+09-22 00:23:20.545  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":0,"type":"TRANSFER_ACCEPTED","payload":{"transferId":"bytes-1790007800341-87880"}}
+09-22 00:23:20.545  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":0,"type":"VIEW_CHANGED","payload":{"view":{"yaw":0,"pitch":0,"distance":16,"panX":0,"panY":0}}}
+09-22 00:23:20.617  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"restore-1790007800356","revision":0,"type":"RENDER_SUCCEEDED","payload":{}}
+09-22 00:23:20.619  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":0,"type":"ECHO_RESULT","payload":{"text":"中文 \"引号\" \u0000 结束"}}
+09-22 00:23:20.623  9166  9166 I A03d00/JSAPP: SELF_BINARY_ROUNDTRIP true
+09-22 00:23:20.624  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":0,"type":"TRANSFER_ACCEPTED","payload":{"transferId":"bytes-1790007800359-38452"}}
+09-22 00:23:24.346  9166  9166 I A03d00/JSAPP: SELF_AUDIO_STATE loading
+09-22 00:23:24.491  9166  9166 I A03d00/JSAPP: SELF_AUDIO_STATE playing
+09-22 00:23:24.491  9166  9166 I A03d00/JSAPP: SELF_AUDIO_PLAYING quiet
+09-22 00:23:26.044  9166  9166 I A03d00/JSAPP: SELF_AUDIO_PROGRESS quiet 1012
+09-22 00:23:29.267  9166  9166 I A03d00/JSAPP: SELF_EXPORT_SAVED 413425
+09-22 00:23:32.517  9166  9166 I A03d00/JSAPP: SELF_AUDIO_STATE loading
+09-22 00:23:32.575  9166  9166 I A03d00/JSAPP: SELF_AUDIO_STATE playing
+09-22 00:23:32.576  9166  9166 I A03d00/JSAPP: SELF_AUDIO_PLAYING warm
+09-22 00:23:33.874  9166  9166 I A03d00/JSAPP: SELF_AUDIO_PROGRESS warm 1126
+09-22 00:23:39.366  9166  9166 I A03d00/JSAPP: SELF_EXPORT_SAVED 413425
+09-22 00:23:40.474  9166  9166 I A03d00/JSAPP: SELF_AUDIO_STATE paused
+09-22 00:23:40.677  9166  9166 I A03d00/JSAPP: SELF_AUDIO_STATE loading
+09-22 00:23:40.797  9166  9166 I A03d00/JSAPP: SELF_AUDIO_STATE playing
+09-22 00:23:40.797  9166  9166 I A03d00/JSAPP: SELF_AUDIO_PLAYING warm
+09-22 00:23:42.091  9166  9166 I A03d00/JSAPP: SELF_AUDIO_STATE off
+09-22 00:23:50.286  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":0,"type":"VIEW_CHANGED","payload":{"view":{"yaw":0,"pitch":0,"distance":16,"panX":0,"panY":0}}}
+09-22 00:23:53.957  9166  9166 I A03d00/JSAPP: SELF_EXPORT_SAVED 413425
+09-22 00:23:59.461  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":0,"type":"VIEW_CHANGED","payload":{"view":{"yaw":0.04994473115003828,"pitch":0,"distance":16,"panX":0,"panY":0}}}
+09-22 00:24:04.441  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":0,"type":"VIEW_CHANGED","payload":{"view":{"yaw":0,"pitch":0,"distance":16,"panX":0,"panY":0}}}
+09-22 00:24:08.123  9166  9166 I A03d00/JSAPP: SELF_EXPORT_SAVED 413425
+09-22 00:24:11.630  9166  9166 I A03d00/JSAPP: SELF_EXPORT_SAVED 413425
+09-22 00:24:12.188  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":0,"type":"VIEW_CHANGED","payload":{"view":{"yaw":0.5700000000000003,"pitch":0.032,"distance":16,"panX":0,"panY":0}}}
+09-22 00:24:12.189  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":0,"type":"VIEW_CHANGED","payload":{"view":{"yaw":0.5700000000000003,"pitch":0.032,"distance":16,"panX":0,"panY":0}}}
+09-22 00:24:15.601  9166  9166 I A03d00/JSAPP: SELF_EXPORT_SAVED 419138
+09-22 00:24:21.511  9166  9166 I A03d00/JSAPP: SELF_WORK_SAVED work-1790007861478
+09-22 00:24:24.738  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":0,"type":"VIEW_CHANGED","payload":{"view":{"yaw":0,"pitch":0,"distance":16,"panX":0,"panY":0}}}
+09-22 00:24:29.757  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":1,"type":"INITIALIZED","payload":{}}
+09-22 00:24:30.043  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":1,"type":"ASSET_REGISTERED","payload":{"width":1024,"height":1024}}
+09-22 00:24:30.046  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":1,"type":"TRANSFER_ACCEPTED","payload":{"transferId":"bytes-1790007869758-80532"}}
+09-22 00:24:30.066  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":1,"type":"TRANSFER_ACCEPTED","payload":{"transferId":"bytes-1790007869773-64178"}}
+09-22 00:24:30.066  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":1,"type":"TRANSFER_ACCEPTED","payload":{"transferId":"bytes-1790007869783-2719"}}
+09-22 00:24:30.066  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":1,"type":"TRANSFER_ACCEPTED","payload":{"transferId":"bytes-1790007869801-44951"}}
+09-22 00:24:30.067  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":1,"type":"VIEW_CHANGED","payload":{"view":{"yaw":0.5700000000000003,"pitch":0.032,"distance":16,"panX":0,"panY":0}}}
+09-22 00:24:30.276  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"restore-1790007869826","revision":1,"type":"RENDER_SUCCEEDED","payload":{}}
+09-22 00:24:30.277  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":1,"type":"ECHO_RESULT","payload":{"text":"中文 \"引号\" \u0000 结束"}}
+09-22 00:24:30.283  9166  9166 I A03d00/JSAPP: SELF_BINARY_ROUNDTRIP true
+09-22 00:24:30.284  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":1,"type":"TRANSFER_ACCEPTED","payload":{"transferId":"bytes-1790007869829-20395"}}
+09-22 00:24:34.313  9166  9166 I A03d00/JSAPP: SELF_EXPORT_SAVED 419138
+09-22 00:24:42.394  9166  9166 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"session-1790007799003","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":1,"type":"VIEW_CHANGED","payload":{"view":{"yaw":0,"pitch":0,"distance":16,"panX":0,"panY":0}}}

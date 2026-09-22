@@ -1,0 +1,104 @@
+{
+  "testedAt": "2026-09-22T09:54:56.624709+00:00",
+  "source": "Capability probe targeting official DeepSeek HTTPS API; original nonpersonal synthetic images. Missing key means no API request was sent.",
+  "cases": [
+    {
+      "case": "red-circle",
+      "status": "passed",
+      "visualDescriptionMatched": true,
+      "toolSelectionMatched": true,
+      "result": {
+        "schemaVersion": 1,
+        "requestId": "vision-red-circle-1790070893",
+        "snapshotId": "vision-red-circle-1790070893",
+        "assetId": "sample",
+        "assetVersion": "v1",
+        "textureVersion": "t1",
+        "sceneRevision": 2,
+        "regionVersion": 1,
+        "plan": {
+          "decision": "edit",
+          "shortMessage": "图中为纯白背景上一个红色圆形，共 1 个图形；主色为红色，故按规则选 rose 预设，为已登记的 lip 区域提议轻度数字试色（试色为模拟效果，非真实品牌实测）。",
+          "operations": [
+            {
+              "operation": "set_digital_tint",
+              "regionId": "lip",
+              "presetId": "rose",
+              "intensityLevel": "light",
+              "layerId": "",
+              "productProfileId": ""
+            }
+          ],
+          "explanationRefs": [],
+          "question": ""
+        },
+        "modelEvidence": {
+          "requestedModel": "deepseek-flash",
+          "returnedModel": "deepseek-flash",
+          "systemFingerprint": "aeb56401ca74e127821c4f9126dcb669",
+          "elapsedMs": 1453,
+          "usage": {
+            "prompt_tokens": 1844,
+            "completion_tokens": 198,
+            "total_tokens": 2042,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "prompt_cache_hit_tokens": 0,
+            "prompt_cache_miss_tokens": 1844
+          },
+          "providerResponseId": "ea15f443-6a45-4474-80d8-a8853a21e725"
+        }
+      }
+    },
+    {
+      "case": "blue-squares",
+      "status": "passed",
+      "visualDescriptionMatched": true,
+      "toolSelectionMatched": true,
+      "result": {
+        "schemaVersion": 1,
+        "requestId": "vision-blue-squares-1790070894",
+        "snapshotId": "vision-blue-squares-1790070894",
+        "assetId": "sample",
+        "assetVersion": "v1",
+        "textureVersion": "t1",
+        "sceneRevision": 2,
+        "regionVersion": 1,
+        "plan": {
+          "decision": "edit",
+          "shortMessage": "图中主色为蓝色，形状为正方形，共 3 个。按规则蓝色对应 terracotta，为已登记 lip 区域提议轻度数字试色（新增图层）。",
+          "operations": [
+            {
+              "operation": "set_digital_tint",
+              "regionId": "lip",
+              "presetId": "terracotta",
+              "intensityLevel": "light",
+              "layerId": "",
+              "productProfileId": ""
+            }
+          ],
+          "explanationRefs": [],
+          "question": ""
+        },
+        "modelEvidence": {
+          "requestedModel": "deepseek-flash",
+          "returnedModel": "deepseek-flash",
+          "systemFingerprint": "aeb56401ca74e127821c4f9126dcb669",
+          "elapsedMs": 2079,
+          "usage": {
+            "prompt_tokens": 1846,
+            "completion_tokens": 187,
+            "total_tokens": 2033,
+            "prompt_tokens_details": {
+              "cached_tokens": 896
+            },
+            "prompt_cache_hit_tokens": 896,
+            "prompt_cache_miss_tokens": 950
+          },
+          "providerResponseId": "55b33936-9324-4465-96a7-c5c7fc5787ae"
+        }
+      }
+    }
+  ]
+}

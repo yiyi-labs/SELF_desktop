@@ -1,0 +1,112 @@
+{
+  "$defs": {
+    "Operation": {
+      "additionalProperties": false,
+      "properties": {
+        "operation": {
+          "enum": [
+            "set_digital_tint",
+            "set_effect_level",
+            "remove_effect"
+          ],
+          "title": "Operation",
+          "type": "string"
+        },
+        "regionId": {
+          "title": "Regionid",
+          "type": "string"
+        },
+        "presetId": {
+          "enum": [
+            "rose",
+            "terracotta"
+          ],
+          "title": "Presetid",
+          "type": "string"
+        },
+        "intensityLevel": {
+          "enum": [
+            "none",
+            "light",
+            "medium",
+            "strong"
+          ],
+          "title": "Intensitylevel",
+          "type": "string"
+        },
+        "layerId": {
+          "default": "",
+          "description": "For set_digital_tint this MUST be empty: a new layer has no existing ID. For set_effect_level/remove_effect use the existing target layerId.",
+          "title": "Layerid",
+          "type": "string"
+        },
+        "productProfileId": {
+          "const": "",
+          "default": "",
+          "description": "Must be empty. No calibrated product profiles are registered.",
+          "title": "Productprofileid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "operation",
+        "regionId",
+        "presetId",
+        "intensityLevel"
+      ],
+      "title": "Operation",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "decision": {
+      "enum": [
+        "edit",
+        "explain",
+        "clarify",
+        "support"
+      ],
+      "title": "Decision",
+      "type": "string"
+    },
+    "shortMessage": {
+      "maxLength": 400,
+      "minLength": 1,
+      "title": "Shortmessage",
+      "type": "string"
+    },
+    "operations": {
+      "items": {
+        "$ref": "#/$defs/Operation"
+      },
+      "maxItems": 1,
+      "title": "Operations",
+      "type": "array"
+    },
+    "explanationRefs": {
+      "description": "Must be []. No source evidence is registered. Region IDs, preset IDs and layer IDs are NOT evidence references.",
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 0,
+      "title": "Explanationrefs",
+      "type": "array"
+    },
+    "question": {
+      "description": "Must be empty for edit/explain/support. Only decision=clarify may contain a question; a clarify plan must have operations=[]. Authorization confirmation is handled by the app, not this field.",
+      "maxLength": 200,
+      "title": "Question",
+      "type": "string"
+    }
+  },
+  "required": [
+    "decision",
+    "shortMessage",
+    "operations",
+    "explanationRefs",
+    "question"
+  ],
+  "title": "Plan",
+  "type": "object"
+}

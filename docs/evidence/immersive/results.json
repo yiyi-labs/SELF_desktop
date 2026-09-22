@@ -1,0 +1,39 @@
+{
+  "environment": "Actual HarmonyOS API 19 emulator, installed production renderer, native ArkUI and AVPlayer",
+  "date": "2026-09-21T16:24:43.555Z",
+  "checks": [
+    {
+      "name": "native music is off by default, real AVPlayer playback advances after opt-in",
+      "status": "passed",
+      "details": {
+        "source": "packaged original 32-second WAV",
+        "verification": "native AVPlayer playing plus >=1000ms decoded timeline; no claim of human listening test"
+      }
+    },
+    {
+      "name": "style changes use another local track and preserve exported appearance",
+      "status": "passed"
+    },
+    {
+      "name": "background pauses audio, foreground resumes only prior opt-in",
+      "status": "passed"
+    },
+    {
+      "name": "explicit chat mood with native keyboard",
+      "status": "unverified",
+      "details": "First activation of system XiaoYi input method requires its separate user agreement/privacy decision. No acceptance automated. Production text-to-style rules are covered by Node and Hypium."
+    },
+    {
+      "name": "motion off pauses decorative animations",
+      "status": "passed"
+    },
+    {
+      "name": "native light orbit moves view, lasso freezes it, reset is exact",
+      "status": "passed"
+    },
+    {
+      "name": "actual drag rotation persists through workspace reopen",
+      "status": "passed"
+    }
+  ]
+}

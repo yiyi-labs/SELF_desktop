@@ -1,0 +1,2 @@
+09-22 09:07:20.559 27085 27085 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"","assetId":"","assetVersion":"","requestId":"","revision":0,"type":"READY","payload":{"webgl2":false,"message":"当前模拟器或设备限制了 3D 图形，暂时无法显示面容。请使用支持 WebGL2 的运行环境。","arrayBuffer":true,"three":"0.186.0"}}
+09-22 09:07:20.586 27085 27085 E A03d00/JSAPP: SELF_ERROR 当前模拟器或设备限制了 3D 图形，暂时无法显示面容。请使用支持 WebGL2 的运行环境。

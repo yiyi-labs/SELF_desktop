@@ -1,0 +1,12 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {inside,validatePolygon,polygonMask,innerFeather} from '../src/selection/polygon.ts';
+import {TransferReceiver,encode64,decode64} from '../src/bridge/transfer.ts';
+import {srgbToLinear,linearToSrgb} from '../src/effects/tint.ts';
+const square=[{x:5,y:5},{x:15,y:5},{x:15,y:15},{x:5,y:15},{x:5,y:5}];
+test('simple closed lasso fills interior including repeated pointerup endpoint',()=>{const p=validatePolygon([...square,square[0]],20,20,1);const m=polygonMask(p,20,20);assert.equal(m.reduce((n,v)=>n+(v>0?1:0),0),100);assert.ok(m[10*20+10]);});
+test('self intersection/open/outside rejected without resizing selection',()=>{assert.throws(()=>validatePolygon([{x:1,y:1},{x:19,y:19},{x:1,y:19},{x:19,y:1},{x:1,y:1}],20,20));assert.throws(()=>validatePolygon(square.slice(0,4),20,20,1));assert.throws(()=>validatePolygon(square,10,10));});
+test('inner feather cannot leak a single unauthorized texel',()=>{const m=polygonMask(square,20,20),feather=innerFeather(m,20,20,3);for(let i=0;i<m.length;i++)if(!m[i])assert.equal(feather[i],0);assert.ok(feather[10*20+10]>0);});
+const header={transferId:'roundtrip',sessionId:'session',assetId:'asset',assetVersion:'v1',revision:0,kind:'echo',length:65539};
+test('all 256 byte values, random bytes and uneven tails survive bounded chunk transfer',()=>{const r=new TransferReceiver(),bytes=Uint8Array.from({length:65539},(_,i)=>i%256);crypto.getRandomValues(bytes.subarray(40000,60000));r.begin(header);for(let i=0;i<bytes.length;i+=4096)r.chunk(header.transferId,i,decode64(encode64(bytes.subarray(i,i+4096))));assert.deepEqual(r.end(header.transferId).bytes,bytes);});
+test('cancel / duplicate offset / oversized / truncated cannot complete',()=>{const r=new TransferReceiver();r.begin(header);r.chunk(header.transferId,0,new Uint8Array(17));r.cancel();assert.throws(()=>r.end(header.transferId));r.begin(header);assert.throws(()=>r.chunk(header.transferId,3,new Uint8Array(17)));r.begin(header);assert.throws(()=>r.end(header.transferId));assert.throws(()=>r.begin({...header,length:1e9}));});
+test('sRGB conversion is invertible over all byte levels',()=>{for(let i=0;i<=255;i++)assert.ok(Math.abs(linearToSrgb(srgbToLinear(i/255))-i/255)<1e-12);});

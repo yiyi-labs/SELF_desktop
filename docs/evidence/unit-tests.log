@@ -1,0 +1,32 @@
+✔ candidate and authorized-pending are not successful history (0.7804ms)
+✔ forged/cancelled authorization and concurrent execution rejected (0.1943ms)
+✔ only latest candidate can be authorized (0.0938ms)
+✔ stale and mismatched rendering acknowledgements cannot commit (0.0946ms)
+✔ strength NaN rejected (0.1058ms)
+✔ strength Infinity rejected (0.0839ms)
+✔ strength -0.1 rejected (0.0559ms)
+✔ strength 0.66 rejected (0.0639ms)
+✔ unknown operation, region and preset rejected (0.1128ms)
+✔ photo regions do not magically become lips (0.1845ms)
+✔ undo redo acknowledged only after successful replay (0.0955ms)
+✔ absolute adjustment replaces previous operation (0.0837ms)
+✔ current-result protection retains immutable snapshot through adjustment / reopen (0.28ms)
+✔ original protection is not confused with current result (0.09ms)
+✔ pending preview cannot be saved (0.0653ms)
+✔ un-calibrated brand products cannot simulate (0.0473ms)
+✔ saved view retains selected angle without modifying edit operations (0.4963ms)
+✔ ambience responds to explicit statements, handles negation, leaves unrelated chat unchanged (0.2855ms)
+✔ simple closed lasso fills interior including repeated pointerup endpoint (1.5694ms)
+✔ self intersection/open/outside rejected without resizing selection (0.2629ms)
+✔ inner feather cannot leak a single unauthorized texel (0.5038ms)
+✔ all 256 byte values, random bytes and uneven tails survive bounded chunk transfer (8.8855ms)
+✔ cancel / duplicate offset / oversized / truncated cannot complete (0.5896ms)
+✔ sRGB conversion is invertible over all byte levels (0.1751ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 192.827

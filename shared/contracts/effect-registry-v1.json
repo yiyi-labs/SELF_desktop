@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "presets": {
+    "rose": {
+      "color": [
+        0.66,
+        0.12,
+        0.3
+      ]
+    },
+    "terracotta": {
+      "color": [
+        0.65,
+        0.25,
+        0.18
+      ]
+    }
+  },
+  "levels": {
+    "none": 0.0,
+    "light": 0.18,
+    "medium": 0.32,
+    "strong": 0.5
+  },
+  "calibratedProductProfiles": []
+}

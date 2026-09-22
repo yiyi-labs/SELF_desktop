@@ -1,0 +1,34 @@
+{
+  "origin": "Original procedural composition made for SELF; no third-party recordings",
+  "generator": "scripts/prepare-audio.mjs",
+  "purpose": "Optional ambient music, no therapeutic or efficacy claims",
+  "files": [
+    {
+      "file": "quiet.wav",
+      "sampleRate": 24000,
+      "channels": 2,
+      "durationSeconds": 32,
+      "peak": 0.09563388621396947,
+      "rms": 0.023376823823142677,
+      "sha256": "cb5196308838479cf6fd827f02141435d87e97c3bbcf2039e3b7b6fb22b228f2"
+    },
+    {
+      "file": "warm.wav",
+      "sampleRate": 24000,
+      "channels": 2,
+      "durationSeconds": 32,
+      "peak": 0.09684907626093484,
+      "rms": 0.023376914922928795,
+      "sha256": "4c2ef3cebfb763dcc3c8e249c2c47c36cdc1b5bc78a60d39fd4ab7081a9e13e2"
+    },
+    {
+      "file": "clear.wav",
+      "sampleRate": 24000,
+      "channels": 2,
+      "durationSeconds": 32,
+      "peak": 0.09616936466441584,
+      "rms": 0.023376855432924396,
+      "sha256": "3e2e8ddc7727ac5eb203a924f47b57849281ccacca2b1a2bc4d61e1669d62d64"
+    }
+  ]
+}

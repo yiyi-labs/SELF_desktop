@@ -1,0 +1,19 @@
+09-22 15:11:57.372 28796 28796 I A03d00/JSAPP: SELF_SURFACE_CYCLE 11
+09-22 15:11:57.381 28796 28796 I A03d00/JSAPP: SELF_ES_PROBE {"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139970071231232,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"pngRoundtripExact":true,"rgba8Fbo":true}
+09-22 15:11:57.385 28796 28796 I A03d00/JSAPP: SELF_EXIF 1 {"height":49,"width":33}
+09-22 15:11:57.388 28796 28796 I A03d00/JSAPP: SELF_EXIF 2 {"height":49,"width":33}
+09-22 15:11:57.391 28796 28796 I A03d00/JSAPP: SELF_EXIF 3 {"height":49,"width":33}
+09-22 15:11:57.396 28796 28796 I A03d00/JSAPP: SELF_EXIF 4 {"height":49,"width":33}
+09-22 15:11:57.399 28796 28796 I A03d00/JSAPP: SELF_EXIF 5 {"height":33,"width":49}
+09-22 15:11:57.402 28796 28796 I A03d00/JSAPP: SELF_EXIF 6 {"height":33,"width":49}
+09-22 15:11:57.404 28796 28796 I A03d00/JSAPP: SELF_EXIF 7 {"height":33,"width":49}
+09-22 15:11:57.406 28796 28796 I A03d00/JSAPP: SELF_EXIF 8 {"height":33,"width":49}
+09-22 15:11:57.513 28796 28796 I A03d00/JSAPP: SELF_ES_GLB {"height":1024,"triangles":17684,"vertices":9279,"width":1024}
+09-22 15:11:57.948 28796 28796 I A03d00/JSAPP: SELF_ES_SELECTION 40442
+09-22 15:11:58.234 28796 28796 I A03d00/JSAPP: SELF_ES_EDIT {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":861320,"protectedPixels":887}
+09-22 15:11:58.943 28796 28796 I A03d00/JSAPP: SELF_ES_SNAPSHOT {"height":1024,"split":470635,"view":{"distance":16.0,"panX":0.0,"panY":0.0,"pitch":0.0,"yaw":0.0},"width":768}
+09-22 15:11:59.554 28796 28796 I A03d00/JSAPP: SELF_ES_EXCEPTION {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":862207,"protectedPixels":0}
+09-22 15:12:00.765 28796 28796 I A03d00/JSAPP: SELF_ES_PHOTO {"selectedPixels":45,"view":{"distance":16,"panX":0.4000000059604645,"panY":0,"pitch":0,"yaw":0},"malformedRejected":true}
+09-22 15:12:00.870 28796 28796 I A03d00/JSAPP: SELF_ES_STATS {"cpuSubmitAndSwapP50Ms":7.560536,"cpuSubmitAndSwapP95Ms":29.950516,"cpuSubmitOver50Ms":0,"frames":11,"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139970071231232,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"renderStartIntervalOver50Ms":0,"renderStartIntervalP50Ms":0.0,"renderStartIntervalP95Ms":0.0}
+09-22 15:12:00.870 28796 28796 I A03d00/JSAPP: SELF_ES_PROBE_FINISHED
+09-22 15:12:01.028 28796 28796 I A03d00/JSAPP: SELF_NETWORKKIT {"healthStatus":200,"modelConfigured":false,"missingKeyRejected":true,"operationsAfterFailure":0,"paidCall":"not sent"}

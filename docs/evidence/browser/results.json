@@ -1,0 +1,69 @@
+{
+  "environment": "Desktop Chrome, headless SwiftShader; NOT HarmonyOS emulator",
+  "date": "2026-09-22T00:57:56.120Z",
+  "browser": "153.0.8010.53",
+  "checks": [
+    {
+      "name": "GLB byte loading / embedded JPEG / WebGL2",
+      "status": "passed",
+      "details": {
+        "renderer": "WebKit WebGL",
+        "triangles": 17684
+      }
+    },
+    {
+      "name": "RGBA8 RenderTarget readback / PNG / alpha",
+      "status": "passed",
+      "details": {
+        "bytes": 236437,
+        "width": 390,
+        "height": 720
+      }
+    },
+    {
+      "name": "same pipeline zero-operation identity",
+      "status": "passed"
+    },
+    {
+      "name": "actual lip tint changes local pixels / absolute strength repeat",
+      "status": "passed",
+      "details": {
+        "changedPixels": 647
+      }
+    },
+    {
+      "name": "comparison does not crop export",
+      "status": "passed"
+    },
+    {
+      "name": "surface picking returns UV",
+      "status": "passed",
+      "details": {
+        "u": 0.5008620492086433,
+        "v": 0.5131606981174389
+      }
+    },
+    {
+      "name": "bidirectional MessagePort text and all-byte binary",
+      "status": "passed",
+      "details": {
+        "bytes": 65539,
+        "chunks": 2,
+        "text": "中文 \"quoted\" \u0000 end"
+      }
+    },
+    {
+      "name": "second viewport / resize",
+      "status": "passed",
+      "details": {
+        "width": 430,
+        "height": 932
+      }
+    },
+    {
+      "name": "GPU errors absent",
+      "status": "passed"
+    }
+  ],
+  "errors": []
+}

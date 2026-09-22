@@ -1,0 +1,56 @@
+{
+  "testedAt": "2026-09-22T09:54:57.012147+00:00",
+  "source": "Host HTTP -> running SELF backend -> real DeepSeek. Original red-circle fixture only. This is not a phone UI test.",
+  "health": {
+    "status": "ready",
+    "modelConfigured": true
+  },
+  "httpStatus": 200,
+  "result": {
+    "schemaVersion": 1,
+    "requestId": "http-live-1790070897",
+    "snapshotId": "http-live-1790070897",
+    "assetId": "sample",
+    "assetVersion": "v1",
+    "textureVersion": "t1",
+    "sceneRevision": 2,
+    "regionVersion": 1,
+    "plan": {
+      "decision": "edit",
+      "shortMessage": "图中为一个纯红色实心圆形，居中，共 1 个图形，白色背景。为已登记 lip 区域新增 rose 轻度数字试色候选（新图层，layerId 留空）。数字试色仅为颜色模拟，非品牌实测或真实功效，也不代表已生效。lip 为已确认区域，可在确认界面直接授权。",
+      "operations": [
+        {
+          "operation": "set_digital_tint",
+          "regionId": "lip",
+          "presetId": "rose",
+          "intensityLevel": "light",
+          "layerId": "",
+          "productProfileId": ""
+        }
+      ],
+      "explanationRefs": [],
+      "question": ""
+    },
+    "modelEvidence": {
+      "requestedModel": "deepseek-flash",
+      "returnedModel": "deepseek-flash",
+      "systemFingerprint": "aeb56401ca74e127821c4f9126dcb669",
+      "elapsedMs": 1953,
+      "usage": {
+        "prompt_tokens": 1814,
+        "completion_tokens": 221,
+        "total_tokens": 2035,
+        "prompt_tokens_details": {
+          "cached_tokens": 896
+        },
+        "prompt_cache_hit_tokens": 896,
+        "prompt_cache_miss_tokens": 918
+      },
+      "providerResponseId": "542ac28c-e427-4493-9906-72f86aaa9811"
+    }
+  },
+  "idempotentReplayMatched": true,
+  "visualDescriptionMatched": true,
+  "toolSelectionMatched": true,
+  "status": "passed"
+}

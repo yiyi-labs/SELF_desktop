@@ -1,0 +1,28 @@
+{
+  "emulatorVersion": "emulator 7.0.0.106(SP1DEVC00E999R4P11) ",
+  "runtimeABI": "x86_64",
+  "runtimeAPI": "26 ",
+  "specSHA256": "2F6FE181BABC1228E31BFEC05B04E6B01C1F149D8CCF06BB1AC6E2F8ECD12375",
+  "signature": "Original signingConfigs empty; unsigned debug",
+  "checkedAt": "2026-09-22T15:14:48.4267958+08:00",
+  "clang": [
+    "OHOS (dev) clang version 15.0.4 (llvm-project 329916b990b43824d4b7e67de911fee7a966b1c8)",
+    "Target: x86_64-w64-windows-gnu",
+    "Thread model: posix",
+    "InstalledDir: C:/Program Files/Huawei/DevEco Studio/sdk/default/openharmony/native/llvm/bin"
+  ],
+  "hdc": "Ver: 3.2.0f",
+  "deveco": "26.0.0.821",
+  "configuration": "{\n  \"app\": {\n    \"signingConfigs\": [],\n    \"products\": [{\n      \"name\": \"default\",\n      \"targetSdkVersion\": \"26.0.0\", \"compatibleSdkVersion\": \"5.1.1(19)\",\n      \"runtimeOS\": \"HarmonyOS\",\n      \"buildOption\": {\"strictMode\": {\"caseSensitiveCheck\": true,\"useNormalizedOHMUrl\": true}}\n    }],\n    \"buildModeSet\": [{\"name\":\"debug\"},{\"name\":\"release\"}]\n  },\n  \"modules\": [{\"name\":\"entry\",\"srcPath\":\"./entry\",\"targets\":[{\"name\":\"default\",\"applyToProducts\":[\"default\"]}]}]\n}\n",
+  "nativeSdk": {
+    "apiVersion": "26",
+    "displayName": "Native",
+    "meta": {
+      "metaVersion": "3.0.2"
+    },
+    "path": "native",
+    "platformVersion": "26.0.0",
+    "releaseType": "Release",
+    "version": "26.0.0.105"
+  }
+}

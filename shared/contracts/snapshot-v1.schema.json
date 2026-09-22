@@ -1,0 +1,206 @@
+{
+  "$defs": {
+    "Layer": {
+      "additionalProperties": false,
+      "properties": {
+        "layerId": {
+          "title": "Layerid",
+          "type": "string"
+        },
+        "regionId": {
+          "title": "Regionid",
+          "type": "string"
+        },
+        "presetId": {
+          "title": "Presetid",
+          "type": "string"
+        },
+        "intensityLevel": {
+          "enum": [
+            "none",
+            "light",
+            "medium",
+            "strong"
+          ],
+          "title": "Intensitylevel",
+          "type": "string"
+        }
+      },
+      "required": [
+        "layerId",
+        "regionId",
+        "presetId",
+        "intensityLevel"
+      ],
+      "title": "Layer",
+      "type": "object"
+    },
+    "Region": {
+      "additionalProperties": false,
+      "properties": {
+        "regionId": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Regionid",
+          "type": "string"
+        },
+        "description": {
+          "maxLength": 160,
+          "title": "Description",
+          "type": "string"
+        },
+        "semantic": {
+          "default": "manual",
+          "enum": [
+            "manual",
+            "confirmed-lips"
+          ],
+          "title": "Semantic",
+          "type": "string"
+        }
+      },
+      "required": [
+        "regionId",
+        "description"
+      ],
+      "title": "Region",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": 1,
+      "default": 1,
+      "title": "Schemaversion",
+      "type": "integer"
+    },
+    "requestId": {
+      "maxLength": 100,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9_-]+$",
+      "title": "Requestid",
+      "type": "string"
+    },
+    "snapshotId": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Snapshotid",
+      "type": "string"
+    },
+    "assetId": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Assetid",
+      "type": "string"
+    },
+    "assetVersion": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Assetversion",
+      "type": "string"
+    },
+    "textureVersion": {
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Textureversion",
+      "type": "string"
+    },
+    "sceneRevision": {
+      "minimum": 0,
+      "title": "Scenerevision",
+      "type": "integer"
+    },
+    "regionVersion": {
+      "minimum": 0,
+      "title": "Regionversion",
+      "type": "integer"
+    },
+    "viewRevision": {
+      "minimum": 0,
+      "title": "Viewrevision",
+      "type": "integer"
+    },
+    "view": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "maxProperties": 8,
+      "title": "View",
+      "type": "object"
+    },
+    "userText": {
+      "maxLength": 2000,
+      "minLength": 1,
+      "title": "Usertext",
+      "type": "string"
+    },
+    "regions": {
+      "items": {
+        "$ref": "#/$defs/Region"
+      },
+      "maxItems": 32,
+      "title": "Regions",
+      "type": "array"
+    },
+    "layers": {
+      "items": {
+        "$ref": "#/$defs/Layer"
+      },
+      "maxItems": 8,
+      "title": "Layers",
+      "type": "array"
+    },
+    "protectedRegionIds": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 32,
+      "title": "Protectedregionids",
+      "type": "array"
+    },
+    "uploadAuthorized": {
+      "const": true,
+      "title": "Uploadauthorized",
+      "type": "boolean"
+    },
+    "imageWidth": {
+      "default": 768,
+      "maximum": 2048,
+      "minimum": 8,
+      "title": "Imagewidth",
+      "type": "integer"
+    },
+    "imageHeight": {
+      "default": 1024,
+      "maximum": 2048,
+      "minimum": 8,
+      "title": "Imageheight",
+      "type": "integer"
+    },
+    "annotatedRegionId": {
+      "default": "",
+      "maxLength": 100,
+      "title": "Annotatedregionid",
+      "type": "string"
+    }
+  },
+  "required": [
+    "requestId",
+    "snapshotId",
+    "assetId",
+    "assetVersion",
+    "textureVersion",
+    "sceneRevision",
+    "regionVersion",
+    "viewRevision",
+    "view",
+    "userText",
+    "regions",
+    "layers",
+    "protectedRegionIds",
+    "uploadAuthorized"
+  ],
+  "title": "Snapshot",
+  "type": "object"
+}

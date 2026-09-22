@@ -1,0 +1,16 @@
+[
+  {
+    "commit": "3d73fde86504d441663276d48ff211711d9b3aba",
+    "scope": "documentation cross-check, not commercial SDK compatibility guarantee",
+    "repo": "openharmony/docs",
+    "retrievedAt": "2026-09-22T14:38:32.1092603+08:00",
+    "path": "zh-cn/application-dev/ui/napi-xcomponent-guidelines.md"
+  },
+  {
+    "commit": "137c97afc03146b1a706dbdb67db953792075730",
+    "scope": "documentation cross-check, not commercial SDK compatibility guarantee",
+    "repo": "openharmony/arkui_ace_engine",
+    "retrievedAt": "2026-09-22T14:38:33.1403855+08:00",
+    "path": "interfaces/native/native_interface_xcomponent.cpp"
+  }
+]

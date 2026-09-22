@@ -1,0 +1,220 @@
+09-22 15:10:52.503 28796 28796 I A03d00/JSAPP: SELF_ES_EVENT {"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139960265472768,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"type":"READY"}
+09-22 15:10:52.503 28796 28796 I A03d00/JSAPP: SELF_SURFACE_CYCLE 1
+09-22 15:10:52.514 28796 28796 I A03d00/JSAPP: SELF_ES_PROBE {"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139960265472768,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"pngRoundtripExact":true,"rgba8Fbo":true}
+09-22 15:10:52.520 28796 28796 I A03d00/JSAPP: SELF_EXIF 1 {"height":49,"width":33}
+09-22 15:10:52.524 28796 28796 I A03d00/JSAPP: SELF_EXIF 2 {"height":49,"width":33}
+09-22 15:10:52.535 28796 28796 I A03d00/JSAPP: SELF_EXIF 3 {"height":49,"width":33}
+09-22 15:10:52.538 28796 28796 I A03d00/JSAPP: SELF_EXIF 4 {"height":49,"width":33}
+09-22 15:10:52.540 28796 28796 I A03d00/JSAPP: SELF_EXIF 5 {"height":33,"width":49}
+09-22 15:10:52.543 28796 28796 I A03d00/JSAPP: SELF_EXIF 6 {"height":33,"width":49}
+09-22 15:10:52.545 28796 28796 I A03d00/JSAPP: SELF_EXIF 7 {"height":33,"width":49}
+09-22 15:10:52.548 28796 28796 I A03d00/JSAPP: SELF_EXIF 8 {"height":33,"width":49}
+09-22 15:10:52.647 28796 28796 I A03d00/JSAPP: SELF_ES_GLB {"height":1024,"triangles":17684,"vertices":9279,"width":1024}
+09-22 15:10:53.102 28796 28796 I A03d00/JSAPP: SELF_ES_SELECTION 40442
+09-22 15:10:53.408 28796 28796 I A03d00/JSAPP: SELF_ES_EDIT {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":861320,"protectedPixels":887}
+09-22 15:10:54.161 28796 28796 I A03d00/JSAPP: SELF_ES_SNAPSHOT {"height":1024,"split":470635,"view":{"distance":16.0,"panX":0.0,"panY":0.0,"pitch":0.0,"yaw":0.0},"width":768}
+09-22 15:10:54.784 28796 28796 I A03d00/JSAPP: SELF_ES_EXCEPTION {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":862207,"protectedPixels":0}
+09-22 15:10:56.032 28796 28796 I A03d00/JSAPP: SELF_ES_PHOTO {"selectedPixels":45,"view":{"distance":16,"panX":0.4000000059604645,"panY":0,"pitch":0,"yaw":0},"malformedRejected":true}
+09-22 15:10:56.145 28796 28796 I A03d00/JSAPP: SELF_ES_STATS {"cpuSubmitAndSwapP50Ms":1.948399,"cpuSubmitAndSwapP95Ms":26.054788,"cpuSubmitOver50Ms":0,"frames":11,"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139960265472768,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"renderStartIntervalOver50Ms":0,"renderStartIntervalP50Ms":0.0,"renderStartIntervalP95Ms":0.0}
+09-22 15:10:56.145 28796 28796 I A03d00/JSAPP: SELF_ES_PROBE_FINISHED
+09-22 15:10:56.352 28796 28796 I A03d00/JSAPP: SELF_NETWORKKIT {"healthStatus":200,"modelConfigured":false,"missingKeyRejected":true,"operationsAfterFailure":0,"paidCall":"not sent"}
+09-22 15:10:58.656 28796 28796 I A03d00/JSAPP: SELF_ES_EVENT {"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139960265472768,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"type":"READY"}
+09-22 15:10:58.656 28796 28796 I A03d00/JSAPP: SELF_SURFACE_CYCLE 2
+09-22 15:10:58.666 28796 28796 I A03d00/JSAPP: SELF_ES_PROBE {"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139960265472768,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"pngRoundtripExact":true,"rgba8Fbo":true}
+09-22 15:10:58.670 28796 28796 I A03d00/JSAPP: SELF_EXIF 1 {"height":49,"width":33}
+09-22 15:10:58.674 28796 28796 I A03d00/JSAPP: SELF_EXIF 2 {"height":49,"width":33}
+09-22 15:10:58.678 28796 28796 I A03d00/JSAPP: SELF_EXIF 3 {"height":49,"width":33}
+09-22 15:10:58.681 28796 28796 I A03d00/JSAPP: SELF_EXIF 4 {"height":49,"width":33}
+09-22 15:10:58.684 28796 28796 I A03d00/JSAPP: SELF_EXIF 5 {"height":33,"width":49}
+09-22 15:10:58.688 28796 28796 I A03d00/JSAPP: SELF_EXIF 6 {"height":33,"width":49}
+09-22 15:10:58.694 28796 28796 I A03d00/JSAPP: SELF_EXIF 7 {"height":33,"width":49}
+09-22 15:10:58.698 28796 28796 I A03d00/JSAPP: SELF_EXIF 8 {"height":33,"width":49}
+09-22 15:10:58.790 28796 28796 I A03d00/JSAPP: SELF_ES_GLB {"height":1024,"triangles":17684,"vertices":9279,"width":1024}
+09-22 15:10:59.198 28796 28796 I A03d00/JSAPP: SELF_ES_SELECTION 40442
+09-22 15:10:59.491 28796 28796 I A03d00/JSAPP: SELF_ES_EDIT {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":861320,"protectedPixels":887}
+09-22 15:11:00.264 28796 28796 I A03d00/JSAPP: SELF_ES_SNAPSHOT {"height":1024,"split":470635,"view":{"distance":16.0,"panX":0.0,"panY":0.0,"pitch":0.0,"yaw":0.0},"width":768}
+09-22 15:11:00.874 28796 28796 I A03d00/JSAPP: SELF_ES_EXCEPTION {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":862207,"protectedPixels":0}
+09-22 15:11:02.038 28796 28796 I A03d00/JSAPP: SELF_ES_PHOTO {"selectedPixels":45,"view":{"distance":16,"panX":0.4000000059604645,"panY":0,"pitch":0,"yaw":0},"malformedRejected":true}
+09-22 15:11:02.151 28796 28796 I A03d00/JSAPP: SELF_ES_STATS {"cpuSubmitAndSwapP50Ms":1.718324,"cpuSubmitAndSwapP95Ms":23.952433,"cpuSubmitOver50Ms":0,"frames":11,"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139960265472768,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"renderStartIntervalOver50Ms":0,"renderStartIntervalP50Ms":0.0,"renderStartIntervalP95Ms":0.0}
+09-22 15:11:02.151 28796 28796 I A03d00/JSAPP: SELF_ES_PROBE_FINISHED
+09-22 15:11:02.258 28796 28796 I A03d00/JSAPP: SELF_NETWORKKIT {"healthStatus":200,"modelConfigured":false,"missingKeyRejected":true,"operationsAfterFailure":0,"paidCall":"not sent"}
+09-22 15:11:05.313 28796 28796 I A03d00/JSAPP: SELF_ES_EVENT {"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139960265472768,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"type":"READY"}
+09-22 15:11:05.313 28796 28796 I A03d00/JSAPP: SELF_SURFACE_CYCLE 3
+09-22 15:11:05.322 28796 28796 I A03d00/JSAPP: SELF_ES_PROBE {"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139960265472768,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"pngRoundtripExact":true,"rgba8Fbo":true}
+09-22 15:11:05.325 28796 28796 I A03d00/JSAPP: SELF_EXIF 1 {"height":49,"width":33}
+09-22 15:11:05.327 28796 28796 I A03d00/JSAPP: SELF_EXIF 2 {"height":49,"width":33}
+09-22 15:11:05.329 28796 28796 I A03d00/JSAPP: SELF_EXIF 3 {"height":49,"width":33}
+09-22 15:11:05.333 28796 28796 I A03d00/JSAPP: SELF_EXIF 4 {"height":49,"width":33}
+09-22 15:11:05.335 28796 28796 I A03d00/JSAPP: SELF_EXIF 5 {"height":33,"width":49}
+09-22 15:11:05.338 28796 28796 I A03d00/JSAPP: SELF_EXIF 6 {"height":33,"width":49}
+09-22 15:11:05.346 28796 28796 I A03d00/JSAPP: SELF_EXIF 7 {"height":33,"width":49}
+09-22 15:11:05.350 28796 28796 I A03d00/JSAPP: SELF_EXIF 8 {"height":33,"width":49}
+09-22 15:11:05.467 28796 28796 I A03d00/JSAPP: SELF_ES_GLB {"height":1024,"triangles":17684,"vertices":9279,"width":1024}
+09-22 15:11:05.929 28796 28796 I A03d00/JSAPP: SELF_ES_SELECTION 40442
+09-22 15:11:06.288 28796 28796 I A03d00/JSAPP: SELF_ES_EDIT {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":861320,"protectedPixels":887}
+09-22 15:11:06.973 28796 28796 I A03d00/JSAPP: SELF_ES_SNAPSHOT {"height":1024,"split":470635,"view":{"distance":16.0,"panX":0.0,"panY":0.0,"pitch":0.0,"yaw":0.0},"width":768}
+09-22 15:11:07.561 28796 28796 I A03d00/JSAPP: SELF_ES_EXCEPTION {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":862207,"protectedPixels":0}
+09-22 15:11:08.782 28796 28796 I A03d00/JSAPP: SELF_ES_PHOTO {"selectedPixels":45,"view":{"distance":16,"panX":0.4000000059604645,"panY":0,"pitch":0,"yaw":0},"malformedRejected":true}
+09-22 15:11:08.896 28796 28796 I A03d00/JSAPP: SELF_ES_STATS {"cpuSubmitAndSwapP50Ms":1.533563,"cpuSubmitAndSwapP95Ms":28.773891,"cpuSubmitOver50Ms":0,"frames":10,"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139960265472768,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"renderStartIntervalOver50Ms":0,"renderStartIntervalP50Ms":0.0,"renderStartIntervalP95Ms":0.0}
+09-22 15:11:08.896 28796 28796 I A03d00/JSAPP: SELF_ES_PROBE_FINISHED
+09-22 15:11:09.057 28796 28796 I A03d00/JSAPP: SELF_NETWORKKIT {"healthStatus":200,"modelConfigured":false,"missingKeyRejected":true,"operationsAfterFailure":0,"paidCall":"not sent"}
+09-22 15:11:11.854 28796 28796 I A03d00/JSAPP: SELF_ES_EVENT {"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139960265472768,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"type":"READY"}
+09-22 15:11:11.854 28796 28796 I A03d00/JSAPP: SELF_SURFACE_CYCLE 4
+09-22 15:11:11.864 28796 28796 I A03d00/JSAPP: SELF_ES_PROBE {"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139960265472768,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"pngRoundtripExact":true,"rgba8Fbo":true}
+09-22 15:11:11.867 28796 28796 I A03d00/JSAPP: SELF_EXIF 1 {"height":49,"width":33}
+09-22 15:11:11.871 28796 28796 I A03d00/JSAPP: SELF_EXIF 2 {"height":49,"width":33}
+09-22 15:11:11.874 28796 28796 I A03d00/JSAPP: SELF_EXIF 3 {"height":49,"width":33}
+09-22 15:11:11.877 28796 28796 I A03d00/JSAPP: SELF_EXIF 4 {"height":49,"width":33}
+09-22 15:11:11.885 28796 28796 I A03d00/JSAPP: SELF_EXIF 5 {"height":33,"width":49}
+09-22 15:11:11.888 28796 28796 I A03d00/JSAPP: SELF_EXIF 6 {"height":33,"width":49}
+09-22 15:11:11.890 28796 28796 I A03d00/JSAPP: SELF_EXIF 7 {"height":33,"width":49}
+09-22 15:11:11.893 28796 28796 I A03d00/JSAPP: SELF_EXIF 8 {"height":33,"width":49}
+09-22 15:11:11.983 28796 28796 I A03d00/JSAPP: SELF_ES_GLB {"height":1024,"triangles":17684,"vertices":9279,"width":1024}
+09-22 15:11:12.413 28796 28796 I A03d00/JSAPP: SELF_ES_SELECTION 40442
+09-22 15:11:12.739 28796 28796 I A03d00/JSAPP: SELF_ES_EDIT {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":861320,"protectedPixels":887}
+09-22 15:11:13.497 28796 28796 I A03d00/JSAPP: SELF_ES_SNAPSHOT {"height":1024,"split":470635,"view":{"distance":16.0,"panX":0.0,"panY":0.0,"pitch":0.0,"yaw":0.0},"width":768}
+09-22 15:11:14.159 28796 28796 I A03d00/JSAPP: SELF_ES_EXCEPTION {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":862207,"protectedPixels":0}
+09-22 15:11:15.288 28796 28796 I A03d00/JSAPP: SELF_ES_PHOTO {"selectedPixels":45,"view":{"distance":16,"panX":0.4000000059604645,"panY":0,"pitch":0,"yaw":0},"malformedRejected":true}
+09-22 15:11:15.393 28796 28796 I A03d00/JSAPP: SELF_ES_STATS {"cpuSubmitAndSwapP50Ms":1.397292,"cpuSubmitAndSwapP95Ms":21.192518,"cpuSubmitOver50Ms":0,"frames":10,"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139960265472768,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"renderStartIntervalOver50Ms":0,"renderStartIntervalP50Ms":0.0,"renderStartIntervalP95Ms":0.0}
+09-22 15:11:15.393 28796 28796 I A03d00/JSAPP: SELF_ES_PROBE_FINISHED
+09-22 15:11:15.485 28796 28796 I A03d00/JSAPP: SELF_NETWORKKIT {"healthStatus":200,"modelConfigured":false,"missingKeyRejected":true,"operationsAfterFailure":0,"paidCall":"not sent"}
+09-22 15:11:18.384 28796 28796 I A03d00/JSAPP: SELF_ES_EVENT {"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139970071231232,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"type":"READY"}
+09-22 15:11:18.384 28796 28796 I A03d00/JSAPP: SELF_SURFACE_CYCLE 5
+09-22 15:11:18.391 28796 28796 I A03d00/JSAPP: SELF_ES_PROBE {"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139970071231232,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"pngRoundtripExact":true,"rgba8Fbo":true}
+09-22 15:11:18.393 28796 28796 I A03d00/JSAPP: SELF_EXIF 1 {"height":49,"width":33}
+09-22 15:11:18.395 28796 28796 I A03d00/JSAPP: SELF_EXIF 2 {"height":49,"width":33}
+09-22 15:11:18.398 28796 28796 I A03d00/JSAPP: SELF_EXIF 3 {"height":49,"width":33}
+09-22 15:11:18.400 28796 28796 I A03d00/JSAPP: SELF_EXIF 4 {"height":49,"width":33}
+09-22 15:11:18.402 28796 28796 I A03d00/JSAPP: SELF_EXIF 5 {"height":33,"width":49}
+09-22 15:11:18.405 28796 28796 I A03d00/JSAPP: SELF_EXIF 6 {"height":33,"width":49}
+09-22 15:11:18.408 28796 28796 I A03d00/JSAPP: SELF_EXIF 7 {"height":33,"width":49}
+09-22 15:11:18.419 28796 28796 I A03d00/JSAPP: SELF_EXIF 8 {"height":33,"width":49}
+09-22 15:11:18.520 28796 28796 I A03d00/JSAPP: SELF_ES_GLB {"height":1024,"triangles":17684,"vertices":9279,"width":1024}
+09-22 15:11:19.017 28796 28796 I A03d00/JSAPP: SELF_ES_SELECTION 40442
+09-22 15:11:19.333 28796 28796 I A03d00/JSAPP: SELF_ES_EDIT {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":861320,"protectedPixels":887}
+09-22 15:11:20.062 28796 28796 I A03d00/JSAPP: SELF_ES_SNAPSHOT {"height":1024,"split":470635,"view":{"distance":16.0,"panX":0.0,"panY":0.0,"pitch":0.0,"yaw":0.0},"width":768}
+09-22 15:11:20.626 28796 28796 I A03d00/JSAPP: SELF_ES_EXCEPTION {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":862207,"protectedPixels":0}
+09-22 15:11:21.783 28796 28796 I A03d00/JSAPP: SELF_ES_PHOTO {"selectedPixels":45,"view":{"distance":16,"panX":0.4000000059604645,"panY":0,"pitch":0,"yaw":0},"malformedRejected":true}
+09-22 15:11:21.926 28796 28796 I A03d00/JSAPP: SELF_ES_STATS {"cpuSubmitAndSwapP50Ms":17.394213,"cpuSubmitAndSwapP95Ms":25.113099,"cpuSubmitOver50Ms":0,"frames":12,"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139970071231232,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"renderStartIntervalOver50Ms":0,"renderStartIntervalP50Ms":0.0,"renderStartIntervalP95Ms":0.0}
+09-22 15:11:21.926 28796 28796 I A03d00/JSAPP: SELF_ES_PROBE_FINISHED
+09-22 15:11:22.085 28796 28796 I A03d00/JSAPP: SELF_NETWORKKIT {"healthStatus":200,"modelConfigured":false,"missingKeyRejected":true,"operationsAfterFailure":0,"paidCall":"not sent"}
+09-22 15:11:24.833 28796 28796 I A03d00/JSAPP: SELF_ES_EVENT {"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139970071231232,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"type":"READY"}
+09-22 15:11:24.833 28796 28796 I A03d00/JSAPP: SELF_SURFACE_CYCLE 6
+09-22 15:11:24.843 28796 28796 I A03d00/JSAPP: SELF_ES_PROBE {"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139970071231232,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"pngRoundtripExact":true,"rgba8Fbo":true}
+09-22 15:11:24.845 28796 28796 I A03d00/JSAPP: SELF_EXIF 1 {"height":49,"width":33}
+09-22 15:11:24.848 28796 28796 I A03d00/JSAPP: SELF_EXIF 2 {"height":49,"width":33}
+09-22 15:11:24.850 28796 28796 I A03d00/JSAPP: SELF_EXIF 3 {"height":49,"width":33}
+09-22 15:11:24.852 28796 28796 I A03d00/JSAPP: SELF_EXIF 4 {"height":49,"width":33}
+09-22 15:11:24.854 28796 28796 I A03d00/JSAPP: SELF_EXIF 5 {"height":33,"width":49}
+09-22 15:11:24.858 28796 28796 I A03d00/JSAPP: SELF_EXIF 6 {"height":33,"width":49}
+09-22 15:11:24.861 28796 28796 I A03d00/JSAPP: SELF_EXIF 7 {"height":33,"width":49}
+09-22 15:11:24.864 28796 28796 I A03d00/JSAPP: SELF_EXIF 8 {"height":33,"width":49}
+09-22 15:11:24.984 28796 28796 I A03d00/JSAPP: SELF_ES_GLB {"height":1024,"triangles":17684,"vertices":9279,"width":1024}
+09-22 15:11:25.444 28796 28796 I A03d00/JSAPP: SELF_ES_SELECTION 40442
+09-22 15:11:25.717 28796 28796 I A03d00/JSAPP: SELF_ES_EDIT {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":861320,"protectedPixels":887}
+09-22 15:11:26.443 28796 28796 I A03d00/JSAPP: SELF_ES_SNAPSHOT {"height":1024,"split":470635,"view":{"distance":16.0,"panX":0.0,"panY":0.0,"pitch":0.0,"yaw":0.0},"width":768}
+09-22 15:11:27.099 28796 28796 I A03d00/JSAPP: SELF_ES_EXCEPTION {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":862207,"protectedPixels":0}
+09-22 15:11:28.332 28796 28796 I A03d00/JSAPP: SELF_ES_PHOTO {"selectedPixels":45,"view":{"distance":16,"panX":0.4000000059604645,"panY":0,"pitch":0,"yaw":0},"malformedRejected":true}
+09-22 15:11:28.442 28796 28796 I A03d00/JSAPP: SELF_ES_STATS {"cpuSubmitAndSwapP50Ms":2.423978,"cpuSubmitAndSwapP95Ms":26.198752,"cpuSubmitOver50Ms":0,"frames":11,"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139970071231232,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"renderStartIntervalOver50Ms":0,"renderStartIntervalP50Ms":0.0,"renderStartIntervalP95Ms":0.0}
+09-22 15:11:28.442 28796 28796 I A03d00/JSAPP: SELF_ES_PROBE_FINISHED
+09-22 15:11:28.576 28796 28796 I A03d00/JSAPP: SELF_NETWORKKIT {"healthStatus":200,"modelConfigured":false,"missingKeyRejected":true,"operationsAfterFailure":0,"paidCall":"not sent"}
+09-22 15:11:31.402 28796 28796 I A03d00/JSAPP: SELF_ES_EVENT {"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139970071231232,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"type":"READY"}
+09-22 15:11:31.402 28796 28796 I A03d00/JSAPP: SELF_SURFACE_CYCLE 7
+09-22 15:11:31.412 28796 28796 I A03d00/JSAPP: SELF_ES_PROBE {"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139970071231232,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"pngRoundtripExact":true,"rgba8Fbo":true}
+09-22 15:11:31.416 28796 28796 I A03d00/JSAPP: SELF_EXIF 1 {"height":49,"width":33}
+09-22 15:11:31.420 28796 28796 I A03d00/JSAPP: SELF_EXIF 2 {"height":49,"width":33}
+09-22 15:11:31.422 28796 28796 I A03d00/JSAPP: SELF_EXIF 3 {"height":49,"width":33}
+09-22 15:11:31.427 28796 28796 I A03d00/JSAPP: SELF_EXIF 4 {"height":49,"width":33}
+09-22 15:11:31.429 28796 28796 I A03d00/JSAPP: SELF_EXIF 5 {"height":33,"width":49}
+09-22 15:11:31.432 28796 28796 I A03d00/JSAPP: SELF_EXIF 6 {"height":33,"width":49}
+09-22 15:11:31.435 28796 28796 I A03d00/JSAPP: SELF_EXIF 7 {"height":33,"width":49}
+09-22 15:11:31.438 28796 28796 I A03d00/JSAPP: SELF_EXIF 8 {"height":33,"width":49}
+09-22 15:11:31.554 28796 28796 I A03d00/JSAPP: SELF_ES_GLB {"height":1024,"triangles":17684,"vertices":9279,"width":1024}
+09-22 15:11:32.032 28796 28796 I A03d00/JSAPP: SELF_ES_SELECTION 40442
+09-22 15:11:32.316 28796 28796 I A03d00/JSAPP: SELF_ES_EDIT {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":861320,"protectedPixels":887}
+09-22 15:11:32.955 28796 28796 I A03d00/JSAPP: SELF_ES_SNAPSHOT {"height":1024,"split":470635,"view":{"distance":16.0,"panX":0.0,"panY":0.0,"pitch":0.0,"yaw":0.0},"width":768}
+09-22 15:11:33.544 28796 28796 I A03d00/JSAPP: SELF_ES_EXCEPTION {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":862207,"protectedPixels":0}
+09-22 15:11:34.641 28796 28796 I A03d00/JSAPP: SELF_ES_PHOTO {"selectedPixels":45,"view":{"distance":16,"panX":0.4000000059604645,"panY":0,"pitch":0,"yaw":0},"malformedRejected":true}
+09-22 15:11:34.715 28796 28796 I A03d00/JSAPP: SELF_ES_STATS {"cpuSubmitAndSwapP50Ms":16.593194,"cpuSubmitAndSwapP95Ms":24.798671,"cpuSubmitOver50Ms":0,"frames":11,"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139970071231232,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"renderStartIntervalOver50Ms":0,"renderStartIntervalP50Ms":0.0,"renderStartIntervalP95Ms":0.0}
+09-22 15:11:34.715 28796 28796 I A03d00/JSAPP: SELF_ES_PROBE_FINISHED
+09-22 15:11:34.840 28796 28796 I A03d00/JSAPP: SELF_NETWORKKIT {"healthStatus":200,"modelConfigured":false,"missingKeyRejected":true,"operationsAfterFailure":0,"paidCall":"not sent"}
+09-22 15:11:37.915 28796 28796 I A03d00/JSAPP: SELF_ES_EVENT {"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139970071231232,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"type":"READY"}
+09-22 15:11:37.915 28796 28796 I A03d00/JSAPP: SELF_SURFACE_CYCLE 8
+09-22 15:11:37.921 28796 28796 I A03d00/JSAPP: SELF_ES_PROBE {"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139970071231232,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"pngRoundtripExact":true,"rgba8Fbo":true}
+09-22 15:11:37.923 28796 28796 I A03d00/JSAPP: SELF_EXIF 1 {"height":49,"width":33}
+09-22 15:11:37.925 28796 28796 I A03d00/JSAPP: SELF_EXIF 2 {"height":49,"width":33}
+09-22 15:11:37.927 28796 28796 I A03d00/JSAPP: SELF_EXIF 3 {"height":49,"width":33}
+09-22 15:11:37.929 28796 28796 I A03d00/JSAPP: SELF_EXIF 4 {"height":49,"width":33}
+09-22 15:11:37.931 28796 28796 I A03d00/JSAPP: SELF_EXIF 5 {"height":33,"width":49}
+09-22 15:11:37.934 28796 28796 I A03d00/JSAPP: SELF_EXIF 6 {"height":33,"width":49}
+09-22 15:11:37.937 28796 28796 I A03d00/JSAPP: SELF_EXIF 7 {"height":33,"width":49}
+09-22 15:11:37.939 28796 28796 I A03d00/JSAPP: SELF_EXIF 8 {"height":33,"width":49}
+09-22 15:11:38.035 28796 28796 I A03d00/JSAPP: SELF_ES_GLB {"height":1024,"triangles":17684,"vertices":9279,"width":1024}
+09-22 15:11:38.467 28796 28796 I A03d00/JSAPP: SELF_ES_SELECTION 40442
+09-22 15:11:38.731 28796 28796 I A03d00/JSAPP: SELF_ES_EDIT {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":861320,"protectedPixels":887}
+09-22 15:11:39.429 28796 28796 I A03d00/JSAPP: SELF_ES_SNAPSHOT {"height":1024,"split":470635,"view":{"distance":16.0,"panX":0.0,"panY":0.0,"pitch":0.0,"yaw":0.0},"width":768}
+09-22 15:11:40.068 28796 28796 I A03d00/JSAPP: SELF_ES_EXCEPTION {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":862207,"protectedPixels":0}
+09-22 15:11:41.195 28796 28796 I A03d00/JSAPP: SELF_ES_PHOTO {"selectedPixels":45,"view":{"distance":16,"panX":0.4000000059604645,"panY":0,"pitch":0,"yaw":0},"malformedRejected":true}
+09-22 15:11:41.272 28796 28796 I A03d00/JSAPP: SELF_ES_STATS {"cpuSubmitAndSwapP50Ms":17.386048,"cpuSubmitAndSwapP95Ms":31.506121,"cpuSubmitOver50Ms":0,"frames":12,"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139970071231232,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"renderStartIntervalOver50Ms":0,"renderStartIntervalP50Ms":0.0,"renderStartIntervalP95Ms":0.0}
+09-22 15:11:41.272 28796 28796 I A03d00/JSAPP: SELF_ES_PROBE_FINISHED
+09-22 15:11:41.383 28796 28796 I A03d00/JSAPP: SELF_NETWORKKIT {"healthStatus":200,"modelConfigured":false,"missingKeyRejected":true,"operationsAfterFailure":0,"paidCall":"not sent"}
+09-22 15:11:44.355 28796 28796 I A03d00/JSAPP: SELF_ES_EVENT {"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139970071231232,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"type":"READY"}
+09-22 15:11:44.355 28796 28796 I A03d00/JSAPP: SELF_SURFACE_CYCLE 9
+09-22 15:11:44.389 28796 28796 I A03d00/JSAPP: SELF_ES_PROBE {"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139970071231232,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"pngRoundtripExact":true,"rgba8Fbo":true}
+09-22 15:11:44.392 28796 28796 I A03d00/JSAPP: SELF_EXIF 1 {"height":49,"width":33}
+09-22 15:11:44.395 28796 28796 I A03d00/JSAPP: SELF_EXIF 2 {"height":49,"width":33}
+09-22 15:11:44.398 28796 28796 I A03d00/JSAPP: SELF_EXIF 3 {"height":49,"width":33}
+09-22 15:11:44.400 28796 28796 I A03d00/JSAPP: SELF_EXIF 4 {"height":49,"width":33}
+09-22 15:11:44.403 28796 28796 I A03d00/JSAPP: SELF_EXIF 5 {"height":33,"width":49}
+09-22 15:11:44.405 28796 28796 I A03d00/JSAPP: SELF_EXIF 6 {"height":33,"width":49}
+09-22 15:11:44.408 28796 28796 I A03d00/JSAPP: SELF_EXIF 7 {"height":33,"width":49}
+09-22 15:11:44.410 28796 28796 I A03d00/JSAPP: SELF_EXIF 8 {"height":33,"width":49}
+09-22 15:11:44.522 28796 28796 I A03d00/JSAPP: SELF_ES_GLB {"height":1024,"triangles":17684,"vertices":9279,"width":1024}
+09-22 15:11:44.977 28796 28796 I A03d00/JSAPP: SELF_ES_SELECTION 40442
+09-22 15:11:45.258 28796 28796 I A03d00/JSAPP: SELF_ES_EDIT {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":861320,"protectedPixels":887}
+09-22 15:11:46.003 28796 28796 I A03d00/JSAPP: SELF_ES_SNAPSHOT {"height":1024,"split":470635,"view":{"distance":16.0,"panX":0.0,"panY":0.0,"pitch":0.0,"yaw":0.0},"width":768}
+09-22 15:11:46.580 28796 28796 I A03d00/JSAPP: SELF_ES_EXCEPTION {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":862207,"protectedPixels":0}
+09-22 15:11:47.697 28796 28796 I A03d00/JSAPP: SELF_ES_PHOTO {"selectedPixels":45,"view":{"distance":16,"panX":0.4000000059604645,"panY":0,"pitch":0,"yaw":0},"malformedRejected":true}
+09-22 15:11:47.786 28796 28796 I A03d00/JSAPP: SELF_ES_STATS {"cpuSubmitAndSwapP50Ms":3.129193,"cpuSubmitAndSwapP95Ms":24.330693,"cpuSubmitOver50Ms":0,"frames":11,"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139970071231232,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"renderStartIntervalOver50Ms":0,"renderStartIntervalP50Ms":0.0,"renderStartIntervalP95Ms":0.0}
+09-22 15:11:47.786 28796 28796 I A03d00/JSAPP: SELF_ES_PROBE_FINISHED
+09-22 15:11:47.891 28796 28796 I A03d00/JSAPP: SELF_NETWORKKIT {"healthStatus":200,"modelConfigured":false,"missingKeyRejected":true,"operationsAfterFailure":0,"paidCall":"not sent"}
+09-22 15:11:50.793 28796 28796 I A03d00/JSAPP: SELF_ES_EVENT {"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139970071231232,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"type":"READY"}
+09-22 15:11:50.793 28796 28796 I A03d00/JSAPP: SELF_SURFACE_CYCLE 10
+09-22 15:11:50.802 28796 28796 I A03d00/JSAPP: SELF_ES_PROBE {"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139970071231232,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"pngRoundtripExact":true,"rgba8Fbo":true}
+09-22 15:11:50.805 28796 28796 I A03d00/JSAPP: SELF_EXIF 1 {"height":49,"width":33}
+09-22 15:11:50.807 28796 28796 I A03d00/JSAPP: SELF_EXIF 2 {"height":49,"width":33}
+09-22 15:11:50.810 28796 28796 I A03d00/JSAPP: SELF_EXIF 3 {"height":49,"width":33}
+09-22 15:11:50.813 28796 28796 I A03d00/JSAPP: SELF_EXIF 4 {"height":49,"width":33}
+09-22 15:11:50.816 28796 28796 I A03d00/JSAPP: SELF_EXIF 5 {"height":33,"width":49}
+09-22 15:11:50.819 28796 28796 I A03d00/JSAPP: SELF_EXIF 6 {"height":33,"width":49}
+09-22 15:11:50.821 28796 28796 I A03d00/JSAPP: SELF_EXIF 7 {"height":33,"width":49}
+09-22 15:11:50.825 28796 28796 I A03d00/JSAPP: SELF_EXIF 8 {"height":33,"width":49}
+09-22 15:11:50.941 28796 28796 I A03d00/JSAPP: SELF_ES_GLB {"height":1024,"triangles":17684,"vertices":9279,"width":1024}
+09-22 15:11:51.420 28796 28796 I A03d00/JSAPP: SELF_ES_SELECTION 40442
+09-22 15:11:51.646 28796 28796 I A03d00/JSAPP: SELF_ES_EDIT {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":861320,"protectedPixels":887}
+09-22 15:11:52.333 28796 28796 I A03d00/JSAPP: SELF_ES_SNAPSHOT {"height":1024,"split":470635,"view":{"distance":16.0,"panX":0.0,"panY":0.0,"pitch":0.0,"yaw":0.0},"width":768}
+09-22 15:11:52.987 28796 28796 I A03d00/JSAPP: SELF_ES_EXCEPTION {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":862207,"protectedPixels":0}
+09-22 15:11:54.174 28796 28796 I A03d00/JSAPP: SELF_ES_PHOTO {"selectedPixels":45,"view":{"distance":16,"panX":0.4000000059604645,"panY":0,"pitch":0,"yaw":0},"malformedRejected":true}
+09-22 15:11:54.276 28796 28796 I A03d00/JSAPP: SELF_ES_STATS {"cpuSubmitAndSwapP50Ms":16.778658,"cpuSubmitAndSwapP95Ms":28.725756,"cpuSubmitOver50Ms":0,"frames":11,"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139970071231232,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"renderStartIntervalOver50Ms":0,"renderStartIntervalP50Ms":0.0,"renderStartIntervalP95Ms":0.0}
+09-22 15:11:54.276 28796 28796 I A03d00/JSAPP: SELF_ES_PROBE_FINISHED
+09-22 15:11:54.423 28796 28796 I A03d00/JSAPP: SELF_NETWORKKIT {"healthStatus":200,"modelConfigured":false,"missingKeyRejected":true,"operationsAfterFailure":0,"paidCall":"not sent"}
+09-22 15:11:57.372 28796 28796 I A03d00/JSAPP: SELF_ES_EVENT {"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139970071231232,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"type":"READY"}
+09-22 15:11:57.372 28796 28796 I A03d00/JSAPP: SELF_SURFACE_CYCLE 11
+09-22 15:11:57.381 28796 28796 I A03d00/JSAPP: SELF_ES_PROBE {"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139970071231232,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"pngRoundtripExact":true,"rgba8Fbo":true}
+09-22 15:11:57.385 28796 28796 I A03d00/JSAPP: SELF_EXIF 1 {"height":49,"width":33}
+09-22 15:11:57.388 28796 28796 I A03d00/JSAPP: SELF_EXIF 2 {"height":49,"width":33}
+09-22 15:11:57.391 28796 28796 I A03d00/JSAPP: SELF_EXIF 3 {"height":49,"width":33}
+09-22 15:11:57.396 28796 28796 I A03d00/JSAPP: SELF_EXIF 4 {"height":49,"width":33}
+09-22 15:11:57.399 28796 28796 I A03d00/JSAPP: SELF_EXIF 5 {"height":33,"width":49}
+09-22 15:11:57.402 28796 28796 I A03d00/JSAPP: SELF_EXIF 6 {"height":33,"width":49}
+09-22 15:11:57.404 28796 28796 I A03d00/JSAPP: SELF_EXIF 7 {"height":33,"width":49}
+09-22 15:11:57.406 28796 28796 I A03d00/JSAPP: SELF_EXIF 8 {"height":33,"width":49}
+09-22 15:11:57.513 28796 28796 I A03d00/JSAPP: SELF_ES_GLB {"height":1024,"triangles":17684,"vertices":9279,"width":1024}
+09-22 15:11:57.948 28796 28796 I A03d00/JSAPP: SELF_ES_SELECTION 40442
+09-22 15:11:58.234 28796 28796 I A03d00/JSAPP: SELF_ES_EDIT {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":861320,"protectedPixels":887}
+09-22 15:11:58.943 28796 28796 I A03d00/JSAPP: SELF_ES_SNAPSHOT {"height":1024,"split":470635,"view":{"distance":16.0,"panX":0.0,"panY":0.0,"pitch":0.0,"yaw":0.0},"width":768}
+09-22 15:11:59.554 28796 28796 I A03d00/JSAPP: SELF_ES_EXCEPTION {"checkedHeight":1200,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":862207,"protectedPixels":0}
+09-22 15:12:00.765 28796 28796 I A03d00/JSAPP: SELF_ES_PHOTO {"selectedPixels":45,"view":{"distance":16,"panX":0.4000000059604645,"panY":0,"pitch":0,"yaw":0},"malformedRejected":true}
+09-22 15:12:00.870 28796 28796 I A03d00/JSAPP: SELF_ES_STATS {"cpuSubmitAndSwapP50Ms":7.560536,"cpuSubmitAndSwapP95Ms":29.950516,"cpuSubmitOver50Ms":0,"frames":11,"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139970071231232,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"renderStartIntervalOver50Ms":0,"renderStartIntervalP50Ms":0.0,"renderStartIntervalP95Ms":0.0}
+09-22 15:12:00.870 28796 28796 I A03d00/JSAPP: SELF_ES_PROBE_FINISHED
+09-22 15:12:01.028 28796 28796 I A03d00/JSAPP: SELF_NETWORKKIT {"healthStatus":200,"modelConfigured":false,"missingKeyRejected":true,"operationsAfterFailure":0,"paidCall":"not sent"}

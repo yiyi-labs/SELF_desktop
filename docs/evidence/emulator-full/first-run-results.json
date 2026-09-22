@@ -1,0 +1,64 @@
+{
+  "environment": "Actual HAP / ArkUI / ArkWeb in Huawei Phone HarmonyOS API 19 emulator",
+  "date": "2026-09-21T15:14:37.658Z",
+  "checks": [
+    {
+      "name": "actual ArkWeb and chunked 65539-byte native roundtrip",
+      "status": "passed",
+      "details": {
+        "device": "127.0.0.1:5555",
+        "pid": "1056",
+        "os": "emulator 5.1.0.199(SP3DEVC00E199R4P11)",
+        "userAgent": "Mozilla/5.0 (Phone; OpenHarmony 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36  ArkWeb/4.1.6.1 Mobile",
+        "chunkSize": 65536,
+        "bytes": 65539
+      }
+    },
+    {
+      "name": "original export available without editing",
+      "status": "passed",
+      "details": {
+        "bytes": 413425
+      }
+    },
+    {
+      "name": "candidate does not render; consent commits; undo and redo",
+      "status": "passed"
+    },
+    {
+      "name": "comparison exports full frame with identical effective pixels",
+      "status": "passed"
+    },
+    {
+      "name": "actual closed lasso returns native mask, then local consent",
+      "status": "passed",
+      "details": {
+        "selectedTexels": 4030,
+        "bytes": 1048576
+      }
+    },
+    {
+      "name": "current appearance protection survives later color adjustment",
+      "status": "passed",
+      "details": "whole PNG identical: changed operation lies wholly inside protected lasso"
+    },
+    {
+      "name": "save, alter, reopen and delete actual private workspace",
+      "status": "passed",
+      "details": {
+        "workspace": "work-1790003620625",
+        "actualOperations": 2
+      }
+    },
+    {
+      "name": "native photo picker cancellation preserves current image",
+      "status": "failed",
+      "error": "Error: Timed out: SELF_EXPORT_SAVED"
+    },
+    {
+      "name": "background then foreground recovers same export",
+      "status": "failed",
+      "error": "Error: Timed out: SELF_EXPORT_SAVED"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "testedAt": "2026-09-22T09:53:38.406147+00:00",
+  "source": "Host HTTP -> running SELF backend -> real DeepSeek. Original red-circle fixture only. This is not a phone UI test.",
+  "health": {
+    "status": "ready",
+    "modelConfigured": true
+  },
+  "httpStatus": 200,
+  "result": {
+    "schemaVersion": 1,
+    "requestId": "http-live-1790070818",
+    "snapshotId": "http-live-1790070818",
+    "assetId": "sample",
+    "assetVersion": "v1",
+    "textureVersion": "t1",
+    "sceneRevision": 2,
+    "regionVersion": 1,
+    "plan": {
+      "decision": "edit",
+      "shortMessage": "图中是一个红色实心圆形，数量为 1 个。已登记 lip 区域当前已有 rose 轻度图层（layer-1），移除后新增同样参数会视觉等效，因此这里提议改为新增 terracotta 轻度候选作为替代选项；若你确实只想保留 rose，请说明，我再改为移除现有层后重新新增。数字试色仅作色彩方向参考，不代表品牌实测或真实功效。",
+      "operations": [
+        {
+          "operation": "set_digital_tint",
+          "regionId": "lip",
+          "presetId": "terracotta",
+          "intensityLevel": "light",
+          "layerId": "",
+          "productProfileId": ""
+        }
+      ],
+      "explanationRefs": [],
+      "question": ""
+    },
+    "modelEvidence": {
+      "requestedModel": "deepseek-flash",
+      "returnedModel": "deepseek-flash",
+      "systemFingerprint": "aeb56401ca74e127821c4f9126dcb669",
+      "elapsedMs": 2078,
+      "usage": {
+        "prompt_tokens": 1766,
+        "completion_tokens": 236,
+        "total_tokens": 2002,
+        "prompt_tokens_details": {
+          "cached_tokens": 896
+        },
+        "prompt_cache_hit_tokens": 896,
+        "prompt_cache_miss_tokens": 870
+      },
+      "providerResponseId": "08a60d83-f0d5-4b86-a4e3-62d7a1bb32da"
+    }
+  },
+  "idempotentReplayMatched": true,
+  "visualDescriptionMatched": true,
+  "toolSelectionMatched": false,
+  "status": "failed"
+}

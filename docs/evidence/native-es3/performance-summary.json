@@ -1,0 +1,63 @@
+{
+  "metricLimits": "CPU submit+eglSwapBuffers and CPU render-start intervals, not GPU completion or actual display presentation. Emulator only; mixed UI workload. Memory sampling may start after warm-up.",
+  "before": {
+    "lastStats": {
+      "cpuSubmitAndSwapP50Ms": 2.60561,
+      "cpuSubmitAndSwapP95Ms": 38.468143,
+      "cpuSubmitOver50Ms": 184,
+      "frames": 15718,
+      "generation": 1,
+      "graphics": {
+        "abi": "64-bit",
+        "glsl": "OpenGL ES GLSL ES 3.10",
+        "renderer": "Mali-G77",
+        "textureUnits": 32,
+        "thread": 139960259967744,
+        "vendor": "ARM",
+        "version": "OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"
+      },
+      "presentIntervalOver50Ms": 1554,
+      "presentIntervalP50Ms": 45.268767,
+      "presentIntervalP95Ms": 61.860973
+    },
+    "completed": {
+      "elapsedMs": 605638,
+      "cycles": 89
+    },
+    "memorySamples": 52,
+    "firstRssKiB": 222552,
+    "lastRssKiB": 248480,
+    "peakRssKiB": 248480,
+    "processHighWaterKiB": 259180
+  },
+  "after": {
+    "lastStats": {
+      "cpuSubmitAndSwapP50Ms": 2.18075,
+      "cpuSubmitAndSwapP95Ms": 35.22341,
+      "cpuSubmitOver50Ms": 145,
+      "frames": 16839,
+      "generation": 1,
+      "graphics": {
+        "abi": "64-bit",
+        "glsl": "OpenGL ES GLSL ES 3.10",
+        "renderer": "Mali-G77",
+        "textureUnits": 32,
+        "thread": 139960260754176,
+        "vendor": "ARM",
+        "version": "OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"
+      },
+      "renderStartIntervalOver50Ms": 1019,
+      "renderStartIntervalP50Ms": 31.422086,
+      "renderStartIntervalP95Ms": 63.04067
+    },
+    "completed": {
+      "elapsedMs": 608091,
+      "cycles": 89
+    },
+    "memorySamples": 48,
+    "firstRssKiB": 259744,
+    "lastRssKiB": 235112,
+    "peakRssKiB": 307828,
+    "processHighWaterKiB": 318024
+  }
+}

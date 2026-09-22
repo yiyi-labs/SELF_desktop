@@ -1,0 +1,47 @@
+{
+  "environment": "HarmonyOS phone emulator, actual HAP / ArkUI / ArkWeb",
+  "date": "2026-09-21T14:40:14.273Z",
+  "checks": [
+    {
+      "name": "ArkWeb on actual API 19 emulator",
+      "status": "passed",
+      "details": {
+        "device": "127.0.0.1:5555",
+        "os": "emulator 5.1.0.199(SP3DEVC00E199R4P11)",
+        "runtime": "Mozilla/5.0 (Phone; OpenHarmony 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36  ArkWeb/4.1.6.1 Mobile"
+      }
+    },
+    {
+      "name": "native ArrayBuffer / Chinese / quotes / NUL roundtrip",
+      "status": "passed",
+      "details": {
+        "binaryBytes": 65539
+      }
+    },
+    {
+      "name": "native button authorizes actual rendering",
+      "status": "passed"
+    },
+    {
+      "name": "comparison then full PNG saved by native",
+      "status": "passed",
+      "details": {
+        "width": 768,
+        "height": 1024,
+        "bytes": 409007
+      }
+    },
+    {
+      "name": "closed screen lasso creates actual native mask",
+      "status": "passed",
+      "details": {
+        "bytes": 1048576,
+        "selectedTexels": 2331
+      }
+    },
+    {
+      "name": "background and foreground recover",
+      "status": "passed"
+    }
+  ]
+}

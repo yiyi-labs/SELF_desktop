@@ -1,0 +1,46 @@
+{
+  "date": "2026-09-22T09:14:34.3982360+08:00",
+  "device": "127.0.0.1:5555",
+  "system": "emulator 7.0.0.106(SP1DEVC00E999R4P11)",
+  "api": 26,
+  "environment": "Real HarmonyOS phone emulator, not Previewer or desktop browser",
+  "defaultProductDesign": "Preserved in EntryAbility; restored after isolated probe",
+  "checks": [
+    {
+      "status": "passed",
+      "name": "Native probe compilation and installation"
+    },
+    {
+      "status": "partial",
+      "details": "Observed actual textured geometry initially, material type 3; not consistently successful",
+      "name": "Scene.load GLB and Component3D textured geometry"
+    },
+    {
+      "status": "failed",
+      "details": "Bright patches around eyes, lips and ears. Explicit new unlit material overexposed and was removed.",
+      "name": "Visual fidelity"
+    },
+    {
+      "status": "failed",
+      "details": "Creating scene manager failed on final diagnostic attempt",
+      "name": "Repeated native startup"
+    },
+    {
+      "status": "unverified",
+      "details": "Implemented and compiled; not validated across views",
+      "name": "Native rotation/pinch gestures"
+    },
+    {
+      "status": "not_implemented",
+      "name": "Native selection/edit/protection/PNG"
+    },
+    {
+      "status": "not_implemented",
+      "name": "Personal capture/reconstruction and Remy file interoperability"
+    },
+    {
+      "status": "unverified",
+      "name": "Real device"
+    }
+  ]
+}

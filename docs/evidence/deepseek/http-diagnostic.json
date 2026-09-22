@@ -1,0 +1,38 @@
+{
+  "httpStatus": 200,
+  "model": "deepseek-flash",
+  "id": "5e9740a5-6762-41ff-8c55-8f7bf9e11b42",
+  "usage": {
+    "prompt_tokens": 1674,
+    "completion_tokens": 287,
+    "total_tokens": 1961,
+    "prompt_tokens_details": {
+      "cached_tokens": 768
+    },
+    "prompt_cache_hit_tokens": 768,
+    "prompt_cache_miss_tokens": 906
+  },
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "",
+        "tool_calls": [
+          {
+            "index": 0,
+            "id": "call_00_wYNKzTCSpoDmMitze0qK2848",
+            "type": "function",
+            "function": {
+              "name": "propose_edit_plan",
+              "arguments": "{\"decision\": \"edit\", \"shortMessage\": \"图片描述：画面中央有 1 个正圆形，颜色为纯红色（无渐变、无描边），背景为纯白；除该圆形外无其他图形。登记信息：lip 区域已有图层 layer-1（rose/轻度）——因一个区域已有该预设的轻度图层，下面仅提交一个新增候选操作（rose/轻度），是否与已有图层重复由你在手机上确认。数字试色仅为视觉预览，不代表品牌实测或真实功效。\", \"operations\": [{\"operation\": \"set_digital_tint\", \"regionId\": \"lip\", \"presetId\": \"rose\", \"intensityLevel\": \"light\", \"layerId\": \"\", \"productProfileId\": \"\"}], \"explanationRefs\": [], \"question\": \"lip 区域已存在一个 rose/轻度 图层（layer-1），是否仍要新增一个同参数的试色图层？如需调色或去除，请说明删除或调整哪一个图层。\"}"
+            }
+          }
+        ]
+      },
+      "logprobs": null,
+      "finish_reason": "tool_calls"
+    }
+  ],
+  "validationError": "unexpected question"
+}

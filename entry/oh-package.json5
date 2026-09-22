@@ -1,0 +1,1 @@
+{"name":"entry","version":"0.1.0","description":"SELF native state and renderer host","main":"","author":"","license":"","dependencies":{"libself_native.so":"file:./src/main/cpp/types/libself_native"}}

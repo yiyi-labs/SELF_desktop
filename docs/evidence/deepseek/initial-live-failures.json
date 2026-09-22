@@ -1,0 +1,16 @@
+{
+  "testedAt": "2026-09-22T09:46:46.746496+00:00",
+  "source": "Capability probe targeting official DeepSeek HTTPS API; original nonpersonal synthetic images. Missing key means no API request was sent.",
+  "cases": [
+    {
+      "case": "red-circle",
+      "status": "failed",
+      "reason": "invalid_plan"
+    },
+    {
+      "case": "blue-squares",
+      "status": "failed",
+      "reason": "invalid_plan"
+    }
+  ]
+}

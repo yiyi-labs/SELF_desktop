@@ -1,0 +1,216 @@
+start ability successfully.
+
+OHOS_REPORT_SUM: 9
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=1
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=10
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=rotationDoesNotExpireCandidateButBusinessChangeDoes
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=1
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=10
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=rotationDoesNotExpireCandidateButBusinessChangeDoes
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=2
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=10
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=targetedLayerRemovalWaitsForRenderSuccess
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=2
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=10
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=targetedLayerRemovalWaitsForRenderSuccess
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=3
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=10
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=deletingSavedRecordKeepsCurrentWorkingAssetsReadable
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=3
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=10
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=deletingSavedRecordKeepsCurrentWorkingAssetsReadable
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=69
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=4
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=10
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=candidateRequiresConsentAndSuccess
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=4
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=10
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=candidateRequiresConsentAndSuccess
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=2
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=5
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=10
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=renderFailureCreatesNoBill
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=5
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=10
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=renderFailureCreatesNoBill
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=9
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=6
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=10
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=undoRedoAreAcknowledgedAndProtectionPersists
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=6
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=10
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=undoRedoAreAcknowledgedAndProtectionPersists
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=2
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=7
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=10
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=unknownAndUncalibratedOperationsRejected
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=7
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=10
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=unknownAndUncalibratedOperationsRejected
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=2
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=8
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=10
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=savedAnchorIsIndependentAndCanRestore
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=8
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=10
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=savedAnchorIsIndependentAndCanRestore
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=9
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=10
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=distressDoesNotRecommendProductsOrEdit
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=9
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=10
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=distressDoesNotRecommendProductsOrEdit
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=2
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: suiteconsuming=89
+
+
+OHOS_REPORT_SUM: 1
+OHOS_REPORT_STATUS: class=SELFNativeApi26UI
+
+
+OHOS_REPORT_STATUS: class=SELFNativeApi26UI
+OHOS_REPORT_STATUS: current=10
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=10
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=realTouchLassoAndLocalConsent
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeApi26UI
+OHOS_REPORT_STATUS: current=10
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=10
+OHOS_REPORT_STATUS: stack=    at anonymous entry (entry/src/ohosTest/ets/test/List.test.ets:84:175)
+OHOS_REPORT_STATUS: stream=Error in realTouchLassoAndLocalConsent, Cannot read property click of null
+OHOS_REPORT_STATUS: test=realTouchLassoAndLocalConsent
+OHOS_REPORT_STATUS_CODE: -1
+OHOS_REPORT_STATUS: consuming=7578
+
+
+OHOS_REPORT_STATUS: class=SELFNativeApi26UI
+OHOS_REPORT_STATUS: suiteconsuming=7578
+
+
+OHOS_REPORT_RESULT: stream=Tests run: 10, Failure: 0, Error: 1, Pass: 9, Ignore: 0
+OHOS_REPORT_CODE: 0
+OHOS_REPORT_STATUS: taskconsuming=7667
+
+TestFinished-ResultCode: 0
+TestFinished-ResultMsg: your test finished!!!
+user test finished.

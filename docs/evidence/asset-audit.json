@@ -1,0 +1,14 @@
+{
+  "triangles": 17684,
+  "vertices": 9279,
+  "uvRasterSize": 1024,
+  "coveredPixels": 961111,
+  "overlappingInteriorSamples": 216,
+  "editableOverlap": 0,
+  "lipOverlap": 0,
+  "degenerateUVTriangles": 11,
+  "scope": "1024 pixel-centre raster audit; not an analytic proof; editing restricted to audited masks, never entire UV map",
+  "embeddedImages": true,
+  "externalResources": false,
+  "validatorErrors": 0
+}

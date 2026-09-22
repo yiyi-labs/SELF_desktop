@@ -1,0 +1,83 @@
+{
+  "exif1": {
+    "dimensions": [
+      33,
+      49
+    ],
+    "cornerMaxError": 0,
+    "pass": true
+  },
+  "exif2": {
+    "dimensions": [
+      33,
+      49
+    ],
+    "cornerMaxError": 0,
+    "pass": true
+  },
+  "exif3": {
+    "dimensions": [
+      33,
+      49
+    ],
+    "cornerMaxError": 0,
+    "pass": true
+  },
+  "exif4": {
+    "dimensions": [
+      33,
+      49
+    ],
+    "cornerMaxError": 0,
+    "pass": true
+  },
+  "exif5": {
+    "dimensions": [
+      49,
+      33
+    ],
+    "cornerMaxError": 0,
+    "pass": true
+  },
+  "exif6": {
+    "dimensions": [
+      49,
+      33
+    ],
+    "cornerMaxError": 0,
+    "pass": true
+  },
+  "exif7": {
+    "dimensions": [
+      49,
+      33
+    ],
+    "cornerMaxError": 0,
+    "pass": true
+  },
+  "exif8": {
+    "dimensions": [
+      49,
+      33
+    ],
+    "cornerMaxError": 0,
+    "pass": true
+  },
+  "oddWidthPNGExact": true,
+  "editChangedBounds": [
+    329,
+    444,
+    419,
+    471
+  ],
+  "repeatAbsoluteExact": true,
+  "rotationChanged": true,
+  "protectedWithoutGrantExactBaseline": true,
+  "singleGrantChangesPixels": true,
+  "laterUngrantOperationCannotChangeProtection": true,
+  "cleanSnapshotMatchesEffectiveExport": true,
+  "annotationSeparateFromClean": true,
+  "invalidGLBLeavesEffectiveImage": true,
+  "actualSelectionTexels": 40442,
+  "actualPhotoSelectionTexels": 45
+}

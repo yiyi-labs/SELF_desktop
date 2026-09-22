@@ -1,0 +1,63 @@
+{
+  "environment": "Node file validation; NOT reconstruction or device rendering",
+  "date": "2026-09-22T01:02:01.681Z",
+  "results": [
+    {
+      "name": "existing textured mesh",
+      "status": "passed",
+      "structurallyCompatible": true,
+      "errors": []
+    },
+    {
+      "name": "PLY renamed GLB",
+      "status": "passed",
+      "structurallyCompatible": false,
+      "errors": [
+        "Error: Expected a complete GLB 2.0 container; renaming PLY/OBJ does not convert it"
+      ]
+    },
+    {
+      "name": "point primitive",
+      "status": "passed",
+      "structurallyCompatible": false,
+      "errors": [
+        "Only TRIANGLES mode is accepted"
+      ]
+    },
+    {
+      "name": "missing UV",
+      "status": "passed",
+      "structurallyCompatible": false,
+      "errors": [
+        "Khronos glTF validation failed",
+        "Missing or unsupported TEXCOORD_0: expected dense float VEC2",
+        "UV and position counts must match"
+      ]
+    },
+    {
+      "name": "external image",
+      "status": "passed",
+      "structurallyCompatible": false,
+      "errors": [
+        "Khronos glTF validation failed",
+        "Expected one embedded JPEG/PNG texture"
+      ]
+    },
+    {
+      "name": "unverified Gaussian extension",
+      "status": "passed",
+      "structurallyCompatible": false,
+      "errors": [
+        "Profile only accepts KHR_materials_unlit; compressed or Gaussian extensions need a separately verified decoder"
+      ]
+    },
+    {
+      "name": "unbaked transform",
+      "status": "passed",
+      "structurallyCompatible": false,
+      "errors": [
+        "Bake node transforms before importing into the current editor"
+      ]
+    }
+  ]
+}

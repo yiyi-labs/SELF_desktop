@@ -1,0 +1,245 @@
+start ability successfully.
+
+OHOS_REPORT_SUM: 10
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=1
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=11
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=oneOperationExceptionDoesNotUnlockPolicy
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=1
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=11
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=oneOperationExceptionDoesNotUnlockPolicy
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=2
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=11
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=rotationDoesNotExpireCandidateButBusinessChangeDoes
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=2
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=11
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=rotationDoesNotExpireCandidateButBusinessChangeDoes
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=3
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=11
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=targetedLayerRemovalWaitsForRenderSuccess
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=3
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=11
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=targetedLayerRemovalWaitsForRenderSuccess
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=5
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=4
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=11
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=deletingSavedRecordKeepsCurrentWorkingAssetsReadable
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=4
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=11
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=deletingSavedRecordKeepsCurrentWorkingAssetsReadable
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=35
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=5
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=11
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=candidateRequiresConsentAndSuccess
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=5
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=11
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=candidateRequiresConsentAndSuccess
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=2
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=6
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=11
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=renderFailureCreatesNoBill
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=6
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=11
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=renderFailureCreatesNoBill
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=0
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=7
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=11
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=undoRedoAreAcknowledgedAndProtectionPersists
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=7
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=11
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=undoRedoAreAcknowledgedAndProtectionPersists
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=8
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=11
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=unknownAndUncalibratedOperationsRejected
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=8
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=11
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=unknownAndUncalibratedOperationsRejected
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=9
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=11
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=savedAnchorIsIndependentAndCanRestore
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=9
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=11
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=savedAnchorIsIndependentAndCanRestore
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=10
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=11
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=distressDoesNotRecommendProductsOrEdit
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: current=10
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=11
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=distressDoesNotRecommendProductsOrEdit
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=1
+
+
+OHOS_REPORT_STATUS: class=SELFNativePolicy
+OHOS_REPORT_STATUS: suiteconsuming=48
+
+
+OHOS_REPORT_SUM: 1
+OHOS_REPORT_STATUS: class=SELFNativeApi26UI
+
+
+OHOS_REPORT_STATUS: class=SELFNativeApi26UI
+OHOS_REPORT_STATUS: current=11
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=11
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=realTouchLassoAndLocalConsent
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeApi26UI
+OHOS_REPORT_STATUS: current=11
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=11
+OHOS_REPORT_STATUS: stack=Cannot get SourceMap info, dump raw stack:
+=====================Backtrace========================#00 pc 00007f4d79ab5dff [Unknown]
+#01 pc 00007f4d6bcdecb8 [Unknown]
+#02 pc 00007f4d6b69337a [Unknown]
+#03 pc 00007f4d6b499251 [Unknown]
+#04 pc 00007f4d6b4985e9 [Unknown]
+#05 pc 00007f4d6b555a30 [Unknown]
+#06 pc 00007f4d6bb19d42 [Unknown]
+#07 pc 00007f4d6bb18f2e [Unknown]
+#08 pc 00007f4d6bac6916 [Unknown]
+#09 pc 00007f4d7167fb21 [Unknown]
+OHOS_REPORT_STATUS: stream=Error in realTouchLassoAndLocalConsent, Component not exist matching: {selfMatcher=[{attrName:visible; value:true; Pattern:0},{attrName:text; value:圈选已完成。可在工具中选择局部试色或“这里别动”。; Pattern:0},]}
+OHOS_REPORT_STATUS: test=realTouchLassoAndLocalConsent
+OHOS_REPORT_STATUS_CODE: -1
+OHOS_REPORT_STATUS: consuming=6463
+
+
+OHOS_REPORT_STATUS: class=SELFNativeApi26UI
+OHOS_REPORT_STATUS: suiteconsuming=6463
+
+
+OHOS_REPORT_RESULT: stream=Tests run: 11, Failure: 0, Error: 1, Pass: 10, Ignore: 0
+OHOS_REPORT_CODE: 0
+OHOS_REPORT_STATUS: taskconsuming=6511
+
+TestFinished-ResultCode: 0
+TestFinished-ResultMsg: your test finished!!!
+user test finished.

@@ -1,0 +1,92 @@
+{
+  "environment": "Desktop Chrome SwiftShader; NOT HarmonyOS",
+  "date": "2026-09-21T15:57:45.228Z",
+  "checks": [
+    {
+      "name": "strict original and current protection at y=0, z=16",
+      "status": "passed",
+      "details": {
+        "protectedSamplePixels": 320,
+        "tolerancePerChannel": 0,
+        "outsideEditedPixels": 26236
+      }
+    },
+    {
+      "name": "strict original and current protection at y=0.38, z=18",
+      "status": "passed",
+      "details": {
+        "protectedSamplePixels": 397,
+        "tolerancePerChannel": 0,
+        "outsideEditedPixels": 19496
+      }
+    },
+    {
+      "name": "operation order is respected and repeat does not accumulate",
+      "status": "passed"
+    },
+    {
+      "name": "WebGL context restore retains effective pixels",
+      "status": "passed"
+    },
+    {
+      "name": "PHOTO plane, clipping lasso, pan/zoom, no horizontal mirror",
+      "status": "passed",
+      "details": {
+        "length": 12288,
+        "selected": 2240,
+        "kind": "PHOTO"
+      }
+    },
+    {
+      "name": "repeated asset replacement releases old GPU resources",
+      "status": "passed",
+      "details": [
+        {
+          "geometries": 1,
+          "textures": 6,
+          "lost": false
+        },
+        {
+          "geometries": 1,
+          "textures": 6,
+          "lost": false
+        },
+        {
+          "geometries": 1,
+          "textures": 6,
+          "lost": false
+        },
+        {
+          "geometries": 1,
+          "textures": 6,
+          "lost": false
+        },
+        {
+          "geometries": 1,
+          "textures": 6,
+          "lost": false
+        },
+        {
+          "geometries": 1,
+          "textures": 6,
+          "lost": false
+        },
+        {
+          "geometries": 1,
+          "textures": 6,
+          "lost": false
+        },
+        {
+          "geometries": 1,
+          "textures": 6,
+          "lost": false
+        }
+      ]
+    },
+    {
+      "name": "no remote dependency after page has loaded",
+      "status": "passed",
+      "details": "loaded resources, not an offline-first native boot claim"
+    }
+  ]
+}

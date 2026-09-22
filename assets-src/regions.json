@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "textureVersion": "LeePerrySmith-Map-COL-r186-original",
+  "coordinates": "source image pixels, 1024x1024, top-left origin; glTF uv.v maps directly to image row with flipY=false",
+  "method": "Manually authored conservative polygons by inspection of original Map-COL.jpg; closed mouth only. No claim of tooth segmentation.",
+  "lip": [[458,475],[468,470],[487,466],[501,467],[511,463],[523,467],[542,469],[559,475],[561,480],[551,488],[530,493],[509,495],[485,490],[469,487],[460,482]],
+  "lipExclusion": [[458,479],[482,477],[509,479],[535,478],[562,479],[559,481],[531,481],[508,482],[482,480],[459,481]],
+  "editable": [[362,321],[420,308],[469,328],[494,371],[536,371],[555,332],[602,314],[668,328],[685,426],[646,520],[586,566],[498,583],[407,552],[351,486],[337,397]],
+  "protectionTest": [[386,407],[406,403],[416,426],[400,441],[382,427]]
+}

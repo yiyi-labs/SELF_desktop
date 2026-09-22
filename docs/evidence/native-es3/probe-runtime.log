@@ -1,0 +1,18 @@
+09-22 14:35:29.288  4223  4223 I A03d00/JSAPP: SELF_ES_EVENT {"message":"Shader: ERROR: 0:? : 'pre-mature EOF' : syntax error syntax error\n\n","type":"ERROR"}
+09-22 14:37:00.488  5906  5906 I A03d00/JSAPP: SELF_ES_EVENT {"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139960267832064,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"type":"READY"}
+09-22 14:37:00.593  5906  5906 I A03d00/JSAPP: SELF_ES_PROBE {"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139960267832064,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"pngRoundtripExact":true,"rgba8Fbo":true}
+09-22 14:37:00.599  5906  5906 I A03d00/JSAPP: SELF_EXIF 1 {"height":49,"width":33}
+09-22 14:37:00.602  5906  5906 I A03d00/JSAPP: SELF_EXIF 2 {"height":49,"width":33}
+09-22 14:37:00.605  5906  5906 I A03d00/JSAPP: SELF_EXIF 3 {"height":49,"width":33}
+09-22 14:37:00.607  5906  5906 I A03d00/JSAPP: SELF_EXIF 4 {"height":49,"width":33}
+09-22 14:37:00.612  5906  5906 I A03d00/JSAPP: SELF_EXIF 5 {"height":33,"width":49}
+09-22 14:37:00.626  5906  5906 I A03d00/JSAPP: SELF_EXIF 6 {"height":33,"width":49}
+09-22 14:37:00.630  5906  5906 I A03d00/JSAPP: SELF_EXIF 7 {"height":33,"width":49}
+09-22 14:37:00.634  5906  5906 I A03d00/JSAPP: SELF_EXIF 8 {"height":33,"width":49}
+09-22 14:37:00.800  5906  5906 I A03d00/JSAPP: SELF_ES_GLB {"height":1024,"triangles":17684,"vertices":9279,"width":1024}
+09-22 14:37:01.389  5906  5906 I A03d00/JSAPP: SELF_ES_SELECTION 37596
+09-22 14:37:01.776  5906  5906 I A03d00/JSAPP: SELF_ES_EDIT {"checkedHeight":1277,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":916408,"protectedPixels":997}
+09-22 14:37:02.488  5906  5906 I A03d00/JSAPP: SELF_ES_SNAPSHOT {"height":1024,"split":470635,"view":{"distance":16.0,"panX":0.0,"panY":0.0,"pitch":0.0,"yaw":0.0},"width":768}
+09-22 14:37:03.075  5906  5906 I A03d00/JSAPP: SELF_ES_EXCEPTION {"checkedHeight":1277,"checkedWidth":720,"maxNonAuthorizedError":0,"maxProtectedError":0,"nonAuthorizedPixels":917405,"protectedPixels":0}
+09-22 14:37:03.905  5906  5906 I A03d00/JSAPP: SELF_ES_STATS {"cpuSubmitAndSwapP50Ms":1.52969,"cpuSubmitAndSwapP95Ms":54.06266,"cpuSubmitOver50Ms":2,"frames":9,"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.10","renderer":"Mali-G77","textureUnits":32,"thread":139960267832064,"vendor":"ARM","version":"OpenGL ES 3.2 (4.6.0 - Build 32.0.101.8724)"},"presentIntervalOver50Ms":0,"presentIntervalP50Ms":0.0,"presentIntervalP95Ms":0.0}
+09-22 14:37:03.905  5906  5906 I A03d00/JSAPP: SELF_ES_PROBE_FINISHED

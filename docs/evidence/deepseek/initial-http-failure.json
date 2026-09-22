@@ -1,0 +1,13 @@
+{
+  "testedAt": "2026-09-22T09:51:23.733705+00:00",
+  "source": "Host HTTP -> running SELF backend -> real DeepSeek. Original red-circle fixture only. This is not a phone UI test.",
+  "health": {
+    "status": "ready",
+    "modelConfigured": true
+  },
+  "httpStatus": 502,
+  "status": "failed",
+  "error": {
+    "detail": "invalid_plan"
+  }
+}
