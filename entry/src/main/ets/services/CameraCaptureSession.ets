@@ -65,10 +65,11 @@ export class CameraCaptureSession {
    console.info('SELF_CAMERA_PROFILES '+JSON.stringify(capabilities.videoProfiles));
    const encoder=encoders.find((e:media.EncoderInfo)=>e.mimeType===media.CodecMimeType.VIDEO_AVC)||encoders.find((e:media.EncoderInfo)=>e.type==='video');
    const videos=capabilities.videoProfiles.filter((p:camera.VideoProfile)=>p.size.width<=Math.min(1920,encoder?.width?.max||1920)&&p.size.height<=Math.min(1080,encoder?.height?.max||1080)&&p.frameRateRange.min<=30&&p.frameRateRange.max>=30).sort((a:camera.VideoProfile,b:camera.VideoProfile)=>b.size.width-a.size.width);
-   const profile=videos.find((v:camera.VideoProfile)=>capabilities.previewProfiles.some((p:camera.Profile)=>p.size.width===v.size.width&&p.size.height===v.size.height));
+   const readablePreviews=capabilities.previewProfiles.filter((p:camera.Profile)=>p.format===1003||p.format===3);
+   const profile=videos.find((v:camera.VideoProfile)=>readablePreviews.some((p:camera.Profile)=>p.size.width===v.size.width&&p.size.height===v.size.height));
    if(prepareRecording&&!profile)throw new Error('当前摄像头未提供匹配的预览与录像规格');
-   const previewProfile=prepareRecording?capabilities.previewProfiles.find((p:camera.Profile)=>p.size.width===profile!.size.width&&p.size.height===profile!.size.height):
-    capabilities.previewProfiles.filter((p:camera.Profile)=>p.size.width<=1920&&p.size.height<=1080).sort((a:camera.Profile,b:camera.Profile)=>b.size.width*b.size.height-a.size.width*a.size.height)[0];
+   const previewProfile=prepareRecording?readablePreviews.find((p:camera.Profile)=>p.size.width===profile!.size.width&&p.size.height===profile!.size.height&&p.format===1003)||readablePreviews.find((p:camera.Profile)=>p.size.width===profile!.size.width&&p.size.height===profile!.size.height):
+    readablePreviews.filter((p:camera.Profile)=>p.size.width<=1920&&p.size.height<=1080).sort((a:camera.Profile,b:camera.Profile)=>b.size.width*b.size.height-a.size.width*a.size.height)[0];
    if(!previewProfile)throw new Error('没有可用预览规格');
    this.width=previewProfile.size.width;this.height=previewProfile.size.height;
    this.input=manager.createCameraInput(target);await this.input.open();
@@ -122,22 +123,24 @@ export class CameraCaptureSession {
   if(!this.preview||this.disposed)return;
   try{
    const degrees=display.getDefaultDisplaySync().rotation*90;
-   const rotation=this.preview.getPreviewRotation(degrees);
-   if(![0,90,180,270].includes(rotation))throw new Error('相机没有返回有效方向');
+   const reported=this.preview.getPreviewRotation(degrees);
+   if(![0,90,180,270].includes(reported))throw new Error('相机没有返回有效方向');
+   const rotation=reported;
    // Camera Kit rotates the buffer once. ArkUI only fits the resulting aspect ratio.
    this.preview.setPreviewRotation(rotation,false);this.previewRotation=rotation;
    this.onGeometry(this.width,this.height,rotation);
-   console.info('SELF_CAMERA_ROTATION '+JSON.stringify({display:degrees,preview:rotation,width:this.width,height:this.height}));
+   console.info('SELF_CAMERA_ROTATION '+JSON.stringify({display:degrees,reported,preview:rotation,width:this.width,height:this.height}));
   }catch(e){this.onError('相机方向设置失败，请重新打开：'+(e as Error).message);}
  }
  async start():Promise<void>{
   if(!this.previewStarted||!this.video||!this.recorder||this.disposed||this.completed)throw new Error('请等候真实预览画面出现');
   await this.recorder.updateRotation(this.video.getVideoRotation(display.getDefaultDisplaySync().rotation*90));
-  await this.recorder.start();try{await this.video.start();this.recording=true;this.startedAt=Date.now();}catch(e){await this.release();throw new Error((e as Error).message);}
+  try{await this.video.start();await this.recorder.start();this.recording=true;this.startedAt=Date.now();}
+  catch(e){try{await this.video.stop();}catch(_){}await this.release();throw new Error((e as Error).message);}
  }
  async stop():Promise<string>{
   if(!this.recording||!this.recorder||!this.video)throw new Error('当前没有正在录制的视频');
-  await this.video.stop();await this.recorder.stop();this.recording=false;
+  await this.recorder.stop();await this.video.stop();this.recording=false;
   if(!this.file)throw new Error('录像文件未打开');fs.closeSync(this.file);this.file=undefined;
   const bytes=fs.statSync(this.path).size;if(bytes<1024)throw new Error('录像没有产生有效文件');
   const metadata:CameraClipEvidence={schemaVersion:1,source:'native-camera-kit',createdAt:this.startedAt,durationMs:Date.now()-this.startedAt,width:this.width,height:this.height,bytes,previewStarted:this.previewStarted,reconstructionStatus:'not-reconstructed',poseData:false,private:true};

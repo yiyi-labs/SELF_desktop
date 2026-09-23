@@ -1,0 +1,111 @@
+import { http } from '@kit.NetworkKit';
+import { fileIo as fs } from '@kit.CoreFileKit';
+import { cryptoFramework } from '@kit.CryptoArchitectureKit';
+
+export interface ReconstructionTransportHealth {
+  status:string;
+  protocol:number;
+  chunkBytes:number;
+  maxCaptureBytes:number;
+  engine:string;
+}
+export interface ReconstructionJobStatus {jobId:string;state:string;progress:number;message:string;assets:Record<string,ReconstructionAssetManifest>;}
+export interface ReconstructionAssetManifest {file:string;bytes:number;sha256:string;}
+interface CreatedJob {jobId:string;chunkBytes:number;state:string;}
+interface ChunkReceipt {index:number;sha256:string;received:number;total:number;}
+interface CaptureManifest {bytes:number;sha256:string;}
+interface SealedJob {state:string;sha256:string;}
+
+/** Portable private reconstruction endpoint. USB HDC and a future HTTPS service share this contract. */
+export class ReconstructionTransportClient {
+  endpoint:string='http://127.0.0.1:8787';
+  token:string='';
+  private url(path:string):string {
+    const base=this.endpoint.trim().replace(/\/$/,'');
+    if(base!=='http://127.0.0.1:8787'&&!base.startsWith('https://'))throw new Error('请在设置中连接安全的建模服务');
+    return base+'/v1/reconstruction'+path;
+  }
+  private headers(binary:boolean=false):Record<string,string>{
+    const values:Record<string,string>={'Content-Type':binary?'application/octet-stream':'application/json'};
+    if(this.token)values['Authorization']='Bearer '+this.token;
+    return values;
+  }
+  async probe():Promise<ReconstructionTransportHealth>{
+    const request=http.createHttp();
+    try{
+      const response=await request.request(this.url('/health'),{method:http.RequestMethod.GET,header:this.headers(),expectDataType:http.HttpDataType.STRING,connectTimeout:5000,readTimeout:8000,usingCache:false});
+      if(response.responseCode!==200)throw new Error('建模服务暂时不可用（'+response.responseCode+'）');
+      const health=JSON.parse(response.result as string) as ReconstructionTransportHealth;
+      if(health.protocol!==1||health.chunkBytes!==1048576||health.status!=='ready')throw new Error('建模服务版本不匹配');
+      return health;
+    }finally{request.destroy();}
+  }
+  /** Actual device-to-service binary path check; never treated as a portrait result. */
+  async echo():Promise<boolean>{
+    const sent=new Uint8Array(65539);
+    for(let i=0;i<sent.length;i++)sent[i]=(i*131+17)%256;
+    const request=http.createHttp();
+    try{
+      const response=await request.request(this.url('/echo'),{method:http.RequestMethod.POST,header:this.headers(true),extraData:sent.buffer as ArrayBuffer,expectDataType:http.HttpDataType.ARRAY_BUFFER,connectTimeout:5000,readTimeout:10000,usingCache:false});
+      if(response.responseCode!==200)return false;
+      const received=new Uint8Array(response.result as ArrayBuffer);
+      return received.length===sent.length&&received.every((value:number,index:number)=>value===sent[index]);
+    }finally{request.destroy();}
+  }
+  private async sha256(bytes:ArrayBuffer):Promise<string>{
+    const md=cryptoFramework.createMd('SHA256');
+    await md.update({data:new Uint8Array(bytes)});
+    return this.hex((await md.digest()).data);
+  }
+  private hex(bytes:Uint8Array):string{
+    let value='';for(let i=0;i<bytes.length;i++)value+=bytes[i].toString(16).padStart(2,'0');return value;
+  }
+  private async fileDigest(path:string):Promise<CaptureManifest>{
+    const file=fs.openSync(path,fs.OpenMode.READ_ONLY);
+    try{
+      const size=fs.statSync(file.fd).size;
+      if(size<1024||size>256*1024*1024)throw new Error('拍摄文件不完整或过大');
+      const md=cryptoFramework.createMd('SHA256');let remaining=size;
+      while(remaining>0){const data=new ArrayBuffer(Math.min(1048576,remaining));const read=fs.readSync(file.fd,data,{length:data.byteLength});if(read<=0)throw new Error('无法完整读取拍摄文件');await md.update({data:new Uint8Array(read===data.byteLength?data:data.slice(0,read))});remaining-=read;}
+      return {bytes:size,sha256:this.hex((await md.digest()).data)};
+    }finally{fs.closeSync(file);}
+  }
+  private async json(path:string,method:http.RequestMethod,body:string=''):Promise<string>{
+    const request=http.createHttp();
+    try{
+      const response=await request.request(this.url(path),{method,header:this.headers(),extraData:body,expectDataType:http.HttpDataType.STRING,connectTimeout:10000,readTimeout:30000,usingCache:false});
+      if(response.responseCode<200||response.responseCode>=300)throw new Error('建模服务暂时无法处理（'+response.responseCode+'）');
+      return response.result as string;
+    }finally{request.destroy();}
+  }
+  async uploadCapture(path:string,onProgress:(value:number)=>void=()=>{}):Promise<string>{
+    const manifest=await this.fileDigest(path);
+    const created=JSON.parse(await this.json('/jobs',http.RequestMethod.POST,JSON.stringify({totalBytes:manifest.bytes,sha256:manifest.sha256,format:'mp4'}))) as CreatedJob;
+    if(!/^[a-f0-9]{32}$/.test(created.jobId)||created.chunkBytes!==1048576)throw new Error('建模任务回复无效');
+    const file=fs.openSync(path,fs.OpenMode.READ_ONLY);
+    try{
+      const count=Math.ceil(manifest.bytes/created.chunkBytes);let remaining=manifest.bytes;
+      for(let index=0;index<count;index++){
+        const buffer=new ArrayBuffer(Math.min(created.chunkBytes,remaining));
+        const read=fs.readSync(file.fd,buffer,{length:buffer.byteLength});
+        if(read!==buffer.byteLength)throw new Error('拍摄数据读取不完整');
+        const digest=await this.sha256(buffer),request=http.createHttp();
+        try{
+          const headers=this.headers(true);headers['X-Content-SHA256']=digest;
+          const response=await request.request(this.url('/jobs/'+created.jobId+'/chunks/'+index),{method:http.RequestMethod.PUT,header:headers,extraData:buffer,expectDataType:http.HttpDataType.STRING,connectTimeout:10000,readTimeout:45000,usingCache:false});
+          if(response.responseCode!==200)throw new Error('拍摄数据传输中断（'+response.responseCode+'）');
+          const receipt=JSON.parse(response.result as string) as ChunkReceipt;
+          if(receipt.index!==index||receipt.sha256!==digest)throw new Error('拍摄数据校验失败');
+        }finally{request.destroy();}
+        remaining-=read;onProgress((index+1)/count);
+      }
+    }finally{fs.closeSync(file);}
+    const sealed=JSON.parse(await this.json('/jobs/'+created.jobId+'/seal',http.RequestMethod.POST)) as SealedJob;
+    if(sealed.state!=='queued'||sealed.sha256!==manifest.sha256)throw new Error('建模任务校验失败');
+    return created.jobId;
+  }
+  async status(jobId:string):Promise<ReconstructionJobStatus>{
+    if(!/^[a-f0-9]{32}$/.test(jobId))throw new Error('建模任务编号无效');
+    return JSON.parse(await this.json('/jobs/'+jobId,http.RequestMethod.GET)) as ReconstructionJobStatus;
+  }
+}

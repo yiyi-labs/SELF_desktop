@@ -3,7 +3,8 @@ import { common } from '@kit.AbilityKit';
 import { CameraCaptureSession } from '../services/CameraCaptureSession';
 import { CaptureMotionGuide } from '../services/CaptureMotionGuide';
 import { CaptureMoveHint } from './CaptureMoveHint';
-import { ReconstructionClient } from '../services/ReconstructionClient';
+import { ReconstructionTransportClient } from '../services/ReconstructionTransportClient';
+import { fileIo as fs } from '@kit.CoreFileKit';
 
 @Component
 export struct CameraCaptureView {
@@ -17,12 +18,19 @@ export struct CameraCaptureView {
  @State faceSeen:boolean=false;
  @State faceLocked:boolean=false;
  @State detection:boolean=false;
+ @State recording:boolean=false;
+ @State clipSaved:boolean=false;
  @State orbit:number=0;
  @State trackX:number=0;
  @State trackY:number=-24;
  @State ringSize:number=420;
  @State faceRoll:number=0;
  @State faceYaw:number=0;
+ @State faceAnchorVisible:boolean=false;
+ @State faceCenterX:number=0;
+ @State faceCenterY:number=0;
+ @State faceRadiusX:number=90;
+ @State faceRadiusY:number=120;
  @State reconstructionState:string='checking';
  private localGuide:LocalFaceGuide=new LocalFaceGuide();
  private motionGuide:CaptureMotionGuide=new CaptureMotionGuide();
@@ -35,6 +43,8 @@ export struct CameraCaptureView {
  private controller:XComponentController=new XComponentController();
  private capture:CameraCaptureSession=new CameraCaptureSession();
  private faceTimer:number=-1;
+ private recordingTimer:number=-1;
+ private lastClipPath:string='';
  private epoch:number=0;
  private surfaceReady:boolean=false;
  private expired:boolean=false;
@@ -42,24 +52,55 @@ export struct CameraCaptureView {
  private previewWidth():number{return Math.max(this.viewportWidth,this.viewportHeight*this.streamRatio);}
  private previewHeight():number{return Math.max(this.viewportHeight,this.viewportWidth/this.streamRatio);}
  private ring():number{return Math.min(this.viewportWidth*.82,this.viewportHeight*.72,560);}
- private seek():void{this.motionGuide.reset();this.faceSeen=false;this.getUIContext().animateTo({duration:this.motion?420:0,curve:Curve.EaseOut},()=>{this.faceLocked=false;this.ringSize=this.ring();this.trackX=0;this.trackY=0;this.faceRoll=0;this.faceYaw=0;});}
+ private seek():void{this.motionGuide.reset();this.faceSeen=false;this.faceAnchorVisible=false;this.getUIContext().animateTo({duration:this.motion?420:0,curve:Curve.EaseOut},()=>{this.faceLocked=false;this.ringSize=this.ring();this.trackX=0;this.trackY=0;this.faceRoll=0;this.faceYaw=0;});}
  private async checkReconstruction(epoch:number):Promise<void>{
   this.reconstructionState='checking';this.captureIssue='';
   try{
-   const capability=await new ReconstructionClient().probe();
+   const transport=new ReconstructionTransportClient();
+   const capability=await transport.probe();
    if(this.expired||epoch!==this.epoch)return;
-   // A runtime's presence is not a completed AR capture/import/acceptance pipeline.
-   this.reconstructionState=capability.available?'not-connected':'unavailable';
-   this.captureIssue=capability.message;
-   console.info('SELF_CAMERA_RECON_CAPABILITY '+JSON.stringify(capability));
+   const roundtrip=await transport.echo();
+   if(this.expired||epoch!==this.epoch)return;
+   this.reconstructionState=roundtrip&&capability.engine==='ready'?'connected':roundtrip?'preparing':'unavailable';
+   this.captureIssue=roundtrip&&capability.engine!=='ready'?this.tr('个人建模尚未就绪，当前可以检查取景。','Personal modeling is being prepared; you can check the framing.'):roundtrip?'':this.tr('连接不稳定，请稍后重试。','The connection is unstable. Please try again.');
+   console.info('SELF_RECON_USB_HTTP '+JSON.stringify({protocol:capability.protocol,binaryRoundTrip:roundtrip,engine:capability.engine}));
   }catch(_){if(!this.expired&&epoch===this.epoch){this.reconstructionState='unavailable';this.captureIssue=this.tr('暂时无法确认建模能力，请稍后重试。','Modeling capability could not be checked. Please try again.');}}
  }
  private outcome():string{
+  if(this.recording)return this.tr('正在记录面容的不同视角…','Capturing different views of your face…');
+  if(this.clipSaved)return this.tr('拍摄片段已保存 · 个人建模尚未完成','Capture saved · Personal modeling is not complete');
   if(this.reconstructionState==='checking')return this.tr('正在检查建模能力…','Checking modeling support…');
-  return this.reconstructionState==='unavailable'?this.tr('本机暂不能建模 · 可体验面容跟随','Modeling unavailable here · Face tracking preview'):this.tr('建模流程尚未接通 · 当前仅预览','Modeling is not connected yet · Preview only');
+  if(this.reconstructionState==='preparing')return this.tr('取景已就绪 · 个人建模仍在准备','Framing is ready · Personal modeling is being prepared');
+  return this.reconstructionState==='unavailable'?this.tr('暂时无法连接建模服务 · 可继续预览','Modeling service unavailable · Preview continues'):this.tr('建模服务已就绪','Modeling service is ready');
+ }
+ private async toggleCapture():Promise<void>{
+  if(this.busy||!this.ready||!this.capture.canRecord)return;
+  this.busy=true;
+  try{
+   if(this.recording){
+    clearTimeout(this.recordingTimer);this.recordingTimer=-1;
+    this.lastClipPath=await this.capture.stop();this.recording=false;this.clipSaved=true;
+    console.info('SELF_CAMERA_CAPTURE_COMPLETED '+JSON.stringify({videoSaved:true,personal3D:false}));
+   }else{
+    await this.capture.start();this.clipSaved=false;this.recording=true;
+    console.info('SELF_CAMERA_CAPTURE_STARTED');
+    this.recordingTimer=setTimeout(()=>{if(this.recording)this.toggleCapture();},30000);
+   }
+  }catch(e){this.status=(e as Error).message;this.info=true;this.recording=false;clearTimeout(this.recordingTimer);this.recordingTimer=-1;}
+  finally{this.busy=false;}
+ }
+ private async discardLastClip():Promise<void>{
+  if(!this.lastClipPath)return;
+  try{
+   if(fs.accessSync(this.lastClipPath))fs.unlinkSync(this.lastClipPath);
+   if(fs.accessSync(this.lastClipPath+'.json'))fs.unlinkSync(this.lastClipPath+'.json');
+   this.lastClipPath='';this.clipSaved=false;
+   console.info('SELF_CAMERA_CAPTURE_DISCARDED');
+   await this.open();
+  }catch(e){this.status=this.tr('无法删除这段拍摄，请稍后重试。','Could not delete this capture. Please try again.');}
  }
  private async open():Promise<void>{
-  const epoch=++this.epoch;this.busy=true;this.ready=false;this.detection=false;this.info=false;clearTimeout(this.faceTimer);this.faceTimer=-1;this.seek();this.checkReconstruction(epoch);
+  const epoch=++this.epoch;this.busy=true;this.ready=false;this.detection=false;this.info=false;this.recording=false;this.clipSaved=false;clearTimeout(this.recordingTimer);this.recordingTimer=-1;clearTimeout(this.faceTimer);this.faceTimer=-1;this.seek();this.checkReconstruction(epoch);
   await this.localGuide.stop();await this.capture.dispose();if(this.expired||!this.foreground||epoch!==this.epoch)return;
   const capture=new CameraCaptureSession();this.capture=capture;this.localGuide=new LocalFaceGuide();
   capture.onFrame=(frame,rotation,format)=>this.localGuide.consume(frame,rotation,format);
@@ -67,7 +108,7 @@ export struct CameraCaptureView {
   capture.onGeometry=(w:number,h:number,rotation:number)=>{if(epoch===this.epoch){const ratio=rotation%180===0?w/h:h/w;if(this.streamRatio!==ratio){this.streamRatio=ratio;this.seek();}}};
   capture.onError=(message:string)=>{if(epoch!==this.epoch)return;this.ready=false;this.status=message;capture.dispose();};
   try{const context=this.getUIContext().getHostContext() as common.UIAbilityContext;
-   const label=await capture.open(context,this.controller.getXComponentSurfaceId(),this.front,false);
+   const label=await capture.open(context,this.controller.getXComponentSurfaceId(),this.front,true);
    if(!this.expired&&epoch===this.epoch){
     this.status=label;
     this.localGuide.onAvailable=(ok:boolean)=>{if(epoch===this.epoch)this.detection=ok;};
@@ -83,6 +124,10 @@ export struct CameraCaptureView {
      const following=confirmedMotion&&face!.locked;
      const acquiring=!this.faceLocked&&following;
      this.faceSeen=true;
+     this.faceAnchorVisible=face!.locked;
+     this.faceCenterX=x;this.faceCenterY=y;
+     this.faceRadiusX=Math.min(this.viewportWidth*.35,face!.width*this.previewWidth()*.43);
+     this.faceRadiusY=Math.min(this.viewportHeight*.40,face!.height*this.previewHeight()*.43);
      if(acquiring)console.info('SELF_CAMERA_GUIDANCE_FOLLOWING '+JSON.stringify({source:'tracked-relative-face-motion',reconstructionPose:false}));
      this.getUIContext().animateTo({duration:this.motion?(acquiring?440:90):0,curve:Curve.EaseOut},()=>{
       this.faceLocked=following;
@@ -97,10 +142,10 @@ export struct CameraCaptureView {
   finally{if(epoch===this.epoch)this.busy=false;}
  }
  private visibilityChanged():void{
-  if(!this.foreground){this.epoch++;this.ready=false;clearTimeout(this.faceTimer);this.faceTimer=-1;this.localGuide.stop();this.capture.dispose();}
+  if(!this.foreground){this.epoch++;this.ready=false;this.recording=false;clearTimeout(this.recordingTimer);clearTimeout(this.faceTimer);this.faceTimer=-1;this.localGuide.stop();this.capture.dispose();}
   else if(this.surfaceReady&&!this.expired)this.open();
  }
- aboutToDisappear():void{this.expired=true;this.epoch++;clearTimeout(this.faceTimer);this.localGuide.stop();this.capture.dispose();}
+ aboutToDisappear():void{this.expired=true;this.epoch++;clearTimeout(this.recordingTimer);clearTimeout(this.faceTimer);this.localGuide.stop();this.capture.dispose();}
  @Builder icon(symbol:string,label:string,action:()=>void){
   Button(symbol).id(symbol==='ⓘ'?'camera-info':symbol==='‹'?'camera-back':'camera-switch').width(48).height(48).fontSize(25).fontColor(Color.White).backgroundColor('#38FFFFFF')
    .border({width:1,color:'#55FFFFFF'}).borderRadius(24).stateStyles({pressed:{.scale({x:.90,y:.90})},normal:{.scale({x:1,y:1})}}).animation({duration:this.motion?160:0,curve:Curve.EaseOut}).accessibilityText(label).onClick(action)
@@ -116,6 +161,14 @@ export struct CameraCaptureView {
     if(this.faceLocked){Circle().width(3).height(3).fill('#F8FFFFFF')}
     if(!this.ready){LoadingProgress().width(36).height(36).color(Color.White)}
    }.id('camera-anchor').width(this.ringSize+12).height(this.ringSize+12).scale({x:Math.cos(this.faceYaw*Math.PI/180),y:1}).rotate({angle:this.faceRoll}).translate({x:this.trackX,y:this.trackY}).hitTestBehavior(HitTestMode.None)
+   if(this.faceAnchorVisible){
+    Stack(){
+     ForEach([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23],(index:number)=>{
+      Circle().width(index%5===0?4:2.5).height(index%5===0?4:2.5).fill(index%3===0?'#C6FFF1':'#E8D9FF').opacity(index%5===0?.56:.34)
+       .translate({x:Math.cos(index*2.399)*Math.sqrt((index+.5)/24)*this.faceRadiusX,y:Math.sin(index*2.399)*Math.sqrt((index+.5)/24)*this.faceRadiusY})
+     },(index:number)=>index.toString())
+    }.width(1).height(1).translate({x:this.faceCenterX,y:this.faceCenterY}).hitTestBehavior(HitTestMode.None)
+   }
    if(this.ready&&!this.faceLocked){
     CaptureMoveHint({motion:this.motion,language:this.language,hintSize:Math.min(360,this.viewportWidth-48,this.viewportHeight*.62)})
      .transition({opacity:0,scale:{x:.88,y:.88}})
@@ -126,7 +179,20 @@ export struct CameraCaptureView {
     Text(this.faceLocked?this.tr('正在跟随你的面容','Following your face'):this.faceSeen?this.tr('看见你了，保持自然','Face detected. Stay relaxed.'):this.tr('正在寻找你，不用刻意对准','Finding you — no need to line up exactly'))
      .id('camera-guide').fontSize(17).fontColor(Color.White).textShadow({radius:6,color:'#AA000000',offsetX:0,offsetY:1})
     Text(this.outcome()).id('camera-capture-outcome').fontSize(13).fontColor('#EFFFFFFF').textShadow({radius:2,color:'#90000000',offsetY:1}).margin({top:8,bottom:18}).onClick(()=>{this.info=true;})
-    this.icon('↻',this.tr('切换镜头','Switch camera'),()=>{if(!this.busy){this.front=!this.front;this.open();}})
+    Row({space:30}){
+     this.icon('↻',this.tr('切换镜头','Switch camera'),()=>{if(!this.busy&&!this.recording){this.front=!this.front;this.open();}})
+     Button(){
+      Stack(){
+       Circle().width(76).height(76).fill('#27FFFFFF').stroke('#F5FFFFFF').strokeWidth(3)
+       if(this.recording){Rect().width(26).height(26).radius(6).fill('#FF788D')}
+       else{Circle().width(54).height(54).fill('#F9FFFFFF')}
+      }.width(82).height(82)
+     }.id('camera-shutter').width(92).height(92).backgroundColor(Color.Transparent).enabled(this.ready&&!this.busy&&!this.clipSaved&&this.capture.canRecord)
+      .stateStyles({pressed:{.scale({x:.88,y:.88})},normal:{.scale({x:1,y:1})}}).animation({duration:this.motion?160:0,curve:Curve.EaseOut})
+      .accessibilityText(this.clipSaved?this.tr('拍摄已保存','Capture saved'):this.recording?this.tr('结束拍摄','Stop capture'):this.tr('开始拍摄','Start capture')).onClick(()=>this.toggleCapture())
+     this.icon('ⓘ',this.tr('拍摄说明','Capture info'),()=>{this.info=true;})
+    }
+    Text(this.recording?this.tr('再次轻触，结束拍摄','Tap again to finish'):this.tr('轻触拍摄，慢慢移动镜头','Tap to capture, then move slowly')).fontSize(12).fontColor('#EFFFFFFF').margin({top:4})
     if(this.ready){Text(this.tr('画面只在本机处理','Processed on this device')).id('camera-preview-active').fontSize(12).fontColor('#EFFFFFFF').textShadow({radius:2,color:'#90000000',offsetY:1}).margin({top:12,bottom:28})}
     else{Text(this.tr('正在连接相机…','Connecting camera…')).fontSize(12).fontColor('#D6FFFFFF').margin({bottom:28})}
    }.width('100%').height('100%')
@@ -135,10 +201,11 @@ export struct CameraCaptureView {
      Text(this.tr('拍摄说明','Capture info')).fontSize(20).fontColor(Color.White)
      Text(this.tr('保持表情自然，让另一人缓慢移动镜头，留下多个视角。','Keep a relaxed expression while someone slowly moves the camera around you.')).fontSize(15).fontColor('#EEFFFFFF')
      Text(this.tr('进入后会自动寻找面容；稳定移动后，小圈会跟随鼻尖。','Tracking starts on entry. After steady motion, the small ring follows your nose.')).fontSize(13).fontColor('#DDFFFFFF')
-     Text(this.tr('当前仅预览跟随，不会录制视频或生成个人3D。','This is a tracking preview. No video or personal 3D is created.')).fontSize(13).fontColor('#DDFFFFFF')
+     Text(this.tr('拍摄片段保存在应用内；建模能力就绪后才能生成个人3D。','Capture is stored in the app; personal 3D requires modeling support.')).fontSize(13).fontColor('#DDFFFFFF')
      if(this.captureIssue){Text(this.captureIssue).id('camera-reconstruction-issue').fontSize(12).fontColor('#DDFFFFFF')}
      Text(this.detection?this.tr('本机检测面容并跟随鼻尖，不上传画面','Face detection and nose tracking stay on this device'):this.tr('当前设备未提供人脸检测，圆环为对齐引导','Face detection unavailable; the ring is an alignment guide')).fontSize(13).fontColor('#DDFFFFFF')
      Text(this.status).id('camera-status').fontSize(12).fontColor('#DDFFFFFF')
+     if(this.clipSaved){Button(this.tr('删除这段拍摄','Delete this capture')).id('camera-discard-clip').onClick(()=>this.discardLastClip()).backgroundColor('#40FFFFFF').fontColor(Color.White)}
      Button(this.tr('知道了','Got it')).onClick(()=>{this.info=false;if(!this.ready&&!this.busy)this.open();}).backgroundColor('#40FFFFFF').fontColor(Color.White)
     }.padding(24).width(Math.min(this.viewportWidth-48,400)).backgroundColor('#F0303442').borderRadius(28).border({width:1,color:'#50FFFFFF'}).position({x:Math.max(24,this.viewportWidth-424),y:86}).transition({opacity:0,scale:{x:.85,y:.85,centerX:'100%',centerY:'0%'}})
    }

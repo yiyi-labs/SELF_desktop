@@ -10,8 +10,10 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from contracts import Snapshot
 from deepseek_client import propose, ModelFailure
+from recon_transfer import router as reconstruction_router
 
 app = FastAPI(title="SELF private candidate planner", docs_url=None, redoc_url=None)
+app.include_router(reconstruction_router)
 recent = deque()
 completed = OrderedDict()
 inflight: set[str] = set()

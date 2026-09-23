@@ -1,10 +1,11 @@
 import { deviceInfo } from '@kit.BasicServicesKit';
 import { image } from '@kit.ImageKit';
 import { fileIo as fs } from '@kit.CoreFileKit';
+import { faceDetector } from '@kit.CoreVisionKit';
 import native from 'libself_native.so';
-import { DetectedFace,FaceAnchor,FaceAnchorTracker } from './FaceAnchorTracker';
+import { DetectedFace,FaceAnchor,FaceAnchorTracker,FacePoint } from './FaceAnchorTracker';
 interface FrameRequest {op:string;width:number;height:number;timestamp:number;record:boolean;detect:boolean;}
-interface FrameResult {faces:DetectedFace[];processingMs:number;frames:number;}
+interface FrameResult {faces:DetectedFace[];rawFaces:number;peakScore:number;processingMs:number;frames:number;}
 interface StartRequest {op:string;fd:number;width:number;height:number;}
 interface StopRequest {op:string;timestamp:number;}
 interface ClipStats {frames:number;width:number;height:number;durationMs:number;fps:number;}
@@ -18,6 +19,10 @@ export class LocalFaceGuide {
  private recording:boolean=false;private settling:boolean=false;
  private file:fs.File|undefined;private path:string='';private startedAt:number=0;
  private logAt:number=0;
+ private visionTried:boolean=false;private visionReady:boolean=false;private visionAt:number=0;
+ private lastVisionFaces:DetectedFace[]=[];private lastVisionAt:number=0;
+ private visionMisses:number=0;
+ private visionLogAt:number=0;private visionLogCount:number=-1;
  onResult:(face:FaceAnchor|undefined)=>void=()=>{};
  onAvailable:(available:boolean)=>void=()=>{};
  onError:(message:string)=>void=()=>{};
@@ -50,7 +55,9 @@ export class LocalFaceGuide {
     if(stride<w||bytes.byteLength<stride*h*3/2)throw new Error('Invalid NV21 row stride');
     if(stride!==w){const packed=new Uint8Array(w*h*3/2),source=new Uint8Array(bytes);for(let y=0;y<h*3/2;y++)packed.set(source.subarray(y*stride,y*stride+w),y*w);bytes=packed.buffer as ArrayBuffer;}
    }
-   pixel=await image.createPixelMap(bytes,{size:{width:w,height:h},pixelFormat:formatPixel,editable:true});
+   // srcPixelFormat describes the camera buffer. pixelFormat only describes
+   // the result; omitting srcPixelFormat makes Image Kit assume BGRA input.
+   pixel=await image.createPixelMap(bytes,{size:{width:w,height:h},srcPixelFormat:formatPixel,pixelFormat:image.PixelMapFormat.RGBA_8888,editable:true});
    if(rotation)await pixel.rotate(rotation);
    // API26 emulator RGBA producer has a bottom-up camera buffer origin.
    // Match the displayed preview; do not apply this device-path correction to NV21.
@@ -58,7 +65,6 @@ export class LocalFaceGuide {
    stage='geometry';const info=await pixel.getImageInfo();const scale=Math.min(1,960/Math.max(info.size.width,info.size.height));
    const width=Math.floor(info.size.width*scale/2)*2,height=Math.floor(info.size.height*scale/2)*2;
    if(width!==info.size.width||height!==info.size.height)await pixel.scale(width/info.size.width,height/info.size.height);
-   stage='format';if(info.pixelFormat!==image.PixelMapFormat.RGBA_8888)await pixel.convertPixelFormat(image.PixelMapFormat.RGBA_8888);
    const actual=await pixel.getImageInfo();
    stage='read';const rgba=new ArrayBuffer(actual.size.width*actual.size.height*4);await pixel.readPixelsToBuffer(rgba);
    if(this.stopped)return;
@@ -69,9 +75,41 @@ export class LocalFaceGuide {
    const request:FrameRequest={op:'frame',width:this.width,height:this.height,timestamp:began,record:this.recording&&!this.settling,detect};
    stage='native';const result=JSON.parse((await native.camera(JSON.stringify(request),rgba)).json) as FrameResult;
    if(this.stopped)return;
-   if(detect)this.onResult(this.tracker.update(result.faces,began,this.width/this.height));
+   let found:DetectedFace[]=result.faces;
+   if(!this.visionTried){
+    this.visionTried=true;
+    try{this.visionReady=await faceDetector.init();console.info('SELF_COREVISION_INIT '+this.visionReady);}
+    catch(e){console.info('SELF_COREVISION_UNAVAILABLE '+String(e));}
+   }
+   if(detect&&this.visionReady&&began-this.visionAt>=350){
+    this.visionAt=began;
+    try{
+     // Camera Kit and this PixelMap use the same SDK rotation. A single
+     // Core Vision pass avoids four expensive orientation probes per miss.
+     const info:faceDetector.VisionInfo={pixelMap:pixel};
+     const faces=await faceDetector.detect(info);
+     const official=faces.map((face:faceDetector.Face)=>({confidence:face.probability,x:face.rect.left/this.width,y:face.rect.top/this.height,width:face.rect.width/this.width,height:face.rect.height/this.height,landmarks:face.points.map((point:faceDetector.FacePoint)=>({x:point.x/this.width,y:point.y/this.height} as FacePoint)),yaw:face.pose.yaw,roll:face.pose.roll} as DetectedFace));
+     if(official.length!==this.visionLogCount||began-this.visionLogAt>5000){this.visionLogAt=began;this.visionLogCount=official.length;console.info('SELF_COREVISION_FACES '+official.length);}
+     if(official.length===1&&official[0].confidence>=.8&&official[0].landmarks.length===5){this.lastVisionFaces=official;this.lastVisionAt=began;this.visionMisses=0;}
+     else if(++this.visionMisses>=3){this.lastVisionFaces=[];}
+    }catch(e){console.info('SELF_COREVISION_DETECT_FAILED '+String(e));this.visionReady=false;}
+   }
+   if(this.visionReady){
+    const confirmed=this.lastVisionFaces.length===1&&began-this.lastVisionAt<1400?this.lastVisionFaces[0]:undefined;
+    if(!confirmed)found=[];
+    else{
+     const nearby=found.find((candidate:DetectedFace)=>candidate.landmarks.length===5&&
+      Math.hypot(candidate.landmarks[2].x-confirmed.landmarks[2].x,candidate.landmarks[2].y-confirmed.landmarks[2].y)<Math.max(.09,confirmed.width*.65)&&
+      candidate.width/confirmed.width>.55&&candidate.width/confirmed.width<1.8);
+     found=nearby?[nearby]:began-this.lastVisionAt<450?[confirmed]:[];
+    }
+   }
+   if(detect)this.onResult(this.tracker.update(found,began,this.width/this.height));
    this.onAvailable(true);this.errors=0;
-   if(Date.now()-this.logAt>2500){this.logAt=Date.now();console.info('SELF_CAMERA_FRAME '+JSON.stringify({width:this.width,height:this.height,detected:detect,faces:result.faces.length,processingMs:result.processingMs,frames:result.frames,cycleMs:Date.now()-began,source:'camera-image-receiver',privatePixelsLogged:false}));}
+   if(Date.now()-this.logAt>2500){
+    this.logAt=Date.now();
+    console.info('SELF_CAMERA_FRAME '+JSON.stringify({width:this.width,height:this.height,format,detected:detect,faces:found.length,rawFaces:result.rawFaces,peakScore:result.peakScore,coreVision:this.visionReady,processingMs:result.processingMs,frames:result.frames,cycleMs:Date.now()-began,source:'camera-image-receiver',privatePixelsLogged:false}));
+   }
   }catch(e){
    console.info('SELF_CAMERA_READ_ERROR '+stage+' '+JSON.stringify(e));this.onResult(undefined);this.tracker.reset();
    if(++this.errors>=3){this.onAvailable(false);this.stopped=true;await this.cancelRecording();this.onError('相机画面读取失败（'+stage+'），请重新打开：'+JSON.stringify(e));}
@@ -107,5 +145,5 @@ export class LocalFaceGuide {
   if(this.path&&fs.accessSync(this.path))fs.unlinkSync(this.path);this.path='';
  }
  stop():Promise<void>{if(!this.closing)this.closing=this.finishStop();return this.closing;}
- private async finishStop():Promise<void>{this.stopped=true;try{await this.task;}catch(_){}await this.cancelRecording();this.tracker.reset();}
+ private async finishStop():Promise<void>{this.stopped=true;try{await this.task;}catch(_){}await this.cancelRecording();if(this.visionReady){try{await faceDetector.release();}catch(_){}}this.tracker.reset();}
 }

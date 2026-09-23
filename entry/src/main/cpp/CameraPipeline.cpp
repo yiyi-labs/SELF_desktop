@@ -95,9 +95,9 @@ struct Recording {
 };
 std::unique_ptr<Recording> recording;
 
-Json detect(const std::vector<uint8_t>& rgba, int width, int height) {
+Json detect(const std::vector<uint8_t>& rgba, int width, int height, int& rawFaces, int& peakScore) {
     // Preserve aspect ratio; bounded CPU inference. No identity embeddings or network.
-    double factor = std::min(1.0, 320.0 / std::max(width, height));
+    double factor = std::min(1.0, 400.0 / std::max(width, height));
     int w = std::max(32, int(width * factor)), h = std::max(32, int(height * factor));
     std::vector<uint8_t> bgr(w * h * 3);
     for (int y = 0; y < h; ++y) for (int x = 0; x < w; ++x) {
@@ -107,8 +107,11 @@ Json detect(const std::vector<uint8_t>& rgba, int width, int height) {
     alignas(64) unsigned char buffer[FACEDETECTION_RESULT_BUFFER_SIZE]{};
     int* result = facedetect_cnn(buffer, bgr.data(), w, h, w * 3);
     Json faces = Json::array();
+    rawFaces = result ? result[0] : 0;
+    peakScore = 0;
     if (result) for (int i = 0; i < std::min(result[0], 32); ++i) {
         const short* p = reinterpret_cast<const short*>(buffer + 4) + i * FACEDETECTION_RESULT_STRIDE_SHORTS;
+        peakScore = std::max(peakScore, int(p[0]));
         if (p[0] < 80 || p[3] < 20 || p[4] < 20) continue;
         Json landmarks = Json::array();
         for (int k = 0; k < 5; ++k) landmarks.push_back({{"x", double(p[5 + 2 * k]) / w}, {"y", double(p[6 + 2 * k]) / h}});
@@ -135,8 +138,9 @@ nlohmann::json cameraProcess(const Json& request, const std::vector<uint8_t>& rg
     check(w >= 32 && h >= 32 && w <= 1280 && h <= 1280 && rgba.size() == size_t(w) * h * 4, "Invalid camera RGBA buffer");
     auto start = std::chrono::steady_clock::now();
     if (request.value("record", false)) { check(recording != nullptr, "Capture session ended"); recording->frame(rgba, w, h, request.at("timestamp")); }
-    Json faces = request.value("detect", true) ? detect(rgba, w, h) : Json::array();
-    return {{"faces", faces}, {"processingMs", std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - start).count()}, {"frames", recording ? recording->frames : 0}};
+    int rawFaces = 0, peakScore = 0;
+    Json faces = request.value("detect", true) ? detect(rgba, w, h, rawFaces, peakScore) : Json::array();
+    return {{"faces", faces}, {"rawFaces", rawFaces}, {"peakScore", peakScore}, {"processingMs", std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - start).count()}, {"frames", recording ? recording->frames : 0}};
 }
 }
 

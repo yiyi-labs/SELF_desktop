@@ -1,0 +1,216 @@
+"""Private, resumable capture transport for SELF reconstruction jobs.
+
+The route does not claim that an uploaded clip is a reconstructed portrait.
+Only a separately validated reconstruction worker may publish assets.
+"""
+
+from __future__ import annotations
+
+import hashlib
+import hmac
+import json
+import os
+import re
+import secrets
+import shutil
+import time
+from pathlib import Path
+
+from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import FileResponse, Response
+
+
+router = APIRouter(prefix="/v1/reconstruction")
+ROOT = Path(os.getenv("SELF_RECON_JOBS_DIR", Path(__file__).parent / "recon-jobs")).resolve()
+JOB_RE = re.compile(r"^[a-f0-9]{32}$")
+SHA_RE = re.compile(r"^[a-f0-9]{64}$")
+CHUNK_BYTES = 1024 * 1024
+MAX_CAPTURE_BYTES = 256 * 1024 * 1024
+MAX_CHUNKS = (MAX_CAPTURE_BYTES + CHUNK_BYTES - 1) // CHUNK_BYTES
+
+
+def _authorize(request: Request) -> None:
+    token = os.getenv("SELF_BACKEND_TOKEN", "")
+    if token:
+        if not hmac.compare_digest(request.headers.get("authorization", ""), "Bearer " + token):
+            raise HTTPException(401, "unauthorized")
+    elif not (
+        os.getenv("SELF_DEV_LOOPBACK") == "1"
+        and request.client
+        and request.client.host in {"127.0.0.1", "::1", "testclient"}
+    ):
+        raise HTTPException(503, "backend_auth_not_configured")
+
+
+def _job_dir(job_id: str) -> Path:
+    if not JOB_RE.fullmatch(job_id):
+        raise HTTPException(404, "job_not_found")
+    path = ROOT / job_id
+    if not path.is_dir():
+        raise HTTPException(404, "job_not_found")
+    return path
+
+
+def _read_job(path: Path) -> dict:
+    return json.loads((path / "job.json").read_text(encoding="utf-8"))
+
+
+def _save_job(path: Path, job: dict) -> None:
+    temporary = path / "job.json.tmp"
+    temporary.write_text(json.dumps(job, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    os.replace(temporary, path / "job.json")
+
+
+@router.get("/health")
+def health(request: Request):
+    _authorize(request)
+    return {"status": "ready", "protocol": 1, "chunkBytes": CHUNK_BYTES,
+            "maxCaptureBytes": MAX_CAPTURE_BYTES, "engine": "not-verified"}
+
+
+@router.post("/echo")
+async def echo(request: Request):
+    """One-megabyte binary round trip used by device acceptance tests."""
+    _authorize(request)
+    data = await request.body()
+    if not 1 <= len(data) <= CHUNK_BYTES:
+        raise HTTPException(413, "echo_size")
+    return Response(data, media_type="application/octet-stream",
+                    headers={"X-Content-SHA256": hashlib.sha256(data).hexdigest()})
+
+
+@router.post("/jobs")
+async def create_job(request: Request):
+    _authorize(request)
+    body = await request.body()
+    if len(body) > 2048:
+        raise HTTPException(413, "manifest_size")
+    try:
+        payload = json.loads(body)
+        if set(payload) != {"totalBytes", "sha256", "format"}:
+            raise ValueError()
+        total = payload["totalBytes"]
+        digest = payload["sha256"]
+        if type(total) is not int or not 1024 <= total <= MAX_CAPTURE_BYTES:
+            raise ValueError()
+        if not isinstance(digest, str) or not SHA_RE.fullmatch(digest):
+            raise ValueError()
+        if payload["format"] != "mp4":
+            raise ValueError()
+    except (ValueError, TypeError, json.JSONDecodeError):
+        raise HTTPException(422, "invalid_manifest") from None
+    ROOT.mkdir(parents=True, exist_ok=True)
+    job_id = secrets.token_hex(16)
+    path = ROOT / job_id
+    path.mkdir(mode=0o700)
+    job = {"schemaVersion": 1, "jobId": job_id, "state": "receiving",
+           "totalBytes": total, "sha256": digest, "format": "mp4",
+           "createdAt": int(time.time()), "receivedChunks": [], "progress": 0,
+           "message": "", "assets": {}}
+    _save_job(path, job)
+    return {"jobId": job_id, "chunkBytes": CHUNK_BYTES, "state": "receiving"}
+
+
+@router.put("/jobs/{job_id}/chunks/{index}")
+async def put_chunk(job_id: str, index: int, request: Request):
+    _authorize(request)
+    path = _job_dir(job_id)
+    job = _read_job(path)
+    if job["state"] != "receiving":
+        raise HTTPException(409, "job_not_receiving")
+    count = (job["totalBytes"] + CHUNK_BYTES - 1) // CHUNK_BYTES
+    if not 0 <= index < count or count > MAX_CHUNKS:
+        raise HTTPException(422, "chunk_index")
+    expected_size = min(CHUNK_BYTES, job["totalBytes"] - index * CHUNK_BYTES)
+    expected_sha = request.headers.get("x-content-sha256", "")
+    if not SHA_RE.fullmatch(expected_sha):
+        raise HTTPException(422, "chunk_digest")
+    data = bytearray()
+    async for piece in request.stream():
+        data.extend(piece)
+        if len(data) > expected_size:
+            raise HTTPException(413, "chunk_size")
+    if len(data) != expected_size:
+        raise HTTPException(422, "chunk_size")
+    actual_sha = hashlib.sha256(data).hexdigest()
+    if not hmac.compare_digest(actual_sha, expected_sha):
+        raise HTTPException(422, "chunk_digest")
+    chunks = path / "chunks"
+    chunks.mkdir(exist_ok=True)
+    target = chunks / f"{index:04d}.bin"
+    if target.exists():
+        if hashlib.sha256(target.read_bytes()).hexdigest() != actual_sha:
+            raise HTTPException(409, "chunk_conflict")
+    else:
+        temporary = chunks / f"{index:04d}.tmp"
+        temporary.write_bytes(data)
+        os.replace(temporary, target)
+    received = set(job["receivedChunks"])
+    received.add(index)
+    job["receivedChunks"] = sorted(received)
+    job["progress"] = min(25, round(25 * len(received) / count))
+    _save_job(path, job)
+    return {"index": index, "sha256": actual_sha, "received": len(received), "total": count}
+
+
+@router.post("/jobs/{job_id}/seal")
+def seal_job(job_id: str, request: Request):
+    _authorize(request)
+    path = _job_dir(job_id)
+    job = _read_job(path)
+    if job["state"] == "queued":
+        return {"jobId": job_id, "state": "queued"}
+    if job["state"] != "receiving":
+        raise HTTPException(409, "job_not_receiving")
+    count = (job["totalBytes"] + CHUNK_BYTES - 1) // CHUNK_BYTES
+    if job["receivedChunks"] != list(range(count)):
+        raise HTTPException(409, "missing_chunks")
+    digest = hashlib.sha256()
+    temporary = path / "capture.mp4.tmp"
+    with temporary.open("wb") as output:
+        for index in range(count):
+            data = (path / "chunks" / f"{index:04d}.bin").read_bytes()
+            output.write(data)
+            digest.update(data)
+    if temporary.stat().st_size != job["totalBytes"] or not hmac.compare_digest(digest.hexdigest(), job["sha256"]):
+        temporary.unlink(missing_ok=True)
+        raise HTTPException(422, "capture_digest")
+    os.replace(temporary, path / "capture.mp4")
+    job["state"] = "queued"
+    job["progress"] = 25
+    _save_job(path, job)
+    shutil.rmtree(path / "chunks")
+    return {"jobId": job_id, "state": "queued", "sha256": job["sha256"]}
+
+
+@router.get("/jobs/{job_id}")
+def job_status(job_id: str, request: Request):
+    _authorize(request)
+    job = _read_job(_job_dir(job_id))
+    return {key: job[key] for key in ("jobId", "state", "progress", "message", "assets")}
+
+
+@router.get("/jobs/{job_id}/assets/{kind}")
+def asset(job_id: str, kind: str, request: Request):
+    _authorize(request)
+    job = _read_job(_job_dir(job_id))
+    if job["state"] != "complete" or kind not in {"mesh", "gaussian"}:
+        raise HTTPException(404, "asset_not_ready")
+    manifest = job["assets"].get(kind)
+    if not manifest:
+        raise HTTPException(404, "asset_not_ready")
+    path = _job_dir(job_id) / manifest["file"]
+    if not path.is_file() or path.stat().st_size != manifest["bytes"]:
+        raise HTTPException(409, "asset_changed")
+    return FileResponse(path, media_type="model/gltf-binary" if kind == "mesh" else "application/octet-stream",
+                        headers={"X-Content-SHA256": manifest["sha256"]})
+
+
+@router.delete("/jobs/{job_id}")
+def delete_job(job_id: str, request: Request):
+    _authorize(request)
+    path = _job_dir(job_id)
+    if _read_job(path)["state"] == "running":
+        raise HTTPException(409, "job_running")
+    shutil.rmtree(path)
+    return {"deleted": True}
