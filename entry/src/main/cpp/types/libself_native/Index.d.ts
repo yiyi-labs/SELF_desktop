@@ -4,3 +4,4 @@ export const unbind: (id: string) => void;
 export const request: (id: string, json: string, bytes?: ArrayBuffer) => Promise<NativeResult>;
 
 export const camera: (json: string, rgba?: ArrayBuffer) => Promise<NativeResult>;
+export const reconstruct: (json: string, rgb?: ArrayBuffer) => Promise<NativeResult>;

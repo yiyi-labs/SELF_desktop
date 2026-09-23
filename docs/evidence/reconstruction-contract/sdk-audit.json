@@ -1,0 +1,60 @@
+{
+  "checkedOn": "2026-09-23",
+  "sdkFiles": [
+    {
+      "path": "C:\\Program Files\\Huawei\\DevEco Studio\\sdk\\default\\hms\\native\\sysroot\\usr\\include\\spatial\\spatial_recon_interface.h",
+      "bytes": 33124,
+      "sha256": "29b52fd99dba0d97fb53dda77bcf58699914233dc29b122d391bcfd4d95a814b"
+    },
+    {
+      "path": "C:\\Program Files\\Huawei\\DevEco Studio\\sdk\\default\\hms\\native\\sysroot\\usr\\include\\ar\\ar_engine_core.h",
+      "bytes": 205875,
+      "sha256": "e2850a144658f545514d1b0ad7cbab7f501be84c32e31e12b8814a3771d95284"
+    },
+    {
+      "path": "C:\\Program Files\\Huawei\\DevEco Studio\\sdk\\default\\hms\\native\\docs\\html\\group___spatial_recon.html",
+      "bytes": 95515,
+      "sha256": "17fc02659e4d08ebc7cb836d0c7be3eb158fae1c252f6f1bbce5e1371f2fc5a5"
+    },
+    {
+      "path": "C:\\Program Files\\Huawei\\DevEco Studio\\sdk\\default\\hms\\ets\\api\\@hms.graphics.spatialRender.d.ts",
+      "bytes": 21350,
+      "sha256": "3926a4f1491343f3d02e79477db3f1f4f6e85825feec796ffeecf9937ca306af"
+    },
+    {
+      "path": "C:\\Program Files\\Huawei\\DevEco Studio\\sdk\\default\\hms\\ets\\api\\@hms.graphics.spatialEdit.d.ts",
+      "bytes": 7806,
+      "sha256": "474468655ed371d5869145dc655c9740c8250b09b75dae30afbfb7fdc6872e62"
+    },
+    {
+      "path": "C:\\Program Files\\Huawei\\DevEco Studio\\sdk\\default\\openharmony\\ets\\api\\graphics3d\\Scene.d.ts",
+      "bytes": 21125,
+      "sha256": "997cadebf42473428351847d461a3a8b311390f5cb50de390150f99182b05f16"
+    }
+  ],
+  "reconstructionFunctions": [
+    "HMS_SpatialRecon_IsSupport",
+    "HMS_SpatialRecon_CreateSession",
+    "HMS_SpatialRecon_DestroySession",
+    "HMS_SpatialRecon_PushFrame",
+    "HMS_SpatialRecon_PushARFrame",
+    "HMS_SpatialRecon_StartSession",
+    "HMS_SpatialRecon_SetRunningMode",
+    "HMS_SpatialRecon_PauseSession",
+    "HMS_SpatialRecon_ResumeSession",
+    "HMS_SpatialRecon_GetProgress",
+    "HMS_SpatialRecon_GetRefinedFrame",
+    "HMS_SpatialRecon_RegisterNGCallbackFunc",
+    "HMS_SpatialRecon_SaveResultToFile"
+  ],
+  "selectionMethods": [
+    "selectBy2DBox",
+    "selectBy2DMask",
+    "selectBy3DBox",
+    "selectByIndex"
+  ],
+  "selectionReadbackDeclared": false,
+  "renderContextLoadPluginDeclared": true,
+  "copiedSdkImplementation": false,
+  "runtimeCompatibilityProvenByHeaders": false
+}

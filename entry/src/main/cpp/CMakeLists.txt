@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.5.0)
 project(self_native)
 set(CMAKE_CXX_STANDARD 17)
 add_library(self_native SHARED napi.cpp RendererSession.cpp ProductScene.cpp ImagePipeline.cpp GltfAssetLoader.cpp RegionSelection.cpp)
+target_sources(self_native PRIVATE SpatialReconstruction.cpp)
+# Hvigor supplies the installed commercial SDK include directory. Optional runtime
+# functions use decltype + dlsym; SDK stub libraries are never copied into the HAP.
 target_sources(self_native PRIVATE CameraPipeline.cpp vendor/libfacedetection/facedetectcnn.cpp vendor/libfacedetection/facedetectcnn-model.cpp vendor/libfacedetection/facedetectcnn-data.cpp)
 target_sources(self_native PRIVATE CameraCodecs.c CameraMux.c)
 set_source_files_properties(CameraCodecs.c PROPERTIES COMPILE_OPTIONS "-O3;-Wno-macro-redefined;-Wno-sign-compare;-Wno-unused-parameter")

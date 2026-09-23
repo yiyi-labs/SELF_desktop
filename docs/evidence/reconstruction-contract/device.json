@@ -1,0 +1,7 @@
+{
+  "deviceType": "tablet",
+  "abi": "x86_64",
+  "remoteEvidence": "/data/local/tmp/self-recon-d53f25e4df7b47a493da43128a1931d7",
+  "device": "127.0.0.1:5555",
+  "personalReconstructionValidated": false
+}

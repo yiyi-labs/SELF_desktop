@@ -1,5 +1,6 @@
 #include "RendererSession.h"
 #include "RegionSelection.h"
+#include "SpatialReconstruction.h"
 #include "EditCompositor.h"
 #include "AtmosphereShader.h"
 #include <hilog/log.h>
@@ -76,15 +77,7 @@ Result RendererSession::process(Json j,std::vector<uint8_t> bytes){
   std::vector<uint8_t> empty(w*h);auto zero=adaptiveFeather(empty,w,h);check(std::all_of(zero.begin(),zero.end(),[](uint8_t v){return !v;}),"Empty mask leaked");
   return {{{"outsideTexels",outside},{"softTexels",soft},{"center",f[64*w+64]},{"narrowCenter",narrow[64*w+60]},{"monotonic",true}}};
  }
- if(type=="RECON_SUPPORT"){
-  // Optional commercial SDK capability. Resolve at runtime to preserve API19
-  // loading; ABI checked against SDK26 spatial_recon_interface.h (GS enum = 0).
-  void* library=dlopen("libspatial_recon_ndk.z.so",RTLD_NOW|RTLD_LOCAL);
-  if(!library)return {{{"available",false},{"libraryLoaded",false},{"pipelineImplemented",false},{"blockedStage","device-runtime"},{"message","当前设备缺少空间建模能力；应用的个人3D重建流程也尚未接通。"}}};
-  using IsSupport=int(*)(int);auto support=reinterpret_cast<IsSupport>(dlsym(library,"HMS_SpatialRecon_IsSupport"));
-  int status=support?support(0):-1;dlclose(library);
-  return {{{"available",status==0},{"libraryLoaded",true},{"status",status},{"pipelineImplemented",false},{"blockedStage",status==0?"pose-reconstruction-import":"device-capability"},{"message",status==0?"设备具备高斯重建能力；本应用尚未接通位姿采集、重建和结果载入。":"设备未通过原生建模能力检查（"+std::to_string(status)+"），暂时不能生成你的3D面容。"}}};
- }
+ if(type=="RECON_SUPPORT")return {reconstructionProcess({{"op","probe"}}, {})};
  if(type=="LOAD"){
   auto next=j.value("kind","")=="glb"?loadGLB(bytes):photoAsset(bytes); // Decode/parse outside the GL worker.
   result=enqueue([this,next=std::move(next)]()mutable{check(surface_!=EGL_NO_SURFACE,"Native surface unavailable");viewReset_=false;asset_=std::move(next);masks_.clear();featherMasks_.clear();operations_=Json::array();anchors_=Json::array();protectId_.clear();protectRule_.clear();hasAsset_=true;if(asset_.photo)yaw_=pitch_=0;upload();dirty_=true;schedule();return Result{{{"width",asset_.image.width},{"height",asset_.image.height},{"vertices",asset_.vertices.size()},{"triangles",asset_.indices.size()/3}}};}).get();

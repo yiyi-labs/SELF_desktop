@@ -1,0 +1,113 @@
+{
+  "contractTestsUseInjectedSdk": true,
+  "environment": "HarmonyOS native executable",
+  "failed": 0,
+  "passed": 23,
+  "personalReconstructionValidated": false,
+  "runtimeProbe": {
+    "api26Symbols": false,
+    "available": false,
+    "captureIntegrated": false,
+    "gsAcceptanceVerified": false,
+    "libraryLoaded": false,
+    "message": "当前设备未通过空间重建能力检查；不会用示例面容代替你的建模结果。",
+    "nativeSessionImplemented": true,
+    "pipelineImplemented": false,
+    "qualityPolicy": "preserve-source-no-decimation-no-early-success",
+    "status": -1
+  },
+  "tests": [
+    {
+      "name": "missing_runtime_rejects_without_success",
+      "passed": true
+    },
+    {
+      "name": "missing_api26_callback_is_not_compatible",
+      "passed": true
+    },
+    {
+      "name": "start_requires_multiple_frames",
+      "passed": true
+    },
+    {
+      "name": "frame_bytes_and_calibration_preserved",
+      "passed": true
+    },
+    {
+      "name": "timestamp_precision_and_order",
+      "passed": true
+    },
+    {
+      "name": "no_synthetic_landmark_pose",
+      "passed": true
+    },
+    {
+      "name": "lost_tracking_not_submitted",
+      "passed": true
+    },
+    {
+      "name": "memory_limit_never_downscales",
+      "passed": true
+    },
+    {
+      "name": "resolution_change_rejected",
+      "passed": true
+    },
+    {
+      "name": "progress_one_is_not_completion",
+      "passed": true
+    },
+    {
+      "name": "sdk_completion_and_save_are_separate",
+      "passed": true
+    },
+    {
+      "name": "callback_error_preserves_failure",
+      "passed": true
+    },
+    {
+      "name": "missing_output_not_saved",
+      "passed": true
+    },
+    {
+      "name": "late_callback_cannot_finish_new_job",
+      "passed": true
+    },
+    {
+      "name": "stale_commands_rejected",
+      "passed": true
+    },
+    {
+      "name": "pause_resume_preserve_source",
+      "passed": true
+    },
+    {
+      "name": "sdk_frame_limit_is_failure_not_truncation",
+      "passed": true
+    },
+    {
+      "name": "job_paths_cannot_overwrite",
+      "passed": true
+    },
+    {
+      "name": "creation_failure_can_release",
+      "passed": true
+    },
+    {
+      "name": "native_ar_input_does_not_copy_rgb",
+      "passed": true
+    },
+    {
+      "name": "destruction_failure_retains_borrowed_memory",
+      "passed": true
+    },
+    {
+      "name": "callback_from_other_thread_is_safe",
+      "passed": true
+    },
+    {
+      "name": "invalid_intrinsics_never_reach_sdk",
+      "passed": true
+    }
+  ]
+}

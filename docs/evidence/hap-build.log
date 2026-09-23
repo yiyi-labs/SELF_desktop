@@ -1,15 +1,15 @@
 > hvigor [32mUP-TO-DATE :entry:default@PreBuild...  [39m
 > hvigor [32mFinished :entry:default@CreateModuleInfo... after 1 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@GenerateMetadata...  [39m
-> hvigor [32mFinished :entry:default@ConfigureCmake... after 53 ms [39m
+> hvigor [32mFinished :entry:default@ConfigureCmake... after 50 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@MergeProfile...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@CreateBuildProfile...  [39m
 > hvigor [32mFinished :entry:default@PreCheckSyscap... after 1 ms [39m
-> hvigor [32mFinished :entry:default@GeneratePkgSdkInfo... after 5 ms [39m
-> hvigor [32mFinished :entry:default@ProcessIntegratedHsp... after 2 ms [39m
-> hvigor [32mFinished :entry:default@BuildNativeWithCmake... after 42 ms [39m
+> hvigor [32mFinished :entry:default@GeneratePkgSdkInfo... after 4 ms [39m
+> hvigor [32mFinished :entry:default@ProcessIntegratedHsp... after 1 ms [39m
+> hvigor [32mFinished :entry:default@BuildNativeWithCmake... after 34 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@MakePackInfo...  [39m
-> hvigor [32mFinished :entry:default@SyscapTransform... after 12 ms [39m
+> hvigor [32mFinished :entry:default@SyscapTransform... after 10 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@GeneratePkgContextInfo...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@ProcessProfile...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@ProcessRouterMap...  [39m
@@ -17,12 +17,18 @@
 > hvigor [32mFinished :entry:default@ProcessStartupConfig... after 2 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@ProcessResource...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@GenerateLoaderJson...  [39m
-> hvigor [32mFinished :entry:default@CompileResource... after 298 ms [39m
+> hvigor [32mFinished :entry:default@CompileResource... after 277 ms [39m
 > hvigor [32mFinished :entry:default@BuildJS... after 5 ms [39m
-> hvigor [32mFinished :entry:default@BuildNativeWithNinja... after 131 ms [39m
-> hvigor [32mUP-TO-DATE :entry:default@ProcessLibs...  [39m
-> hvigor [32mUP-TO-DATE :entry:default@DoNativeStrip...  [39m
-> hvigor [32mUP-TO-DATE :entry:default@CacheNativeLibs...  [39m
+> hvigor WARN: When performing compilation for the arm64-v8a architecture:
+clang++: warning: argument unused during compilation: '--gcc-toolchain=C:/Program Files/Huawei/DevEco Studio/sdk/default/openharmony/native/llvm' [-Wunused-command-line-argument]
+
+> hvigor WARN: When performing compilation for the x86_64 architecture:
+clang++: warning: argument unused during compilation: '--gcc-toolchain=C:/Program Files/Huawei/DevEco Studio/sdk/default/openharmony/native/llvm' [-Wunused-command-line-argument]
+
+> hvigor [32mFinished :entry:default@BuildNativeWithNinja... after 2 s 753 ms [39m
+> hvigor [32mFinished :entry:default@ProcessLibs... after 74 ms [39m
+> hvigor [32mFinished :entry:default@DoNativeStrip... after 134 ms [39m
+> hvigor [32mFinished :entry:default@CacheNativeLibs... after 10 ms [39m
 > hvigor WARN: WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/entryability/EntryAbility.ets:8:100
  This API is unavailable to 2in1.
 
@@ -380,15 +386,15 @@ WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/Nativ
  Function may throw exceptions. Special handling is required.
 
 
-> hvigor [32mFinished :entry:default@CompileArkTS... after 6 s 163 ms [39m
+> hvigor [32mFinished :entry:default@CompileArkTS... after 5 s 96 ms [39m
 > hvigor [32mFinished :entry:default@GeneratePkgModuleJson... after 4 ms [39m
 > hvigor [32mFinished :entry:default@ProcessCompiledResources... after 1 ms [39m
-> hvigor [32mFinished :entry:default@PackageHap... after 620 ms [39m
-> hvigor [32mFinished :entry:default@PackingCheck... after 10 ms [39m
+> hvigor [32mFinished :entry:default@PackageHap... after 793 ms [39m
+> hvigor [32mFinished :entry:default@PackingCheck... after 11 ms [39m
 > hvigor WARN: No signingConfig found for product default
 > hvigor [32mFinished :entry:default@SignHap... after 2 ms [39m
-> hvigor [32mFinished :entry:default@CollectDebugSymbol... after 1 ms [39m
+> hvigor [32mFinished :entry:default@CollectDebugSymbol... after 2 ms [39m
 > hvigor [32mFinished :entry:assembleHap... after 1 ms [39m
-> hvigor [32mBUILD SUCCESSFUL in 14 s 414 ms [39m
+> hvigor [32mBUILD SUCCESSFUL in 13 s 382 ms [39m
 
-33 tasks in total: 19 executed, 14 up-to-date
+33 tasks in total: 22 executed, 11 up-to-date
