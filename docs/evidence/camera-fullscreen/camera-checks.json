@@ -1,0 +1,19 @@
+{
+  "source": "Actual tablet ArkUI onAreaChange and Camera Kit rotation callbacks; no camera pixel files",
+  "surfaceEvents": 2,
+  "maxAspectError": 6.781684014356415e-08,
+  "aspectPreserved": true,
+  "displayPreviewPairs": [
+    [
+      270,
+      180
+    ]
+  ],
+  "metadataTypesEmpty": true,
+  "coreVisionUnsupported": true,
+  "manualLandscapePreviewInspected": true,
+  "manualPrivateScreenshotRetained": false,
+  "portraitLandscapeResizeAssertedInHypium": true,
+  "portraitPixelOrientationVisuallyVerified": false,
+  "notes": "Retained camera rotation metadata covers landscape; portrait window resize and continuing preview were checked by the tablet suite. No claim of full visual orientation testing across devices."
+}

@@ -1,0 +1,21 @@
+09-23 09:10:55.176 23328 23328 I A03d00/JSAPP: SELF_CAMERA_DEVICES [{"position":1,"type":1,"connection":0},{"position":2,"type":1,"connection":0}]
+09-23 09:10:55.176 23328 23328 I A03d00/JSAPP: SELF_CAMERA_METADATA_TYPES []
+09-23 09:10:55.292 23328 23328 I A03d00/JSAPP: SELF_CAMERA_ENCODERS [{"mimeType":"audio/mp4a-latm","type":"audio","bitRate":{"min":1,"max":500000},"channels":{"min":1,"max":8},"sampleRate":[7350,8000,11025,12000,16000,22050,24000,32000,44100,48000,64000,88200,96000]}]
+09-23 09:10:55.292 23328 23328 I A03d00/JSAPP: SELF_CAMERA_PROFILES [{"format":3,"frameRateRange":{"min":30,"max":60},"size":{"width":1280,"height":720}}]
+09-23 09:10:55.829 23328 23328 I A03d00/JSAPP: SELF_CAMERA_ROTATION {"display":270,"preview":180,"width":1280,"height":720}
+09-23 09:10:55.830 23328 23328 I A03d00/JSAPP: SELF_CAMERA_READY {"width":1280,"height":720,"fps":30,"position":2,"recording":false,"canRecord":false}
+09-23 09:10:55.830 23328 23328 I A03d00/JSAPP: SELF_LOCAL_FACE unsupported
+09-23 09:10:55.837 23328 23328 I A03d00/JSAPP: SELF_CAMERA_PREVIEW_STARTED
+09-23 09:10:57.359 23328 23328 I A03d00/JSAPP: SELF_CAMERA_LAYOUT {"pass":0,"fullscreen":{"bottom":1864,"displayId":0,"left":0,"right":2880,"top":86},"preview":{"bottom":1864,"displayId":0,"left":0,"right":2880,"top":86},"ratio":1.6197975253093364,"status":"前置 · 1280 × 720 · 当前系统无录像编码器，仅可预览","canRecord":false,"privatePixelsCaptured":false}
+09-23 09:10:58.626 23328 23328 I A03d00/JSAPP: SELF_CAMERA_SURFACE {"width":1066.6666259765625,"height":600,"aspect":1.7777777777777777}
+09-23 09:10:58.631 23328 23328 I A03d00/JSAPP: SELF_CAMERA_DEVICES [{"position":1,"type":1,"connection":0},{"position":2,"type":1,"connection":0}]
+09-23 09:10:58.632 23328 23328 I A03d00/JSAPP: SELF_CAMERA_METADATA_TYPES []
+09-23 09:10:58.671 23328 23328 I A03d00/JSAPP: SELF_CAMERA_SURFACE {"width":1587.5555419921875,"height":893,"aspect":1.7777777777777777}
+09-23 09:10:58.687 23328 23328 I A03d00/JSAPP: SELF_CAMERA_ENCODERS [{"mimeType":"audio/mp4a-latm","type":"audio","bitRate":{"min":1,"max":500000},"channels":{"min":1,"max":8},"sampleRate":[7350,8000,11025,12000,16000,22050,24000,32000,44100,48000,64000,88200,96000]}]
+09-23 09:10:58.687 23328 23328 I A03d00/JSAPP: SELF_CAMERA_PROFILES [{"format":3,"frameRateRange":{"min":30,"max":60},"size":{"width":1280,"height":720}}]
+09-23 09:10:59.145 23328 23328 I A03d00/JSAPP: SELF_CAMERA_ROTATION {"display":270,"preview":180,"width":1280,"height":720}
+09-23 09:10:59.146 23328 23328 I A03d00/JSAPP: SELF_CAMERA_READY {"width":1280,"height":720,"fps":30,"position":2,"recording":false,"canRecord":false}
+09-23 09:10:59.146 23328 23328 I A03d00/JSAPP: SELF_LOCAL_FACE unsupported
+09-23 09:10:59.196 23328 23328 I A03d00/JSAPP: SELF_CAMERA_PREVIEW_STARTED
+09-23 09:11:01.147 23328 23328 I A03d00/JSAPP: SELF_CAMERA_LAYOUT {"pass":1,"fullscreen":{"bottom":1864,"displayId":0,"left":0,"right":2880,"top":86},"preview":{"bottom":1864,"displayId":0,"left":0,"right":2880,"top":86},"ratio":1.6197975253093364,"status":"前置 · 1280 × 720 · 当前系统无录像编码器，仅可预览","canRecord":false,"privatePixelsCaptured":false}
+09-23 09:11:12.008 23328 23328 I A03d00/JSAPP: SELF_UI_SETTINGS {"anchor":{"bottom":194,"displayId":0,"left":1664,"right":1760,"top":98},"panel":{"bottom":1234,"displayId":0,"left":1168,"right":1888,"top":234},"accentSaved":true,"languageSaved":true,"englishControls":true,"restoredChinese":true}

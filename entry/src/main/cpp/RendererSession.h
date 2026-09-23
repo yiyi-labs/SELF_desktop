@@ -40,6 +40,7 @@ class RendererSession {
  EGLDisplay display_=EGL_NO_DISPLAY;EGLContext context_=EGL_NO_CONTEXT;EGLSurface surface_=EGL_NO_SURFACE;OHNativeWindow* window_=nullptr;
  GLuint program_=0,backgroundProgram_=0,vao_=0,vbo_=0,ebo_=0,texture_=0,maskArray_=0,protection_=0,annotation_=0;
  GLuint transitionProgram_=0,transitionTexture_=0;bool transitioning_=false;double transitionStart_=0;uint64_t transitionFrames_=0;
+ std::array<float,3> paletteWeights_{{1,0,0}};
  bool motion_=false;int palette_=0;float phase_=0;long long lastAnimatedDraw_=0,nextAnimatedDraw_=0;
  int width_=1,height_=1,auditMode_=0;uint64_t generation_=0,frameCount_=0;std::vector<double> frameTimes_,frameIntervals_;long long lastPresented_=0;
  Asset asset_;std::map<std::string,std::vector<uint8_t>> masks_;Json operations_=Json::array(),anchors_=Json::array();std::string protectId_,protectRule_,tool_="NAVIGATE";

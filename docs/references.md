@@ -64,3 +64,10 @@ Three.js0.186.0 及旧浏览器代码仅保留作迁移参照；示例 GLB 仍�
 本轮设计阅读 [华为设计官网](https://developer.huawei.com/consumer/cn/design)及 [HarmonyOS 7 官方页面](https://consumer.huawei.com/cn/harmonyos-7/)，采用柔和光感、材质层次、堆叠卡片和响应式布局的方向。未复制官方素材，未宣称获得官方设计认证或已经验证真机流畅度。实现使用本机商业 SDK26 的 ArkUI 与 GLES3，不用 OpenHarmony 示例版本表证明商业兼容。
 
 本轮相机、对话与背景使用范围见 [对话与平板相机核验](interaction-camera-validation.md)：本机 API26 Camera Kit/Media Kit 的声明与官方说明核对，原生采集类、GLSL 氛围和圈选反馈自主实现；没有复制 SDK 文件或新第三方资产。
+
+
+## 2026-09-23 全屏采集与设置
+
+新增 `rawfile/ui/{camera,settings,atmosphere,music,music_off}.svg` 为本项目原创路径图标；未使用华为系统图标文件、Remy 视频画面、网页图片或第三方包装资产。CameraCaptureView / LocalFaceGuide / UiPreference / UiText 和方向/动画修改均为项目实现，未复制 SDK 声明或官方示例。
+
+核对入口：[华为相机旋转术语](https://developer.huawei.com/consumer/cn/doc/doccenter-capabilities/camera-rotation-term-native)、[窗口旋转](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/window-rotation)、[Remy 机型支持说明](https://consumer.huawei.com/cn/support/content/zh-cn16076523/)。动态页面部分正文超时，实际接口以安装的商业 SDK 声明、编译及平板运行核验。搜索到 [Remy 演示](https://www.bilibili.com/video/BV1vEAaz3EvG/)，网页返回412，内嵌浏览器超时，未能完整观看；不声称逐帧复刻或复用其跟踪/重建算法。环形引导为原创交互，不能当作成功重建进度。

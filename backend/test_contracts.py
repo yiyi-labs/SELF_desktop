@@ -24,6 +24,22 @@ def response(value):
         "name":"propose_edit_plan","arguments":json.dumps(value)}}]}}]}
 
 class Contracts(unittest.TestCase):
+    def test_english_is_presentation_only(self):
+        s=snapshot().model_copy(update={'responseLanguage':'en','userText':'Try a muted pink on this area.'})
+        value=plan();value['shortMessage']='Try rose gently.'
+        checked=parse_response(response(value),s)
+        self.assertEqual(checked.shortMessage,'Try Muted pink gently.')
+        self.assertEqual(checked.operations[0].presetId,'rose')
+        bad=plan();bad['operations'][0]['regionId']='invented'
+        self.assertRaises(ModelFailure,parse_response,response(bad),s)
+        s.userText='I just want to talk, no edits.'
+        self.assertRaises(ModelFailure,parse_response,response(plan()),s)
+        image=io.BytesIO();Image.new('RGB',(16,16),'gray').save(image,format='PNG')
+        body=request_body(s,[image.getvalue()],'test')
+        self.assertIn('Reply in warm, concise English',body['messages'][0]['content'])
+        self.assertEqual(body['tool_choice']['function']['name'],'propose_edit_plan')
+        with self.assertRaises(ValidationError):Snapshot.model_validate({**s.model_dump(),'responseLanguage':'execute_code'})
+
     def test_explicit_listening_cannot_propose_edit(self):
         s=snapshot().model_copy(update={'userText':'这颗痣我想留着，只想聊聊，不用修改。'})
         self.assertRaises(ModelFailure,parse_response,response(plan()),s)

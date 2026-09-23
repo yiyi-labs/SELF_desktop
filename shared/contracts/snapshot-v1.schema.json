@@ -188,6 +188,15 @@
       "title": "Resolvedchoice",
       "type": "string"
     },
+    "responseLanguage": {
+      "default": "zh",
+      "enum": [
+        "zh",
+        "en"
+      ],
+      "title": "Responselanguage",
+      "type": "string"
+    },
     "regions": {
       "items": {
         "$ref": "#/$defs/Region"

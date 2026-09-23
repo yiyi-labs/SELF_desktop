@@ -1,3 +1,4 @@
+import { UiText } from '../services/UiText';
 import native from 'libself_native.so';
 import { common } from '@kit.AbilityKit';
 import { ProductRecord,ProductRepository } from '../services/ProductRepository';
@@ -5,10 +6,12 @@ import { ProductFactsDeck } from './ProductFactsDeck';
 
 interface ProductEvent {type:string;message?:string;}
 @Extend(Button)
-function productButton(){.height(38).padding({left:14,right:14}).fontSize(13).fontColor('#675772').backgroundColor('#C8FFFFFF').borderRadius(20)}
+function productButton(){.height(38).padding({left:14,right:14}).fontSize(13).fontColor('#675772').backgroundColor('#C8FFFFFF').borderRadius(20).stateStyles({pressed:{.opacity(.72).scale({x:.96,y:.96})},normal:{.opacity(1).scale({x:1,y:1})}}).animation({duration:150,curve:Curve.EaseOut})}
 
 @Component
 export struct ProductCard {
+ @StorageLink('selfLanguage') language:string='zh';
+ private tr(value:string):string{return UiText.get(value,this.language);}
  @Prop @Watch('productChanged') product:ProductRecord=ProductRepository.records()[0];
  @Prop @Watch('motionChanged') motion:boolean=true;
  @Prop suggestionCount:number=1;
@@ -62,22 +65,22 @@ export struct ProductCard {
  aboutToDisappear():void{this.detach();}
  build(){
   Column({space:10}){
-   Row(){Text('OLAY  /  本次提到').fontSize(11).letterSpacing(1).fontColor('#9683A0');Blank();Button('收起').id('product-close').productButton().onClick(()=>this.onClose())}.width('100%')
+   Row(){Text(this.tr('OLAY  /  本次提到')).fontSize(11).letterSpacing(1).fontColor('#9683A0');Blank();Button(this.tr('收起')).id('product-close').productButton().onClick(()=>this.onClose())}.width('100%')
    Row({space:10}){Stack({alignContent:Alignment.Bottom}){
     XComponent({type:XComponentType.SURFACE}).id('self-product-view').width('100%').height('100%').backgroundColor('#F9F7FA')
      .onAttach(()=>{const node=this.getUIContext().getAttachedFrameNodeById('self-product-view');if(node){this.bound=true;native.bind(this.productSessionKey,node,(value:string)=>{if(!this.bound)return;const e=JSON.parse(value) as ProductEvent;if(e.type==='READY')this.load();else if(e.type==='ERROR')this.error='立体展示暂不可用。';});}})
      .onDetach(()=>this.detach()).onTouch((e:TouchEvent)=>this.touch(e))
-    Text(this.error||(!this.ready?'正在呈现…':'拖动旋转 · 3D 外观示意')).fontSize(10).fontColor('#94859F').padding(8).hitTestBehavior(HitTestMode.None)
+    Text(this.tr(this.error||(!this.ready?'正在呈现…':'拖动旋转 · 3D 外观示意'))).fontSize(10).fontColor('#94859F').padding(8).hitTestBehavior(HitTestMode.None)
    }.layoutWeight(1).height(210).borderRadius(24).clip(true)
    ProductFactsDeck({product:this.product,motion:this.motion})}.width('100%')
-   Row(){Column({space:5}){Text(this.product.name).fontSize(18).fontWeight(FontWeight.Medium).fontColor('#493C55').maxLines(2);Text(this.product.specification.startsWith('未核实')?'中国大陆资料':this.product.specification).fontSize(12).fontColor('#95849E')}.alignItems(HorizontalAlign.Start).layoutWeight(1);Button(this.opened?'合上':'打开看看').id('product-lid').productButton().enabled(this.ready).onClick(()=>this.toggle())}.width('100%')
-   Button('聊聊这款').productButton().width('100%').backgroundColor('#7C698F').fontColor(Color.White).onClick(()=>this.onAsk(this.product.productId))
+   Row(){Column({space:5}){Text(this.tr(this.product.name)).fontSize(18).fontWeight(FontWeight.Medium).fontColor('#493C55').maxLines(2);Text(this.tr(this.product.specification.startsWith('未核实')?'中国大陆资料':this.product.specification)).fontSize(12).fontColor('#95849E')}.alignItems(HorizontalAlign.Start).layoutWeight(1);Button(this.tr(this.opened?'合上':'打开看看')).id('product-lid').productButton().enabled(this.ready).onClick(()=>this.toggle())}.width('100%')
+   Button(this.tr('聊聊这款')).productButton().width('100%').backgroundColor('#7C698F').fontColor(Color.White).onClick(()=>this.onAsk(this.product.productId))
    Row(){
-    if(this.suggestionCount>1){Button('上一项').productButton().onClick(()=>this.onChoose(-1))}
+    if(this.suggestionCount>1){Button(this.tr('上一项')).productButton().onClick(()=>this.onChoose(-1))}
     Blank()
-    Text('与本次对话相关').fontSize(10).fontColor('#A194A8')
+    Text(this.tr('与本次对话相关')).fontSize(10).fontColor('#A194A8')
     Blank()
-    if(this.suggestionCount>1){Button('下一项').productButton().onClick(()=>this.onChoose(1))}
+    if(this.suggestionCount>1){Button(this.tr('下一项')).productButton().onClick(()=>this.onChoose(1))}
    }.width('100%')
   }.id('product-card').padding(16).width('100%').backgroundColor('#F3FFFFFF').backgroundBlurStyle(BlurStyle.COMPONENT_REGULAR).borderRadius(32).border({width:1,color:'#EBFFFFFF'}).shadow({radius:28,color:'#23796789',offsetY:8})
  }

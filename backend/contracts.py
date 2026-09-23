@@ -38,6 +38,7 @@ class Snapshot(StrictModel):
     productContextIds: list[str] = Field(default_factory=list, max_length=3)
     dialogue: list[DialogueTurn] = Field(default_factory=list, max_length=3)
     resolvedChoice: str = Field(default="", max_length=60)
+    responseLanguage: Literal["zh", "en"] = "zh"
     regions: list[Region] = Field(max_length=32)
     layers: list[Layer] = Field(max_length=8)
     protectedRegionIds: list[str] = Field(max_length=32)
@@ -60,15 +61,16 @@ class Plan(StrictModel):
     operations: list[Operation] = Field(max_length=1)
     explanationRefs: list[str] = Field(max_length=3, description="Only productId from supplied productInformation. Information only, not evidence of a calibrated effect. Without productInformation use [].")
     question: str = Field(max_length=200, description="Must be empty for edit/explain/support. Only decision=clarify may contain a question; a clarify plan must have operations=[]. Authorization confirmation is handled by the app, not this field.")
-    choices: list[str] = Field(default_factory=list, max_length=3, description="Only for clarify: 2 or 3 short Chinese choices answering ONE question, no numeric prefixes. Otherwise []. Never ask to choose a region when annotatedRegionId is already supplied.")
+    choices: list[str] = Field(default_factory=list, max_length=3, description="Only for clarify: 2 or 3 short choices in responseLanguage answering ONE question, no numeric prefixes. Otherwise []. Never ask to choose a region when annotatedRegionId is already supplied.")
 
 PRESETS = {"rose": {"displayName": "柔玫瑰", "color": [0.66, 0.12, 0.30]}, "terracotta": {"displayName": "暖陶棕", "color": [0.65, 0.25, 0.18]}}
+EN_PRESETS = {"rose":"Muted pink", "terracotta":"Warm clay"}
 LEVELS = {"none": 0.0, "light": 0.18, "medium": 0.32, "strong": 0.5}
 
 def listening_only(text: str) -> bool:
     # Explicit discussion / no-transformation intent. This narrows capabilities,
     # never manufactures an edit or a psychological diagnosis.
-    return bool(re.search(r'只想聊聊|不用修改|先不要.*编辑|不想.{0,12}(?:改成|变成).{0,8}别人',text))
+    return bool(re.search(r'只想聊聊|不用修改|先不要.*编辑|不想.{0,12}(?:改成|变成).{0,8}别人|just (?:want to )?talk|no edits|do not (?:edit|change)|don.t (?:edit|change)',text,re.I))
 
 def validate_plan(plan: Plan, snapshot: Snapshot) -> Plan:
     if listening_only(snapshot.userText) and plan.decision=='edit':
@@ -76,7 +78,7 @@ def validate_plan(plan: Plan, snapshot: Snapshot) -> Plan:
     # Display labels are a deterministic presentation mapping, never an edit rewrite.
     def display(text):
         for key, preset in PRESETS.items():
-            text = re.sub(r"\b"+key+r"\b", preset["displayName"], text, flags=re.I)
+            text = re.sub(r"\b"+key+r"\b", (EN_PRESETS[key] if snapshot.responseLanguage=="en" else preset["displayName"]), text, flags=re.I)
         if re.search(r"regionId|presetId|layerId|set_digital_tint|region-[\w-]+", text):
             raise ValueError("internal_identifier_in_reply")
         return text
@@ -116,7 +118,7 @@ def validate_plan(plan: Plan, snapshot: Snapshot) -> Plan:
     regions = {r.regionId for r in snapshot.regions}
     layers = {r.layerId: r for r in snapshot.layers}
     for op in plan.operations:
-        selected_presets=[key for key,preset in PRESETS.items() if preset['displayName'] in snapshot.resolvedChoice or re.search(r'\b'+key+r'\b',snapshot.resolvedChoice,re.I)]
+        selected_presets=[key for key,preset in PRESETS.items() if preset['displayName'] in snapshot.resolvedChoice or EN_PRESETS[key].lower() in snapshot.resolvedChoice.lower() or re.search(r'\b'+key+r'\b',snapshot.resolvedChoice,re.I)]
         if op.operation=='set_digital_tint' and len(selected_presets)==1 and op.presetId!=selected_presets[0]:
             raise ValueError('choice_preset_mismatch')
         if op.regionId not in regions:

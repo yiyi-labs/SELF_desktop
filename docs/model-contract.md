@@ -46,3 +46,10 @@
 保留证据：`initial-live-failures.json`、`initial-diagnostic.json`、`initial-http-failure.json`、`http-diagnostic.json`、`http-semantic-failure.json`。诊断原始响应仅来自合成图片测试；生产仍不记录用户图片、原话或上游响应正文。真实调用产生API用量；最终三项用量不能当作本轮全部费用。本轮曾再次访问官方文档但网络失败，模型别名到具体版本的映射沿用此前官方资料；实际返回只证明上述model别名和指纹。
 
 模拟器 `emulator-connectivity.log` 显示真实NetworkKit health200、modelConfigured=true；仅验证连通性，该探针未触发付费模型调用。`backend/test_live_http.py` 可复现实际后端测试（先运行test_live.py生成原创夹具，再启动后端）；会发送一次付费调用及一次缓存重放。手机上的云端授权→候选→原生检查→有效提交→账单完整链路、真机和真实人像视觉质量仍未验证。
+
+
+### 2026-09-23 显示语言
+
+客户端快照增加可选 `responseLanguage`（仅 `zh` / `en`，缺省 `zh`）。设置页切换后，后续真实模型请求据此输出简短中/英文。内部 regionId/presetId/layerId、候选、授权、渲染检查和账单保持同一协议，不把翻译当作新的编辑指令。英文展示名为 Muted pink / Warm clay，内部仍为 rose / terracotta。已有用户文本、作品命名和官方商品名不自动改写。
+
+`test_contracts.py` 验证语言不能改变能力、引用区域或权限；`test_live_language.py` 使用公共许可示例图做真实英文回应验证，无摄像头画面。结果见 `evidence/camera-fullscreen/live-english.json`。

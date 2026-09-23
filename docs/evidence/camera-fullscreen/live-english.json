@@ -1,0 +1,39 @@
+{
+  "source": "Public CC BY 3 sample scan; synthetic message, no private images",
+  "passed": true,
+  "result": {
+    "schemaVersion": 1,
+    "requestId": "english-1790125410",
+    "snapshotId": "english-1790125410",
+    "assetId": "sample",
+    "assetVersion": "v1",
+    "textureVersion": "t1",
+    "sceneRevision": 2,
+    "regionVersion": 1,
+    "plan": {
+      "decision": "support",
+      "shortMessage": "The mole stays exactly as it is. We can simply talk, no changes made here.",
+      "operations": [],
+      "explanationRefs": [],
+      "question": "",
+      "choices": []
+    },
+    "modelEvidence": {
+      "requestedModel": "deepseek-flash",
+      "returnedModel": "deepseek-flash",
+      "systemFingerprint": "aeb56401ca74e127821c4f9126dcb669",
+      "elapsedMs": 1360,
+      "usage": {
+        "prompt_tokens": 2018,
+        "completion_tokens": 134,
+        "total_tokens": 2152,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 2018
+      },
+      "providerResponseId": "50e4c8dd-3943-4c6a-95ee-c6a4257486d1"
+    }
+  }
+}

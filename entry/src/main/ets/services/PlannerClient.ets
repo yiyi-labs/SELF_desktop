@@ -13,7 +13,7 @@ export interface CloudSnapshot {
  sceneRevision:number;regionVersion:number;viewRevision:number;view:SceneView;userText:string;
  regions:CloudRegion[];layers:CloudLayer[];protectedRegionIds:string[];productContextIds?:string[];uploadAuthorized:boolean;
  imageWidth:number;imageHeight:number;annotatedRegionId:string;
- dialogue?:DialogueTurn[];resolvedChoice?:string;
+ dialogue?:DialogueTurn[];resolvedChoice?:string;responseLanguage?:string;
 }
 interface ModelEvidence {requestedModel:string;returnedModel:string;systemFingerprint:string|null;elapsedMs:number;}
 export interface CloudResponse {schemaVersion:number;requestId:string;snapshotId:string;assetId:string;assetVersion:string;textureVersion:string;sceneRevision:number;regionVersion:number;plan:CloudPlan;modelEvidence:ModelEvidence;}

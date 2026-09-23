@@ -2,6 +2,7 @@ import { camera } from '@kit.CameraKit';
 import { media } from '@kit.MediaKit';
 import { common, abilityAccessCtrl } from '@kit.AbilityKit';
 import { fileIo as fs } from '@kit.CoreFileKit';
+import { display } from '@kit.ArkUI';
 
 interface CameraDeviceEvidence {position:number;type:number;connection:number;}
 interface CameraClipEvidence {schemaVersion:number;source:string;createdAt:number;durationMs:number;width:number;height:number;bytes:number;previewStarted:boolean;reconstructionStatus:string;poseData:boolean;private:boolean;}
@@ -10,6 +11,12 @@ interface CameraClipEvidence {schemaVersion:number;source:string;createdAt:numbe
 export class CameraCaptureSession {
  private input:camera.CameraInput|undefined;
  private preview:camera.PreviewOutput|undefined;
+ private metadata:camera.MetadataOutput|undefined;
+ private watchingDisplay:boolean=false;
+ private displayChanged: (id:number)=>void=()=>this.updateRotation();
+ onGeometry:(width:number,height:number,rotation:number)=>void=()=>{};
+ onFace:(face:camera.MetadataObject|undefined)=>void=()=>{};
+ faceDetection:boolean=false;
  private video:camera.VideoOutput|undefined;
  private session:camera.VideoSession|undefined;
  private recorder:media.AVRecorder|undefined;
@@ -36,6 +43,7 @@ export class CameraCaptureSession {
    const target=devices.find((d:camera.CameraDevice)=>d.cameraPosition===(front?camera.CameraPosition.CAMERA_POSITION_FRONT:camera.CameraPosition.CAMERA_POSITION_BACK))||devices[0];
    if(!manager.getSupportedSceneModes(target).includes(camera.SceneMode.NORMAL_VIDEO))throw new Error('当前摄像头没有开放标准录像模式');
    const capabilities=manager.getSupportedOutputCapability(target,camera.SceneMode.NORMAL_VIDEO);
+   console.info('SELF_CAMERA_METADATA_TYPES '+JSON.stringify(capabilities.supportedMetadataObjectTypes));
    this.recorder=await media.createAVRecorder();const encoders=await this.recorder.getAvailableEncoder();
    console.info('SELF_CAMERA_ENCODERS '+JSON.stringify(encoders));
    console.info('SELF_CAMERA_PROFILES '+JSON.stringify(capabilities.videoProfiles));
@@ -54,7 +62,7 @@ export class CameraCaptureSession {
    this.recorder.on('error',(error)=>this.onError('录像不可用：'+error.code));
    const config:media.AVRecorderConfig={videoSourceType:media.VideoSourceType.VIDEO_SOURCE_TYPE_SURFACE_YUV,
     profile:{fileFormat:media.ContainerFormatType.CFT_MPEG_4,videoBitrate:Math.max(encoder.bitRate?.min||1,Math.min(8000000,encoder.bitRate?.max||8000000)),videoCodec:encoder.mimeType,videoFrameWidth:this.width,videoFrameHeight:this.height,videoFrameRate:30},
-    url:'fd://'+this.file.fd,metadata:{videoOrientation:String(target.cameraOrientation)}};
+    url:'fd://'+this.file.fd};
    await this.recorder.prepare(config);
    this.video=manager.createVideoOutput(profile,await this.recorder.getInputSurface());
    this.canRecord=true;
@@ -66,16 +74,43 @@ export class CameraCaptureSession {
    this.session.beginConfig();this.session.addInput(this.input);
    if(!this.session.canAddOutput(this.preview))throw new Error('设备不支持当前预览规格');
    this.session.addOutput(this.preview);
+   // Optional HAL detection. Absence of this capability must never look like a successful face lock.
+   const types=capabilities.supportedMetadataObjectTypes;
+   const faceType=types.includes(camera.MetadataObjectType.BASIC_FACE_DETECTION)?camera.MetadataObjectType.BASIC_FACE_DETECTION:camera.MetadataObjectType.FACE_DETECTION;
+   if(types.includes(faceType)){
+    try{this.metadata=manager.createMetadataOutput([faceType]);
+     if(this.session.canAddOutput(this.metadata)){
+      this.session.addOutput(this.metadata);this.faceDetection=true;
+      this.metadata.on('metadataObjectsAvailable',(err,objects)=>{if(!this.disposed)this.onFace(!err&&objects?.length===1?objects[0]:undefined);});
+      this.metadata.on('error',()=>{this.faceDetection=false;this.onFace(undefined);});
+     }else{await this.metadata.release();this.metadata=undefined;}
+    }catch(_){this.faceDetection=false;this.metadata=undefined;}
+   }
    if(this.video){if(!this.session.canAddOutput(this.video))throw new Error('设备不支持当前预览与录像组合');this.session.addOutput(this.video);}
    await this.session.commitConfig();
    if(this.disposed)throw new Error('已关闭相机');
    await this.session.start();
+   this.updateRotation();display.on('change',this.displayChanged);this.watchingDisplay=true;
+   if(this.metadata){try{await this.metadata.start();}catch(_){this.faceDetection=false;}}
    console.info('SELF_CAMERA_READY '+JSON.stringify({width:this.width,height:this.height,fps:30,position:target.cameraPosition,recording:false,canRecord:this.canRecord}));
    return (target.cameraPosition===camera.CameraPosition.CAMERA_POSITION_FRONT?'前置':'后置')+' · '+this.width+' × '+this.height+(this.canRecord?'':' · 当前系统无录像编码器，仅可预览');
   }catch(e){await this.release();throw new Error((e as Error).message||String(e));}
  }
+ updateRotation():void{
+  if(!this.preview||this.disposed)return;
+  try{
+   const degrees=display.getDefaultDisplaySync().rotation*90;
+   const rotation=this.preview.getPreviewRotation(degrees);
+   if(![0,90,180,270].includes(rotation))throw new Error('相机没有返回有效方向');
+   // Camera Kit rotates the buffer once. ArkUI only fits the resulting aspect ratio.
+   this.preview.setPreviewRotation(rotation,false);
+   this.onGeometry(this.width,this.height,rotation);
+   console.info('SELF_CAMERA_ROTATION '+JSON.stringify({display:degrees,preview:rotation,width:this.width,height:this.height}));
+  }catch(e){this.onError('相机方向设置失败，请重新打开：'+(e as Error).message);}
+ }
  async start():Promise<void>{
   if(!this.previewStarted||!this.video||!this.recorder||this.disposed||this.completed)throw new Error('请等候真实预览画面出现');
+  await this.recorder.updateRotation(this.video.getVideoRotation(display.getDefaultDisplaySync().rotation*90));
   await this.recorder.start();try{await this.video.start();this.recording=true;this.startedAt=Date.now();}catch(e){await this.release();throw new Error((e as Error).message);}
  }
  async stop():Promise<string>{
@@ -90,6 +125,9 @@ export class CameraCaptureSession {
  dispose():Promise<void>{this.disposed=true;if(!this.closing)this.closing=this.finishClose();return this.closing;}
  private async finishClose():Promise<void>{try{await this.opening;}catch(_){}await this.release();}
  private async release():Promise<void>{
+  if(this.watchingDisplay){display.off('change',this.displayChanged);this.watchingDisplay=false;}
+  try{await this.metadata?.stop();}catch(_){}
+  try{await this.metadata?.release();}catch(_){}this.metadata=undefined;
   try{await this.session?.stop();}catch(_){}
   try{await this.preview?.release();}catch(_){}this.preview=undefined;
   try{await this.video?.release();}catch(_){}this.video=undefined;

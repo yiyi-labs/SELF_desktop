@@ -32,3 +32,12 @@ UI 只复制请求与字节；N-API async worker 解析 GLB/解码照片。GL �
 [Huawei XComponent 指南](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/napi-xcomponent-guidelines)本次网页正文返回空，不能声称完整核实网页；本地头文件和实际编译为主要依据。官方 OpenHarmony 指南/实现只用于交叉核对，固定读取版本见 `evidence/native-es3/reference-commits.json`。
 
 实际失败包括：未初始化 NativeNode 模块导致 SurfaceHolder 创建失败、默认深度状态导致空白、保护例外 shader 缺括号、N-API 可选 ArrayBuffer 传 undefined。均保留失败日志并修复后重新运行。宿主 CMD AutoRun 改变 CMake 目录的问题通过本项目 `BuildCmd.cs` 的 `/D` 子进程适配解决；不修改注册表。
+
+
+## 2026-09-23 相机与界面增量
+
+仍使用商业 SDK26.0.0.105 / DevEco26.0.0.821。核对 PreviewOutput.getPreviewRotation(display.rotation * 90)、setPreviewRotation(rotation, false)，display change/off 回调；没有用 UI 旋转叠加镜头旋转。录像在开始前用 VideoOutput.getVideoRotation 与 AVRecorder.updateRotation 写入方向，真机编码路径未验证。
+
+MetadataOutput 仅在 supportedMetadataObjectTypes 中存在时加入会话。CoreVisionKit faceDetector 的 init/detect/release 和 ImageKit createPixelMapFromSurfaceWithTransformation / convertPixelFormat 来自商业 SDK 声明；后者 API23 起，当前只验 API26，不保证最低 API19 上的这一新增采集路径。模拟器 canIUse(SystemCapability.AI.Face.Detector) 返回 false，真实跟踪路径未验证。检测限频、单任务、纯内存、不上传、不落盘，停止等待当前任务结束后幂等释放。
+
+UiText 是应用内显示层映射，不修改作品、用户原话或协议标识。CameraCaptureView 使用原有 V1 组件风格；没有混入 V2 装饰器。原生背景切色沿现有 VSync 线程渐变，不增加渲染循环。

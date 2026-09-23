@@ -30,7 +30,6 @@ export default function experienceSuite(){
    const driver=Driver.create();await driver.delayMs(1800);
    const direct=await driver.findComponent(ON.text('拍摄'));
    if(direct)await direct.click();else{await (await driver.findComponent(ON.text('工具'))).click();await (await driver.waitForComponent(ON.text('拍摄面容视频'),5000)).click();}
-   await (await driver.waitForComponent(ON.text('打开相机 · 拍摄视频'),5000)).click();
    await driver.waitForComponent(ON.id('camera-preview-active'),15000);await driver.assertComponentExist(ON.id('camera-preview-active'));
    // Camera pixels are private: this test deliberately does not take screenshots.
    await driver.pressBack();await driver.delayMs(800);await driver.assertComponentExist(ON.text('示例面容 · 数字表达'));

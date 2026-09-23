@@ -1,0 +1,22 @@
+{
+  "checkedAt": "2026-09-23T09:14:14.7366998+08:00",
+  "device": "127.0.0.1:5555",
+  "deviceType": "tablet",
+  "instance": "MatePad Pro 13",
+  "cameraFeature": true,
+  "frontBack": true,
+  "windowsCameraConsent": "Allow",
+  "hostCameras": [
+    {
+      "Name": "Integrated IR Camera",
+      "Status": "OK"
+    },
+    {
+      "Name": "Integrated Camera",
+      "Status": "OK"
+    }
+  ],
+  "sdkCameraDeclaration": true,
+  "configurationChanged": false,
+  "reason": "Existing official image already enables host cameras; application Camera Kit preview probe supplies runtime evidence."
+}

@@ -4,11 +4,12 @@ constexpr const char* atmosphereVertex=R"(#version 300 es
 const vec2 p[3]=vec2[3](vec2(-1.,-1.),vec2(3.,-1.),vec2(-1.,3.));
 void main(){gl_Position=vec4(p[gl_VertexID],.999,1.);})";
 constexpr const char* atmosphereFragment=R"(#version 300 es
-precision highp float;uniform vec2 resolution;uniform float phase;uniform int palette;
+precision highp float;uniform vec2 resolution;uniform float phase;uniform vec3 paletteWeights;
 out vec4 color;
 void main(){vec2 uv=gl_FragCoord.xy/resolution;float aspect=resolution.x/resolution.y;
-vec3 cool=vec3(.63,.60,.80),warm=vec3(.95,.79,.68),mint=vec3(.61,.80,.80);
-if(palette==1){cool=vec3(.78,.59,.73);warm=vec3(.99,.82,.61);mint=vec3(.83,.77,.87);}if(palette==2){cool=vec3(.54,.75,.80);warm=vec3(.84,.92,.80);mint=vec3(.68,.76,.91);}
+vec3 cool=vec3(.63,.60,.80)*paletteWeights.x+vec3(.78,.59,.73)*paletteWeights.y+vec3(.54,.75,.80)*paletteWeights.z;
+vec3 warm=vec3(.95,.79,.68)*paletteWeights.x+vec3(.99,.82,.61)*paletteWeights.y+vec3(.84,.92,.80)*paletteWeights.z;
+vec3 mint=vec3(.61,.80,.80)*paletteWeights.x+vec3(.83,.77,.87)*paletteWeights.y+vec3(.68,.76,.91)*paletteWeights.z;
 vec3 c=mix(warm,cool,smoothstep(0.,1.,uv.y)*.82);
 vec2 p=uv-vec2(.48+.025*sin(phase*.12),.57+.015*cos(phase*.1));
 float halo=exp(-dot(p*vec2(1.25,1.),p*vec2(1.25,1.))*9.);
