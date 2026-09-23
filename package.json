@@ -6,6 +6,7 @@
     "assets:validate": "node scripts/validate-assets.mjs",
     "build": "node scripts/build.mjs",
     "test": "node --experimental-strip-types --test renderer-web/tests/*.test.ts",
+    "test:camera-guidance": "node scripts/test-camera-guidance.mjs",
     "test:browser": "node scripts/browser-test.mjs",
     "test:advanced": "node scripts/browser-advanced-test.mjs",
     "test:design": "node scripts/browser-design-test.mjs",

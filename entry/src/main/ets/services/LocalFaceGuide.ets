@@ -16,6 +16,7 @@ export class LocalFaceGuide {
  private task:Promise<void>|undefined;private closing:Promise<void>|undefined;
  private errors:number=0;private tracker:FaceAnchorTracker=new FaceAnchorTracker();
  private width:number=0;private height:number=0;
+ private orientation:number=-1;
  private recording:boolean=false;private settling:boolean=false;
  private file:fs.File|undefined;private path:string='';private startedAt:number=0;
  private logAt:number=0;
@@ -37,6 +38,7 @@ export class LocalFaceGuide {
  private async read(frame:image.Image,rotation:number,format:number):Promise<void>{
   let pixel:image.PixelMap|undefined;const began=Date.now();let stage='receiver';
   try{
+   if(rotation!==this.orientation){this.orientation=rotation;this.tracker.reset();this.lastVisionFaces=[];this.lastVisionAt=0;this.visionMisses=0;}
    const component=await frame.getComponent(image.ComponentType.JPEG);
    const w=frame.size.width,h=frame.size.height;
    // CameraFormat 3 is RGBA, 1003 is NV21. Never infer format from byte count.
@@ -76,6 +78,7 @@ export class LocalFaceGuide {
    stage='native';const result=JSON.parse((await native.camera(JSON.stringify(request),rgba)).json) as FrameResult;
    if(this.stopped)return;
    let found:DetectedFace[]=result.faces;
+   found.forEach((face:DetectedFace)=>{face.sampleAt=began;});
    if(!this.visionTried){
     this.visionTried=true;
     try{this.visionReady=await faceDetector.init();console.info('SELF_COREVISION_INIT '+this.visionReady);}
@@ -90,7 +93,7 @@ export class LocalFaceGuide {
      const faces=await faceDetector.detect(info);
      const official=faces.map((face:faceDetector.Face)=>({confidence:face.probability,x:face.rect.left/this.width,y:face.rect.top/this.height,width:face.rect.width/this.width,height:face.rect.height/this.height,landmarks:face.points.map((point:faceDetector.FacePoint)=>({x:point.x/this.width,y:point.y/this.height} as FacePoint)),yaw:face.pose.yaw,roll:face.pose.roll} as DetectedFace));
      if(official.length!==this.visionLogCount||began-this.visionLogAt>5000){this.visionLogAt=began;this.visionLogCount=official.length;console.info('SELF_COREVISION_FACES '+official.length);}
-     if(official.length===1&&official[0].confidence>=.8&&official[0].landmarks.length===5){this.lastVisionFaces=official;this.lastVisionAt=began;this.visionMisses=0;}
+     if(official.length===1&&official[0].confidence>=.8&&official[0].landmarks.length===5){official[0].sampleAt=began;official[0].poseSampleAt=began;this.lastVisionFaces=official;this.lastVisionAt=began;this.visionMisses=0;}
      else if(++this.visionMisses>=3){this.lastVisionFaces=[];}
     }catch(e){console.info('SELF_COREVISION_DETECT_FAILED '+String(e));this.visionReady=false;}
    }
@@ -101,7 +104,8 @@ export class LocalFaceGuide {
      const nearby=found.find((candidate:DetectedFace)=>candidate.landmarks.length===5&&
       Math.hypot(candidate.landmarks[2].x-confirmed.landmarks[2].x,candidate.landmarks[2].y-confirmed.landmarks[2].y)<Math.max(.09,confirmed.width*.65)&&
       candidate.width/confirmed.width>.55&&candidate.width/confirmed.width<1.8);
-     found=nearby?[nearby]:began-this.lastVisionAt<450?[confirmed]:[];
+     if(nearby){nearby.yaw=confirmed.yaw;nearby.roll=confirmed.roll;nearby.poseSampleAt=this.lastVisionAt;found=[nearby];}
+     else found=began-this.lastVisionAt<450?[confirmed]:[];
     }
    }
    if(detect)this.onResult(this.tracker.update(found,began,this.width/this.height));

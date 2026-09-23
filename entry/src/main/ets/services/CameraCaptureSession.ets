@@ -6,7 +6,7 @@ import { fileIo as fs } from '@kit.CoreFileKit';
 import { display } from '@kit.ArkUI';
 
 interface CameraDeviceEvidence {position:number;type:number;connection:number;}
-interface CameraClipEvidence {schemaVersion:number;source:string;createdAt:number;durationMs:number;width:number;height:number;bytes:number;previewStarted:boolean;reconstructionStatus:string;poseData:boolean;private:boolean;}
+interface CameraClipEvidence {schemaVersion:number;source:string;createdAt:number;durationMs:number;width:number;height:number;bytes:number;rotation:number;front:boolean;previewStarted:boolean;reconstructionStatus:string;poseData:boolean;private:boolean;}
 
 /** Native Camera Kit surface preview + silent MP4. No network or reconstruction here. */
 export class CameraCaptureSession {
@@ -15,11 +15,17 @@ export class CameraCaptureSession {
  private analysis:camera.PreviewOutput|undefined;
  private frameTask:Promise<void>|undefined;
  private reading:boolean=false;
+ private lastFrameShape:string='';
  private previewRotation:number=0;
+ private videoRotation:number=0;private actualFront:boolean=false;private lensOrientation:number=0;
  onFrame:(frame:image.Image,rotation:number,format:number)=>Promise<void>=async(frame)=>{await frame.release();};
  private async receive(format:number):Promise<void>{
   if(this.disposed||this.reading||!this.receiver)return;this.reading=true;
-  try{const frame=await this.receiver.readLatestImage();if(frame)await this.onFrame(frame,this.previewRotation,format);}
+  try{const frame=await this.receiver.readLatestImage();if(frame){
+   const shape=frame.size.width+'x'+frame.size.height+'-'+format+'-'+this.previewRotation;
+   if(shape!==this.lastFrameShape){this.lastFrameShape=shape;console.info('SELF_CAMERA_ANALYSIS_STREAM '+JSON.stringify({frameWidth:frame.size.width,frameHeight:frame.size.height,profileWidth:this.width,profileHeight:this.height,format,previewRotation:this.previewRotation}));}
+   await this.onFrame(frame,this.previewRotation,format);
+  }}
   catch(e){console.info('SELF_CAMERA_RECEIVER_ERROR '+JSON.stringify(e));}
   finally{this.reading=false;}
  }
@@ -28,7 +34,7 @@ export class CameraCaptureSession {
  private metadata:camera.MetadataOutput|undefined;
  private watchingDisplay:boolean=false;
  private displayChanged: (id:number)=>void=()=>this.updateRotation();
- onGeometry:(width:number,height:number,rotation:number)=>void=()=>{};
+ onGeometry:(width:number,height:number,rotation:number,front:boolean,lensOrientation:number,displayRotation:number)=>void=()=>{};
  onFace:(face:camera.MetadataObject|undefined)=>void=()=>{};
  faceDetection:boolean=false;
  private video:camera.VideoOutput|undefined;
@@ -55,6 +61,8 @@ export class CameraCaptureSession {
    console.info('SELF_CAMERA_DEVICES '+JSON.stringify(devices.map((d:camera.CameraDevice)=>({position:d.cameraPosition,type:d.cameraType,connection:d.connectionType} as CameraDeviceEvidence))));
    if(!devices.length)throw new Error('当前设备没有可用摄像头，请检查 Windows 摄像头权限与占用情况');
    const target=devices.find((d:camera.CameraDevice)=>d.cameraPosition===(front?camera.CameraPosition.CAMERA_POSITION_FRONT:camera.CameraPosition.CAMERA_POSITION_BACK))||devices[0];
+   this.actualFront=target.cameraPosition===camera.CameraPosition.CAMERA_POSITION_FRONT;
+   this.lensOrientation=target.cameraOrientation;
    if(!manager.getSupportedSceneModes(target).includes(camera.SceneMode.NORMAL_VIDEO))throw new Error('当前摄像头没有开放标准录像模式');
    const capabilities=manager.getSupportedOutputCapability(target,camera.SceneMode.NORMAL_VIDEO);
    console.info('SELF_CAMERA_METADATA_TYPES '+JSON.stringify(capabilities.supportedMetadataObjectTypes));
@@ -128,13 +136,17 @@ export class CameraCaptureSession {
    const rotation=reported;
    // Camera Kit rotates the buffer once. ArkUI only fits the resulting aspect ratio.
    this.preview.setPreviewRotation(rotation,false);this.previewRotation=rotation;
-   this.onGeometry(this.width,this.height,rotation);
-   console.info('SELF_CAMERA_ROTATION '+JSON.stringify({display:degrees,reported,preview:rotation,width:this.width,height:this.height}));
+   // ImageReceiver has no display; keep its producer in the raw sensor/profile
+   // orientation so the analysis PixelMap has exactly one software rotation.
+   try{this.analysis?.setPreviewRotation(0,true);}catch(e){console.info('SELF_CAMERA_ANALYSIS_ROTATION_UNAVAILABLE '+String(e));}
+   this.onGeometry(this.width,this.height,rotation,this.actualFront,this.lensOrientation,degrees);
+   console.info('SELF_CAMERA_ROTATION '+JSON.stringify({display:degrees,lens:this.lensOrientation,reported,preview:rotation,width:this.width,height:this.height,front:this.actualFront}));
   }catch(e){this.onError('相机方向设置失败，请重新打开：'+(e as Error).message);}
  }
  async start():Promise<void>{
   if(!this.previewStarted||!this.video||!this.recorder||this.disposed||this.completed)throw new Error('请等候真实预览画面出现');
-  await this.recorder.updateRotation(this.video.getVideoRotation(display.getDefaultDisplaySync().rotation*90));
+  this.videoRotation=this.video.getVideoRotation(display.getDefaultDisplaySync().rotation*90);
+  await this.recorder.updateRotation(this.videoRotation);
   try{await this.video.start();await this.recorder.start();this.recording=true;this.startedAt=Date.now();}
   catch(e){try{await this.video.stop();}catch(_){}await this.release();throw new Error((e as Error).message);}
  }
@@ -143,7 +155,7 @@ export class CameraCaptureSession {
   await this.recorder.stop();await this.video.stop();this.recording=false;
   if(!this.file)throw new Error('录像文件未打开');fs.closeSync(this.file);this.file=undefined;
   const bytes=fs.statSync(this.path).size;if(bytes<1024)throw new Error('录像没有产生有效文件');
-  const metadata:CameraClipEvidence={schemaVersion:1,source:'native-camera-kit',createdAt:this.startedAt,durationMs:Date.now()-this.startedAt,width:this.width,height:this.height,bytes,previewStarted:this.previewStarted,reconstructionStatus:'not-reconstructed',poseData:false,private:true};
+  const metadata:CameraClipEvidence={schemaVersion:1,source:'native-camera-kit',createdAt:this.startedAt,durationMs:Date.now()-this.startedAt,width:this.width,height:this.height,bytes,rotation:this.videoRotation,front:this.actualFront,previewStarted:this.previewStarted,reconstructionStatus:'not-reconstructed',poseData:false,private:true};
   const file=fs.openSync(this.path+'.json',fs.OpenMode.CREATE|fs.OpenMode.READ_WRITE);try{fs.writeSync(file.fd,JSON.stringify(metadata));}finally{fs.closeSync(file);}
   this.completed=true;console.info('SELF_CAMERA_SAVED '+JSON.stringify(metadata));return this.path;
  }
