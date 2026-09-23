@@ -1,0 +1,8 @@
+09-23 14:24:22.168 19375 19375 I A03d00/JSAPP: SELF_CAMERA_RECON_CAPABILITY {"api26Symbols":false,"available":false,"captureIntegrated":false,"gsAcceptanceVerified":false,"libraryLoaded":false,"message":"当前设备未通过空间重建能力检查；不会用示例面容代替你的建模结果。","nativeSessionImplemented":true,"pipelineImplemented":false,"qualityPolicy":"preserve-source-no-decimation-no-early-success","status":-1}
+09-23 14:24:22.431 19375 19375 I A03d00/JSAPP: SELF_CAMERA_ROTATION {"display":270,"preview":180,"width":1280,"height":720}
+09-23 14:24:22.431 19375 19375 I A03d00/JSAPP: SELF_CAMERA_READY {"width":1280,"height":720,"position":2,"recording":false,"canRecord":false,"previewOnly":true}
+09-23 14:24:23.417 19375 19375 I A03d00/JSAPP: SELF_CAMERA_FRAME {"width":960,"height":540,"detected":true,"faces":1,"processingMs":41.235697,"frames":0,"cycleMs":91,"source":"camera-image-receiver","privatePixelsLogged":false}
+09-23 14:24:24.924 19375 19375 I A03d00/JSAPP: SELF_CAMERA_GUIDANCE_FOLLOWING {"source":"tracked-relative-face-motion","reconstructionPose":false}
+09-23 14:24:25.930 19375 19375 I A03d00/JSAPP: SELF_CAMERA_FRAME {"width":960,"height":540,"detected":false,"faces":0,"processingMs":0.044755,"frames":0,"cycleMs":28,"source":"camera-image-receiver","privatePixelsLogged":false}
+09-23 14:24:28.436 19375 19375 I A03d00/JSAPP: SELF_CAMERA_FRAME {"width":960,"height":540,"detected":true,"faces":1,"processingMs":22.82303,"frames":0,"cycleMs":56,"source":"camera-image-receiver","privatePixelsLogged":false}
+09-23 14:24:29.128 19375 19375 I A03d00/JSAPP: SELF_CAMERA_GUIDANCE_FOLLOWING {"source":"tracked-relative-face-motion","reconstructionPose":false}

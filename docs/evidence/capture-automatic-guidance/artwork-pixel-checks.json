@@ -1,0 +1,9 @@
+{
+  "device": "127.0.0.1:5555",
+  "cameraPixelsCaptured": false,
+  "personalTrackingValidated": false,
+  "personalReconstructionValidated": false,
+  "transparentFraction": 0.9244349612770666,
+  "lineAnimationChangesFrames": true,
+  "transparentCorners": true
+}

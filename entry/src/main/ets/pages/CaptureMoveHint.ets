@@ -5,7 +5,13 @@ export struct CaptureMoveHint {
  @Param language:string='zh';
  @Param hintSize:number=320;
  @Local travel:number=-1;
- aboutToAppear():void{if(this.motion)this.getUIContext().animateTo({duration:2300,iterations:-1,playMode:PlayMode.Alternate,curve:Curve.EaseInOut},()=>{this.travel=1;});}
+ private startTimer:number=-1;
+ aboutToAppear():void{
+  this.travel=this.motion?-1:0;
+  // Wait for the initial layout so the first visible position is an animation start value.
+  if(this.motion)this.startTimer=setTimeout(()=>{this.getUIContext().animateTo({duration:2300,iterations:-1,playMode:PlayMode.Alternate,curve:Curve.EaseInOut},()=>{this.travel=1;});},100);
+ }
+ aboutToDisappear():void{clearTimeout(this.startTimer);}
  build(){
   Column({space:18}){
    Stack(){
@@ -15,13 +21,13 @@ export struct CaptureMoveHint {
     Path().commands('M 22 178 Q 110 220 198 178 M 185 177 L 198 178 L 193 191')
      .width(220).height(222).fill(Color.Transparent).stroke('#80FFFFFF').strokeWidth(2).strokeDashArray([5,6])
     Stack(){
-     Rect().width(68).height(114).radius(13).fill('#2D132331').stroke(Color.White).strokeWidth(3.4)
-     Rect().width(48).height(86).radius(5).fill('#0AFFFFFF').stroke('#A8FFFFFF').strokeWidth(1).translate({y:-3})
+     Rect().width(68).height(114).radius(13).fill(Color.Transparent).stroke(Color.White).strokeWidth(3.4)
+     Rect().width(48).height(86).radius(5).fill(Color.Transparent).stroke('#A8FFFFFF').strokeWidth(1).translate({y:-3})
      Line().startPoint([0,0]).endPoint([19,0]).stroke(Color.White).strokeWidth(2.4).width(19).height(2).translate({y:48})
     }.width(74).height(122).rotate({angle:this.travel*18}).translate({x:this.travel*64,y:20+Math.abs(this.travel)*7})
    }.width(260).height(242).scale({x:this.hintSize/320,y:this.hintSize/320})
-   Text(this.language==='en'?'Slowly move the camera to one side':'让镜头慢慢移向一侧').fontSize(this.hintSize>300?21:18).fontWeight(FontWeight.Medium).fontColor(Color.White).textAlign(TextAlign.Center)
-   Text(this.language==='en'?'Keep a relaxed, steady expression':'面容保持自然、稳定就好').fontSize(13).fontColor('#D6FFFFFF')
-  }.id('camera-motion-hint').width(this.hintSize).padding({top:12,bottom:22,left:16,right:16}).backgroundColor('#52101926').backgroundBlurStyle(BlurStyle.COMPONENT_ULTRA_THIN).border({width:1,color:'#30FFFFFF'}).borderRadius(36).shadow({radius:35,color:'#20000000'}).hitTestBehavior(HitTestMode.None)
+   Text(this.language==='en'?'Slowly move the camera to one side':'让镜头慢慢移向一侧').fontSize(this.hintSize>300?21:18).fontWeight(FontWeight.Medium).fontColor(Color.White).textAlign(TextAlign.Center).textShadow({radius:2,color:'#90000000',offsetY:1})
+   Text(this.language==='en'?'Keep a relaxed, steady expression':'面容保持自然、稳定就好').fontSize(13).fontColor('#EFFFFFFF').textShadow({radius:2,color:'#90000000',offsetY:1})
+  }.id('camera-motion-hint').width(this.hintSize).padding({top:12,bottom:22,left:16,right:16}).hitTestBehavior(HitTestMode.None)
  }
 }

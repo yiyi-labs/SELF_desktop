@@ -1,0 +1,58 @@
+{
+  "device": "127.0.0.1:5555",
+  "cameraPixelsCaptured": false,
+  "personalTrackingValidated": false,
+  "personalReconstructionValidated": false,
+  "transparentFraction": 0.9244349612770666,
+  "lineAnimationChangesFrames": true,
+  "transparentCorners": true,
+  "previewStarted": true,
+  "shutterAbsent": true,
+  "newRecordings": 0,
+  "hintPresent": true,
+  "fullScreen": true,
+  "nodes": {
+    "camera-fullscreen": {
+      "bounds": "[0,86][2880,1864]",
+      "text": "",
+      "blur": "",
+      "backgroundColor": "#FF151822"
+    },
+    "camera-preview-active": {
+      "bounds": "[1344,1780][1536,1808]",
+      "text": "画面只在本机处理",
+      "blur": "",
+      "backgroundColor": "#00000000"
+    },
+    "camera-motion-hint": {
+      "bounds": "[1080,620][1800,1323]",
+      "text": "",
+      "blur": "",
+      "backgroundColor": "#00000000"
+    },
+    "camera-anchor": {
+      "bounds": "[868,399][2012,1543]",
+      "text": "",
+      "blur": "",
+      "backgroundColor": "#00000000"
+    },
+    "camera-capture-outcome": {
+      "bounds": "[1244,1594][1636,1624]",
+      "text": "本机暂不能建模 · 可体验面容跟随",
+      "blur": "",
+      "backgroundColor": "#00000000"
+    },
+    "camera-guide": {
+      "bounds": "[1287,1538][1593,1578]",
+      "text": "看见你了，保持自然",
+      "blur": "",
+      "backgroundColor": "#00000000"
+    },
+    "self-camera-preview": {
+      "bounds": "[0,86][2880,1864]",
+      "text": "",
+      "blur": "",
+      "backgroundColor": "#00000000"
+    }
+  }
+}

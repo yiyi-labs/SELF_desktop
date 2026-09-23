@@ -6,7 +6,7 @@ import native from 'libself_native.so';
 import { DetectedFace,FaceAnchorTracker } from '../../../main/ets/services/FaceAnchorTracker';
 import { FaceAnchor } from '../../../main/ets/services/FaceAnchorTracker';
 import { CaptureMotionGuide } from '../../../main/ets/services/CaptureMotionGuide';
-import { Driver,ON } from '@ohos.UiTest';
+interface GuideReport {recordedAt:number;done:boolean;error:string;cameraPixels:boolean;}
 interface Request {op:string;width?:number;height?:number;timestamp?:number;detect?:boolean;record?:boolean;fd?:number;}
 interface Detection {faces:DetectedFace[];processingMs:number;}
 interface Stats {frames:number;width:number;height:number;durationMs:number;fps:number;}
@@ -14,17 +14,20 @@ function trackedFace(x:number=.5,yaw:number=0,y:number=.45,width:number=.4,heigh
 export default function cameraPipelineSuite(){
  describe('SELFNativeCameraPipeline',()=>{
   it('rendersGuideArtworkWithoutCameraPixels',0,async()=>{
-   const app=abilityDelegatorRegistry.getAbilityDelegator();const context=(await app.getCurrentTopAbility()).context;
-   const driver=Driver.create();
+   const app=abilityDelegatorRegistry.getAbilityDelegator();const began=Date.now();let result:GuideReport|undefined;
    try{
     await app.startAbility({bundleName:'com.self.mirror',moduleName:'entry_test',abilityName:'GuideTestAbility'});
-    await driver.waitForComponent(ON.id('camera-motion-hint'),5000);await driver.delayMs(500);
-    await driver.screenCapture(context.filesDir+'/camera-guide-preview-a.png');await driver.delayMs(1100);
-    await driver.screenCapture(context.filesDir+'/camera-guide-preview-b.png');
-    const hint=await (await driver.findComponent(ON.id('camera-motion-hint'))).getBounds();
-    const size=await driver.getDisplaySize();expect(Math.abs(hint.left+hint.right-size.x)<8).assertTrue();
-    console.info('SELF_CAMERA_GUIDE_ARTWORK '+JSON.stringify({hint,viewport:size,cameraPixels:false}));
-   }finally{await app.startAbility({bundleName:'com.self.mirror',abilityName:'EntryAbility'});await driver.delayMs(900);}
+    for(let i=0;i<40&&!result;i++){
+     await new Promise<void>((resolve:()=>void)=>setTimeout(resolve,250));
+     const top=await app.getCurrentTopAbility();
+     if(top&&top.context.abilityInfo.name==='GuideTestAbility'){
+      const path=top.context.filesDir+'/camera-guide-artwork.json';
+      if(fs.accessSync(path)){const report=JSON.parse(fs.readTextSync(path)) as GuideReport;if(report.recordedAt>=began)result=report;}
+     }
+    }
+    expect(!!result).assertTrue();expect(result!.done).assertTrue();expect(result!.cameraPixels).assertFalse();
+    console.info('SELF_CAMERA_GUIDE_ARTWORK '+JSON.stringify(result));
+   }finally{await app.startAbility({bundleName:'com.self.mirror',abilityName:'EntryAbility'});}
   });
   it('realNativeFaceDetectionAndSoftwareMp4',0,async()=>{
    const app=abilityDelegatorRegistry.getAbilityDelegator();const context=(await app.getCurrentTopAbility()).context;

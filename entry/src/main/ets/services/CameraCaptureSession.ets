@@ -43,10 +43,10 @@ export class CameraCaptureSession {
  onPreview:()=>void=()=>{};
  onError:(message:string)=>void=()=>{};
  canRecord:boolean=false;
- async open(context:common.UIAbilityContext,surfaceId:string,front:boolean):Promise<string>{
-  this.opening=this.configure(context,surfaceId,front);return this.opening;
+ async open(context:common.UIAbilityContext,surfaceId:string,front:boolean,prepareRecording:boolean=true):Promise<string>{
+  this.opening=this.configure(context,surfaceId,front,prepareRecording);return this.opening;
  }
- private async configure(context:common.UIAbilityContext,surfaceId:string,front:boolean):Promise<string>{
+ private async configure(context:common.UIAbilityContext,surfaceId:string,front:boolean,prepareRecording:boolean):Promise<string>{
   try{
    const permissions=await abilityAccessCtrl.createAtManager().requestPermissionsFromUser(context,['ohos.permission.CAMERA']);
    if(permissions.authResults.some((result:number)=>result!==0))throw new Error('尚未允许摄像头，可在系统设置中开启后重试');
@@ -58,19 +58,22 @@ export class CameraCaptureSession {
    if(!manager.getSupportedSceneModes(target).includes(camera.SceneMode.NORMAL_VIDEO))throw new Error('当前摄像头没有开放标准录像模式');
    const capabilities=manager.getSupportedOutputCapability(target,camera.SceneMode.NORMAL_VIDEO);
    console.info('SELF_CAMERA_METADATA_TYPES '+JSON.stringify(capabilities.supportedMetadataObjectTypes));
-   this.recorder=await media.createAVRecorder();const encoders=await this.recorder.getAvailableEncoder();
+   // Guidance-only entry does not prepare an encoder, video output or empty MP4.
+   let encoders:media.EncoderInfo[]=[];
+   if(prepareRecording){this.recorder=await media.createAVRecorder();encoders=await this.recorder.getAvailableEncoder();}
    console.info('SELF_CAMERA_ENCODERS '+JSON.stringify(encoders));
    console.info('SELF_CAMERA_PROFILES '+JSON.stringify(capabilities.videoProfiles));
    const encoder=encoders.find((e:media.EncoderInfo)=>e.mimeType===media.CodecMimeType.VIDEO_AVC)||encoders.find((e:media.EncoderInfo)=>e.type==='video');
    const videos=capabilities.videoProfiles.filter((p:camera.VideoProfile)=>p.size.width<=Math.min(1920,encoder?.width?.max||1920)&&p.size.height<=Math.min(1080,encoder?.height?.max||1080)&&p.frameRateRange.min<=30&&p.frameRateRange.max>=30).sort((a:camera.VideoProfile,b:camera.VideoProfile)=>b.size.width-a.size.width);
    const profile=videos.find((v:camera.VideoProfile)=>capabilities.previewProfiles.some((p:camera.Profile)=>p.size.width===v.size.width&&p.size.height===v.size.height));
-   if(!profile)throw new Error('当前摄像头未提供匹配的预览与录像规格');
-   const previewProfile=capabilities.previewProfiles.find((p:camera.Profile)=>p.size.width===profile.size.width&&p.size.height===profile.size.height);
+   if(prepareRecording&&!profile)throw new Error('当前摄像头未提供匹配的预览与录像规格');
+   const previewProfile=prepareRecording?capabilities.previewProfiles.find((p:camera.Profile)=>p.size.width===profile!.size.width&&p.size.height===profile!.size.height):
+    capabilities.previewProfiles.filter((p:camera.Profile)=>p.size.width<=1920&&p.size.height<=1080).sort((a:camera.Profile,b:camera.Profile)=>b.size.width*b.size.height-a.size.width*a.size.height)[0];
    if(!previewProfile)throw new Error('没有可用预览规格');
-   this.width=profile.size.width;this.height=profile.size.height;
+   this.width=previewProfile.size.width;this.height=previewProfile.size.height;
    this.input=manager.createCameraInput(target);await this.input.open();
    if(this.disposed)throw new Error('已关闭相机');
-   if(encoder){
+   if(encoder&&profile&&this.recorder){
    const root=context.filesDir+'/captures';if(!fs.accessSync(root))fs.mkdirSync(root);
    this.path=root+'/capture-'+Date.now()+'.mp4';this.file=fs.openSync(this.path,fs.OpenMode.CREATE|fs.OpenMode.READ_WRITE);
    this.recorder.on('error',(error)=>this.onError('录像不可用：'+error.code));
@@ -80,7 +83,7 @@ export class CameraCaptureSession {
    await this.recorder.prepare(config);
    this.video=manager.createVideoOutput(profile,await this.recorder.getInputSurface());
    this.canRecord=true;
-   }else{await this.recorder.release();this.recorder=undefined;}
+   }else{await this.recorder?.release();this.recorder=undefined;}
    this.preview=manager.createPreviewOutput(previewProfile,surfaceId);
    this.preview.on('frameStart',()=>{this.previewStarted=true;this.onPreview();console.info('SELF_CAMERA_PREVIEW_STARTED');});
    this.preview.on('error',(error)=>this.onError('预览不可用：'+error.code));
@@ -101,7 +104,7 @@ export class CameraCaptureSession {
     }catch(_){this.faceDetection=false;this.metadata=undefined;}
    }
    if(this.video){if(!this.session.canAddOutput(this.video))throw new Error('设备不支持当前预览与录像组合');this.session.addOutput(this.video);}
-   this.receiver=image.createImageReceiver(profile.size,image.ImageFormat.JPEG,3);
+   this.receiver=image.createImageReceiver(previewProfile.size,image.ImageFormat.JPEG,3);
    this.analysis=manager.createPreviewOutput(previewProfile,await this.receiver.getReceivingSurfaceId());
    if(!this.session.canAddOutput(this.analysis))throw new Error('当前设备未提供相机帧读取组合');
    this.session.addOutput(this.analysis);
@@ -111,8 +114,8 @@ export class CameraCaptureSession {
    await this.session.start();
    this.updateRotation();display.on('change',this.displayChanged);this.watchingDisplay=true;
    if(this.metadata){try{await this.metadata.start();}catch(_){this.faceDetection=false;}}
-   console.info('SELF_CAMERA_READY '+JSON.stringify({width:this.width,height:this.height,fps:30,position:target.cameraPosition,recording:false,canRecord:this.canRecord}));
-   return (target.cameraPosition===camera.CameraPosition.CAMERA_POSITION_FRONT?'前置':'后置')+' · '+this.width+' × '+this.height+(this.canRecord?'':' · 系统录像编码器未提供');
+   console.info('SELF_CAMERA_READY '+JSON.stringify({width:this.width,height:this.height,position:target.cameraPosition,recording:false,canRecord:this.canRecord,previewOnly:!prepareRecording}));
+   return (target.cameraPosition===camera.CameraPosition.CAMERA_POSITION_FRONT?'前置':'后置')+' · '+this.width+' × '+this.height+(prepareRecording&&!this.canRecord?' · 系统录像编码器未提供':'');
   }catch(e){await this.release();throw new Error((e as Error).message||String(e));}
  }
  updateRotation():void{

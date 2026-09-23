@@ -1,34 +1,28 @@
 > hvigor [32mUP-TO-DATE :entry:default@PreBuild...  [39m
 > hvigor [32mFinished :entry:default@CreateModuleInfo... after 1 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@GenerateMetadata...  [39m
-> hvigor [32mFinished :entry:default@ConfigureCmake... after 50 ms [39m
+> hvigor [32mFinished :entry:default@ConfigureCmake... after 44 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@MergeProfile...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@CreateBuildProfile...  [39m
 > hvigor [32mFinished :entry:default@PreCheckSyscap... after 1 ms [39m
-> hvigor [32mFinished :entry:default@GeneratePkgSdkInfo... after 4 ms [39m
+> hvigor [32mFinished :entry:default@GeneratePkgSdkInfo... after 5 ms [39m
 > hvigor [32mFinished :entry:default@ProcessIntegratedHsp... after 1 ms [39m
-> hvigor [32mFinished :entry:default@BuildNativeWithCmake... after 34 ms [39m
+> hvigor [32mFinished :entry:default@BuildNativeWithCmake... after 47 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@MakePackInfo...  [39m
-> hvigor [32mFinished :entry:default@SyscapTransform... after 10 ms [39m
+> hvigor [32mFinished :entry:default@SyscapTransform... after 12 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@GeneratePkgContextInfo...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@ProcessProfile...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@ProcessRouterMap...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@ProcessShareConfig...  [39m
-> hvigor [32mFinished :entry:default@ProcessStartupConfig... after 2 ms [39m
+> hvigor [32mFinished :entry:default@ProcessStartupConfig... after 8 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@ProcessResource...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@GenerateLoaderJson...  [39m
-> hvigor [32mFinished :entry:default@CompileResource... after 277 ms [39m
-> hvigor [32mFinished :entry:default@BuildJS... after 5 ms [39m
-> hvigor WARN: When performing compilation for the arm64-v8a architecture:
-clang++: warning: argument unused during compilation: '--gcc-toolchain=C:/Program Files/Huawei/DevEco Studio/sdk/default/openharmony/native/llvm' [-Wunused-command-line-argument]
-
-> hvigor WARN: When performing compilation for the x86_64 architecture:
-clang++: warning: argument unused during compilation: '--gcc-toolchain=C:/Program Files/Huawei/DevEco Studio/sdk/default/openharmony/native/llvm' [-Wunused-command-line-argument]
-
-> hvigor [32mFinished :entry:default@BuildNativeWithNinja... after 2 s 753 ms [39m
-> hvigor [32mFinished :entry:default@ProcessLibs... after 74 ms [39m
-> hvigor [32mFinished :entry:default@DoNativeStrip... after 134 ms [39m
-> hvigor [32mFinished :entry:default@CacheNativeLibs... after 10 ms [39m
+> hvigor [32mFinished :entry:default@CompileResource... after 326 ms [39m
+> hvigor [32mFinished :entry:default@BuildJS... after 3 ms [39m
+> hvigor [32mFinished :entry:default@BuildNativeWithNinja... after 193 ms [39m
+> hvigor [32mUP-TO-DATE :entry:default@ProcessLibs...  [39m
+> hvigor [32mUP-TO-DATE :entry:default@DoNativeStrip...  [39m
+> hvigor [32mUP-TO-DATE :entry:default@CacheNativeLibs...  [39m
 > hvigor WARN: WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/entryability/EntryAbility.ets:8:100
  This API is unavailable to 2in1.
 
@@ -76,84 +70,76 @@ WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/Lo
 WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/LocalFaceGuide.ets:107:45
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:61:24
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:63:45
  The system capacity of this api 'media' is not supported on all devices
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:64:68
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:66:68
  The system capacity of this api 'media' is not supported on all devices
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:77:57
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:80:57
  The system capacity of this api 'media' is not supported on all devices
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:78:25
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:81:25
  The system capacity of this api 'media' is not supported on all devices
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:80:24
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:83:24
  To use this API, you need to apply for the permissions: ohos.permission.MICROPHONE
 This permission is required only if audio recording is involved. [since 12]
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:132:23
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:135:23
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:132:49
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:135:49
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:132:74
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:135:74
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:133:23
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:136:23
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:137:47
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:140:47
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:138:47
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:141:47
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:139:18
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:142:18
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:141:17
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:144:17
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:141:94
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:144:94
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:141:150
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:144:150
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:160:37
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:163:37
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:160:62
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CameraCaptureSession.ets:163:62
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:113:57
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:114:57
  The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:113:81
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:114:81
  The 'stroke' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:114:61
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:115:61
  The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:114:85
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:115:85
  The 'stroke' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:115:53
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:116:53
  The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
- It is recommended to use apiAvailable to safeguard API compatibility.
-
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:130:32
- The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
- It is recommended to use apiAvailable to safeguard API compatibility.
-
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:130:56
- The 'stroke' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
 WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/ProductFactsDeck.ets:22:13
@@ -386,15 +372,15 @@ WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/Nativ
  Function may throw exceptions. Special handling is required.
 
 
-> hvigor [32mFinished :entry:default@CompileArkTS... after 5 s 96 ms [39m
-> hvigor [32mFinished :entry:default@GeneratePkgModuleJson... after 4 ms [39m
+> hvigor [32mFinished :entry:default@CompileArkTS... after 5 s 269 ms [39m
+> hvigor [32mFinished :entry:default@GeneratePkgModuleJson... after 3 ms [39m
 > hvigor [32mFinished :entry:default@ProcessCompiledResources... after 1 ms [39m
-> hvigor [32mFinished :entry:default@PackageHap... after 793 ms [39m
-> hvigor [32mFinished :entry:default@PackingCheck... after 11 ms [39m
+> hvigor [32mFinished :entry:default@PackageHap... after 636 ms [39m
+> hvigor [32mFinished :entry:default@PackingCheck... after 9 ms [39m
 > hvigor WARN: No signingConfig found for product default
 > hvigor [32mFinished :entry:default@SignHap... after 2 ms [39m
-> hvigor [32mFinished :entry:default@CollectDebugSymbol... after 2 ms [39m
+> hvigor [32mFinished :entry:default@CollectDebugSymbol... after 1 ms [39m
 > hvigor [32mFinished :entry:assembleHap... after 1 ms [39m
-> hvigor [32mBUILD SUCCESSFUL in 13 s 382 ms [39m
+> hvigor [32mBUILD SUCCESSFUL in 14 s 525 ms [39m
 
-33 tasks in total: 22 executed, 11 up-to-date
+33 tasks in total: 19 executed, 14 up-to-date

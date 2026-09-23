@@ -1,0 +1,130 @@
+
+OHOS_REPORT_SUM: 6
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+OHOS_REPORT_STATUS: current=1
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=6
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=rendersGuideArtworkWithoutCameraPixels
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+OHOS_REPORT_STATUS: current=1
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=6
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=rendersGuideArtworkWithoutCameraPixels
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=2623
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+OHOS_REPORT_STATUS: current=2
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=6
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=realNativeFaceDetectionAndSoftwareMp4
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+OHOS_REPORT_STATUS: current=2
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=6
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=realNativeFaceDetectionAndSoftwareMp4
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=513
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+OHOS_REPORT_STATUS: current=3
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=6
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=anchorAcquisitionLossAndMultipleFaces
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+OHOS_REPORT_STATUS: current=3
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=6
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=anchorAcquisitionLossAndMultipleFaces
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+OHOS_REPORT_STATUS: current=4
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=6
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=motionHintDoesNotExpireWithTimeOrLandmarkJitter
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+OHOS_REPORT_STATUS: current=4
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=6
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=motionHintDoesNotExpireWithTimeOrLandmarkJitter
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=11
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+OHOS_REPORT_STATUS: current=5
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=6
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=sustainedRelativeMotionLocksAndLossReacquires
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+OHOS_REPORT_STATUS: current=5
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=6
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=sustainedRelativeMotionLocksAndLossReacquires
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+OHOS_REPORT_STATUS: current=6
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=6
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=nodScaleAndOneFalseMotionCannotDismissGuidance
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+OHOS_REPORT_STATUS: current=6
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=6
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=nodScaleAndOneFalseMotionCannotDismissGuidance
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+OHOS_REPORT_STATUS: suiteconsuming=3150
+
+
+OHOS_REPORT_RESULT: stream=Tests run: 6, Failure: 0, Error: 0, Pass: 6, Ignore: 0
+OHOS_REPORT_CODE: 0
+OHOS_REPORT_STATUS: taskconsuming=3150
+
+TestFinished-ResultCode: 0
+TestFinished-ResultMsg: your test finished!!!
+user test finished.

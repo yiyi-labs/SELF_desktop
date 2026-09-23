@@ -517,7 +517,7 @@ struct SelfMirrorPage {
         Column(){this.composer()}.padding({left:20,right:20,top:4,bottom:12}).width('100%')
       }
     }.width('100%').height('100%').backgroundColor('#F3F1F5').onAreaChange((_old:Area,area:Area)=>{this.windowWidth=parseFloat(String(area.width));this.wide=this.windowWidth>=840;if(this.context.applicationInfo.debug)console.info('SELF_WINDOW '+JSON.stringify({width:this.windowWidth,wide:this.wide}));}).linearGradient({angle:145,colors:[['#EDF0F8',0],['#F8F0E9',.6],['#F3F1F5',1]]})
-    if(this.cameraLive){CameraCaptureView({motion:this.motion,language:this.language,onClose:()=>this.close(),onSaved:()=>{this.captures=new CaptureService(this.context).list();},onCaptureFinished:async()=>{const reason=await this.bridge.reconstructionSupport();this.captureStatus=reason;return reason;}}).zIndex(100)}
+    if(this.cameraLive){CameraCaptureView({motion:this.motion,language:this.language,onClose:()=>this.close()}).zIndex(100)}
     }.width('100%').height('100%')
   }
 }
