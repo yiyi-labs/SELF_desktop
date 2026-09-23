@@ -1,0 +1,85 @@
+{
+  "checkedAt": "2026-09-23T14:54:02.035710+08:00",
+  "official": {
+    "url": "https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/spatial-recon-introduction",
+    "title": "Spatial Recon Kit简介",
+    "apiUpdatedDate": "2026-09-21 08:28:36",
+    "displayUpdateTime": "2026-07-28 11:23:46",
+    "emulatorSupportQuote": "本Kit暂不支持模拟器。",
+    "retrieval": "Public unauthenticated documentPortal/getDocumentById, code 0; frontend HTML content."
+  },
+  "image": {
+    "version": "7.0.0.107",
+    "apiVersion": 26,
+    "downloadSucceeded": true,
+    "installedInIsolatedDirectory": true,
+    "booted": false,
+    "existingTabletReplaced": false
+  },
+  "staticImageChecks": [
+    {
+      "image": "system.img",
+      "bytes": 3670016000,
+      "checks": [
+        {
+          "literal": "libspatial_recon_ndk.z.so",
+          "found": false
+        },
+        {
+          "literal": "libspatialrender.z.so",
+          "found": false
+        },
+        {
+          "literal": "libspatialedit.z.so",
+          "found": false
+        }
+      ]
+    },
+    {
+      "image": "sys_prod.img",
+      "bytes": 629145600,
+      "checks": [
+        {
+          "literal": "libspatial_recon_ndk.z.so",
+          "found": false
+        },
+        {
+          "literal": "libspatialrender.z.so",
+          "found": false
+        },
+        {
+          "literal": "libspatialedit.z.so",
+          "found": false
+        }
+      ]
+    },
+    {
+      "image": "vendor.img",
+      "bytes": 104857600,
+      "checks": [
+        {
+          "literal": "libspatial_recon_ndk.z.so",
+          "found": false
+        },
+        {
+          "literal": "libspatialrender.z.so",
+          "found": false
+        },
+        {
+          "literal": "libspatialedit.z.so",
+          "found": false
+        }
+      ]
+    }
+  ],
+  "runtimeInstallSucceeded": false,
+  "runtimeProbeOnNewImage": "not-run",
+  "personalReconstructionValidated": false,
+  "staticCheckBoundary": "Raw image literal-name search only; does not replace boot/runtime validation or prove every possible capability absent.",
+  "localGpuReadOnly": {
+    "name": "NVIDIA GeForce RTX 5070 Laptop GPU",
+    "memoryMiB": 8151,
+    "reconstructionTested": false
+  },
+  "newInstanceCreation": "Attempted official CLI create in isolated directory; no valid instance produced. Not started; existing tablet unchanged."
+}

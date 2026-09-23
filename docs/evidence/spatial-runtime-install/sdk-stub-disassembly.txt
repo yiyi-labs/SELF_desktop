@@ -1,0 +1,11 @@
+
+C:\Program Files\Huawei\DevEco Studio\sdk\default\hms\native\sysroot\usr\lib\x86_64-linux-ohos\libspatial_recon_ndk.z.so:	file format elf64-x86-64
+
+Disassembly of section .text:
+
+00000000000018e0 <HMS_SpatialRecon_StartSession>:
+    18e0: c3                           	retq
+    18e1: cc                           	int3
+    18e2: cc                           	int3
+
+[Excerpt only: first exported function, not a runtime implementation.]
