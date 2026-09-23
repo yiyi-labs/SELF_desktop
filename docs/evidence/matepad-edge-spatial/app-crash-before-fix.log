@@ -1,0 +1,38 @@
+09-23 15:28:43.838 32610 32610 W A03D00/com.self.mirror/JSAPP: UiTestKit_exporter: systemParameter "persist.ace.testmode.enabled" is not set!
+09-23 15:28:43.838 32610 32610 W A03D00/com.self.mirror/JSAPP: UiTestKit_exporter: Cannot get AbilityDelegator, uitest_daemon need to be pre-started
+09-23 15:28:44.081 32610 32610 I A03D00/com.self.mirror/JSAPP: SELF_WINDOW {"width":1418.1817874435558,"wide":true}
+09-23 15:28:44.188 32610 32610 I A03D00/com.self.mirror/JSAPP: [a92ab17fabd803a 1169da7 2c189d3]SELF_EVENT {"schemaVersion":1,"sessionId":"native-1790148524033","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":0,"type":"INITIALIZED","payload":{}}
+09-23 15:28:44.403 32610 32610 I A03D00/com.self.mirror/JSAPP: [a92ab17fabd803a 3a9be50 cf686]SELF_EVENT {"schemaVersion":1,"sessionId":"native-1790148524033","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":0,"type":"ASSET_REGISTERED","payload":{"width":1024,"height":1024}}
+09-23 15:28:44.462 32610 32610 I A03D00/com.self.mirror/JSAPP: [a92ab17fabd803a 3a95172 16bcc26]SELF_EVENT {"schemaVersion":1,"sessionId":"native-1790148524033","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":0,"type":"VIEW_CHANGED","payload":{"view":{"yaw":0,"pitch":0,"distance":16,"panX":0,"panY":0}}}
+09-23 15:28:44.657 32610 32610 I A03D00/com.self.mirror/JSAPP: [a92ab17fabd803a 26e6f29 17ee930]SELF_EVENT {"schemaVersion":1,"sessionId":"native-1790148524033","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"restore-1790148524198","revision":0,"type":"RENDER_SUCCEEDED","payload":{}}
+09-23 15:28:44.662 32610 32610 I A03D00/com.self.mirror/JSAPP: [a92ab17fabd803a 1383aef b7dd5b]SELF_BINARY_ROUNDTRIP true
+09-23 15:28:45.165 32610 32610 I A03D00/com.self.mirror/JSAPP: [Hypium]parameters:{"class":"SELFNativeSpatialProbe","timeout":"90000"}
+09-23 15:28:45.166 32610 32610 I A03D00/com.self.mirror/JSAPP: [Hypium]filter params:0
+09-23 15:28:45.166 32610 32610 I A03D00/com.self.mirror/JSAPP: [Hypium]stress length : 1
+09-23 15:28:45.166 32610 32610 I A03D00/com.self.mirror/JSAPP: [Hypium]filter suite : SELFNativeCameraPipeline
+09-23 15:28:45.166 32610 32610 I A03D00/com.self.mirror/JSAPP: [Hypium]filter suite : SELFNativeStress
+09-23 15:28:45.166 32610 32610 I A03D00/com.self.mirror/JSAPP: [Hypium]filter suite : SELFNativeModelLive
+09-23 15:28:45.166 32610 32610 I A03D00/com.self.mirror/JSAPP: [Hypium]filter suite : SELFNativeExperience
+09-23 15:28:45.166 32610 32610 I A03D00/com.self.mirror/JSAPP: [Hypium]filter suite : SELFNativeProductUI
+09-23 15:28:45.166 32610 32610 I A03D00/com.self.mirror/JSAPP: [Hypium]filter suite : SELFNativeCamera
+09-23 15:28:45.166 32610 32610 I A03D00/com.self.mirror/JSAPP: [Hypium]filter suite : SELFNativePolicy
+09-23 15:28:45.166 32610 32610 I A03D00/com.self.mirror/JSAPP: [Hypium]filter suite : SELFNativeApi26UI
+09-23 15:28:45.177 32610 32610 I A03D00/com.self.mirror/JSAPP: [Hypium] rootSuite:{"description":"","childSuites":[{"description":"SELFNativeSpatialProbe","childSuites":[],"specs":[{"description":"recordsActualCommercialGsAvailabilityWithoutCallingItReconstruction","fi":0,"duration":0,"startTime":0,"isExecuted":false,"isSkip":false,"skipReason":"","expectMsg":""}],"beforeAll":[],"afterAll":[],"beforeItSpecified":{},"afterItSpecified":{},"beforeEach":[],"beforeEachIt":[],"afterEach":[],"afterEachIt":[],"duration":0,"hookError":null,"isSkip":false,"skipReason":""}],"specs":[],"beforeAll":[],"afterAll":[],"beforeItSpecified":{},"afterItSpecified":{},"beforeEach":[],"beforeEachIt":[],"afterEach":[],"afterEachIt":[],"duration":0,"hookError":null,"isSkip":false,"skipReason":""}
+09-23 15:28:45.177 32610 32610 I A03D00/com.self.mirror/JSAPP: [Hypium][start] start run suites
+09-23 15:28:45.177 32610 32610 I A03D00/com.self.mirror/JSAPP: [Hypium][suite start]SELFNativeSpatialProbe
+09-23 15:28:45.177 32610 32610 I A03D00/com.self.mirror/JSAPP: OHOS_REPORT_SUM: 1
+09-23 15:28:45.177 32610 32610 I A03D00/com.self.mirror/JSAPP: OHOS_REPORT_STATUS: class=SELFNativeSpatialProbe
+09-23 15:28:45.177 32610 32610 I A03D00/com.self.mirror/JSAPP: [Hypium]printSync called ...
+09-23 15:28:45.177 32610 32610 I A03D00/com.self.mirror/JSAPP: [Hypium]SELFNativeSpatialProbe suiteStart print success
+09-23 15:28:45.177 32610 32610 I A03D00/com.self.mirror/JSAPP: [Hypium]start running case 'recordsActualCommercialGsAvailabilityWithoutCallingItReconstruction'
+09-23 15:28:45.177 32610 32610 I A03D00/com.self.mirror/JSAPP: OHOS_REPORT_STATUS: class=SELFNativeSpatialProbe
+09-23 15:28:45.177 32610 32610 I A03D00/com.self.mirror/JSAPP: OHOS_REPORT_STATUS: current=1
+09-23 15:28:45.177 32610 32610 I A03D00/com.self.mirror/JSAPP: OHOS_REPORT_STATUS: id=JS
+09-23 15:28:45.177 32610 32610 I A03D00/com.self.mirror/JSAPP: OHOS_REPORT_STATUS: numtests=1
+09-23 15:28:45.177 32610 32610 I A03D00/com.self.mirror/JSAPP: OHOS_REPORT_STATUS: stream=
+09-23 15:28:45.177 32610 32610 I A03D00/com.self.mirror/JSAPP: OHOS_REPORT_STATUS: test=recordsActualCommercialGsAvailabilityWithoutCallingItReconstruction
+09-23 15:28:45.177 32610 32610 I A03D00/com.self.mirror/JSAPP: OHOS_REPORT_STATUS_CODE: 1
+09-23 15:28:45.177 32610 32610 I A03D00/com.self.mirror/JSAPP: [Hypium]printSync called ...
+09-23 15:28:45.177 32610 32610 I A03D00/com.self.mirror/JSAPP: [Hypium]recordsActualCommercialGsAvailabilityWithoutCallingItReconstruction specStart start print success
+09-23 15:28:45.205 32610 32610 I A03D00/com.self.mirror/JSAPP: [a92ab27fad2b772 36e8d68 3b425ce]SELF_AUDIO_STATE off
+09-23 15:28:45.220 32610 32610 I A03D00/com.self.mirror/JSAPP: [a92ab27fad2b772 2c54c7e 2d37e97]SELF_NATIVE_STATS {"cpuSubmitAndSwapP50Ms":1.630938,"cpuSubmitAndSwapP95Ms":5.628125,"cpuSubmitOver50Ms":0,"frames":19,"generation":1,"graphics":{"abi":"64-bit","glsl":"OpenGL ES GLSL ES 3.20","renderer":"Maleoon 916B","textureUnits":16,"thread":387629504672,"vendor":"HUAWEI","version":"OpenGL ES 3.2 B312"},"renderStartIntervalOver50Ms":1,"renderStartIntervalP50Ms":33.335,"renderStartIntervalP95Ms":44.087188,"transitionFrames":0}

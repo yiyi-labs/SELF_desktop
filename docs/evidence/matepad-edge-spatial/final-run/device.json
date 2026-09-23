@@ -1,0 +1,8 @@
+{
+  "const.product.model": "QXS-W10",
+  "const.product.devicetype": "tablet",
+  "const.product.cpu.abilist": "arm64-v8a",
+  "const.ohos.apiversion": "26",
+  "const.ohos.releasetype": "Release",
+  "const.product.software.version": "QXS-W10P 7.0.0.107(SP8C00E105R6P5)"
+}

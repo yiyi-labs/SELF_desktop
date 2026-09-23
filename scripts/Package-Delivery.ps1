@@ -2,6 +2,14 @@ param()
 $ErrorActionPreference='Stop'
 $projectRoot=Split-Path -Parent $PSScriptRoot
 $artifactRoot=Join-Path $projectRoot 'artifacts'
+# DevEco writes private signing paths/passwords into the local root profile.
+# Preserve that working file, but never copy its signing section into a source ZIP.
+try {
+  $sourceProfile=Get-Content -LiteralPath (Join-Path $projectRoot 'build-profile.json5') -Raw | ConvertFrom-Json
+  $sourceProfile.app.signingConfigs=@()
+  foreach($product in $sourceProfile.app.products){$product.PSObject.Properties.Remove('signingConfig')}
+  $distributableProfile=$sourceProfile | ConvertTo-Json -Depth 64
+} catch { throw 'Cannot sanitize the local signing profile; source packaging stopped.' }
 if((Get-Content (Join-Path $projectRoot 'backend/.env.example') -Raw) -match '(?m)^DEEPSEEK_API_KEY=\S+') {throw 'The distributable env example must not contain a key'}
 New-Item -ItemType Directory -Force -Path $artifactRoot | Out-Null
 $hap=Join-Path $projectRoot 'entry\build\default\outputs\default\entry-default-unsigned.hap'
@@ -35,9 +43,15 @@ function Add-SourceDirectory([string]$directory){
       if($item.Name -in @('node_modules','oh_modules','.hvigor','.npm-cache','.git','.idea','.preview','.cxx','.browser-profile','artifacts','build','dist','.test','signing','.codex','.agents','.venv','__pycache__','.pytest_cache')){continue}
       Add-SourceDirectory $item.FullName
     }else{
-      if(($item.Name.StartsWith('.env') -and $item.Name -ne '.env.example') -or $item.Name -eq 'local.properties' -or $item.Extension -eq '.tmp' -or $item.Name -eq 'huawei-download-page.html'){continue}
+      if(($item.Name.StartsWith('.env') -and $item.Name -ne '.env.example') -or $item.Name -in @('local.properties','.clangd','.clang-tidy') -or $item.Extension -in @('.tmp','.p12','.pfx','.jks','.keystore','.cer','.csr','.p7b') -or $item.Name -eq 'huawei-download-page.html'){continue}
       $entryName=$item.FullName.Substring($projectRoot.Length+1).Replace('\','/')
-      [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($archive,$item.FullName,$entryName,[System.IO.Compression.CompressionLevel]::Optimal) | Out-Null
+      if($entryName -eq 'build-profile.json5'){
+        $profileEntry=$archive.CreateEntry($entryName,[System.IO.Compression.CompressionLevel]::Optimal)
+        $writer=[System.IO.StreamWriter]::new($profileEntry.Open(),[System.Text.UTF8Encoding]::new($false))
+        try{$writer.Write($distributableProfile)}finally{$writer.Dispose()}
+      }else{
+        [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($archive,$item.FullName,$entryName,[System.IO.Compression.CompressionLevel]::Optimal) | Out-Null
+      }
       $included.Add($entryName)
     }
   }
@@ -47,5 +61,5 @@ $records=@('SELF-debug-unsigned.hap','SELF-source-and-evidence.zip') | ForEach-O
   $file=Get-Item -LiteralPath (Join-Path $artifactRoot $_)
   [ordered]@{file=$file.Name;bytes=$file.Length;sha256=(Get-FileHash -LiteralPath $file.FullName -Algorithm SHA256).Hash.ToLowerInvariant()}
 }
-[ordered]@{createdAt=(Get-Date).ToString('o');sourceCommit=(& git -C $projectRoot rev-parse HEAD);status='Native ES3 debug unsigned. Latest capture entry has automatic transparent guidance and no shutter/recording. Six camera pipeline tests, native UI metadata smoke test and transparent/animated artwork pixels passed on API26 tablet. Personal 3D reconstruction is NOT complete: AR input, GS import, fidelity acceptance and GS surface editing remain disconnected; emulator runtime unavailable. Physical-device quality and detailed face tracking unverified. See docs/capture-automatic-guidance.md and docs/device-3dgs-fidelity-review.md.';nativeAbis=$nativeAbis;packagedRawFilesVerified=$verifiedRawFiles;sourceFiles=$included.Count;files=$records} | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $artifactRoot 'delivery-manifest.json') -Encoding UTF8
+[ordered]@{createdAt=(Get-Date).ToString('o');sourceCommit=(& git -C $projectRoot rev-parse HEAD);sourceWorkingTreeDirty=[bool](& git -C $projectRoot status --porcelain);status='Native debug package for API26. Signed physical-device installation and synthetic GS display/PNG passed. Current QXS-W10 reconstruction support query returns 801; GS editing and PLY export failed. Personal reconstruction and GS surface selection remain unverified. See docs/matepad-edge-3dgs-verification.md.';nativeAbis=$nativeAbis;packagedRawFilesVerified=$verifiedRawFiles;sourceFiles=$included.Count;files=$records} | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $artifactRoot 'delivery-manifest.json') -Encoding UTF8
 Write-Output ('Packaged '+$included.Count+' source, asset and evidence files into '+$artifactRoot)

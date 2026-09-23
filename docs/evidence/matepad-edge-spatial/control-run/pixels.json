@@ -1,0 +1,20 @@
+{
+  "scope": "synthetic GS SDK on physical QXS-W10; no personal image",
+  "dimensions": [
+    512,
+    512
+  ],
+  "beforeNonUniform": true,
+  "greenPixelsBefore": 208920,
+  "maskChangedPixels": 0,
+  "allIndicesControlChangedPixels": 0,
+  "sha256": {
+    "before": "b80a592034196e3d0b33451a2681e28395699218648e5ae404a3ee45803aa132",
+    "after": "b80a592034196e3d0b33451a2681e28395699218648e5ae404a3ee45803aa132",
+    "control": "b80a592034196e3d0b33451a2681e28395699218648e5ae404a3ee45803aa132"
+  },
+  "maskPaintVerified": false,
+  "controlPaintVerified": false,
+  "selectionOcclusionVerified": false,
+  "selectionPersistenceVerified": false
+}

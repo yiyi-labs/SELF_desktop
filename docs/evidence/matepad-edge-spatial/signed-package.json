@@ -1,0 +1,6 @@
+{
+  "file": "SELF-device-debug-signed.hap",
+  "bytes": 22227669,
+  "sha256": "ad5231e70c593abb8881069a7cffb463b9bf2b2276f3a53f31d8d099e20b1bb2",
+  "use": "Local device debug installation, not production distribution"
+}

@@ -1,0 +1,38 @@
+
+OHOS_REPORT_SUM: 1
+OHOS_REPORT_STATUS: class=SELFNativeSpatialProbe
+
+
+OHOS_REPORT_STATUS: class=SELFNativeSpatialProbe
+OHOS_REPORT_STATUS: current=1
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=1
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=recordsActualCommercialGsAvailabilityWithoutCallingItReconstruction
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeSpatialProbe
+OHOS_REPORT_STATUS: current=1
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=1
+OHOS_REPORT_STATUS: stack=    at AssertException @ohos/hypium (oh_modules/.ohpm/@ohos+hypium@1.0.25/oh_modules/@ohos/hypium/src/main/service.js:75:9)
+    at anonymous @ohos/hypium (oh_modules/.ohpm/@ohos+hypium@1.0.25/oh_modules/@ohos/hypium/src/main/service.js:1149:37)
+    at anonymous entry (entry/src/ohosTest/ets/test/SpatialRecon.test.ets:28:93)
+OHOS_REPORT_STATUS: stream=Error in recordsActualCommercialGsAvailabilityWithoutCallingItReconstruction, expect true, actualValue is false
+OHOS_REPORT_STATUS: test=recordsActualCommercialGsAvailabilityWithoutCallingItReconstruction
+OHOS_REPORT_STATUS_CODE: -2
+OHOS_REPORT_STATUS: consuming=61309
+
+
+OHOS_REPORT_STATUS: class=SELFNativeSpatialProbe
+OHOS_REPORT_STATUS: suiteconsuming=61309
+
+
+OHOS_REPORT_RESULT: stream=Tests run: 1, Failure: 1, Error: 0, Pass: 0, Ignore: 0
+OHOS_REPORT_CODE: -1
+OHOS_REPORT_STATUS: taskconsuming=61309
+
+TestFinished-ResultCode: 0
+TestFinished-ResultMsg: your test finished!!!
+user test finished.

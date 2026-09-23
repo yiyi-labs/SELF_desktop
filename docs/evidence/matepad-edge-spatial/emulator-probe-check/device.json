@@ -1,0 +1,8 @@
+{
+  "const.product.model": "emulator",
+  "const.product.devicetype": "tablet",
+  "const.product.cpu.abilist": "x86_64",
+  "const.ohos.apiversion": "26",
+  "const.ohos.releasetype": "Release",
+  "const.product.software.version": "emulator 7.0.0.106(DEVC00E16R1P1)"
+}

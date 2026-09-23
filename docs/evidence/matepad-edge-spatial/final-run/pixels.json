@@ -1,0 +1,11 @@
+{
+  "scope": "synthetic GS on physical QXS-W10, not personal reconstruction",
+  "dimensions": [
+    512,
+    512
+  ],
+  "nonUniformBefore": true,
+  "greenPixelsBefore": 208920,
+  "changedPixels": 0,
+  "redPixelsAfter": 0
+}

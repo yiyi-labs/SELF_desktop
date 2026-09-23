@@ -1,0 +1,12 @@
+{
+  "scope": "synthetic GS mounted-scene run, before export-path correction",
+  "size": [
+    512,
+    512
+  ],
+  "nonUniformBefore": true,
+  "frontGreenPixels": 208920,
+  "changedPixels": 0,
+  "maskPaintPixelVerified": false,
+  "selectionOcclusionVerified": false
+}

@@ -10,7 +10,7 @@ export default function spatialReconSuite(){
       try{
         await app.startAbility({bundleName:'com.self.mirror',moduleName:'entry_test',abilityName:'SpatialProbeAbility'});
         let phase='checking';
-        for(let i=0;i<50&&(phase==='checking'||phase==='loaded');i++){
+        for(let i=0;i<150&&(phase==='checking'||phase==='loaded');i++){
           await new Promise<void>((resolve:()=>void)=>setTimeout(resolve,400));
           const top=await app.getCurrentTopAbility();
           if(top&&top.context.abilityInfo.name==='SpatialProbeAbility'){

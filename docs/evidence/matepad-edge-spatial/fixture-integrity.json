@@ -1,0 +1,15 @@
+{
+  "match": true,
+  "files": [
+    {
+      "file": "occlusion.ply",
+      "bytes": 41781,
+      "sha256": "94ed5d3017b1925e46c959d47d66c894090b50dc265fbf814b49ddefd7e0879b"
+    },
+    {
+      "file": "fixture-device.ply",
+      "bytes": 41781,
+      "sha256": "94ed5d3017b1925e46c959d47d66c894090b50dc265fbf814b49ddefd7e0879b"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "diagnosticCompleted": false,
+  "phase": "failed",
+  "reconstructionSupportStatus": 801,
+  "gsNodeLoaded": true,
+  "exportCallSucceeded": false,
+  "personalReconstructionValidated": false,
+  "note": "Synthetic SDK probe only. Pixel, occlusion and persistent-surface verification are separate gates."
+}

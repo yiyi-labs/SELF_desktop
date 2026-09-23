@@ -1,0 +1,31 @@
+{
+  "source": "/system/etc/syscap.json",
+  "components": [
+    {
+      "component": "ar_engine",
+      "syscap": [
+        "SystemCapability.AREngine.Core"
+      ]
+    },
+    {
+      "component": "ar_view",
+      "syscap": [
+        "SystemCapability.AREngine.Core"
+      ]
+    },
+    {
+      "component": "graphics_3d_ext",
+      "syscap": [
+        "SystemCapability.Graphics.SpatialEdit",
+        "SystemCapability.Graphics.SpatialRender"
+      ]
+    },
+    {
+      "component": "spatial_recon",
+      "syscap": [
+        "SystemCapability.Graphics.SpatialRecon"
+      ]
+    }
+  ],
+  "runtimeCallsValidated": false
+}

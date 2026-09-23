@@ -1,0 +1,9 @@
+{
+  "sourceDevice": "HUAWEI MatePad Edge QXS-W10",
+  "path": "/system/lib64/ndk/libspatial_recon_ndk.z.so",
+  "bytes": 99160,
+  "sha256": "b86312b8e30338ca0a11bbfe55e46346bb7b23f076776f762c2e48a9475450b1",
+  "api26CallbackExportPresent": true,
+  "exportBodiesAreImmediateEmptyReturns": false,
+  "appRuntimeCallsValidated": false
+}
