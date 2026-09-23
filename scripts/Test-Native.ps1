@@ -26,6 +26,6 @@ if($LASTEXITCODE -ne 0){throw 'Test package install failed'}
 & $hdc -t $Device shell aa test -b com.self.mirror -m entry_test -s unittest OpenHarmonyTestRunner -s notClass SELFNativeStress,SELFNativeModelLive,SELFNativeExperience,SELFNativeProductUI,SELFNativeCamera,SELFNativeCameraPipeline -s timeout 60000 2>&1 | Tee-Object -FilePath "$Evidence/hypium-results.log"
 if($LASTEXITCODE -ne 0){throw 'Native test command failed'}
 $log=Get-Content -LiteralPath "$Evidence/hypium-results.log" -Raw
-if($log -notmatch 'Tests run: 14, Failure: 0, Error: 0, Pass: 14, Ignore: 0' -or $log -notmatch 'TestFinished-ResultCode: 0'){throw 'Inspect hypium-results.log; success must be confirmed from the framework report'}
+if($log -notmatch 'Tests run: 15, Failure: 0, Error: 0, Pass: 15, Ignore: 0' -or $log -notmatch 'TestFinished-ResultCode: 0'){throw 'Inspect hypium-results.log; success must be confirmed from the framework report'}
 
 

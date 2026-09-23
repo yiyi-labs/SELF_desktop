@@ -53,6 +53,7 @@ export class NativeRendererPort {
   if(type==='VIEW_SET'&&payload.view){this.onOutline([]);this.view=payload.view;this.enqueue({type:'VIEW',yaw:this.view.yaw,pitch:this.view.pitch,distance:this.view.distance,panX:this.view.panX,panY:this.view.panY},undefined,()=>this.emit('VIEW_CHANGED',{view:this.view}));return;}
   if(type==='SET_TOOL'){this.cancelStroke();this.tool=payload.tool||'NAVIGATE';this.enqueue({type:'TOOL',tool:this.tool},undefined);return;}
   if(type==='VIEW_ORBIT'){this.enqueue({type:'ORBIT'},undefined);return;}
+  if(type==='VIEW_RESET'){this.onOutline([]);this.view={yaw:0,pitch:0,distance:16,panX:0,panY:0};this.enqueue({type:'VIEW_RESET',motion:payload.motion},undefined,()=>this.emit('VIEW_CHANGED',{view:this.view}));return;}
   if(type==='EXPORT_REQUEST'){this.enqueue({type:'EXPORT',width:payload.width||768,height:payload.height||1024},undefined,(r:NativeResult)=>this.onBytes('png',r.bytes));return;}
   if(type==='SET_ATMOSPHERE'){this.enqueue({type:'ATMOSPHERE',motion:payload.motion,palette:payload.palette},undefined);return;}
   if(type==='ECHO')return;

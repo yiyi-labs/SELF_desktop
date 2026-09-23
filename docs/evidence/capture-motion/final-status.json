@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-09-23T12:41:59.0346968+08:00",
+  "hapSha256": "B37B4E2F7333D4680F4E620D72F7231E5FFE157564D1DB5F49101319A8377F99",
+  "hapBytes": 21764512,
+  "productionBuild": "passed",
+  "earlyRegression": "15/15",
+  "earlyPipeline": "5/5",
+  "firstCameraSuite": "2/4",
+  "finalInstall": "blocked-emulator-disconnected",
+  "finalRunner": "compiled-not-run",
+  "personal3D": "not-implemented",
+  "physicalDevice": "not-tested",
+  "modelCallsThisTurn": 0
+}

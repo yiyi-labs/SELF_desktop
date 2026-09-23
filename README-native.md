@@ -1,4 +1,6 @@
-> 2026-09-23 最新：[拍摄、跟踪与 Remy 参考核验](docs/camera-tracking-validation.md)。平板模拟器已能实际录制无声 MP4、保存和回放；新增本机CPU人脸检测与鼻尖锚点。真人转头贴合按用户要求稍后测试；个人3D重建和背景虚化尚未完成。
+> 2026-09-23 最新：[拍摄引导、重建缺口与移动算力审查](docs/capture-motion-reconstruction-audit.md)。引导改为实际连续运动触发收拢，回正改为边缘图标并平滑复位；拍摄时暂停背后的3D渲染。坚持设备端重建，但应用尚未接通位姿、重建及产物加载；当前模拟器也缺运行库，拍摄不会自动变成个人3D。真人跟踪与支持真机验证按用户安排稍后进行。
+
+> [此前拍摄与跟踪验收](docs/camera-tracking-validation.md)保留真实MP4录制/回读证据；其中固定时长引导已由本轮取代。
 
 > [全屏相机与设置](docs/camera-fullscreen-validation.md)、[对话与背景](docs/interaction-camera-validation.md)是之前的阶段记录，其中“只能预览”已由本轮软件录像实现更新。后续调试使用平板。
 

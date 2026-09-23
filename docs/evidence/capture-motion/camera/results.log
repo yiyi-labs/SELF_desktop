@@ -1,0 +1,107 @@
+start ability successfully.
+
+OHOS_REPORT_SUM: 4
+OHOS_REPORT_STATUS: class=SELFNativeCamera
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCamera
+OHOS_REPORT_STATUS: current=1
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=4
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=fullScreenCameraRotatesReopensAndKeepsEntry
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCamera
+OHOS_REPORT_STATUS: current=1
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=4
+OHOS_REPORT_STATUS: stack=    at AssertException @ohos/hypium (oh_modules/.ohpm/@ohos+hypium@1.0.25/oh_modules/@ohos/hypium/src/main/service.js:75:9)
+    at anonymous @ohos/hypium (oh_modules/.ohpm/@ohos+hypium@1.0.25/oh_modules/@ohos/hypium/src/main/service.js:1149:37)
+    at anonymous entry (entry/src/ohosTest/ets/test/Camera.test.ets:42:26)
+OHOS_REPORT_STATUS: stream=Error in fullScreenCameraRotatesReopensAndKeepsEntry, expect true, actualValue is false
+OHOS_REPORT_STATUS: test=fullScreenCameraRotatesReopensAndKeepsEntry
+OHOS_REPORT_STATUS_CODE: -2
+OHOS_REPORT_STATUS: consuming=14523
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCamera
+OHOS_REPORT_STATUS: current=2
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=4
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=cameraActuallyRecordsAndDecodesPrivately
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCamera
+OHOS_REPORT_STATUS: current=2
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=4
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=cameraActuallyRecordsAndDecodesPrivately
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=15694
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCamera
+OHOS_REPORT_STATUS: current=3
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=4
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=orientationChangeSavesCurrentVideoSegment
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCamera
+OHOS_REPORT_STATUS: current=3
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=4
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=orientationChangeSavesCurrentVideoSegment
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=9913
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCamera
+OHOS_REPORT_STATUS: current=4
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=4
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=anchoredAtmosphereAccentAndLanguage
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCamera
+OHOS_REPORT_STATUS: current=4
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=4
+OHOS_REPORT_STATUS: stack=Cannot get SourceMap info, dump raw stack:
+=====================Backtrace========================#00 pc 00007fe3207b5dff [Unknown]
+#01 pc 00007fe31bfdecb8 [Unknown]
+#02 pc 00007fe31b99337a [Unknown]
+#03 pc 00007fe31b799251 [Unknown]
+#04 pc 00007fe31b7985e9 [Unknown]
+#05 pc 00007fe31b855a30 [Unknown]
+#06 pc 00007fe31be19d42 [Unknown]
+#07 pc 00007fe31be18f2e [Unknown]
+#08 pc 00007fe31bdc6916 [Unknown]
+#09 pc 00007fe31c3c01f1 [Unknown]
+OHOS_REPORT_STATUS: stream=Error in anchoredAtmosphereAccentAndLanguage, Component not exist matching: {selfMatcher=[{attrName:visible; value:true; Pattern:0},{attrName:text; value:隐私与云端; Pattern:0},]}
+OHOS_REPORT_STATUS: test=anchoredAtmosphereAccentAndLanguage
+OHOS_REPORT_STATUS_CODE: -1
+OHOS_REPORT_STATUS: consuming=7014
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCamera
+OHOS_REPORT_STATUS: suiteconsuming=47144
+
+
+OHOS_REPORT_RESULT: stream=Tests run: 4, Failure: 1, Error: 1, Pass: 2, Ignore: 0
+OHOS_REPORT_CODE: -1
+OHOS_REPORT_STATUS: taskconsuming=47144
+
+TestFinished-ResultCode: 0
+TestFinished-ResultMsg: your test finished!!!
+user test finished.

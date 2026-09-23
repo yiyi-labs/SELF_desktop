@@ -1,0 +1,35 @@
+> hvigor WARN: The version number of the 'entry' module does not comply with the SemVer specification.
+               This will affect the installation and publication by ohpm.
+               Make sure the value of version in the oh-package.json5 file of the module complies with the SemVer specification.
+> hvigor ERROR: Failed :entry:ohosTest@PreBuild... 
+> hvigor ERROR: 00303038 Configuration Error
+Error Message: Schema validate failed, at file: D:\STUDY\College\mine\olay\entry\src\ohosTest\module.json5
+
+* Try the following:
+  > Please check the following fields. 
+ {
+  instancePath: 'module.abilities[0]',
+  keyword: 'required',
+  params: { missingProperty: 'startWindowIcon' },
+  message: "must have required property 'startWindowIcon'",
+  location: 'D:/STUDY/College/mine/olay/entry/src/ohosTest/module.json5:1:178',
+  solution: 'For help about startWindows, you can solve the problem with this FAQ.'
+} 
+{
+  instancePath: 'module.abilities[0]',
+  keyword: 'required',
+  params: { missingProperty: 'startWindowBackground' },
+  message: "must have required property 'startWindowBackground'",
+  location: 'D:/STUDY/College/mine/olay/entry/src/ohosTest/module.json5:1:178',
+  solution: 'For help about startWindows, you can solve the problem with this FAQ.'
+} 
+
+
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --debug option to get more log output.
+
+> hvigor ERROR: BUILD FAILED in 2 s 851 ms 
+
+0 task in total: 0 executed, 0 up-to-date.

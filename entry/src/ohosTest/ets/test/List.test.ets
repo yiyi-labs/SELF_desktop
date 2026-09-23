@@ -115,6 +115,22 @@ export default function testsuite(){
     });
   });
   describe('SELFNativeApi26UI',()=>{
+    it('recenterUsesEdgeIconAndReturnsNativeViewSmoothly',0,async()=>{
+      const app=abilityDelegatorRegistry.getAbilityDelegator();await app.startAbility({bundleName:'com.self.mirror',abilityName:'EntryAbility'});
+      const driver=Driver.create();await driver.delayMs(1800);const context=(await app.getCurrentTopAbility()).context;
+      const assets=new AssetStore(context),works=new WorkspaceStore(context,assets);const before=works.list().map((w:WorkItem)=>w.id);
+      try{
+        const surface=await (await driver.findComponent(ON.id('self-native-mirror'))).getBounds();
+        await driver.swipe(Math.round(surface.left+(surface.right-surface.left)*.35),Math.round((surface.top+surface.bottom)*.55),Math.round(surface.left+(surface.right-surface.left)*.48),Math.round((surface.top+surface.bottom)*.55),500);
+        const reset=await driver.waitForComponent(ON.id('recenter-view'),5000);const button=await reset.getBounds();
+        expect(button.right<surface.left+(surface.right-surface.left)*.2).assertTrue();
+        await reset.click();await driver.delayMs(850);
+        await openWorks(driver);await driver.delayMs(300);await (await driver.findComponent(ON.text('保存当前作品'))).click();await driver.delayMs(700);
+        const created=works.list().filter((w:WorkItem)=>!before.includes(w.id));expect(created.length).assertEqual(1);
+        const state=works.open(created[0].id);expect(Math.abs(state.view?.yaw||0)<.001).assertTrue();expect(Math.abs(state.view?.pitch||0)<.001).assertTrue();expect(state.view?.distance).assertEqual(16);
+        console.info('SELF_RECENTER_UI '+JSON.stringify({button,surface,view:state.view}));await driver.pressBack();
+      }finally{for(const item of works.list().filter((w:WorkItem)=>!before.includes(w.id)))works.delete(item.id);}
+    });
     it('saveReopenExportAndDeleteOnlyNewTestWork',0,async()=>{
       const app=abilityDelegatorRegistry.getAbilityDelegator();await app.startAbility({bundleName:'com.self.mirror',abilityName:'EntryAbility'});const driver=Driver.create();await driver.delayMs(2200);
       const context=(await app.getCurrentTopAbility()).context;const assets=new AssetStore(context),works=new WorkspaceStore(context,assets);const before=works.list().map((w:WorkItem)=>w.id);

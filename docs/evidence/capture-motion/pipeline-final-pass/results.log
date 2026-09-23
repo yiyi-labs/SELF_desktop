@@ -1,0 +1,154 @@
+
+OHOS_REPORT_SUM: 6
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+OHOS_REPORT_STATUS: current=1
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=6
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=rendersGuideArtworkWithoutCameraPixels
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+OHOS_REPORT_STATUS: current=1
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=6
+OHOS_REPORT_STATUS: stack=Cannot get SourceMap info, dump raw stack:
+=====================Backtrace========================#00 pc 00007fe3207b5dff [Unknown]
+#01 pc 00007fe31bfdecb8 [Unknown]
+#02 pc 00007fe31b99337a [Unknown]
+#03 pc 00007fe31b799251 [Unknown]
+#04 pc 00007fe31b7985e9 [Unknown]
+#05 pc 00007fe31b855a30 [Unknown]
+#06 pc 00007fe31be19d42 [Unknown]
+#07 pc 00007fe31be18f2e [Unknown]
+#08 pc 00007fe31bdc6916 [Unknown]
+#09 pc 00007fe31c3c01f1 [Unknown]
+#10 pc 00007fe31244fe48 [Unknown]
+OHOS_REPORT_STATUS: stream=Error in rendersGuideArtworkWithoutCameraPixels, Calling GetCurrentTopAbility failed.
+OHOS_REPORT_STATUS: test=rendersGuideArtworkWithoutCameraPixels
+OHOS_REPORT_STATUS_CODE: -1
+OHOS_REPORT_STATUS: consuming=7542
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+OHOS_REPORT_STATUS: current=2
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=6
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=realNativeFaceDetectionAndSoftwareMp4
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+OHOS_REPORT_STATUS: current=2
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=6
+OHOS_REPORT_STATUS: stack=Cannot get SourceMap info, dump raw stack:
+=====================Backtrace========================#00 pc 00007fe3207b5dff [Unknown]
+#01 pc 00007fe31bfdecb8 [Unknown]
+#02 pc 00007fe31b99337a [Unknown]
+#03 pc 00007fe31b799251 [Unknown]
+#04 pc 00007fe31b7985e9 [Unknown]
+#05 pc 00007fe31b855a30 [Unknown]
+#06 pc 00007fe31be19d42 [Unknown]
+#07 pc 00007fe31be18f2e [Unknown]
+#08 pc 00007fe31bdc6916 [Unknown]
+#09 pc 00007fe31c3c01f1 [Unknown]
+#10 pc 00007fe31244fe48 [Unknown]
+OHOS_REPORT_STATUS: stream=Error in realNativeFaceDetectionAndSoftwareMp4, Calling GetCurrentTopAbility failed.
+OHOS_REPORT_STATUS: test=realNativeFaceDetectionAndSoftwareMp4
+OHOS_REPORT_STATUS_CODE: -1
+OHOS_REPORT_STATUS: consuming=33
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+OHOS_REPORT_STATUS: current=3
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=6
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=anchorAcquisitionLossAndMultipleFaces
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+OHOS_REPORT_STATUS: current=3
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=6
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=anchorAcquisitionLossAndMultipleFaces
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+OHOS_REPORT_STATUS: current=4
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=6
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=motionHintDoesNotExpireWithTimeOrLandmarkJitter
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+OHOS_REPORT_STATUS: current=4
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=6
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=motionHintDoesNotExpireWithTimeOrLandmarkJitter
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=29
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+OHOS_REPORT_STATUS: current=5
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=6
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=sustainedRelativeMotionLocksAndLossReacquires
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+OHOS_REPORT_STATUS: current=5
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=6
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=sustainedRelativeMotionLocksAndLossReacquires
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=2
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+OHOS_REPORT_STATUS: current=6
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=6
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=nodScaleAndOneFalseMotionCannotDismissGuidance
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+OHOS_REPORT_STATUS: current=6
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=6
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=nodScaleAndOneFalseMotionCannotDismissGuidance
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCameraPipeline
+OHOS_REPORT_STATUS: suiteconsuming=7608
+
+
+OHOS_REPORT_RESULT: stream=Tests run: 6, Failure: 0, Error: 2, Pass: 4, Ignore: 0
+OHOS_REPORT_CODE: 0
+OHOS_REPORT_STATUS: taskconsuming=7608
+
+TestFinished-ResultCode: 0
+TestFinished-ResultMsg: your test finished!!!
+user test finished.

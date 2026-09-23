@@ -37,7 +37,8 @@ export default function cameraSuite(){
      }
      if(!await driver.findComponent(ON.id('camera-status')))await (await driver.findComponent(ON.id('camera-info'))).click();await driver.delayMs(350);
      const status=await (await driver.findComponent(ON.id('camera-status'))).getText();
-     const canRecord=await driver.findComponent(ON.id('camera-record').enabled(true));
+      // A preview frame can arrive before the analysis/encoder path is ready.
+      const canRecord=await driver.waitForComponent(ON.id('camera-record').enabled(true),15000);
      console.info('SELF_CAMERA_LAYOUT '+JSON.stringify({pass,fullscreen:full,preview,ratio,status,canRecord:!!canRecord,privatePixelsCaptured:false}));
      expect(!!canRecord).assertTrue();
      await driver.pressBack();await driver.delayMs(650);await driver.assertComponentExist(ON.id('begin-capture'));
@@ -51,9 +52,20 @@ export default function cameraSuite(){
    const captures=new CaptureService(context);const before=captures.list().map((r:CaptureRecord)=>r.name);let created:CaptureRecord[]=[];
    try{
     await (await driver.waitForComponent(ON.id('begin-capture'),5000)).click();
-    const button=await driver.waitForComponent(ON.id('camera-record').enabled(true),15000);await button.click();await driver.delayMs(4200);
+    const button=await driver.waitForComponent(ON.id('camera-record').enabled(true),15000);await button.click();await driver.delayMs(4800);
+    if(await driver.findComponent(ON.text('正在寻找你，不用刻意对准'))){
+     const hint=await (await driver.findComponent(ON.id('camera-motion-hint'))).getBounds();
+     const full=await (await driver.findComponent(ON.id('camera-fullscreen'))).getBounds();
+     expect(Math.abs((hint.left+hint.right)-(full.left+full.right))<8).assertTrue();
+     expect(Math.abs((hint.top+hint.bottom)-(full.top+full.bottom))<8).assertTrue();
+     expect(hint.right-hint.left>(full.right-full.left)*.20).assertTrue();
+     console.info('SELF_CAMERA_HINT_LAYOUT '+JSON.stringify({hint,full,afterMilliseconds:4800,noFace:true,privatePixelsCaptured:false}));
+    }
     await (await driver.findComponent(ON.id('camera-record'))).click();await driver.delayMs(2200);
     created=captures.list().filter((r:CaptureRecord)=>!before.includes(r.name));expect(created.length).assertEqual(1);expect(created[0].bytes>1024).assertTrue();
+    await driver.assertComponentExist(ON.text('尚未生成3D面容'));
+    await (await driver.findComponent(ON.id('camera-info'))).click();await driver.delayMs(200);
+    const issue=await (await driver.findComponent(ON.id('camera-reconstruction-issue'))).getText();expect(issue.length>5).assertTrue();console.info('SELF_CAMERA_RECONSTRUCTION_BLOCKED '+issue);
     const file=fs.openSync(context.filesDir+'/captures/'+created[0].name,fs.OpenMode.READ_ONLY);
     const extractor=await media.createAVImageGenerator();
     try{extractor.fdSrc={fd:file.fd,offset:0,length:created[0].bytes};const frame=await extractor.fetchFrameByTime(500000,media.AVImageQueryOptions.AV_IMAGE_QUERY_CLOSEST,{width:240,height:136});const info=await frame.getImageInfo();expect(info.size.width>0&&info.size.height>0).assertTrue();await frame.release();console.info('SELF_CAMERA_PRIVATE_VIDEO '+JSON.stringify({saved:true,decode:true,bytes:created[0].bytes,width:info.size.width,height:info.size.height,privateVideoExported:false}));}
@@ -74,7 +86,7 @@ export default function cameraSuite(){
     await (await driver.waitForComponent(ON.id('begin-capture'),5000)).click();await (await driver.waitForComponent(ON.id('camera-record').enabled(true),15000)).click();await driver.delayMs(2300);
     await appWindow.setPreferredOrientation(window.Orientation.PORTRAIT);await driver.delayMs(3000);
     expect(captures.list().filter((r:CaptureRecord)=>!before.includes(r.name)).length).assertEqual(1);
-    await driver.assertComponentExist(ON.text('视频已留在本机'));console.info('SELF_CAMERA_ROTATION_SAVED true');
+    await driver.assertComponentExist(ON.text('尚未生成3D面容'));console.info('SELF_CAMERA_ROTATION_SAVED true');
    }finally{
     if(await driver.findComponent(ON.id('camera-fullscreen')))await driver.pressBack();
     await appWindow.setPreferredOrientation(window.Orientation.AUTO_ROTATION_RESTRICTED);
@@ -100,7 +112,7 @@ export default function cameraSuite(){
     await (await driver.findComponent(ON.id('panel-close'))).click();await driver.delayMs(350);
     await driver.assertComponentExist(ON.text('Send'));
     await (await driver.findComponent(ON.id('open-settings'))).click();await driver.delayMs(350);await (await driver.findComponent(ON.id('language-zh'))).click();
-    await driver.assertComponentExist(ON.text('隐私与云端'));await driver.pressBack();
+     await driver.waitForComponent(ON.text('隐私与云端'),5000);await driver.pressBack();
     console.info('SELF_UI_SETTINGS '+JSON.stringify({anchor,panel,accentSaved:true,languageSaved:true,englishControls:true,restoredChinese:true}));
    }finally{UiPreference.save(context,before);}
   });

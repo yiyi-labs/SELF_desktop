@@ -1,0 +1,675 @@
+> hvigor [32mUP-TO-DATE :entry:ohosTest@PreBuild...  [39m
+> hvigor [32mFinished :entry:ohosTest@CreateModuleInfo... after 1 ms [39m
+> hvigor [32mUP-TO-DATE :entry:ohosTest@GenerateMetadata...  [39m
+> hvigor [32mFinished :entry:ohosTest@ConfigureCmake... after 1 ms [39m
+> hvigor [32mUP-TO-DATE :entry:ohosTest@MergeProfile...  [39m
+> hvigor [32mUP-TO-DATE :entry:ohosTest@CreateBuildProfile...  [39m
+> hvigor [32mFinished :entry:ohosTest@PreCheckSyscap... after 1 ms [39m
+> hvigor [32mUP-TO-DATE :entry:ohosTest@GeneratePkgContextInfo...  [39m
+> hvigor [32mFinished :entry:ohosTest@GeneratePkgSdkInfo... after 4 ms [39m
+> hvigor [32mFinished :entry:ohosTest@ProcessIntegratedHsp... after 1 ms [39m
+> hvigor [32mFinished :entry:ohosTest@BuildNativeWithCmake... after 1 ms [39m
+> hvigor [32mUP-TO-DATE :entry:ohosTest@MakePackInfo...  [39m
+> hvigor [32mFinished :entry:ohosTest@SyscapTransform... after 11 ms [39m
+> hvigor [32mUP-TO-DATE :entry:ohosTest@ProcessProfile...  [39m
+> hvigor [32mUP-TO-DATE :entry:ohosTest@ProcessRouterMap...  [39m
+> hvigor [32mUP-TO-DATE :entry:ohosTest@ProcessShareConfig...  [39m
+> hvigor [32mFinished :entry:ohosTest@ProcessStartupConfig... after 2 ms [39m
+> hvigor [32mFinished :entry:ohosTest@BuildNativeWithNinja... after 1 ms [39m
+> hvigor [32mUP-TO-DATE :entry:ohosTest@ProcessResource...  [39m
+> hvigor [32mUP-TO-DATE :entry:ohosTest@GenerateLoaderJson...  [39m
+> hvigor [32mUP-TO-DATE :entry:ohosTest@ProcessLibs...  [39m
+> hvigor [32mFinished :entry:ohosTest@CompileResource... after 333 ms [39m
+> hvigor [32mUP-TO-DATE :entry:ohosTest@DoNativeStrip...  [39m
+> hvigor [32mFinished :entry:ohosTest@OhosTestBuildJS... after 8 ms [39m
+> hvigor [32mUP-TO-DATE :entry:ohosTest@CacheNativeLibs...  [39m
+> hvigor WARN: WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/testability/GuideTestAbility.ets:5:59
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/CameraPipeline.test.ets:25:67
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/CameraPipeline.test.ets:25:77
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/CameraPipeline.test.ets:25:88
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:23:75
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:27:16
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:28:25
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:30:84
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:32:17
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:36:39
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:38:21
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:38:40
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:38:60
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:39:8
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:39:24
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:47:84
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:49:21
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:50:12
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:50:53
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:56:25
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:56:45
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:58:117
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AssetStore.ets:58:137
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:18:24
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:25:8
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:34:50
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:38:14
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:38:49
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:40:70
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:46:41
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:48:26
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:48:137
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:49:8
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:64:64
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:65:27
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:66:51
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:71:135
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:71:155
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:75:29
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:78:67
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:78:91
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:82:84
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:82:101
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:83:80
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:83:97
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Stress.test.ets:20:37
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Stress.test.ets:20:45
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Stress.test.ets:20:53
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Stress.test.ets:20:77
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Stress.test.ets:20:83
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Stress.test.ets:20:108
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Stress.test.ets:20:116
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Stress.test.ets:20:124
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Stress.test.ets:20:148
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Stress.test.ets:20:154
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Experience.test.ets:14:126
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Experience.test.ets:14:134
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Experience.test.ets:14:142
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Experience.test.ets:14:186
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Experience.test.ets:14:193
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Experience.test.ets:14:202
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Experience.test.ets:18:18
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Experience.test.ets:18:33
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Experience.test.ets:18:48
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Experience.test.ets:18:57
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Experience.test.ets:18:71
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Experience.test.ets:18:87
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Experience.test.ets:20:21
+ This API is unavailable to 2in1.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Experience.test.ets:22:20
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Experience.test.ets:22:34
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Experience.test.ets:22:43
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Experience.test.ets:22:51
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Experience.test.ets:26:29
+ This API is unavailable to 2in1.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Product.test.ets:27:56
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Product.test.ets:27:71
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Product.test.ets:27:85
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Product.test.ets:27:100
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Product.test.ets:32:37
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Product.test.ets:32:45
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Product.test.ets:32:53
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Product.test.ets:32:77
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Product.test.ets:32:83
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Product.test.ets:32:108
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Product.test.ets:32:116
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Product.test.ets:32:124
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Product.test.ets:32:148
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Product.test.ets:32:154
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Product.test.ets:40:40
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Product.test.ets:40:51
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Product.test.ets:40:62
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Product.test.ets:40:89
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Product.test.ets:40:98
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Product.test.ets:40:126
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Product.test.ets:40:137
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Product.test.ets:40:148
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Product.test.ets:40:175
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Product.test.ets:40:184
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:12:57
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:13:15
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:18:11
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:18:31
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:18:54
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:18:82
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:22:12
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:22:32
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:24:19
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:24:79
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:35:21
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:35:42
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:35:69
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/UiPreference.ets:18:17
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/UiPreference.ets:19:10
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/UiPreference.ets:19:63
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/UiPreference.ets:19:83
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:24:59
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:24:70
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:24:80
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:24:112
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:24:124
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:24:133
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:26:27
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:26:41
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:26:56
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:26:71
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:28:21
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:28:32
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:28:48
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:28:60
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:28:77
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:28:87
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:28:102
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:28:115
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:30:23
+ This API is unavailable to 2in1.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:33:22
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:33:36
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:33:48
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:33:59
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:34:23
+ This API is unavailable to 2in1.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:47:112
+ This API is unavailable to 2in1.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:59:28
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:59:38
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:59:51
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:59:61
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:60:28
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:60:37
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:60:51
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:60:60
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:61:18
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:61:29
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:61:40
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:61:51
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:70:27
+ The system capacity of this api 'media' is not supported on all devices
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:71:123
+ The system capacity of this api 'media' is not supported on all devices
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:85:21
+ This API is unavailable to 2in1.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:87:21
+ This API is unavailable to 2in1.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:92:21
+ This API is unavailable to 2in1.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:102:18
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:102:32
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:102:44
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/Camera.test.ets:102:55
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:27:29
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:28:27
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:29:23
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:29:53
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:29:74
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:30:30
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:30:64
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:30:96
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:33:29
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:34:27
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:35:23
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:35:53
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:35:81
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:35:127
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:124:47
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:124:61
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:124:75
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:124:106
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:124:118
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:124:150
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:124:164
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:124:178
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:124:209
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:124:221
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:126:23
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:126:37
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:126:51
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:126:65
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:140:125
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:140:133
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:140:141
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:140:166
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:140:172
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:140:197
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:140:205
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:140:213
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:140:238
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:140:244
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:156:132
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:156:140
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:156:148
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:156:195
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:156:202
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:156:211
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:161:20
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:161:33
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:161:45
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:161:59
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:161:72
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:161:84
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:161:95
+ This API is unavailable to tablet(earlier than API level 20).
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/ohosTest/ets/test/List.test.ets:161:110
+ This API is unavailable to tablet(earlier than API level 20).
+
+
+> hvigor [32mFinished :entry:ohosTest@OhosTestCompileArkTS... after 4 s 941 ms [39m
+> hvigor [32mFinished :entry:ohosTest@OhosTestCopyMockConfigJson... after 1 ms [39m
+> hvigor [32mFinished :entry:ohosTest@GeneratePkgModuleJson... after 3 ms [39m
+> hvigor [32mFinished :entry:ohosTest@ProcessCompiledResources... after 1 ms [39m
+> hvigor [32mFinished :entry:ohosTest@PackageHap... after 722 ms [39m
+> hvigor [32mFinished :entry:ohosTest@PackingCheck... after 10 ms [39m
+> hvigor WARN: No signingConfig found for product default
+> hvigor [32mFinished :entry:ohosTest@SignHap... after 4 ms [39m
+> hvigor [32mFinished :entry:ohosTest@CollectDebugSymbol... after 2 ms [39m
+> hvigor [32mFinished :entry:assembleHap... after 1 ms [39m
+> hvigor [32mBUILD SUCCESSFUL in 14 s 797 ms [39m
+
+34 tasks in total: 20 executed, 14 up-to-date

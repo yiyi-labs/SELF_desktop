@@ -255,7 +255,7 @@ struct SelfMirrorPage {
   private toggleMusic(enabled:boolean):void{this.musicOn=enabled;this.audio.configure(enabled,this.palette);}
   private setAtmosphere():void{if(this.bridge.ready)this.bridge.send('SET_ATMOSPHERE',{motion:this.motion&&this.foreground,palette:this.palette});}
   private chooseAtmosphere(mode:string):void{this.getUIContext().animateTo({duration:this.motion?280:0},()=>this.palette=mode);this.setAtmosphere();this.saveUi();if(this.musicOn)this.audio.configure(true,mode);}
-  private foregroundChanged():void{this.bridge.foreground(this.foreground);this.audio.visibility(this.foreground);this.setAtmosphere();if(!this.foreground&&this.timer>=0){clearInterval(this.timer);this.timer=-1;this.playing=false;}}
+  private foregroundChanged():void{this.bridge.foreground(this.foreground&&!this.cameraLive);this.audio.visibility(this.foreground);this.setAtmosphere();if(!this.foreground&&this.timer>=0){clearInterval(this.timer);this.timer=-1;this.playing=false;}}
   private replyChanged():void{if(!this.motion)return;this.replyScale=.98;this.replyOpacity=.75;this.getUIContext().animateTo({duration:320,curve:Curve.EaseOut},()=>{this.replyScale=1;this.replyOpacity=1;});}
   private undo(direction:number):void{this.lastModelProductIds=[];this.productOpen=false;this.replySources=[];try{this.session.replay(direction);this.busy=true;this.sendSnapshot();}catch(e){this.fail(String(e));}}
   private reset():void{this.lastModelProductIds=[];this.productOpen=false;this.replySources=[];try{this.session.reset();this.busy=true;this.sendSnapshot();}catch(e){this.fail(String(e));}}
@@ -264,7 +264,7 @@ struct SelfMirrorPage {
   private chooseProduct(direction:number):void{const all=ProductRepository.records().filter((p:ProductRecord)=>this.replySources.includes(p.productId));if(!all.length)return;const index=all.findIndex((p:ProductRecord)=>p.productId===this.productSelection.productId);this.productSelection=all[(index+direction+all.length)%all.length];}
   private open(name:string,event?:ClickEvent):void{
     if(this.busy)return;if(name==='产品资料'){this.showProduct();return;}
-    if(name==='拍摄面容'){this.cameraLive=true;this.showBeginning=false;this.bridge.send('SET_TOOL',{tool:'DETAIL'});return;}
+    if(name==='拍摄面容'){this.cameraLive=true;this.showBeginning=false;this.bridge.send('SET_TOOL',{tool:'DETAIL'});this.bridge.foreground(false);return;}
     if(event){this.anchorX=event.windowX;this.anchorY=event.windowY-this.surfaceTop;}
     else if(!this.detail){this.anchorX=this.focusOpen?this.focusX*this.surfaceWidth:this.surfaceWidth-100;this.anchorY=this.focusOpen?this.focusY*this.surfaceHeight:16;}
     if(!this.detail)this.previousTool=this.tool;
@@ -272,7 +272,7 @@ struct SelfMirrorPage {
     this.bridge.send('SET_TOOL',{tool:'DETAIL'});this.workItems=this.works.list();this.note=this.works.readNote();
     if(name==='采集记录'){this.selectedCapture='';this.captures=new CaptureService(this.context).list();}
   }
-  private close():void{this.cameraLive=false;if(this.timer>=0)clearInterval(this.timer);this.timer=-1;this.playing=false;this.getUIContext().animateTo({duration:this.motion?240:0,curve:Curve.EaseOut},()=>this.detail='');this.tool=this.previousTool;this.bridge.send('SET_TOOL',{tool:this.tool});}
+  private close():void{this.cameraLive=false;this.bridge.foreground(this.foreground);if(this.timer>=0)clearInterval(this.timer);this.timer=-1;this.playing=false;this.getUIContext().animateTo({duration:this.motion?240:0,curve:Curve.EaseOut},()=>this.detail='');this.tool=this.previousTool;this.bridge.send('SET_TOOL',{tool:this.tool});}
   private protect(current:boolean,persistent:boolean):void{
     try{this.session.protect(this.selected,current,persistent);this.sendSnapshot();this.labels();this.close();
       if(persistent)this.works.savePreference(this.session).then(()=>{this.subtitle='已明确保存长期偏好';this.labels();}).catch((e:Error)=>this.fail(e.message));
@@ -493,7 +493,8 @@ struct SelfMirrorPage {
             Text(this.tr('从相机开始 · 个人3D重建尚未接通')).fontSize(11).fontColor('#81758D')
             Button(this.tr('先看示例')).softButton().height(36).fontSize(12).onClick(()=>{this.showBeginning=false;if(this.motion)this.bridge.send('VIEW_ORBIT',{});})
           }.alignItems(HorizontalAlign.Start).padding(22).width(290).backgroundColor('#CAFFFFFF').backgroundBlurStyle(BlurStyle.COMPONENT_REGULAR).borderRadius(28).position({x:24,y:62}).transition({opacity:0,translate:{y:12}})}
-          Row({space:8}){Text(this.tr(!this.ready?'镜面准备中':this.tool==='LASSO'?'轻轻圈画一个范围，松手后聊聊':this.wide?'拖动转身 · 双指缩放 · 手写笔直接圈画':'拖动转身 · 双指缩放')).fontSize(11).fontColor('#81758D').layoutWeight(1);Button(this.tr('回正')).softButton().width(60).onClick(()=>this.bridge.send('VIEW_SET',{view:{yaw:0,pitch:0,distance:16,panX:0,panY:0}})).enabled(this.ready&&!this.busy)}.width(this.wide?'48%':'100%').padding(16).position({x:0,y:this.surfaceHeight-(this.wide?142:72)})
+          Text(this.tr(!this.ready?'镜面准备中':this.tool==='LASSO'?'轻轻圈画一个范围，松手后聊聊':this.wide?'拖动转身 · 双指缩放 · 手写笔直接圈画':'拖动转身 · 双指缩放')).fontSize(11).fontColor('#81758D').padding(16).position({x:0,y:this.surfaceHeight-(this.wide?128:56)}).hitTestBehavior(HitTestMode.None)
+          if(!this.focusOpen&&!this.productOpen){Button(){Image($rawfile('ui/recenter.svg')).width(27).height(27)}.id('recenter-view').accessibilityText(this.tr('回正')).width(46).height(46).backgroundColor('#AFFFFFFF').backgroundBlurStyle(BlurStyle.COMPONENT_ULTRA_THIN).border({width:1,color:'#E6FFFFFF'}).borderRadius(23).shadow({radius:16,color:'#17756387',offsetY:4}).stateStyles({pressed:{.scale({x:.90,y:.90})},normal:{.scale({x:1,y:1})}}).animation({duration:this.motion?180:0,curve:Curve.EaseOut}).position({x:20,y:Math.max(70,this.surfaceHeight*.48)}).onClick(()=>this.bridge.send('VIEW_RESET',{motion:this.motion})).enabled(this.ready&&!this.busy)}
           if(this.wide){
             if(this.productOpen){
               Scroll(){Column({space:12}){this.conversation();this.product()}.width('100%')}.align(Alignment.TopStart).width(420).height(Math.max(260,this.surfaceHeight-108)).scrollBar(BarState.Off).position({x:this.focusOpen?Math.min(this.bubbleX(),this.surfaceWidth-440):Math.max(20,this.surfaceWidth-440),y:this.focusOpen?Math.min(this.bubbleY(),Math.max(16,this.surfaceHeight-680)):16}).transition({opacity:0,translate:{x:20}})
@@ -516,7 +517,7 @@ struct SelfMirrorPage {
         Column(){this.composer()}.padding({left:20,right:20,top:4,bottom:12}).width('100%')
       }
     }.width('100%').height('100%').backgroundColor('#F3F1F5').onAreaChange((_old:Area,area:Area)=>{this.windowWidth=parseFloat(String(area.width));this.wide=this.windowWidth>=840;if(this.context.applicationInfo.debug)console.info('SELF_WINDOW '+JSON.stringify({width:this.windowWidth,wide:this.wide}));}).linearGradient({angle:145,colors:[['#EDF0F8',0],['#F8F0E9',.6],['#F3F1F5',1]]})
-    if(this.cameraLive){CameraCaptureView({motion:this.motion,language:this.language,onClose:()=>this.close(),onSaved:()=>{this.captures=new CaptureService(this.context).list();}}).zIndex(100)}
+    if(this.cameraLive){CameraCaptureView({motion:this.motion,language:this.language,onClose:()=>this.close(),onSaved:()=>{this.captures=new CaptureService(this.context).list();},onCaptureFinished:async()=>{const reason=await this.bridge.reconstructionSupport();this.captureStatus=reason;return reason;}}).zIndex(100)}
     }.width('100%').height('100%')
   }
 }

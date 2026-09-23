@@ -1,0 +1,3 @@
+TestFinished-ResultCode: -1
+TestFinished-ResultMsg: Could not start test host: TypeError: Cannot read property delayMs of null
+user test finished.

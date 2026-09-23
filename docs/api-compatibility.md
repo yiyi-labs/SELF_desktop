@@ -53,3 +53,9 @@ ImageKit的createPixelMap、rotate、flip、scale、convertPixelFormat、readPix
 无系统视频编码器时使用本地C/C++H.264与MP4封装，不冒充系统AVRecorder；时间戳真实、最长边960、最多30秒。Video组件使用CoreFileKit.fileUri的应用私有路径；回放触发onStart，另由MediaKit.AVImageGenerator实际解码验证文件，避免仅凭组件出现判断视频有效。
 
 本次公开模型帧的CPU检测、编码和实际相机录制在API26 x86_64通过。依赖固定、许可与修改见references.md。SpatialRecon的设备能力、AR位姿、内参、3DGS格式仍是独立未完成链路，不由相机录像或GLB渲染通过推导。
+
+## 2026-09-23 运动触发与重建边界
+
+`CaptureMoveHint` 是独立 V2 组件，通过参数供 V1 相机页面调用；没有在同一 struct 混用状态版本。原生回正动画复用现有 VSync，隐藏镜面明确 foreground(false)，回到主界面再恢复。`RECON_SUPPORT` 除设备状态外明确 pipelineImplemented:false；设备支持不再被误读为应用已接通。
+
+新增核对商业 SDK API26 GSEdit 的 selectBy2DMask / paint / saveToPLY / extract3DMainBody；只用于选型，尚未接到生产编辑管线。头文件存在不代表当前模拟器或任意真机支持。摄像头动画仍是二维几何引导，不能作为 SpatialRecon 的真实位姿。具体见 capture-motion-reconstruction-audit.md。

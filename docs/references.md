@@ -86,3 +86,11 @@ Three.js0.186.0 及旧浏览器代码仅保留作迁移参照；示例 GLB 仍�
 新增 `rawfile/ui/{camera,settings,atmosphere,music,music_off}.svg` 为本项目原创路径图标；未使用华为系统图标文件、Remy 视频画面、网页图片或第三方包装资产。CameraCaptureView / LocalFaceGuide / UiPreference / UiText 和方向/动画修改均为项目实现，未复制 SDK 声明或官方示例。
 
 核对入口：[华为相机旋转术语](https://developer.huawei.com/consumer/cn/doc/doccenter-capabilities/camera-rotation-term-native)、[窗口旋转](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/window-rotation)、[Remy 机型支持说明](https://consumer.huawei.com/cn/support/content/zh-cn16076523/)。动态页面部分正文超时，实际接口以安装的商业 SDK 声明、编译及平板运行核验。搜索到 [Remy 演示](https://www.bilibili.com/video/BV1vEAaz3EvG/)，网页返回412，内嵌浏览器超时，未能完整观看；不声称逐帧复刻或复用其跟踪/重建算法。环形引导为原创交互，不能当作成功重建进度。
+
+## 2026-09-23 运动引导与设备重建审查
+
+`CaptureMoveHint.ets` 的人物/手机 Path 与 `rawfile/ui/recenter.svg` 均为本项目原创，无新增图像或代码依赖。交互依据是用户本地7.933秒 Remy 视频可见片段；未复制其画面、商标、图标和私有实现。测试页面只存在 ohosTest HAP。
+
+核对商业 SDK26.0.0.105 的 spatial_recon_interface.h、ar_engine_core.h、@hms.graphics.spatialRender.d.ts、@hms.graphics.spatialEdit.d.ts；本轮只读取声明，不分发SDK头文件。重建/编辑声明哈希见 evidence/capture-motion/sdk-header-hashes.json。
+
+[Remy官网](https://www.remy3d.cn/)仅作产品交互参考；[PocketGS v5](https://arxiv.org/html/2601.17354v5)与[Mobile-GS](https://arxiv.org/abs/2603.11531)仅作技术研究，没有下载或复用代码/权重/图片，论文许可不被推定为代码许可。实际选型与未实现项见[移动算力审查](capture-motion-reconstruction-audit.md)。
