@@ -1,4 +1,5 @@
 const EN:Record<string,string> = {
+  "播放视频": "Play video",
   "氛围": "Atmosphere",
   "设置": "Settings",
   "强调色": "Accent color",

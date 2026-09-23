@@ -1,0 +1,10 @@
+# Preserve the exact bytes recorded in shared/camera-dependencies.json on Windows.
+entry/src/main/cpp/vendor/libfacedetection/** -text
+entry/src/main/cpp/vendor/minih264/** -text
+entry/src/main/cpp/vendor/minimp4/** -text
+entry/src/main/resources/rawfile/licenses/libfacedetection.txt -text
+entry/src/main/resources/rawfile/licenses/minih264.txt -text
+entry/src/main/resources/rawfile/licenses/minimp4.txt -text
+licenses/libfacedetection-BSD-3-Clause.txt -text
+licenses/minih264-CC0-1.0.txt -text
+licenses/minimp4-CC0-1.0.txt -text

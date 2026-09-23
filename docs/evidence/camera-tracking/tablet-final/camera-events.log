@@ -1,0 +1,98 @@
+09-23 11:18:08.420  4693  4693 I A03d00/JSAPP: [a92ab344f04c0d4, 940af2, 324cf1b] SELF_CAMERA_DEVICES [{"position":1,"type":1,"connection":0},{"position":2,"type":1,"connection":0}]
+09-23 11:18:08.420  4693  4693 I A03d00/JSAPP: [a92ab344f04c0d4, 940af2, 324cf1b] SELF_CAMERA_METADATA_TYPES []
+09-23 11:18:08.434  4693  4693 I A03d00/JSAPP: [a92ab344f04c0d4, 1b0ea67, 1ab3a9e] SELF_CAMERA_ENCODERS [{"mimeType":"audio/mp4a-latm","type":"audio","bitRate":{"min":1,"max":500000},"channels":{"min":1,"max":8},"sampleRate":[7350,8000,11025,12000,16000,22050,24000,32000,44100,48000,64000,88200,96000]}]
+09-23 11:18:08.434  4693  4693 I A03d00/JSAPP: [a92ab344f04c0d4, 1b0ea67, 1ab3a9e] SELF_CAMERA_PROFILES [{"format":3,"frameRateRange":{"min":30,"max":60},"size":{"width":1280,"height":720}}]
+09-23 11:18:08.601  4693  4693 I A03d00/JSAPP: SELF_CAMERA_ROTATION {"display":270,"preview":180,"width":1280,"height":720}
+09-23 11:18:08.602  4693  4693 I A03d00/JSAPP: SELF_CAMERA_READY {"width":1280,"height":720,"fps":30,"position":2,"recording":false,"canRecord":false}
+09-23 11:18:08.615  4693  4693 I A03d00/JSAPP: SELF_CAMERA_PREVIEW_STARTED
+09-23 11:18:09.582  4693  4693 I A03d00/JSAPP: SELF_CAMERA_FRAME {"width":960,"height":540,"faces":0,"processingMs":18.283264,"frames":0,"cycleMs":46,"source":"camera-image-receiver","privatePixelsLogged":false}
+09-23 11:18:10.228  4693  4693 I A03d00/JSAPP: SELF_CAMERA_LAYOUT {"pass":0,"fullscreen":{"bottom":1864,"displayId":0,"left":0,"right":2880,"top":86},"preview":{"bottom":1864,"displayId":0,"left":0,"right":2880,"top":86},"ratio":1.6197975253093364,"status":"前置 · 1280 × 720 · 系统录像编码器未提供 · 本机软件采集","canRecord":true,"privatePixelsCaptured":false}
+09-23 11:18:11.191  4693  4693 I A03d00/JSAPP: SELF_CAMERA_SURFACE {"width":1066.6666259765625,"height":600,"aspect":1.7777777777777777}
+09-23 11:18:11.194  4693  4693 I A03d00/JSAPP: SELF_CAMERA_SURFACE {"width":1587.5555419921875,"height":893,"aspect":1.7777777777777777}
+09-23 11:18:11.195  4693  4693 I A03d00/JSAPP: SELF_CAMERA_DEVICES [{"position":1,"type":1,"connection":0},{"position":2,"type":1,"connection":0}]
+09-23 11:18:11.195  4693  4693 I A03d00/JSAPP: SELF_CAMERA_METADATA_TYPES []
+09-23 11:18:11.205  4693  4693 I A03d00/JSAPP: SELF_CAMERA_ENCODERS [{"mimeType":"audio/mp4a-latm","type":"audio","bitRate":{"min":1,"max":500000},"channels":{"min":1,"max":8},"sampleRate":[7350,8000,11025,12000,16000,22050,24000,32000,44100,48000,64000,88200,96000]}]
+09-23 11:18:11.205  4693  4693 I A03d00/JSAPP: SELF_CAMERA_PROFILES [{"format":3,"frameRateRange":{"min":30,"max":60},"size":{"width":1280,"height":720}}]
+09-23 11:18:11.329  4693  4693 I A03d00/JSAPP: SELF_CAMERA_ROTATION {"display":270,"preview":180,"width":1280,"height":720}
+09-23 11:18:11.329  4693  4693 I A03d00/JSAPP: SELF_CAMERA_READY {"width":1280,"height":720,"fps":30,"position":2,"recording":false,"canRecord":false}
+09-23 11:18:11.346  4693  4693 I A03d00/JSAPP: SELF_CAMERA_PREVIEW_STARTED
+09-23 11:18:12.273  4693  4693 I A03d00/JSAPP: SELF_CAMERA_FRAME {"width":960,"height":540,"faces":0,"processingMs":22.654923,"frames":0,"cycleMs":70,"source":"camera-image-receiver","privatePixelsLogged":false}
+09-23 11:18:12.970  4693  4693 I A03d00/JSAPP: SELF_CAMERA_LAYOUT {"pass":1,"fullscreen":{"bottom":1864,"displayId":0,"left":0,"right":2880,"top":86},"preview":{"bottom":1864,"displayId":0,"left":0,"right":2880,"top":86},"ratio":1.6197975253093364,"status":"前置 · 1280 × 720 · 系统录像编码器未提供 · 本机软件采集","canRecord":true,"privatePixelsCaptured":false}
+09-23 11:18:16.000  4693  4693 I A03d00/JSAPP: SELF_CAMERA_SURFACE {"width":1066.6666259765625,"height":600,"aspect":1.7777777777777777}
+09-23 11:18:16.002  4693  4693 I A03d00/JSAPP: SELF_CAMERA_SURFACE {"width":1587.5555419921875,"height":893,"aspect":1.7777777777777777}
+09-23 11:18:16.003  4693  4693 I A03d00/JSAPP: SELF_CAMERA_DEVICES [{"position":1,"type":1,"connection":0},{"position":2,"type":1,"connection":0}]
+09-23 11:18:16.003  4693  4693 I A03d00/JSAPP: SELF_CAMERA_METADATA_TYPES []
+09-23 11:18:16.019  4693  4693 I A03d00/JSAPP: SELF_CAMERA_ENCODERS [{"mimeType":"audio/mp4a-latm","type":"audio","bitRate":{"min":1,"max":500000},"channels":{"min":1,"max":8},"sampleRate":[7350,8000,11025,12000,16000,22050,24000,32000,44100,48000,64000,88200,96000]}]
+09-23 11:18:16.019  4693  4693 I A03d00/JSAPP: SELF_CAMERA_PROFILES [{"format":3,"frameRateRange":{"min":30,"max":60},"size":{"width":1280,"height":720}}]
+09-23 11:18:16.153  4693  4693 I A03d00/JSAPP: SELF_CAMERA_ROTATION {"display":270,"preview":180,"width":1280,"height":720}
+09-23 11:18:16.154  4693  4693 I A03d00/JSAPP: SELF_CAMERA_READY {"width":1280,"height":720,"fps":30,"position":2,"recording":false,"canRecord":false}
+09-23 11:18:16.154  4693  4693 I A03d00/JSAPP: SELF_CAMERA_PREVIEW_STARTED
+09-23 11:18:17.120  4693  4693 I A03d00/JSAPP: SELF_CAMERA_FRAME {"width":960,"height":540,"faces":0,"processingMs":23.325807,"frames":0,"cycleMs":66,"source":"camera-image-receiver","privatePixelsLogged":false}
+09-23 11:18:19.723  4693  4693 I A03d00/JSAPP: SELF_CAMERA_FRAME {"width":960,"height":540,"faces":0,"processingMs":23.574238,"frames":20,"cycleMs":55,"source":"camera-image-receiver","privatePixelsLogged":false}
+09-23 11:18:21.773  4693  4693 I A03d00/JSAPP: SELF_CAMERA_SAVED {"schemaVersion":2,"source":"native-camera-receiver-software-h264","createdAt":1790133497409,"durationMs":4312,"width":960,"height":540,"bytes":730931,"frames":36,"fps":8.348794063079778,"previewStarted":true,"reconstructionStatus":"not-reconstructed","poseData":false,"private":true}
+09-23 11:18:22.238  4693  4693 I A03d00/JSAPP: SELF_CAMERA_DEVICES [{"position":1,"type":1,"connection":0},{"position":2,"type":1,"connection":0}]
+09-23 11:18:22.238  4693  4693 I A03d00/JSAPP: SELF_CAMERA_METADATA_TYPES []
+09-23 11:18:22.254  4693  4693 I A03d00/JSAPP: SELF_CAMERA_ENCODERS [{"mimeType":"audio/mp4a-latm","type":"audio","bitRate":{"min":1,"max":500000},"channels":{"min":1,"max":8},"sampleRate":[7350,8000,11025,12000,16000,22050,24000,32000,44100,48000,64000,88200,96000]}]
+09-23 11:18:22.254  4693  4693 I A03d00/JSAPP: SELF_CAMERA_PROFILES [{"format":3,"frameRateRange":{"min":30,"max":60},"size":{"width":1280,"height":720}}]
+09-23 11:18:22.412  4693  4693 I A03d00/JSAPP: SELF_CAMERA_ROTATION {"display":270,"preview":180,"width":1280,"height":720}
+09-23 11:18:22.413  4693  4693 I A03d00/JSAPP: SELF_CAMERA_READY {"width":1280,"height":720,"fps":30,"position":2,"recording":false,"canRecord":false}
+09-23 11:18:22.440  4693  4693 I A03d00/JSAPP: SELF_CAMERA_PREVIEW_STARTED
+09-23 11:18:23.423  4693  4693 I A03d00/JSAPP: SELF_CAMERA_FRAME {"width":960,"height":540,"faces":0,"processingMs":21.51678,"frames":0,"cycleMs":87,"source":"camera-image-receiver","privatePixelsLogged":false}
+09-23 11:18:24.036  4693  4693 I A03d00/JSAPP: SELF_CAMERA_PRIVATE_VIDEO {"saved":true,"decode":true,"bytes":730931,"width":240,"height":136,"privateVideoExported":false}
+09-23 11:18:26.030  4693  4693 I A03d00/JSAPP: SELF_CAPTURE_PLAYBACK_STARTED
+09-23 11:18:29.292  4693  4693 I A03d00/JSAPP: SELF_CAMERA_SURFACE {"width":1066.6666259765625,"height":600,"aspect":1.7777777777777777}
+09-23 11:18:29.306  4693  4693 I A03d00/JSAPP: SELF_CAMERA_SURFACE {"width":1587.5555419921875,"height":893,"aspect":1.7777777777777777}
+09-23 11:18:29.307  4693  4693 I A03d00/JSAPP: SELF_CAMERA_DEVICES [{"position":1,"type":1,"connection":0},{"position":2,"type":1,"connection":0}]
+09-23 11:18:29.307  4693  4693 I A03d00/JSAPP: SELF_CAMERA_METADATA_TYPES []
+09-23 11:18:29.326  4693  4693 I A03d00/JSAPP: SELF_CAMERA_ENCODERS [{"mimeType":"audio/mp4a-latm","type":"audio","bitRate":{"min":1,"max":500000},"channels":{"min":1,"max":8},"sampleRate":[7350,8000,11025,12000,16000,22050,24000,32000,44100,48000,64000,88200,96000]}]
+09-23 11:18:29.326  4693  4693 I A03d00/JSAPP: SELF_CAMERA_PROFILES [{"format":3,"frameRateRange":{"min":30,"max":60},"size":{"width":1280,"height":720}}]
+09-23 11:18:29.459  4693  4693 I A03d00/JSAPP: SELF_CAMERA_ROTATION {"display":270,"preview":180,"width":1280,"height":720}
+09-23 11:18:29.459  4693  4693 I A03d00/JSAPP: SELF_CAMERA_READY {"width":1280,"height":720,"fps":30,"position":2,"recording":false,"canRecord":false}
+09-23 11:18:29.474  4693  4693 I A03d00/JSAPP: SELF_CAMERA_PREVIEW_STARTED
+09-23 11:18:30.373  4693  4693 I A03d00/JSAPP: SELF_CAMERA_FRAME {"width":960,"height":540,"faces":0,"processingMs":26.47714,"frames":0,"cycleMs":60,"source":"camera-image-receiver","privatePixelsLogged":false}
+09-23 11:18:16.000  4693  4693 I A03d00/JSAPP: SELF_CAMERA_SURFACE {"width":1066.6666259765625,"height":600,"aspect":1.7777777777777777}
+09-23 11:18:16.002  4693  4693 I A03d00/JSAPP: SELF_CAMERA_SURFACE {"width":1587.5555419921875,"height":893,"aspect":1.7777777777777777}
+09-23 11:18:16.003  4693  4693 I A03d00/JSAPP: SELF_CAMERA_DEVICES [{"position":1,"type":1,"connection":0},{"position":2,"type":1,"connection":0}]
+09-23 11:18:16.003  4693  4693 I A03d00/JSAPP: SELF_CAMERA_METADATA_TYPES []
+09-23 11:18:16.019  4693  4693 I A03d00/JSAPP: SELF_CAMERA_ENCODERS [{"mimeType":"audio/mp4a-latm","type":"audio","bitRate":{"min":1,"max":500000},"channels":{"min":1,"max":8},"sampleRate":[7350,8000,11025,12000,16000,22050,24000,32000,44100,48000,64000,88200,96000]}]
+09-23 11:18:16.019  4693  4693 I A03d00/JSAPP: SELF_CAMERA_PROFILES [{"format":3,"frameRateRange":{"min":30,"max":60},"size":{"width":1280,"height":720}}]
+09-23 11:18:16.153  4693  4693 I A03d00/JSAPP: SELF_CAMERA_ROTATION {"display":270,"preview":180,"width":1280,"height":720}
+09-23 11:18:16.154  4693  4693 I A03d00/JSAPP: SELF_CAMERA_READY {"width":1280,"height":720,"fps":30,"position":2,"recording":false,"canRecord":false}
+09-23 11:18:16.154  4693  4693 I A03d00/JSAPP: SELF_CAMERA_PREVIEW_STARTED
+09-23 11:18:17.120  4693  4693 I A03d00/JSAPP: SELF_CAMERA_FRAME {"width":960,"height":540,"faces":0,"processingMs":23.325807,"frames":0,"cycleMs":66,"source":"camera-image-receiver","privatePixelsLogged":false}
+09-23 11:18:19.723  4693  4693 I A03d00/JSAPP: SELF_CAMERA_FRAME {"width":960,"height":540,"faces":0,"processingMs":23.574238,"frames":20,"cycleMs":55,"source":"camera-image-receiver","privatePixelsLogged":false}
+09-23 11:18:21.773  4693  4693 I A03d00/JSAPP: SELF_CAMERA_SAVED {"schemaVersion":2,"source":"native-camera-receiver-software-h264","createdAt":1790133497409,"durationMs":4312,"width":960,"height":540,"bytes":730931,"frames":36,"fps":8.348794063079778,"previewStarted":true,"reconstructionStatus":"not-reconstructed","poseData":false,"private":true}
+09-23 11:18:22.238  4693  4693 I A03d00/JSAPP: SELF_CAMERA_DEVICES [{"position":1,"type":1,"connection":0},{"position":2,"type":1,"connection":0}]
+09-23 11:18:22.238  4693  4693 I A03d00/JSAPP: SELF_CAMERA_METADATA_TYPES []
+09-23 11:18:22.254  4693  4693 I A03d00/JSAPP: SELF_CAMERA_ENCODERS [{"mimeType":"audio/mp4a-latm","type":"audio","bitRate":{"min":1,"max":500000},"channels":{"min":1,"max":8},"sampleRate":[7350,8000,11025,12000,16000,22050,24000,32000,44100,48000,64000,88200,96000]}]
+09-23 11:18:22.254  4693  4693 I A03d00/JSAPP: SELF_CAMERA_PROFILES [{"format":3,"frameRateRange":{"min":30,"max":60},"size":{"width":1280,"height":720}}]
+09-23 11:18:22.412  4693  4693 I A03d00/JSAPP: SELF_CAMERA_ROTATION {"display":270,"preview":180,"width":1280,"height":720}
+09-23 11:18:22.413  4693  4693 I A03d00/JSAPP: SELF_CAMERA_READY {"width":1280,"height":720,"fps":30,"position":2,"recording":false,"canRecord":false}
+09-23 11:18:22.440  4693  4693 I A03d00/JSAPP: SELF_CAMERA_PREVIEW_STARTED
+09-23 11:18:23.423  4693  4693 I A03d00/JSAPP: SELF_CAMERA_FRAME {"width":960,"height":540,"faces":0,"processingMs":21.51678,"frames":0,"cycleMs":87,"source":"camera-image-receiver","privatePixelsLogged":false}
+09-23 11:18:24.036  4693  4693 I A03d00/JSAPP: SELF_CAMERA_PRIVATE_VIDEO {"saved":true,"decode":true,"bytes":730931,"width":240,"height":136,"privateVideoExported":false}
+09-23 11:18:26.030  4693  4693 I A03d00/JSAPP: SELF_CAPTURE_PLAYBACK_STARTED
+09-23 11:18:29.292  4693  4693 I A03d00/JSAPP: SELF_CAMERA_SURFACE {"width":1066.6666259765625,"height":600,"aspect":1.7777777777777777}
+09-23 11:18:29.306  4693  4693 I A03d00/JSAPP: SELF_CAMERA_SURFACE {"width":1587.5555419921875,"height":893,"aspect":1.7777777777777777}
+09-23 11:18:29.307  4693  4693 I A03d00/JSAPP: SELF_CAMERA_DEVICES [{"position":1,"type":1,"connection":0},{"position":2,"type":1,"connection":0}]
+09-23 11:18:29.307  4693  4693 I A03d00/JSAPP: SELF_CAMERA_METADATA_TYPES []
+09-23 11:18:29.326  4693  4693 I A03d00/JSAPP: SELF_CAMERA_ENCODERS [{"mimeType":"audio/mp4a-latm","type":"audio","bitRate":{"min":1,"max":500000},"channels":{"min":1,"max":8},"sampleRate":[7350,8000,11025,12000,16000,22050,24000,32000,44100,48000,64000,88200,96000]}]
+09-23 11:18:29.326  4693  4693 I A03d00/JSAPP: SELF_CAMERA_PROFILES [{"format":3,"frameRateRange":{"min":30,"max":60},"size":{"width":1280,"height":720}}]
+09-23 11:18:29.459  4693  4693 I A03d00/JSAPP: SELF_CAMERA_ROTATION {"display":270,"preview":180,"width":1280,"height":720}
+09-23 11:18:29.459  4693  4693 I A03d00/JSAPP: SELF_CAMERA_READY {"width":1280,"height":720,"fps":30,"position":2,"recording":false,"canRecord":false}
+09-23 11:18:29.474  4693  4693 I A03d00/JSAPP: SELF_CAMERA_PREVIEW_STARTED
+09-23 11:18:30.373  4693  4693 I A03d00/JSAPP: SELF_CAMERA_FRAME {"width":960,"height":540,"faces":0,"processingMs":26.47714,"frames":0,"cycleMs":60,"source":"camera-image-receiver","privatePixelsLogged":false}
+09-23 11:18:32.878  4693  4693 I A03d00/JSAPP: SELF_CAMERA_ROTATION {"display":0,"preview":270,"width":1280,"height":720}
+09-23 11:18:32.890  4693  4693 I A03d00/JSAPP: SELF_CAMERA_SURFACE {"width":1440,"height":2560,"aspect":0.5625}
+09-23 11:18:32.934  4693  4693 I A03d00/JSAPP: SELF_CAMERA_SAVED {"schemaVersion":2,"source":"native-camera-receiver-software-h264","createdAt":1790133510588,"durationMs":2291,"width":960,"height":540,"bytes":355598,"frames":19,"fps":8.293321693583588,"previewStarted":true,"reconstructionStatus":"not-reconstructed","poseData":false,"private":true}
+09-23 11:18:33.022  4693  4693 I A03d00/JSAPP: SELF_CAMERA_SURFACE {"width":1440,"height":2560,"aspect":0.5625}
+09-23 11:18:33.041  4693  4693 I A03d00/JSAPP: SELF_CAMERA_SURFACE {"width":960,"height":1706.6666259765625,"aspect":0.5625}
+09-23 11:18:33.484  4693  4693 I A03d00/JSAPP: SELF_CAMERA_DEVICES [{"position":1,"type":1,"connection":0},{"position":2,"type":1,"connection":0}]
+09-23 11:18:33.484  4693  4693 I A03d00/JSAPP: SELF_CAMERA_METADATA_TYPES []
+09-23 11:18:33.493  4693  4693 I A03d00/JSAPP: SELF_CAMERA_ENCODERS [{"mimeType":"audio/mp4a-latm","type":"audio","bitRate":{"min":1,"max":500000},"channels":{"min":1,"max":8},"sampleRate":[7350,8000,11025,12000,16000,22050,24000,32000,44100,48000,64000,88200,96000]}]
+09-23 11:18:33.493  4693  4693 I A03d00/JSAPP: SELF_CAMERA_PROFILES [{"format":3,"frameRateRange":{"min":30,"max":60},"size":{"width":1280,"height":720}}]
+09-23 11:18:33.645  4693  4693 I A03d00/JSAPP: SELF_CAMERA_ROTATION {"display":0,"preview":270,"width":1280,"height":720}
+09-23 11:18:33.646  4693  4693 I A03d00/JSAPP: SELF_CAMERA_READY {"width":1280,"height":720,"fps":30,"position":2,"recording":false,"canRecord":false}
+09-23 11:18:33.652  4693  4693 I A03d00/JSAPP: SELF_CAMERA_PREVIEW_STARTED
+09-23 11:18:34.674  4693  4693 I A03d00/JSAPP: SELF_CAMERA_FRAME {"width":540,"height":960,"faces":0,"processingMs":21.461956,"frames":0,"cycleMs":53,"source":"camera-image-receiver","privatePixelsLogged":false}
+09-23 11:18:35.889  4693  4693 I A03d00/JSAPP: SELF_CAMERA_ROTATION_SAVED true

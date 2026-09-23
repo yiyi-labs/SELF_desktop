@@ -1,5 +1,5 @@
 param([Parameter(Mandatory=$true)][string]$Device,
-      [Parameter(Mandatory=$true)][ValidateSet('SELFNativePolicy','SELFNativeApi26UI','SELFNativeExperience','SELFNativeModelLive','SELFNativeProductUI','SELFNativeCamera')][string]$Suite,
+      [Parameter(Mandatory=$true)][ValidateSet('SELFNativePolicy','SELFNativeApi26UI','SELFNativeExperience','SELFNativeModelLive','SELFNativeProductUI','SELFNativeCamera','SELFNativeCameraPipeline')][string]$Suite,
       [Parameter(Mandatory=$true)][int]$ExpectedTests,
       [Parameter(Mandatory=$true)][string]$Evidence,
       [string]$DevEcoHome='C:\Program Files\Huawei\DevEco Studio')

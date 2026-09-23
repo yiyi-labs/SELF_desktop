@@ -1,3 +1,4 @@
+import { image } from '@kit.ImageKit';
 import { camera } from '@kit.CameraKit';
 import { media } from '@kit.MediaKit';
 import { common, abilityAccessCtrl } from '@kit.AbilityKit';
@@ -10,6 +11,19 @@ interface CameraClipEvidence {schemaVersion:number;source:string;createdAt:numbe
 /** Native Camera Kit surface preview + silent MP4. No network or reconstruction here. */
 export class CameraCaptureSession {
  private input:camera.CameraInput|undefined;
+ private receiver:image.ImageReceiver|undefined;
+ private analysis:camera.PreviewOutput|undefined;
+ private frameTask:Promise<void>|undefined;
+ private reading:boolean=false;
+ private previewRotation:number=0;
+ onFrame:(frame:image.Image,rotation:number,format:number)=>Promise<void>=async(frame)=>{await frame.release();};
+ private async receive(format:number):Promise<void>{
+  if(this.disposed||this.reading||!this.receiver)return;this.reading=true;
+  try{const frame=await this.receiver.readLatestImage();if(frame)await this.onFrame(frame,this.previewRotation,format);}
+  catch(e){console.info('SELF_CAMERA_RECEIVER_ERROR '+JSON.stringify(e));}
+  finally{this.reading=false;}
+ }
+
  private preview:camera.PreviewOutput|undefined;
  private metadata:camera.MetadataOutput|undefined;
  private watchingDisplay:boolean=false;
@@ -87,13 +101,18 @@ export class CameraCaptureSession {
     }catch(_){this.faceDetection=false;this.metadata=undefined;}
    }
    if(this.video){if(!this.session.canAddOutput(this.video))throw new Error('设备不支持当前预览与录像组合');this.session.addOutput(this.video);}
+   this.receiver=image.createImageReceiver(profile.size,image.ImageFormat.JPEG,3);
+   this.analysis=manager.createPreviewOutput(previewProfile,await this.receiver.getReceivingSurfaceId());
+   if(!this.session.canAddOutput(this.analysis))throw new Error('当前设备未提供相机帧读取组合');
+   this.session.addOutput(this.analysis);
+   this.receiver.on('imageArrival',()=>{if(!this.reading)this.frameTask=this.receive(previewProfile.format);});
    await this.session.commitConfig();
    if(this.disposed)throw new Error('已关闭相机');
    await this.session.start();
    this.updateRotation();display.on('change',this.displayChanged);this.watchingDisplay=true;
    if(this.metadata){try{await this.metadata.start();}catch(_){this.faceDetection=false;}}
    console.info('SELF_CAMERA_READY '+JSON.stringify({width:this.width,height:this.height,fps:30,position:target.cameraPosition,recording:false,canRecord:this.canRecord}));
-   return (target.cameraPosition===camera.CameraPosition.CAMERA_POSITION_FRONT?'前置':'后置')+' · '+this.width+' × '+this.height+(this.canRecord?'':' · 当前系统无录像编码器，仅可预览');
+   return (target.cameraPosition===camera.CameraPosition.CAMERA_POSITION_FRONT?'前置':'后置')+' · '+this.width+' × '+this.height+(this.canRecord?'':' · 系统录像编码器未提供');
   }catch(e){await this.release();throw new Error((e as Error).message||String(e));}
  }
  updateRotation():void{
@@ -103,7 +122,7 @@ export class CameraCaptureSession {
    const rotation=this.preview.getPreviewRotation(degrees);
    if(![0,90,180,270].includes(rotation))throw new Error('相机没有返回有效方向');
    // Camera Kit rotates the buffer once. ArkUI only fits the resulting aspect ratio.
-   this.preview.setPreviewRotation(rotation,false);
+   this.preview.setPreviewRotation(rotation,false);this.previewRotation=rotation;
    this.onGeometry(this.width,this.height,rotation);
    console.info('SELF_CAMERA_ROTATION '+JSON.stringify({display:degrees,preview:rotation,width:this.width,height:this.height}));
   }catch(e){this.onError('相机方向设置失败，请重新打开：'+(e as Error).message);}
@@ -129,6 +148,9 @@ export class CameraCaptureSession {
   try{await this.metadata?.stop();}catch(_){}
   try{await this.metadata?.release();}catch(_){}this.metadata=undefined;
   try{await this.session?.stop();}catch(_){}
+  try{await this.frameTask;}catch(_){}
+  try{await this.analysis?.release();}catch(_){}this.analysis=undefined;
+  try{await this.receiver?.release();}catch(_){}this.receiver=undefined;
   try{await this.preview?.release();}catch(_){}this.preview=undefined;
   try{await this.video?.release();}catch(_){}this.video=undefined;
   try{await this.session?.release();}catch(_){}this.session=undefined;

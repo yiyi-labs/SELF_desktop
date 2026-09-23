@@ -1,3 +1,4 @@
+import { fileUri } from '@kit.CoreFileKit';
 import { NativeMirrorSurface } from './NativeMirrorSurface';
 import { CameraCaptureView } from './CameraCaptureView';
 import { ProductCard } from './ProductCard';
@@ -35,6 +36,7 @@ struct SelfMirrorPage {
   @State focusOpen:boolean=false;
   @State captureStatus:string='';
   @State captures:CaptureRecord[]=[];
+  @State selectedCapture:string='';
   @State cameraLive:boolean=false;
   @State language:string='zh';
   @State accent:string='#7C698F';
@@ -268,7 +270,7 @@ struct SelfMirrorPage {
     if(!this.detail)this.previousTool=this.tool;
     this.getUIContext().animateTo({duration:this.motion?280:0,curve:Curve.EaseOut},()=>this.detail=name);
     this.bridge.send('SET_TOOL',{tool:'DETAIL'});this.workItems=this.works.list();this.note=this.works.readNote();
-    if(name==='采集记录')this.captures=new CaptureService(this.context).list();
+    if(name==='采集记录'){this.selectedCapture='';this.captures=new CaptureService(this.context).list();}
   }
   private close():void{this.cameraLive=false;if(this.timer>=0)clearInterval(this.timer);this.timer=-1;this.playing=false;this.getUIContext().animateTo({duration:this.motion?240:0,curve:Curve.EaseOut},()=>this.detail='');this.tool=this.previousTool;this.bridge.send('SET_TOOL',{tool:this.tool});}
   private protect(current:boolean,persistent:boolean):void{
@@ -354,11 +356,12 @@ struct SelfMirrorPage {
         Text(this.tr('SELF · API 26')).fontSize(12).fontColor('#81758D')
       }
       if(this.detail==='采集记录'){
+        if(this.selectedCapture){Video({src:fileUri.getUriFromPath(this.context.filesDir+'/captures/'+this.selectedCapture)}).id('capture-playback').onStart(()=>console.info('SELF_CAPTURE_PLAYBACK_STARTED')).onError(()=>console.info('SELF_CAPTURE_PLAYBACK_ERROR')).width('100%').height(230).autoPlay(true).controls(true).objectFit(ImageFit.Contain).borderRadius(18)}
         Text(this.tr('视频只保存在本机，尚未生成个人 3D。')).fontSize(14).fontColor('#81758D')
         Button(this.tr('拍摄面容')).softButton().onClick((event:ClickEvent)=>this.open('拍摄面容',event))
         if(this.captureStatus){Text(this.tr(this.captureStatus)).fontSize(14)}
         Button(this.tr('检查设备重建能力')).softButton().onClick(()=>this.checkReconstruction())
-        ForEach(this.captures,(clip:CaptureRecord)=>{Row(){Text(this.tr('私密视频')+' · '+Math.round(clip.bytes/1024)+' KB').fontSize(14).layoutWeight(1);Button(this.tr('删除视频')).softButton().onClick(()=>{new CaptureService(this.context).delete(clip.name);this.captures=new CaptureService(this.context).list();})}},(clip:CaptureRecord)=>clip.name)
+        ForEach(this.captures,(clip:CaptureRecord)=>{Row(){Text(this.tr('私密视频')+' · '+Math.round(clip.bytes/1024)+' KB').fontSize(14).layoutWeight(1);Button('▶').id('play-'+clip.name).softButton().accessibilityText(this.tr('播放视频')).onClick(()=>this.selectedCapture=clip.name);Button(this.tr('删除视频')).softButton().onClick(()=>{if(this.selectedCapture===clip.name)this.selectedCapture='';new CaptureService(this.context).delete(clip.name);this.captures=new CaptureService(this.context).list();})}},(clip:CaptureRecord)=>clip.name)
       }
       if(this.detail==='工具'){
         Button(this.tr('拍摄面容视频')).softButton().onClick(()=>{this.open('拍摄面容');})

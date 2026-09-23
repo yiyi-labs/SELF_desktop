@@ -1,0 +1,101 @@
+[
+  {
+    "name": "libfacedetection",
+    "repository": "https://github.com/ShiqiYu/libfacedetection",
+    "revision": "acf7b254121927e7dced30e233a2e03119f28ea2",
+    "license": "BSD-3-Clause",
+    "files": [
+      {
+        "path": "entry/src/main/cpp/vendor/libfacedetection/facedetectcnn-data.cpp",
+        "sha256": "cf019963f413528540d6de741e72eea4f2f0b572ca85b22dd4baa8fc71b42bb6",
+        "upstreamUnchanged": true
+      },
+      {
+        "path": "entry/src/main/cpp/vendor/libfacedetection/facedetectcnn-model.cpp",
+        "sha256": "0c5689b7070c070429a2c45eb3ae7f02018e492db94b0a3eb660681e9ca0aee6",
+        "upstreamUnchanged": true
+      },
+      {
+        "path": "entry/src/main/cpp/vendor/libfacedetection/facedetectcnn.cpp",
+        "sha256": "e86cbb3f4080762197d0a43b98f3534e08fe890a7eed5c5904e395b8bed4a55d",
+        "upstreamUnchanged": true
+      },
+      {
+        "path": "entry/src/main/cpp/vendor/libfacedetection/facedetectcnn.h",
+        "sha256": "896ad9cae317d1ebce947662ea44d7d1c3f12cd77606da977c0adea9c5625605",
+        "upstreamUnchanged": true
+      },
+      {
+        "path": "entry/src/main/cpp/vendor/libfacedetection/facedetection_export.h",
+        "sha256": "f9d87830fa46b7728b10aefe04234b5f9a6ba7532b8f1b7189ff6fdedbeda2cc",
+        "upstreamUnchanged": false
+      },
+      {
+        "path": "entry/src/main/cpp/vendor/libfacedetection/LICENSE",
+        "sha256": "95b286c39b1444594e18672e6092321e39cc11f2f1daf994cadfd95af7c91dcc",
+        "upstreamUnchanged": true
+      },
+      {
+        "path": "entry/src/main/cpp/vendor/libfacedetection/README.md",
+        "sha256": "cc2fb0253baca47734ab8c7431f065ea4ef520fbbbbf20016e72fd68576afe76",
+        "upstreamUnchanged": true
+      }
+    ]
+  },
+  {
+    "name": "minih264",
+    "repository": "https://github.com/lieff/minih264",
+    "revision": "b0baea7a80ef9d12da97301dd1099b8791b5ba43",
+    "license": "CC0-1.0",
+    "files": [
+      {
+        "path": "entry/src/main/cpp/vendor/minih264/LICENSE",
+        "sha256": "6a1ee543e5282cd9061881edf462e6fdab181f328da71fc2c9a6950a80e94d01",
+        "upstreamUnchanged": true
+      },
+      {
+        "path": "entry/src/main/cpp/vendor/minih264/minih264e.h",
+        "sha256": "661afe7802b4e1174e8389632f3ee437b903e036a9c91a7f035830947c6a7aae",
+        "upstreamUnchanged": true
+      },
+      {
+        "path": "entry/src/main/cpp/vendor/minih264/minih264e_test.c",
+        "sha256": "c7ecab95d199ad4e46f7f53cfe675b5576211bf4d4c91230eef4a420cbf81d4a",
+        "upstreamUnchanged": true
+      },
+      {
+        "path": "entry/src/main/cpp/vendor/minih264/README.md",
+        "sha256": "f90ebee3c2e8311ffe1a12b5c267eb5b75913359a61215323be90349eeca96f5",
+        "upstreamUnchanged": true
+      }
+    ]
+  },
+  {
+    "name": "minimp4",
+    "repository": "https://github.com/lieff/minimp4",
+    "revision": "5a212a18dba7dca09543bbc7d65619274fd2931a",
+    "license": "CC0-1.0",
+    "files": [
+      {
+        "path": "entry/src/main/cpp/vendor/minimp4/LICENSE",
+        "sha256": "6a1ee543e5282cd9061881edf462e6fdab181f328da71fc2c9a6950a80e94d01",
+        "upstreamUnchanged": true
+      },
+      {
+        "path": "entry/src/main/cpp/vendor/minimp4/minimp4.h",
+        "sha256": "1fc8d29b8c29dbeead9710bd9e95f6aab4d2fec48a55c2cc54a59f0338190bf2",
+        "upstreamUnchanged": true
+      },
+      {
+        "path": "entry/src/main/cpp/vendor/minimp4/minimp4_test.c",
+        "sha256": "d0fb79c3612c7002fb1e6070ebd43813d4ca4d8fbd2da90cd82e547fbb721551",
+        "upstreamUnchanged": true
+      },
+      {
+        "path": "entry/src/main/cpp/vendor/minimp4/README.md",
+        "sha256": "80f57deac829d157685e943ae4ed208b53ef5490f22c22b21c77dd2f28c6b6b0",
+        "upstreamUnchanged": true
+      }
+    ]
+  }
+]

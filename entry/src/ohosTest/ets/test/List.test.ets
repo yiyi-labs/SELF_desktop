@@ -1,3 +1,4 @@
+import cameraPipelineSuite from './CameraPipeline.test';
 import { describe, it, expect } from '@ohos/hypium';
 import { SessionStore } from '../../../main/ets/domain/SessionStore';
 import { PolicyEngine } from '../../../main/ets/domain/PolicyEngine';
@@ -39,7 +40,7 @@ function session():SessionStore{
   return s;
 }
 export default function testsuite(){
-  stressSuite();liveModelSuite();experienceSuite();productSuite();cameraSuite();
+  cameraPipelineSuite();stressSuite();liveModelSuite();experienceSuite();productSuite();cameraSuite();
   describe('SELFNativePolicy',()=>{
     it('localNewEffectCannotBypassModelButRestoreRemainsLocal',0,()=>{
       const s=new SessionStore();s.regions=session().regions;const plan=s.propose('lipTint','lip');let rejected=false;

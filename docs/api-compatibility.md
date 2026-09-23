@@ -1,5 +1,7 @@
 # 商业 SDK 接口核对：2026-09-22
 
+> 最新采集接口与结果见本文末尾的2026-09-23更新及 [拍摄核验](camera-tracking-validation.md)。历史CoreVision/Surface截图路径已被本机CPU检测与ImageReceiver替代。
+
 正式路径为 ArkUI → N-API → C++ EGL/OpenGL ES3 → XComponent SURFACE。唯一生产入口仍为 `EntryAbility / SelfMirrorPage`。旧 Web 与 Component3D 试验源码保留作参照，不自动回退、不创建第二套作品。
 
 实际 DevEco 26.0.0.821；SDK/Native package 26.0.0.105（API26、Release），target `26.0.0`、compatible `5.1.1(19)`，沿用 ArkTS 动态编译模式。CMake 3.28、Clang 15.0.4；`arm64-v8a`、`x86_64` 都从本项目源码链接。运行证据仅为 API26 x86_64 模拟器，不代表 arm64 真机或最低版本已经测试。
@@ -41,3 +43,13 @@ UI 只复制请求与字节；N-API async worker 解析 GLB/解码照片。GL �
 MetadataOutput 仅在 supportedMetadataObjectTypes 中存在时加入会话。CoreVisionKit faceDetector 的 init/detect/release 和 ImageKit createPixelMapFromSurfaceWithTransformation / convertPixelFormat 来自商业 SDK 声明；后者 API23 起，当前只验 API26，不保证最低 API19 上的这一新增采集路径。模拟器 canIUse(SystemCapability.AI.Face.Detector) 返回 false，真实跟踪路径未验证。检测限频、单任务、纯内存、不上传、不落盘，停止等待当前任务结束后幂等释放。
 
 UiText 是应用内显示层映射，不修改作品、用户原话或协议标识。CameraCaptureView 使用原有 V1 组件风格；没有混入 V2 装饰器。原生背景切色沿现有 VSync 线程渐变，不增加渲染循环。
+
+## 2026-09-23 真实帧与软件录像更新
+
+实际核对 SDK 的 image.ImageReceiver、createImageReceiver(size, ImageFormat.JPEG, capacity)、getReceivingSurfaceId、readLatestImage、Image.getComponent、rowStride/byteBuffer/release。JPEG是接收器的占位参数；相机生产者的Profile决定RGBA/NV21实际格式。CameraSession加入第二个PreviewOutput前调用canAddOutput，队列只读最新帧，单任务在途，停止等待帧释放后关闭接收器。当前API26平板真实通过，不能保证所有设备支持相同多输出组合。
+
+ImageKit的createPixelMap、rotate、flip、scale、convertPixelFormat、readPixelsToBuffer均按实际商业SDK编译；相同格式不重复转换。设备限定修正使用BasicServicesKit.deviceInfo.productModel；真机NV21分支未实测。CoreVisionKit检测和createPixelMapFromSurfaceWithTransformation不再是相机生产路径。
+
+无系统视频编码器时使用本地C/C++H.264与MP4封装，不冒充系统AVRecorder；时间戳真实、最长边960、最多30秒。Video组件使用CoreFileKit.fileUri的应用私有路径；回放触发onStart，另由MediaKit.AVImageGenerator实际解码验证文件，避免仅凭组件出现判断视频有效。
+
+本次公开模型帧的CPU检测、编码和实际相机录制在API26 x86_64通过。依赖固定、许可与修改见references.md。SpatialRecon的设备能力、AR位姿、内参、3DGS格式仍是独立未完成链路，不由相机录像或GLB渲染通过推导。

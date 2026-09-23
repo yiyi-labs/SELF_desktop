@@ -1,0 +1,93 @@
+start ability successfully.
+
+OHOS_REPORT_SUM: 4
+OHOS_REPORT_STATUS: class=SELFNativeCamera
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCamera
+OHOS_REPORT_STATUS: current=1
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=4
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=fullScreenCameraRotatesReopensAndKeepsEntry
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCamera
+OHOS_REPORT_STATUS: current=1
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=4
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=fullScreenCameraRotatesReopensAndKeepsEntry
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=13780
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCamera
+OHOS_REPORT_STATUS: current=2
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=4
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=cameraActuallyRecordsAndDecodesPrivately
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCamera
+OHOS_REPORT_STATUS: current=2
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=4
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=cameraActuallyRecordsAndDecodesPrivately
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=13401
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCamera
+OHOS_REPORT_STATUS: current=3
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=4
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=orientationChangeSavesCurrentVideoSegment
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCamera
+OHOS_REPORT_STATUS: current=3
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=4
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=orientationChangeSavesCurrentVideoSegment
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=8811
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCamera
+OHOS_REPORT_STATUS: current=4
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=4
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=anchoredAtmosphereAccentAndLanguage
+OHOS_REPORT_STATUS_CODE: 1
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCamera
+OHOS_REPORT_STATUS: current=4
+OHOS_REPORT_STATUS: id=JS
+OHOS_REPORT_STATUS: numtests=4
+OHOS_REPORT_STATUS: stream=
+OHOS_REPORT_STATUS: test=anchoredAtmosphereAccentAndLanguage
+OHOS_REPORT_STATUS_CODE: 0
+OHOS_REPORT_STATUS: consuming=7070
+
+
+OHOS_REPORT_STATUS: class=SELFNativeCamera
+OHOS_REPORT_STATUS: suiteconsuming=43062
+
+
+OHOS_REPORT_RESULT: stream=Tests run: 4, Failure: 0, Error: 0, Pass: 4, Ignore: 0
+OHOS_REPORT_CODE: 0
+OHOS_REPORT_STATUS: taskconsuming=43062
+
+TestFinished-ResultCode: 0
+TestFinished-ResultMsg: your test finished!!!
+user test finished.

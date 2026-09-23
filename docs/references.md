@@ -1,8 +1,23 @@
 # 实际引用与许可
 
+## 2026-09-23 相机帧、检测和软件编码
+
+以下源码固定到实际下载的 commit，原文文件及本项目生成文件的逐文件SHA256见 [camera-dependencies.json](../shared/camera-dependencies.json)，可运行 `scripts/Check-Camera-Dependencies.py` 校验。相关许可证同时随源码和 HAP 的 `rawfile/licenses` 分发。
+
+| 来源与固定版本 | 使用范围与实际修改 |
+|---|---|
+| [libfacedetection](https://github.com/ShiqiYu/libfacedetection/tree/acf7b254121927e7dced30e233a2e03119f28ea2)，BSD-3-Clause | 使用 facedetectcnn.cpp/.h、facedetectcnn-model.cpp、facedetectcnn-data.cpp 内置CNN和5关键点模型；保留上游原文。另按上游要求生成 facedetection_export.h 宏头。SELF自写RGBA→BGR缩放、置信度过滤、几何跟随与界面；arm64启用NEON，x86标量路径，不依赖OpenCV/ONNX运行时 |
+| [minih264](https://github.com/lieff/minih264/tree/b0baea7a80ef9d12da97301dd1099b8791b5ba43)，CC0-1.0 | minih264e.h 未改；SELF CameraCodecs.c 单独以C编译，禁用库内多线程；CameraPipeline.cpp自写带步长的RGBA→I420、实际时间戳和异步生命周期 |
+| [minimp4](https://github.com/lieff/minimp4/tree/5a212a18dba7dca09543bbc7d65619274fd2931a)，CC0-1.0 | minimp4.h 未改；独立CameraMux.c翻译单元，SELF自写私有fd写入、样本时长、收尾与失败清理。两库README/LICENSE/test.c留作来源对照，test.c不编入应用 |
+| 既有 Lee Perry-Smith 公共扫描，CC BY3.0 | 新 public-scan-face.png 是已有原生示例渲染 native-face.png 的384×512派生测试图；公共编码测试MP4只重复此图。署名：Infinite, 3D Head Scan by Lee Perry-Smith; based on www.triplegangers.com。原始许可见 assets/LICENSE-HEAD.txt；不是用户人像或重建结果 |
+
+CameraCaptureSession/LocalFaceGuide/FaceAnchorTracker、锚点动效、线条手机提示和回放入口为SELF实现；没有复制Remy代码、图标或视频帧。用户提供的7.933秒参考视频仅在本机抽帧观察，详见 [实际观看范围](camera-tracking-validation.md)。相似交互不代表获得其算法、资产或实现。
+
+商业SDK核对 [ImageReceiver](https://developer.huawei.com/consumer/cn/doc/doccenter-capabilities/api/arkts-apis-image-imagereceiver)、[图像接收指南](https://developer.huawei.com/consumer/cn/doc/HarmonyOS-Guides/image-receiver-native)、本机 image.d.ts / camera.d.ts / media.d.ts / spatial_recon_interface.h。NDK指南只核对生产者/接收者关系，本项目使用ArkTS ImageReceiver，不复制已废弃的旧NDK样例。参考文档不代替实际编译和设备证据。
+
 ## 当前原生与模型增量（2026-09-22）
 
-最新规范已取代旧 Web 主引擎及 Remy/3DGS 的生产方向，以下新增项实际用于当前原生版本。其余章节保留历史来源，不代表仍运行旧引擎。
+2026-09-22规范更新了旧 Web 主引擎和可选模型占位方向，以下新增项实际用于原生版本。其余章节保留历史来源；后续Remy参考研究见本文顶部，不代表仍运行旧引擎或已完成3DGS重建。
 
 | 固定来源 | 实际文件 / 修改 / 许可 |
 |---|---|
