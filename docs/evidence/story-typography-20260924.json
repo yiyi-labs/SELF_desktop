@@ -1,0 +1,23 @@
+{
+  "device": "HarmonyOS tablet 6DP0226117002287",
+  "date": "2026-09-24",
+  "earlyFrame": {
+    "visibleCharacters": 4,
+    "hiddenCharacters": 9,
+    "source": "ArkUI layout immediately after launching installed HAP"
+  },
+  "settledFrame": {
+    "visibleCharacters": 13,
+    "hiddenCharacters": 0,
+    "source": "ArkUI layout after animation completed"
+  },
+  "interaction": {
+    "source": "real touch swipe on personal 3DGS viewer",
+    "viewerEventObserved": "SELF_GS_VIEWER_INTERACTION",
+    "storyHoldPolicyMs": 26000
+  },
+  "limits": [
+    "Long-idle sentence change was not timed end to end on device.",
+    "No personal screenshot is stored in the repository."
+  ]
+}

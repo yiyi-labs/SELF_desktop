@@ -8,6 +8,7 @@ export struct GaussianPortraitSurface {
   @Prop viewPath:string='';
   onReady:()=>void=()=>{};
   onFailure:(message:string)=>void=()=>{};
+  onInteraction:()=>void=()=>{};
   private controller:webview.WebviewController=new webview.WebviewController();
 
   private intercept(event:OnInterceptRequestEvent):WebResourceResponse|null {
@@ -47,6 +48,7 @@ export struct GaussianPortraitSurface {
         const message=event.message.getMessage();
         if(message.startsWith('SELF_GS_VIEWER_READY'))this.onReady();
         if(message.startsWith('SELF_GS_VIEWER_ERROR'))this.onFailure(message.replace('SELF_GS_VIEWER_ERROR ',''));
+        if(message.startsWith('SELF_GS_VIEWER_INTERACTION'))this.onInteraction();
         console.info('SELF_PERSONAL_VIEWER '+message);
         return false;
       })

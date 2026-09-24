@@ -60,7 +60,7 @@ export struct CameraCaptureView {
  @State streamRatio:number=16/9;
  @StorageLink('selfForeground') @Watch('visibilityChanged') foreground:boolean=true;
  onClose:()=>void=()=>{};
- onJob:(jobId:string)=>void=()=>{};
+ onCapture:(name:string)=>void=()=>{};
  private controller:XComponentController=new XComponentController();
  private capture:CameraCaptureSession=new CameraCaptureSession();
  private faceTimer:number=-1;
@@ -119,20 +119,9 @@ export struct CameraCaptureView {
     clearTimeout(this.recordingTimer);this.recordingTimer=-1;
     this.lastClipPath=await this.capture.stop();this.recording=false;this.clipSaved=true;this.updateCoverage(undefined);
     console.info('SELF_CAMERA_CAPTURE_COMPLETED '+JSON.stringify({videoSaved:true,personal3D:false}));
-    {
-     try{
-      this.transferStatus=this.tr('正在提交这次拍摄…','Submitting this capture…');
-      const transport=new ReconstructionTransportClient();transport.endpoint=this.backendAddress;transport.token=this.backendToken;
-      const capability=await transport.probe();
-      if(capability.engine!=='ready')throw new Error('modeling_engine_not_ready');
-      const jobId=await transport.uploadCapture(this.lastClipPath,(value:number)=>{
-       this.transferStatus=this.tr('正在提交这次拍摄 · ','Submitting this capture · ')+Math.round(value*100)+'%';
-      });
-      this.transferStatus=this.tr('正在生成立体面容，完成后会告诉你','Creating your 3D portrait; we will let you know when it is ready');
-      this.onJob(jobId);
-      console.info('SELF_RECON_JOB_SUBMITTED '+jobId);
-     }catch(e){this.transferStatus=this.tr('拍摄已保存，建模暂时未提交','Capture saved; modeling has not started');console.info('SELF_RECON_JOB_SUBMIT_FAILED '+String(e));}
-    }
+    const name=this.lastClipPath.substring(this.lastClipPath.lastIndexOf('/')+1);
+    this.onCapture(name);
+    this.onClose();
    }else{
     await this.capture.start();this.clipSaved=false;this.recording=true;
     this.coverage.reset();this.coverageMilestoneSeen=false;this.updateCoverage(undefined);this.showCoverage(2300);
@@ -143,7 +132,7 @@ export struct CameraCaptureView {
   finally{this.busy=false;}
  }
  private async leave():Promise<void>{
-  if(this.recording){await this.toggleCapture();if(!this.clipSaved)return;}
+  if(this.recording){await this.toggleCapture();return;}
   this.onClose();
  }
  private async discardLastClip():Promise<void>{
@@ -261,15 +250,15 @@ export struct CameraCaptureView {
      .transition({opacity:0,scale:{x:.88,y:.88}})
    }
    Column(){
-    Row(){this.icon('‹',this.tr('返回','Back'),()=>{this.leave();});Blank();Text(this.tr('拍摄面容','Capture yourself')).fontSize(17).fontColor(Color.White);Blank();this.icon('ⓘ',this.tr('拍摄说明','Capture info'),()=>{this.getUIContext().animateTo({duration:this.motion?220:0},()=>this.info=!this.info);})}.width('100%').padding(24)
+    Row(){this.icon('‹',this.tr('返回','Back'),()=>{this.leave();});Blank();Text(this.tr('循光看见自己','Follow your light')).fontSize(17).fontColor(Color.White);Blank();this.icon('ⓘ',this.tr('拍摄说明','Capture info'),()=>{this.getUIContext().animateTo({duration:this.motion?220:0},()=>this.info=!this.info);})}.width('100%').padding({left:24,right:24,top:38,bottom:24})
     Blank()
     if(this.faceLocked||this.recording||this.clipSaved){
      CaptureViewCoverage({covered:this.coverageFlags,active:this.coverageActive,count:this.coverageCount,hint:this.coverageHint,angle:this.coverageAngle,language:this.language,expanded:this.coverageExpanded,availableWidth:this.viewportWidth})
       .margin({bottom:10}).transition({opacity:0,scale:{x:.92,y:.92}})
     }
-    Text(this.faceLocked?this.tr('正在跟随你的面容','Following your face'):this.faceSeen?this.tr('看见你了，保持自然','Face detected. Stay relaxed.'):this.tr('正在寻找你，不用刻意对准','Finding you — no need to line up exactly'))
+    Text(this.faceLocked?this.tr('光点正轻轻跟着你','The light is following you'):this.faceSeen?this.tr('看见你了，保持自然','I see you. Stay relaxed.'):this.tr('让光慢慢找到你','Let the light find you'))
      .id('camera-guide').fontSize(17).fontColor(Color.White).textShadow({radius:6,color:'#AA000000',offsetX:0,offsetY:1})
-    Text(this.outcome()).id('camera-capture-outcome').fontSize(13).fontColor('#EFFFFFFF').textShadow({radius:2,color:'#90000000',offsetY:1}).margin({top:8,bottom:18}).onClick(()=>{this.info=true;})
+    if(this.recording){Text(this.tr('从正面缓缓走向两侧，留下更多真实的你','Move gently from the front to each side')).id('camera-capture-outcome').fontSize(13).fontColor('#EFFFFFFF').textShadow({radius:2,color:'#90000000',offsetY:1}).margin({top:8,bottom:18})}
     Row({space:30}){
      this.icon('↻',this.tr('切换镜头','Switch camera'),()=>{if(!this.busy&&!this.recording){this.front=!this.front;this.open();}})
      Button(){
@@ -303,7 +292,7 @@ export struct CameraCaptureView {
      Button(this.tr('知道了','Got it')).onClick(()=>{this.info=false;if(!this.ready&&!this.busy)this.open();}).backgroundColor('#40FFFFFF').fontColor(Color.White)
     }.padding(24).width(Math.min(this.viewportWidth-48,400)).backgroundColor('#F0303442').borderRadius(28).border({width:1,color:'#50FFFFFF'}).position({x:Math.max(24,this.viewportWidth-424),y:86}).transition({opacity:0,scale:{x:.85,y:.85,centerX:'100%',centerY:'0%'}})
    }
-  }.id('camera-fullscreen').width('100%').height('100%').backgroundColor('#151822').clip(true)
+  }.id('camera-fullscreen').width('100%').height('100%').backgroundColor('#080C1B').clip(true)
    .onAreaChange((_old:Area,area:Area)=>{this.viewportWidth=Number(area.width);this.viewportHeight=Number(area.height);this.capture.updateRotation();})
  }
 }

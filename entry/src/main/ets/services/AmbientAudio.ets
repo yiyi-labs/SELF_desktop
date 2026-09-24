@@ -10,6 +10,7 @@ export class AmbientAudio {
   private token:number=0;
   private queue:Promise<void>=Promise.resolve();
   onStatus:(state:string)=>void=()=>{};
+  onPulse:(level:number)=>void=()=>{};
   constructor(context:common.UIAbilityContext){this.context=context;}
   configure(enabled:boolean,mode:string):void{
     const next=['quiet','warm','clear'].includes(mode)?mode:'quiet';if(this.wanted===enabled&&this.mode===next)return;
@@ -32,7 +33,14 @@ export class AmbientAudio {
       }
       if(state==='playing'){this.onStatus('playing');console.info('SELF_AUDIO_PLAYING '+this.mode);}
     });
-    let reported=false;player.on('timeUpdate',(time:number)=>{if(!reported&&time>=1000&&token===this.token){reported=true;console.info('SELF_AUDIO_PROGRESS '+this.mode+' '+time);}});
+    let reported=false,lastPulse=-1;
+    player.on('timeUpdate',(time:number)=>{
+      if(token!==this.token)return;
+      if(!reported&&time>=1000){reported=true;console.info('SELF_AUDIO_PROGRESS '+this.mode+' '+time);}
+      // The original soundtrack has one soft bell every four seconds. Follow its playback clock.
+      const slot=Math.floor(time/220);
+      if(slot!==lastPulse){lastPulse=slot;const beat=(time/1000)%4;this.onPulse(Math.min(1,Math.exp(-beat*.85)*(.35+.65*Math.min(1,beat*3))));}
+    });
     player.on('error',(e)=>{if(token===this.token)this.error(e);});
     const fd=await this.context.resourceManager.getRawFd(rawPath);if(token!==this.token)return;player.fdSrc={fd:fd.fd,offset:fd.offset,length:fd.length};
   }

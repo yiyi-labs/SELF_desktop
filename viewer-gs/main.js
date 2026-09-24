@@ -28,7 +28,7 @@ async function start() {
   app.scene.ambientLight=new Color(1,1,1);
   app.start();
   const camera=new Entity('Portrait camera');
-  camera.addComponent('camera',{clearColor:new Color(.93,.9,.95,0),fov:view.fovDegrees,nearClip:.01,farClip:10000});
+  camera.addComponent('camera',{clearColor:new Color(.04,.06,.11,0),fov:view.fovDegrees,nearClip:.01,farClip:10000});
   app.root.addChild(camera);
 
   const asset=new Asset('Personal 3DGS','gsplat',{url:'https://self.local/portrait.gaussian.ply'});
@@ -56,8 +56,10 @@ async function start() {
       };
       app.on('update',update);update();
       let touching=false,lastX=0,lastY=0;
-      canvas.addEventListener('pointerdown',event=>{touching=true;lastX=event.clientX;lastY=event.clientY;canvas.setPointerCapture(event.pointerId);});
-      canvas.addEventListener('pointermove',event=>{if(!touching)return;targetYaw+=(event.clientX-lastX)*.008;targetPitch=Math.max(-.9,Math.min(.9,targetPitch+(event.clientY-lastY)*.008));lastX=event.clientX;lastY=event.clientY;});
+      let lastInteraction=-2000;
+      const interaction=()=>{if(performance.now()-lastInteraction>1800){lastInteraction=performance.now();console.log('SELF_GS_VIEWER_INTERACTION');}};
+      canvas.addEventListener('pointerdown',event=>{interaction();touching=true;lastX=event.clientX;lastY=event.clientY;canvas.setPointerCapture(event.pointerId);});
+      canvas.addEventListener('pointermove',event=>{if(!touching)return;interaction();targetYaw+=(event.clientX-lastX)*.008;targetPitch=Math.max(-.9,Math.min(.9,targetPitch+(event.clientY-lastY)*.008));lastX=event.clientX;lastY=event.clientY;});
       canvas.addEventListener('pointerup',()=>touching=false);
       canvas.addEventListener('pointercancel',()=>touching=false);
       canvas.addEventListener('wheel',event=>{targetZoom=Math.max(.35,Math.min(4,targetZoom*Math.exp(event.deltaY*.001)));event.preventDefault();},{passive:false});

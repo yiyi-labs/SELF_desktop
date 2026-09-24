@@ -1,0 +1,11 @@
+{
+  "device": "HarmonyOS tablet 6DP0226117002287",
+  "date": "2026-09-24",
+  "action": "Music toggled on and back off from the personal portrait home",
+  "observed": [
+    "SELF_AUDIO_PLAYING quiet",
+    "SELF_AUDIO_PROGRESS quiet 1021"
+  ],
+  "processStayedAlive": true,
+  "scope": "Native AVPlayer playback clock advanced. Particle response is driven by this clock in code; visual synchronization and frame rate were not measured."
+}

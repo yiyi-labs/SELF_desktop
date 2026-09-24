@@ -1,32 +1,38 @@
 > hvigor [32mUP-TO-DATE :entry:default@PreBuild...  [39m
 > hvigor [32mFinished :entry:default@CreateModuleInfo... after 1 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@GenerateMetadata...  [39m
-> hvigor [32mFinished :entry:default@ConfigureCmake... after 40 ms [39m
+> hvigor [32mFinished :entry:default@ConfigureCmake... after 74 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@MergeProfile...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@CreateBuildProfile...  [39m
 > hvigor [32mFinished :entry:default@PreCheckSyscap... after 1 ms [39m
-> hvigor [32mFinished :entry:default@GeneratePkgSdkInfo... after 4 ms [39m
+> hvigor [32mFinished :entry:default@GeneratePkgSdkInfo... after 3 ms [39m
 > hvigor [32mFinished :entry:default@ProcessIntegratedHsp... after 1 ms [39m
-> hvigor [32mFinished :entry:default@BuildNativeWithCmake... after 33 ms [39m
+> hvigor [32mFinished :entry:default@BuildNativeWithCmake... after 43 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@MakePackInfo...  [39m
-> hvigor [32mFinished :entry:default@SyscapTransform... after 11 ms [39m
+> hvigor [32mFinished :entry:default@SyscapTransform... after 9 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@GeneratePkgContextInfo...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@ProcessProfile...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@ProcessRouterMap...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@ProcessShareConfig...  [39m
-> hvigor [32mFinished :entry:default@ProcessStartupConfig... after 3 ms [39m
+> hvigor [32mFinished :entry:default@ProcessStartupConfig... after 2 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@ProcessResource...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@GenerateLoaderJson...  [39m
-> hvigor [32mFinished :entry:default@CompileResource... after 279 ms [39m
-> hvigor [32mFinished :entry:default@BuildJS... after 6 ms [39m
-> hvigor [32mFinished :entry:default@BuildNativeWithNinja... after 123 ms [39m
+> hvigor [32mFinished :entry:default@CompileResource... after 290 ms [39m
+> hvigor [32mFinished :entry:default@BuildJS... after 7 ms [39m
+> hvigor [32mFinished :entry:default@BuildNativeWithNinja... after 150 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@ProcessLibs...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@DoNativeStrip...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@CacheNativeLibs...  [39m
-> hvigor WARN: WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/entryability/EntryAbility.ets:8:100
+> hvigor WARN: WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/entryability/EntryAbility.ets:8:22
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/entryability/EntryAbility.ets:10:12
  This API is unavailable to 2in1.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/entryability/EntryAbility.ets:9:11
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/entryability/EntryAbility.ets:12:12
+ This API is unavailable to 2in1.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/entryability/EntryAbility.ets:14:11
  Function may throw exceptions. Special handling is required.
 
 WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/bridge/RendererBridge.ets:55:29
@@ -304,43 +310,43 @@ WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/Captu
  The 'stroke' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:237:57
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:226:57
  The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:237:81
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:226:81
  The 'stroke' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:238:61
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:227:61
  The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:238:85
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:227:85
  The 'stroke' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:239:53
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:228:53
  The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:247:9
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:236:9
  The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:254:35
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:243:35
  The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:277:38
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:266:38
  The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:277:56
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:266:56
  The 'stroke' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:279:43
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CameraCaptureView.ets:268:43
  The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
@@ -486,16 +492,16 @@ WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/Wo
 WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/WorkspaceStore.ets:83:97
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AmbientAudio.ets:24:49
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AmbientAudio.ets:25:49
  The system capacity of this api 'media' is not supported on all devices
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AmbientAudio.ets:24:55
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AmbientAudio.ets:25:55
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AmbientAudio.ets:25:41
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AmbientAudio.ets:26:41
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AmbientAudio.ets:37:49
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/AmbientAudio.ets:45:49
  Function may throw exceptions. Special handling is required.
 
 WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:12:57
@@ -549,33 +555,68 @@ WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/Ui
 WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/UiPreference.ets:19:83
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:129:58
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:157:11
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:129:84
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:174:58
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:136:12
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:174:84
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:165:75
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:181:12
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:165:95
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:210:75
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:228:11
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:210:95
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:415:70
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:282:11
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:469:70
  The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:415:112
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:469:112
  The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:442:50
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:496:50
+ The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
+ It is recommended to use apiAvailable to safeguard API compatibility.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:645:39
+ The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
+ It is recommended to use apiAvailable to safeguard API compatibility.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:645:57
+ The 'stroke' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
+ It is recommended to use apiAvailable to safeguard API compatibility.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:647:67
+ The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
+ It is recommended to use apiAvailable to safeguard API compatibility.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:665:47
+ The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
+ It is recommended to use apiAvailable to safeguard API compatibility.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:689:51
+ The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
+ It is recommended to use apiAvailable to safeguard API compatibility.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:689:69
+ The 'stroke' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
+ It is recommended to use apiAvailable to safeguard API compatibility.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:689:170
+ The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
+ It is recommended to use apiAvailable to safeguard API compatibility.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:699:68
  The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
@@ -591,15 +632,25 @@ WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/Nativ
 WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/NativeEsProbe.ets:117:208
  Function may throw exceptions. Special handling is required.
 
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:719:114
+ The current component id "music-toggle" is duplicate with D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:670:38.
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:720:73
+ The current component id "begin-capture" is duplicate with D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:699:211.
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:721:77
+ The current component id "open-ambience" is duplicate with D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:671:21.
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:722:75
+ The current component id "open-settings" is duplicate with D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:672:21.
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:766:50
+ The current component id "detail-panel" is duplicate with D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:706:48.
 
-> hvigor [32mFinished :entry:default@CompileArkTS... after 5 s 562 ms [39m
-> hvigor [32mFinished :entry:default@GeneratePkgModuleJson... after 3 ms [39m
+> hvigor [32mFinished :entry:default@CompileArkTS... after 6 s 303 ms [39m
+> hvigor [32mFinished :entry:default@GeneratePkgModuleJson... after 4 ms [39m
 > hvigor [32mFinished :entry:default@ProcessCompiledResources... after 1 ms [39m
-> hvigor [32mFinished :entry:default@PackageHap... after 694 ms [39m
-> hvigor [32mFinished :entry:default@PackingCheck... after 7 ms [39m
-> hvigor [32mFinished :entry:default@SignHap... after 9 s 728 ms [39m
+> hvigor [32mFinished :entry:default@PackageHap... after 939 ms [39m
+> hvigor [32mFinished :entry:default@PackingCheck... after 9 ms [39m
+> hvigor [32mFinished :entry:default@SignHap... after 9 s 928 ms [39m
 > hvigor [32mFinished :entry:default@CollectDebugSymbol... after 1 ms [39m
 > hvigor [32mFinished :entry:assembleHap... after 1 ms [39m
-> hvigor [32mBUILD SUCCESSFUL in 22 s 596 ms [39m
+> hvigor [32mBUILD SUCCESSFUL in 24 s 941 ms [39m
 
 33 tasks in total: 19 executed, 14 up-to-date
