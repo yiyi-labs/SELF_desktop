@@ -21,7 +21,15 @@ from fastapi.responses import FileResponse, Response
 
 
 router = APIRouter(prefix="/v1/reconstruction")
-ROOT = Path(os.getenv("SELF_RECON_JOBS_DIR", Path(__file__).parent / "recon-jobs")).resolve()
+def _default_jobs_root() -> Path:
+    """Stable private data location, independent of source checkout and rebuilds."""
+    if os.name == "nt":
+        base = Path(os.getenv("LOCALAPPDATA") or (Path.home() / "AppData" / "Local"))
+        return base / "SELF" / "Reconstruction"
+    return Path(os.getenv("XDG_DATA_HOME") or (Path.home() / ".local" / "share")) / "SELF" / "reconstruction"
+
+
+ROOT = Path(os.getenv("SELF_RECON_JOBS_DIR") or _default_jobs_root()).resolve()
 JOB_RE = re.compile(r"^[a-f0-9]{32}$")
 SHA_RE = re.compile(r"^[a-f0-9]{64}$")
 CHUNK_BYTES = 1024 * 1024
@@ -199,9 +207,17 @@ def asset(job_id: str, kind: str, request: Request):
     manifest = job["assets"].get(kind)
     if not manifest:
         raise HTTPException(404, "asset_not_ready")
+    if (not isinstance(manifest.get("file"), str)
+            or Path(manifest["file"]).name != manifest["file"]
+            or not isinstance(manifest.get("sha256"), str)
+            or not SHA_RE.fullmatch(manifest["sha256"])):
+        raise HTTPException(409, "asset_manifest_invalid")
     path = _job_dir(job_id) / manifest["file"]
     if not path.is_file() or path.stat().st_size != manifest["bytes"]:
         raise HTTPException(409, "asset_changed")
+    with path.open("rb") as source:
+        if not hmac.compare_digest(hashlib.file_digest(source, "sha256").hexdigest(), manifest["sha256"]):
+            raise HTTPException(409, "asset_changed")
     return FileResponse(path, media_type="model/gltf-binary" if kind == "mesh" else "application/octet-stream",
                         headers={"X-Content-SHA256": manifest["sha256"]})
 

@@ -100,12 +100,40 @@ export class ReconstructionTransportClient {
         remaining-=read;onProgress((index+1)/count);
       }
     }finally{fs.closeSync(file);}
-    const sealed=JSON.parse(await this.json('/jobs/'+created.jobId+'/seal',http.RequestMethod.POST)) as SealedJob;
+    const sealed=JSON.parse(await this.json('/jobs/'+created.jobId+'/seal',http.RequestMethod.POST,'{}')) as SealedJob;
     if(sealed.state!=='queued'||sealed.sha256!==manifest.sha256)throw new Error('建模任务校验失败');
     return created.jobId;
   }
   async status(jobId:string):Promise<ReconstructionJobStatus>{
     if(!/^[a-f0-9]{32}$/.test(jobId))throw new Error('建模任务编号无效');
     return JSON.parse(await this.json('/jobs/'+jobId,http.RequestMethod.GET)) as ReconstructionJobStatus;
+  }
+  /** Download only a completed, hash-matched GLB into app-private fixed storage. */
+  async downloadMesh(jobId:string,filesDir:string):Promise<string>{
+    if(!/^[a-f0-9]{32}$/.test(jobId))throw new Error('建模任务编号无效');
+    const job=await this.status(jobId);
+    const asset=job.assets?.mesh;
+    if(job.state!=='complete'||!asset||!Number.isInteger(asset.bytes)||asset.bytes<1024||asset.bytes>32*1024*1024||
+      !/^[a-f0-9]{64}$/.test(asset.sha256))throw new Error('个人模型尚未通过校验');
+    const request=http.createHttp();
+    let bytes:ArrayBuffer;
+    try{
+      const response=await request.request(this.url('/jobs/'+jobId+'/assets/mesh'),{method:http.RequestMethod.GET,
+        header:this.headers(),expectDataType:http.HttpDataType.ARRAY_BUFFER,connectTimeout:10000,readTimeout:60000,usingCache:false});
+      if(response.responseCode!==200)throw new Error('个人模型下载失败（'+response.responseCode+'）');
+      bytes=response.result as ArrayBuffer;
+    }finally{request.destroy();}
+    const header=new DataView(bytes);
+    if(bytes.byteLength!==asset.bytes||bytes.byteLength<12||header.getUint32(0,true)!==0x46546c67||
+      header.getUint32(4,true)!==2||header.getUint32(8,true)!==bytes.byteLength||
+      await this.sha256(bytes)!==asset.sha256)throw new Error('个人模型文件校验失败');
+    const models=filesDir+'/models';if(!fs.accessSync(models))fs.mkdirSync(models);
+    const directory=models+'/'+jobId;if(!fs.accessSync(directory))fs.mkdirSync(directory);
+    const path=directory+'/portrait.glb',temporary=path+'.tmp';
+    const file=fs.openSync(temporary,fs.OpenMode.CREATE|fs.OpenMode.READ_WRITE|fs.OpenMode.TRUNC);
+    try{const written=fs.writeSync(file.fd,bytes);if(written!==bytes.byteLength)throw new Error('个人模型保存不完整');fs.fsyncSync(file.fd);}
+    catch(e){fs.closeSync(file);if(fs.accessSync(temporary))fs.unlinkSync(temporary);throw new Error('个人模型保存失败');}
+    fs.closeSync(file);fs.renameSync(temporary,path);
+    return path;
   }
 }
