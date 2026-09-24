@@ -15,6 +15,8 @@ import { faceParticle } from '../services/FaceParticleField';
 export struct CameraCaptureView {
  @Prop motion:boolean=true;
  @Prop language:string='zh';
+ @Prop backendAddress:string='http://127.0.0.1:8787';
+ @Prop backendToken:string='';
  @State status:string='';
  @State ready:boolean=false;
  @State busy:boolean=true;
@@ -45,6 +47,7 @@ export struct CameraCaptureView {
  @State coverageAngle:number=0;
  @State mirrorOverlay:boolean=true;
  @State reconstructionState:string='checking';
+ @State transferStatus:string='';
  private localGuide:LocalFaceGuide=new LocalFaceGuide();
  private motionGuide:CaptureMotionGuide=new CaptureMotionGuide();
  private coverage:ViewCoverageGuide=new ViewCoverageGuide();
@@ -56,6 +59,7 @@ export struct CameraCaptureView {
  @State streamRatio:number=16/9;
  @StorageLink('selfForeground') @Watch('visibilityChanged') foreground:boolean=true;
  onClose:()=>void=()=>{};
+ onJob:(jobId:string)=>void=()=>{};
  private controller:XComponentController=new XComponentController();
  private capture:CameraCaptureSession=new CameraCaptureSession();
  private faceTimer:number=-1;
@@ -77,7 +81,7 @@ export struct CameraCaptureView {
  private async checkReconstruction(epoch:number):Promise<void>{
   this.reconstructionState='checking';this.captureIssue='';
   try{
-   const transport=new ReconstructionTransportClient();
+   const transport=new ReconstructionTransportClient();transport.endpoint=this.backendAddress;transport.token=this.backendToken;
    const capability=await transport.probe();
    if(this.expired||epoch!==this.epoch)return;
    const roundtrip=await transport.echo();
@@ -89,6 +93,7 @@ export struct CameraCaptureView {
  }
  private outcome():string{
   if(this.recording)return this.tr('正在记录面容的不同视角…','Capturing different views of your face…');
+  if(this.transferStatus)return this.transferStatus;
   if(this.clipSaved)return this.tr('拍摄片段已保存 · 个人建模尚未完成','Capture saved · Personal modeling is not complete');
   if(this.reconstructionState==='checking')return this.tr('正在检查建模能力…','Checking modeling support…');
   if(this.reconstructionState==='preparing')return this.tr('取景已就绪 · 个人建模仍在准备','Framing is ready · Personal modeling is being prepared');
@@ -102,6 +107,20 @@ export struct CameraCaptureView {
     clearTimeout(this.recordingTimer);this.recordingTimer=-1;
     this.lastClipPath=await this.capture.stop();this.recording=false;this.clipSaved=true;this.updateCoverage(undefined);
     console.info('SELF_CAMERA_CAPTURE_COMPLETED '+JSON.stringify({videoSaved:true,personal3D:false}));
+    {
+     try{
+      this.transferStatus=this.tr('正在提交这次拍摄…','Submitting this capture…');
+      const transport=new ReconstructionTransportClient();transport.endpoint=this.backendAddress;transport.token=this.backendToken;
+      const capability=await transport.probe();
+      if(capability.engine!=='ready')throw new Error('modeling_engine_not_ready');
+      const jobId=await transport.uploadCapture(this.lastClipPath,(value:number)=>{
+       this.transferStatus=this.tr('正在提交这次拍摄 · ','Submitting this capture · ')+Math.round(value*100)+'%';
+      });
+      this.transferStatus=this.tr('正在生成立体面容，完成后会告诉你','Creating your 3D portrait; we will let you know when it is ready');
+      this.onJob(jobId);
+      console.info('SELF_RECON_JOB_SUBMITTED '+jobId);
+     }catch(e){this.transferStatus=this.tr('拍摄已保存，建模暂时未提交','Capture saved; modeling has not started');console.info('SELF_RECON_JOB_SUBMIT_FAILED '+String(e));}
+    }
    }else{
     await this.capture.start();this.clipSaved=false;this.recording=true;
     this.coverage.reset();this.updateCoverage(undefined);
@@ -126,7 +145,7 @@ export struct CameraCaptureView {
   }catch(e){this.status=this.tr('无法删除这段拍摄，请稍后重试。','Could not delete this capture. Please try again.');}
  }
  private async open():Promise<void>{
-  const epoch=++this.epoch;this.busy=true;this.ready=false;this.detection=false;this.info=false;this.recording=false;this.clipSaved=false;clearTimeout(this.recordingTimer);this.recordingTimer=-1;clearTimeout(this.faceTimer);this.faceTimer=-1;this.seek();this.checkReconstruction(epoch);
+  const epoch=++this.epoch;this.busy=true;this.ready=false;this.detection=false;this.info=false;this.recording=false;this.clipSaved=false;this.transferStatus='';clearTimeout(this.recordingTimer);this.recordingTimer=-1;clearTimeout(this.faceTimer);this.faceTimer=-1;this.seek();this.checkReconstruction(epoch);
   await this.localGuide.stop();await this.capture.dispose();if(this.expired||!this.foreground||epoch!==this.epoch)return;
   const capture=new CameraCaptureSession();this.capture=capture;this.localGuide=new LocalFaceGuide();
   capture.onFrame=(frame,rotation,format)=>this.localGuide.consume(frame,rotation,format);
@@ -253,7 +272,7 @@ export struct CameraCaptureView {
      this.icon('ⓘ',this.tr('拍摄说明','Capture info'),()=>{this.info=true;})
     }
     Text(this.recording?this.tr('再次轻触，结束拍摄','Tap again to finish'):this.tr('轻触拍摄，慢慢移动镜头','Tap to capture, then move slowly')).fontSize(12).fontColor('#EFFFFFFF').margin({top:4})
-    if(this.ready){Text(this.tr('画面只在本机处理','Processed on this device')).id('camera-preview-active').fontSize(12).fontColor('#EFFFFFFF').textShadow({radius:2,color:'#90000000',offsetY:1}).margin({top:12,bottom:28})}
+    if(this.ready){Text(this.tr('拍摄仅用于这次建模','This capture is used only for this model')).id('camera-preview-active').fontSize(12).fontColor('#EFFFFFFF').textShadow({radius:2,color:'#90000000',offsetY:1}).margin({top:12,bottom:28})}
     else{Text(this.tr('正在连接相机…','Connecting camera…')).fontSize(12).fontColor('#D6FFFFFF').margin({bottom:28})}
    }.width('100%').height('100%')
    if(this.info||(!this.ready&&!this.busy)){
@@ -261,10 +280,10 @@ export struct CameraCaptureView {
      Text(this.tr('拍摄说明','Capture info')).fontSize(20).fontColor(Color.White)
      Text(this.tr('保持表情自然，让另一人缓慢移动镜头，留下多个视角。','Keep a relaxed expression while someone slowly moves the camera around you.')).fontSize(15).fontColor('#EEFFFFFF')
      Text(this.tr('进入后会自动寻找面容；稳定移动后，小圈会跟随鼻尖。','Tracking starts on entry. After steady motion, the small ring follows your nose.')).fontSize(13).fontColor('#DDFFFFFF')
-     Text(this.tr('拍摄片段保存在应用内；建模能力就绪后才能生成个人3D。','Capture is stored in the app; personal 3D requires modeling support.')).fontSize(13).fontColor('#DDFFFFFF')
+     Text(this.tr('拍摄后会提交至你连接的建模服务；原片也留在应用内。','After capture, the clip is sent to your connected modeling service and remains in the app.')).fontSize(13).fontColor('#DDFFFFFF')
      Text(this.tr('亮起的视角是拍摄参考，还需要检查画面清晰度。','Illuminated views guide capture; image clarity still matters.')).fontSize(12).fontColor('#D2FFFFFF')
      if(this.captureIssue){Text(this.captureIssue).id('camera-reconstruction-issue').fontSize(12).fontColor('#DDFFFFFF')}
-     Text(this.detection?this.tr('本机检测面容并跟随鼻尖，不上传画面','Face detection and nose tracking stay on this device'):this.tr('当前设备未提供人脸检测，圆环为对齐引导','Face detection unavailable; the ring is an alignment guide')).fontSize(13).fontColor('#DDFFFFFF')
+     Text(this.detection?this.tr('取景时的面容跟随在设备上完成','Live face tracking runs on your device'):this.tr('当前设备未提供人脸检测，圆环为对齐引导','Face detection unavailable; the ring is an alignment guide')).fontSize(13).fontColor('#DDFFFFFF')
      Text(this.tr(this.viewportHeight>this.viewportWidth?'竖屏 · 相机方向 ':'横屏 · 相机方向 ',this.viewportHeight>this.viewportWidth?'Portrait · camera ':'Landscape · camera ')+this.lensOrientation+'° · '+this.displayRotation+'° → '+this.cameraRotation+'°').fontSize(11).fontColor('#C9FFFFFF')
      Button(this.tr('圈偏向另一侧？切换镜像','Marker on the wrong side? Flip alignment')).id('camera-mirror-correction').onClick(()=>{this.mirrorOverlay=!this.mirrorOverlay;this.seek();}).backgroundColor('#40FFFFFF').fontColor(Color.White)
      Text(this.status).id('camera-status').fontSize(12).fontColor('#DDFFFFFF')

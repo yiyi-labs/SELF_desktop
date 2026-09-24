@@ -19,6 +19,9 @@ try {
 if($LASTEXITCODE -ne 0){throw 'Audio asset preparation failed'}
 & (Join-Path $PSScriptRoot 'Prepare-NativeResources.ps1')
 # renderer-web remains a development reference. Production compilation does not require Three.js/esbuild.
+$ErrorActionPreference='Continue'
 & $node $hvigor --mode module -p product=default -p module=entry@default -p buildMode=debug assembleHap --no-daemon 2>&1 | Tee-Object -FilePath docs/evidence/hap-build.log
-if($LASTEXITCODE -ne 0){throw 'HAP build failed; see docs/evidence/hap-build.log'}
+$buildExit=$LASTEXITCODE
+$ErrorActionPreference='Stop'
+if($buildExit -ne 0){throw 'HAP build failed; see docs/evidence/hap-build.log'}
 } finally { $env:ComSpec=$originalComSpec }

@@ -1,0 +1,36 @@
+{
+  "date": "2026-09-24",
+  "device": "connected HarmonyOS tablet",
+  "transport": "USB/HDC reverse port to Windows loopback service",
+  "jobId": "774b943d527db68f6358966039963b38",
+  "capture": {
+    "bytes": 14255575,
+    "sha256OnWindows": "df2246bee269c56c1501d514fd5705a82b92820b6ea23917bb49907266e4af81"
+  },
+  "reconstruction": {
+    "state": "gaussian_ready",
+    "sampledFrames": 43,
+    "registeredFrames": 43,
+    "sparsePoints": 3199,
+    "faceConfirmedViews": 40,
+    "faceTrackObservations": 6779,
+    "trainingSteps": 6000,
+    "sourceResolution": true,
+    "gaussians": 92715,
+    "validationViews": 5,
+    "validationPsnrDb": 20.65,
+    "frontalFacePsnrDb": 21.1,
+    "humanFaceReviewRequired": true
+  },
+  "result": {
+    "format": "gsplat PLY",
+    "bytes": 21882216,
+    "sha256OnWindows": "035727c372d3f43b26984868fdf05332ec9f6dc5fc7876b7b14216ea823df7fa",
+    "sha256OnTablet": "035727c372d3f43b26984868fdf05332ec9f6dc5fc7876b7b14216ea823df7fa",
+    "savedInAppPrivateModels": true,
+    "pendingMarkerCleared": true,
+    "editableMeshValidated": false,
+    "renderedOnMainScreen": false,
+    "faceSelectionValidated": false
+  }
+}

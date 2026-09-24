@@ -72,8 +72,16 @@ def _save_job(path: Path, job: dict) -> None:
 @router.get("/health")
 def health(request: Request):
     _authorize(request)
+    engine = "not-verified"
+    heartbeat = ROOT / "worker_status.json"
+    try:
+        state = json.loads(heartbeat.read_text(encoding="utf-8"))
+        if state.get("ready") is True and time.time() - state.get("updatedAt", 0) < 30:
+            engine = "ready"
+    except (OSError, ValueError, TypeError):
+        pass
     return {"status": "ready", "protocol": 1, "chunkBytes": CHUNK_BYTES,
-            "maxCaptureBytes": MAX_CAPTURE_BYTES, "engine": "not-verified"}
+            "maxCaptureBytes": MAX_CAPTURE_BYTES, "engine": engine}
 
 
 @router.post("/echo")
@@ -201,8 +209,14 @@ def job_status(job_id: str, request: Request):
 @router.get("/jobs/{job_id}/assets/{kind}")
 def asset(job_id: str, kind: str, request: Request):
     _authorize(request)
+    path, manifest = _verified_asset(job_id, kind)
+    return FileResponse(path, media_type="model/gltf-binary" if kind == "mesh" else "application/octet-stream",
+                        headers={"X-Content-SHA256": manifest["sha256"]})
+
+
+def _verified_asset(job_id: str, kind: str, verify_digest: bool = True) -> tuple[Path, dict]:
     job = _read_job(_job_dir(job_id))
-    if job["state"] != "complete" or kind not in {"mesh", "gaussian"}:
+    if kind not in {"mesh", "gaussian"} or (job["state"] != "complete" and not (job["state"] == "gaussian_ready" and kind == "gaussian")):
         raise HTTPException(404, "asset_not_ready")
     manifest = job["assets"].get(kind)
     if not manifest:
@@ -210,16 +224,33 @@ def asset(job_id: str, kind: str, request: Request):
     if (not isinstance(manifest.get("file"), str)
             or Path(manifest["file"]).name != manifest["file"]
             or not isinstance(manifest.get("sha256"), str)
-            or not SHA_RE.fullmatch(manifest["sha256"])):
+            or not SHA_RE.fullmatch(manifest["sha256"])
+            or type(manifest.get("bytes")) is not int
+            or not 1024 <= manifest["bytes"] <= (32 * 1024 * 1024 if kind == "mesh" else 256 * 1024 * 1024)):
         raise HTTPException(409, "asset_manifest_invalid")
     path = _job_dir(job_id) / manifest["file"]
     if not path.is_file() or path.stat().st_size != manifest["bytes"]:
         raise HTTPException(409, "asset_changed")
+    if verify_digest:
+        with path.open("rb") as source:
+            if not hmac.compare_digest(hashlib.file_digest(source, "sha256").hexdigest(), manifest["sha256"]):
+                raise HTTPException(409, "asset_changed")
+    return path, manifest
+
+
+@router.get("/jobs/{job_id}/assets/{kind}/chunks/{index}")
+def asset_chunk(job_id: str, kind: str, index: int, request: Request):
+    _authorize(request)
+    # The device verifies the entire file digest after all bounded chunks.
+    path, manifest = _verified_asset(job_id, kind, verify_digest=False)
+    count = (manifest["bytes"] + CHUNK_BYTES - 1) // CHUNK_BYTES
+    if not 0 <= index < count:
+        raise HTTPException(422, "chunk_index")
     with path.open("rb") as source:
-        if not hmac.compare_digest(hashlib.file_digest(source, "sha256").hexdigest(), manifest["sha256"]):
-            raise HTTPException(409, "asset_changed")
-    return FileResponse(path, media_type="model/gltf-binary" if kind == "mesh" else "application/octet-stream",
-                        headers={"X-Content-SHA256": manifest["sha256"]})
+        source.seek(index * CHUNK_BYTES)
+        data = source.read(CHUNK_BYTES)
+    return Response(data, media_type="application/octet-stream",
+                    headers={"X-Content-SHA256": hashlib.sha256(data).hexdigest()})
 
 
 @router.delete("/jobs/{job_id}")

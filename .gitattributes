@@ -8,3 +8,4 @@ entry/src/main/resources/rawfile/licenses/minimp4.txt -text
 licenses/libfacedetection-BSD-3-Clause.txt -text
 licenses/minih264-CC0-1.0.txt -text
 licenses/minimp4-CC0-1.0.txt -text
+backend/setup_reconstruction_wsl.sh text eol=lf

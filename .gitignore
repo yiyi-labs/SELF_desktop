@@ -14,6 +14,9 @@ backend/.env
 **/.env.*
 !**/.env.example
 backend/.venv/
+backend/.venv-recon/
+backend/.sources/
+backend/.data/
 backend/recon-jobs/
 __pycache__/
 .pytest_cache/

@@ -85,6 +85,27 @@ class ReconstructionTransportTest(unittest.TestCase):
         (job_dir / "fixture.glb").write_bytes(model[:-1] + b"x")
         self.assertEqual(self.client.get(url, headers=self.headers).status_code, 409)
 
+    def test_gaussian_is_chunked_but_not_claimed_as_editable_mesh(self):
+        payload = b"a" * 1024
+        job_id = self.client.post("/v1/reconstruction/jobs", json={
+            "totalBytes": len(payload), "sha256": hashlib.sha256(payload).hexdigest(), "format": "mp4",
+        }, headers=self.headers).json()["jobId"]
+        job_dir = Path(self.root.name) / job_id
+        gaussian = b"ply\nformat binary_little_endian 1.0\nelement vertex 1\nend_header\n" + bytes(range(256)) * 5000
+        (job_dir / "portrait.gaussian.ply").write_bytes(gaussian)
+        job = recon_transfer._read_job(job_dir)
+        job.update(state="gaussian_ready", assets={"gaussian": {
+            "file": "portrait.gaussian.ply", "bytes": len(gaussian),
+            "sha256": hashlib.sha256(gaussian).hexdigest()}})
+        recon_transfer._save_job(job_dir, job)
+        base = f"/v1/reconstruction/jobs/{job_id}/assets"
+        self.assertEqual(self.client.get(base + "/mesh", headers=self.headers).status_code, 404)
+        self.assertEqual(self.client.get(base + "/gaussian/chunks/0", headers=self.headers).content,
+                         gaussian[:recon_transfer.CHUNK_BYTES])
+        self.assertEqual(self.client.get(base + "/gaussian/chunks/1", headers=self.headers).content,
+                         gaussian[recon_transfer.CHUNK_BYTES:])
+        self.assertEqual(self.client.get(base + "/gaussian/chunks/2", headers=self.headers).status_code, 422)
+
 
 if __name__ == "__main__":
     unittest.main()

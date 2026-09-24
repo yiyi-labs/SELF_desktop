@@ -136,4 +136,37 @@ export class ReconstructionTransportClient {
     fs.closeSync(file);fs.renameSync(temporary,path);
     return path;
   }
+  /** Receive a Gaussian result in bounded USB chunks. This is not a GLB. */
+  async downloadGaussian(jobId:string,filesDir:string,onProgress:(value:number)=>void=()=>{}):Promise<string>{
+    if(!/^[a-f0-9]{32}$/.test(jobId))throw new Error('建模任务编号无效');
+    const job=await this.status(jobId),asset=job.assets?.gaussian;
+    if(job.state!=='gaussian_ready'||!asset||!Number.isInteger(asset.bytes)||asset.bytes<4096||asset.bytes>256*1024*1024||
+      !/^[a-f0-9]{64}$/.test(asset.sha256))throw new Error('立体细节尚未通过校验');
+    const models=filesDir+'/models';if(!fs.accessSync(models))fs.mkdirSync(models);
+    const directory=models+'/'+jobId;if(!fs.accessSync(directory))fs.mkdirSync(directory);
+    const path=directory+'/portrait.gaussian.ply',temporary=path+'.tmp';
+    const file=fs.openSync(temporary,fs.OpenMode.CREATE|fs.OpenMode.READ_WRITE|fs.OpenMode.TRUNC);
+    const digest=cryptoFramework.createMd('SHA256');let received=0;
+    try{
+      const count=Math.ceil(asset.bytes/1048576);
+      for(let index=0;index<count;index++){
+        const request=http.createHttp();let chunk:ArrayBuffer;
+        try{
+          const response=await request.request(this.url('/jobs/'+jobId+'/assets/gaussian/chunks/'+index),{
+            method:http.RequestMethod.GET,header:this.headers(),expectDataType:http.HttpDataType.ARRAY_BUFFER,
+            connectTimeout:10000,readTimeout:60000,usingCache:false});
+          if(response.responseCode!==200)throw new Error('立体细节传输中断');
+          chunk=response.result as ArrayBuffer;
+        }finally{request.destroy();}
+        const expected=Math.min(1048576,asset.bytes-received);
+        if(chunk.byteLength!==expected)throw new Error('立体细节文件不完整');
+        if(index===0){const header=new Uint8Array(chunk);if(header[0]!==112||header[1]!==108||header[2]!==121||header[3]!==10)throw new Error('立体细节格式不正确');}
+        const written=fs.writeSync(file.fd,chunk);if(written!==chunk.byteLength)throw new Error('立体细节保存不完整');
+        await digest.update({data:new Uint8Array(chunk)});received+=written;onProgress(received/asset.bytes);
+      }
+      if(received!==asset.bytes||this.hex((await digest.digest()).data)!==asset.sha256)throw new Error('立体细节校验失败');
+      fs.fsyncSync(file.fd);
+    }catch(e){fs.closeSync(file);if(fs.accessSync(temporary))fs.unlinkSync(temporary);throw new Error(String(e));}
+    fs.closeSync(file);fs.renameSync(temporary,path);return path;
+  }
 }

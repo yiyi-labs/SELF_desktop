@@ -1,4 +1,4 @@
-import { fileUri } from '@kit.CoreFileKit';
+import { fileUri, fileIo as fs } from '@kit.CoreFileKit';
 import { NativeMirrorSurface } from './NativeMirrorSurface';
 import { CameraCaptureView } from './CameraCaptureView';
 import { ProductCard } from './ProductCard';
@@ -14,9 +14,12 @@ import { PlannerService } from '../services/PlannerService';
 import { ProductRepository, ProductRecord } from '../services/ProductRepository';
 import { AmbientAudio } from '../services/AmbientAudio';
 import { CaptureService,CaptureRecord } from '../services/CaptureService';
+import { ReconstructionTransportClient } from '../services/ReconstructionTransportClient';
 import { UiPreference, UiSettings } from '../services/UiPreference';
 import { UiText } from '../services/UiText';
 import { AmbiencePreference } from '../services/AmbiencePreference';
+
+interface PendingReconstruction {jobId:string;}
 
 @Extend(Button)
 function softButton(){
@@ -108,6 +111,62 @@ struct SelfMirrorPage {
   private restoreRequest: string = '';
   private restoreNotice:string='';
   private previousSession: SessionStore | undefined = undefined;
+  private reconTimer:number=-1;
+  private reconJob:string='';
+  private reconChecking:boolean=false;
+
+  private trackReconstruction(jobId:string):void{
+    if(!/^[a-f0-9]{32}$/.test(jobId))return;
+    this.reconJob=jobId;
+    this.assets.writeAtomic(this.context.filesDir+'/reconstruction-pending.json',JSON.stringify({jobId}));
+    this.captureStatus='正在塑造立体细节…';
+    if(this.reconTimer<0)this.reconTimer=setInterval(()=>this.pollReconstruction(),5000);
+    this.pollReconstruction();
+  }
+  private finishReconstruction():void{
+    if(this.reconTimer>=0)clearInterval(this.reconTimer);this.reconTimer=-1;this.reconJob='';
+    const path=this.context.filesDir+'/reconstruction-pending.json';if(fs.accessSync(path))fs.unlinkSync(path);
+  }
+  private async pollReconstruction():Promise<void>{
+    if(this.reconChecking||!this.reconJob)return;
+    this.reconChecking=true;
+    const jobId=this.reconJob,client=new ReconstructionTransportClient();
+    client.endpoint=this.backendAddress;client.token=this.backendToken;
+    try{
+      const result=await client.status(jobId);if(this.reconJob!==jobId)return;
+      if(result.state==='failed'){
+        this.captureStatus=result.message==='face_not_confirmed_in_capture'?'这段拍摄还没能看清完整面容，可以换个光线再试。':'这段拍摄还不足以生成可靠的立体面容，原片仍为你保留。';
+        this.subtitle=this.captureStatus;this.finishReconstruction();return;
+      }
+      if(result.state==='gaussian_ready'){
+        const file=await client.downloadGaussian(jobId,this.context.filesDir);
+        if(this.reconJob!==jobId)return;
+        this.assets.writeAtomic(this.context.filesDir+'/reconstruction-result.json',JSON.stringify({jobId,gaussian:file}));
+        this.captureStatus='立体细节已保存。可编辑面容仍在核验，当前作品保持原样。';
+        this.subtitle=this.captureStatus;this.finishReconstruction();return;
+      }
+      if(result.state==='complete'){
+        const file=await client.downloadMesh(jobId,this.context.filesDir);
+        if(this.reconJob!==jobId)return;
+        this.assets.writeAtomic(this.context.filesDir+'/reconstruction-result.json',JSON.stringify({jobId,mesh:file}));
+        this.captureStatus='个人模型已保存，正在核验显示与圈选。';this.subtitle=this.captureStatus;
+        this.finishReconstruction();return;
+      }
+      this.captureStatus='正在塑造立体细节 · '+Math.max(0,Math.min(99,result.progress))+'%';
+    }catch(_){if(this.reconJob===jobId)this.captureStatus='建模连接暂时中断，稍后会继续查看。';}
+    finally{this.reconChecking=false;}
+  }
+  private async submitCapture(name:string):Promise<void>{
+    if(!/^capture-[0-9]+\.mp4$/.test(name)||this.reconJob)return;
+    const client=new ReconstructionTransportClient();client.endpoint=this.backendAddress;client.token=this.backendToken;
+    try{
+      this.captureStatus='正在准备这段拍摄…';
+      const health=await client.probe();if(health.engine!=='ready')throw new Error('建模服务尚未就绪');
+      const path=this.context.filesDir+'/captures/'+name;
+      const jobId=await client.uploadCapture(path,(value:number)=>this.captureStatus='正在提交这段拍摄 · '+Math.round(value*100)+'%');
+      this.trackReconstruction(jobId);
+    }catch(_){this.captureStatus='这段拍摄暂时没能开始建模，原片仍在这里。';}
+  }
 
   aboutToAppear(): void {
     const ui=UiPreference.load(this.context);this.language=ui.language;this.accent=ui.accent;this.palette=ui.palette;this.motion=ui.motion;this.followChat=ui.followChat;AppStorage.setOrCreate('selfLanguage',ui.language);
@@ -122,6 +181,8 @@ struct SelfMirrorPage {
       this.session.regions.push(r);
     }
     this.works.loadPreference(this.session);this.labels();
+    const pending=this.context.filesDir+'/reconstruction-pending.json';
+    if(fs.accessSync(pending)){try{const saved=JSON.parse(fs.readTextSync(pending)) as PendingReconstruction;this.trackReconstruction(saved.jobId);}catch(_){}}
     this.bridge.onMessage=(m:Envelope)=>this.receive(m);
     this.bridge.onBytes=(kind:string,bytes:ArrayBuffer)=>{
       try{
@@ -304,7 +365,7 @@ struct SelfMirrorPage {
       this.works.loadPreference(this.session);this.bridge.assetId=this.session.assetId;this.bridge.assetVersion=this.session.assetVersion;this.bridge.revision=0;this.identity='示例面容';this.selected='';this.candidate='';this.ready=false;this.close();this.labels();this.bridge.send('INIT',{});this.subtitle='已删除这张照片的应用内源文件、作品、蒙版和私有导出；私密文字保留';
     }catch(e){this.fail(String(e));}
   }
-  aboutToDisappear():void{this.planner.cancel();if(this.timer>=0)clearInterval(this.timer);this.audio.dispose();this.bridge.dispose();this.assets.cleanupTemporary();}
+  aboutToDisappear():void{this.planner.cancel();if(this.timer>=0)clearInterval(this.timer);if(this.reconTimer>=0)clearInterval(this.reconTimer);this.reconTimer=-1;this.audio.dispose();this.bridge.dispose();this.assets.cleanupTemporary();}
   onBackPress():boolean{if(this.cameraLive){this.close();return true;}if(this.detail){this.close();return true;}if(this.productOpen){this.productOpen=false;return true;}if(this.tool!=='NAVIGATE'){this.switchTool(this.tool);return true;}return false;}
   @Builder ambienceTile(mode:string,label:string,color:string){
     Button(){Column({space:8}){Stack(){Circle().width(48).height(48).fill(color);Circle().width(26).height(26).fill('#BBFFFFFF').blur(7).offset({x:8,y:-4})}.width(62).height(60);Text(this.tr(label)).fontSize(13).fontColor('#62516F')}}.id('palette-'+mode).layoutWeight(1).height(102).backgroundColor(this.palette===mode?'#D9FFFFFF':'#38FFFFFF').border({width:this.palette===mode?1.5:1,color:this.palette===mode?this.accent:'#77FFFFFF'}).borderRadius(22).stateStyles({pressed:{.scale({x:.96,y:.96})},normal:{.scale({x:1,y:1})}}).animation({duration:this.motion?180:0,curve:Curve.EaseOut}).onClick(()=>this.chooseAtmosphere(mode))
@@ -357,11 +418,19 @@ struct SelfMirrorPage {
       }
       if(this.detail==='采集记录'){
         if(this.selectedCapture){Video({src:fileUri.getUriFromPath(this.context.filesDir+'/captures/'+this.selectedCapture)}).id('capture-playback').onStart(()=>console.info('SELF_CAPTURE_PLAYBACK_STARTED')).onError(()=>console.info('SELF_CAPTURE_PLAYBACK_ERROR')).width('100%').height(230).autoPlay(true).controls(true).objectFit(ImageFit.Contain).borderRadius(18)}
-        Text(this.tr('视频只保存在本机，尚未生成个人 3D。')).fontSize(14).fontColor('#81758D')
+          Text(this.tr('原片留在这里；完成后会显示建模进度。')).fontSize(14).fontColor('#81758D')
         Button(this.tr('拍摄面容')).softButton().onClick((event:ClickEvent)=>this.open('拍摄面容',event))
         if(this.captureStatus){Text(this.tr(this.captureStatus)).fontSize(14)}
         Button(this.tr('检查设备重建能力')).softButton().onClick(()=>this.checkReconstruction())
-        ForEach(this.captures,(clip:CaptureRecord)=>{Row(){Text(this.tr('私密视频')+' · '+Math.round(clip.bytes/1024)+' KB').fontSize(14).layoutWeight(1);Button('▶').id('play-'+clip.name).softButton().accessibilityText(this.tr('播放视频')).onClick(()=>this.selectedCapture=clip.name);Button(this.tr('删除视频')).softButton().onClick(()=>{if(this.selectedCapture===clip.name)this.selectedCapture='';new CaptureService(this.context).delete(clip.name);this.captures=new CaptureService(this.context).list();})}},(clip:CaptureRecord)=>clip.name)
+          ForEach(this.captures,(clip:CaptureRecord)=>{
+            Column({space:6}){
+              Row(){Text(this.tr('私密视频')+' · '+Math.round(clip.bytes/1024)+' KB').fontSize(14).layoutWeight(1);Button('▶').id('play-'+clip.name).softButton().width(48).accessibilityText(this.tr('播放视频')).onClick(()=>this.selectedCapture=clip.name)}.width('100%')
+              Row({space:8}){
+                Button(this.tr('开始建模')).softButton().layoutWeight(1).enabled(!this.reconJob).onClick(()=>this.submitCapture(clip.name))
+                Button(this.tr('删除原片')).softButton().layoutWeight(1).onClick(()=>{if(this.selectedCapture===clip.name)this.selectedCapture='';new CaptureService(this.context).delete(clip.name);this.captures=new CaptureService(this.context).list();})
+              }.width('100%')
+            }.padding(10).width('100%').backgroundColor('#B8FFFFFF').borderRadius(18)
+          },(clip:CaptureRecord)=>clip.name)
       }
       if(this.detail==='工具'){
         Button(this.tr('拍摄面容视频')).softButton().onClick(()=>{this.open('拍摄面容');})
@@ -486,11 +555,12 @@ struct SelfMirrorPage {
         NativeMirrorSurface({port:this.bridge,interactionEnabled:!this.busy&&!this.detail&&!this.cameraLive,motion:this.motion}).width('100%').height('100%')
         if(!this.detail){
           Text(this.tr(this.identity+' · 数字表达')).fontSize(11).fontColor('#7D7188').padding({left:12,right:12,top:6,bottom:6}).backgroundColor('#BFFFFFFF').borderRadius(14).position({x:20,y:12})
+          if(this.captureStatus){Text(this.tr(this.captureStatus)).fontSize(12).fontColor('#62516F').padding({left:12,right:12,top:7,bottom:7}).backgroundColor('#DDFCF9FF').borderRadius(16).maxLines(2).position({x:20,y:44})}
           if(this.showBeginning&&this.wide){Column({space:12}){
             Text(this.tr('从你的面容开始')).fontSize(22).fontColor('#51415F')
             Text(this.tr('拍摄自己，留下多个真实视角。')).fontSize(14).fontColor('#75617F')
             Button(this.tr('拍摄我的面容')).id('intro-capture').softButton().backgroundColor(this.accent).fontColor('#FFFFFF').onClick((event:ClickEvent)=>this.open('拍摄面容',event))
-            Text(this.tr('从相机开始 · 个人3D重建尚未接通')).fontSize(11).fontColor('#81758D')
+              Text(this.tr('从相机开始 · 完成后会告诉你结果')).fontSize(11).fontColor('#81758D')
             Button(this.tr('先看示例')).softButton().height(36).fontSize(12).onClick(()=>{this.showBeginning=false;if(this.motion)this.bridge.send('VIEW_ORBIT',{});})
           }.alignItems(HorizontalAlign.Start).padding(22).width(290).backgroundColor('#CAFFFFFF').backgroundBlurStyle(BlurStyle.COMPONENT_REGULAR).borderRadius(28).position({x:24,y:62}).transition({opacity:0,translate:{y:12}})}
           Text(this.tr(!this.ready?'镜面准备中':this.tool==='LASSO'?'轻轻圈画一个范围，松手后聊聊':this.wide?'拖动转身 · 双指缩放 · 手写笔直接圈画':'拖动转身 · 双指缩放')).fontSize(11).fontColor('#81758D').padding(16).position({x:0,y:this.surfaceHeight-(this.wide?128:56)}).hitTestBehavior(HitTestMode.None)
@@ -517,7 +587,7 @@ struct SelfMirrorPage {
         Column(){this.composer()}.padding({left:20,right:20,top:4,bottom:12}).width('100%')
       }
     }.width('100%').height('100%').backgroundColor('#F3F1F5').onAreaChange((_old:Area,area:Area)=>{this.windowWidth=parseFloat(String(area.width));this.wide=this.windowWidth>=840;if(this.context.applicationInfo.debug)console.info('SELF_WINDOW '+JSON.stringify({width:this.windowWidth,wide:this.wide}));}).linearGradient({angle:145,colors:[['#EDF0F8',0],['#F8F0E9',.6],['#F3F1F5',1]]})
-    if(this.cameraLive){CameraCaptureView({motion:this.motion,language:this.language,onClose:()=>this.close()}).zIndex(100)}
+    if(this.cameraLive){CameraCaptureView({motion:this.motion,language:this.language,backendAddress:this.backendAddress,backendToken:this.backendToken,onJob:(jobId:string)=>this.trackReconstruction(jobId),onClose:()=>this.close()}).zIndex(100)}
     }.width('100%').height('100%')
   }
 }
