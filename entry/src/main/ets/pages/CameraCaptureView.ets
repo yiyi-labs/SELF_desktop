@@ -9,6 +9,7 @@ import { FaceAnchor } from '../services/FaceAnchorTracker';
 import { previewGeometry,previewPoint } from '../services/CameraPreviewTransform';
 import { ViewCoverageGuide } from '../services/ViewCoverageGuide';
 import { CaptureViewCoverage } from './CaptureViewCoverage';
+import { faceParticle } from '../services/FaceParticleField';
 
 @Component
 export struct CameraCaptureView {
@@ -35,10 +36,12 @@ export struct CameraCaptureView {
  @State faceCenterY:number=0;
  @State faceRadiusX:number=90;
  @State faceRadiusY:number=120;
- @State coverageFlags:boolean[]=[false,false,false,false,false];
+ @State featureX:number[]=[];
+ @State featureY:number[]=[];
+ @State coverageFlags:boolean[]=[false,false,false,false,false,false,false,false,false,false,false];
  @State coverageActive:number=-1;
  @State coverageCount:number=0;
- @State coverageHint:number=2;
+ @State coverageHint:number=5;
  @State coverageAngle:number=0;
  @State mirrorOverlay:boolean=true;
  @State reconstructionState:string='checking';
@@ -70,7 +73,7 @@ export struct CameraCaptureView {
   if(result.covered.some((value:boolean,index:number)=>value!==this.coverageFlags[index]))this.coverageFlags=result.covered;
   this.coverageActive=result.active;this.coverageCount=result.count;this.coverageHint=result.hint;this.coverageAngle=result.angle;
  }
- private seek():void{this.motionGuide.reset();this.faceSeen=false;this.faceAnchorVisible=false;this.getUIContext().animateTo({duration:this.motion?420:0,curve:Curve.EaseOut},()=>{this.faceLocked=false;this.ringSize=this.ring();this.trackX=0;this.trackY=0;this.faceRoll=0;this.faceYaw=0;});}
+ private seek():void{this.motionGuide.reset();this.faceSeen=false;this.faceAnchorVisible=false;this.featureX=[];this.featureY=[];this.getUIContext().animateTo({duration:this.motion?420:0,curve:Curve.EaseOut},()=>{this.faceLocked=false;this.ringSize=this.ring();this.trackX=0;this.trackY=0;this.faceRoll=0;this.faceYaw=0;});}
  private async checkReconstruction(epoch:number):Promise<void>{
   this.reconstructionState='checking';this.captureIssue='';
   try{
@@ -169,6 +172,10 @@ export struct CameraCaptureView {
      this.faceCenterX=x;this.faceCenterY=y;
      this.faceRadiusX=Math.min(this.viewportWidth*.35,face!.width*geometry.contentWidth*.43);
      this.faceRadiusY=Math.min(this.viewportHeight*.40,face!.height*geometry.contentHeight*.43);
+     if(face!.observed&&face!.landmarks){
+      const features=face!.landmarks!.map((p)=>previewPoint(p.x,p.y,geometry));
+      this.featureX=features.map((p)=>p.x);this.featureY=features.map((p)=>p.y);
+     }
      if(acquiring)console.info('SELF_CAMERA_GUIDANCE_FOLLOWING '+JSON.stringify({source:'tracked-relative-face-motion',reconstructionPose:false}));
      const ring=Math.max(24,Math.min(38,face!.width*geometry.contentWidth*.16));
      if(acquiring)this.getUIContext().animateTo({duration:this.motion?430:0,curve:Curve.EaseOut},()=>{
@@ -204,12 +211,19 @@ export struct CameraCaptureView {
     .animation({duration:this.motion?95:0,curve:Curve.EaseOut}).hitTestBehavior(HitTestMode.None)
    if(this.faceAnchorVisible){
     Stack(){
-     ForEach([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23],(index:number)=>{
-      Circle().width(index%5===0?4:2.5).height(index%5===0?4:2.5).fill(index%3===0?'#C6FFF1':'#E8D9FF').opacity(index%5===0?.56:.34)
-       .translate({x:Math.cos(index*2.399)*Math.sqrt((index+.5)/24)*this.faceRadiusX,y:Math.sin(index*2.399)*Math.sqrt((index+.5)/24)*this.faceRadiusY})
+     ForEach([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35],(index:number)=>{
+      Circle().width(faceParticle(index,this.faceYaw).size).height(faceParticle(index,this.faceYaw).size)
+       .fill(index%3===0?'#C6FFF1':'#E8D9FF').opacity(faceParticle(index,this.faceYaw).opacity)
+       .translate({x:faceParticle(index,this.faceYaw).x*this.faceRadiusX,y:faceParticle(index,this.faceYaw).y*this.faceRadiusY})
      },(index:number)=>index.toString())
     }.width(1).height(1).translate({x:this.faceCenterX,y:this.faceCenterY})
      .animation({duration:this.motion?95:0,curve:Curve.EaseOut}).hitTestBehavior(HitTestMode.None)
+    ForEach([0,1,2,3,4],(index:number)=>{
+     if(this.featureX.length===5&&this.featureY.length===5){
+      Circle().width(4).height(4).fill('#D9FFF6').opacity(.55)
+       .translate({x:this.featureX[index],y:this.featureY[index]})
+     }
+    },(index:number)=>index.toString())
    }
    if(this.ready&&!this.faceLocked){
     CaptureMoveHint({motion:this.motion,language:this.language,hintSize:Math.min(360,this.viewportWidth-48,this.viewportHeight*.62)})

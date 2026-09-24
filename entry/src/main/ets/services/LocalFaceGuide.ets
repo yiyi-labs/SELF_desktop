@@ -24,6 +24,7 @@ export class LocalFaceGuide {
  private lastVisionFaces:DetectedFace[]=[];private lastVisionAt:number=0;
  private visionMisses:number=0;
  private visionLogAt:number=0;private visionLogCount:number=-1;
+ private arProbeTried:boolean=false;
  onResult:(face:FaceAnchor|undefined)=>void=()=>{};
  onAvailable:(available:boolean)=>void=()=>{};
  onError:(message:string)=>void=()=>{};
@@ -77,6 +78,11 @@ export class LocalFaceGuide {
    const request:FrameRequest={op:'frame',width:this.width,height:this.height,timestamp:began,record:this.recording&&!this.settling,detect};
    stage='native';const result=JSON.parse((await native.camera(JSON.stringify(request),rgba)).json) as FrameResult;
    if(this.stopped)return;
+   if(!this.arProbeTried){
+    this.arProbeTried=true;
+    try{console.info('SELF_AR_FACE_CAPABILITY '+(await native.camera('{"op":"ar_face_support"}')).json);}
+    catch(e){console.info('SELF_AR_FACE_CAPABILITY_FAILED '+String(e));}
+   }
    let found:DetectedFace[]=result.faces;
    found.forEach((face:DetectedFace)=>{face.sampleAt=began;});
    if(!this.visionTried){
@@ -105,7 +111,9 @@ export class LocalFaceGuide {
       Math.hypot(candidate.landmarks[2].x-confirmed.landmarks[2].x,candidate.landmarks[2].y-confirmed.landmarks[2].y)<Math.max(.09,confirmed.width*.65)&&
       candidate.width/confirmed.width>.55&&candidate.width/confirmed.width<1.8);
      if(nearby){nearby.yaw=confirmed.yaw;nearby.roll=confirmed.roll;nearby.poseSampleAt=this.lastVisionAt;found=[nearby];}
-     else found=began-this.lastVisionAt<450?[confirmed]:[];
+     // Never substitute a different detector's five points mid-lock. Their
+     // nose coordinates are not calibrated to the same pixel and visibly jump.
+     else found=[];
     }
    }
    if(detect)this.onResult(this.tracker.update(found,began,this.width/this.height));

@@ -1,19 +1,20 @@
-/** Lightweight, glass-like view guidance; the illuminated points are sampled face-view sectors. */
+/** Glass-like sphere with an approximate moving face-yaw pointer. */
 @ComponentV2
 export struct CaptureViewCoverage {
- @Param covered:boolean[]=[false,false,false,false,false];
+ @Param covered:boolean[]=[false,false,false,false,false,false,false,false,false,false,false];
  @Param active:number=-1;
  @Param count:number=0;
- @Param hint:number=2;
+ @Param hint:number=5;
  @Param angle:number=0;
  @Param language:string='zh';
  private tr(zh:string,en:string):string{return this.language==='en'?en:zh;}
  private cue():string{
-  if(this.hint===0)return this.tr('再看看左侧','Move a little farther left');
-  if(this.hint===1)return this.tr('慢慢移向左前','Move toward the left');
-  if(this.hint===2)return this.tr('先留下正面','Start from the front');
-  if(this.hint===3)return this.tr('慢慢移向右前','Move toward the right');
-  if(this.hint===4)return this.tr('再看看右侧','Move a little farther right');
+  if(this.hint<0)return this.tr('视角已点亮','Views illuminated');
+  if(this.hint<=2)return this.tr('慢慢看看左侧','Slowly move toward the left');
+  if(this.hint<=4)return this.tr('再留一点左前方','Hold a little on the left');
+  if(this.hint===5)return this.tr('先留下正面','Start from the front');
+  if(this.hint<=7)return this.tr('慢慢看看右前方','Slowly move toward the right');
+  if(this.hint<=10)return this.tr('再看看右侧','Move a little farther right');
   return this.tr('视角已点亮','Views illuminated');
  }
  build(){
@@ -24,15 +25,20 @@ export struct CaptureViewCoverage {
     Ellipse().width(88).height(28).fill(Color.Transparent).stroke('#91D3F0F0').strokeWidth(1.3).rotate({angle:-15})
     Ellipse().width(36).height(83).fill(Color.Transparent).stroke('#5FC9E9E9').strokeWidth(1)
     Path().commands('M 8 54 Q 50 3 92 54').width(100).height(65).fill(Color.Transparent).stroke('#9AD9ECF3').strokeWidth(1.5)
-    ForEach([0,1,2,3,4],(index:number)=>{
-     Circle().width(this.active===index?12:9).height(this.active===index?12:9)
+    ForEach([0,1,2,3,4,5,6,7,8,9,10],(index:number)=>{
+     Circle().width(this.active===index?8:6).height(this.active===index?8:6)
       .fill(this.covered[index]?'#D7FFF1':this.active===index?'#FFFFFF':'#285A6477')
       .stroke(this.covered[index]?'#F8FFFFFF':'#D5F0FFFF').strokeWidth(1.2)
-      .translate({x:(index-2)*19,y:Math.abs(index-2)*8-15})
+      .translate({x:(index-5)*8,y:Math.abs(index-5)*2.5-14})
     },(index:number)=>index.toString())
+    if(this.active>=0){
+     Text('▼').fontSize(11).fontColor('#F4FFED').textShadow({radius:9,color:'#A9DDF9F4'})
+      .translate({x:this.angle*.8,y:Math.abs(this.angle)*.25-30})
+      .animation({duration:230,curve:Curve.EaseOut})
+    }
    }.width(102).height(94).hitTestBehavior(HitTestMode.None)
    Column({space:5}){
-    Text(this.tr('视角参考','View guide')+'  '+this.count+'/5').fontSize(15).fontWeight(FontWeight.Medium).fontColor('#F8FFFFFF')
+    Text(this.tr('视角参考','View guide')+'  '+this.count+'/11').fontSize(15).fontWeight(FontWeight.Medium).fontColor('#F8FFFFFF')
     Text(this.cue()).fontSize(13).fontColor('#DDE9FCF8')
     if(this.active>=0){Text(this.tr('相对角度约 ','Relative angle ~')+(this.angle>0?'+':'')+this.angle+'°').fontSize(11).fontColor('#BCE8F3F7')}
    }.alignItems(HorizontalAlign.Start)

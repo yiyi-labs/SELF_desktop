@@ -11,6 +11,8 @@
 #include <sys/stat.h>
 #include <stdexcept>
 #include <algorithm>
+#include <dlfcn.h>
+#include <ar/ar_engine_core.h>
 
 namespace self {
 namespace {
@@ -97,7 +99,9 @@ std::unique_ptr<Recording> recording;
 
 Json detect(const std::vector<uint8_t>& rgba, int width, int height, int& rawFaces, int& peakScore) {
     // Preserve aspect ratio; bounded CPU inference. No identity embeddings or network.
-    double factor = std::min(1.0, 400.0 / std::max(width, height));
+    // Keep finer facial detail for five-point fitting without feeding the
+    // full 960 px analysis frame through the CPU detector on every pass.
+    double factor = std::min(1.0, 480.0 / std::max(width, height));
     int w = std::max(32, int(width * factor)), h = std::max(32, int(height * factor));
     std::vector<uint8_t> bgr(w * h * 3);
     for (int y = 0; y < h; ++y) for (int x = 0; x < w; ++x) {
@@ -123,6 +127,15 @@ Json detect(const std::vector<uint8_t>& rgba, int width, int height, int& rawFac
 nlohmann::json cameraProcess(const Json& request, const std::vector<uint8_t>& rgba) {
     std::lock_guard<std::mutex> lock(cameraMutex);
     const auto op = request.at("op").get<std::string>();
+    if (op == "ar_face_support") {
+        // Capability only. No AR session, camera image, or face data is opened.
+        void* library = dlopen("libarengine_ndk.z.so", RTLD_NOW | RTLD_LOCAL);
+        if (!library) return {{"loaded", false}, {"supported", false}, {"status", -1}};
+        auto checkSupported = reinterpret_cast<decltype(&HMS_AREngine_CheckSupported)>(dlsym(library, "HMS_AREngine_CheckSupported"));
+        int status = checkSupported ? static_cast<int>(checkSupported(ARENGINE_FEATURE_TYPE_FACE)) : -2;
+        dlclose(library);
+        return {{"loaded", true}, {"supported", status == ARENGINE_SUCCESS}, {"status", status}};
+    }
     if (op == "cancel") { recording.reset(); return {{"cancelled", true}}; }
     if (op == "start") {
         check(!recording, "Already recording"); auto next = std::make_unique<Recording>();
