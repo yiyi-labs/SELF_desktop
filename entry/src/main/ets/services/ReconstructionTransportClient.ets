@@ -115,6 +115,52 @@ export class ReconstructionTransportClient {
     if(!/^[a-f0-9]{32}$/.test(jobId))throw new Error('建模任务编号无效');
     return JSON.parse(await this.json('/jobs/'+jobId,http.RequestMethod.GET)) as ReconstructionJobStatus;
   }
+  async downloadPreview(jobId:string,filesDir:string):Promise<string>{
+    const job=await this.status(jobId),asset=job.assets?.preview;
+    if(job.state!=='gaussian_ready'||!asset||!Number.isInteger(asset.bytes)||asset.bytes<256||asset.bytes>512*1024||
+      !/^[a-f0-9]{64}$/.test(asset.sha256))throw new Error('星辰预览暂未就绪');
+    const request=http.createHttp();let bytes:ArrayBuffer;
+    try{
+      const response=await request.request(this.url('/jobs/'+jobId+'/assets/preview'),{
+        method:http.RequestMethod.GET,header:this.headers(),expectDataType:http.HttpDataType.ARRAY_BUFFER,
+        connectTimeout:10000,readTimeout:15000,usingCache:false});
+      if(response.responseCode!==200)throw new Error('星辰预览下载失败');
+      bytes=response.result as ArrayBuffer;
+    }finally{request.destroy();}
+    const header=new Uint8Array(bytes);
+    if(bytes.byteLength!==asset.bytes||header[0]!==137||header[1]!==80||header[2]!==78||header[3]!==71||
+      await this.sha256(bytes)!==asset.sha256)throw new Error('星辰预览校验失败');
+    const models=filesDir+'/models';if(!fs.accessSync(models))fs.mkdirSync(models);
+    const directory=models+'/'+jobId;if(!fs.accessSync(directory))fs.mkdirSync(directory);
+    const path=directory+'/portrait.preview.png',temp=path+'.tmp';
+    const file=fs.openSync(temp,fs.OpenMode.CREATE|fs.OpenMode.READ_WRITE|fs.OpenMode.TRUNC);
+    try{if(fs.writeSync(file.fd,bytes)!==bytes.byteLength)throw new Error('星辰预览写入不完整');fs.fsyncSync(file.fd);}
+    catch(error){fs.closeSync(file);if(fs.accessSync(temp))fs.unlinkSync(temp);throw new Error(String(error));}
+    fs.closeSync(file);fs.renameSync(temp,path);return path;
+  }
+  async downloadPreview3d(jobId:string,filesDir:string):Promise<string>{
+    const job=await this.status(jobId),asset=job.assets?.preview3d;
+    if(job.state!=='gaussian_ready'||!asset||!Number.isInteger(asset.bytes)||asset.bytes<4096||asset.bytes>12*1024*1024||
+      !/^[a-f0-9]{64}$/.test(asset.sha256))throw new Error('星辰立体预览暂未就绪');
+    const request=http.createHttp();let bytes:ArrayBuffer;
+    try{
+      const response=await request.request(this.url('/jobs/'+jobId+'/assets/preview3d'),{
+        method:http.RequestMethod.GET,header:this.headers(),expectDataType:http.HttpDataType.ARRAY_BUFFER,
+        connectTimeout:10000,readTimeout:45000,usingCache:false});
+      if(response.responseCode!==200)throw new Error('星辰立体预览下载失败');
+      bytes=response.result as ArrayBuffer;
+    }finally{request.destroy();}
+    const header=new Uint8Array(bytes);
+    if(bytes.byteLength!==asset.bytes||header[0]!==112||header[1]!==108||header[2]!==121||header[3]!==10||
+      await this.sha256(bytes)!==asset.sha256)throw new Error('星辰立体预览校验失败');
+    const models=filesDir+'/models';if(!fs.accessSync(models))fs.mkdirSync(models);
+    const directory=models+'/'+jobId;if(!fs.accessSync(directory))fs.mkdirSync(directory);
+    const path=directory+'/portrait.preview.gaussian.ply',temp=path+'.tmp';
+    const file=fs.openSync(temp,fs.OpenMode.CREATE|fs.OpenMode.READ_WRITE|fs.OpenMode.TRUNC);
+    try{if(fs.writeSync(file.fd,bytes)!==bytes.byteLength)throw new Error('星辰立体预览写入不完整');fs.fsyncSync(file.fd);}
+    catch(error){fs.closeSync(file);if(fs.accessSync(temp))fs.unlinkSync(temp);throw new Error(String(error));}
+    fs.closeSync(file);fs.renameSync(temp,path);return path;
+  }
   /** Download only a completed, hash-matched GLB into app-private fixed storage. */
   async downloadMesh(jobId:string,filesDir:string):Promise<string>{
     if(!/^[a-f0-9]{32}$/.test(jobId))throw new Error('建模任务编号无效');

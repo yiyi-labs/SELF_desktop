@@ -6,6 +6,7 @@ import { webview } from '@kit.ArkWeb';
 export struct GaussianPortraitSurface {
   @Prop gaussianPath:string='';
   @Prop viewPath:string='';
+  @Prop previewMode:boolean=false;
   onReady:()=>void=()=>{};
   onFailure:(message:string)=>void=()=>{};
   onInteraction:()=>void=()=>{};
@@ -41,7 +42,7 @@ export struct GaussianPortraitSurface {
   }
 
   build(){
-    Web({src:$rawfile('gs-viewer.html'),controller:this.controller})
+    Web({src:this.previewMode?$rawfile('gs-preview.html'):$rawfile('gs-viewer.html'),controller:this.controller})
       .width('100%').height('100%')
       .onInterceptRequest((event:OnInterceptRequestEvent)=>this.intercept(event))
       .onConsole((event:OnConsoleEvent)=>{

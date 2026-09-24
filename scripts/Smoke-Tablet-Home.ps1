@@ -12,22 +12,23 @@ function Read-Layout {
   if ($LASTEXITCODE -ne 0) { throw 'Unable to inspect SELF layout' }
   & $hdc -t $Device file recv $deviceLayout $tempLayout | Out-Null
   if ($LASTEXITCODE -ne 0) { throw 'Unable to transfer SELF layout' }
-  return Get-Content -LiteralPath $tempLayout -Raw | ConvertFrom-Json
+  # On some commercial tablet builds, uitest writes UI text in a legacy
+  # encoding while retaining ASCII ids/bounds. Match only those stable fields.
+  return Get-Content -LiteralPath $tempLayout -Raw
 }
-function Find-Node($node, [string]$id) {
-  if ($node.attributes.id -eq $id) { return $node }
-  foreach ($child in $node.children) {
-    $match = Find-Node $child $id
-    if ($match) { return $match }
-  }
-  return $null
+function Find-Node([string]$layout, [string]$id) {
+  $at = $layout.IndexOf(('"id":"' + $id + '"'), [StringComparison]::Ordinal)
+  if ($at -lt 0) { return $null }
+  $prefix = $layout.Substring([Math]::Max(0,$at - 800), [Math]::Min(800,$at))
+  $bounds = [regex]::Matches($prefix, '"bounds":"\[(\d+),(\d+)\]\[(\d+),(\d+)\]"')
+  if ($bounds.Count -eq 0) { return $null }
+  return $bounds[$bounds.Count - 1]
 }
 function Click-Id([string]$id) {
   $node = Find-Node (Read-Layout) $id
   if (-not $node) { throw "Missing UI control: $id" }
-  $numbers = [regex]::Matches($node.attributes.bounds, '\d+') | ForEach-Object { [int]$_.Value }
-  $x = [int](($numbers[0] + $numbers[2]) / 2)
-  $y = [int](($numbers[1] + $numbers[3]) / 2)
+  $x = [int](([int]$node.Groups[1].Value + [int]$node.Groups[3].Value) / 2)
+  $y = [int](([int]$node.Groups[2].Value + [int]$node.Groups[4].Value) / 2)
   & $hdc -t $Device shell uitest uiInput click $x $y | Out-Null
   Start-Sleep -Milliseconds 650
 }

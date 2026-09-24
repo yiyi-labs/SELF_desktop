@@ -211,6 +211,17 @@ def opening_view(path: Path) -> dict:
             "sha256": file_sha256(output)}
 
 
+def portrait_preview(path: Path) -> dict:
+    from portrait_preview import create, create_3d_lod
+
+    output = create(path)
+    lod = create_3d_lod(path)
+    return {"preview": {"file": output.name, "bytes": output.stat().st_size,
+                         "sha256": file_sha256(output)},
+            "preview3d": {"file": lod.name, "bytes": lod.stat().st_size,
+                          "sha256": file_sha256(lod)}}
+
+
 def run_one(path: Path) -> None:
     job = json.loads((path / "job.json").read_text(encoding="utf-8"))
     if job.get("state") != "queued":
@@ -227,13 +238,22 @@ def run_one(path: Path) -> None:
         view = opening_view(path)
         update(path, "running", 62, "正在生成立体细节")
         gaussian = train_gaussians(path)
+        try:
+            preview = portrait_preview(path)
+        except (OSError, ValueError, KeyError, ImportError) as error:
+            # A navigation thumbnail must never invalidate a usable 3D model.
+            preview = None
+            (path / "preview_error.log").write_text(type(error).__name__, encoding="utf-8")
         # A Gaussian view is not yet a face-selectable, editable mesh.
         viewpoint = json.loads((path / "viewpoint_quality.json").read_text(encoding="utf-8"))
         message = ("立体面容已生成；侧面细节可在下次拍摄时补充"
                    if not viewpoint["broadSideCoverage"]
                    else "立体面容已生成；可编辑面容仍待核验")
+        assets = {"gaussian": gaussian, "view": view}
+        if preview:
+            assets.update(preview)
         update(path, "gaussian_ready", 85, message,
-               assets={"gaussian": gaussian, "view": view}, viewpointQuality=viewpoint)
+               assets=assets, viewpointQuality=viewpoint)
     except Exception as error:
         reason = str(error) if isinstance(error, ReconstructionFailure) else type(error).__name__
         update(path, "failed", 0, reason[:120], assets={})

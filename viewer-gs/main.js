@@ -2,6 +2,7 @@ import { Application, Asset, Entity, FILLMODE_FILL_WINDOW, RESOLUTION_AUTO, Colo
 
 const canvas=document.getElementById('portrait');
 const status=document.getElementById('status');
+const preview=document.body.dataset.preview==='true';
 const report=(kind,message)=>{status.textContent=message;console.log(`SELF_GS_VIEWER_${kind} ${message}`);};
 const finite3=(v)=>Array.isArray(v)&&v.length===3&&v.every(Number.isFinite);
 const normal=(v)=>{const n=Math.hypot(...v);return v.map(x=>x/n);};
@@ -42,9 +43,11 @@ async function start() {
       const target=view.target,up=normal(view.up),original=view.camera.map((x,i)=>x-target[i]);
       const radius=Math.hypot(...original);
       if(!Number.isFinite(radius)||radius<.01)throw new Error('个人模型相机参数不完整');
-      const openingZoom=view.targetFaceFraction===.5?1:1.36;
+      const openingZoom=preview ? .9 : view.targetFaceFraction===.5 ? 1 : 1.36;
       let yaw=0,pitch=0,zoom=openingZoom,targetYaw=0,targetPitch=0,targetZoom=openingZoom;
+      let touching=false,lastX=0,lastY=0;
       const update=()=>{
+        if(preview&&!touching)targetYaw=Math.sin(performance.now()*.00027)*.23;
         yaw+=(targetYaw-yaw)*.2;pitch+=(targetPitch-pitch)*.2;zoom+=(targetZoom-zoom)*.2;
         const afterYaw=rotate(original,up,yaw);
         const forward=normal(afterYaw.map(x=>-x));
@@ -55,7 +58,6 @@ async function start() {
         camera.lookAt(...target,...up);
       };
       app.on('update',update);update();
-      let touching=false,lastX=0,lastY=0;
       let lastInteraction=-2000;
       const interaction=()=>{if(performance.now()-lastInteraction>1800){lastInteraction=performance.now();console.log('SELF_GS_VIEWER_INTERACTION');}};
       canvas.addEventListener('pointerdown',event=>{interaction();touching=true;lastX=event.clientX;lastY=event.clientY;canvas.setPointerCapture(event.pointerId);});

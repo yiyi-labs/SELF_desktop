@@ -118,6 +118,29 @@ class ReconstructionTransportTest(unittest.TestCase):
         (job_dir / "portrait.view.json").write_bytes(view[:-1] + b"x")
         self.assertEqual(self.client.get(base + "/view", headers=self.headers).status_code, 409)
 
+    def test_star_preview_is_bounded_and_hash_checked(self):
+        payload = b"a" * 1024
+        job_id = self.client.post("/v1/reconstruction/jobs", json={
+            "totalBytes": len(payload), "sha256": hashlib.sha256(payload).hexdigest(), "format": "mp4",
+        }, headers=self.headers).json()["jobId"]
+        job_dir = Path(self.root.name) / job_id
+        preview = b"\x89PNG\r\n\x1a\n" + b"p" * 512
+        preview3d = b"ply\nformat binary_little_endian 1.0\n" + b"p" * 8192
+        (job_dir / "portrait.preview.png").write_bytes(preview)
+        (job_dir / "portrait.preview.gaussian.ply").write_bytes(preview3d)
+        job = recon_transfer._read_job(job_dir)
+        job.update(state="gaussian_ready", assets={name: {
+            "file": filename, "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()}
+            for name, filename, data in (
+                ("preview", "portrait.preview.png", preview),
+                ("preview3d", "portrait.preview.gaussian.ply", preview3d))})
+        recon_transfer._save_job(job_dir, job)
+        base = f"/v1/reconstruction/jobs/{job_id}/assets"
+        self.assertEqual(self.client.get(base + "/preview", headers=self.headers).content, preview)
+        self.assertEqual(self.client.get(base + "/preview3d", headers=self.headers).content, preview3d)
+        (job_dir / "portrait.preview.gaussian.ply").write_bytes(preview3d[:-1] + b"x")
+        self.assertEqual(self.client.get(base + "/preview3d", headers=self.headers).status_code, 409)
+
 
 if __name__ == "__main__":
     unittest.main()

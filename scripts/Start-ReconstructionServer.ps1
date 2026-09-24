@@ -8,6 +8,16 @@ $projectRoot = Split-Path -Parent $PSScriptRoot
 $backend = Join-Path $projectRoot 'backend'
 $python = Join-Path $backend '.venv/Scripts/python.exe'
 $dataRoot = Join-Path $backend '.data/reconstruction'
+$envFile = Join-Path $backend '.env'
+if (Test-Path -LiteralPath $envFile) {
+  foreach ($line in Get-Content -LiteralPath $envFile) {
+    if ($line -match '^(DEEPSEEK_API_KEY|SELF_BACKEND_TOKEN)=(.*)$') {
+      $name = $Matches[1]
+      $value = $Matches[2].Trim().Trim('"').Trim("'")
+      [Environment]::SetEnvironmentVariable($name, $value, 'Process')
+    }
+  }
+}
 if (!(Test-Path -LiteralPath $python)) { throw 'Backend Python environment is missing.' }
 New-Item -ItemType Directory -Path $dataRoot -Force | Out-Null
 

@@ -1,37 +1,37 @@
-{
-  "device": "6DP0226117002287",
-  "steps": [
-    {
-      "expected": "detail-panel",
-      "processPreserved": true,
-      "control": "open-settings",
-      "visible": true
-    },
-    {
-      "expected": "detail-panel",
-      "processPreserved": true,
-      "control": "open-ambience",
-      "visible": true
-    },
-    {
-      "expected": "detail-panel",
-      "processPreserved": true,
-      "control": "home-note",
-      "visible": true
-    },
-    {
-      "expected": "detail-panel",
-      "processPreserved": true,
-      "control": "home-works",
-      "visible": true
-    },
-    {
-      "expected": "camera-fullscreen",
-      "processPreserved": true,
-      "control": "begin-capture",
-      "visible": true
-    }
-  ],
-  "checkedAt": "2026-09-24T18:20:22.0569185+08:00",
-  "initialPid": "59840"
+﻿{
+    "checkedAt":  "2026-09-24T22:44:09.2653348+08:00",
+    "initialPid":  "3720",
+    "steps":  [
+                  {
+                      "control":  "open-settings",
+                      "processPreserved":  true,
+                      "visible":  true,
+                      "expected":  "detail-panel"
+                  },
+                  {
+                      "control":  "open-ambience",
+                      "processPreserved":  true,
+                      "visible":  true,
+                      "expected":  "detail-panel"
+                  },
+                  {
+                      "control":  "home-note",
+                      "processPreserved":  true,
+                      "visible":  true,
+                      "expected":  "detail-panel"
+                  },
+                  {
+                      "control":  "home-works",
+                      "processPreserved":  true,
+                      "visible":  true,
+                      "expected":  "detail-panel"
+                  },
+                  {
+                      "control":  "begin-capture",
+                      "processPreserved":  true,
+                      "visible":  true,
+                      "expected":  "camera-fullscreen"
+                  }
+              ],
+    "device":  "6DP0226117002287"
 }

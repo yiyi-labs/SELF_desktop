@@ -213,13 +213,13 @@ def job_status(job_id: str, request: Request):
 def asset(job_id: str, kind: str, request: Request):
     _authorize(request)
     path, manifest = _verified_asset(job_id, kind)
-    return FileResponse(path, media_type="model/gltf-binary" if kind == "mesh" else "application/octet-stream",
+    return FileResponse(path, media_type="image/png" if kind == "preview" else "model/gltf-binary" if kind == "mesh" else "application/octet-stream",
                         headers={"X-Content-SHA256": manifest["sha256"]})
 
 
 def _verified_asset(job_id: str, kind: str, verify_digest: bool = True) -> tuple[Path, dict]:
     job = _read_job(_job_dir(job_id))
-    if kind not in {"mesh", "gaussian", "view"} or (job["state"] != "complete" and not (job["state"] == "gaussian_ready" and kind in {"gaussian", "view"})):
+    if kind not in {"mesh", "gaussian", "view", "preview", "preview3d"} or (job["state"] != "complete" and not (job["state"] == "gaussian_ready" and kind in {"gaussian", "view", "preview", "preview3d"})):
         raise HTTPException(404, "asset_not_ready")
     manifest = job["assets"].get(kind)
     if not manifest:
@@ -229,8 +229,8 @@ def _verified_asset(job_id: str, kind: str, verify_digest: bool = True) -> tuple
             or not isinstance(manifest.get("sha256"), str)
             or not SHA_RE.fullmatch(manifest["sha256"])
             or type(manifest.get("bytes")) is not int
-            or not (128 if kind == "view" else 1024) <= manifest["bytes"] <=
-            (4096 if kind == "view" else 32 * 1024 * 1024 if kind == "mesh" else 256 * 1024 * 1024)):
+            or not (128 if kind == "view" else 256 if kind == "preview" else 1024) <= manifest["bytes"] <=
+            (4096 if kind == "view" else 512 * 1024 if kind == "preview" else 12 * 1024 * 1024 if kind == "preview3d" else 32 * 1024 * 1024 if kind == "mesh" else 256 * 1024 * 1024)):
         raise HTTPException(409, "asset_manifest_invalid")
     path = _job_dir(job_id) / manifest["file"]
     if not path.is_file() or path.stat().st_size != manifest["bytes"]:

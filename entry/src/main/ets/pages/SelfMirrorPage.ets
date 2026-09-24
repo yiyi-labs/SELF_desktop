@@ -16,12 +16,13 @@ import { PlannerService } from '../services/PlannerService';
 import { ProductRepository, ProductRecord } from '../services/ProductRepository';
 import { AmbientAudio } from '../services/AmbientAudio';
 import { CaptureService,CaptureRecord } from '../services/CaptureService';
+import { PortraitStarStore, PortraitStar } from '../services/PortraitStarStore';
 import { ReconstructionTransportClient, ReconstructionView } from '../services/ReconstructionTransportClient';
 import { UiPreference, UiSettings } from '../services/UiPreference';
 import { UiText } from '../services/UiText';
 import { AmbiencePreference } from '../services/AmbiencePreference';
 
-interface PendingReconstruction {jobId:string;}
+interface PendingReconstruction {jobId:string;name?:string;}
 interface SavedReconstruction {jobId:string;gaussian?:string;view?:string;mesh?:string;}
 
 @Extend(Button)
@@ -49,10 +50,18 @@ struct SelfMirrorPage {
   @State showPersonal:boolean=true;
   @State legacyEditorOpen:boolean=false;
   @State personalReady:boolean=false;
+  @State originMode:boolean=true;
+  @State skyOpen:boolean=false;
+  @State starItems:PortraitStar[]=[];
+  @State previewStarId:string='';
+  @State previewReady:boolean=false;
+  @State starNameDraft:string='';
+  @State activeStarId:string='';
   @State journey:string='idle';
   @State reconProgress:number=0;
   @State introStage:number=0;
   @State introLine:string='';
+  @State introCharacters:number=0;
   @State introDrop:number=-80;
   @State introBurst:number=0;
   @State revealOpacity:number=1;
@@ -60,12 +69,13 @@ struct SelfMirrorPage {
   @State musicPulse:number=0;
   @State storyLine:number=0;
   @State visibleCharacters:number=0;
-  private storyTimer:number=-1;
+  private storyVisits:number[]=[1,0,0];
   private characterTimer:number=-1;
+  private storyCueTimer:number=-1;
   private lastInteractionAt:number=Date.now();
-  private lastStoryAt:number=Date.now();
   private revealTimer:number=-1;
   private introTimers:number[]=[];
+  private introCharacterTimer:number=-1;
   private sparks:number[]=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
   @State language:string='zh';
   @State accent:string='#7C698F';
@@ -77,7 +87,7 @@ struct SelfMirrorPage {
   private panelHeight():number{return Math.min(this.surfaceHeight-24,this.detail==='氛围'?552:this.detail==='设置'?414:600);}
   private panelX():number{return Math.max(16,Math.min(this.surfaceWidth-this.panelWidth()-16,this.anchorX-this.panelWidth()/2));}
   private panelY():number{return Math.max(12,Math.min(this.surfaceHeight-this.panelHeight()-12,this.anchorY<60?12:this.anchorY-this.panelHeight()-16));}
-  private saveUi():void{UiPreference.save(this.context,{language:this.language,accent:this.accent,palette:this.palette,motion:this.motion,followChat:this.followChat});}
+  private saveUi():void{UiPreference.save(this.context,{language:this.language,accent:this.accent,palette:this.palette,motion:this.motion,followChat:this.followChat,stylusHints:this.stylusHints});}
   private setLanguage(value:string):void{this.markInteraction();this.language=value;AppStorage.setOrCreate('selfLanguage',value);this.saveUi();this.revealStory();}
   private setAccent(value:string):void{this.getUIContext().animateTo({duration:this.motion?280:0,curve:Curve.EaseOut},()=>this.accent=value);this.saveUi();}
   @State showBeginning:boolean=true;
@@ -89,6 +99,7 @@ struct SelfMirrorPage {
   @State motion:boolean=true;
   @State palette:string='quiet';
   @State followChat:boolean=true;
+  @State stylusHints:boolean=true;
   @State lastUtterance:string='';
   @State replyScale:number=1;
   @State replyOpacity:number=1;
@@ -130,6 +141,7 @@ struct SelfMirrorPage {
   private context: common.UIAbilityContext = this.getUIContext().getHostContext() as common.UIAbilityContext;
   private assets: AssetStore = new AssetStore(this.context);
   private works: WorkspaceStore = new WorkspaceStore(this.context,this.assets);
+  private stars:PortraitStarStore=new PortraitStarStore(this.context,this.assets);
   private audio:AmbientAudio=new AmbientAudio(this.context);
   private session: SessionStore = new SessionStore();
   private previousTool: string = 'NAVIGATE';
@@ -140,39 +152,72 @@ struct SelfMirrorPage {
   private reconTimer:number=-1;
   private reconJob:string='';
   private reconChecking:boolean=false;
-  private personalActive():boolean{return !this.legacyEditorOpen&&this.showPersonal&&!!this.personalGaussianPath&&!!this.personalViewPath;}
-  private story():string[]{return this.language==='en'?['Every side of you belongs here.','Follow one small light. Find yourself.','Stay just as you are, or discover more.']:['每一种模样，都值得被看见。','循着一粒微光，慢慢遇见自己。','不必藏起任何一面。'];}
+  private personalActive():boolean{return !this.legacyEditorOpen&&!this.originMode&&!this.skyOpen&&this.showPersonal&&!!this.personalGaussianPath&&!!this.personalViewPath;}
+  private introStory():string[]{return this.language==='en'?['Every side of you belongs here.','Follow one small light. Find yourself.','Stay just as you are, or discover more.']:['每一种模样，都值得被看见。','循着一粒微光，慢慢遇见自己。','不必藏起任何一面。'];}
+  private story():string[]{return this.language==='en'?
+    ['Every side of you belongs here.','The lights you passed are still here.','Turn gently. Meet another side of yourself.',
+     'Follow one small light, at your own pace.','Each star keeps a moment of yours.','There is room for every detail of you.',
+     'No part of you needs to hide.','Wander among the moments that made you.','Rest your gaze on what you want to understand.']:
+    ['每一种模样，都值得被看见。','走过的光，还在这里等你。','轻轻转动，遇见另一面的自己。',
+     '循着一粒微光，按自己的节奏前行。','每颗星辰，都留着那一刻的你。','你在意的细节，也属于完整的自己。',
+     '不必藏起任何一面。','在星辰之间，看看一路走来的自己。','想细看哪里？先让目光停留片刻。'];}
   private markInteraction():void{this.lastInteractionAt=Date.now();}
   private revealStory():void{
-    if(this.characterTimer>=0)clearInterval(this.characterTimer);
-    this.characterTimer=-1;this.lastStoryAt=Date.now();this.visibleCharacters=0;
-    const length=this.story()[this.storyLine].length;
+    if(this.characterTimer>=0)clearTimeout(this.characterTimer);
+    this.characterTimer=-1;this.visibleCharacters=0;
+    const line=this.story()[this.storyLine],length=line.length;
     if(!this.motion){this.visibleCharacters=length;return;}
-    this.characterTimer=setInterval(()=>{
+    const next=():void=>{
       this.visibleCharacters=Math.min(length,this.visibleCharacters+1);
-      if(this.visibleCharacters>=length){clearInterval(this.characterTimer);this.characterTimer=-1;}
-    },95);
+      if(this.visibleCharacters>=length){this.characterTimer=-1;return;}
+      const last=line[this.visibleCharacters-1];
+      const delay=last==='，'||last==='。'||last==='.'?250:72+(this.visibleCharacters%4)*23;
+      this.characterTimer=setTimeout(next,delay);
+    };
+    this.characterTimer=setTimeout(next,130);
   }
-  private startIntro():void{
-    if(fs.accessSync(this.context.filesDir+'/self-intro-seen'))return;
-    this.introStage=1;this.introLine=this.story()[0];
-    this.introTimers.push(setTimeout(()=>{this.introLine=this.story()[1];},1900));
-    this.introTimers.push(setTimeout(()=>{this.introLine=this.story()[2];},3700));
+  private cueStory(kind:number,delay:number):void{
+    if(this.storyCueTimer>=0)clearTimeout(this.storyCueTimer);
+    this.storyCueTimer=-1;
+    const group=[kind,kind+3,kind+6],visits=this.storyVisits[kind];
+    let next=group[visits%3];
+    if(next===this.storyLine)next=group[(visits+1)%3];
+    this.storyVisits[kind]=visits+1;
+    this.storyCueTimer=setTimeout(()=>{this.storyCueTimer=-1;this.storyLine=next;this.revealStory();},delay);
+  }
+  private startIntro(force:boolean=false):void{
+    if(!force&&fs.accessSync(this.context.filesDir+'/self-intro-seen'))return;
+    this.introStage=1;this.showIntroLine(this.introStory()[0]);
+    this.introTimers.push(setTimeout(()=>this.showIntroLine(this.introStory()[1]),1900));
+    this.introTimers.push(setTimeout(()=>this.showIntroLine(this.introStory()[2]),3700));
     this.introTimers.push(setTimeout(()=>{this.introStage=2;this.introLine='';this.getUIContext().animateTo({duration:this.motion?900:0,curve:Curve.EaseIn},()=>this.introDrop=this.surfaceHeight*.34);},5300));
     this.introTimers.push(setTimeout(()=>{this.introStage=3;this.getUIContext().animateTo({duration:this.motion?800:0,curve:Curve.EaseOut},()=>this.introBurst=1);},6300));
     this.introTimers.push(setTimeout(()=>this.finishIntro(),7350));
   }
+  private showIntroLine(line:string):void{
+    if(this.introCharacterTimer>=0)clearTimeout(this.introCharacterTimer);
+    this.introLine=line;this.introCharacters=0;
+    if(!this.motion){this.introCharacters=line.length;return;}
+    const reveal=():void=>{
+      this.introCharacters=Math.min(line.length,this.introCharacters+1);
+      if(this.introCharacters>=line.length){this.introCharacterTimer=-1;return;}
+      this.introCharacterTimer=setTimeout(reveal,78+(this.introCharacters%3)*20);
+    };
+    this.introCharacterTimer=setTimeout(reveal,160);
+  }
   private finishIntro():void{
     this.introTimers.forEach((timer:number)=>clearTimeout(timer));this.introTimers=[];
+    if(this.introCharacterTimer>=0)clearTimeout(this.introCharacterTimer);this.introCharacterTimer=-1;
     this.introStage=0;this.assets.writeAtomic(this.context.filesDir+'/self-intro-seen','1');this.revealStory();
   }
 
-  private activateGaussian(saved:SavedReconstruction):boolean{
+  private activateGaussian(saved:SavedReconstruction,showNow:boolean=true):boolean{
     if(!/^[a-f0-9]{32}$/.test(saved.jobId))return false;
     const directory=this.context.filesDir+'/models/'+saved.jobId;
     const gaussian=directory+'/portrait.gaussian.ply',view=directory+'/portrait.view.json';
     if(saved.gaussian!==gaussian||saved.view!==view||!fs.accessSync(gaussian)||!fs.accessSync(view))return false;
     this.personalGaussianPath=gaussian;this.personalViewPath=view;this.showPersonal=true;this.legacyEditorOpen=false;this.personalReady=false;
+    this.activeStarId=saved.jobId;this.originMode=!showNow;this.skyOpen=false;
     this.showBeginning=false;
     return true;
   }
@@ -193,14 +238,59 @@ struct SelfMirrorPage {
         try{const view=await client.downloadView(saved.jobId,this.context.filesDir);saved.view=view;this.assets.writeAtomic(path,JSON.stringify(saved));}
         catch(error){console.error('SELF_PERSONAL_VIEW_REFRESH_FAILED '+String(error));if(fs.accessSync(expected))saved.view=expected;}
       }
-      this.activateGaussian(saved);
+      this.activateGaussian(saved,false);
+      if(!fs.accessSync(this.stars.previewPath(saved.jobId))){
+        const client=new ReconstructionTransportClient();client.endpoint=this.backendAddress;client.token=this.backendToken;
+        try{await client.downloadPreview(saved.jobId,this.context.filesDir);this.refreshStars();}
+        catch(_){/* The full personal model remains available without a thumbnail. */}
+      }
     }catch(error){console.error('SELF_PERSONAL_RESTORE_FAILED '+String(error));}
+  }
+
+  private refreshStars():void{this.starItems=this.stars.list();}
+  private returnOrigin():void{
+    this.markInteraction();this.originMode=true;this.skyOpen=false;this.journey='idle';
+    this.personalReady=false;this.detail='';this.cueStory(0,900);
+  }
+  private enterSky():void{
+    this.markInteraction();this.refreshStars();this.originMode=true;this.skyOpen=true;
+    this.journey='idle';this.detail='';this.personalReady=false;
+    if(this.starItems.length>0)this.selectStarPreview(this.starItems[0].jobId);
+    this.cueStory(1,450);
+  }
+  private selectStarPreview(id:string):void{
+    const star=this.starItems.find((item:PortraitStar)=>item.jobId===id);
+    if(!star)return;
+    this.previewStarId=id;this.previewReady=false;this.markInteraction();
+    if(star.preview3dPath)return;
+    const client=new ReconstructionTransportClient();client.endpoint=this.backendAddress;client.token=this.backendToken;
+    client.downloadPreview3d(id,this.context.filesDir).then(()=>{
+      if(this.skyOpen&&this.previewStarId===id)this.refreshStars();
+    }).catch((error:Error)=>console.warn('SELF_STAR_3D_PREVIEW_UNAVAILABLE '+String(error)));
+  }
+  private openStar(id:string):void{
+    const star=this.starItems.find((item:PortraitStar)=>item.jobId===id);
+    if(!star)return;
+    const paths=this.stars.modelPaths(id);
+    if(!this.activateGaussian({jobId:id,gaussian:paths.gaussian,view:paths.view}))return;
+    this.markInteraction();this.journey='revealing';this.revealOpacity=1;this.revealScale=.35;
+    this.cueStory(2,1200);
+    console.info('SELF_STAR_OPEN '+id);
+  }
+  private saveStarName():void{
+    this.starNameDraft=PortraitStarStore.cleanName(this.starNameDraft);
+    if(this.reconJob){
+      this.assets.writeAtomic(this.context.filesDir+'/reconstruction-pending.json',
+        JSON.stringify({jobId:this.reconJob,name:this.starNameDraft} as PendingReconstruction));
+    }
+    console.info('SELF_STAR_NAME_SAVED '+this.starNameDraft.length);
   }
 
   private trackReconstruction(jobId:string):void{
     if(!/^[a-f0-9]{32}$/.test(jobId))return;
     this.reconJob=jobId;
-    this.assets.writeAtomic(this.context.filesDir+'/reconstruction-pending.json',JSON.stringify({jobId}));
+    this.assets.writeAtomic(this.context.filesDir+'/reconstruction-pending.json',
+      JSON.stringify({jobId,name:this.starNameDraft} as PendingReconstruction));
     this.journey='forming';this.reconProgress=Math.max(6,this.reconProgress);this.captureStatus='你的轮廓，正在星光里渐渐清晰。';
     if(this.reconTimer<0)this.reconTimer=setInterval(()=>this.pollReconstruction(),5000);
     this.pollReconstruction();
@@ -225,10 +315,13 @@ struct SelfMirrorPage {
       if(result.state==='gaussian_ready'){
         const view=await client.downloadView(jobId,this.context.filesDir);
         const file=await client.downloadGaussian(jobId,this.context.filesDir);
+        try{await client.downloadPreview(jobId,this.context.filesDir);}catch(error){console.warn('SELF_STAR_PREVIEW_UNAVAILABLE '+String(error));}
+        try{await client.downloadPreview3d(jobId,this.context.filesDir);}catch(error){console.warn('SELF_STAR_3D_PREVIEW_UNAVAILABLE '+String(error));}
         if(this.reconJob!==jobId)return;
         const saved:SavedReconstruction={jobId,gaussian:file,view};
         this.assets.writeAtomic(this.context.filesDir+'/reconstruction-result.json',JSON.stringify(saved));
-        this.activateGaussian(saved);
+        this.stars.upsert(jobId,this.starNameDraft);this.refreshStars();
+        this.activateGaussian(saved);this.cueStory(2,1800);
         this.reconProgress=100;this.journey='revealing';this.revealOpacity=1;this.revealScale=.35;
         this.captureStatus=result.viewpointQuality?.broadSideCoverage===false?
           '立体面容已打开。想看更清楚的侧面，下次可让镜头再多绕一点。':'你的立体面容正在打开…';
@@ -250,6 +343,7 @@ struct SelfMirrorPage {
     if(!/^capture-[0-9]+\.mp4$/.test(name)||this.reconJob)return;
     const client=new ReconstructionTransportClient();client.endpoint=this.backendAddress;client.token=this.backendToken;
     try{
+      this.starNameDraft='';this.originMode=true;this.skyOpen=false;
       this.journey='forming';this.reconProgress=5;this.captureStatus='正从光点里，找回你的轮廓。';
       const health=await client.probe();if(health.engine!=='ready')throw new Error('建模服务尚未就绪');
       const path=this.context.filesDir+'/captures/'+name;
@@ -259,17 +353,12 @@ struct SelfMirrorPage {
   }
 
   aboutToAppear(): void {
-    const ui=UiPreference.load(this.context);this.language=ui.language;this.accent=ui.accent;this.palette=ui.palette;this.motion=ui.motion;this.followChat=ui.followChat;AppStorage.setOrCreate('selfLanguage',ui.language);
+    const ui=UiPreference.load(this.context);this.language=ui.language;this.accent=ui.accent;this.palette=ui.palette;this.motion=ui.motion;this.followChat=ui.followChat;this.stylusHints=ui.stylusHints;AppStorage.setOrCreate('selfLanguage',ui.language);
     this.bridge.onSelectionAnchor=(x:number,y:number,halfWidth:number)=>{this.focusX=x;this.focusY=y;this.focusHalfWidth=halfWidth;};
     this.bridge.onToolChanged=(name:string)=>{this.tool=name;this.focusOpen=false;};
     this.audio.onStatus=(state:string)=>{this.audioState=state;if(state!=='playing')this.musicPulse=0;if(this.context.applicationInfo.debug)console.info('SELF_AUDIO_STATE '+state);if(state==='error'){this.musicOn=false;this.subtitle='音乐暂时无法播放，你可以继续安静地使用镜面。';}};
     this.audio.onPulse=(value:number)=>this.musicPulse=value;
     this.startIntro();if(this.introStage===0)this.revealStory();
-    this.storyTimer=setInterval(()=>{
-      const now=Date.now();
-      if(this.foreground&&this.introStage===0&&this.journey==='idle'&&!this.detail&&!this.cameraLive&&!this.legacyEditorOpen&&
-         now-this.lastInteractionAt>26000&&now-this.lastStoryAt>26000){this.storyLine=(this.storyLine+1)%this.story().length;this.revealStory();}
-    },1000);
 
     this.assets.registerRaw('sample-lee','assets/sample-head.glb');
     for(const name of ['lip','editable','protectionTest']){
@@ -278,8 +367,9 @@ struct SelfMirrorPage {
       this.session.regions.push(r);
     }
     this.works.loadPreference(this.session);this.labels();
+    this.refreshStars();
     const pending=this.context.filesDir+'/reconstruction-pending.json';
-    if(fs.accessSync(pending)){try{const saved=JSON.parse(fs.readTextSync(pending)) as PendingReconstruction;this.trackReconstruction(saved.jobId);}catch(_){}}
+    if(fs.accessSync(pending)){try{const saved=JSON.parse(fs.readTextSync(pending)) as PendingReconstruction;this.starNameDraft=saved.name||'';this.trackReconstruction(saved.jobId);}catch(_){}}
     this.restoreGaussian();
     this.bridge.onMessage=(m:Envelope)=>this.receive(m);
     this.bridge.onBytes=(kind:string,bytes:ArrayBuffer)=>{
@@ -463,8 +553,8 @@ struct SelfMirrorPage {
       this.works.loadPreference(this.session);this.bridge.assetId=this.session.assetId;this.bridge.assetVersion=this.session.assetVersion;this.bridge.revision=0;this.identity='示例面容';this.selected='';this.candidate='';this.ready=false;this.close();this.labels();this.bridge.send('INIT',{});this.subtitle='已删除这张照片的应用内源文件、作品、蒙版和私有导出；私密文字保留';
     }catch(e){this.fail(String(e));}
   }
-  aboutToDisappear():void{this.planner.cancel();if(this.timer>=0)clearInterval(this.timer);if(this.storyTimer>=0)clearInterval(this.storyTimer);if(this.characterTimer>=0)clearInterval(this.characterTimer);if(this.revealTimer>=0)clearTimeout(this.revealTimer);this.introTimers.forEach((timer:number)=>clearTimeout(timer));if(this.reconTimer>=0)clearInterval(this.reconTimer);this.reconTimer=-1;this.audio.dispose();this.bridge.dispose();this.assets.cleanupTemporary();}
-  onBackPress():boolean{if(this.introStage>0){this.finishIntro();return true;}if(this.cameraLive){this.close();return true;}if(this.detail){this.close();return true;}if(this.productOpen){this.productOpen=false;return true;}if(this.legacyEditorOpen){this.legacyEditorOpen=false;this.ready=false;return true;}if(this.tool!=='NAVIGATE'){this.switchTool(this.tool);return true;}return false;}
+  aboutToDisappear():void{this.planner.cancel();if(this.timer>=0)clearInterval(this.timer);if(this.storyCueTimer>=0)clearTimeout(this.storyCueTimer);if(this.characterTimer>=0)clearTimeout(this.characterTimer);if(this.introCharacterTimer>=0)clearTimeout(this.introCharacterTimer);if(this.revealTimer>=0)clearTimeout(this.revealTimer);this.introTimers.forEach((timer:number)=>clearTimeout(timer));if(this.reconTimer>=0)clearInterval(this.reconTimer);this.reconTimer=-1;this.audio.dispose();this.bridge.dispose();this.assets.cleanupTemporary();}
+  onBackPress():boolean{if(this.introStage>0){this.finishIntro();return true;}if(this.cameraLive){this.close();return true;}if(this.detail){this.close();return true;}if(this.skyOpen||this.personalActive()){this.returnOrigin();return true;}if(this.productOpen){this.productOpen=false;return true;}if(this.legacyEditorOpen){this.legacyEditorOpen=false;this.ready=false;return true;}if(this.tool!=='NAVIGATE'){this.switchTool(this.tool);return true;}return false;}
   @Builder ambienceTile(mode:string,label:string,color:string){
     Button(){Column({space:8}){Stack(){Circle().width(48).height(48).fill(color);Circle().width(26).height(26).fill('#BBFFFFFF').blur(7).offset({x:8,y:-4})}.width(62).height(60);Text(this.tr(label)).fontSize(13).fontColor('#62516F')}}.id('palette-'+mode).layoutWeight(1).height(102).backgroundColor(this.palette===mode?'#D9FFFFFF':'#38FFFFFF').border({width:this.palette===mode?1.5:1,color:this.palette===mode?this.accent:'#77FFFFFF'}).borderRadius(22).stateStyles({pressed:{.scale({x:.96,y:.96})},normal:{.scale({x:1,y:1})}}).animation({duration:this.motion?180:0,curve:Curve.EaseOut}).onClick(()=>this.chooseAtmosphere(mode))
   }
@@ -503,6 +593,9 @@ struct SelfMirrorPage {
       if(this.detail==='设置'){
         Text(this.tr('语言 / Language')).fontSize(14).fontColor('#81758D')
         Row({space:12}){Button(this.tr('中文')).id('language-zh').softButton().backgroundColor(this.language==='zh'?'#DDFFFFFF':'#66FFFFFF').onClick(()=>this.setLanguage('zh'));Button(this.tr('English')).id('language-en').softButton().backgroundColor(this.language==='en'?'#DDFFFFFF':'#66FFFFFF').onClick(()=>this.setLanguage('en'))}
+        Row(){Text(this.language==='en'?'Use stylus':'使用手写笔').layoutWeight(1);Toggle({type:ToggleType.Switch,isOn:this.stylusHints}).id('stylus-hints-toggle').selectedColor(this.accent).onChange((value:boolean)=>{this.stylusHints=value;this.saveUi();})}.height(48)
+        Text(this.language==='en'?'The pen can be preferred; touch always remains available. Face-attached selection for personal 3D portraits is not ready yet.':'有笔时优先显示手写笔引导；没有笔仍可触控。个人立体面容的贴脸圈选尚未开放。').fontSize(12).fontColor('#81758D')
+        Button(this.language==='en'?'Watch the beginning again':'重温最初的微光').id('replay-intro').softButton().width('100%').onClick(()=>{this.close();this.returnOrigin();this.startIntro(true);})
         Button(this.tr('隐私与云端')).softButton().width('100%').onClick((event:ClickEvent)=>this.open('云端理解',event))
         Button(this.tr('采集记录')).softButton().width('100%').onClick((event:ClickEvent)=>this.open('采集记录',event))
         Button(this.tr('作品与记录')).softButton().width('100%').onClick((event:ClickEvent)=>this.open('作品与记录',event))
@@ -640,20 +733,45 @@ struct SelfMirrorPage {
   }
   @Builder introOverlay(){
     Stack(){
-      if(this.introStage===1){Text(this.introLine).fontSize(this.wide?30:23).letterSpacing(3).lineHeight(this.wide?48:38).fontColor('#F2F2FF').textAlign(TextAlign.Center).width(Math.min(this.surfaceWidth-48,680)).transition({opacity:0,translate:{y:12}})}
-      if(this.introStage>=2){
+      if(this.introStage===1){Flex({wrap:FlexWrap.Wrap,justifyContent:FlexAlign.Center}){
+        ForEach(this.introLine.split(''),(letter:string,index:number)=>{
+          Text(letter).fontSize(this.wide?30:23).letterSpacing(3).fontColor('#F2F2FF')
+            .opacity(index<this.introCharacters?1:0).blur(index<this.introCharacters?0:8)
+            .animation({duration:this.motion?300:0,curve:Curve.EaseOut})
+        },(_letter:string,index:number)=>index.toString())
+      }.width(Math.min(this.surfaceWidth-48,680))}
+      if(this.introStage===3){
+        NightSkySurface({formation:this.introBurst,musicPulse:0,motion:this.motion,active:true,phaseMode:'forming'}).width('100%').height('100%')
+      }
+      if(this.introStage===2){
         Circle().width(48).height(48).fill('#548FA8DC').stroke('#E5E9FF').strokeWidth(1.5).shadow({radius:44,color:'#729BC9F2'}).position({x:this.surfaceWidth*.5-24,y:this.surfaceHeight*.47+this.introDrop})
-        if(this.introStage===3){ForEach(this.sparks,(index:number)=>{
-          Circle().width(index%5===0?4:2).height(index%5===0?4:2).fill(index%3===0?'#E7BCE9':'#BEDDFD')
-            .position({x:this.surfaceWidth*.5+Math.cos(index*2.4)*(28+index*5)*this.introBurst,y:this.surfaceHeight*.79+Math.sin(index*2.4)*(28+index*4)*this.introBurst}).opacity(1-this.introBurst*.7)
-        },(index:number)=>index.toString())}
       }
       Button(this.language==='en'?'Skip':'跳过').id('skip-intro').softButton().width(72).height(40).position({x:Math.max(16,this.surfaceWidth-92),y:42}).onClick(()=>this.finishIntro())
     }.width('100%').height('100%').backgroundColor('#080B17').zIndex(50)
   }
+  @Builder starTile(star:PortraitStar,index:number){
+    Button(){
+      Row({space:10}){
+        Stack(){
+          Circle().width(66).height(66).fill('#263A607A').shadow({radius:24,color:index%2===0?'#5C8BADE2':'#588E7DBF'})
+          if(star.previewPath){
+            Image(fileUri.getUriFromPath(star.previewPath)).width(64).height(64).objectFit(ImageFit.Contain).borderRadius(32)
+          }else{
+            Circle().width(42).height(42).fill('#6C9BBBDD').blur(16)
+            Text('✧').fontSize(30).fontColor('#D9E5FF')
+          }
+          Circle().width(69).height(69).fill('#00000000').stroke('#8BAECFE8').strokeWidth(1)
+        }.width(74).height(74)
+        Text(star.name).fontSize(14).fontColor('#F5F4FF').fontWeight(FontWeight.Medium).maxLines(1)
+      }.padding({left:10,right:16})
+    }.id('star-'+star.jobId).width(185).height(86).backgroundColor(this.previewStarId===star.jobId?'#48618294':'#25354D78')
+      .border({width:1,color:this.previewStarId===star.jobId?'#BACFEB':'#708FB1D5'}).borderRadius(27)
+      .stateStyles({pressed:{.scale({x:.94,y:.94})},normal:{.scale({x:1,y:1})}})
+      .animation({duration:this.motion?220:0,curve:Curve.EaseOut}).onClick(()=>this.selectStarPreview(star.jobId))
+  }
   @Builder nightHome(){
     Stack(){
-      NightSkySurface({formation:this.journey==='forming'?.22+this.reconProgress*.006:this.personalActive()?.16:.58,musicPulse:this.musicPulse,motion:this.motion,active:this.foreground&&!this.cameraLive&&(!this.personalActive()||this.journey==='forming')}).width('100%').height('100%')
+      NightSkySurface({formation:this.journey==='forming'?.22+this.reconProgress*.006:this.skyOpen?.22:this.personalActive()?.16:.82+Math.min(.09,this.starItems.length*.013),musicPulse:this.musicPulse,motion:this.motion,active:this.foreground&&!this.cameraLive&&(!this.personalActive()||this.journey==='forming'),phaseMode:this.skyOpen?'sky':this.journey==='forming'?'forming':this.personalActive()?'sky':'origin'}).width('100%').height('100%')
       if(this.personalActive()&&this.journey!=='forming'){
         GaussianPortraitSurface({gaussianPath:this.personalGaussianPath,viewPath:this.personalViewPath,
           onReady:()=>{this.personalReady=true;this.captureStatus='';if(this.journey==='revealing'){
@@ -665,7 +783,7 @@ struct SelfMirrorPage {
         Stack(){Circle().width(72).height(72).fill('#B6C8EC').shadow({radius:80,color:'#A7C7EE'}).scale({x:this.revealScale,y:this.revealScale})}.width('100%').height('100%').backgroundColor('#080C1B').opacity(this.revealOpacity).hitTestBehavior(HitTestMode.None)
       }
       Row({space:10}){
-        Column({space:2}){Text('SELF').fontSize(25).letterSpacing(5).fontWeight(FontWeight.Medium).fontColor('#F5F5FF');Text(this.language==='en'?'Find your own light':'循光，遇见自己').fontSize(10).letterSpacing(2).fontColor('#A9BCD8')}.alignItems(HorizontalAlign.Start)
+        Column({space:2}){Text('SELF').fontSize(25).letterSpacing(5).fontWeight(FontWeight.Medium).fontColor('#F5F5FF');Text(this.language==='en'?'Find your own light':'循光，遇见自己').fontSize(10).letterSpacing(2).fontColor('#A9BCD8')}.alignItems(HorizontalAlign.Start).onClick(()=>this.returnOrigin())
         Blank()
         Button(this.musicOn?'♫':'♩').id('music-toggle').softButton().width(46).height(46).fontSize(22).fontColor('#EFF0FF').backgroundColor('#44314B70').accessibilityText(this.tr(this.musicOn?'音乐开':'音乐关')).onClick(()=>this.toggleMusic(!this.musicOn))
         Button('✧').id('open-ambience').softButton().width(46).height(46).fontSize(24).fontColor('#EFF0FF').backgroundColor('#44314B70').accessibilityText(this.tr('氛围')).onClick((event:ClickEvent)=>this.open('氛围',event))
@@ -681,8 +799,31 @@ struct SelfMirrorPage {
                 .animation({duration:this.motion?280:0,curve:Curve.EaseOut})
             },(_letter:string,index:number)=>index.toString())
           }.width('100%')
-          Text(this.personalActive()?(this.language==='en'?'Touch and turn to discover each side.':'轻轻转动，看看每一面的自己。'):(this.language==='en'?'A portrait begins with your own light.':'你的光，会慢慢勾勒出轮廓。')).fontSize(13).fontColor('#BAC9E0').textShadow({radius:5,color:'#7D101528',offsetY:2})
+          if(!this.skyOpen){Text(this.personalActive()?(this.language==='en'?'Touch and turn to discover each side.':'轻轻转动，看看每一面的自己。'):(this.language==='en'?'A portrait begins with your own light.':'你的光，会慢慢勾勒出轮廓。')).fontSize(13).fontColor('#BAC9E0').textShadow({radius:5,color:'#7D101528',offsetY:2})}
         }.alignItems(HorizontalAlign.Start).width(Math.min(this.surfaceWidth-48,this.wide?460:340)).position({x:this.wide?50:26,y:this.surfaceHeight*(this.wide?.22:.18)}).hitTestBehavior(HitTestMode.None)
+      }
+      if(this.skyOpen&&!this.detail){
+        Column({space:12}){
+          Text(this.language==='en'?'Your constellations':'你的星辰').fontSize(this.wide?20:19).fontColor('#D7E4FA').fontWeight(FontWeight.Medium)
+          if(this.starItems.length===0){Text(this.language==='en'?'Your first star begins with a portrait.':'第一颗星辰，会从一次拍摄开始。').fontSize(15).fontColor('#B6C9E2')}
+          else{
+            Stack(){
+              ForEach(this.starItems,(star:PortraitStar)=>{
+                if(star.jobId===this.previewStarId){
+                  if(star.preview3dPath){
+                    GaussianPortraitSurface({gaussianPath:star.preview3dPath,viewPath:this.stars.modelPaths(star.jobId).view,previewMode:true,
+                      onReady:()=>{this.previewReady=true;console.info('SELF_STAR_3D_READY '+star.jobId);},
+                      onFailure:(message:string)=>{this.previewReady=false;console.warn('SELF_STAR_3D_FAILED '+message);},
+                      onInteraction:()=>this.markInteraction()}).width('100%').height('100%')
+                  }else if(star.previewPath){Image(fileUri.getUriFromPath(star.previewPath)).width('85%').height('85%').objectFit(ImageFit.Contain)}
+                  else{Text('✧').fontSize(96).fontColor('#C4D8F1')}
+                }
+              },(star:PortraitStar)=>star.jobId)
+            }.width(Math.min(this.wide?this.surfaceHeight*.30:this.surfaceWidth*.68,330)).height(Math.min(this.wide?this.surfaceHeight*.30:this.surfaceWidth*.68,330))
+            Scroll(){Row({space:12}){ForEach(this.starItems,(star:PortraitStar,index:number)=>{this.starTile(star,index)},(star:PortraitStar)=>star.jobId)}.padding({left:24,right:24,top:4,bottom:4})}
+              .scrollable(ScrollDirection.Horizontal).scrollBar(BarState.Off).width('100%').height(98)
+          }
+        }.alignItems(HorizontalAlign.Center).width('100%').position({x:0,y:this.surfaceHeight*(this.wide?.25:.29)})
       }
       if(this.journey==='forming'){
         Column({space:18}){
@@ -690,17 +831,34 @@ struct SelfMirrorPage {
           Text(this.captureStatus).fontSize(this.wide?21:18).fontColor('#F2F1FF').textAlign(TextAlign.Center)
           Progress({value:this.reconProgress,total:100,type:ProgressType.Linear}).width(Math.min(260,this.surfaceWidth-96)).height(4).color('#BFD5FF').backgroundColor('#3B59799D')
           Text(Math.round(this.reconProgress)+'%').fontSize(12).fontColor('#B3C8DF')
+          TextInput({text:this.starNameDraft,placeholder:this.language==='en'?'What will you call this star?':'这颗星辰，想叫什么？'}).id('star-name-input')
+            .width(Math.min(260,this.surfaceWidth-96)).maxLength(24).fontColor('#F5F4FF').placeholderColor('#C0C8DC')
+            .backgroundColor('#30476088').borderRadius(18).onChange((value:string)=>this.starNameDraft=value)
+          Button(this.language==='en'?'Keep this name':'留下这个名字').id('save-star-name').softButton().height(40)
+            .fontColor('#F5F4FF').backgroundColor('#536787A6').onClick(()=>this.saveStarName())
         }.width(Math.min(this.surfaceWidth-40,400)).padding(22).backgroundColor('#24324764').backgroundBlurStyle(BlurStyle.COMPONENT_ULTRA_THIN).border({width:1,color:'#527F9BBE'}).borderRadius(30)
       }
       if(this.journey==='failed'&&this.captureStatus){Text(this.captureStatus).fontSize(14).fontColor('#E9E2F4').maxLines(3).padding(16).width(Math.min(this.surfaceWidth-40,440)).backgroundColor('#87505C7F').borderRadius(18).position({x:20,y:this.surfaceHeight*.67})}
-      if(!this.detail){
+      if(!this.detail&&this.journey!=='forming'){
         Column({space:12}){
           Row({space:10}){
-            Button(){Row({space:10}){Circle().width(16).height(16).fill('#E8ECFF').shadow({radius:18,color:'#BAC9FF'});Text(this.language==='en'?'Find my portrait':'寻找我的模样').fontSize(16).fontColor('#FFFFFF')}}.id('begin-capture').height(54).padding({left:20,right:20}).backgroundColor('#F0243659').border({width:1,color:'#A1ADC5E9'}).borderRadius(28).shadow({radius:24,color:'#536987BE'}).stateStyles({pressed:{.scale({x:.94,y:.94})},normal:{.scale({x:1,y:1})}}).animation({duration:this.motion?180:0,curve:Curve.EaseOut}).onClick((event:ClickEvent)=>this.open('拍摄面容',event))
-            Button(this.language==='en'?'My words':'留句话').id('home-note').softButton().fontColor('#F4F2FF').backgroundColor('#61374766').onClick((event:ClickEvent)=>this.open('留一句话',event))
-            Button(this.language==='en'?'Works':'足迹').id('home-works').softButton().fontColor('#F4F2FF').backgroundColor('#61374766').onClick((event:ClickEvent)=>this.open('作品与记录',event))
+            if(!this.personalActive()&&!this.skyOpen){
+              Button(){Row({space:10}){Circle().width(16).height(16).fill('#E8ECFF').shadow({radius:18,color:'#BAC9FF'});Text(this.language==='en'?'Find my portrait':'寻找我的模样').fontSize(16).fontColor('#FFFFFF')}}.id('begin-capture').height(54).padding({left:20,right:20}).backgroundColor('#F0243659').border({width:1,color:'#A1ADC5E9'}).borderRadius(28).shadow({radius:24,color:'#536987BE'}).stateStyles({pressed:{.scale({x:.94,y:.94})},normal:{.scale({x:1,y:1})}}).animation({duration:this.motion?180:0,curve:Curve.EaseOut}).onClick((event:ClickEvent)=>this.open('拍摄面容',event))
+            }
+            if(this.skyOpen){
+              if(this.previewStarId){Button(this.language==='en'?'Meet this star':'走近这颗星辰').id('open-star-full').softButton().fontColor('#F4F2FF').backgroundColor('#75456683').onClick(()=>this.openStar(this.previewStarId))}
+              Button(this.language==='en'?'Origin':'回到原点').id('return-origin-sky').softButton().fontColor('#F4F2FF').backgroundColor('#61374766').onClick(()=>this.returnOrigin())
+            }
+            else if(this.personalActive()){
+              Button(this.language==='en'?'Sky':'我的星辰').id('open-star-sky').softButton().fontColor('#F4F2FF').backgroundColor('#61374766').onClick(()=>this.enterSky())
+              Button(this.language==='en'?'Origin':'回到原点').id('return-origin').softButton().fontColor('#F4F2FF').backgroundColor('#61374766').onClick(()=>this.returnOrigin())
+            }else{
+              Button(this.language==='en'?'My stars':'我的星辰').id('open-star-sky-origin').softButton().fontColor('#F4F2FF').backgroundColor('#61374766').onClick(()=>this.enterSky())
+              Button(this.language==='en'?'My words':'留句话').id('home-note').softButton().fontColor('#F4F2FF').backgroundColor('#61374766').onClick((event:ClickEvent)=>this.open('留一句话',event))
+              Button(this.language==='en'?'Works':'足迹').id('home-works').softButton().fontColor('#F4F2FF').backgroundColor('#61374766').onClick((event:ClickEvent)=>this.open('作品与记录',event))
+            }
           }.justifyContent(FlexAlign.Center)
-          Text(this.personalActive()?(this.language==='en'?'Your portrait is here.':'你的立体面容，已经在这里。'):(this.journey==='forming'?'':this.language==='en'?'Start with a gentle capture.':'从一次轻轻的拍摄开始。')).fontSize(12).fontColor('#AFC1D6').textAlign(TextAlign.Center)
+          if(!this.skyOpen){Text(this.personalActive()?(this.language==='en'?'Turn gently and meet every side.':'轻轻转动，看看每一面的自己。'):(this.journey==='forming'?'':this.language==='en'?'Start with a gentle capture.':'从一次轻轻的拍摄开始。')).fontSize(12).fontColor('#AFC1D6').textAlign(TextAlign.Center)}
         }.width('100%').position({x:0,y:Math.max(0,this.surfaceHeight-154)}).zIndex(10)
       }
       if(this.detail){Column(){this.details()}.id('detail-panel').width(this.panelWidth()).height(this.panelHeight()).position({x:this.panelX(),y:this.panelY()}).transition({opacity:0,scale:{x:.3,y:.3,centerX:this.anchorX-this.panelX(),centerY:this.anchorY-this.panelY()}}).zIndex(20)}
@@ -716,10 +874,10 @@ struct SelfMirrorPage {
         Column({space:2}){Text(this.tr('SELF')).fontSize(23).letterSpacing(4).fontWeight(FontWeight.Medium).fontColor('#42374E');Text(this.tr('自在此刻')).fontSize(10).letterSpacing(2).fontColor('#887A93')}.alignItems(HorizontalAlign.Start)
         if(this.wide){Text(this.tr('每一种样子，都值得被看见')).fontSize(13).fontColor('#998AA4').margin({left:22})}
         Blank()
-        Button(){Image(this.musicOn?$rawfile('ui/music.svg'):$rawfile('ui/music_off.svg')).width(23).height(23)}.id('music-toggle').softButton().width(48).accessibilityText(this.tr(this.musicOn?'音乐开':'音乐关')).onClick(()=>this.toggleMusic(!this.musicOn))
-        Button(){Image($rawfile('ui/camera.svg')).width(25).height(25)}.id('begin-capture').softButton().width(48).accessibilityText(this.tr('拍摄我的面容')).onClick(()=>this.open('拍摄面容'))
-        Button(){Image($rawfile('ui/atmosphere.svg')).width(25).height(25)}.id('open-ambience').softButton().width(48).accessibilityText(this.tr('氛围')).enabled(this.ready&&!this.busy).onClick((event:ClickEvent)=>this.open('氛围',event))
-        Button(){Image($rawfile('ui/settings.svg')).width(24).height(24)}.id('open-settings').softButton().width(48).accessibilityText(this.tr('设置')).onClick((event:ClickEvent)=>this.open('设置',event))
+        Button(){Image(this.musicOn?$rawfile('ui/music.svg'):$rawfile('ui/music_off.svg')).width(23).height(23)}.id('legacy-music-toggle').softButton().width(48).accessibilityText(this.tr(this.musicOn?'音乐开':'音乐关')).onClick(()=>this.toggleMusic(!this.musicOn))
+        Button(){Image($rawfile('ui/camera.svg')).width(25).height(25)}.id('legacy-begin-capture').softButton().width(48).accessibilityText(this.tr('拍摄我的面容')).onClick(()=>this.open('拍摄面容'))
+        Button(){Image($rawfile('ui/atmosphere.svg')).width(25).height(25)}.id('legacy-open-ambience').softButton().width(48).accessibilityText(this.tr('氛围')).enabled(this.ready&&!this.busy).onClick((event:ClickEvent)=>this.open('氛围',event))
+        Button(){Image($rawfile('ui/settings.svg')).width(24).height(24)}.id('legacy-open-settings').softButton().width(48).accessibilityText(this.tr('设置')).onClick((event:ClickEvent)=>this.open('设置',event))
       }.padding({left:22,right:22,top:10,bottom:8}).width('100%')
       Stack({alignContent:Alignment.Bottom}){
         if(this.personalActive()){
@@ -763,7 +921,7 @@ struct SelfMirrorPage {
             Scroll(){this.conversation()}.align(Alignment.TopStart).width('92%').height(this.phoneBubbleHeight()).scrollBar(BarState.Off).position({x:this.surfaceWidth*.04,y:Math.max(48,Math.min(this.surfaceHeight-this.phoneBubbleHeight()-92,this.focusY*this.surfaceHeight+35))}).transition({opacity:0,scale:{x:.94,y:.94},translate:{y:-12}})
           }
         }
-        if(this.detail){Column(){this.details()}.id('detail-panel').width(this.panelWidth()).height(this.panelHeight()).position({x:this.panelX(),y:this.panelY()}).transition({opacity:0,scale:{x:.3,y:.3,centerX:this.anchorX-this.panelX(),centerY:this.anchorY-this.panelY()}})}
+        if(this.detail){Column(){this.details()}.id('legacy-detail-panel').width(this.panelWidth()).height(this.panelHeight()).position({x:this.panelX(),y:this.panelY()}).transition({opacity:0,scale:{x:.3,y:.3,centerX:this.anchorX-this.panelX(),centerY:this.anchorY-this.panelY()}})}
       }.layoutWeight(1).width('100%').onAreaChange((_old:Area,area:Area)=>{this.surfaceWidth=parseFloat(String(area.width));this.surfaceHeight=parseFloat(String(area.height));this.surfaceTop=Number(area.globalPosition.y);})
       if(!this.wide&&!this.detail&&!this.personalActive()){
         if(this.showBeginning){Button(this.tr('从拍摄我的面容开始')).softButton().onClick((event:ClickEvent)=>this.open('拍摄面容',event))}
