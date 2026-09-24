@@ -46,6 +46,15 @@ assert.ok(Math.abs(suppressed.x-.5)<.006,'nose-only landmark jitter should not d
 const translated=detected(.52,.5,580);
 const followed=stable.update([translated],580,1.7);
 assert.ok(followed.x>suppressed.x,'coherent eye-and-nose movement must still be followed');
+const badInitial=new FaceAnchorTracker();
+assert.equal(badInitial.update([detected(.5,.5,100)],100,1.7).locked,false);
+const unstableFit=detected(.5,.5,220);
+for(const index of [0,1,3,4])unstableFit.landmarks[index].x+=.12;
+assert.equal(badInitial.update([unstableFit],220,1.7).locked,false);
+assert.equal(badInitial.update([detected(.5,.5,340)],340,1.7).locked,false,
+  'a stable nose alone must not complete the initial lock');
+assert.equal(badInitial.update([detected(.5,.5,460)],460,1.7).locked,false);
+assert.equal(badInitial.update([detected(.5,.5,580)],580,1.7).locked,true);
 
 const guide = new ViewCoverageGuide();
 assert.equal(VIEW_ANGLES.length,11);

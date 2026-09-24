@@ -197,6 +197,20 @@ def train_gaussians(path: Path) -> dict:
     return {"file": output.name, "bytes": output.stat().st_size, "sha256": digest}
 
 
+def opening_view(path: Path) -> dict:
+    from reconstruction_view import coverage, derive
+
+    view = derive(path)
+    report = coverage(path, view)
+    atomic_json(path / "viewpoint_quality.json", report)
+    # Coverage guides the next capture; it must not discard a usable front
+    # portrait or force someone through repeated, exact camera movements.
+    output = path / "portrait.view.json"
+    atomic_json(output, view)
+    return {"file": output.name, "bytes": output.stat().st_size,
+            "sha256": file_sha256(output)}
+
+
 def run_one(path: Path) -> None:
     job = json.loads((path / "job.json").read_text(encoding="utf-8"))
     if job.get("state") != "queued":
@@ -210,12 +224,16 @@ def run_one(path: Path) -> None:
         atomic_json(path / "face_regions.json", {key: list(value) for key, value in faces.items()})
         update(path, "running", 43, "正在恢复视角")
         recover_cameras(path, frames, faces)
+        view = opening_view(path)
         update(path, "running", 62, "正在生成立体细节")
         gaussian = train_gaussians(path)
-        # The current HarmonyOS viewer consumes GLB, not Gaussian PLY. A real
-        # PLY is available, but no personal model is claimed complete here.
-        update(path, "gaussian_ready", 85, "立体细节已生成；可编辑面容仍待核验",
-               assets={"gaussian": gaussian})
+        # A Gaussian view is not yet a face-selectable, editable mesh.
+        viewpoint = json.loads((path / "viewpoint_quality.json").read_text(encoding="utf-8"))
+        message = ("立体面容已生成；侧面细节可在下次拍摄时补充"
+                   if not viewpoint["broadSideCoverage"]
+                   else "立体面容已生成；可编辑面容仍待核验")
+        update(path, "gaussian_ready", 85, message,
+               assets={"gaussian": gaussian, "view": view}, viewpointQuality=viewpoint)
     except Exception as error:
         reason = str(error) if isinstance(error, ReconstructionFailure) else type(error).__name__
         update(path, "failed", 0, reason[:120], assets={})

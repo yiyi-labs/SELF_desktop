@@ -203,7 +203,10 @@ def seal_job(job_id: str, request: Request):
 def job_status(job_id: str, request: Request):
     _authorize(request)
     job = _read_job(_job_dir(job_id))
-    return {key: job[key] for key in ("jobId", "state", "progress", "message", "assets")}
+    result = {key: job[key] for key in ("jobId", "state", "progress", "message", "assets")}
+    if "viewpointQuality" in job:
+        result["viewpointQuality"] = job["viewpointQuality"]
+    return result
 
 
 @router.get("/jobs/{job_id}/assets/{kind}")
@@ -216,7 +219,7 @@ def asset(job_id: str, kind: str, request: Request):
 
 def _verified_asset(job_id: str, kind: str, verify_digest: bool = True) -> tuple[Path, dict]:
     job = _read_job(_job_dir(job_id))
-    if kind not in {"mesh", "gaussian"} or (job["state"] != "complete" and not (job["state"] == "gaussian_ready" and kind == "gaussian")):
+    if kind not in {"mesh", "gaussian", "view"} or (job["state"] != "complete" and not (job["state"] == "gaussian_ready" and kind in {"gaussian", "view"})):
         raise HTTPException(404, "asset_not_ready")
     manifest = job["assets"].get(kind)
     if not manifest:
@@ -226,7 +229,8 @@ def _verified_asset(job_id: str, kind: str, verify_digest: bool = True) -> tuple
             or not isinstance(manifest.get("sha256"), str)
             or not SHA_RE.fullmatch(manifest["sha256"])
             or type(manifest.get("bytes")) is not int
-            or not 1024 <= manifest["bytes"] <= (32 * 1024 * 1024 if kind == "mesh" else 256 * 1024 * 1024)):
+            or not (128 if kind == "view" else 1024) <= manifest["bytes"] <=
+            (4096 if kind == "view" else 32 * 1024 * 1024 if kind == "mesh" else 256 * 1024 * 1024)):
         raise HTTPException(409, "asset_manifest_invalid")
     path = _job_dir(job_id) / manifest["file"]
     if not path.is_file() or path.stat().st_size != manifest["bytes"]:

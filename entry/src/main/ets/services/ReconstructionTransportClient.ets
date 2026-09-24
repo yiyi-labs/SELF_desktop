@@ -1,6 +1,7 @@
 import { http } from '@kit.NetworkKit';
 import { fileIo as fs } from '@kit.CoreFileKit';
 import { cryptoFramework } from '@kit.CryptoArchitectureKit';
+import { util } from '@kit.ArkTS';
 
 export interface ReconstructionTransportHealth {
   status:string;
@@ -9,8 +10,14 @@ export interface ReconstructionTransportHealth {
   maxCaptureBytes:number;
   engine:string;
 }
-export interface ReconstructionJobStatus {jobId:string;state:string;progress:number;message:string;assets:Record<string,ReconstructionAssetManifest>;}
+export interface ReconstructionViewpointQuality {broadSideCoverage:boolean;registeredViews:number;minYawDegrees:number;maxYawDegrees:number;}
+export interface ReconstructionJobStatus {jobId:string;state:string;progress:number;message:string;assets:Record<string,ReconstructionAssetManifest>;viewpointQuality?:ReconstructionViewpointQuality;}
 export interface ReconstructionAssetManifest {file:string;bytes:number;sha256:string;}
+export interface ReconstructionView {
+  schemaVersion:number;sourceFrame:string;target:number[];camera:number[];up:number[];
+  fovDegrees:number;faceTrackCount:number;sourceFaceFraction:number;
+  targetFaceFraction?:number;
+}
 interface CreatedJob {jobId:string;chunkBytes:number;state:string;}
 interface ChunkReceipt {index:number;sha256:string;received:number;total:number;}
 interface CaptureManifest {bytes:number;sha256:string;}
@@ -167,6 +174,33 @@ export class ReconstructionTransportClient {
       if(received!==asset.bytes||this.hex((await digest.digest()).data)!==asset.sha256)throw new Error('立体细节校验失败');
       fs.fsyncSync(file.fd);
     }catch(e){fs.closeSync(file);if(fs.accessSync(temporary))fs.unlinkSync(temporary);throw new Error(String(e));}
+    fs.closeSync(file);fs.renameSync(temporary,path);return path;
+  }
+  async downloadView(jobId:string,filesDir:string):Promise<string>{
+    if(!/^[a-f0-9]{32}$/.test(jobId))throw new Error('建模任务编号无效');
+    const job=await this.status(jobId),asset=job.assets?.view;
+    if(job.state!=='gaussian_ready'||!asset||!Number.isInteger(asset.bytes)||asset.bytes<128||asset.bytes>4096||
+      !/^[a-f0-9]{64}$/.test(asset.sha256))throw new Error('个人模型视角尚未通过校验');
+    const request=http.createHttp();let bytes:ArrayBuffer;
+    try{
+      const response=await request.request(this.url('/jobs/'+jobId+'/assets/view'),{method:http.RequestMethod.GET,
+        header:this.headers(),expectDataType:http.HttpDataType.ARRAY_BUFFER,connectTimeout:10000,readTimeout:10000,usingCache:false});
+      if(response.responseCode!==200)throw new Error('个人模型视角下载失败');
+      bytes=response.result as ArrayBuffer;
+    }finally{request.destroy();}
+    if(bytes.byteLength!==asset.bytes||await this.sha256(bytes)!==asset.sha256)throw new Error('个人模型视角校验失败');
+    const text=util.TextDecoder.create('utf-8').decodeToString(new Uint8Array(bytes));
+    const view=JSON.parse(text) as ReconstructionView;
+    const finiteVector=(value:number[]):boolean=>Array.isArray(value)&&value.length===3&&value.every((number:number)=>Number.isFinite(number)&&Math.abs(number)<1000000);
+    if(view.schemaVersion!==1||!finiteVector(view.target)||!finiteVector(view.camera)||!finiteVector(view.up)||
+      !Number.isFinite(view.fovDegrees)||view.fovDegrees<10||view.fovDegrees>90||
+      !Number.isInteger(view.faceTrackCount)||view.faceTrackCount<30)throw new Error('个人模型视角内容无效');
+    const models=filesDir+'/models';if(!fs.accessSync(models))fs.mkdirSync(models);
+    const directory=models+'/'+jobId;if(!fs.accessSync(directory))fs.mkdirSync(directory);
+    const path=directory+'/portrait.view.json',temporary=path+'.tmp';
+    const file=fs.openSync(temporary,fs.OpenMode.CREATE|fs.OpenMode.READ_WRITE|fs.OpenMode.TRUNC);
+    try{if(fs.writeSync(file.fd,bytes)!==bytes.byteLength)throw new Error('个人模型视角保存不完整');fs.fsyncSync(file.fd);}
+    catch(error){fs.closeSync(file);if(fs.accessSync(temporary))fs.unlinkSync(temporary);throw new Error('个人模型视角保存失败');}
     fs.closeSync(file);fs.renameSync(temporary,path);return path;
   }
 }

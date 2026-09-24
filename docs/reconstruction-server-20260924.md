@@ -12,7 +12,7 @@
 
 工作器只认封存成功的 `queued` 任务：读取视频信息、原分辨率抽取无损 PNG、确认多张正脸、由 COLMAP/PyCOLMAP 恢复真实相机位姿，核对正脸区域确有三维轨迹，再由 gsplat 在 RTX 5070 上训练并验证留出视角。全分辨率训练与 8 GB 显存限制冲突时明确失败，不以静默缩小人脸换取成功状态。`portrait.gaussian.ply` 经大小、头和 SHA-256 校验后才标为 `gaussian_ready`。平板分块取回到应用私有 `filesDir/models/<jobId>/portrait.gaussian.ply`，再次核对 SHA-256，并保留本地原片 `filesDir/captures/`。可编辑 GLB 的预定路径仍是 `filesDir/models/<jobId>/portrait.glb`，只有真实 GLB 构建并验收后才能发布 `complete`。
 
-**格式边界**：gsplat PLY 包含 Gaussian 位置、缩放、旋转、不透明度和球谐颜色，不是带 UV 的脸部网格。当前鸿蒙主界面解析 GLB Mesh；不能仅把 PLY 改扩展名、把点云三角化或用示例头模来称为本人可圈选面容。因此 `gaussian_ready` 会保存到平板并提示“可编辑面容仍在核验”，不会切换主界面作品，也不会声称脸部圈选、保护和上妆已适配。后续须建立与高斯资产配准的高质量人脸网格、纹理/语义面片及双向投影，并在真机验证遮挡、侧脸和编辑效果。
+**格式边界**：gsplat PLY 包含 Gaussian 位置、缩放、旋转、不透明度和球谐颜色，不是带 UV 的脸部网格。当前鸿蒙主界面已用应用内离线 ArkWeb/WebGL2 查看本人 PLY，并以 COLMAP 相机数据打开到正面；示例 GLB 编辑器仍单独保留。PLY 不能仅改扩展名或把点云三角化就称为可圈选面容。本人的圈选、保护和上妆仍需与高斯资产配准的高质量网格、纹理/语义面片及双向投影，并在真机验证遮挡、侧脸和编辑效果。
 
 ## 本机依赖与许可
 
@@ -42,9 +42,11 @@
 | 默认端口电脑与真机状态读取 | 通过 | Windows 与已连接平板在 USB/HDC `127.0.0.1:8787` 均读到 `engine:ready`；测试端口 8789 上平板也读到上述拒绝结果 |
 | 当前 HAP 上传真实拍摄并自动启动工作器 | 通过 | 用户解锁后在平板 SELF 的采集记录中启动现有 14.2 秒视频；应用通过 USB/HDC 分块上传任务 `774b943d527db68f6358966039963b38`，电脑收到 14255575 B、SHA-256 `df2246bee269c56c1501d514fd5705a82b92820b6ea23917bb49907266e4af81`，与原片完全一致，工作器自动完成位姿恢复与 GPU 训练；提交到资产写出约 2.2 分钟 |
 | 真实面容 3DGS 数字质量 | 部分通过 | 自动任务独立注册 43/43 帧，40 个确认面容的视角有三维轨迹，3199 稀疏点、6779 次面部区域轨迹观测；6000 次 GPU 训练输出 92715 个 Gaussian，5 个留出视角整体 PSNR 20.65 dB、正面面部 PSNR 21.10 dB。视觉细节、侧脸及本人相似度尚未人工验收，数字指标不能替代主观外观确认 |
-| 真实 3DGS 电脑→平板字节传输 | 通过 | `portrait.gaussian.ply` 为 24785017 B，SHA-256 `2ac4d2ecafb10f1cae65dca0c4008ab4396f39355e94914ea9c8d1d7b6f34d4d`；平板经 HDC 反向端口下载至测试临时目录后 SHA-256 完全一致，临时副本已删除 |
+| 真实 3DGS 电脑→平板字节传输 | 通过 | 当前作品 `portrait.gaussian.ply` 为 21882216 B；电脑与平板私有目录的 SHA-256 同为 `035727c372d3f43b26984868fdf05332ec9f6dc5fc7876b7b14216ea823df7fa` |
 | 应用私有目录自动保存 PLY | 通过 | 应用自己按 1 MiB 分块下载 `21882216` B 到 `filesDir/models/774b943d527db68f6358966039963b38/portrait.gaussian.ply`；平板 SHA-256 与电脑资产清单同为 `035727c372d3f43b26984868fdf05332ec9f6dc5fc7876b7b14216ea823df7fa`，`reconstruction-result.json` 指向该私有路径，`reconstruction-pending.json` 已清除 |
-| 高质量可编辑 GLB、鸿蒙主界面显示、贴脸圈选、上妆/保护 | 未完成 | 当前 `gaussian_ready` 只可保存 PLY；不会标为完整个人作品 |
+| 本人 PLY 在鸿蒙主界面显示及触摸旋转 | 通过 | 实际平板日志确认应用私有 PLY 和相机 JSON 被读取、92715 个 Gaussian 被 WebGL2 查看器载入；离线重启后仍显示，手势可旋转。侧面明显散乱，不能据此声称高保真 |
+| Huawei 原生 GSPlugin 导入标准 gsplat PLY / 转换的 KHR GS GLB | 失败（本设备、这两种文件） | API 返回 `Unable to load GS node`；不推断所有华为原生格式均不支持 |
+| 本人可编辑 GLB、贴脸圈选、上妆/保护 | 未完成 | 当前显示的是高斯外观，不具有已验证的人脸拓扑和语义面片 |
 
 完整人物建模是否可成功还取决于拍摄时**相机绕稳定面容移动并形成视差**，不能把脸左右转动的 11 档提示当成已知相机位姿。COLMAP [官方教程](https://colmap.github.io/tutorial)要求足够重叠、清晰纹理与几何视差。标准场景 3DGS 对表情变化、低纹理皮肤、背景占比大及 8 GB 显存都可能失败；本工作器把这些情况作为质量失败或人工核验事项，不宣称稳定性已经验证。
 
@@ -52,4 +54,6 @@
 
 首个真实任务最初在训练入口因 NumPy 双精度缩放参数与 CUDA 单精度核函数不匹配而失败。修正为单精度后，在同一私有任务上手动重训，按训练指标与 PLY 完整性复核，再标为 `gaussian_ready`。之后由平板应用重新上传同一原片，后台从零自动完成并由应用保存，覆盖了此前的手动恢复缺口。训练器在保持源分辨率和质量门槛不变的前提下缓存无损解码帧，减少 Windows/WSL 共享卷反复读取开销。
 
-华为[官方 spatialRender API](https://developer.huawei.com/consumer/en/doc/harmonyos-references/spatial-recon-spatialrender)声明 `GSPlugin.loadGSNode` 可加载 3DGS 模型，但公开示例使用 GLB，未明确保证本工程输出的 gsplat PLY 可以直接导入。当前工程主渲染器使用 GLB Mesh，也还没有与高斯资产配准的人脸网格和语义面片。因此本次验证止于**应用私有存储里的真实 PLY**；主界面仍保留示例作品，原生显示、可旋转查看本人面容、贴脸圈选/编辑均不得宣称通过。
+华为[官方 spatialRender API](https://developer.huawei.com/consumer/en/doc/harmonyos-references/spatial-recon-spatialrender)声明 `GSPlugin.loadGSNode` 可加载 3DGS 模型，但公开示例使用 GLB，未明确保证标准 gsplat PLY 或 KHR GS GLB。该平板对本工程两种探针均返回 `Unable to load GS node`。当前采用离线 [PlayCanvas 2.22.4](https://github.com/playcanvas/engine)（MIT，许可随 HAP 打包）在应用内 WebGL2 显示 PLY，直接读取已核验的应用私有字节；并未把浏览器桌面测试代替平板测试。主界面现在能看见并旋转本人面容，但侧面细节质量较差，个人圈选/编辑仍未通过。
+
+同一段真实采集的相机位姿仅覆盖正面左约 24.3° 到右约 18.7°。拍摄页 11 个亮点依据脸部朝向计算，不等于电脑恢复的相机绕脸角度。现在工作器记录实际相机覆盖，仅作为补拍建议，不要求用户逐格点亮，更不会因为少几个角度直接拒绝已有正面作品。人脸框的额外训练权重做了隔离对比：0.5 权重使留出正面面部 PSNR 从 21.10 提到 21.56 dB，文件从 21.9 MB 增至 40.2 MB；2.0 权重文件涨到 140.9 MB 而面部仅 21.20 dB，因此未来任务采用 0.5。详见 [`evidence/face-quality-20260924.json`](evidence/face-quality-20260924.json)。这些数字不证明侧脸变清晰，0.5 版本也尚未在平板测流畅度。PyTorch 记录的峰值分配显存为 399 MiB，原任务无 OOM；这次侧脸问题主要是缺少视角，而不是已经触到 8 GB 上限。该显存指标不包括 CUDA 上下文与其他进程。

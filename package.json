@@ -1,5 +1,8 @@
 {
-  "name": "self-harmonyos", "version": "0.1.0", "private": true, "type": "module",
+  "name": "self-harmonyos",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
   "scripts": {
     "assets:fetch": "powershell -NoProfile -File scripts/Fetch-Assets.ps1",
     "assets:prepare": "node scripts/prepare-assets.mjs",
@@ -14,6 +17,14 @@
     "test:immersive": "node scripts/emulator-immersive-test.mjs",
     "serve": "node scripts/serve.mjs"
   },
-  "dependencies": {"three": "0.186.0"},
-  "devDependencies": {"esbuild": "0.28.2", "gltf-validator": "2.0.0-dev.3.10", "playwright-core": "1.63.0", "pngjs": "7.0.0"}
+  "dependencies": {
+    "playcanvas": "2.22.4",
+    "three": "0.186.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "gltf-validator": "2.0.0-dev.3.10",
+    "playwright-core": "1.63.0",
+    "pngjs": "7.0.0"
+  }
 }

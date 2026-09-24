@@ -1,0 +1,55 @@
+{
+  "date": "2026-09-24",
+  "source": "same private tablet capture; numerical evidence only, no frames or face screenshots committed",
+  "capture": {
+    "registeredCameraViews": 43,
+    "minCameraYawDegrees": -24.3,
+    "maxCameraYawDegrees": 18.7,
+    "tenDegreeBins": 5,
+    "broadSideCoverage": false,
+    "interpretation": "The existing front portrait can render, but the clip does not constrain either side well. The coverage threshold is advisory, not a capture gate."
+  },
+  "gpu": {
+    "model": "NVIDIA GeForce RTX 5070 Laptop GPU",
+    "totalVramMiB": 8151,
+    "outOfMemoryObserved": false,
+    "memoryMetricScope": "PyTorch max_memory_allocated; excludes CUDA context and other processes"
+  },
+  "algorithmComparison": [
+    {
+      "faceLossWeight": 0,
+      "trainingSteps": 6000,
+      "gaussians": 92715,
+      "assetBytes": 21882216,
+      "heldOutFullFramePsnrDb": 20.65,
+      "heldOutFrontalFacePsnrDb": 21.1,
+      "source": "original production run"
+    },
+    {
+      "faceLossWeight": 2,
+      "trainingSteps": 6000,
+      "gaussians": 596986,
+      "assetBytes": 140890173,
+      "heldOutFullFramePsnrDb": 20.69,
+      "heldOutFrontalFacePsnrDb": 21.2,
+      "peakTorchAllocatedMiB": 1030,
+      "source": "isolated experiment; rejected as default because the size increase brought little measured benefit"
+    },
+    {
+      "faceLossWeight": 0.5,
+      "trainingSteps": 6000,
+      "gaussians": 170133,
+      "assetBytes": 40152865,
+      "heldOutFullFramePsnrDb": 20.74,
+      "heldOutFrontalFacePsnrDb": 21.56,
+      "peakTorchAllocatedMiB": 399,
+      "source": "isolated experiment; selected for future jobs; tablet rendering of this larger asset not yet measured"
+    }
+  ],
+  "personalPortrait": {
+    "originalModelRetained": true,
+    "faceWeightedCandidatePublishedToTablet": false,
+    "newTrackingTestedOnLiveFace": false,
+    "cameraQualityGuarantee": false
+  }
+}

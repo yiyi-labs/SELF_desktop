@@ -115,6 +115,10 @@ def train(path: Path, steps: int = 6000) -> None:
     strategy.check_sanity(params, optimizers)
     state = strategy.initialize_state(scene_scale=scene_scale)
     face_regions = json.loads((path / "face_regions.json").read_text(encoding="utf-8"))
+    # The portrait occupies only a small fraction of many source frames. Keep
+    # the full-frame objective for geometry/background, but give the detected
+    # face its own loss so it cannot be drowned out by the room behind it.
+    face_loss_weight = .5
     random.shuffle(cameras)
     face_entries = [entry for entry in cameras if entry[0].name in face_regions]
     if len(face_entries) < 3:
@@ -134,14 +138,14 @@ def train(path: Path, steps: int = 6000) -> None:
     if sum(width * height * 3 for _, _, _, width, height in cameras) <= 2 * 1024**3:
         for name, _, _, _, _ in cameras:
             with Image.open(name) as source:
-                image_cache[name] = np.asarray(source.convert("RGB"), dtype=np.uint8)
+                image_cache[name] = np.array(source.convert("RGB"), dtype=np.uint8, copy=True)
 
     def render(entry, degree):
         name, pose, intrinsic, width, height = entry
         image = image_cache.get(name)
         if image is None:
             with Image.open(name) as source:
-                image = np.asarray(source.convert("RGB"), dtype=np.uint8)
+                image = np.array(source.convert("RGB"), dtype=np.uint8, copy=True)
         if image.shape[:2] != (height, width):
             raise RuntimeError("COLMAP intrinsics disagree with source frame")
         target = torch.from_numpy(image).to(device).float()[None] / 255
@@ -162,6 +166,13 @@ def train(path: Path, steps: int = 6000) -> None:
         output, target, info = render(entry, degree)
         strategy.step_pre_backward(params, optimizers, state, step, info)
         loss = F.l1_loss(output, target)
+        region = face_regions.get(entry[0].name)
+        if region is not None:
+            x, y, w, h = region
+            if 0 <= x < entry[3] and 0 <= y < entry[4] and w > 0 and h > 0:
+                x2, y2 = min(entry[3], x + w), min(entry[4], y + h)
+                loss = loss + face_loss_weight * F.l1_loss(
+                    output[:, y:y2, x:x2], target[:, y:y2, x:x2])
         if not torch.isfinite(loss):
             raise RuntimeError("Non-finite reconstruction loss")
         loss.backward()
@@ -191,6 +202,9 @@ def train(path: Path, steps: int = 6000) -> None:
     metrics = {"steps": steps, "sourceResolution": True, "gaussians": len(params["means"]),
                "validationViews": len(validation), "validationPsnrDb": round(psnr, 2),
                "frontalFacePsnrDb": round(face_psnr, 2),
+               "faceLossWeight": face_loss_weight,
+               "peakCudaMemoryMiB": round(torch.cuda.max_memory_allocated() / 1024**2),
+               "peakCudaReservedMiB": round(torch.cuda.max_memory_reserved() / 1024**2),
                "lossSamples": losses, "humanFaceReviewRequired": True}
     (path / "training_metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
     if psnr < 16 or face_psnr < 18 or len(params["means"]) < 1200:

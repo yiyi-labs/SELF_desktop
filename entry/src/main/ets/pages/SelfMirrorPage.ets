@@ -1,5 +1,6 @@
 import { fileUri, fileIo as fs } from '@kit.CoreFileKit';
 import { NativeMirrorSurface } from './NativeMirrorSurface';
+import { GaussianPortraitSurface } from './GaussianPortraitSurface';
 import { CameraCaptureView } from './CameraCaptureView';
 import { ProductCard } from './ProductCard';
 import { NativeRendererPort } from '../bridge/NativeRendererPort';
@@ -14,12 +15,13 @@ import { PlannerService } from '../services/PlannerService';
 import { ProductRepository, ProductRecord } from '../services/ProductRepository';
 import { AmbientAudio } from '../services/AmbientAudio';
 import { CaptureService,CaptureRecord } from '../services/CaptureService';
-import { ReconstructionTransportClient } from '../services/ReconstructionTransportClient';
+import { ReconstructionTransportClient, ReconstructionView } from '../services/ReconstructionTransportClient';
 import { UiPreference, UiSettings } from '../services/UiPreference';
 import { UiText } from '../services/UiText';
 import { AmbiencePreference } from '../services/AmbiencePreference';
 
 interface PendingReconstruction {jobId:string;}
+interface SavedReconstruction {jobId:string;gaussian?:string;view?:string;mesh?:string;}
 
 @Extend(Button)
 function softButton(){
@@ -41,6 +43,10 @@ struct SelfMirrorPage {
   @State captures:CaptureRecord[]=[];
   @State selectedCapture:string='';
   @State cameraLive:boolean=false;
+  @State personalGaussianPath:string='';
+  @State personalViewPath:string='';
+  @State showPersonal:boolean=true;
+  @State personalReady:boolean=false;
   @State language:string='zh';
   @State accent:string='#7C698F';
   @State anchorX:number=380;
@@ -114,6 +120,37 @@ struct SelfMirrorPage {
   private reconTimer:number=-1;
   private reconJob:string='';
   private reconChecking:boolean=false;
+  private personalActive():boolean{return this.showPersonal&&!!this.personalGaussianPath&&!!this.personalViewPath;}
+
+  private activateGaussian(saved:SavedReconstruction):boolean{
+    if(!/^[a-f0-9]{32}$/.test(saved.jobId))return false;
+    const directory=this.context.filesDir+'/models/'+saved.jobId;
+    const gaussian=directory+'/portrait.gaussian.ply',view=directory+'/portrait.view.json';
+    if(saved.gaussian!==gaussian||saved.view!==view||!fs.accessSync(gaussian)||!fs.accessSync(view))return false;
+    this.personalGaussianPath=gaussian;this.personalViewPath=view;this.showPersonal=true;this.personalReady=false;
+    this.showBeginning=false;
+    return true;
+  }
+  private async restoreGaussian():Promise<void>{
+    const path=this.context.filesDir+'/reconstruction-result.json';
+    if(!fs.accessSync(path))return;
+    try{
+      const saved=JSON.parse(fs.readTextSync(path)) as SavedReconstruction;
+      if(!saved.gaussian||!/^[a-f0-9]{32}$/.test(saved.jobId))return;
+      const expected=this.context.filesDir+'/models/'+saved.jobId+'/portrait.view.json';
+      let refresh=saved.view!==expected||!fs.accessSync(expected);
+      if(!refresh){
+        try{const current=JSON.parse(fs.readTextSync(expected)) as ReconstructionView;refresh=current.targetFaceFraction!==.5;}
+        catch(_){refresh=true;}
+      }
+      if(refresh){
+        const client=new ReconstructionTransportClient();client.endpoint=this.backendAddress;client.token=this.backendToken;
+        try{const view=await client.downloadView(saved.jobId,this.context.filesDir);saved.view=view;this.assets.writeAtomic(path,JSON.stringify(saved));}
+        catch(error){console.error('SELF_PERSONAL_VIEW_REFRESH_FAILED '+String(error));if(fs.accessSync(expected))saved.view=expected;}
+      }
+      this.activateGaussian(saved);
+    }catch(error){console.error('SELF_PERSONAL_RESTORE_FAILED '+String(error));}
+  }
 
   private trackReconstruction(jobId:string):void{
     if(!/^[a-f0-9]{32}$/.test(jobId))return;
@@ -135,14 +172,20 @@ struct SelfMirrorPage {
     try{
       const result=await client.status(jobId);if(this.reconJob!==jobId)return;
       if(result.state==='failed'){
-        this.captureStatus=result.message==='face_not_confirmed_in_capture'?'这段拍摄还没能看清完整面容，可以换个光线再试。':'这段拍摄还不足以生成可靠的立体面容，原片仍为你保留。';
+        this.captureStatus=result.message==='face_not_confirmed_in_capture'?'这段拍摄还没能看清完整面容，可以换个光线再试。':
+          result.message==='camera_angles_insufficient'?'这次没有拍到面容的两侧。可以保持头部自然不动，让镜头从一侧缓慢绕到另一侧再试。':
+          '这段拍摄还不足以生成可靠的立体面容，原片仍为你保留。';
         this.subtitle=this.captureStatus;this.finishReconstruction();return;
       }
       if(result.state==='gaussian_ready'){
+        const view=await client.downloadView(jobId,this.context.filesDir);
         const file=await client.downloadGaussian(jobId,this.context.filesDir);
         if(this.reconJob!==jobId)return;
-        this.assets.writeAtomic(this.context.filesDir+'/reconstruction-result.json',JSON.stringify({jobId,gaussian:file}));
-        this.captureStatus='立体细节已保存。可编辑面容仍在核验，当前作品保持原样。';
+        const saved:SavedReconstruction={jobId,gaussian:file,view};
+        this.assets.writeAtomic(this.context.filesDir+'/reconstruction-result.json',JSON.stringify(saved));
+        this.activateGaussian(saved);
+        this.captureStatus=result.viewpointQuality?.broadSideCoverage===false?
+          '立体面容已打开。想看更清楚的侧面，下次可让镜头再多绕一点。':'你的立体面容正在打开…';
         this.subtitle=this.captureStatus;this.finishReconstruction();return;
       }
       if(result.state==='complete'){
@@ -183,6 +226,7 @@ struct SelfMirrorPage {
     this.works.loadPreference(this.session);this.labels();
     const pending=this.context.filesDir+'/reconstruction-pending.json';
     if(fs.accessSync(pending)){try{const saved=JSON.parse(fs.readTextSync(pending)) as PendingReconstruction;this.trackReconstruction(saved.jobId);}catch(_){}}
+    this.restoreGaussian();
     this.bridge.onMessage=(m:Envelope)=>this.receive(m);
     this.bridge.onBytes=(kind:string,bytes:ArrayBuffer)=>{
       try{
@@ -552,10 +596,25 @@ struct SelfMirrorPage {
         Button(){Image($rawfile('ui/settings.svg')).width(24).height(24)}.id('open-settings').softButton().width(48).accessibilityText(this.tr('设置')).onClick((event:ClickEvent)=>this.open('设置',event))
       }.padding({left:22,right:22,top:10,bottom:8}).width('100%')
       Stack({alignContent:Alignment.Bottom}){
-        NativeMirrorSurface({port:this.bridge,interactionEnabled:!this.busy&&!this.detail&&!this.cameraLive,motion:this.motion}).width('100%').height('100%')
-        if(!this.detail){
-          Text(this.tr(this.identity+' · 数字表达')).fontSize(11).fontColor('#7D7188').padding({left:12,right:12,top:6,bottom:6}).backgroundColor('#BFFFFFFF').borderRadius(14).position({x:20,y:12})
-          if(this.captureStatus){Text(this.tr(this.captureStatus)).fontSize(12).fontColor('#62516F').padding({left:12,right:12,top:7,bottom:7}).backgroundColor('#DDFCF9FF').borderRadius(16).maxLines(2).position({x:20,y:44})}
+        if(this.personalActive()){
+          GaussianPortraitSurface({gaussianPath:this.personalGaussianPath,viewPath:this.personalViewPath,
+            onReady:()=>{this.personalReady=true;this.captureStatus='';this.subtitle='你的立体面容已经来到这里。轻轻拖动，可以从不同角度看看自己。';},
+            onFailure:(message:string)=>{this.personalReady=false;this.captureStatus=message;}}).width('100%').height('100%')
+        }else{
+          NativeMirrorSurface({port:this.bridge,interactionEnabled:!this.busy&&!this.detail&&!this.cameraLive,motion:this.motion}).width('100%').height('100%')
+        }
+        if(!this.detail&&this.personalActive()){
+          Row({space:8}){
+            Text(this.tr('你的立体面容')).fontSize(13).fontColor('#584B68')
+            Text(this.personalReady?this.tr('拖动观察'):this.tr('正在打开…')).fontSize(11).fontColor('#887A93')
+          }.padding({left:14,right:14,top:8,bottom:8}).backgroundColor('#DFFFFFFF').backgroundBlurStyle(BlurStyle.COMPONENT_ULTRA_THIN).borderRadius(18).position({x:20,y:16})
+          if(this.captureStatus){Text(this.tr(this.captureStatus)).fontSize(12).fontColor('#62516F').padding(10).backgroundColor('#E9FFFFFF').borderRadius(14).position({x:20,y:58})}
+          Button(this.tr('查看创作示例')).softButton().height(40).fontSize(12).position({x:20,y:Math.max(76,this.surfaceHeight-70)}).onClick(()=>{this.showPersonal=false;this.subtitle='这里是创作示例；你的立体面容已妥善保存。';})
+        }
+        if(!this.detail&&!this.personalActive()){
+          if(this.personalGaussianPath){Button(this.tr('回到我的立体面容')).softButton().height(40).fontSize(12).position({x:20,y:16}).onClick(()=>{this.showPersonal=true;this.captureStatus='';})}
+          Text(this.tr(this.identity+' · 数字表达')).fontSize(11).fontColor('#7D7188').padding({left:12,right:12,top:6,bottom:6}).backgroundColor('#BFFFFFFF').borderRadius(14).position({x:20,y:this.personalGaussianPath?64:12})
+          if(this.captureStatus){Text(this.tr(this.captureStatus)).fontSize(12).fontColor('#62516F').padding({left:12,right:12,top:7,bottom:7}).backgroundColor('#DDFCF9FF').borderRadius(16).maxLines(2).position({x:20,y:this.personalGaussianPath?96:44})}
           if(this.showBeginning&&this.wide){Column({space:12}){
             Text(this.tr('从你的面容开始')).fontSize(22).fontColor('#51415F')
             Text(this.tr('拍摄自己，留下多个真实视角。')).fontSize(14).fontColor('#75617F')
@@ -580,7 +639,7 @@ struct SelfMirrorPage {
         }
         if(this.detail){Column(){this.details()}.id('detail-panel').width(this.panelWidth()).height(this.panelHeight()).position({x:this.panelX(),y:this.panelY()}).transition({opacity:0,scale:{x:.3,y:.3,centerX:this.anchorX-this.panelX(),centerY:this.anchorY-this.panelY()}})}
       }.layoutWeight(1).width('100%').onAreaChange((_old:Area,area:Area)=>{this.surfaceWidth=parseFloat(String(area.width));this.surfaceHeight=parseFloat(String(area.height));this.surfaceTop=Number(area.globalPosition.y);})
-      if(!this.wide&&!this.detail){
+      if(!this.wide&&!this.detail&&!this.personalActive()){
         if(this.showBeginning){Button(this.tr('从拍摄我的面容开始')).softButton().onClick((event:ClickEvent)=>this.open('拍摄面容',event))}
         if(!this.focusOpen||this.productOpen){Column(){this.conversation()}.width('92%')}
         Scroll(){this.canvasActions()}.scrollable(ScrollDirection.Horizontal).scrollBar(BarState.Off).width('100%').height(66)

@@ -17,6 +17,8 @@ $env:ComSpec=$buildCmd
 try {
 & $node scripts/prepare-audio.mjs
 if($LASTEXITCODE -ne 0){throw 'Audio asset preparation failed'}
+& $node scripts/build-gs-viewer.mjs
+if($LASTEXITCODE -ne 0){throw '3DGS viewer preparation failed'}
 & (Join-Path $PSScriptRoot 'Prepare-NativeResources.ps1')
 # renderer-web remains a development reference. Production compilation does not require Three.js/esbuild.
 $ErrorActionPreference='Continue'

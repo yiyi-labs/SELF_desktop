@@ -7,6 +7,8 @@ export struct CaptureViewCoverage {
  @Param hint:number=5;
  @Param angle:number=0;
  @Param language:string='zh';
+ @Param expanded:boolean=false;
+ @Param availableWidth:number=800;
  private tr(zh:string,en:string):string{return this.language==='en'?en:zh;}
  private cue():string{
   if(this.hint<0)return this.tr('视角已点亮','Views illuminated');
@@ -19,8 +21,13 @@ export struct CaptureViewCoverage {
  }
  private arcY(index:number):number{return -11+index*index*.88;}
  build(){
-  Row({space:14}){
-   Stack(){
+  Column({space:this.expanded?8:0}){
+   if(this.expanded){
+    Text(this.cue()).fontSize(17).fontWeight(FontWeight.Medium).fontColor('#FAFFFFFF')
+     .width('100%').textAlign(TextAlign.Center)
+   }
+   Row({space:14}){
+    Stack(){
     Path().commands('M 4 40 Q 64 -4 124 40').width(128).height(58).fill(Color.Transparent)
      .stroke('#8BCFEEE6').strokeWidth(1.2)
     ForEach([0,1,2,3,4,5,6,7,8,9,10],(index:number)=>{
@@ -35,19 +42,21 @@ export struct CaptureViewCoverage {
       .shadow({radius:8,color:'#A0BFEFEA'})
       .animation({duration:240,curve:Curve.EaseOut})
     }
-   }.width(128).height(72).hitTestBehavior(HitTestMode.None)
-   Column({space:4}){
-    Row({space:8}){
-     Text(this.tr('视角','Views')+' '+this.count+'/11').fontSize(15).fontWeight(FontWeight.Medium).fontColor('#F8FFFFFF')
-     if(this.active>=0){Text((this.angle>0?'+':'')+this.angle+'°').fontSize(11).fontColor('#D9ECF8F3')}
-    }
-    Text(this.cue()).fontSize(12).fontColor('#DDE9FCF8')
-   }.alignItems(HorizontalAlign.Start)
-  }.padding({left:15,right:18,top:10,bottom:10}).height(92).backgroundColor('#78202C3E')
+    }.width(128).height(72).hitTestBehavior(HitTestMode.None)
+    Column({space:4}){
+     Text(this.tr('已留下 ','Captured ')+this.count+this.tr(' 个视角',' views')).fontSize(this.expanded?18:15)
+      .fontWeight(FontWeight.Medium).fontColor('#F8FFFFFF')
+     if(this.active>=0){Text((this.angle>0?'+':'')+this.angle+'°').fontSize(12).fontColor('#D9ECF8F3')}
+     if(!this.expanded){Text(this.cue()).fontSize(12).fontColor('#DDE9FCF8')}
+    }.alignItems(HorizontalAlign.Start)
+   }.width('100%').justifyContent(FlexAlign.Center)
+  }.padding({left:15,right:18,top:this.expanded?17:10,bottom:this.expanded?13:10})
+   .width(Math.min(this.availableWidth-40,this.expanded?430:336)).height(this.expanded?128:92).backgroundColor('#78202C3E')
    .backgroundBlurStyle(BlurStyle.COMPONENT_REGULAR)
-   .linearGradient({angle:145,colors:[['#8B425A70',0],['#641D2D43',.6],['#85324B60',1]]})
-   .border({width:1,color:'#B5DDF8F2'}).borderRadius(30)
-   .shadow({radius:24,color:'#4C071421',offsetY:9})
+   .linearGradient({angle:145,colors:[['#A3526B80',0],['#6D1D2D43',.6],['#9A40596F',1]]})
+   .border({width:1,color:this.expanded?'#E6E8FFF9':'#B5DDF8F2'}).borderRadius(30)
+   .shadow({radius:this.expanded?32:24,color:'#4C071421',offsetY:this.expanded?14:9})
+   .animation({duration:300,curve:Curve.EaseOut})
    .hitTestBehavior(HitTestMode.None)
  }
 }

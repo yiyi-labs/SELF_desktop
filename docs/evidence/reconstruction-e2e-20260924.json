@@ -30,7 +30,12 @@
     "savedInAppPrivateModels": true,
     "pendingMarkerCleared": true,
     "editableMeshValidated": false,
-    "renderedOnMainScreen": false,
+    "renderedOnMainScreen": true,
+    "renderPath": "offline PlayCanvas 2.22.4 ArkWeb WebGL2 viewer fed from hash-verified app-private PLY and calibrated view JSON",
+    "offlineRestartDisplayedPersonalModel": true,
+    "viewerReportedGaussians": 92715,
+    "rotatedByTouch": true,
+    "sideViewQuality": "poor; recovered cameras cover only -24.3 to +18.7 degrees around the opening view",
     "faceSelectionValidated": false
   }
 }

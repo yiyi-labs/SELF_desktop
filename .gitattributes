@@ -9,3 +9,5 @@ licenses/libfacedetection-BSD-3-Clause.txt -text
 licenses/minih264-CC0-1.0.txt -text
 licenses/minimp4-CC0-1.0.txt -text
 backend/setup_reconstruction_wsl.sh text eol=lf
+# Generated PlayCanvas bundle embeds upstream shader strings verbatim.
+entry/src/main/resources/rawfile/gs-viewer.js -text -whitespace

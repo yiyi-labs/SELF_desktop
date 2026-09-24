@@ -93,18 +93,30 @@ class ReconstructionTransportTest(unittest.TestCase):
         job_dir = Path(self.root.name) / job_id
         gaussian = b"ply\nformat binary_little_endian 1.0\nelement vertex 1\nend_header\n" + bytes(range(256)) * 5000
         (job_dir / "portrait.gaussian.ply").write_bytes(gaussian)
+        view = b'{"schemaVersion":1,"sourceFrame":"frame_0001.png","target":[0,0,1],"camera":[0,0,0],"up":[0,1,0],"fovDegrees":50,"faceTrackCount":80}'
+        (job_dir / "portrait.view.json").write_bytes(view)
         job = recon_transfer._read_job(job_dir)
         job.update(state="gaussian_ready", assets={"gaussian": {
             "file": "portrait.gaussian.ply", "bytes": len(gaussian),
-            "sha256": hashlib.sha256(gaussian).hexdigest()}})
+            "sha256": hashlib.sha256(gaussian).hexdigest()}, "view": {
+            "file": "portrait.view.json", "bytes": len(view),
+            "sha256": hashlib.sha256(view).hexdigest()}},
+            viewpointQuality={"registeredViews": 43, "minYawDegrees": -24.3,
+                              "maxYawDegrees": 18.7, "broadSideCoverage": False})
         recon_transfer._save_job(job_dir, job)
         base = f"/v1/reconstruction/jobs/{job_id}/assets"
+        status = self.client.get(f"/v1/reconstruction/jobs/{job_id}", headers=self.headers).json()
+        self.assertEqual(status["state"], "gaussian_ready")
+        self.assertFalse(status["viewpointQuality"]["broadSideCoverage"])
         self.assertEqual(self.client.get(base + "/mesh", headers=self.headers).status_code, 404)
         self.assertEqual(self.client.get(base + "/gaussian/chunks/0", headers=self.headers).content,
                          gaussian[:recon_transfer.CHUNK_BYTES])
         self.assertEqual(self.client.get(base + "/gaussian/chunks/1", headers=self.headers).content,
                          gaussian[recon_transfer.CHUNK_BYTES:])
         self.assertEqual(self.client.get(base + "/gaussian/chunks/2", headers=self.headers).status_code, 422)
+        self.assertEqual(self.client.get(base + "/view", headers=self.headers).content, view)
+        (job_dir / "portrait.view.json").write_bytes(view[:-1] + b"x")
+        self.assertEqual(self.client.get(base + "/view", headers=self.headers).status_code, 409)
 
 
 if __name__ == "__main__":

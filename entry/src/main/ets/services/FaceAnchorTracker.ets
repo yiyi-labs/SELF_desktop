@@ -14,9 +14,9 @@ export class FaceAnchorTracker {
  private last:FaceAnchor|undefined;
  private at:number=0;private sampleAt:number=-1;private consecutive:number=0;
  private rawX:number=0;private rawY:number=0;private velocityX:number=0;private velocityY:number=0;
- private eyeX:number=0;private eyeY:number=0;private rawYaw:number=0;
+ private eyeX:number=0;private eyeY:number=0;private mouthX:number=0;private mouthY:number=0;private rawYaw:number=0;
  private alpha(cutoff:number,dt:number):number{return 1/(1+1/(2*Math.PI*cutoff*dt));}
- reset():void{this.last=undefined;this.at=0;this.sampleAt=-1;this.consecutive=0;this.velocityX=0;this.velocityY=0;this.eyeX=0;this.eyeY=0;this.rawYaw=0;}
+ reset():void{this.last=undefined;this.at=0;this.sampleAt=-1;this.consecutive=0;this.velocityX=0;this.velocityY=0;this.eyeX=0;this.eyeY=0;this.mouthX=0;this.mouthY=0;this.rawYaw=0;}
  private plausible(face:DetectedFace):boolean{
   if(face.confidence<.80||face.landmarks.length!==5||face.width<.08||face.height<.08||
    face.x<0||face.y<0||face.x+face.width>1||face.y+face.height>1||
@@ -51,18 +51,27 @@ export class FaceAnchorTracker {
   const yaw=Math.max(-55,Math.min(55,face.yaw!==undefined&&Number.isFinite(face.yaw)?face.yaw:estimateYaw));
   const previous=this.last;
   const dt=Math.max(.016,Math.min(.25,(now-this.at)/1000));
-  const stable=previous&&now-this.at<550&&Math.hypot((nose.x-previous.x)*aspect,nose.y-previous.y)<Math.max(.08,previous.width*.34);
-  this.consecutive=stable?this.consecutive+1:1;
   const eyeX=(e0.x+e1.x)/2,eyeY=(e0.y+e1.y)/2;
+  const mouthX=(face.landmarks[3].x+face.landmarks[4].x)/2;
+  const mouthY=(face.landmarks[3].y+face.landmarks[4].y)/2;
+  const eyeTravel=Math.hypot((eyeX-this.eyeX)*aspect,eyeY-this.eyeY);
+  const mouthTravel=Math.hypot((mouthX-this.mouthX)*aspect,mouthY-this.mouthY);
+  // A first lock needs agreement from the eyes and mouth too. A detector can
+  // leave its nose almost still while fitting the rest of the face elsewhere.
+  const stable=previous&&now-this.at<550&&
+   Math.hypot((nose.x-previous.x)*aspect,nose.y-previous.y)<Math.max(.08,previous.width*.34)&&
+   eyeTravel<Math.max(.07,previous.width*.30)&&mouthTravel<Math.max(.08,previous.width*.35)&&
+   face.width/previous.width>.75&&face.width/previous.width<1.35;
+  this.consecutive=stable?this.consecutive+1:1;
   let x=nose.x,y=nose.y;
   if(previous){
    // Translation is supported by both eyes; a nose-only jump is usually a
    // landmark fit error. Allow real profile changes when the pose also turns.
-   const eyeTravel=Math.hypot((eyeX-this.eyeX)*aspect,eyeY-this.eyeY);
    const noseTravel=Math.hypot((nose.x-this.rawX)*aspect,nose.y-this.rawY);
    // A yaw inferred from this same nose point is not independent evidence.
    const poseTurn=face.yaw!==undefined?Math.abs(yaw-this.rawYaw):0;
-   const noseOnly=noseTravel>Math.max(.006,eyeTravel*2.5)&&eyeTravel<.012&&poseTurn<4;
+   const noseOnly=noseTravel>Math.max(.006,eyeTravel*2.5,mouthTravel*2.5)&&
+    eyeTravel<.012&&mouthTravel<.014&&poseTurn<4;
    if(previous.locked&&noseOnly){
     x=previous.x+(eyeX-this.eyeX);y=previous.y+(eyeY-this.eyeY);
    }
@@ -80,7 +89,7 @@ export class FaceAnchorTracker {
    }
   }
   this.rawX=nose.x;this.rawY=nose.y;
-  this.eyeX=eyeX;this.eyeY=eyeY;this.rawYaw=yaw;
+  this.eyeX=eyeX;this.eyeY=eyeY;this.mouthX=mouthX;this.mouthY=mouthY;this.rawYaw=yaw;
   const locked=!!previous?.locked||this.consecutive>=3;
   const anchor:FaceAnchor={x,y,width:previous?previous.width+(face.width-previous.width)*.18:face.width,
    height:previous?previous.height+(face.height-previous.height)*.18:face.height,
