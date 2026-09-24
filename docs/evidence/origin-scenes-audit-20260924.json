@@ -8,12 +8,15 @@
       "points": 4200,
       "frames": 20,
       "personPoints": 4200,
-      "loopSeamRms": 0.00382,
+      "loopSeamRms": 0.02571,
+      "minFrameStepRms": 0.01343,
+      "maxFrameStepRms": 0.0329,
+      "seamVelocityMismatchRms": 0.000037,
       "personCenter": [
         0.0178,
         -0.0033
       ],
-      "sha256": "60a92e8d83b2ffefc5887f087866855ad9414e5561b173ee91fe89f66ae78780"
+      "sha256": "d2db327cb81d57d1c3e3c8be4e441e50ffdb6816cdb147f02409d0b445aa0721"
     },
     {
       "scene": "window",
@@ -22,6 +25,9 @@
       "frames": 20,
       "personPoints": 2300,
       "loopSeamRms": 0.00917,
+      "minFrameStepRms": 0.00464,
+      "maxFrameStepRms": 0.08928,
+      "seamVelocityMismatchRms": 0,
       "personCenter": [
         -0.2172,
         0.1824
@@ -34,12 +40,15 @@
       "points": 4200,
       "frames": 20,
       "personPoints": 2100,
-      "loopSeamRms": 0.00377,
+      "loopSeamRms": 0.02558,
+      "minFrameStepRms": 0.01335,
+      "maxFrameStepRms": 0.03291,
+      "seamVelocityMismatchRms": 0.000037,
       "personCenter": [
         -0.0817,
         -0.04
       ],
-      "sha256": "7e434ed8d255747de7c71482f4d7ef047b9fa4b1aacb712085b294d008b1517b"
+      "sha256": "7e4b67eac30a9b35bdcfe56202580b64f85c0b1fc801c635124ac6c42a909e34"
     },
     {
       "scene": "horizon",
@@ -48,6 +57,9 @@
       "frames": 20,
       "personPoints": 2100,
       "loopSeamRms": 0.00305,
+      "minFrameStepRms": 0.00242,
+      "maxFrameStepRms": 0.00512,
+      "seamVelocityMismatchRms": 0,
       "personCenter": [
         -0.236,
         -0.01
@@ -61,6 +73,9 @@
       "frames": 20,
       "personPoints": 2100,
       "loopSeamRms": 0.00326,
+      "minFrameStepRms": 0.00259,
+      "maxFrameStepRms": 0.00548,
+      "seamVelocityMismatchRms": 0,
       "personCenter": [
         -0.275,
         0.016

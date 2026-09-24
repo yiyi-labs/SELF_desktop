@@ -213,16 +213,19 @@ for(const [scene,clip] of [['walker',walk],['window',working],['bridge',walk],['
       const [x,y,z]=environments[scene][i-2100];writePoint(out,frame,i,x,y,z);
     }
   }
-  // The source walk begins in a narrower pose than it ends. Blend the final
-  // five baked frames toward frame zero so the repeat does not snap in size.
-  if(scene==='walker'||scene==='bridge')for(let frame=15;frame<frameCount;frame++){
-    const progress=(frame-14)/6;
-    const mix=progress*progress*(3-2*progress);
-    for(let i=0;i<(scene==='walker'?pointCount:2100);i++){
-      const offset=16+(frame*pointCount+i)*6,first=16+i*6;
-      for(let axis=0;axis<3;axis++){
-        const old=out.readInt16LE(offset+axis*2),start=out.readInt16LE(first+axis*2);
-        out.writeInt16LE(Math.round(old*(1-mix)+start*mix),offset+axis*2);
+  // The source walk's terminal pose is not exactly cyclic. Estimate the next
+  // pose from its final velocity, then spread that closing drift evenly across
+  // the entire cycle. This keeps step speed steady instead of slowing to a
+  // halt during the last few frames and jumping at the repeat.
+  if(scene==='walker'||scene==='bridge')for(let i=0;i<(scene==='walker'?pointCount:2100);i++){
+    const first=16+i*6,last=16+((frameCount-1)*pointCount+i)*6;
+    const previous=16+((frameCount-2)*pointCount+i)*6;
+    for(let axis=0;axis<3;axis++){
+      const correction=2*out.readInt16LE(last+axis*2)-out.readInt16LE(previous+axis*2)-out.readInt16LE(first+axis*2);
+      for(let frame=1;frame<frameCount;frame++){
+        const offset=16+(frame*pointCount+i)*6+axis*2;
+        const value=out.readInt16LE(offset)-frame/frameCount*correction;
+        out.writeInt16LE(Math.max(-32767,Math.min(32767,Math.round(value))),offset);
       }
     }
   }
