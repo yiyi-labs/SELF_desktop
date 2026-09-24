@@ -68,7 +68,10 @@ struct SelfMirrorPage {
   @State revealScale:number=1;
   @State musicPulse:number=0;
   @State storyLine:number=0;
+  @State originScene:number=0;
+  @State originVerse:number=0;
   @State visibleCharacters:number=0;
+  private originVisits:number[]=[0,0,0,0,0];
   private storyVisits:number[]=[1,0,0];
   private characterTimer:number=-1;
   private storyCueTimer:number=-1;
@@ -84,7 +87,7 @@ struct SelfMirrorPage {
   private surfaceTop:number=76;
   private tr(value:string):string{return UiText.get(value,this.language);}
   private panelWidth():number{return Math.min(this.surfaceWidth-32,this.detail==='氛围'?360:520);}
-  private panelHeight():number{return Math.min(this.surfaceHeight-24,this.detail==='氛围'?552:this.detail==='设置'?414:600);}
+  private panelHeight():number{return Math.min(this.surfaceHeight-24,this.detail==='氛围'?552:this.detail==='设置'?610:600);}
   private panelX():number{return Math.max(16,Math.min(this.surfaceWidth-this.panelWidth()-16,this.anchorX-this.panelWidth()/2));}
   private panelY():number{return Math.max(12,Math.min(this.surfaceHeight-this.panelHeight()-12,this.anchorY<60?12:this.anchorY-this.panelHeight()-16));}
   private saveUi():void{UiPreference.save(this.context,{language:this.language,accent:this.accent,palette:this.palette,motion:this.motion,followChat:this.followChat,stylusHints:this.stylusHints});}
@@ -161,11 +164,34 @@ struct SelfMirrorPage {
     ['每一种模样，都值得被看见。','走过的光，还在这里等你。','轻轻转动，遇见另一面的自己。',
      '循着一粒微光，按自己的节奏前行。','每颗星辰，都留着那一刻的你。','你在意的细节，也属于完整的自己。',
      '不必藏起任何一面。','在星辰之间，看看一路走来的自己。','想细看哪里？先让目光停留片刻。'];}
+  private originLines():string[][]{return this.language==='en'?
+    [['One small light is enough to begin.','Every step leaves a trace of light.'],
+     ['What you care for grows beside you.','Even a quiet pause can shine.'],
+     ['Cross gently; your light comes with you.','You have come farther than you think.'],
+     ['Look up. There is room for your hopes.','The stars can wait while you find your way.'],
+     ['After every journey, you can still be you.','Come home to every part of yourself.']]:
+    [['从一粒微光，慢慢走向夜空。','每一步，都留下属于自己的光。'],
+     ['停一停，照亮身边的生长。','安静的片刻，也有自己的光。'],
+     ['轻轻越过未知，光会与你同行。','回头看，你已走过很远。'],
+     ['抬头看看，心里的星光还在。','星辰会等你，按自己的步调前行。'],
+     ['走过许多路，依然自在地成为自己。','回来时，也拥抱每一面的自己。']];}
+  private originTitles():string[]{return this.language==='en'?
+    ['DEPARTURE','CARE','CROSSING','STARLIGHT','RETURN']:
+    ['启程','照料','跨越','寻光','归来'];}
+  private currentStoryLine():string{return !this.skyOpen&&!this.personalActive()?
+    this.originLines()[this.originScene][this.originVerse]:this.story()[this.storyLine];}
+  private onOriginScene(index:number):void{
+    if(index<0||index>=5||this.originScene===index||this.skyOpen||this.personalActive())return;
+    this.originScene=index;
+    this.originVerse=this.originVisits[index]%2;
+    this.originVisits[index]++;
+    this.revealStory();
+  }
   private markInteraction():void{this.lastInteractionAt=Date.now();}
   private revealStory():void{
     if(this.characterTimer>=0)clearTimeout(this.characterTimer);
     this.characterTimer=-1;this.visibleCharacters=0;
-    const line=this.story()[this.storyLine],length=line.length;
+    const line=this.currentStoryLine(),length=line.length;
     if(!this.motion){this.visibleCharacters=length;return;}
     const next=():void=>{
       this.visibleCharacters=Math.min(length,this.visibleCharacters+1);
@@ -250,7 +276,7 @@ struct SelfMirrorPage {
   private refreshStars():void{this.starItems=this.stars.list();}
   private returnOrigin():void{
     this.markInteraction();this.originMode=true;this.skyOpen=false;this.journey='idle';
-    this.personalReady=false;this.detail='';this.cueStory(0,900);
+    this.personalReady=false;this.detail='';this.originScene=0;this.revealStory();
   }
   private enterSky():void{
     this.markInteraction();this.refreshStars();this.originMode=true;this.skyOpen=true;
@@ -556,12 +582,12 @@ struct SelfMirrorPage {
   aboutToDisappear():void{this.planner.cancel();if(this.timer>=0)clearInterval(this.timer);if(this.storyCueTimer>=0)clearTimeout(this.storyCueTimer);if(this.characterTimer>=0)clearTimeout(this.characterTimer);if(this.introCharacterTimer>=0)clearTimeout(this.introCharacterTimer);if(this.revealTimer>=0)clearTimeout(this.revealTimer);this.introTimers.forEach((timer:number)=>clearTimeout(timer));if(this.reconTimer>=0)clearInterval(this.reconTimer);this.reconTimer=-1;this.audio.dispose();this.bridge.dispose();this.assets.cleanupTemporary();}
   onBackPress():boolean{if(this.introStage>0){this.finishIntro();return true;}if(this.cameraLive){this.close();return true;}if(this.detail){this.close();return true;}if(this.skyOpen||this.personalActive()){this.returnOrigin();return true;}if(this.productOpen){this.productOpen=false;return true;}if(this.legacyEditorOpen){this.legacyEditorOpen=false;this.ready=false;return true;}if(this.tool!=='NAVIGATE'){this.switchTool(this.tool);return true;}return false;}
   @Builder ambienceTile(mode:string,label:string,color:string){
-    Button(){Column({space:8}){Stack(){Circle().width(48).height(48).fill(color);Circle().width(26).height(26).fill('#BBFFFFFF').blur(7).offset({x:8,y:-4})}.width(62).height(60);Text(this.tr(label)).fontSize(13).fontColor('#62516F')}}.id('palette-'+mode).layoutWeight(1).height(102).backgroundColor(this.palette===mode?'#D9FFFFFF':'#38FFFFFF').border({width:this.palette===mode?1.5:1,color:this.palette===mode?this.accent:'#77FFFFFF'}).borderRadius(22).stateStyles({pressed:{.scale({x:.96,y:.96})},normal:{.scale({x:1,y:1})}}).animation({duration:this.motion?180:0,curve:Curve.EaseOut}).onClick(()=>this.chooseAtmosphere(mode))
+    Button(){Column({space:8}){Stack(){Circle().width(48).height(48).fill(color);Circle().width(26).height(26).fill('#BBFFFFFF').blur(7).offset({x:8,y:-4})}.width(62).height(60);Text(this.tr(label)).fontSize(13).fontColor('#3B4665')}}.id('palette-'+mode).layoutWeight(1).height(102).backgroundColor(this.palette===mode?'#B9E1EAF8':'#72D1DDEF').border({width:this.palette===mode?1.5:1,color:this.palette===mode?'#CDEBFA':'#88E5F0FF'}).borderRadius(22).stateStyles({pressed:{.scale({x:.96,y:.96})},normal:{.scale({x:1,y:1})}}).animation({duration:this.motion?180:0,curve:Curve.EaseOut}).onClick(()=>this.chooseAtmosphere(mode))
   }
   @Builder
   details(){
     Scroll(){Column({space:12}){
-      Row(){Text(this.tr(this.detail)).fontSize(23).fontWeight(FontWeight.Medium).fontColor('#41364E').layoutWeight(1);Button(this.tr('×')).id('panel-close').softButton().width(44).onClick(()=>this.close())}.width('100%')
+      Row(){Text('✧').fontSize(19).fontColor('#667C9F').margin({right:8});Text(this.tr(this.detail)).fontSize(23).fontWeight(FontWeight.Medium).fontColor('#2C3852').layoutWeight(1);Button(this.tr('×')).id('panel-close').softButton().width(44).backgroundColor('#A8D7E4F1').onClick(()=>this.close())}.width('100%')
       if(this.detail==='完整回复'){Text(this.tr(this.subtitle)).fontSize(17).lineHeight(28)}
       if(this.detail==='云端理解'){
         Text(this.tr('开启后，每次主动发送会附上当前静态面容图和最近三轮问答，由配置的后端交给 DeepSeek 理解。不会上传相机视频；修改仍需确认。')).fontSize(16).fontColor('#665A72')
@@ -592,14 +618,14 @@ struct SelfMirrorPage {
       }
       if(this.detail==='设置'){
         Text(this.tr('语言 / Language')).fontSize(14).fontColor('#81758D')
-        Row({space:12}){Button(this.tr('中文')).id('language-zh').softButton().backgroundColor(this.language==='zh'?'#DDFFFFFF':'#66FFFFFF').onClick(()=>this.setLanguage('zh'));Button(this.tr('English')).id('language-en').softButton().backgroundColor(this.language==='en'?'#DDFFFFFF':'#66FFFFFF').onClick(()=>this.setLanguage('en'))}
+        Row({space:12}){Button(this.tr('中文')).id('language-zh').softButton().backgroundColor(this.language==='zh'?'#B9E2EAF6':'#79CDD9EA').onClick(()=>this.setLanguage('zh'));Button(this.tr('English')).id('language-en').softButton().backgroundColor(this.language==='en'?'#B9E2EAF6':'#79CDD9EA').onClick(()=>this.setLanguage('en'))}
         Row(){Text(this.language==='en'?'Use stylus':'使用手写笔').layoutWeight(1);Toggle({type:ToggleType.Switch,isOn:this.stylusHints}).id('stylus-hints-toggle').selectedColor(this.accent).onChange((value:boolean)=>{this.stylusHints=value;this.saveUi();})}.height(48)
         Text(this.language==='en'?'The pen can be preferred; touch always remains available. Face-attached selection for personal 3D portraits is not ready yet.':'有笔时优先显示手写笔引导；没有笔仍可触控。个人立体面容的贴脸圈选尚未开放。').fontSize(12).fontColor('#81758D')
-        Button(this.language==='en'?'Watch the beginning again':'重温最初的微光').id('replay-intro').softButton().width('100%').onClick(()=>{this.close();this.returnOrigin();this.startIntro(true);})
-        Button(this.tr('隐私与云端')).softButton().width('100%').onClick((event:ClickEvent)=>this.open('云端理解',event))
-        Button(this.tr('采集记录')).softButton().width('100%').onClick((event:ClickEvent)=>this.open('采集记录',event))
-        Button(this.tr('作品与记录')).softButton().width('100%').onClick((event:ClickEvent)=>this.open('作品与记录',event))
-        Button(this.tr('关于 SELF')).softButton().width('100%').onClick((event:ClickEvent)=>this.open('关于 SELF',event))
+        Button(this.language==='en'?'Watch the beginning again':'重温最初的微光').id('replay-intro').softButton().backgroundColor('#8ED4E1F0').width('100%').onClick(()=>{this.close();this.returnOrigin();this.startIntro(true);})
+        Button(this.tr('隐私与云端')).softButton().backgroundColor('#8ED4E1F0').width('100%').onClick((event:ClickEvent)=>this.open('云端理解',event))
+        Button(this.tr('采集记录')).softButton().backgroundColor('#8ED4E1F0').width('100%').onClick((event:ClickEvent)=>this.open('采集记录',event))
+        Button(this.tr('作品与记录')).softButton().backgroundColor('#8ED4E1F0').width('100%').onClick((event:ClickEvent)=>this.open('作品与记录',event))
+        Button(this.tr('关于 SELF')).softButton().backgroundColor('#8ED4E1F0').width('100%').onClick((event:ClickEvent)=>this.open('关于 SELF',event))
       }
       if(this.detail==='关于 SELF'){
         Text(this.tr('每一种样子，都值得被看见')).fontSize(19).fontColor(this.accent)
@@ -676,7 +702,7 @@ struct SelfMirrorPage {
         Button(this.tr('跳过')).softButton().onClick(()=>this.close())
       }
       if(this.detail!=='氛围'&&this.detail!=='设置'){Button(this.tr('返回设置')).softButton().onClick((event:ClickEvent)=>this.open('设置',event))}
-    }.padding(24).width('100%').alignItems(HorizontalAlign.Start)}.align(Alignment.TopStart).width('100%').height('100%').backgroundColor('#E4DDE5F3').backgroundBlurStyle(BlurStyle.COMPONENT_THICK).linearGradient({angle:145,colors:[['#E9E8EEFA',0],['#B5DAE5F2',.6],['#D9EAE7F8',1]]}).border({width:1,color:'#EDFFFFFF'}).shadow({radius:32,color:'#50465A79',offsetY:12}).borderRadius(32)
+    }.padding(24).width('100%').alignItems(HorizontalAlign.Start)}.align(Alignment.TopStart).width('100%').height('100%').backgroundColor('#C8B7C8E1').backgroundBlurStyle(BlurStyle.COMPONENT_THICK).linearGradient({angle:145,colors:[['#D8D5E1F1',0],['#C4BCCDE6',.60],['#D9C9DDED',1]]}).border({width:1,color:'#B8DDEAFF'}).shadow({radius:32,color:'#684B6592',offsetY:12}).borderRadius(32)
   }
   @Builder
   conversation(){
@@ -771,7 +797,7 @@ struct SelfMirrorPage {
   }
   @Builder nightHome(){
     Stack(){
-      NightSkySurface({formation:this.journey==='forming'?.22+this.reconProgress*.006:this.skyOpen?.22:this.personalActive()?.16:.82+Math.min(.09,this.starItems.length*.013),musicPulse:this.musicPulse,motion:this.motion,active:this.foreground&&!this.cameraLive&&(!this.personalActive()||this.journey==='forming'),phaseMode:this.skyOpen?'sky':this.journey==='forming'?'forming':this.personalActive()?'sky':'origin'}).width('100%').height('100%')
+      NightSkySurface({formation:this.journey==='forming'?.22+this.reconProgress*.006:this.skyOpen?.22:this.personalActive()?.16:.82+Math.min(.09,this.starItems.length*.013),musicPulse:this.musicPulse,motion:this.motion,active:this.foreground&&!this.cameraLive&&(!this.personalActive()||this.journey==='forming'),phaseMode:this.skyOpen?'sky':this.journey==='forming'?'forming':this.personalActive()?'sky':'origin',onSceneChange:(index:number)=>this.onOriginScene(index)}).width('100%').height('100%')
       if(this.personalActive()&&this.journey!=='forming'){
         GaussianPortraitSurface({gaussianPath:this.personalGaussianPath,viewPath:this.personalViewPath,
           onReady:()=>{this.personalReady=true;this.captureStatus='';if(this.journey==='revealing'){
@@ -792,14 +818,14 @@ struct SelfMirrorPage {
       if(this.journey==='idle'&&!this.detail){
         Column({space:12}){
           Flex({wrap:FlexWrap.Wrap}){
-            ForEach(this.story()[this.storyLine].split(''),(letter:string,index:number)=>{
+            ForEach(this.currentStoryLine().split(''),(letter:string,index:number)=>{
               Text(letter).fontSize(this.wide?27:21).letterSpacing(2).fontWeight(FontWeight.Medium).fontColor('#F5F4FF')
                 .opacity(index<this.visibleCharacters?1:0).blur(index<this.visibleCharacters?0:7)
                 .textShadow({radius:5,color:'#7D101528',offsetY:2})
                 .animation({duration:this.motion?280:0,curve:Curve.EaseOut})
-            },(_letter:string,index:number)=>index.toString())
+            },(_letter:string,index:number)=>this.currentStoryLine()+'-'+index.toString())
           }.width('100%')
-          if(!this.skyOpen){Text(this.personalActive()?(this.language==='en'?'Touch and turn to discover each side.':'轻轻转动，看看每一面的自己。'):(this.language==='en'?'A portrait begins with your own light.':'你的光，会慢慢勾勒出轮廓。')).fontSize(13).fontColor('#BAC9E0').textShadow({radius:5,color:'#7D101528',offsetY:2})}
+          if(!this.skyOpen){Text(this.personalActive()?(this.language==='en'?'Touch and turn to discover each side.':'轻轻转动，看看每一面的自己。'):this.originTitles()[this.originScene]).fontSize(13).letterSpacing(2).fontColor('#BAC9E0').textShadow({radius:5,color:'#7D101528',offsetY:2})}
         }.alignItems(HorizontalAlign.Start).width(Math.min(this.surfaceWidth-48,this.wide?460:340)).position({x:this.wide?50:26,y:this.surfaceHeight*(this.wide?.22:.18)}).hitTestBehavior(HitTestMode.None)
       }
       if(this.skyOpen&&!this.detail){

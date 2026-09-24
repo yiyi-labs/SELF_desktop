@@ -121,8 +121,70 @@ for(let j=0;j<pointCount-2300;j++){
   room.push([x,y,z]);
 }
 
+// Three further life moments. Every backdrop is a volume of 3D points rather
+// than a flat picture; each scene still contains just one fictional person.
+const line = (a,b,t,jitter=.006) => [
+  a[0]+(b[0]-a[0])*t+(unit()-.5)*jitter,
+  a[1]+(b[1]-a[1])*t+(unit()-.5)*jitter,
+  a[2]+(b[2]-a[2])*t+(unit()-.5)*jitter];
+const environments={
+  bridge:[], horizon:[], threshold:[]
+};
+for(let j=0;j<2100;j++){
+  // Crossing: a curved 3D bridge and a stream of low, glimmering water.
+  let p;
+  if(j<1400){
+    const t=j>=1050?Math.round(unit()*12)/12:unit(), side=j%4;
+    const x=-.64+1.28*t, arch=.21*(1-(2*t-1)**2);
+    if(j<650)p=[x,.29-arch+(unit()-.5)*.024,(side<2?-.19:.20)+(unit()-.5)*.02];
+    else if(j<1050)p=[x,.10-arch+(unit()-.5)*.012,side<2?-.24:.25];
+    else p=[x,.10-arch+unit()*.18,(side<2?-.24:.25)+(unit()-.5)*.008];
+  }else{
+    const t=unit(),r=(unit()-.5)*.52;
+    p=[-.72+1.44*t,.39+Math.sin(t*18+r*17)*.015,r];
+  }
+  environments.bridge.push(p);
+  // Looking upward: a hill, a distant comet's layered tail and luminous core.
+  if(j<1050){
+    const x=(unit()-.5)*1.55,z=(unit()-.5)*.62;
+    p=[x,.33-.11*Math.cos(x*2)+z*.08+(unit()-.5)*.012,z];
+  }else if(j<1780){
+    const t=unit(), spread=(unit()-.5)*(.07+.12*t);
+    p=[.55-.43*t,-.41+.18*t+spread*.22, -.22+spread];
+  }else{
+    const a=unit()*Math.PI*2,r=Math.sqrt(unit())*.09;
+    p=[.55+Math.cos(a)*r,-.41+Math.sin(a)*r,(unit()-.5)*.14-.22];
+  }
+  environments.horizon.push(p);
+  // Return: a sheltered arched doorway, window, path and soft canopy.
+  if(j<1150){
+    const side=Math.floor(unit()*6),t=unit();
+    if(side===0)p=line([.05,.34,-.28],[.05,-.12,-.28],t);
+    else if(side===1)p=line([.57,.34,-.28],[.57,-.12,-.28],t);
+    else if(side===2){const a=Math.PI+Math.PI*t;p=[.31+.26*Math.cos(a),-.12+.20*Math.sin(a),-.28+(unit()-.5)*.015];}
+    else if(side===3)p=line([-.66,-.12,-.32],[.66,-.12,-.32],t);
+    else if(side===4)p=line([-.66,-.12,-.32],[-.34,-.28,-.32],t);
+    else p=line([.66,-.12,-.32],[.34,-.28,-.32],t);
+  }else if(j<1450){
+    const side=Math.floor(unit()*4),t=unit(),left=-.56,right=-.36,top=-.06,bottom=.12;
+    if(side===0)p=line([left,top,-.28],[right,top,-.28],t);
+    else if(side===1)p=line([left,bottom,-.28],[right,bottom,-.28],t);
+    else if(side===2)p=line([left,top,-.28],[left,bottom,-.28],t);
+    else p=line([right,top,-.28],[right,bottom,-.28],t);
+  }else if(j<1800){
+    const t=unit(),s=(unit()-.5)*.22;
+    p=[s*(.5+t),.36+t*.18,.26+t*.42];
+  }else{
+    const t=unit(),a=unit()*Math.PI*2;
+    p=[.62+Math.cos(a)*(.12+.20*t),-.19+Math.sin(a)*(.07+.15*t),-.31+(unit()-.5)*.17];
+  }
+  environments.threshold.push(p);
+}
+
 const outputs=[];
-for(const [scene,clip] of [['walker',walk],['window',working]]){
+const idle=gltf.animations.find(clip => clip.name.endsWith('|Idle'));
+if(!idle)throw Error('The pinned idle clip is missing');
+for(const [scene,clip] of [['walker',walk],['window',working],['bridge',walk],['horizon',idle],['threshold',idle]]){
   mixer.stopAllAction();
   mixer.clipAction(clip).reset().play();
   const out=makeBuffer();
@@ -136,13 +198,32 @@ for(const [scene,clip] of [['walker',walk],['window',working]]){
       vertex.applyMatrix4(mesh.matrixWorld);
       vertices[i*3]=vertex.x;vertices[i*3+1]=vertex.y;vertices[i*3+2]=vertex.z;
     }
-    const humanCount=scene==='walker'?pointCount:2300;
+    const humanCount=scene==='walker'?pointCount:scene==='window'?2300:2100;
     for(let i=0;i<humanCount;i++){
       const [x,y,z]=sampleSurface(samples[i]);
-      writePoint(out,frame,i,scene==='window'?x-.24:x,scene==='window'?y+.02:y,z);
+      const shiftX=scene==='window'?-.24:scene==='bridge'?-.10:scene==='horizon'?-.25:scene==='threshold'?-.29:0;
+      const shiftY=scene==='window'?.02:scene==='bridge'?-.035:scene==='horizon'?-.025:0;
+      const size=scene==='horizon'?.86:scene==='threshold'?.92:1;
+      writePoint(out,frame,i,x*size+shiftX,y*size+shiftY,z*size);
     }
     if(scene==='window')for(let i=2300;i<pointCount;i++){
       const [x,y,z]=room[i-2300];writePoint(out,frame,i,x,y,z);
+    }
+    if(environments[scene])for(let i=2100;i<pointCount;i++){
+      const [x,y,z]=environments[scene][i-2100];writePoint(out,frame,i,x,y,z);
+    }
+  }
+  // The source walk begins in a narrower pose than it ends. Blend the final
+  // five baked frames toward frame zero so the repeat does not snap in size.
+  if(scene==='walker'||scene==='bridge')for(let frame=15;frame<frameCount;frame++){
+    const progress=(frame-14)/6;
+    const mix=progress*progress*(3-2*progress);
+    for(let i=0;i<(scene==='walker'?pointCount:2100);i++){
+      const offset=16+(frame*pointCount+i)*6,first=16+i*6;
+      for(let axis=0;axis<3;axis++){
+        const old=out.readInt16LE(offset+axis*2),start=out.readInt16LE(first+axis*2);
+        out.writeInt16LE(Math.round(old*(1-mix)+start*mix),offset+axis*2);
+      }
     }
   }
   const destination=path.join('entry','src','main','resources','rawfile',`origin-${scene}.bin`);

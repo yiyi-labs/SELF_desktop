@@ -1,0 +1,71 @@
+{
+  "passed": true,
+  "totalBytes": 2520080,
+  "results": [
+    {
+      "scene": "walker",
+      "bytes": 504016,
+      "points": 4200,
+      "frames": 20,
+      "personPoints": 4200,
+      "loopSeamRms": 0.00382,
+      "personCenter": [
+        0.0178,
+        -0.0033
+      ],
+      "sha256": "60a92e8d83b2ffefc5887f087866855ad9414e5561b173ee91fe89f66ae78780"
+    },
+    {
+      "scene": "window",
+      "bytes": 504016,
+      "points": 4200,
+      "frames": 20,
+      "personPoints": 2300,
+      "loopSeamRms": 0.00917,
+      "personCenter": [
+        -0.2172,
+        0.1824
+      ],
+      "sha256": "39b2755045455cc94ec6680d51baa8ec483d4b6b9c5c49ab6b6fb840eb2d1e35"
+    },
+    {
+      "scene": "bridge",
+      "bytes": 504016,
+      "points": 4200,
+      "frames": 20,
+      "personPoints": 2100,
+      "loopSeamRms": 0.00377,
+      "personCenter": [
+        -0.0817,
+        -0.04
+      ],
+      "sha256": "7e434ed8d255747de7c71482f4d7ef047b9fa4b1aacb712085b294d008b1517b"
+    },
+    {
+      "scene": "horizon",
+      "bytes": 504016,
+      "points": 4200,
+      "frames": 20,
+      "personPoints": 2100,
+      "loopSeamRms": 0.00305,
+      "personCenter": [
+        -0.236,
+        -0.01
+      ],
+      "sha256": "236374d4746ded083eced87543c31ad682c7f1367e304a784d0133b35a061da4"
+    },
+    {
+      "scene": "threshold",
+      "bytes": 504016,
+      "points": 4200,
+      "frames": 20,
+      "personPoints": 2100,
+      "loopSeamRms": 0.00326,
+      "personCenter": [
+        -0.275,
+        0.016
+      ],
+      "sha256": "a313a573c0ae9ebfb7d39453561683e5299d5b986b2d58bb8e920c883852eafa"
+    }
+  ]
+}
