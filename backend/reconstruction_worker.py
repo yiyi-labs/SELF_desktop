@@ -14,6 +14,7 @@ import math
 import os
 import re
 import shutil
+import signal
 import subprocess
 import sys
 import threading
@@ -31,8 +32,12 @@ class ReconstructionFailure(Exception):
     pass
 
 
+class ReconstructionCancelled(Exception):
+    pass
+
+
 def atomic_json(path: Path, value: dict) -> None:
-    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary = path.with_name(path.name + f".{os.getpid()}.{threading.get_ident()}.tmp")
     temporary.write_text(json.dumps(value, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     os.replace(temporary, path)
 
@@ -47,10 +52,16 @@ def file_sha256(path: Path) -> str:
 
 
 def update(path: Path, state: str, progress: int, message: str = "", **extra: object) -> None:
+    if (path / "cancel.requested").exists():
+        raise ReconstructionCancelled()
     job_file = path / "job.json"
     job = json.loads(job_file.read_text(encoding="utf-8"))
     job.update(state=state, progress=progress, message=message, **extra)
+    if (path / "cancel.requested").exists():
+        raise ReconstructionCancelled()
     atomic_json(job_file, job)
+    if (path / "cancel.requested").exists():
+        raise ReconstructionCancelled()
 
 
 def command(argv: list[str], timeout: int, *, cwd: Path | None = None,
@@ -89,7 +100,7 @@ def extract_frames(path: Path) -> list[Path]:
     width, height = int(stream["width"]), int(stream["height"])
     duration = float(probe.get("format", {}).get("duration") or stream.get("duration") or 0)
     if not (640 <= width <= 4096 and 480 <= height <= 4096 and
-            8 <= duration <= 45 and math.isfinite(duration)):
+            8 <= duration <= 600 and math.isfinite(duration)):
         raise ReconstructionFailure("capture_length_or_resolution_insufficient")
     # Lossless frames preserve source detail. Fewer temporal samples avoid
     # almost-identical views; this is not spatial downsampling of the face.
@@ -222,9 +233,21 @@ def portrait_preview(path: Path) -> dict:
                           "sha256": file_sha256(lod)}}
 
 
+def discard_training_inputs(path: Path, assets: dict) -> None:
+    """Keep published result assets and job status, never the source video."""
+    keep = {"job.json", "cancel.requested"} | {item["file"] for item in assets.values()}
+    for item in path.iterdir():
+        if item.name in keep:
+            continue
+        if item.is_dir():
+            shutil.rmtree(item)
+        else:
+            item.unlink(missing_ok=True)
+
+
 def run_one(path: Path) -> None:
     job = json.loads((path / "job.json").read_text(encoding="utf-8"))
-    if job.get("state") != "queued":
+    if job.get("state") != "queued" or (path / "cancel.requested").exists():
         return
     try:
         update(path, "running", 27, "正在核对拍摄片段")
@@ -252,11 +275,75 @@ def run_one(path: Path) -> None:
         assets = {"gaussian": gaussian, "view": view}
         if preview:
             assets.update(preview)
+        discard_training_inputs(path, assets)
         update(path, "gaussian_ready", 85, message,
                assets=assets, viewpointQuality=viewpoint)
+    except ReconstructionCancelled:
+        return
     except Exception as error:
+        if (path / "cancel.requested").exists():
+            return
         reason = str(error) if isinstance(error, ReconstructionFailure) else type(error).__name__
         update(path, "failed", 0, reason[:120], assets={})
+        discard_training_inputs(path, {})
+
+
+def finish_cancel(path: Path) -> None:
+    """Only called after the job process has exited; never delete live inputs."""
+    # WSL/NTFS may briefly report a non-empty directory while a terminated
+    # FFmpeg child releases its final file handle. Never publish "cancelled"
+    # until every private input is gone, or an API client could delete the job
+    # while this supervisor is still removing its frames.
+    for attempt in range(10):
+        pending = [item for item in path.iterdir()
+                   if item.name not in {"job.json", "cancel.requested"}]
+        if not pending:
+            break
+        for item in pending:
+            try:
+                if item.is_dir():
+                    shutil.rmtree(item)
+                else:
+                    item.unlink(missing_ok=True)
+            except FileNotFoundError:
+                pass
+            except OSError:
+                if attempt == 9:
+                    raise
+        time.sleep(.15)
+    job = json.loads((path / "job.json").read_text(encoding="utf-8"))
+    job.update(state="cancelled", progress=0, message="", assets={})
+    atomic_json(path / "job.json", job)
+
+
+def supervise_job(path: Path) -> None:
+    """Isolate heavy reconstruction so a mistaken submission can be stopped."""
+    child = subprocess.Popen([sys.executable, str(HERE / "reconstruction_worker.py"),
+                              "--job", path.name], start_new_session=True,
+                             stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+                             stderr=subprocess.DEVNULL)
+    while child.poll() is None:
+        if (path / "cancel.requested").exists():
+            try:
+                os.killpg(child.pid, signal.SIGTERM)
+            except ProcessLookupError:
+                pass
+            try:
+                child.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                try:
+                    os.killpg(child.pid, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
+                child.wait(timeout=5)
+            break
+        time.sleep(.3)
+    if (path / "cancel.requested").exists():
+        finish_cancel(path)
+    elif child.returncode and (path / "job.json").is_file():
+        job = json.loads((path / "job.json").read_text(encoding="utf-8"))
+        if job.get("state") == "running":
+            update(path, "failed", 0, "worker_process_exited", assets={})
 
 
 def preflight() -> dict:
@@ -288,9 +375,15 @@ def main() -> None:
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--once", action="store_true")
+    parser.add_argument("--job", default="")
     args = parser.parse_args()
     if not os.environ.get("SELF_RECON_JOBS_DIR"):
         raise SystemExit("SELF_RECON_JOBS_DIR must be an explicit shared path")
+    if args.job:
+        if not JOB_ID.fullmatch(args.job):
+            raise SystemExit("invalid job ID")
+        run_one(ROOT / args.job)
+        return
     # gsplat's JIT loader removes its cache directory before compiling. A
     # second worker must never enter preflight or it may delete live objects.
     lock_file = open("/tmp/self-reconstruction-worker.lock", "w", encoding="utf-8")
@@ -308,12 +401,20 @@ def main() -> None:
     while True:
         if not capability["ready"]:
             capability = preflight()
-        if capability["ready"]:
-            for path in sorted(ROOT.iterdir()):
-                if path.is_dir() and JOB_ID.fullmatch(path.name) and (path / "job.json").is_file():
-                    run_one(path)
-                    if args.once:
-                        return
+        for path in sorted(ROOT.iterdir()):
+            if path.is_dir() and JOB_ID.fullmatch(path.name) and (path / "job.json").is_file():
+                job = json.loads((path / "job.json").read_text(encoding="utf-8"))
+                try:
+                    if job.get("state") == "cancel_requested" and (path / "cancel.requested").exists():
+                        finish_cancel(path)
+                    elif capability["ready"] and job.get("state") == "queued":
+                        supervise_job(path)
+                except OSError as error:
+                    # Keep the worker alive and retry terminal cleanup next
+                    # pass; expose no capture paths through public status.
+                    print(f"SELF_WORKER_RETRY {type(error).__name__}", file=sys.stderr)
+                if args.once and job.get("state") in {"queued", "cancel_requested"}:
+                    return
         if args.once:
             return
         time.sleep(5 if capability["ready"] else 30)

@@ -13,6 +13,7 @@ import os
 import re
 import secrets
 import shutil
+import threading
 import time
 from pathlib import Path
 
@@ -33,8 +34,15 @@ ROOT = Path(os.getenv("SELF_RECON_JOBS_DIR") or _default_jobs_root()).resolve()
 JOB_RE = re.compile(r"^[a-f0-9]{32}$")
 SHA_RE = re.compile(r"^[a-f0-9]{64}$")
 CHUNK_BYTES = 1024 * 1024
-MAX_CAPTURE_BYTES = 256 * 1024 * 1024
+MAX_CAPTURE_BYTES = 1024 * 1024 * 1024
 MAX_CHUNKS = (MAX_CAPTURE_BYTES + CHUNK_BYTES - 1) // CHUNK_BYTES
+_JOB_LOCKS: dict[str, threading.RLock] = {}
+_JOB_LOCKS_GUARD = threading.Lock()
+
+
+def _job_lock(job_id: str) -> threading.RLock:
+    with _JOB_LOCKS_GUARD:
+        return _JOB_LOCKS.setdefault(job_id, threading.RLock())
 
 
 def _authorize(request: Request) -> None:
@@ -64,9 +72,20 @@ def _read_job(path: Path) -> dict:
 
 
 def _save_job(path: Path, job: dict) -> None:
-    temporary = path / "job.json.tmp"
+    temporary = path / f"job.{secrets.token_hex(4)}.tmp"
     temporary.write_text(json.dumps(job, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     os.replace(temporary, path / "job.json")
+
+
+def _discard_job_payload(path: Path) -> None:
+    """Keep a status tombstone, but discard personal footage and intermediates."""
+    for item in path.iterdir():
+        if item.name in {"job.json", "cancel.requested"}:
+            continue
+        if item.is_dir():
+            shutil.rmtree(item)
+        else:
+            item.unlink(missing_ok=True)
 
 
 @router.get("/health")
@@ -132,7 +151,7 @@ async def put_chunk(job_id: str, index: int, request: Request):
     _authorize(request)
     path = _job_dir(job_id)
     job = _read_job(path)
-    if job["state"] != "receiving":
+    if job["state"] != "receiving" or (path / "cancel.requested").exists():
         raise HTTPException(409, "job_not_receiving")
     count = (job["totalBytes"] + CHUNK_BYTES - 1) // CHUNK_BYTES
     if not 0 <= index < count or count > MAX_CHUNKS:
@@ -151,21 +170,25 @@ async def put_chunk(job_id: str, index: int, request: Request):
     actual_sha = hashlib.sha256(data).hexdigest()
     if not hmac.compare_digest(actual_sha, expected_sha):
         raise HTTPException(422, "chunk_digest")
-    chunks = path / "chunks"
-    chunks.mkdir(exist_ok=True)
-    target = chunks / f"{index:04d}.bin"
-    if target.exists():
-        if hashlib.sha256(target.read_bytes()).hexdigest() != actual_sha:
-            raise HTTPException(409, "chunk_conflict")
-    else:
-        temporary = chunks / f"{index:04d}.tmp"
-        temporary.write_bytes(data)
-        os.replace(temporary, target)
-    received = set(job["receivedChunks"])
-    received.add(index)
-    job["receivedChunks"] = sorted(received)
-    job["progress"] = min(25, round(25 * len(received) / count))
-    _save_job(path, job)
+    with _job_lock(job_id):
+        job = _read_job(path)
+        if job["state"] != "receiving" or (path / "cancel.requested").exists():
+            raise HTTPException(409, "job_not_receiving")
+        chunks = path / "chunks"
+        chunks.mkdir(exist_ok=True)
+        target = chunks / f"{index:04d}.bin"
+        if target.exists():
+            if hashlib.sha256(target.read_bytes()).hexdigest() != actual_sha:
+                raise HTTPException(409, "chunk_conflict")
+        else:
+            temporary = chunks / f"{index:04d}.tmp"
+            temporary.write_bytes(data)
+            os.replace(temporary, target)
+        received = set(job["receivedChunks"])
+        received.add(index)
+        job["receivedChunks"] = sorted(received)
+        job["progress"] = min(25, round(25 * len(received) / count))
+        _save_job(path, job)
     return {"index": index, "sha256": actual_sha, "received": len(received), "total": count}
 
 
@@ -173,30 +196,31 @@ async def put_chunk(job_id: str, index: int, request: Request):
 def seal_job(job_id: str, request: Request):
     _authorize(request)
     path = _job_dir(job_id)
-    job = _read_job(path)
-    if job["state"] == "queued":
-        return {"jobId": job_id, "state": "queued"}
-    if job["state"] != "receiving":
-        raise HTTPException(409, "job_not_receiving")
-    count = (job["totalBytes"] + CHUNK_BYTES - 1) // CHUNK_BYTES
-    if job["receivedChunks"] != list(range(count)):
-        raise HTTPException(409, "missing_chunks")
-    digest = hashlib.sha256()
-    temporary = path / "capture.mp4.tmp"
-    with temporary.open("wb") as output:
-        for index in range(count):
-            data = (path / "chunks" / f"{index:04d}.bin").read_bytes()
-            output.write(data)
-            digest.update(data)
-    if temporary.stat().st_size != job["totalBytes"] or not hmac.compare_digest(digest.hexdigest(), job["sha256"]):
-        temporary.unlink(missing_ok=True)
-        raise HTTPException(422, "capture_digest")
-    os.replace(temporary, path / "capture.mp4")
-    job["state"] = "queued"
-    job["progress"] = 25
-    _save_job(path, job)
-    shutil.rmtree(path / "chunks")
-    return {"jobId": job_id, "state": "queued", "sha256": job["sha256"]}
+    with _job_lock(job_id):
+        job = _read_job(path)
+        if job["state"] == "queued":
+            return {"jobId": job_id, "state": "queued"}
+        if job["state"] != "receiving" or (path / "cancel.requested").exists():
+            raise HTTPException(409, "job_not_receiving")
+        count = (job["totalBytes"] + CHUNK_BYTES - 1) // CHUNK_BYTES
+        if job["receivedChunks"] != list(range(count)):
+            raise HTTPException(409, "missing_chunks")
+        digest = hashlib.sha256()
+        temporary = path / "capture.mp4.tmp"
+        with temporary.open("wb") as output:
+            for index in range(count):
+                data = (path / "chunks" / f"{index:04d}.bin").read_bytes()
+                output.write(data)
+                digest.update(data)
+        if temporary.stat().st_size != job["totalBytes"] or not hmac.compare_digest(digest.hexdigest(), job["sha256"]):
+            temporary.unlink(missing_ok=True)
+            raise HTTPException(422, "capture_digest")
+        os.replace(temporary, path / "capture.mp4")
+        job["state"] = "queued"
+        job["progress"] = 25
+        _save_job(path, job)
+        shutil.rmtree(path / "chunks")
+        return {"jobId": job_id, "state": "queued", "sha256": job["sha256"]}
 
 
 @router.get("/jobs/{job_id}")
@@ -207,6 +231,29 @@ def job_status(job_id: str, request: Request):
     if "viewpointQuality" in job:
         result["viewpointQuality"] = job["viewpointQuality"]
     return result
+
+
+@router.post("/jobs/{job_id}/cancel")
+def cancel_job(job_id: str, request: Request):
+    _authorize(request)
+    path = _job_dir(job_id)
+    with _job_lock(job_id):
+        job = _read_job(path)
+        if job["state"] in {"complete", "gaussian_ready"}:
+            raise HTTPException(409, "job_already_finished")
+        if job["state"] == "cancelled":
+            return {"jobId": job_id, "state": "cancelled"}
+        (path / "cancel.requested").touch(exist_ok=True)
+        if job["state"] in {"receiving", "failed"}:
+            _discard_job_payload(path)
+            job.update(state="cancelled", progress=0, message="", assets={})
+            _save_job(path, job)
+            return {"jobId": job_id, "state": "cancelled"}
+        # A worker may start a queued job while this request is in flight. Let its
+        # supervisor reap the process before any input or working file is removed.
+        job.update(state="cancel_requested", message="")
+        _save_job(path, job)
+        return {"jobId": job_id, "state": "cancel_requested"}
 
 
 @router.get("/jobs/{job_id}/assets/{kind}")
@@ -261,7 +308,8 @@ def asset_chunk(job_id: str, kind: str, index: int, request: Request):
 def delete_job(job_id: str, request: Request):
     _authorize(request)
     path = _job_dir(job_id)
-    if _read_job(path)["state"] == "running":
-        raise HTTPException(409, "job_running")
-    shutil.rmtree(path)
-    return {"deleted": True}
+    with _job_lock(job_id):
+        if _read_job(path)["state"] in {"receiving", "running", "cancel_requested"}:
+            raise HTTPException(409, "job_running")
+        shutil.rmtree(path)
+        return {"deleted": True}

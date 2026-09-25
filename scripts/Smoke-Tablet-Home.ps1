@@ -55,6 +55,6 @@ foreach ($case in @(
   Back
 }
 $result = @{ device=$Device; initialPid=$initialPid; checkedAt=(Get-Date).ToString('o'); steps=$results }
-$out = Join-Path $root 'docs\evidence\home-ui-smoke-20260924.json'
+$out = Join-Path $root ('docs\evidence\home-ui-smoke-' + (Get-Date -Format 'yyyyMMdd') + '.json')
 $result | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $out -Encoding utf8
 Write-Output "SELF home UI smoke passed: $out"

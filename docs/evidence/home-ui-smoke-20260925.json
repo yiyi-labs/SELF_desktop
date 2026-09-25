@@ -1,0 +1,37 @@
+{
+  "checkedAt": "2026-09-25T10:49:54.1405213+08:00",
+  "device": "6DP0226117002287",
+  "initialPid": "26901",
+  "steps": [
+    {
+      "expected": "detail-panel",
+      "control": "open-settings",
+      "visible": true,
+      "processPreserved": true
+    },
+    {
+      "expected": "detail-panel",
+      "control": "open-ambience",
+      "visible": true,
+      "processPreserved": true
+    },
+    {
+      "expected": "detail-panel",
+      "control": "home-note",
+      "visible": true,
+      "processPreserved": true
+    },
+    {
+      "expected": "detail-panel",
+      "control": "home-works",
+      "visible": true,
+      "processPreserved": true
+    },
+    {
+      "expected": "camera-fullscreen",
+      "control": "begin-capture",
+      "visible": true,
+      "processPreserved": true
+    }
+  ]
+}

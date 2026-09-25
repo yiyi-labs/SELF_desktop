@@ -2,7 +2,6 @@ import { fileUri, fileIo as fs } from '@kit.CoreFileKit';
 import { NativeMirrorSurface } from './NativeMirrorSurface';
 import { GaussianPortraitSurface } from './GaussianPortraitSurface';
 import { CameraCaptureView } from './CameraCaptureView';
-import { FormationOrb } from './FormationOrb';
 import { NightSkySurface } from './NightSkySurface';
 import { ProductCard } from './ProductCard';
 import { NativeRendererPort } from '../bridge/NativeRendererPort';
@@ -62,7 +61,14 @@ struct SelfMirrorPage {
   @State reconProgress:number=0;
   @State reconSubmitting:boolean=false;
   @State reconCanRetry:boolean=false;
+  @State reconCancelling:boolean=false;
+  @State formationLine:string='';
+  @State formationChars:number=0;
   private pendingCaptureName:string='';
+  private uploadingJobId:string='';
+  private submissionId:number=0;
+  private cancelledSubmissionId:number=-1;
+  private formationTimer:number=-1;
   @State introStage:number=0;
   @State introLine:string='';
   @State introCharacters:number=0;
@@ -316,12 +322,44 @@ struct SelfMirrorPage {
     console.info('SELF_STAR_NAME_SAVED '+this.starNameDraft.length);
   }
 
+  private setFormationLine(line:string):void{
+    if(this.formationLine===line)return;
+    if(this.formationTimer>=0)clearInterval(this.formationTimer);
+    this.formationLine=line;this.formationChars=this.motion?0:line.length;
+    if(this.motion&&line.length>0)this.formationTimer=setInterval(()=>{
+      this.formationChars=Math.min(this.formationLine.length,this.formationChars+1);
+      if(this.formationChars>=this.formationLine.length){clearInterval(this.formationTimer);this.formationTimer=-1;}
+    },92);
+  }
+  private finishCancelledReconstruction():void{
+    this.finishReconstruction();this.uploadingJobId='';this.reconCancelling=false;
+    this.reconProgress=0;this.captureStatus='';this.journey='idle';this.setFormationLine('');
+    this.revealStory();console.info('SELF_RECON_CANCELLED');
+  }
+  private async cancelReconstruction():Promise<void>{
+    if(this.reconCancelling)return;
+    this.cancelledSubmissionId=this.submissionId;this.reconCancelling=true;
+    this.setFormationLine(this.language==='en'?'The light is coming to rest.':'这束光，正轻轻停下。');
+    const jobId=this.reconJob||this.uploadingJobId;
+    if(!jobId){if(!this.reconSubmitting)this.finishCancelledReconstruction();return;}
+    const client=new ReconstructionTransportClient();client.endpoint=this.backendAddress;client.token=this.backendToken;
+    try{
+      const result=await client.cancelJob(jobId);
+      if(result.state==='cancelled')this.finishCancelledReconstruction();
+      else if(!this.reconJob){this.trackReconstruction(jobId);this.reconCancelling=true;this.captureStatus='星光正在慢慢停下。';}
+    }catch(error){
+      console.error('SELF_RECON_CANCEL_FAILED '+String(error));
+      this.reconCancelling=false;this.captureStatus='暂时没能确认停止，连接恢复后可以再试。';
+    }
+  }
+
   private trackReconstruction(jobId:string):void{
     if(!/^[a-f0-9]{32}$/.test(jobId))return;
     this.reconJob=jobId;
     this.assets.writeAtomic(this.context.filesDir+'/reconstruction-pending.json',
       JSON.stringify({jobId,name:this.starNameDraft} as PendingReconstruction));
     this.journey='forming';this.reconProgress=Math.max(6,this.reconProgress);this.captureStatus='你的轮廓，正在星光里渐渐清晰。';
+    if(!this.reconCancelling)this.setFormationLine(this.language==='en'?'A little more of you comes into view.':'每一面的你，都在慢慢靠近。');
     if(this.reconTimer<0)this.reconTimer=setInterval(()=>this.pollReconstruction(),5000);
     this.pollReconstruction();
   }
@@ -336,6 +374,8 @@ struct SelfMirrorPage {
     client.endpoint=this.backendAddress;client.token=this.backendToken;
     try{
       const result=await client.status(jobId);if(this.reconJob!==jobId)return;
+      if(result.state==='cancelled'){this.finishCancelledReconstruction();return;}
+      if(result.state==='cancel_requested'||this.reconCancelling){this.captureStatus='星光正在慢慢停下。';return;}
       if(result.state==='failed'){
         this.captureStatus=result.message==='face_not_confirmed_in_capture'?'这段拍摄还没能看清完整面容，可以换个光线再试。':
           result.message==='camera_angles_insufficient'?'这次没有拍到面容的两侧。可以保持头部自然不动，让镜头从一侧缓慢绕到另一侧再试。':
@@ -366,25 +406,48 @@ struct SelfMirrorPage {
       }
       this.reconProgress=Math.max(this.reconProgress,Math.max(5,Math.min(96,result.progress)));
       this.captureStatus=this.reconProgress<35?'正从光点里，找回你的轮廓。':this.reconProgress<75?'每一个角度，都在慢慢靠近。':'快看见更完整的你了。';
+      this.setFormationLine(this.reconProgress<35?'每一面的你，都在慢慢靠近。':this.reconProgress<75?'星光正留下你的轮廓。':'快看见更完整的你了。');
     }catch(_){if(this.reconJob===jobId)this.captureStatus='星光暂时停了一下，会继续陪你等待。';}
     finally{this.reconChecking=false;}
   }
   private async submitCapture(name:string):Promise<void>{
     if(!/^capture-[0-9]+\.mp4$/.test(name)){this.captureStatus='没有找到这段拍摄，请重新选择。';this.journey='failed';return;}
     if(this.reconJob||this.reconSubmitting)return;
+    const attempt=++this.submissionId;
     const client=new ReconstructionTransportClient();client.endpoint=this.backendAddress;client.token=this.backendToken;
     if(this.detail)this.close();
     try{
       if(this.pendingCaptureName!==name)this.starNameDraft='';
-      this.pendingCaptureName=name;this.reconSubmitting=true;this.reconCanRetry=false;this.originMode=true;this.skyOpen=false;
+      this.pendingCaptureName=name;this.uploadingJobId='';this.reconSubmitting=true;this.reconCanRetry=false;this.reconCancelling=false;this.originMode=true;this.skyOpen=false;
       this.journey='forming';this.reconProgress=5;this.captureStatus='正从光点里，找回你的轮廓。';
+      this.setFormationLine(this.language==='en'?'Every side of you is coming into view.':'每一面的你，都在慢慢靠近。');
       const health=await client.probe();if(health.engine!=='ready')throw new Error('建模服务尚未就绪');
+      if(this.cancelledSubmissionId===attempt)throw new Error('upload_cancelled');
       const path=this.context.filesDir+'/captures/'+name;
       if(!fs.accessSync(path))throw new Error('拍摄文件没有找到');
-      const jobId=await client.uploadCapture(path,(value:number)=>this.reconProgress=Math.max(5,Math.round(value*22)));
+      const jobId=await client.uploadCapture(path,(value:number)=>this.reconProgress=Math.max(5,Math.round(value*22)),
+        (created:string)=>this.uploadingJobId=created,()=>this.cancelledSubmissionId===attempt);
+      if(this.cancelledSubmissionId===attempt){await client.cancelJob(jobId);throw new Error('upload_cancelled');}
+      this.uploadingJobId='';
       this.trackReconstruction(jobId);
     }catch(error){
+      if(this.cancelledSubmissionId===attempt){
+        if(this.uploadingJobId){
+          try{
+            const result=await client.cancelJob(this.uploadingJobId);
+            if(result.state==='cancel_requested'){
+              this.trackReconstruction(this.uploadingJobId);this.reconCancelling=true;
+              this.captureStatus='星光正在慢慢停下。';
+            }else this.finishCancelledReconstruction();
+          }catch(cancelError){
+            console.error('SELF_RECON_CANCEL_UNCONFIRMED '+String(cancelError));
+            this.reconCancelling=false;this.captureStatus='暂时没能确认停止，连接恢复后可以再试。';
+          }
+        }else this.finishCancelledReconstruction();
+        return;
+      }
       const reason=String(error);console.error('SELF_RECON_SUBMIT_FAILED '+reason);
+      if(this.uploadingJobId){try{await client.cancelJob(this.uploadingJobId);}catch(_){}this.uploadingJobId='';}
       this.reconCanRetry=!reason.includes('过大')&&!reason.includes('不完整')&&!reason.includes('没有找到');
       this.journey='failed';this.captureStatus=this.reconCanRetry?
         '星光暂时没能连接。拍摄已留下，连接恢复后轻触重试。':
@@ -593,7 +656,7 @@ struct SelfMirrorPage {
       this.works.loadPreference(this.session);this.bridge.assetId=this.session.assetId;this.bridge.assetVersion=this.session.assetVersion;this.bridge.revision=0;this.identity='示例面容';this.selected='';this.candidate='';this.ready=false;this.close();this.labels();this.bridge.send('INIT',{});this.subtitle='已删除这张照片的应用内源文件、作品、蒙版和私有导出；私密文字保留';
     }catch(e){this.fail(String(e));}
   }
-  aboutToDisappear():void{this.planner.cancel();if(this.timer>=0)clearInterval(this.timer);if(this.storyCueTimer>=0)clearTimeout(this.storyCueTimer);if(this.characterTimer>=0)clearTimeout(this.characterTimer);if(this.introCharacterTimer>=0)clearTimeout(this.introCharacterTimer);if(this.revealTimer>=0)clearTimeout(this.revealTimer);this.introTimers.forEach((timer:number)=>clearTimeout(timer));if(this.reconTimer>=0)clearInterval(this.reconTimer);this.reconTimer=-1;this.audio.dispose();this.bridge.dispose();this.assets.cleanupTemporary();}
+  aboutToDisappear():void{this.planner.cancel();if(this.timer>=0)clearInterval(this.timer);if(this.storyCueTimer>=0)clearTimeout(this.storyCueTimer);if(this.characterTimer>=0)clearTimeout(this.characterTimer);if(this.formationTimer>=0)clearInterval(this.formationTimer);if(this.introCharacterTimer>=0)clearTimeout(this.introCharacterTimer);if(this.revealTimer>=0)clearTimeout(this.revealTimer);this.introTimers.forEach((timer:number)=>clearTimeout(timer));if(this.reconTimer>=0)clearInterval(this.reconTimer);this.reconTimer=-1;this.audio.dispose();this.bridge.dispose();this.assets.cleanupTemporary();}
   onBackPress():boolean{if(this.introStage>0){this.finishIntro();return true;}if(this.cameraLive){this.close();return true;}if(this.detail){this.close();return true;}if(this.skyOpen||this.personalActive()){this.returnOrigin();return true;}if(this.productOpen){this.productOpen=false;return true;}if(this.legacyEditorOpen){this.legacyEditorOpen=false;this.ready=false;return true;}if(this.tool!=='NAVIGATE'){this.switchTool(this.tool);return true;}return false;}
   @Builder ambienceTile(mode:string,label:string,color:string){
     Button(){Column({space:8}){Stack(){Circle().width(48).height(48).fill(color);Circle().width(26).height(26).fill('#BBFFFFFF').blur(7).offset({x:8,y:-4})}.width(62).height(60);Text(this.tr(label)).fontSize(13).fontColor('#3B4665')}}.id('palette-'+mode).layoutWeight(1).height(102).backgroundColor(this.palette===mode?'#B9E1EAF8':'#72D1DDEF').border({width:this.palette===mode?1.5:1,color:this.palette===mode?'#CDEBFA':'#88E5F0FF'}).borderRadius(22).stateStyles({pressed:{.scale({x:.96,y:.96})},normal:{.scale({x:1,y:1})}}).animation({duration:this.motion?180:0,curve:Curve.EaseOut}).onClick(()=>this.chooseAtmosphere(mode))
@@ -637,7 +700,7 @@ struct SelfMirrorPage {
         Text(this.language==='en'?'The pen can be preferred; touch always remains available. Face-attached selection for personal 3D portraits is not ready yet.':'有笔时优先显示手写笔引导；没有笔仍可触控。个人立体面容的贴脸圈选尚未开放。').fontSize(12).fontColor('#81758D')
         Button(this.language==='en'?'Watch the beginning again':'重温最初的微光').id('replay-intro').softButton().backgroundColor('#8ED4E1F0').width('100%').onClick(()=>{this.close();this.returnOrigin();this.startIntro(true);})
         Button(this.tr('隐私与云端')).softButton().backgroundColor('#8ED4E1F0').width('100%').onClick((event:ClickEvent)=>this.open('云端理解',event))
-        Button(this.tr('采集记录')).softButton().backgroundColor('#8ED4E1F0').width('100%').onClick((event:ClickEvent)=>this.open('采集记录',event))
+        Button(this.tr('采集记录')).id('open-captures').softButton().backgroundColor('#8ED4E1F0').width('100%').onClick((event:ClickEvent)=>this.open('采集记录',event))
         Button(this.tr('作品与记录')).softButton().backgroundColor('#8ED4E1F0').width('100%').onClick((event:ClickEvent)=>this.open('作品与记录',event))
         Button(this.tr('关于 SELF')).softButton().backgroundColor('#8ED4E1F0').width('100%').onClick((event:ClickEvent)=>this.open('关于 SELF',event))
       }
@@ -657,8 +720,8 @@ struct SelfMirrorPage {
             Column({space:6}){
               Row(){Text(this.tr('私密视频')+' · '+Math.round(clip.bytes/1024)+' KB').fontSize(14).layoutWeight(1);Button('▶').id('play-'+clip.name).softButton().width(48).accessibilityText(this.tr('播放视频')).onClick(()=>this.selectedCapture=clip.name)}.width('100%')
               Row({space:8}){
-                Button(this.reconJob||this.reconSubmitting?this.tr('正在寻找中'):this.tr('开始建模')).softButton().layoutWeight(1).enabled(!this.reconJob&&!this.reconSubmitting).onClick(()=>this.submitCapture(clip.name))
-                Button(this.tr('删除原片')).softButton().layoutWeight(1).onClick(()=>{if(this.selectedCapture===clip.name)this.selectedCapture='';new CaptureService(this.context).delete(clip.name);this.captures=new CaptureService(this.context).list();})
+                Button(this.reconJob||this.reconSubmitting?this.tr('正在寻找中'):this.tr('开始建模')).id('model-'+clip.name).softButton().layoutWeight(1).enabled(!this.reconJob&&!this.reconSubmitting).onClick(()=>this.submitCapture(clip.name))
+                Button(this.tr('删除原片')).id('delete-'+clip.name).softButton().layoutWeight(1).onClick(()=>{if(this.selectedCapture===clip.name)this.selectedCapture='';new CaptureService(this.context).delete(clip.name);this.captures=new CaptureService(this.context).list();})
               }.width('100%')
             }.padding(10).width('100%').backgroundColor('#B8FFFFFF').borderRadius(18)
           },(clip:CaptureRecord)=>clip.name)
@@ -781,7 +844,7 @@ struct SelfMirrorPage {
         },(_letter:string,index:number)=>index.toString())
       }.width(Math.min(this.surfaceWidth-48,680))}
       if(this.introStage===3){
-        NightSkySurface({formation:this.introBurst,musicPulse:0,motion:this.motion,active:true,phaseMode:'forming'}).width('100%').height('100%')
+        NightSkySurface({formation:this.introBurst,musicPulse:0,motion:this.motion,active:true,phaseMode:'intro'}).width('100%').height('100%')
       }
       if(this.introStage===2){
         Circle().width(48).height(48).fill('#548FA8DC').stroke('#E5E9FF').strokeWidth(1.5).shadow({radius:44,color:'#729BC9F2'}).position({x:this.surfaceWidth*.5-24,y:this.surfaceHeight*.47+this.introDrop})
@@ -866,17 +929,35 @@ struct SelfMirrorPage {
         }.alignItems(HorizontalAlign.Center).width('100%').position({x:0,y:this.surfaceHeight*(this.wide?.25:.29)})
       }
       if(this.journey==='forming'){
-        Column({space:18}){
-          FormationOrb({motion:this.motion})
-          Text(this.captureStatus).fontSize(this.wide?21:18).fontColor('#F2F1FF').textAlign(TextAlign.Center)
-          Progress({value:this.reconProgress,total:100,type:ProgressType.Linear}).width(Math.min(260,this.surfaceWidth-96)).height(4).color('#BFD5FF').backgroundColor('#3B59799D')
-          Text(Math.round(this.reconProgress)+'%').fontSize(12).fontColor('#B3C8DF')
+        Flex({wrap:FlexWrap.Wrap}){
+          ForEach(this.formationLine.split(''),(letter:string,index:number)=>{
+            Text(letter).fontSize(this.wide?27:21).letterSpacing(2).fontWeight(FontWeight.Medium).fontColor('#F5F4FF')
+              .opacity(index<this.formationChars?1:0).blur(index<this.formationChars?0:7)
+              .animation({duration:this.motion?280:0,curve:Curve.EaseOut})
+          },(_letter:string,index:number)=>this.formationLine+'-'+index.toString())
+        }.width(Math.min(this.surfaceWidth-48,this.wide?460:340))
+          .position({x:this.wide?50:26,y:this.surfaceHeight*(this.wide?.22:.18)}).hitTestBehavior(HitTestMode.None)
+        Column({space:12}){
           TextInput({text:this.starNameDraft,placeholder:this.language==='en'?'What will you call this star?':'这颗星辰，想叫什么？'}).id('star-name-input')
-            .width(Math.min(260,this.surfaceWidth-96)).maxLength(24).fontColor('#F5F4FF').placeholderColor('#C0C8DC')
-            .backgroundColor('#30476088').borderRadius(18).onChange((value:string)=>this.starNameDraft=value)
-          Button(this.language==='en'?'Keep this name':'留下这个名字').id('save-star-name').softButton().height(40)
-            .fontColor('#F5F4FF').backgroundColor('#536787A6').onClick(()=>this.saveStarName())
-        }.width(Math.min(this.surfaceWidth-40,400)).padding(22).backgroundColor('#24324764').backgroundBlurStyle(BlurStyle.COMPONENT_ULTRA_THIN).border({width:1,color:'#527F9BBE'}).borderRadius(30)
+            .width(Math.min(300,this.surfaceWidth-84)).maxLength(24).fontColor('#F5F4FF').placeholderColor('#C0C8DC')
+            .backgroundColor('#1A293D').border({width:1,color:'#6E8BA9'}).borderRadius(18)
+            .onChange((value:string)=>this.starNameDraft=value)
+          Row({space:14}){
+            Button(this.language==='en'?'Keep this name':'留下名字').id('save-star-name').height(38)
+              .fontSize(13).fontColor('#DFEEFF').backgroundColor('#263E5B').border({width:1,color:'#7B9AB9'}).borderRadius(19).onClick(()=>this.saveStarName())
+            Button(this.reconCancelling?(this.language==='en'?'Stopping…':'正在停下…'):(this.language==='en'?'Cancel':'取消这次寻找'))
+              .id('cancel-reconstruction').height(38).fontSize(13).fontColor('#B8CAE1')
+              .backgroundColor('#172336').border({width:1,color:'#536781'}).borderRadius(19)
+              .enabled(!this.reconCancelling).onClick(()=>this.cancelReconstruction())
+          }.justifyContent(FlexAlign.Center)
+          Row({space:9}){
+            Text(this.language==='en'?'Following light':'循光').fontSize(11).fontColor('#A7BDD6')
+            Progress({value:this.reconProgress,total:100,type:ProgressType.Linear})
+              .width(Math.min(195,this.surfaceWidth-180)).height(3).color('#BEDCF4').backgroundColor('#263A54')
+            Text(Math.round(this.reconProgress)+'%').fontSize(11).fontColor('#A7BDD6')
+          }.justifyContent(FlexAlign.Center)
+        }.width(Math.min(this.surfaceWidth-40,360))
+          .position({x:Math.max(20,(this.surfaceWidth-Math.min(this.surfaceWidth-40,360))/2),y:this.surfaceHeight*(this.wide?.74:.70)})
       }
       if(this.journey==='failed'&&this.captureStatus){
         Column({space:12}){

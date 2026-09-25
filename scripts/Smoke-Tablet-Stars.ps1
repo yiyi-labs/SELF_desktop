@@ -69,7 +69,7 @@ $result = @{
   introReplayVisible = $introVisible
   processPreserved = ($pidBefore -eq $pidAfter)
 }
-$path = Join-Path $root 'docs\evidence\tablet-stars-20260924.json'
+$path = Join-Path $root ('docs\evidence\tablet-stars-' + (Get-Date -Format 'yyyyMMdd') + '.json')
 $result | ConvertTo-Json -Depth 3 | Set-Content -LiteralPath $path -Encoding utf8
 if (-not $result.processPreserved) { throw 'SELF process restarted during star journey' }
 Write-Output "SELF star journey smoke recorded: $path"

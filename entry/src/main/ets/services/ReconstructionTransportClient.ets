@@ -22,6 +22,7 @@ interface CreatedJob {jobId:string;chunkBytes:number;state:string;}
 interface ChunkReceipt {index:number;sha256:string;received:number;total:number;}
 interface CaptureManifest {bytes:number;sha256:string;}
 interface SealedJob {state:string;sha256:string;}
+export interface CancellationReceipt {jobId:string;state:string;}
 
 /** Portable private reconstruction endpoint. USB HDC and a future HTTPS service share this contract. */
 export class ReconstructionTransportClient {
@@ -67,13 +68,13 @@ export class ReconstructionTransportClient {
   private hex(bytes:Uint8Array):string{
     let value='';for(let i=0;i<bytes.length;i++)value+=bytes[i].toString(16).padStart(2,'0');return value;
   }
-  private async fileDigest(path:string):Promise<CaptureManifest>{
+  private async fileDigest(path:string,cancelled:()=>boolean):Promise<CaptureManifest>{
     const file=fs.openSync(path,fs.OpenMode.READ_ONLY);
     try{
       const size=fs.statSync(file.fd).size;
-      if(size<1024||size>256*1024*1024)throw new Error('拍摄文件不完整或过大');
+      if(size<1024||size>1024*1024*1024)throw new Error('拍摄文件不完整或过大');
       const md=cryptoFramework.createMd('SHA256');let remaining=size;
-      while(remaining>0){const data=new ArrayBuffer(Math.min(1048576,remaining));const read=fs.readSync(file.fd,data,{length:data.byteLength});if(read<=0)throw new Error('无法完整读取拍摄文件');await md.update({data:new Uint8Array(read===data.byteLength?data:data.slice(0,read))});remaining-=read;}
+      while(remaining>0){if(cancelled())throw new Error('upload_cancelled');const data=new ArrayBuffer(Math.min(1048576,remaining));const read=fs.readSync(file.fd,data,{length:data.byteLength});if(read<=0)throw new Error('无法完整读取拍摄文件');await md.update({data:new Uint8Array(read===data.byteLength?data:data.slice(0,read))});remaining-=read;}
       return {bytes:size,sha256:this.hex((await md.digest()).data)};
     }finally{fs.closeSync(file);}
   }
@@ -85,14 +86,18 @@ export class ReconstructionTransportClient {
       return response.result as string;
     }finally{request.destroy();}
   }
-  async uploadCapture(path:string,onProgress:(value:number)=>void=()=>{}):Promise<string>{
-    const manifest=await this.fileDigest(path);
+  async uploadCapture(path:string,onProgress:(value:number)=>void=()=>{},
+    onCreated:(jobId:string)=>void=()=>{},cancelled:()=>boolean=()=>false):Promise<string>{
+    const manifest=await this.fileDigest(path,cancelled);
     const created=JSON.parse(await this.json('/jobs',http.RequestMethod.POST,JSON.stringify({totalBytes:manifest.bytes,sha256:manifest.sha256,format:'mp4'}))) as CreatedJob;
     if(!/^[a-f0-9]{32}$/.test(created.jobId)||created.chunkBytes!==1048576)throw new Error('建模任务回复无效');
+    onCreated(created.jobId);
+    if(cancelled()){await this.cancelJob(created.jobId);throw new Error('upload_cancelled');}
     const file=fs.openSync(path,fs.OpenMode.READ_ONLY);
     try{
       const count=Math.ceil(manifest.bytes/created.chunkBytes);let remaining=manifest.bytes;
       for(let index=0;index<count;index++){
+        if(cancelled()){await this.cancelJob(created.jobId);throw new Error('upload_cancelled');}
         const buffer=new ArrayBuffer(Math.min(created.chunkBytes,remaining));
         const read=fs.readSync(file.fd,buffer,{length:buffer.byteLength});
         if(read!==buffer.byteLength)throw new Error('拍摄数据读取不完整');
@@ -107,6 +112,7 @@ export class ReconstructionTransportClient {
         remaining-=read;onProgress((index+1)/count);
       }
     }finally{fs.closeSync(file);}
+    if(cancelled()){await this.cancelJob(created.jobId);throw new Error('upload_cancelled');}
     const sealed=JSON.parse(await this.json('/jobs/'+created.jobId+'/seal',http.RequestMethod.POST,'{}')) as SealedJob;
     if(sealed.state!=='queued'||sealed.sha256!==manifest.sha256)throw new Error('建模任务校验失败');
     return created.jobId;
@@ -114,6 +120,12 @@ export class ReconstructionTransportClient {
   async status(jobId:string):Promise<ReconstructionJobStatus>{
     if(!/^[a-f0-9]{32}$/.test(jobId))throw new Error('建模任务编号无效');
     return JSON.parse(await this.json('/jobs/'+jobId,http.RequestMethod.GET)) as ReconstructionJobStatus;
+  }
+  async cancelJob(jobId:string):Promise<CancellationReceipt>{
+    if(!/^[a-f0-9]{32}$/.test(jobId))throw new Error('建模任务编号无效');
+    const result=JSON.parse(await this.json('/jobs/'+jobId+'/cancel',http.RequestMethod.POST,'{}')) as CancellationReceipt;
+    if(result.jobId!==jobId||!['cancelled','cancel_requested'].includes(result.state))throw new Error('取消结果未确认');
+    return result;
   }
   async downloadPreview(jobId:string,filesDir:string):Promise<string>{
     const job=await this.status(jobId),asset=job.assets?.preview;
