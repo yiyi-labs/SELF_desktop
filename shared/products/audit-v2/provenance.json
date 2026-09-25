@@ -1,0 +1,13 @@
+{
+  "sourceArchiveSha256": "0a6892e7215a46e9a938f820eca98dd0fd81d8a39482ffabb00dfc6e8f28ce6e",
+  "datasetVersion": "2026-09-25.audit-v2",
+  "importedFiles": {
+    "coverage.json": "499ba5a0941e50c49e51675b4bf7a4e435b1bc0f67dd0391b05b93a7db94687e",
+    "products_cn.json": "002c8f3811a4758ff6261449719fc63dc91d7e0cb73b6018b7edb4f015e613b1",
+    "source_rechecks.json": "64ca4ff2596efd9bf77e568d35d2c80e9cbe5780969dee1b444a77b0f4090ae8",
+    "product_dossiers_cn.json": "40678913d3d6fc9d0462aa87ed016fe5fe98b954d6bbcaa32b51828395babd47",
+    "calibration_profiles.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "approved_release_manifest.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+  },
+  "semanticStatus": "research_evidence_only_not_a_complete_current_product_or_calibration_catalog"
+}

@@ -1,6 +1,7 @@
 import { fileUri, fileIo as fs } from '@kit.CoreFileKit';
 import { NativeMirrorSurface } from './NativeMirrorSurface';
 import { GaussianPortraitSurface } from './GaussianPortraitSurface';
+import { PersonalPortraitEditor } from './PersonalPortraitEditor';
 import { GalaxyUniverseSurface, GalaxyScene } from './GalaxyUniverseSurface';
 import { CameraCaptureView } from './CameraCaptureView';
 import { NightSkySurface } from './NightSkySurface';
@@ -737,7 +738,7 @@ struct SelfMirrorPage {
         Text(this.tr('语言 / Language')).fontSize(14).fontColor('#81758D')
         Row({space:12}){Button(this.tr('中文')).id('language-zh').softButton().backgroundColor(this.language==='zh'?'#B9E2EAF6':'#79CDD9EA').onClick(()=>this.setLanguage('zh'));Button(this.tr('English')).id('language-en').softButton().backgroundColor(this.language==='en'?'#B9E2EAF6':'#79CDD9EA').onClick(()=>this.setLanguage('en'))}
         Row(){Text(this.language==='en'?'Use stylus':'使用手写笔').layoutWeight(1);Toggle({type:ToggleType.Switch,isOn:this.stylusHints}).id('stylus-hints-toggle').selectedColor(this.accent).onChange((value:boolean)=>{this.stylusHints=value;this.saveUi();})}.height(48)
-        Text(this.language==='en'?'The pen can be preferred; touch always remains available. Face-attached selection for personal 3D portraits is not ready yet.':'有笔时优先显示手写笔引导；没有笔仍可触控。个人立体面容的贴脸圈选尚未开放。').fontSize(12).fontColor('#81758D')
+        Text(this.language==='en'?'Use a pen or touch to circle an area on your personal 3D portrait. Try a small area first.':'可用手写笔或触控在个人立体面容上圈选；先从小范围开始。').fontSize(12).fontColor('#81758D')
         Button(this.language==='en'?'Watch the beginning again':'重温最初的微光').id('replay-intro').softButton().backgroundColor('#8ED4E1F0').width('100%').onClick(()=>{this.close();this.returnOrigin();this.startIntro(true);})
         Button(this.tr('隐私与云端')).softButton().backgroundColor('#8ED4E1F0').width('100%').onClick((event:ClickEvent)=>this.open('云端理解',event))
         Button(this.tr('采集记录')).id('open-captures').softButton().backgroundColor('#8ED4E1F0').width('100%').onClick((event:ClickEvent)=>this.open('采集记录',event))
@@ -747,7 +748,7 @@ struct SelfMirrorPage {
       if(this.detail==='关于 SELF'){
         Text(this.tr('每一种样子，都值得被看见')).fontSize(19).fontColor(this.accent)
         Text(this.tr('不抹去你的特点。保留现在，或尝试一点不同，都由你决定。')).fontSize(15).lineHeight(24)
-        Text(this.tr(this.personalGaussianPath?'这里显示你的立体面容。你可以转动观看；针对这份模型的圈选与修改仍在继续完善。':'可以从一次轻轻的拍摄开始。只有完成重建并通过显示核验后，立体面容才会出现在这里。')).fontSize(13).fontColor('#81758D')
+        Text(this.tr(this.personalGaussianPath?'这里显示你的立体面容。圈选可跟随模型转动；数字试色不代表护肤品的真实效果。':'可以从一次轻轻的拍摄开始。只有完成重建并通过显示核验后，立体面容才会出现在这里。')).fontSize(13).fontColor('#81758D')
         Text(this.tr('SELF · API 26')).fontSize(12).fontColor('#81758D')
       }
       if(this.detail==='采集记录'){
@@ -967,7 +968,11 @@ struct SelfMirrorPage {
           .transition({opacity:0,scale:{x:.91,y:.91}})
       }
       if(this.personalActive()&&this.journey!=='forming'){
-        GaussianPortraitSurface({gaussianPath:this.personalGaussianPath,viewPath:this.personalViewPath,
+        PersonalPortraitEditor({gaussianPath:this.personalGaussianPath,viewPath:this.personalViewPath,
+          assetId:this.activeStarId,language:this.language,cloudEnabled:this.cloudSessionEnabled,
+          backendAddress:this.backendAddress,backendToken:this.backendToken,
+          viewportWidth:this.surfaceWidth,viewportHeight:this.surfaceHeight,
+          onEnableCloud:()=>{this.cloudSessionEnabled=true;},
           onReady:()=>{this.personalReady=true;this.captureStatus='';if(this.journey==='revealing'){
             this.getUIContext().animateTo({duration:this.motion?1350:0,curve:Curve.EaseOut},()=>{this.revealOpacity=0;this.revealScale=7;});
             this.revealTimer=setTimeout(()=>{this.journey='idle';this.revealTimer=-1;},this.motion?1380:50);

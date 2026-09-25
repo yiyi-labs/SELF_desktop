@@ -40,10 +40,10 @@ export struct CameraCaptureView {
  @State faceRadiusY:number=120;
  @State featureX:number[]=[];
  @State featureY:number[]=[];
- @State coverageFlags:boolean[]=[false,false,false,false,false,false,false,false,false,false,false];
+   @State coverageFlags:boolean[]=[false,false,false,false,false,false,false,false,false,false,false,false,false];
  @State coverageActive:number=-1;
  @State coverageCount:number=0;
- @State coverageHint:number=5;
+   @State coverageHint:number=6;
  @State coverageAngle:number=0;
  @State coverageExpanded:boolean=false;
  @State mirrorOverlay:boolean=true;

@@ -48,7 +48,8 @@ export class FaceAnchorTracker {
   let roll=Math.atan2(dy,dx)*180/Math.PI;if(roll>90)roll-=180;if(roll< -90)roll+=180;
   if(face.roll!==undefined&&Number.isFinite(face.roll))roll=Math.max(-90,Math.min(90,face.roll));
   const estimateYaw=(nose.x-(e0.x+e1.x)/2)/Math.max(.02,Math.abs(e1.x-e0.x))*80;
-  const yaw=Math.max(-55,Math.min(55,face.yaw!==undefined&&Number.isFinite(face.yaw)?face.yaw:estimateYaw));
+  const hasOfficialYaw=face.yaw!==undefined&&Number.isFinite(face.yaw);
+  const yaw=Math.max(hasOfficialYaw?-65:-55,Math.min(hasOfficialYaw?65:55,hasOfficialYaw?face.yaw!:estimateYaw));
   const previous=this.last;
   const dt=Math.max(.016,Math.min(.25,(now-this.at)/1000));
   const eyeX=(e0.x+e1.x)/2,eyeY=(e0.y+e1.y)/2;

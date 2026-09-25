@@ -1,5 +1,9 @@
 import { fileIo as fs } from '@kit.CoreFileKit';
 import { webview } from '@kit.ArkWeb';
+import { RendererBridge, Envelope, MessagePayload } from '../bridge/RendererBridge';
+
+export interface GsSelection {regionId:string;count:number;total:number;x:number;y:number;}
+export interface GsCapture {width:number;height:number;images:number;}
 
 /** App-private 3DGS bytes served only to the bundled, offline viewer. */
 @Component
@@ -7,10 +11,56 @@ export struct GaussianPortraitSurface {
   @Prop gaussianPath:string='';
   @Prop viewPath:string='';
   @Prop previewMode:boolean=false;
+  @Prop @Watch('commandChanged') editCommand:string='';
   onReady:()=>void=()=>{};
   onFailure:(message:string)=>void=()=>{};
+  onEditFailure:(message:string)=>void=()=>{};
   onInteraction:()=>void=()=>{};
+  onSelection:(selection:GsSelection,mask:ArrayBuffer)=>void=()=>{};
+  onCapture:(clean:ArrayBuffer,annotated:ArrayBuffer,width:number,height:number)=>void=()=>{};
+  onApplied:(action:string)=>void=()=>{};
   private controller:webview.WebviewController=new webview.WebviewController();
+  private bridge:RendererBridge=new RendererBridge();
+  private selection:GsSelection|undefined=undefined;
+  private capture:GsCapture|undefined=undefined;
+  private clean:ArrayBuffer|undefined=undefined;
+  private lastCommand:string='';
+  aboutToDisappear():void{this.bridge.dispose();this.clean=undefined;this.selection=undefined;this.capture=undefined;}
+
+  private commandChanged():void {
+    if(!this.bridge.ready||!this.editCommand||this.editCommand===this.lastCommand)return;
+    try{this.bridge.send('GS_COMMAND',JSON.parse(this.editCommand) as MessagePayload);this.lastCommand=this.editCommand;}
+    catch(error){this.onFailure('这次操作暂时无法继续：'+String(error));}
+  }
+  private connected():void {
+    const match=/\/models\/([a-f0-9]{32})\//.exec(this.gaussianPath.replace(/\\/g,'/'));
+    if(!match){this.onFailure('个人模型路径不正确');return;}
+    this.bridge.assetId=match[1];this.bridge.assetVersion=match[1];
+    this.lastCommand='';
+    this.bridge.onMessage=(message:Envelope)=>{
+      if(message.type==='READY'){this.onReady();this.commandChanged();}
+      if(message.type==='GS_FAILED')this.onEditFailure(message.payload.message||'圈选暂时不可用');
+      if(message.type==='GS_SELECTION'&&message.payload.count!==undefined&&message.payload.total!==undefined&&
+        message.payload.x!==undefined&&message.payload.y!==undefined)
+        this.selection={regionId:message.payload.regionId||'gs-selected',count:message.payload.count,total:message.payload.total,x:message.payload.x,y:message.payload.y};
+      if(message.type==='GS_CAPTURE'&&message.payload.width!==undefined&&message.payload.height!==undefined&&message.payload.images!==undefined)
+        this.capture={width:message.payload.width,height:message.payload.height,images:message.payload.images};
+      if(message.type==='GS_APPLIED')this.onApplied(message.payload.action||'');
+    };
+    this.bridge.onBytes=(kind:string,bytes:ArrayBuffer)=>{
+      if(kind==='gs-mask'&&this.selection){
+        const selection=this.selection;this.selection=undefined;
+        if(bytes.byteLength!==selection.total)return;
+        this.onSelection(selection,bytes);
+      }
+      if(kind==='gs-clean')this.clean=bytes;
+      if(kind==='gs-annotated'&&this.clean&&this.capture){
+        this.onCapture(this.clean,bytes,this.capture.width,this.capture.height);
+        this.clean=undefined;this.capture=undefined;
+      }
+    };
+    this.bridge.attach(this.controller);
+  }
 
   private intercept(event:OnInterceptRequestEvent):WebResourceResponse|null {
     const url=event.request.getRequestUrl();
@@ -45,9 +95,10 @@ export struct GaussianPortraitSurface {
     Web({src:this.previewMode?$rawfile('gs-preview.html'):$rawfile('gs-viewer.html'),controller:this.controller})
       .width('100%').height('100%')
       .onInterceptRequest((event:OnInterceptRequestEvent)=>this.intercept(event))
+      .onPageEnd(()=>{if(!this.previewMode)this.connected();})
       .onConsole((event:OnConsoleEvent)=>{
         const message=event.message.getMessage();
-        if(message.startsWith('SELF_GS_VIEWER_READY'))this.onReady();
+        if(this.previewMode&&message.startsWith('SELF_GS_VIEWER_READY'))this.onReady();
         if(message.startsWith('SELF_GS_VIEWER_ERROR'))this.onFailure(message.replace('SELF_GS_VIEWER_ERROR ',''));
         if(message.startsWith('SELF_GS_VIEWER_INTERACTION'))this.onInteraction();
         console.info('SELF_PERSONAL_VIEWER '+message);

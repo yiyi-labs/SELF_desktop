@@ -6,13 +6,14 @@ import { SceneView, EditOperation, RegionRecord } from '../domain/EditPlan';
 export interface CloudOperation {operation:string;regionId:string;presetId:string;intensityLevel:string;layerId:string;productProfileId:string;}
 export interface CloudPlan {decision:string;shortMessage:string;operations:CloudOperation[];explanationRefs:string[];question:string;choices?:string[];}
 export interface DialogueTurn {userText:string;reply:string;choices:string[];}
-interface CloudRegion {regionId:string;description:string;semantic:string;}
+export interface CloudRegion {regionId:string;description:string;semantic:string;}
 interface CloudLayer {layerId:string;regionId:string;presetId:string;intensityLevel:string;}
 export interface CloudSnapshot {
  schemaVersion:number;requestId:string;snapshotId:string;assetId:string;assetVersion:string;textureVersion:string;
  sceneRevision:number;regionVersion:number;viewRevision:number;view:SceneView;userText:string;
  regions:CloudRegion[];layers:CloudLayer[];protectedRegionIds:string[];productContextIds?:string[];uploadAuthorized:boolean;
  imageWidth:number;imageHeight:number;annotatedRegionId:string;
+ annotatedRegionIds?:string[];
  dialogue?:DialogueTurn[];resolvedChoice?:string;responseLanguage?:string;
 }
 interface ModelEvidence {requestedModel:string;returnedModel:string;systemFingerprint:string|null;elapsedMs:number;}
@@ -47,18 +48,24 @@ export class PlannerClient {
  }
   validate(plan:CloudPlan,snapshot:CloudSnapshot):void{
   const productFollowup=(snapshot.productContextIds?.length||0)>0&&/^[1-3]$|这款|这个|它|试一下|试试|淡一点|参数|效果/.test(snapshot.userText);
-  if(plan.decision==='edit'&&(/olay|玉兰油|产品|护肤|小白瓶|超红瓶|黑管/i.test(snapshot.userText)||productFollowup||plan.explanationRefs.length>0))throw new Error('这款产品还没有可核验的效果参数，不能用通用试色代替它');
+  const namedProduct=/olay|玉兰油|小白瓶|超红瓶|黑管/i.test(snapshot.userText);
+  const genericNegation=snapshot.userText.includes('通用数字试色')&&/(?:不是|非|不按|不根据).{0,8}(?:产品|护肤)/.test(snapshot.userText);
+  if(plan.decision==='edit'&&(namedProduct||(!genericNegation&&/产品|护肤/.test(snapshot.userText))||productFollowup||plan.explanationRefs.length>0))throw new Error('这款产品还没有可核验的效果参数，不能用通用试色代替它');
   if(Object.keys(plan).some((key:string)=>!['decision','shortMessage','operations','explanationRefs','question','choices'].includes(key)))throw new Error('候选包含未知字段');
   if(plan.choices&&plan.choices.length&&(plan.decision!=='clarify'||plan.choices.length<2||plan.choices.length>3||plan.choices.some((c:string)=>!c.trim()||c.length>60)))throw new Error('对话选项无效');
   if(/\brose\b|\bterracotta\b|regionId|presetId|layerId/.test(plan.shortMessage+plan.question+(plan.choices||[]).join(' ')))throw new Error('回复包含内部标识，请重新提出请求');
   if(/^[1-3]$/.test(snapshot.userText.trim())&&plan.decision==='edit'&&!snapshot.resolvedChoice)throw new Error('请说明这个数字对应的选择');
-  if(!['edit','explain','clarify','support'].includes(plan.decision)||!plan.shortMessage||plan.shortMessage.length>400||plan.operations.length>1||plan.explanationRefs.length>3||plan.explanationRefs.some((id:string)=>!ProductRepository.records().some((p:ProductRecord)=>p.productId===id)))throw new Error('候选计划不符合协议');
+  if(!['edit','explain','clarify','support'].includes(plan.decision)||!plan.shortMessage||plan.shortMessage.length>400||plan.operations.length>4||plan.explanationRefs.length>3||plan.explanationRefs.some((id:string)=>!ProductRepository.records().some((p:ProductRecord)=>p.productId===id)))throw new Error('候选计划不符合协议');
   if(plan.question.length>200||(plan.decision!=='clarify'&&plan.question))throw new Error('候选提问不符合协议');
   if(plan.decision!=='edit'&&plan.operations.length)throw new Error('交流不能夹带编辑');
-  if(plan.decision==='edit'&&plan.operations.length!==1)throw new Error('需要一个完整的候选操作');
+  if(plan.decision==='edit'&&plan.operations.length<1)throw new Error('需要完整的候选操作');
+  const selected=snapshot.annotatedRegionIds&&snapshot.annotatedRegionIds.length?snapshot.annotatedRegionIds:(snapshot.annotatedRegionId?[snapshot.annotatedRegionId]:[]);
+  if(selected.length>4||new Set(selected).size!==selected.length)throw new Error('圈选区域不完整');
+  const newRegions:string[]=[];
   for(const op of plan.operations){if(Object.keys(op).some((key:string)=>!['operation','regionId','presetId','intensityLevel','layerId','productProfileId'].includes(key)))throw new Error('操作包含未知字段');if(!['set_digital_tint','set_effect_level','remove_effect'].includes(op.operation)||!['rose','terracotta'].includes(op.presetId)||op.productProfileId||!snapshot.regions.some((r:CloudRegion)=>r.regionId===op.regionId))throw new Error('模型引用了未登记的能力或区域');PlannerClient.strength(op.intensityLevel);
    if(op.operation!=='set_digital_tint'){const layer=snapshot.layers.find((l:CloudLayer)=>l.layerId===op.layerId);if(!layer||layer.regionId!==op.regionId||layer.presetId!==op.presetId||(op.operation==='remove_effect'&&op.intensityLevel!=='none'))throw new Error('目标编辑层已改变');}
-   else if(op.layerId||op.intensityLevel==='none'||(snapshot.annotatedRegionId&&op.regionId!==snapshot.annotatedRegionId))throw new Error('新建编辑层必须对应本次圈选范围');
+   else if(op.layerId||op.intensityLevel==='none'||(selected.length>0&&!selected.includes(op.regionId))||newRegions.includes(op.regionId))throw new Error('新建编辑层必须对应不同的本次圈选范围');
+   if(op.operation==='set_digital_tint')newRegions.push(op.regionId);
   }
  }
 }

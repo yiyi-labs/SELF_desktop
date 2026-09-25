@@ -24,6 +24,24 @@ def response(value):
         "name":"propose_edit_plan","arguments":json.dumps(value)}}]}}]}
 
 class Contracts(unittest.TestCase):
+    def test_multi_region_candidate_is_atomic_and_bounded(self):
+        s=Snapshot.model_validate({**snapshot().model_dump(),
+            'annotatedRegionId':'','annotatedRegionIds':['gs-selected-1','gs-selected-2'],
+            'regions':[{'regionId':'gs-selected-1','description':'第1处'},
+                       {'regionId':'gs-selected-2','description':'第2处'}],
+            'layers':[], 'userText':'第一处柔玫瑰，第二处暖陶棕'})
+        p=plan();p['operations'][0]['regionId']='gs-selected-1'
+        second=copy.deepcopy(p['operations'][0]);second['regionId']='gs-selected-2';second['presetId']='terracotta'
+        p['operations'].append(second)
+        self.assertEqual(len(parse_response(response(p),s).operations),2)
+        for candidate in ('duplicate','invented','too_many'):
+            q=copy.deepcopy(p)
+            if candidate=='duplicate':q['operations'][1]['regionId']='gs-selected-1'
+            if candidate=='invented':q['operations'][1]['regionId']='gs-selected-3'
+            if candidate=='too_many':q['operations']*=3
+            with self.subTest(candidate=candidate),self.assertRaises(ModelFailure):
+                parse_response(response(q),s)
+
     def test_english_is_presentation_only(self):
         s=snapshot().model_copy(update={'responseLanguage':'en','userText':'Try a muted pink on this area.'})
         value=plan();value['shortMessage']='Try rose gently.'

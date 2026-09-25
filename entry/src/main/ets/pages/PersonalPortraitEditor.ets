@@ -1,0 +1,454 @@
+import { common } from '@kit.AbilityKit';
+import { fileIo as fs } from '@kit.CoreFileKit';
+import { util } from '@kit.ArkTS';
+import { GaussianPortraitSurface, GsSelection } from './GaussianPortraitSurface';
+import { PlannerClient, CloudResponse, CloudSnapshot, CloudRegion, DialogueTurn } from '../services/PlannerClient';
+import { GsRenderLayer } from '../bridge/RendererBridge';
+import { AssetStore } from '../services/AssetStore';
+
+interface SavedGsEdit {
+  schemaVersion:number;
+  assetId:string;
+  assetBytes:number;
+  splatCount:number;
+  maskChecksum:string;
+  preset:string;
+  strength:number;
+  plannerSource:string;
+}
+interface GsLayer {
+  layerId:string;
+  regionId:string;
+  preset:string;
+  strength:number;
+  maskChecksum:string;
+  maskBase64:string;
+}
+interface GsGroup {groupId:string;label:string;createdAt:number;layers:GsLayer[];}
+interface GsHistory {schemaVersion:number;assetId:string;assetBytes:number;splatCount:number;groups:GsGroup[];}
+interface SelectedGsRegion {info:GsSelection;mask:ArrayBuffer;}
+interface GsHistoryItem {layerId:string;preset:string;}
+interface GsHistoryDisplay {groupId:string;label:string;items:GsHistoryItem[];}
+
+/** Personal 3DGS editing remains inside its PlayCanvas surface. The PLY is immutable. */
+@Component
+export struct PersonalPortraitEditor {
+  @Prop gaussianPath:string='';
+  @Prop viewPath:string='';
+  @Prop assetId:string='';
+  @Prop language:string='zh';
+  @Prop cloudEnabled:boolean=false;
+  @Prop backendAddress:string='http://127.0.0.1:8787';
+  @Prop backendToken:string='';
+  @Prop viewportWidth:number=400;
+  @Prop viewportHeight:number=600;
+  onReady:()=>void=()=>{};
+  onFailure:(message:string)=>void=()=>{};
+  onInteraction:()=>void=()=>{};
+  onEnableCloud:()=>void=()=>{};
+  private context:common.UIAbilityContext=this.getUIContext().getHostContext() as common.UIAbilityContext;
+  private assets:AssetStore=new AssetStore(this.context);
+  private planner:PlannerClient=new PlannerClient();
+  private selections:SelectedGsRegion[]=[];
+  private history:GsHistory|undefined=undefined;
+  private pendingHistory:GsHistory|undefined=undefined;
+  private comparisonTarget:string='';
+  private pendingComparison:string|undefined=undefined;
+  private pending:CloudResponse|undefined=undefined;
+  private pendingSnapshot:CloudSnapshot|undefined=undefined;
+  private revision:number=0;
+  private serial:number=0;
+  private requestText:string='';
+  private dialogue:DialogueTurn[]=[];
+  @State editCommand:string='';
+  @State ready:boolean=false;
+  @State tool:string='move';
+  @State bubble:boolean=false;
+  @State selected:boolean=false;
+  @State waiting:boolean=false;
+  @State consentOffer:boolean=false;
+  @State candidateReady:boolean=false;
+  @State applied:boolean=false;
+  @State comparing:boolean=false;
+  @State keyboardOpen:boolean=false;
+  @State historyOpen:boolean=false;
+  @State historyRevision:number=0;
+  @State selectionCount:number=0;
+  @State historyDisplay:GsHistoryDisplay[]=[];
+  @State responseText:string='';
+  @State question:string='';
+  @State choices:string[]=[];
+  @State input:string='';
+  @State anchorX:number=.5;
+  @State anchorY:number=.5;
+
+  private label(zh:string,en:string):string{return this.language==='en'?en:zh;}
+  private bubbleLeft():number {
+    const width=Math.min(330,this.viewportWidth-36);
+    if(this.keyboardOpen&&this.viewportWidth>=840)return 24;
+    if(this.viewportWidth>=840)return this.anchorX<.5?
+      Math.min(this.viewportWidth-width-24,Math.max(this.viewportWidth*.66,this.anchorX*this.viewportWidth+100)):
+      28;
+    return Math.max(18,Math.min(this.viewportWidth-width-18,this.anchorX*this.viewportWidth-width/2));
+  }
+  private directory():string{return this.context.filesDir+'/models/'+this.assetId;}
+  private command(action:string,tool:string='',preset:string='',strength:number=0,maskBase64:string=''):void{
+    this.editCommand=JSON.stringify({action,tool,preset,strength,maskBase64,serial:++this.serial});
+  }
+  private savedPath():string{return this.directory()+'/portrait.edit.json';}
+  private maskPath():string{return this.directory()+'/portrait.edit.mask';}
+  private historyPath():string{return this.directory()+'/portrait.edit.v2.json';}
+  private checksum(bytes:Uint8Array):string {
+    let value=2166136261;
+    for(let i=0;i<bytes.length;i++)value=Math.imul(value^bytes[i],16777619)>>>0;
+    return value.toString(16);
+  }
+  private restore():void {
+    if(!/^[a-f0-9]{32}$/.test(this.assetId)){console.warn('SELF_GS_EDIT_RESTORE invalid_asset');return;}
+    try{
+      if(fs.accessSync(this.historyPath())){
+        const history=JSON.parse(fs.readTextSync(this.historyPath())) as GsHistory;
+        if(history.schemaVersion!==2||history.assetId!==this.assetId||history.assetBytes!==fs.statSync(this.gaussianPath).size||
+          !Array.isArray(history.groups)||history.groups.length>12||
+          history.groups.some((group:GsGroup)=>!Array.isArray(group.layers)||group.layers.length<1||group.layers.length>4||
+            group.groupId.length>80||group.label.length>100)||
+          history.groups.reduce((n:number,group:GsGroup)=>n+group.layers.length,0)>16)throw new Error('history_mismatch');
+        const decoder=new util.Base64Helper();
+        for(const group of history.groups)for(const layer of group.layers){
+          const bytes=decoder.decodeSync(layer.maskBase64);
+          if(bytes.length!==history.splatCount||this.checksum(bytes)!==layer.maskChecksum||
+            layer.layerId.length>100||layer.regionId.length>100||
+            !['rose','terracotta'].includes(layer.preset)||![.18,.32,.5].includes(layer.strength))throw new Error('layer_mismatch');
+        }
+        this.history=history;this.applied=history.groups.length>0;this.refreshHistoryDisplay();
+        this.renderHistory(history);console.info('SELF_GS_EDIT_RESTORE_V2 '+history.groups.length);return;
+      }
+      if(!fs.accessSync(this.savedPath())||!fs.accessSync(this.maskPath())){console.info('SELF_GS_EDIT_RESTORE no_recipe');return;}
+      const saved=JSON.parse(fs.readTextSync(this.savedPath())) as SavedGsEdit;
+      const bytes=this.assets.readFile(this.maskPath());
+      if(saved.schemaVersion!==1||saved.assetId!==this.assetId||
+        saved.assetBytes!==fs.statSync(this.gaussianPath).size||
+        saved.splatCount!==bytes.length||bytes.length<80||saved.maskChecksum!==this.checksum(bytes)||
+        !['rose','terracotta'].includes(saved.preset)||![.18,.32,.5].includes(saved.strength)){
+        console.warn('SELF_GS_EDIT_RESTORE recipe_mismatch');return;
+      }
+      const layer:GsLayer={layerId:'legacy-1',regionId:'gs-selected-1',preset:saved.preset,strength:saved.strength,
+        maskChecksum:saved.maskChecksum,maskBase64:new util.Base64Helper().encodeToStringSync(bytes)};
+      this.history={schemaVersion:2,assetId:this.assetId,assetBytes:saved.assetBytes,splatCount:saved.splatCount,
+        groups:[{groupId:'legacy',label:this.label('原有试色','Previous tint'),createdAt:0,layers:[layer]}]};
+      this.applied=true;this.refreshHistoryDisplay();this.renderHistory(this.history);
+      console.info('SELF_GS_EDIT_RESTORE accepted '+bytes.length);
+    }catch(error){console.warn('SELF_GS_EDIT_RESTORE_FAILED '+String(error));}
+  }
+  private save():void {
+    if(!this.history)throw new Error('edit_state_missing');
+    this.assets.writeAtomic(this.historyPath(),JSON.stringify(this.history));
+    console.info('SELF_GS_EDIT_SAVED_V2 '+this.history.groups.length);
+  }
+  private emptyHistory():GsHistory{return {schemaVersion:2,assetId:this.assetId,
+    assetBytes:fs.statSync(this.gaussianPath).size,splatCount:0,groups:[]};}
+  private refreshHistoryDisplay():void{
+    this.historyDisplay=(this.history?.groups||[]).map((group:GsGroup)=>{
+      const items:GsHistoryItem[]=group.layers.map((layer:GsLayer)=>{
+        const item:GsHistoryItem={layerId:layer.layerId,preset:layer.preset};return item;
+      });
+      const display:GsHistoryDisplay={groupId:group.groupId,label:group.label,items};return display;
+    });
+    this.historyRevision++;
+  }
+  private renderHistory(history:GsHistory,filter:string=''):void{
+    const layers:GsRenderLayer[]=[];
+    for(const group of history.groups)for(const layer of group.layers){
+      if(filter&&filter!==group.groupId&&filter!==layer.layerId)continue;
+      const renderLayer:GsRenderLayer={maskBase64:layer.maskBase64,preset:layer.preset,strength:layer.strength};
+      layers.push(renderLayer);
+    }
+    this.editCommand=JSON.stringify({action:'SET_HISTORY',layers,serial:++this.serial});
+  }
+  private stageHistory(next:GsHistory):void{
+    this.pendingHistory=next;this.renderHistory(next);
+  }
+  private editFailed(message:string):void{
+    this.waiting=false;
+    if(this.pendingHistory){this.pendingHistory=undefined;if(this.history)this.renderHistory(this.history);}
+    this.pendingComparison=undefined;
+    this.responseText=message;this.bubble=true;
+  }
+  private viewerReady():void{
+    this.ready=true;this.restore();this.onReady();
+  }
+  private selectedRegion(info:GsSelection,mask:ArrayBuffer):void{
+    console.info('SELF_GS_SELECTION_READY '+info.count+' '+info.total+' '+mask.byteLength);
+    this.planner.cancel();this.pending=undefined;this.pendingSnapshot=undefined;
+    if(this.selections.length>=4||this.selections.some((item:SelectedGsRegion)=>item.info.regionId===info.regionId))return;
+    this.selections.push({info,mask});this.selectionCount=this.selections.length;
+    this.selected=true;this.candidateReady=false;
+    this.tool='move';this.anchorX=Math.max(.1,Math.min(.9,info.x));this.anchorY=Math.max(.15,Math.min(.7,info.y));
+    const firstPrompts=['这一处会跟着你的立体面容。还想圈别处，或聊聊这里？',
+      '光落在这里了。想试一点变化，还是先看看？','这一处已经记下。可以继续圈，也可以告诉我你的想法。'];
+    this.bubble=true;this.responseText=this.selections.length===1?
+      this.label(firstPrompts[(this.history?.groups.length||0)%firstPrompts.length],
+        'This area follows your portrait. Circle another, or tell me about this one.'):
+      this.label('已经圈出'+this.selections.length+'处。可以一起告诉我每处想试的变化。',
+        this.selections.length+' areas selected. Tell me what you would like for each.');
+    this.question='';this.choices=[];this.revision++;this.onInteraction();
+  }
+  private toggleTool():void{
+    if(!this.ready||this.waiting)return;
+    if(this.comparing)this.previewHistory('');
+    this.tool=this.tool==='move'?'lasso':'move';
+    this.command('TOOL',this.tool);
+    if(this.tool==='lasso'){this.bubble=false;this.responseText=this.label('顺着想看的地方画一圈。','Circle an area you want to explore.');}
+    this.onInteraction();
+  }
+  private submit(value:string):void{
+    const text=value.trim();
+    if(!text||this.waiting)return;
+    if(!this.selected){this.responseText=this.label('先轻轻圈出面容上的一处吧。','First, circle an area on your portrait.');return;}
+    this.requestText=text;this.input='';this.pending=undefined;this.pendingSnapshot=undefined;this.candidateReady=false;this.question='';this.choices=[];
+    if(!this.cloudEnabled){this.consentOffer=true;return;}
+    this.capture();
+  }
+  private capture():void{
+    this.consentOffer=false;this.waiting=true;
+    this.responseText=this.label('我陪你看看这些地方…','Let me look at these areas with you…');
+    this.command('CAPTURE');
+  }
+  private async captured(clean:ArrayBuffer,annotated:ArrayBuffer,width:number,height:number):Promise<void>{
+    if(!this.waiting||this.selections.length===0)return;
+    const rev=this.revision;
+    const id='gs-'+Date.now()+'-'+Math.floor(Math.random()*1000000);
+    const snapshot:CloudSnapshot={
+      schemaVersion:1,requestId:id,snapshotId:'snapshot-'+id,assetId:this.assetId,assetVersion:this.assetId,
+      textureVersion:'gs-original-v1',sceneRevision:rev,regionVersion:rev,viewRevision:0,
+      view:{yaw:0,pitch:0,distance:1,panX:0,panY:0},userText:this.requestText,
+      regions:this.selections.map((item:SelectedGsRegion,index:number)=>{
+        const region:CloudRegion={regionId:item.info.regionId,
+          description:'用户在个人立体面容上手工圈定的第'+(index+1)+'处可见表面；只支持数字颜色预览，不代表品牌产品实测效果',semantic:'manual'};
+        return region;
+      }),
+      layers:[],
+      protectedRegionIds:[],productContextIds:[],uploadAuthorized:true,
+      imageWidth:width,imageHeight:height,annotatedRegionId:this.selections.length===1?this.selections[0].info.regionId:'',
+      annotatedRegionIds:this.selections.map((item:SelectedGsRegion)=>item.info.regionId),
+      dialogue:this.dialogue.slice(-3),responseLanguage:this.language
+    };
+    this.planner.endpoint=this.backendAddress.trim();this.planner.token=this.backendToken.trim();
+    try{
+      const reply=await this.planner.propose(snapshot,[clean,annotated]);
+      if(!this.waiting||this.revision!==rev)return;
+      console.info('SELF_GS_PLAN '+reply.plan.decision+' '+reply.modelEvidence.returnedModel);
+      this.responseText='✧ '+reply.plan.shortMessage;this.question=reply.plan.question;this.choices=reply.plan.choices||[];
+      this.dialogue.push({userText:this.requestText,reply:reply.plan.question||reply.plan.shortMessage,choices:this.choices.slice()});
+      this.dialogue=this.dialogue.slice(-3);
+      if(reply.plan.decision==='edit'){this.pending=reply;this.pendingSnapshot=snapshot;this.candidateReady=true;}
+    }catch(error){
+      console.warn('SELF_GS_PLAN_FAILED '+String(error));
+      this.responseText=/olay|玉兰油|小白瓶|超红瓶|护肤|产品/i.test(this.requestText)?
+        this.label('这款产品还没有核验过的上脸标定，不能把普通试色当作它的真实效果。','This product has no verified appearance calibration, so a digital tint cannot stand in for its real effect.'):
+        this.label('这次还没能准备好建议，面容仍保持原样。','I could not prepare a suggestion this time. Your portrait is unchanged.');
+    }finally{this.waiting=false;}
+  }
+  private confirm():void{
+    const reply=this.pending, snapshot=this.pendingSnapshot;
+    if(!reply||!snapshot||snapshot.sceneRevision!==this.revision||this.selections.length===0)return;
+    const operations=reply.plan.operations;
+    if(operations.length<1||operations.length>4||operations.some(op=>op.operation!=='set_digital_tint'||op.productProfileId||
+      !this.selections.some((item:SelectedGsRegion)=>item.info.regionId===op.regionId)))return;
+    const old=this.history||this.emptyHistory();
+    if(old.groups.length>=12||old.groups.reduce((n:number,group:GsGroup)=>n+group.layers.length,0)+operations.length>16){
+      this.responseText=this.label('这颗星辰的变化记录已满；可以先整理旧记录。','This portrait has reached its edit history limit.');return;
+    }
+    const groupId='group-'+Date.now();
+    const layers:GsLayer[]=operations.map((op,index:number)=>{
+      const item=this.selections.find((selected:SelectedGsRegion)=>selected.info.regionId===op.regionId) as SelectedGsRegion;
+      const bytes=new Uint8Array(item.mask);
+      const layer:GsLayer={layerId:groupId+'-'+index,regionId:op.regionId,preset:op.presetId,
+        strength:PlannerClient.strength(op.intensityLevel),maskChecksum:this.checksum(bytes),
+        maskBase64:new util.Base64Helper().encodeToStringSync(bytes)};
+      return layer;
+    });
+    const group:GsGroup={groupId,label:this.requestText.slice(0,28),createdAt:Date.now(),layers};
+    this.stageHistory({schemaVersion:2,assetId:old.assetId,assetBytes:old.assetBytes,
+      splatCount:this.selections[0].mask.byteLength,groups:old.groups.concat([group])});
+    this.pending=undefined;this.pendingSnapshot=undefined;this.candidateReady=false;
+  }
+  private appliedResult(action:string):void{
+    try{
+      if(action!=='SET_HISTORY')return;
+      if(this.pendingHistory){
+        const previous=this.history;
+        this.history=this.pendingHistory;this.pendingHistory=undefined;
+        try{this.save();}
+        catch(error){this.history=previous;if(previous)this.renderHistory(previous);throw new Error(String(error));}
+        this.applied=this.history.groups.length>0;this.comparing=false;this.comparisonTarget='';this.refreshHistoryDisplay();
+        this.selections=[];this.selectionCount=0;this.selected=false;
+        this.command('CLEAR_SELECTION');this.revision++;
+        this.responseText=this.label('这组变化已留在你的星辰里。转动看看，也可以逐项对比。',
+          'These changes are saved with your portrait. Turn and compare each one.');
+      }else if(this.pendingComparison!==undefined){
+        this.comparisonTarget=this.pendingComparison;this.comparing=!!this.comparisonTarget;
+        this.pendingComparison=undefined;
+      }
+      console.info('SELF_GS_HISTORY_APPLIED '+this.history?.groups.length);
+    }catch(error){this.pendingHistory=undefined;this.responseText=this.label('变化未能稳妥保存，已回到上一次记录。','Could not save this change; the previous history is restored.');console.warn('SELF_GS_EDIT_SAVE_FAILED '+String(error));}
+  }
+  private undo():void{
+    this.planner.cancel();this.waiting=false;this.candidateReady=false;this.pending=undefined;
+    if(this.history&&this.history.groups.length){this.deleteGroup(this.history.groups[this.history.groups.length-1].groupId);}
+    else this.responseText=this.label('现在仍是原来的模样。','Your portrait is still unchanged.');
+  }
+  private compare():void{
+    if(!this.applied||this.waiting)return;
+    this.previewHistory(this.comparing?'':'original');
+  }
+  private previewHistory(target:string):void{
+    if(!this.history||this.pendingHistory)return;
+    this.pendingComparison=target;
+    this.renderHistory(this.history,target==='original'?'none':target);
+  }
+  private deleteGroup(id:string):void{
+    if(!this.history||this.pendingHistory)return;
+    this.stageHistory({schemaVersion:2,assetId:this.history.assetId,assetBytes:this.history.assetBytes,
+      splatCount:this.history.splatCount,groups:this.history.groups.filter((group:GsGroup)=>group.groupId!==id)});
+  }
+  private deleteLayer(id:string):void{
+    if(!this.history||this.pendingHistory)return;
+    const groups=this.history.groups.map((group:GsGroup)=>{
+      const revised:GsGroup={groupId:group.groupId,label:group.label,createdAt:group.createdAt,
+        layers:group.layers.filter((layer:GsLayer)=>layer.layerId!==id)};return revised;
+    }).filter((group:GsGroup)=>group.layers.length>0);
+    this.stageHistory({schemaVersion:2,assetId:this.history.assetId,assetBytes:this.history.assetBytes,
+      splatCount:this.history.splatCount,groups});
+  }
+  private clearSelection():void{
+    this.planner.cancel();this.pending=undefined;this.pendingSnapshot=undefined;this.candidateReady=false;
+    this.selections=[];this.selectionCount=0;this.selected=false;
+    this.command('CLEAR_SELECTION');this.bubble=false;this.revision++;
+  }
+  aboutToDisappear():void{this.planner.cancel();}
+
+  build(){
+    Stack(){
+      GaussianPortraitSurface({gaussianPath:this.gaussianPath,viewPath:this.viewPath,editCommand:this.editCommand,
+        onReady:()=>this.viewerReady(),onFailure:(message:string)=>{this.waiting=false;this.onFailure(message);},
+        onEditFailure:(message:string)=>this.editFailed(message),
+        onInteraction:()=>this.onInteraction(),
+        onSelection:(info:GsSelection,mask:ArrayBuffer)=>this.selectedRegion(info,mask),
+        onCapture:(clean:ArrayBuffer,annotated:ArrayBuffer,width:number,height:number)=>{this.captured(clean,annotated,width,height);},
+        onApplied:(action:string)=>this.appliedResult(action)}).width('100%').height('100%')
+      if(this.bubble){
+        Column({space:8}){
+          Row(){Text('✦ SELF').fontSize(12).letterSpacing(2).fontColor('#BFD8F3').layoutWeight(1);
+            Button('×').fontSize(18).fontColor('#DCEAFF').backgroundColor('#00000000').width(30).height(30).onClick(()=>this.bubble=false)}
+          Text(this.responseText).fontSize(15).lineHeight(22).fontColor('#F1F5FF').maxLines(3)
+          if(this.candidateReady){Text(this.label('✧ 数字预览 · '+this.selectionCount+' 处 · 非产品实测效果',
+            '✧ Digital preview · '+this.selectionCount+' areas · not a product effect'))
+            .fontSize(11).fontColor('#B9CDE4')}
+          if(this.question){Text(this.question).fontSize(14).fontColor('#DDEAFF').maxLines(2)}
+          if(this.choices.length>0){Row({space:7}){ForEach(this.choices,(choice:string)=>{
+            Button(choice).fontSize(12).fontColor('#EAF3FF').backgroundColor('#344C68AA').borderRadius(15).onClick(()=>this.submit(choice))
+          },(choice:string)=>choice)}}
+          if(this.consentOffer){
+            Text(this.label('这次会发送当前静态模型画面给 DeepSeek；原模型不上传。','This sends the current still view to DeepSeek. The model file stays here.'))
+              .fontSize(12).fontColor('#BED0E6').maxLines(3)
+            Row({space:8}){
+              Button(this.label('允许这次发送','Send this view')).fontSize(13).fontColor('#F5F8FF').backgroundColor('#496581').borderRadius(17)
+                .onClick(()=>{this.onEnableCloud();this.capture();})
+              Button(this.label('先不发送','Not now')).fontSize(13).fontColor('#D2E1F1').backgroundColor('#253B54').borderRadius(17)
+                .onClick(()=>{this.consentOffer=false;this.responseText=this.label('好，画面留在这里。','Okay. The portrait stays here.');})
+            }
+          }else{
+            TextInput({text:this.input,placeholder:this.label(this.selectionCount>1?'例如：第一处淡一些，第二处暖一点':'想对这里说些什么？',
+              this.selectionCount>1?'For example: softer on one, warmer on two':'What would you like to try?')})
+              .fontSize(14).fontColor('#F4F7FF').placeholderColor('#AFC2D7').backgroundColor('#233A55DD')
+              .borderRadius(17).height(42).onChange((value:string)=>this.input=value)
+              .onFocus(()=>this.keyboardOpen=true).onBlur(()=>this.keyboardOpen=false)
+            Row({space:8}){
+              Button(this.waiting?this.label('在想…','Thinking…'):this.label('发送','Send')).enabled(!this.waiting)
+                .fontSize(13).fontColor('#F5F8FF').backgroundColor('#496581').borderRadius(17).onClick(()=>this.submit(this.input))
+              if(this.candidateReady){Button(this.label('试在面容上','Preview on portrait')).fontSize(13).fontColor('#F5F8FF')
+                .backgroundColor('#6879A0').borderRadius(17).onClick(()=>this.confirm())}
+              if(this.applied){Button(this.label('恢复原样','Undo')).fontSize(13).fontColor('#DCEAFF')
+                .backgroundColor('#283F59').borderRadius(17).onClick(()=>this.undo())}
+            }
+            if(this.selectionCount>0){Row({space:8}){
+              if(this.selectionCount<4){Button(this.label('再圈一处','Circle another')).fontSize(12).fontColor('#DCEAFF')
+                .backgroundColor('#243D59').borderRadius(15).onClick(()=>this.toggleTool())}
+              Button(this.label('重选','Clear selections')).fontSize(12).fontColor('#DCEAFF')
+                .backgroundColor('#243D59').borderRadius(15).onClick(()=>this.clearSelection())
+            }}
+          }
+        }.padding(14).width(Math.min(330,this.viewportWidth-36)).backgroundColor('#D91A2D47')
+          .border({width:1,color:'#657F9D'}).borderRadius(23)
+          .position({x:this.bubbleLeft(),y:Math.max(110,Math.min(this.viewportHeight-(this.keyboardOpen?680:470),this.anchorY*this.viewportHeight-92))})
+          .transition({opacity:0,scale:{x:.92,y:.92},translate:{y:12}}).zIndex(8)
+      }
+      if(this.ready){
+        Button(this.label('✧ 变化记录','✧ Changes')).id('personal-gs-history').height(42).fontSize(12)
+          .fontColor('#ECF3FF').backgroundColor('#1C334DC9').border({width:1,color:'#718EAF'})
+          .borderRadius(21).onClick(()=>{this.historyOpen=!this.historyOpen;this.bubble=false;})
+          .position({x:Math.max(16,this.viewportWidth-135),y:92}).zIndex(7)
+      }
+      if(this.historyOpen){
+        Column({space:10}){
+          Row(){Text(this.label('这颗星辰的变化','Changes on this portrait')).fontSize(15).fontColor('#F1F6FF').layoutWeight(1)
+            Button('×').fontSize(18).fontColor('#EAF3FF').backgroundColor('#00000000').width(28).height(28)
+              .onClick(()=>{this.historyOpen=false;this.previewHistory('');})}
+          if(this.historyDisplay.length===0){Text(this.label('这里还没有新的变化','No changes yet')).fontSize(13).fontColor('#BBD0E6')}
+          Scroll(){Column({space:10}){
+            ForEach(this.historyDisplay,(group:GsHistoryDisplay)=>{
+              Column({space:6}){
+                Text(group.label||this.label('一次尝试','One exploration')).fontSize(13).fontColor('#F1F6FF').maxLines(2)
+                Row({space:7}){
+                  Button(this.label('看这组','Compare group')).fontSize(11).fontColor('#EAF3FF')
+                    .backgroundColor('#385773').borderRadius(16).onClick(()=>this.previewHistory(group.groupId))
+                  Button(this.label('整组回退','Remove group')).fontSize(11).fontColor('#EAF3FF')
+                    .backgroundColor('#385773').borderRadius(16).onClick(()=>this.deleteGroup(group.groupId))
+                }
+                ForEach(group.items,(item:GsHistoryItem,index:number)=>{
+                  Row({space:6}){
+                    Text((index+1)+' · '+(item.preset==='rose'?this.label('柔玫瑰','Muted pink'):this.label('暖陶棕','Warm clay')))
+                      .fontSize(12).fontColor('#C8D9ED').layoutWeight(1)
+                    Button('◉').fontSize(13).fontColor('#EAF3FF').backgroundColor('#385773').borderRadius(18)
+                      .accessibilityText(this.label('单项对比','Compare layer'))
+                      .onClick(()=>this.previewHistory(item.layerId))
+                    Button('×').fontSize(14).fontColor('#EAF3FF').backgroundColor('#385773').borderRadius(18)
+                      .accessibilityText(this.label('移除这一项','Remove layer'))
+                      .onClick(()=>this.deleteLayer(item.layerId))
+                  }
+                },(item:GsHistoryItem)=>item.layerId)
+              }.padding(10).backgroundColor('#243C56CC').borderRadius(16)
+            },(group:GsHistoryDisplay)=>group.groupId)
+          }}.height(Math.min(390,this.viewportHeight*.53))
+          if(this.applied){Button(this.label('看全部变化','Show all')).fontSize(12).fontColor('#EAF3FF')
+            .backgroundColor('#385773').borderRadius(18).onClick(()=>this.previewHistory(''))}
+        }.padding(14).width(Math.min(340,this.viewportWidth-32)).backgroundColor('#132940ED')
+          .border({width:1,color:'#6285A8'}).borderRadius(22)
+          .position({x:Math.max(16,this.viewportWidth-Math.min(340,this.viewportWidth-32)-16),y:138}).zIndex(9)
+      }
+      if(this.ready){
+        if(this.applied){
+          Button(this.comparing?this.label('看变化','Preview'):this.label('看原样','Original')).id('personal-gs-compare')
+            .height(46).padding({left:12,right:12}).fontSize(12).fontColor('#EFF6FF')
+            .backgroundColor('#263E5BBD').border({width:1,color:'#94AEC9'}).borderRadius(23)
+            .onClick(()=>this.compare())
+            .position({x:Math.max(18,this.viewportWidth-290),y:Math.max(150,this.viewportHeight-220)}).zIndex(7)
+        }
+        if(this.applied&&!this.bubble){
+          Button('↶').id('personal-gs-undo').height(46).width(46).fontSize(24).fontColor('#EFF6FF')
+            .backgroundColor('#263E5BBD').border({width:1,color:'#94AEC9'}).borderRadius(23)
+            .accessibilityText(this.label('恢复原样','Undo')).onClick(()=>this.undo())
+            .position({x:Math.max(18,this.viewportWidth-208),y:Math.max(150,this.viewportHeight-220)}).zIndex(7)
+        }
+        Button(this.tool==='move'?this.label('✎  圈选','✎  Circle'):this.label('✦  移动','✦  Move'))
+          .id('personal-gs-tool').height(46).padding({left:16,right:16}).fontSize(14).fontColor('#EFF6FF')
+          .backgroundColor(this.tool==='lasso'?'#596E91CB':'#263E5BBD')
+          .border({width:1,color:'#94AEC9'}).borderRadius(23)
+          .stateStyles({pressed:{.scale({x:.94,y:.94})},normal:{.scale({x:1,y:1})}})
+          .animation({duration:180,curve:Curve.EaseOut}).onClick(()=>this.toggleTool())
+          .position({x:Math.max(18,this.viewportWidth-144),y:Math.max(150,this.viewportHeight-220)}).zIndex(7)
+      }
+    }.width('100%').height('100%')
+  }
+}

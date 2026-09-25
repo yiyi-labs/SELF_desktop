@@ -46,6 +46,7 @@ class Snapshot(StrictModel):
     imageWidth: int = Field(default=768, ge=8, le=2048)
     imageHeight: int = Field(default=1024, ge=8, le=2048)
     annotatedRegionId: str = Field(default="", max_length=100)
+    annotatedRegionIds: list[str] = Field(default_factory=list, max_length=4)
 
 class Operation(StrictModel):
     operation: Literal["set_digital_tint", "set_effect_level", "remove_effect"]
@@ -58,7 +59,7 @@ class Operation(StrictModel):
 class Plan(StrictModel):
     decision: Literal["edit", "explain", "clarify", "support"]
     shortMessage: str = Field(min_length=1, max_length=400)
-    operations: list[Operation] = Field(max_length=1)
+    operations: list[Operation] = Field(max_length=4)
     explanationRefs: list[str] = Field(max_length=3, description="Only productId from supplied productInformation. Information only, not evidence of a calibrated effect. Without productInformation use [].")
     question: str = Field(max_length=200, description="Must be empty for edit/explain/support. Only decision=clarify may contain a question; a clarify plan must have operations=[]. Authorization confirmation is handled by the app, not this field.")
     choices: list[str] = Field(default_factory=list, max_length=3, description="Only for clarify: 2 or 3 short choices in responseLanguage answering ONE question, no numeric prefixes. Otherwise []. Never ask to choose a region when annotatedRegionId is already supplied.")
@@ -109,22 +110,30 @@ def validate_plan(plan: Plan, snapshot: Snapshot) -> Plan:
         raise ValueError('product_effect_not_calibrated')
     if plan.decision != "edit" and plan.operations:
         raise ValueError("non-edit operation")
-    if plan.decision == "edit" and len(plan.operations) != 1:
-        raise ValueError("one operation required")
+    if plan.decision == "edit" and not 1 <= len(plan.operations) <= 4:
+        raise ValueError("one to four operations required")
     if set(plan.explanationRefs) - allowed_refs(snapshot.userText,snapshot.productContextIds):
         raise ValueError("unregistered evidence")
     if plan.decision != "clarify" and plan.question:
         raise ValueError("unexpected question")
     regions = {r.regionId for r in snapshot.regions}
     layers = {r.layerId: r for r in snapshot.layers}
+    selected = snapshot.annotatedRegionIds or ([snapshot.annotatedRegionId] if snapshot.annotatedRegionId else [])
+    if len(selected) != len(set(selected)) or set(selected) - regions:
+        raise ValueError("invalid selected regions")
+    new_regions: set[str] = set()
     for op in plan.operations:
         selected_presets=[key for key,preset in PRESETS.items() if preset['displayName'] in snapshot.resolvedChoice or EN_PRESETS[key].lower() in snapshot.resolvedChoice.lower() or re.search(r'\b'+key+r'\b',snapshot.resolvedChoice,re.I)]
         if op.operation=='set_digital_tint' and len(selected_presets)==1 and op.presetId!=selected_presets[0]:
             raise ValueError('choice_preset_mismatch')
         if op.regionId not in regions:
             raise ValueError("unknown region")
-        if op.operation == 'set_digital_tint' and snapshot.annotatedRegionId and op.regionId != snapshot.annotatedRegionId:
+        if op.operation == 'set_digital_tint' and selected and op.regionId not in selected:
             raise ValueError('selected_region_mismatch')
+        if op.operation == 'set_digital_tint':
+            if op.regionId in new_regions:
+                raise ValueError('duplicate_region_operation')
+            new_regions.add(op.regionId)
         if op.productProfileId:
             raise ValueError("uncalibrated product")
         if op.operation == "set_digital_tint":

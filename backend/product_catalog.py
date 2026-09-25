@@ -1,5 +1,6 @@
 """Reviewed mainland channel facts. Unknown formulas must stay unknown."""
 import json
+import re
 from pathlib import Path
 
 CATALOG = json.loads((Path(__file__).resolve().parents[1] / 'shared/products/olay-cn-catalog.json').read_text(encoding='utf-8'))
@@ -24,4 +25,12 @@ def allowed_refs(user_text: str, context_ids: list[str] | None = None) -> set[st
 
 def requests_product_effect(user_text: str, context_ids: list[str] | None = None) -> bool:
     value=user_text.lower()
-    return any(term in value for term in ('olay','玉兰油','产品','护肤','小白瓶','超红瓶','黑管')) or bool(lookup(user_text,context_ids))
+    if any(term in value for term in ('olay','玉兰油','小白瓶','超红瓶','黑管')):
+        return True
+    # A request explicitly framed as generic digital colour is not a product
+    # effect merely because it says "not a product effect". A named product
+    # above never gains this exception.
+    generic = '通用数字试色' in value and re.search(r'(?:不是|非|不按|不根据).{0,8}(?:产品|护肤)',value)
+    if generic:
+        return False
+    return any(term in value for term in ('产品','护肤')) or bool(lookup(user_text,context_ids))

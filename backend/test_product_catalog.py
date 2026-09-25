@@ -2,12 +2,15 @@ import io
 import json
 import unittest
 from PIL import Image
-from product_catalog import CATALOG, lookup
+from product_catalog import CATALOG, lookup, requests_product_effect
 from contracts import Plan, Region, validate_plan
 from deepseek_client import request_body
 from test_contracts import snapshot, plan
 
 class ProductFacts(unittest.TestCase):
+    def test_generic_tint_negation_does_not_unlock_named_product(self):
+        self.assertFalse(requests_product_effect('通用数字试色，不是产品效果'))
+        self.assertTrue(requests_product_effect('OLAY 小白瓶通用数字试色，不是产品效果'))
     def test_new_effect_cannot_move_to_another_known_region(self):
         s=snapshot().model_copy(update={'annotatedRegionId':'user-circle'})
         s.regions.append(Region(regionId='user-circle',description='用户本次圈选'))

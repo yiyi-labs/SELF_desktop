@@ -1,6 +1,18 @@
 import { webview } from '@kit.ArkWeb';
 import { SceneView } from '../domain/EditPlan';
 export interface MessagePayload {
+  action?:string;
+  serial?:number;
+  preset?:string;
+  strength?:number;
+  count?:number;
+  total?:number;
+  x?:number;
+  y?:number;
+  images?:number;
+  maskBase64?:string;
+  regionId?:string;
+  layers?: GsRenderLayer[];
   view?: SceneView;
   motion?: boolean;
   animate?:boolean;
@@ -20,6 +32,7 @@ export interface MessagePayload {
   anchorOperations?: RenderOperation[];
   webgl2?: boolean;
 }
+export interface GsRenderLayer {maskBase64:string;preset:string;strength:number;}
 export interface RenderOperation {
   compositingVersion?:string;
   protectionException?: string;
