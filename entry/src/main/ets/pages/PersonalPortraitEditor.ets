@@ -76,6 +76,7 @@ export struct PersonalPortraitEditor {
   @State comparing:boolean=false;
   @State keyboardOpen:boolean=false;
   @State historyOpen:boolean=false;
+  @State historyPressed:boolean=false;
   @State libraryOpen:boolean=false;
   @State expandedCareGroup:string='';
   @State historyRevision:number=0;
@@ -385,8 +386,6 @@ export struct PersonalPortraitEditor {
                 .fontSize(13).fontColor('#F5F8FF').backgroundColor('#496581').borderRadius(17).onClick(()=>this.submit(this.input))
               if(this.candidateReady){Button(this.label('试在面容上','Preview on portrait')).fontSize(13).fontColor('#F5F8FF')
                 .backgroundColor('#6879A0').borderRadius(17).onClick(()=>this.confirm())}
-              if(this.applied){Button(this.label('恢复原样','Undo')).fontSize(13).fontColor('#DCEAFF')
-                .backgroundColor('#283F59').borderRadius(17).onClick(()=>this.undo())}
             }
             if(this.selectionCount>0){Row({space:8}){
               if(this.selectionCount<4){Button(this.label('再圈一处','Circle another')).fontSize(12).fontColor('#DCEAFF')
@@ -407,6 +406,15 @@ export struct PersonalPortraitEditor {
               Text(this.label('这颗星辰的变化','Changes on this portrait')).fontSize(18).fontWeight(FontWeight.Medium).fontColor('#F1F6FF')
               Text(this.label('轻轻展开，看看每一步','Open a moment to see more')).fontSize(11).fontColor('#A9C2DF')
             }.alignItems(HorizontalAlign.Start).padding({right:45})}
+            if(this.applied){ListItem(){Row({space:9}){
+              Button(this.comparing?this.label('看变化','Show changes'):this.label('看原样','Show original'))
+                .id('personal-gs-compare').fontSize(12).fontColor('#EAF2FF')
+                .backgroundColor('#385675B8').border({width:1,color:'#7697B7'}).borderRadius(17)
+                .onClick(()=>this.compare())
+              Button(this.label('撤回上一步','Undo last')).id('personal-gs-undo')
+                .fontSize(12).fontColor('#EAF2FF').backgroundColor('#385675B8')
+                .border({width:1,color:'#7697B7'}).borderRadius(17).onClick(()=>this.undo())
+            }.width('100%')}}
             if(this.historyDisplay.length===0){
               ListItem(){Text(this.label('这里还没有新的变化','No changes yet')).fontSize(13).fontColor('#BBD0E6').padding(12)}
             }
@@ -437,8 +445,7 @@ export struct PersonalPortraitEditor {
                       Text(this.label('✧ 养护小记','✧ Care notes')).fontSize(10).fontColor('#AFC9E3')
                     }.alignItems(HorizontalAlign.Start).layoutWeight(1)
                     Text(this.expandedCareGroup===group.groupId?'⌃':'⌄').fontSize(16).fontColor('#C6DDF4')
-                  }.padding({left:8,right:10,top:6,bottom:6}).width('100%').backgroundColor('#294760B9')
-                    .border({width:1,color:'#6588A6'}).borderRadius(15)
+                  }.padding({left:4,right:6,top:6,bottom:6}).width('100%')
                     .onClick(()=>this.getUIContext().animateTo({duration:210,curve:Curve.EaseOut},()=>{
                       this.expandedCareGroup=this.expandedCareGroup===group.groupId?'':group.groupId;}))
                   if(this.expandedCareGroup===group.groupId){
@@ -448,7 +455,8 @@ export struct PersonalPortraitEditor {
                       .fontSize(10).fontColor('#AFC6DE')
                   }
                 }else{
-                  Text(this.label('这次先留在数字光色里，没有硬配护理单品。','A digital colour exploration, with no forced product match.'))
+                  Text(this.label('这一步先留住光色；护理小记，等遇见合适的一款再写。',
+                    'This step keeps the colour; a care note can wait for the right match.'))
                     .fontSize(11).fontColor('#AFC5DB')
                 }
               }.padding(12).width('100%').backgroundColor('#29435CC9').border({width:1,color:'#7091B0'}).borderRadius(20)}
@@ -465,16 +473,27 @@ export struct PersonalPortraitEditor {
           .transition({opacity:0,scale:{x:.94,y:.94},translate:{y:12}}).zIndex(9)
       }
       if(this.ready&&!this.libraryOpen){
-        Button(this.label('✧  变化记录','✧  Changes')).id('personal-gs-history').height(46)
-          .padding({left:16,right:16}).fontSize(14).fontWeight(FontWeight.Medium).fontColor('#F3F8FF')
-          .backgroundColor(this.historyOpen?'#426183DD':'#263E5BCE').border({width:1,color:'#9AB9D5'})
-          .borderRadius(23).shadow({radius:8,color:'#416B92'})
-          .stateStyles({pressed:{.scale({x:.95,y:.95})},normal:{.scale({x:1,y:1})}})
-          .animation({duration:170,curve:Curve.EaseOut})
-          .onClick(()=>{this.getUIContext().animateTo({duration:210,curve:Curve.EaseOut},()=>{
-            this.historyOpen=!this.historyOpen;this.bubble=false;});})
-          .position({x:18,y:Math.max(96,this.viewportHeight-274)}).zIndex(7)
-        if(!this.libraryOpen){
+        if(!this.historyOpen){
+          Button({type:ButtonType.Circle,stateEffect:false}){
+            Stack(){
+              Circle().width(23).height(23).fill('#00000000').stroke('#D5E8FF').strokeWidth(1.4)
+              Circle().width(8).height(8).fill('#DDEEFF')
+              Circle().width(4).height(4).fill('#B8D4F3').position({x:31,y:11})
+            }.width(46).height(46)
+          }.id('personal-gs-history').width(46).height(46).borderRadius(23)
+            .backgroundColor(this.historyPressed?'#476B8DDD':'#263E5BC9')
+            .border({width:1,color:this.historyPressed?'#DFEFFF':'#8AA8C6'})
+            .shadow({radius:this.historyPressed?16:7,color:this.historyPressed?'#A7D6F1':'#355A7C'})
+            .scale({x:this.historyPressed?.93:1,y:this.historyPressed?.93:1})
+            .animation({duration:170,curve:Curve.EaseOut})
+            .accessibilityText(this.label('变化记录','Changes'))
+            .onTouch((event:TouchEvent)=>{this.historyPressed=event.type===TouchType.Down;})
+            .onClick(()=>{this.getUIContext().animateTo({duration:210,curve:Curve.EaseOut},()=>{
+              this.historyOpen=true;this.bubble=false;});})
+            .position({x:18,y:Math.max(120,Math.min(this.viewportHeight*.36,
+              this.viewportHeight-this.historyPanelHeight()-20))}).zIndex(7)
+        }
+        if(!this.historyOpen){
           Button(this.label('✦  护理星图','✦  Care atlas')).id('personal-olay-library').height(43)
             .padding({left:14,right:14}).fontSize(12).fontColor('#E8F2FF')
             .backgroundColor('#263E5BBD').border({width:1,color:'#8AA7C4'}).borderRadius(22)
@@ -482,26 +501,19 @@ export struct PersonalPortraitEditor {
               this.getUIContext().animateTo({duration:220,curve:Curve.EaseOut},()=>{this.libraryOpen=true;});})
             .position({x:18,y:Math.max(150,this.viewportHeight-220)}).zIndex(7)
         }
-        if(this.applied){
-          Button(this.comparing?this.label('看变化','Preview'):this.label('看原样','Original')).id('personal-gs-compare')
-            .height(46).padding({left:12,right:12}).fontSize(12).fontColor('#EFF6FF')
-            .backgroundColor('#263E5BBD').border({width:1,color:'#94AEC9'}).borderRadius(23)
-            .onClick(()=>this.compare())
-            .position({x:Math.max(18,this.viewportWidth-290),y:Math.max(150,this.viewportHeight-220)}).zIndex(7)
-        }
-        if(this.applied&&!this.bubble){
-          Button('↶').id('personal-gs-undo').height(46).width(46).fontSize(24).fontColor('#EFF6FF')
-            .backgroundColor('#263E5BBD').border({width:1,color:'#94AEC9'}).borderRadius(23)
-            .accessibilityText(this.label('恢复原样','Undo')).onClick(()=>this.undo())
-            .position({x:Math.max(18,this.viewportWidth-208),y:Math.max(150,this.viewportHeight-220)}).zIndex(7)
-        }
-        Button(this.tool==='move'?this.label('✎  圈选','✎  Circle'):this.label('✦  移动','✦  Move'))
-          .id('personal-gs-tool').height(46).padding({left:16,right:16}).fontSize(14).fontColor('#EFF6FF')
-          .backgroundColor(this.tool==='lasso'?'#596E91CB':'#263E5BBD')
-          .border({width:1,color:'#94AEC9'}).borderRadius(23)
+        Button(this.tool==='lasso'?this.label('◌  圈选','◌  Select'):this.label('✧  移动','✧  Move'))
+          .id('personal-gs-tool').width(108).height(48).fontSize(14).fontWeight(FontWeight.Medium)
+          .fontColor('#F6F3FF')
+          .linearGradient({angle:145,colors:this.tool==='lasso'?
+            [['#B595E4DA',0],['#684CAABF',.52],['#362C70D9',1]]:
+            [['#9A8ACCC9',0],['#514B90BA',.52],['#292D5FD9',1]]})
+          .border({width:1,color:this.tool==='lasso'?'#D7C0FF':'#B6ACDF'}).borderRadius(24)
+          .shadow({radius:12,color:'#644A9A88',offsetY:3})
           .stateStyles({pressed:{.scale({x:.94,y:.94})},normal:{.scale({x:1,y:1})}})
           .animation({duration:180,curve:Curve.EaseOut}).onClick(()=>this.toggleTool())
-          .position({x:Math.max(18,this.viewportWidth-144),y:Math.max(150,this.viewportHeight-220)}).zIndex(7)
+          .accessibilityText(this.tool==='lasso'?this.label('当前圈选，点按切换移动','Selection mode, tap to move'):
+            this.label('当前移动，点按切换圈选','Move mode, tap to select'))
+          .position({x:Math.max(18,this.viewportWidth-126),y:Math.max(150,this.viewportHeight-220)}).zIndex(7)
       }
       if(this.libraryOpen){
         OlayLibrary({language:this.language,viewportWidth:this.viewportWidth,viewportHeight:this.viewportHeight,
