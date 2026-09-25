@@ -2,7 +2,7 @@ import { common } from '@kit.AbilityKit';
 import { fileIo as fs } from '@kit.CoreFileKit';
 import { AssetStore } from './AssetStore';
 
-export interface PortraitStar { jobId:string; name:string; createdAt:number; previewPath:string; preview3dPath:string; }
+export interface PortraitStar { jobId:string; name:string; createdAt:number; previewPath:string; preview3dPath:string; scene3dPath:string; }
 export interface PortraitModelPaths { gaussian:string; view:string; }
 interface StoredStar { jobId:string; name:string; createdAt:number; }
 interface StarIndex { schemaVersion:number; stars:StoredStar[]; }
@@ -31,6 +31,7 @@ export class PortraitStarStore {
   }
   previewPath(id:string):string{return this.directory(id)+'/portrait.preview.png';}
   preview3dPath(id:string):string{return this.directory(id)+'/portrait.preview.gaussian.ply';}
+  scene3dPath(id:string):string{return this.directory(id)+'/portrait.scene-v3.gaussian.ply';}
   private complete(id:string):boolean{
     if(!this.validId(id))return false;
     const paths=this.modelPaths(id);
@@ -62,7 +63,8 @@ export class PortraitStarStore {
       .sort((a:StoredStar,b:StoredStar)=>b.createdAt-a.createdAt)
       .map((star:StoredStar)=>({jobId:star.jobId,name:star.name,createdAt:star.createdAt,
         previewPath:fs.accessSync(this.previewPath(star.jobId))?this.previewPath(star.jobId):'',
-        preview3dPath:fs.accessSync(this.preview3dPath(star.jobId))?this.preview3dPath(star.jobId):''} as PortraitStar));
+        preview3dPath:fs.accessSync(this.preview3dPath(star.jobId))?this.preview3dPath(star.jobId):'',
+        scene3dPath:fs.accessSync(this.scene3dPath(star.jobId))?this.scene3dPath(star.jobId):''} as PortraitStar));
   }
   upsert(id:string,name:string):void{
     if(!this.complete(id))throw new Error('星辰尚未完整保存');

@@ -1,25 +1,25 @@
 > hvigor [32mUP-TO-DATE :entry:default@PreBuild...  [39m
 > hvigor [32mFinished :entry:default@CreateModuleInfo... after 1 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@GenerateMetadata...  [39m
-> hvigor [32mFinished :entry:default@ConfigureCmake... after 49 ms [39m
+> hvigor [32mFinished :entry:default@ConfigureCmake... after 42 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@MergeProfile...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@CreateBuildProfile...  [39m
 > hvigor [32mFinished :entry:default@PreCheckSyscap... after 1 ms [39m
-> hvigor [32mFinished :entry:default@GeneratePkgSdkInfo... after 3 ms [39m
+> hvigor [32mFinished :entry:default@GeneratePkgSdkInfo... after 4 ms [39m
 > hvigor [32mFinished :entry:default@ProcessIntegratedHsp... after 1 ms [39m
-> hvigor [32mFinished :entry:default@BuildNativeWithCmake... after 34 ms [39m
+> hvigor [32mFinished :entry:default@BuildNativeWithCmake... after 37 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@MakePackInfo...  [39m
-> hvigor [32mFinished :entry:default@SyscapTransform... after 13 ms [39m
+> hvigor [32mFinished :entry:default@SyscapTransform... after 11 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@GeneratePkgContextInfo...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@ProcessProfile...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@ProcessRouterMap...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@ProcessShareConfig...  [39m
-> hvigor [32mFinished :entry:default@ProcessStartupConfig... after 3 ms [39m
+> hvigor [32mFinished :entry:default@ProcessStartupConfig... after 2 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@ProcessResource...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@GenerateLoaderJson...  [39m
-> hvigor [32mFinished :entry:default@CompileResource... after 285 ms [39m
-> hvigor [32mFinished :entry:default@BuildJS... after 6 ms [39m
-> hvigor [32mFinished :entry:default@BuildNativeWithNinja... after 137 ms [39m
+> hvigor [32mFinished :entry:default@CompileResource... after 274 ms [39m
+> hvigor [32mFinished :entry:default@BuildJS... after 7 ms [39m
+> hvigor [32mFinished :entry:default@BuildNativeWithNinja... after 95 ms [39m
 > hvigor [32mUP-TO-DATE :entry:default@ProcessLibs...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@DoNativeStrip...  [39m
 > hvigor [32mUP-TO-DATE :entry:default@CacheNativeLibs...  [39m
@@ -260,112 +260,148 @@ WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/Re
 WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:174:27
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:186:36
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:183:36
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:195:44
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:195:36
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:195:66
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:204:44
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:196:45
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:204:66
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:196:70
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:205:45
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:198:19
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:205:70
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:200:17
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:207:19
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:200:39
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:209:21
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:200:64
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:209:43
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:201:8
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:209:63
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:201:27
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:210:8
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:210:44
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:210:27
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:210:66
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:222:36
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:211:45
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:231:44
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:211:70
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:231:66
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:213:19
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:232:45
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:214:34
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:232:70
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:234:19
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:236:17
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:236:39
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:236:64
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:237:8
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:237:27
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:246:44
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:246:66
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:247:45
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:247:70
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:249:19
+ Function may throw exceptions. Special handling is required.
+
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:250:34
  The system capacity of this api 'createMd' is not supported on all devices
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:214:34
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:250:34
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:230:22
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:266:22
  The system capacity of this api 'update' is not supported on all devices
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:232:57
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:268:57
  The system capacity of this api 'digest' is not supported on all devices
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:234:18
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:270:18
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:234:40
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:270:40
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:234:65
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:270:65
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:235:8
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:271:8
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:235:27
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:271:27
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:244:36
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:280:36
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:256:44
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:292:44
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:256:66
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:292:66
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:257:45
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:293:45
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:257:70
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:293:70
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:259:19
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:295:19
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:261:21
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:297:21
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:261:43
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:297:43
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:261:68
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:297:68
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:262:8
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:298:8
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:262:27
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/ReconstructionTransportClient.ets:298:27
  Function may throw exceptions. Special handling is required.
 
 WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/CaptureViewCoverage.ets:35:8
@@ -609,25 +645,25 @@ WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/Ca
 WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/CaptureService.ets:35:69
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/PortraitStarStore.ets:37:15
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/PortraitStarStore.ets:38:15
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/PortraitStarStore.ets:37:46
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/PortraitStarStore.ets:38:46
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/PortraitStarStore.ets:38:10
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/PortraitStarStore.ets:39:10
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/PortraitStarStore.ets:38:50
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/PortraitStarStore.ets:39:50
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/PortraitStarStore.ets:41:12
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/PortraitStarStore.ets:42:12
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/PortraitStarStore.ets:54:11
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/PortraitStarStore.ets:55:11
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/PortraitStarStore.ets:55:26
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/PortraitStarStore.ets:56:26
  Function may throw exceptions. Special handling is required.
 
 WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/UiPreference.ets:19:17
@@ -642,68 +678,56 @@ WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/Ui
 WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/services/UiPreference.ets:20:83
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:225:19
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:230:19
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:254:58
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:259:58
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:254:84
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:259:84
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:262:12
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:267:12
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:368:75
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:406:75
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:368:95
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:406:95
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:475:11
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:514:11
  Function may throw exceptions. Special handling is required.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:662:70
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:702:70
  The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:662:112
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:702:112
  The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:689:50
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:729:50
  The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:850:39
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:896:39
  The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:850:57
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:896:57
  The 'stroke' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:859:41
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:940:43
  The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:863:43
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:977:47
  The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:866:41
- The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
- It is recommended to use apiAvailable to safeguard API compatibility.
-
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:866:59
- The 'stroke' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
- It is recommended to use apiAvailable to safeguard API compatibility.
-
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:886:47
- The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
- It is recommended to use apiAvailable to safeguard API compatibility.
-
-WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:973:70
+WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/SelfMirrorPage.ets:1047:70
  The 'fill' API is supported since SDK version 26.0.0. However, the current compatible SDK version is 5.1.1(19).
  It is recommended to use apiAvailable to safeguard API compatibility.
 
@@ -720,14 +744,14 @@ WARN: ArkTS:WARN File: D:/STUDY/College/mine/olay/entry/src/main/ets/pages/Nativ
  Function may throw exceptions. Special handling is required.
 
 
-> hvigor [32mFinished :entry:default@CompileArkTS... after 6 s 92 ms [39m
+> hvigor [32mFinished :entry:default@CompileArkTS... after 6 s 793 ms [39m
 > hvigor [32mFinished :entry:default@GeneratePkgModuleJson... after 4 ms [39m
 > hvigor [32mFinished :entry:default@ProcessCompiledResources... after 1 ms [39m
-> hvigor [32mFinished :entry:default@PackageHap... after 729 ms [39m
-> hvigor [32mFinished :entry:default@PackingCheck... after 11 ms [39m
-> hvigor [32mFinished :entry:default@SignHap... after 9 s 642 ms [39m
-> hvigor [32mFinished :entry:default@CollectDebugSymbol... after 1 ms [39m
+> hvigor [32mFinished :entry:default@PackageHap... after 916 ms [39m
+> hvigor [32mFinished :entry:default@PackingCheck... after 12 ms [39m
+> hvigor [32mFinished :entry:default@SignHap... after 9 s 664 ms [39m
+> hvigor [32mFinished :entry:default@CollectDebugSymbol... after 2 ms [39m
 > hvigor [32mFinished :entry:assembleHap... after 1 ms [39m
-> hvigor [32mBUILD SUCCESSFUL in 23 s 135 ms [39m
+> hvigor [32mBUILD SUCCESSFUL in 24 s 99 ms [39m
 
 33 tasks in total: 19 executed, 14 up-to-date

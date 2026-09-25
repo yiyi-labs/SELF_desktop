@@ -173,6 +173,42 @@ export class ReconstructionTransportClient {
     catch(error){fs.closeSync(file);if(fs.accessSync(temp))fs.unlinkSync(temp);throw new Error(String(error));}
     fs.closeSync(file);fs.renameSync(temp,path);return path;
   }
+  async downloadScene3d(jobId:string,filesDir:string):Promise<string>{
+    if(!/^[a-f0-9]{32}$/.test(jobId))throw new Error('星辰编号无效');
+    let job=await this.status(jobId);
+    if(job.state!=='gaussian_ready'&&job.state!=='complete')throw new Error('星辰立体场景尚未就绪');
+    if(job.assets?.scene3d?.file!=='portrait.scene-v3.gaussian.ply'){
+      const prepare=http.createHttp();
+      try{
+        const result=await prepare.request(this.url('/jobs/'+jobId+'/scene-preview'),{
+          method:http.RequestMethod.POST,header:this.headers(),expectDataType:http.HttpDataType.STRING,
+          connectTimeout:10000,readTimeout:60000,usingCache:false});
+        if(result.responseCode!==200)throw new Error('星辰场景预览暂不可用');
+      }finally{prepare.destroy();}
+      job=await this.status(jobId);
+    }
+    const asset=job.assets?.scene3d;
+    if(!asset||!Number.isInteger(asset.bytes)||asset.bytes<4096||asset.bytes>12*1024*1024||
+      !/^[a-f0-9]{64}$/.test(asset.sha256))throw new Error('星辰场景预览校验信息无效');
+    const request=http.createHttp();let bytes:ArrayBuffer;
+    try{
+      const response=await request.request(this.url('/jobs/'+jobId+'/assets/scene3d'),{
+        method:http.RequestMethod.GET,header:this.headers(),expectDataType:http.HttpDataType.ARRAY_BUFFER,
+        connectTimeout:10000,readTimeout:45000,usingCache:false});
+      if(response.responseCode!==200)throw new Error('星辰场景预览下载失败');
+      bytes=response.result as ArrayBuffer;
+    }finally{request.destroy();}
+    const header=new Uint8Array(bytes);
+    if(bytes.byteLength!==asset.bytes||header[0]!==112||header[1]!==108||header[2]!==121||header[3]!==10||
+      await this.sha256(bytes)!==asset.sha256)throw new Error('星辰场景预览校验失败');
+    const models=filesDir+'/models';if(!fs.accessSync(models))fs.mkdirSync(models);
+    const directory=models+'/'+jobId;if(!fs.accessSync(directory))fs.mkdirSync(directory);
+    const path=directory+'/portrait.scene-v3.gaussian.ply',temp=path+'.tmp';
+    const file=fs.openSync(temp,fs.OpenMode.CREATE|fs.OpenMode.READ_WRITE|fs.OpenMode.TRUNC);
+    try{if(fs.writeSync(file.fd,bytes)!==bytes.byteLength)throw new Error('星辰场景预览写入不完整');fs.fsyncSync(file.fd);}
+    catch(error){fs.closeSync(file);if(fs.accessSync(temp))fs.unlinkSync(temp);throw new Error(String(error));}
+    fs.closeSync(file);fs.renameSync(temp,path);return path;
+  }
   /** Download only a completed, hash-matched GLB into app-private fixed storage. */
   async downloadMesh(jobId:string,filesDir:string):Promise<string>{
     if(!/^[a-f0-9]{32}$/.test(jobId))throw new Error('建模任务编号无效');

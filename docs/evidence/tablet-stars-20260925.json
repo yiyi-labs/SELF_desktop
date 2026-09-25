@@ -1,12 +1,14 @@
 {
-  "originRestored": true,
-  "previewDownloaded": true,
-  "introReplayVisible": true,
-  "fullModelControls": true,
-  "checkedAt": "2026-09-25T10:50:31.7486895+08:00",
-  "device": "6DP0226117002287",
   "processPreserved": true,
+  "dialVisible": true,
+  "fullModelControls": true,
+  "historicalJobId": "a114ceadf89a3145e95408a549c2d8b2",
+  "device": "6DP0226117002287",
+  "checkedAt": "2026-09-25T12:12:45.7783718+08:00",
+  "penPreferenceVisible": true,
+  "expandedHistory": true,
+  "previewDownloaded": true,
   "previewViewerReadyLog": false,
-  "historicalJobId": "a2cef3813f8864dae0bc9c6f45ea9a81",
-  "penPreferenceVisible": true
+  "introReplayVisible": true,
+  "originRestored": true
 }

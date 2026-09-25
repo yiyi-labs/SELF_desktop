@@ -27,18 +27,25 @@ function Click([string]$id) {
 }
 $pidBefore = (& $hdc -t $Device shell pidof com.self.mirror).Trim()
 if (-not $pidBefore) { throw 'SELF is not running' }
+if ((Layout).Contains('"id":"return-origin-sky"')) { Click 'return-origin-sky' }
 Click 'open-star-sky-origin'
 $sky = Layout
-$star = [regex]::Match($sky,'"id":"star-([a-f0-9]{32})"')
-if (-not $star.Success) { throw 'Historical 3D model did not enter the star sky' }
+$dialVisible = $sky.Contains('"id":"galaxy-next"') -and $sky.Contains('"id":"galaxy-list-toggle"')
+if (-not $dialVisible) { throw 'Galaxy navigation did not enter the star sky' }
+Click 'galaxy-next'
+Click 'galaxy-list-toggle'
+$expanded = Layout
+$star = [regex]::Match($expanded,'"id":"star-([a-f0-9]{32})"')
+if (-not $star.Success) { throw 'Expanded galaxy index did not contain historical models' }
 $jobId = $star.Groups[1].Value
+Click ('star-'+$jobId)
 Start-Sleep -Seconds 4
 $previewLogs = (& $hdc -t $Device shell hilog -x | Out-String)
-$previewViewerReady = $previewLogs -match 'SELF_STAR_3D_READY'
-$previewPath = "/data/app/el2/100/base/com.self.mirror/haps/entry/files/models/$jobId/portrait.preview.gaussian.ply"
+$previewViewerReady = $previewLogs -match 'SELF_GALAXY_UNIVERSE_READY'
+$previewPath = "/data/app/el2/100/base/com.self.mirror/haps/entry/files/models/$jobId/portrait.scene-v3.gaussian.ply"
 $previewStat = (& $hdc -t $Device shell "ls -l $previewPath" | Out-String)
-$previewSaved = $previewStat -match 'portrait\.preview\.gaussian\.ply'
-if (-not $previewSaved) { throw '3D preview was not downloaded to app-private storage' }
+$previewSaved = $previewStat -match 'portrait\.scene-v3\.gaussian\.ply'
+if (-not $previewSaved) { throw 'Whole-scene 3D preview was not downloaded to app-private storage' }
 Click 'open-star-full'
 Start-Sleep -Seconds 3
 $full = Layout
@@ -62,6 +69,8 @@ $result = @{
   checkedAt = (Get-Date).ToString('o')
   historicalJobId = $jobId
   previewDownloaded = $previewSaved
+  dialVisible = $dialVisible
+  expandedHistory = $star.Success
   previewViewerReadyLog = $previewViewerReady
   fullModelControls = $fullControls
   originRestored = $origin.Contains('"id":"open-star-sky-origin"')

@@ -233,6 +233,38 @@ def job_status(job_id: str, request: Request):
     return result
 
 
+@router.post("/jobs/{job_id}/scene-preview")
+def ensure_scene_preview(job_id: str, request: Request):
+    """Backfill a full-scene LOD from a retained model, without source footage."""
+    _authorize(request)
+    path = _job_dir(job_id)
+    with _job_lock(job_id):
+        job = _read_job(path)
+        if job["state"] not in {"gaussian_ready", "complete"}:
+            raise HTTPException(409, "model_not_ready")
+        gaussian, _ = _verified_asset(job_id, "gaussian")
+        view, _ = _verified_asset(job_id, "view")
+        if not gaussian.is_file() or not view.is_file():
+            raise HTTPException(409, "model_not_ready")
+        existing = job["assets"].get("scene3d")
+        if existing and existing.get("file") == "portrait.scene-v3.gaussian.ply":
+            _verified_asset(job_id, "scene3d")
+            return existing
+        from portrait_preview import create_scene_lod
+        try:
+            output = create_scene_lod(path)
+        except (ValueError, OSError, ImportError):
+            raise HTTPException(422, "scene_preview_unavailable") from None
+        manifest = {"file": output.name, "bytes": output.stat().st_size,
+                    "sha256": hashlib.sha256(output.read_bytes()).hexdigest()}
+        previous = job["assets"].get("scene3d")
+        job["assets"]["scene3d"] = manifest
+        _save_job(path, job)
+        if previous and previous.get("file") in {"portrait.scene.gaussian.ply", "portrait.scene-v2.gaussian.ply"}:
+            (path / previous["file"]).unlink(missing_ok=True)
+        return manifest
+
+
 @router.post("/jobs/{job_id}/cancel")
 def cancel_job(job_id: str, request: Request):
     _authorize(request)
@@ -266,7 +298,7 @@ def asset(job_id: str, kind: str, request: Request):
 
 def _verified_asset(job_id: str, kind: str, verify_digest: bool = True) -> tuple[Path, dict]:
     job = _read_job(_job_dir(job_id))
-    if kind not in {"mesh", "gaussian", "view", "preview", "preview3d"} or (job["state"] != "complete" and not (job["state"] == "gaussian_ready" and kind in {"gaussian", "view", "preview", "preview3d"})):
+    if kind not in {"mesh", "gaussian", "view", "preview", "preview3d", "scene3d"} or (job["state"] != "complete" and not (job["state"] == "gaussian_ready" and kind in {"gaussian", "view", "preview", "preview3d", "scene3d"})):
         raise HTTPException(404, "asset_not_ready")
     manifest = job["assets"].get(kind)
     if not manifest:
@@ -277,7 +309,7 @@ def _verified_asset(job_id: str, kind: str, verify_digest: bool = True) -> tuple
             or not SHA_RE.fullmatch(manifest["sha256"])
             or type(manifest.get("bytes")) is not int
             or not (128 if kind == "view" else 256 if kind == "preview" else 1024) <= manifest["bytes"] <=
-            (4096 if kind == "view" else 512 * 1024 if kind == "preview" else 12 * 1024 * 1024 if kind == "preview3d" else 32 * 1024 * 1024 if kind == "mesh" else 256 * 1024 * 1024)):
+            (4096 if kind == "view" else 512 * 1024 if kind == "preview" else 12 * 1024 * 1024 if kind in {"preview3d", "scene3d"} else 32 * 1024 * 1024 if kind == "mesh" else 256 * 1024 * 1024)):
         raise HTTPException(409, "asset_manifest_invalid")
     path = _job_dir(job_id) / manifest["file"]
     if not path.is_file() or path.stat().st_size != manifest["bytes"]:

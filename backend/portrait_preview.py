@@ -142,6 +142,91 @@ def create_3d_lod(job_dir: Path, limit: int = 24000) -> Path:
     return output
 
 
+def create_scene_lod(job_dir: Path, limit: int = 28000) -> Path:
+    """A bounded *whole-scene* 3DGS for the history universe.
+
+    Radial strata reserve splats for the surroundings even when the face has
+    most of the high-opacity detail. This does not replace the full asset.
+    """
+    source = job_dir / "portrait.gaussian.ply"
+    with source.open("rb") as stream:
+        header = bytearray()
+        while not header.endswith(b"end_header\n"):
+            line = stream.readline()
+            if not line or len(header) + len(line) > 8192:
+                raise ValueError("unsupported PLY header")
+            header.extend(line)
+        text = header.decode("ascii")
+        count_line = next(line for line in text.splitlines() if line.startswith("element vertex "))
+        count = int(count_line.split()[2])
+        fields = [line.split()[2] for line in text.splitlines() if line.startswith("property float ")]
+        if not {"x", "y", "z", "opacity"}.issubset(fields):
+            raise ValueError("unsupported Gaussian fields")
+        records = np.frombuffer(stream.read(), dtype=np.dtype([(field, "<f4") for field in fields]))
+    if len(records) != count or count < 1000:
+        raise ValueError("truncated or tiny Gaussian asset")
+    view = json.loads((job_dir / "portrait.view.json").read_text(encoding="utf-8"))
+    target = np.asarray(view["target"], dtype=np.float64)
+    if target.shape != (3,) or not np.isfinite(target).all():
+        raise ValueError("invalid scene target")
+    xyz = np.column_stack((records["x"], records["y"], records["z"]))
+    opacity = 1 / (1 + np.exp(-np.clip(records["opacity"], -30, 30)))
+    radius = np.linalg.norm(xyz - target, axis=1)
+    valid = np.isfinite(xyz).all(axis=1) & np.isfinite(radius) & (opacity > .035)
+    if {"scale_0", "scale_1", "scale_2"}.issubset(fields):
+        sizes = np.exp(np.clip(np.column_stack((records["scale_0"], records["scale_1"], records["scale_2"])), -20, 20)).max(axis=1)
+        # Large splats become long, bright flakes when a whole room is reduced
+        # to a miniature. Keep fine geometry throughout the scene instead.
+        size_cutoff = min(np.quantile(sizes[valid], .88), np.median(sizes[valid]) * 4)
+        valid &= sizes <= size_cutoff
+    candidates = np.flatnonzero(valid)
+    if len(candidates) < 1000:
+        raise ValueError("scene lacks enough visible splats")
+    # Only reject extreme reconstruction outliers; never crop to a face sphere.
+    cutoff = np.quantile(radius[candidates], .94)
+    fade_start = np.quantile(radius[candidates], .74)
+    candidates = candidates[radius[candidates] <= cutoff]
+    if len(candidates) > limit:
+        rng = np.random.default_rng(20260925)
+        edges = np.quantile(radius[candidates], [.25, .5, .75])
+        groups = np.searchsorted(edges, radius[candidates], side="right")
+        selected = []
+        quota = [limit // 4] * 4
+        quota[0] += limit % 4
+        for group in range(4):
+            pool = candidates[groups == group]
+            size = min(len(pool), quota[group])
+            if size:
+                weights = np.maximum(.08, opacity[pool])
+                weights /= weights.sum()
+                selected.append(rng.choice(pool, size=size, replace=False, p=weights))
+        chosen = np.concatenate(selected)
+        if len(chosen) < limit:
+            remaining = np.setdiff1d(candidates, chosen, assume_unique=False)
+            chosen = np.concatenate((chosen, rng.choice(remaining, size=limit-len(chosen), replace=False)))
+        candidates = chosen
+    candidates = np.sort(candidates)
+    output = job_dir / "portrait.scene-v3.gaussian.ply"
+    new_header = text.replace(count_line, f"element vertex {len(candidates)}", 1).encode("ascii")
+    temporary = output.with_suffix(".ply.tmp")
+    try:
+        with temporary.open("wb") as stream:
+            stream.write(new_header)
+            selected = records[candidates].copy()
+            t = np.clip((radius[candidates] - fade_start) /
+                        max(.001, cutoff - fade_start), 0, 1)
+            smooth = t * t * (3 - 2 * t)
+            alpha = np.clip(opacity[candidates] * (1 - .992 * smooth), .001, .999)
+            selected["opacity"] = np.log(alpha / (1 - alpha)).astype(np.float32)
+            stream.write(selected.tobytes())
+        if not 4096 <= temporary.stat().st_size <= 12 * 1024 * 1024:
+            raise ValueError("scene preview outside bounded transfer size")
+        temporary.replace(output)
+    finally:
+        temporary.unlink(missing_ok=True)
+    return output
+
+
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         raise SystemExit("Usage: portrait_preview.py JOB_DIR")

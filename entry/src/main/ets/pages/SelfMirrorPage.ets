@@ -1,6 +1,7 @@
 import { fileUri, fileIo as fs } from '@kit.CoreFileKit';
 import { NativeMirrorSurface } from './NativeMirrorSurface';
 import { GaussianPortraitSurface } from './GaussianPortraitSurface';
+import { GalaxyUniverseSurface, GalaxyScene } from './GalaxyUniverseSurface';
 import { CameraCaptureView } from './CameraCaptureView';
 import { NightSkySurface } from './NightSkySurface';
 import { ProductCard } from './ProductCard';
@@ -53,8 +54,12 @@ struct SelfMirrorPage {
   @State originMode:boolean=true;
   @State skyOpen:boolean=false;
   @State starItems:PortraitStar[]=[];
+  @State galaxySceneItems:GalaxyScene[]=[];
   @State previewStarId:string='';
+  @State galaxyNavigationSerial:number=0;
   @State previewReady:boolean=false;
+  @State galaxyDialOpen:boolean=false;
+  private pendingScenes:Set<string>=new Set<string>();
   @State starNameDraft:string='';
   @State activeStarId:string='';
   @State journey:string='idle';
@@ -173,7 +178,7 @@ struct SelfMirrorPage {
      'No part of you needs to hide.','Wander among the moments that made you.','Rest your gaze on what you want to understand.']:
     ['每一种模样，都值得被看见。','走过的光，还在这里等你。','轻轻转动，遇见另一面的自己。',
      '循着一粒微光，按自己的节奏前行。','每颗星辰，都留着那一刻的你。','你在意的细节，也属于完整的自己。',
-     '不必藏起任何一面。','在星辰之间，看看一路走来的自己。','想细看哪里？先让目光停留片刻。'];}
+     '不必藏起任何一面。','在星辰之间，看见一路的自己。','想细看哪里？先让目光停留片刻。'];}
   private originLines():string[][]{return this.language==='en'?
     [['One small light is enough to begin.','Every step leaves a trace of light.'],
      ['What you care for grows beside you.','Even a quiet pause can shine.'],
@@ -283,26 +288,59 @@ struct SelfMirrorPage {
     }catch(error){console.error('SELF_PERSONAL_RESTORE_FAILED '+String(error));}
   }
 
-  private refreshStars():void{this.starItems=this.stars.list();}
+  private refreshStars():void{
+    this.starItems=this.stars.list();
+    this.galaxySceneItems=this.starItems.map((star:PortraitStar)=>({jobId:star.jobId,name:star.name,
+      viewPath:this.stars.modelPaths(star.jobId).view,scenePath:star.scene3dPath} as GalaxyScene));
+  }
   private returnOrigin():void{
-    this.markInteraction();this.originMode=true;this.skyOpen=false;this.journey='idle';
+    this.markInteraction();
+    if(this.skyOpen)this.getUIContext().animateTo({duration:this.motion?720:0,curve:Curve.EaseInOut},()=>{this.originMode=true;this.skyOpen=false;});
+    else{this.originMode=true;this.skyOpen=false;}
+    this.journey='idle';
     this.personalReady=false;this.detail='';this.originScene=0;this.revealStory();
   }
   private enterSky():void{
-    this.markInteraction();this.refreshStars();this.originMode=true;this.skyOpen=true;
-    this.journey='idle';this.detail='';this.personalReady=false;
+    this.markInteraction();this.refreshStars();
+    this.getUIContext().animateTo({duration:this.motion?720:0,curve:Curve.EaseInOut},()=>{this.originMode=true;this.skyOpen=true;});
+    this.journey='idle';this.detail='';this.personalReady=false;this.galaxyDialOpen=false;
     if(this.starItems.length>0)this.selectStarPreview(this.starItems[0].jobId);
     this.cueStory(1,450);
   }
-  private selectStarPreview(id:string):void{
+  private requestGalaxyScene(id:string):void{
+    const star=this.starItems.find((item:PortraitStar)=>item.jobId===id);
+    if(!star||star.scene3dPath||this.pendingScenes.has(id))return;
+    this.pendingScenes.add(id);
+    const client=new ReconstructionTransportClient();client.endpoint=this.backendAddress;client.token=this.backendToken;
+    client.downloadScene3d(id,this.context.filesDir).then(()=>{
+      if(this.skyOpen)this.refreshStars();
+    }).catch((error:Error)=>console.warn('SELF_GALAXY_SCENE_UNAVAILABLE '+String(error)))
+      .finally(()=>this.pendingScenes.delete(id));
+  }
+  private selectStarPreview(id:string,navigate:boolean=true):void{
     const star=this.starItems.find((item:PortraitStar)=>item.jobId===id);
     if(!star)return;
     this.previewStarId=id;this.previewReady=false;this.markInteraction();
-    if(star.preview3dPath)return;
-    const client=new ReconstructionTransportClient();client.endpoint=this.backendAddress;client.token=this.backendToken;
-    client.downloadPreview3d(id,this.context.filesDir).then(()=>{
-      if(this.skyOpen&&this.previewStarId===id)this.refreshStars();
-    }).catch((error:Error)=>console.warn('SELF_STAR_3D_PREVIEW_UNAVAILABLE '+String(error)));
+    if(navigate)this.galaxyNavigationSerial++;
+    const index=this.starItems.findIndex((item:PortraitStar)=>item.jobId===id);
+    for(let at=Math.max(0,index-1);at<=Math.min(this.starItems.length-1,index+1);at++)
+      this.requestGalaxyScene(this.starItems[at].jobId);
+  }
+  private nextGalaxy():void{
+    if(this.starItems.length===0)return;
+    const index=this.starItems.findIndex((star:PortraitStar)=>star.jobId===this.previewStarId);
+    this.selectStarPreview(this.starItems[(index+1)%this.starItems.length].jobId);
+  }
+  private setGalaxyDial(open:boolean):void{
+    this.markInteraction();
+    this.getUIContext().animateTo({duration:this.motion?420:0,
+      curve:this.motion?'spring(0,1,390,34)':Curve.EaseOut},()=>this.galaxyDialOpen=open);
+  }
+  private chooseGalaxy(id:string):void{
+    if(this.previewStarId!==id)this.selectStarPreview(id,false);
+  }
+  private currentGalaxyName():string{
+    return this.starItems.find((star:PortraitStar)=>star.jobId===this.previewStarId)?.name||'';
   }
   private openStar(id:string):void{
     const star=this.starItems.find((item:PortraitStar)=>item.jobId===id);
@@ -387,6 +425,7 @@ struct SelfMirrorPage {
         const file=await client.downloadGaussian(jobId,this.context.filesDir);
         try{await client.downloadPreview(jobId,this.context.filesDir);}catch(error){console.warn('SELF_STAR_PREVIEW_UNAVAILABLE '+String(error));}
         try{await client.downloadPreview3d(jobId,this.context.filesDir);}catch(error){console.warn('SELF_STAR_3D_PREVIEW_UNAVAILABLE '+String(error));}
+        try{await client.downloadScene3d(jobId,this.context.filesDir);}catch(error){console.warn('SELF_GALAXY_SCENE_UNAVAILABLE '+String(error));}
         if(this.reconJob!==jobId)return;
         const saved:SavedReconstruction={jobId,gaussian:file,view};
         this.assets.writeAtomic(this.context.filesDir+'/reconstruction-result.json',JSON.stringify(saved));
@@ -620,11 +659,12 @@ struct SelfMirrorPage {
     if(event){this.anchorX=event.windowX;this.anchorY=event.windowY-this.surfaceTop;}
     else if(!this.detail){this.anchorX=this.focusOpen?this.focusX*this.surfaceWidth:this.surfaceWidth-100;this.anchorY=this.focusOpen?this.focusY*this.surfaceHeight:16;}
     if(!this.detail)this.previousTool=this.tool;
-    this.getUIContext().animateTo({duration:this.motion?280:0,curve:Curve.EaseOut},()=>this.detail=name);
+    this.getUIContext().animateTo({duration:this.motion?430:0,
+      curve:this.motion?'spring(0,1,420,37)':Curve.EaseOut},()=>this.detail=name);
     if(this.legacyEditorOpen&&this.bridge.ready)this.bridge.send('SET_TOOL',{tool:'DETAIL'});this.workItems=this.works.list();this.note=this.works.readNote();
     if(name==='采集记录'){this.selectedCapture='';this.captures=new CaptureService(this.context).list();}
   }
-  private close():void{this.markInteraction();this.cameraLive=false;this.bridge.foreground(this.foreground&&this.legacyEditorOpen);if(this.timer>=0)clearInterval(this.timer);this.timer=-1;this.playing=false;this.getUIContext().animateTo({duration:this.motion?240:0,curve:Curve.EaseOut},()=>this.detail='');this.tool=this.previousTool;if(this.legacyEditorOpen&&this.bridge.ready)this.bridge.send('SET_TOOL',{tool:this.tool});}
+  private close():void{this.markInteraction();this.cameraLive=false;this.bridge.foreground(this.foreground&&this.legacyEditorOpen);if(this.timer>=0)clearInterval(this.timer);this.timer=-1;this.playing=false;this.getUIContext().animateTo({duration:this.motion?300:0,curve:Curve.EaseInOut},()=>this.detail='');this.tool=this.previousTool;if(this.legacyEditorOpen&&this.bridge.ready)this.bridge.send('SET_TOOL',{tool:this.tool});}
   private protect(current:boolean,persistent:boolean):void{
     try{this.session.protect(this.selected,current,persistent);this.sendSnapshot();this.labels();this.close();
       if(persistent)this.works.savePreference(this.session).then(()=>{this.subtitle='已明确保存长期偏好';this.labels();}).catch((e:Error)=>this.fail(e.message));
@@ -779,7 +819,13 @@ struct SelfMirrorPage {
         Button(this.tr('跳过')).softButton().onClick(()=>this.close())
       }
       if(this.detail!=='氛围'&&this.detail!=='设置'){Button(this.tr('返回设置')).softButton().onClick((event:ClickEvent)=>this.open('设置',event))}
-    }.padding(24).width('100%').alignItems(HorizontalAlign.Start)}.align(Alignment.TopStart).width('100%').height('100%').backgroundColor('#C8B7C8E1').backgroundBlurStyle(BlurStyle.COMPONENT_THICK).linearGradient({angle:145,colors:[['#D8D5E1F1',0],['#C4BCCDE6',.60],['#D9C9DDED',1]]}).border({width:1,color:'#B8DDEAFF'}).shadow({radius:32,color:'#684B6592',offsetY:12}).borderRadius(32)
+    }.padding(24).width('100%').alignItems(HorizontalAlign.Start)}.align(Alignment.TopStart).width('100%').height('100%')
+      .backgroundColor(this.legacyEditorOpen?'#C8B7C8E1':'#D5C2D3E8')
+      .backgroundBlurStyle(BlurStyle.COMPONENT_THICK,{colorMode:ThemeColorMode.LIGHT})
+      .linearGradient({angle:145,colors:this.legacyEditorOpen?
+        [['#D8D5E1F1',0],['#C4BCCDE6',.60],['#D9C9DDED',1]]:
+        [['#CEDAEAF2',0],['#BBCBE2E9',.60],['#D9E0F0F2',1]]})
+      .border({width:1,color:'#B8DDEAFF'}).shadow({radius:26,color:'#45314260',offsetY:9}).borderRadius(32)
   }
   @Builder
   conversation(){
@@ -852,29 +898,74 @@ struct SelfMirrorPage {
       Button(this.language==='en'?'Skip':'跳过').id('skip-intro').softButton().width(72).height(40).position({x:Math.max(16,this.surfaceWidth-92),y:42}).onClick(()=>this.finishIntro())
     }.width('100%').height('100%').backgroundColor('#080B17').zIndex(50)
   }
-  @Builder starTile(star:PortraitStar,index:number){
-    Button(){
-      Row({space:10}){
-        Stack(){
-          Circle().width(66).height(66).fill('#263A607A').shadow({radius:24,color:index%2===0?'#5C8BADE2':'#588E7DBF'})
-          if(star.previewPath){
-            Image(fileUri.getUriFromPath(star.previewPath)).width(64).height(64).objectFit(ImageFit.Contain).borderRadius(32)
-          }else{
-            Circle().width(42).height(42).fill('#6C9BBBDD').blur(16)
-            Text('✧').fontSize(30).fontColor('#D9E5FF')
-          }
-          Circle().width(69).height(69).fill('#00000000').stroke('#8BAECFE8').strokeWidth(1)
-        }.width(74).height(74)
-        Text(star.name).fontSize(14).fontColor('#F5F4FF').fontWeight(FontWeight.Medium).maxLines(1)
-      }.padding({left:10,right:16})
-    }.id('star-'+star.jobId).width(185).height(86).backgroundColor(this.previewStarId===star.jobId?'#48618294':'#25354D78')
-      .border({width:1,color:this.previewStarId===star.jobId?'#BACFEB':'#708FB1D5'}).borderRadius(27)
-      .stateStyles({pressed:{.scale({x:.94,y:.94})},normal:{.scale({x:1,y:1})}})
-      .animation({duration:this.motion?220:0,curve:Curve.EaseOut}).onClick(()=>this.selectStarPreview(star.jobId))
+  @Builder galaxyNavigation(){
+    Stack(){
+      if(this.galaxyDialOpen){
+        Column({space:9}){
+          Row(){
+            Text(this.language==='en'?'My stars':'我的星辰').fontSize(17).fontWeight(FontWeight.Medium).fontColor('#F6F8FF')
+            Blank()
+            Button('×').id('galaxy-list-close').width(36).height(36).fontSize(23)
+              .fontColor('#F0F4FF').backgroundColor('#344B6F83').borderRadius(18)
+              .onClick(()=>this.setGalaxyDial(false))
+          }.width('100%')
+          Scroll(){
+            Column({space:4}){
+              ForEach(this.starItems,(star:PortraitStar,index:number)=>{
+                Button(){
+                  Row({space:10}){
+                    Text((index+1).toString().padStart(2,'0')).fontSize(12).fontColor('#ACC2E2')
+                    Text(star.name).fontSize(16).fontWeight(FontWeight.Medium)
+                      .fontColor(star.jobId===this.previewStarId?'#FFFFFF':'#E2EAF8').maxLines(1)
+                    Blank()
+                    if(star.jobId===this.previewStarId){Text('✦').fontSize(12).fontColor('#D9E8FF')}
+                  }.width('100%')
+                }.id('star-'+star.jobId).width('100%').height(52).padding({left:12,right:11})
+                  .backgroundColor(star.jobId===this.previewStarId?'#3F5B82B5':'#00000000').borderRadius(14)
+                  .onClick(()=>{this.selectStarPreview(star.jobId);this.galaxyDialOpen=false;})
+              },(star:PortraitStar)=>star.jobId)
+            }
+          }.scrollBar(BarState.Off).width('100%').height(Math.min(this.surfaceHeight*.46,290))
+        }.padding(13).width(Math.min(270,this.surfaceWidth*.48))
+          .backgroundColor('#E6101C31').backgroundBlurStyle(BlurStyle.COMPONENT_REGULAR,{colorMode:ThemeColorMode.DARK})
+          .border({width:1,color:'#819ABE91'}).borderRadius(24)
+          .shadow({radius:22,color:'#59050B18',offsetY:8})
+          .transition({opacity:0,scale:{x:.84,y:.78,centerX:Math.min(270,this.surfaceWidth*.48)-20,centerY:26},translate:{y:-10}})
+      }else{
+        Column({space:8}){
+          Text((Math.max(0,this.starItems.findIndex((star:PortraitStar)=>star.jobId===this.previewStarId))+1).toString().padStart(2,'0')+
+            ' / '+this.starItems.length.toString().padStart(2,'0')).fontSize(12).fontColor('#DBE7F8').letterSpacing(1)
+          Button(){
+            Column({space:3}){
+              Circle().width(8).height(8).fill('#EAF3FF')
+              Rect().width(1.5).height(21).fill('#AFC3DF')
+              Text('⌄').fontSize(21).fontColor('#F3F7FF')
+            }
+          }.id('galaxy-next').width(54).height(80).backgroundColor('#253A5899')
+            .border({width:1,color:'#829CC3A8'}).borderRadius(27)
+            .stateStyles({pressed:{.scale({x:.94,y:.9})},normal:{.scale({x:1,y:1})}})
+            .animation({duration:this.motion?220:0,curve:Curve.EaseOut}).onClick(()=>this.nextGalaxy())
+          Button('☰').id('galaxy-list-toggle').width(40).height(40).fontSize(17)
+            .fontColor('#E8F0FC').backgroundColor('#23385186').borderRadius(20)
+            .onClick(()=>this.setGalaxyDial(true))
+        }.alignItems(HorizontalAlign.Center).width(66)
+          .transition({opacity:0,scale:{x:.92,y:.88},translate:{y:-8}})
+      }
+    }.width(this.galaxyDialOpen?Math.min(270,this.surfaceWidth*.48):66)
+      .position({x:this.galaxyDialOpen?Math.max(18,this.surfaceWidth-Math.min(270,this.surfaceWidth*.48)-28):this.surfaceWidth-94,
+        y:this.wide?140:155}).zIndex(12)
   }
   @Builder nightHome(){
     Stack(){
       NightSkySurface({formation:this.journey==='forming'?.22+this.reconProgress*.006:this.skyOpen?.22:this.personalActive()?.16:.82+Math.min(.09,this.starItems.length*.013),musicPulse:this.musicPulse,motion:this.motion,active:this.foreground&&!this.cameraLive&&(!this.personalActive()||this.journey==='forming'),phaseMode:this.skyOpen?'sky':this.journey==='forming'?'forming':this.personalActive()?'sky':'origin',onSceneChange:(index:number)=>this.onOriginScene(index)}).width('100%').height('100%')
+      if(this.skyOpen&&this.starItems.length>0){
+        GalaxyUniverseSurface({items:this.galaxySceneItems,selectedId:this.previewStarId,navigationSerial:this.galaxyNavigationSerial,
+          onSelection:(id:string)=>this.chooseGalaxy(id),
+          onReady:()=>{this.previewReady=true;console.info('SELF_GALAXY_UNIVERSE_READY');},
+          onFailure:(message:string)=>{this.previewReady=false;console.warn('SELF_GALAXY_UNIVERSE_FAILED '+message);},
+          onInteraction:()=>this.markInteraction()}).width('100%').height('100%')
+          .transition({opacity:0,scale:{x:.91,y:.91}})
+      }
       if(this.personalActive()&&this.journey!=='forming'){
         GaussianPortraitSurface({gaussianPath:this.personalGaussianPath,viewPath:this.personalViewPath,
           onReady:()=>{this.personalReady=true;this.captureStatus='';if(this.journey==='revealing'){
@@ -906,27 +997,10 @@ struct SelfMirrorPage {
         }.alignItems(HorizontalAlign.Start).width(Math.min(this.surfaceWidth-48,this.wide?460:340)).position({x:this.wide?50:26,y:this.surfaceHeight*(this.wide?.22:.18)}).hitTestBehavior(HitTestMode.None)
       }
       if(this.skyOpen&&!this.detail){
-        Column({space:12}){
-          Text(this.language==='en'?'Your constellations':'你的星辰').fontSize(this.wide?20:19).fontColor('#D7E4FA').fontWeight(FontWeight.Medium)
-          if(this.starItems.length===0){Text(this.language==='en'?'Your first star begins with a portrait.':'第一颗星辰，会从一次拍摄开始。').fontSize(15).fontColor('#B6C9E2')}
-          else{
-            Stack(){
-              ForEach(this.starItems,(star:PortraitStar)=>{
-                if(star.jobId===this.previewStarId){
-                  if(star.preview3dPath){
-                    GaussianPortraitSurface({gaussianPath:star.preview3dPath,viewPath:this.stars.modelPaths(star.jobId).view,previewMode:true,
-                      onReady:()=>{this.previewReady=true;console.info('SELF_STAR_3D_READY '+star.jobId);},
-                      onFailure:(message:string)=>{this.previewReady=false;console.warn('SELF_STAR_3D_FAILED '+message);},
-                      onInteraction:()=>this.markInteraction()}).width('100%').height('100%')
-                  }else if(star.previewPath){Image(fileUri.getUriFromPath(star.previewPath)).width('85%').height('85%').objectFit(ImageFit.Contain)}
-                  else{Text('✧').fontSize(96).fontColor('#C4D8F1')}
-                }
-              },(star:PortraitStar)=>star.jobId)
-            }.width(Math.min(this.wide?this.surfaceHeight*.30:this.surfaceWidth*.68,330)).height(Math.min(this.wide?this.surfaceHeight*.30:this.surfaceWidth*.68,330))
-            Scroll(){Row({space:12}){ForEach(this.starItems,(star:PortraitStar,index:number)=>{this.starTile(star,index)},(star:PortraitStar)=>star.jobId)}.padding({left:24,right:24,top:4,bottom:4})}
-              .scrollable(ScrollDirection.Horizontal).scrollBar(BarState.Off).width('100%').height(98)
-          }
-        }.alignItems(HorizontalAlign.Center).width('100%').position({x:0,y:this.surfaceHeight*(this.wide?.25:.29)})
+        if(this.starItems.length===0){
+          Text(this.language==='en'?'Your first star begins with a portrait.':'第一颗星辰，会从一次拍摄开始。')
+            .fontSize(16).fontColor('#D3E0F5').position({x:this.wide?50:26,y:this.surfaceHeight*.39})
+        }else{this.galaxyNavigation()}
       }
       if(this.journey==='forming'){
         Flex({wrap:FlexWrap.Wrap}){
@@ -973,7 +1047,7 @@ struct SelfMirrorPage {
               Button(){Row({space:10}){Circle().width(16).height(16).fill('#E8ECFF').shadow({radius:18,color:'#BAC9FF'});Text(this.language==='en'?'Find my portrait':'寻找我的模样').fontSize(16).fontColor('#FFFFFF')}}.id('begin-capture').height(54).padding({left:20,right:20}).backgroundColor('#F0243659').border({width:1,color:'#A1ADC5E9'}).borderRadius(28).shadow({radius:24,color:'#536987BE'}).stateStyles({pressed:{.scale({x:.94,y:.94})},normal:{.scale({x:1,y:1})}}).animation({duration:this.motion?180:0,curve:Curve.EaseOut}).onClick((event:ClickEvent)=>this.open('拍摄面容',event))
             }
             if(this.skyOpen){
-              if(this.previewStarId){Button(this.language==='en'?'Meet this star':'走近这颗星辰').id('open-star-full').softButton().fontColor('#F4F2FF').backgroundColor('#75456683').onClick(()=>this.openStar(this.previewStarId))}
+              if(this.previewStarId){Button((this.language==='en'?'Open · ':'走近 · ')+this.currentGalaxyName()).id('open-star-full').softButton().fontColor('#F4F2FF').backgroundColor('#75456683').onClick(()=>this.openStar(this.previewStarId))}
               Button(this.language==='en'?'Origin':'回到原点').id('return-origin-sky').softButton().fontColor('#F4F2FF').backgroundColor('#61374766').onClick(()=>this.returnOrigin())
             }
             else if(this.personalActive()){
@@ -988,7 +1062,8 @@ struct SelfMirrorPage {
           if(!this.skyOpen){Text(this.personalActive()?(this.language==='en'?'Turn gently and meet every side.':'轻轻转动，看看每一面的自己。'):(this.journey==='forming'?'':this.language==='en'?'Start with a gentle capture.':'从一次轻轻的拍摄开始。')).fontSize(12).fontColor('#AFC1D6').textAlign(TextAlign.Center)}
         }.width('100%').position({x:0,y:Math.max(0,this.surfaceHeight-154)}).zIndex(10)
       }
-      if(this.detail){Column(){this.details()}.id('detail-panel').width(this.panelWidth()).height(this.panelHeight()).position({x:this.panelX(),y:this.panelY()}).transition({opacity:0,scale:{x:.3,y:.3,centerX:this.anchorX-this.panelX(),centerY:this.anchorY-this.panelY()}}).zIndex(20)}
+      if(this.detail){Column(){this.details()}.id('detail-panel').width(this.panelWidth()).height(this.panelHeight()).position({x:this.panelX(),y:this.panelY()})
+        .transition({opacity:0,scale:{x:.82,y:.82,centerX:this.anchorX-this.panelX(),centerY:this.anchorY-this.panelY()},translate:{y:-8}}).zIndex(20)}
       if(this.introStage>0){this.introOverlay()}
     }.width('100%').height('100%').backgroundColor('#080C1B').onAreaChange((_old:Area,area:Area)=>{this.surfaceWidth=Number(area.width);this.surfaceHeight=Number(area.height);this.surfaceTop=Number(area.globalPosition.y);this.windowWidth=this.surfaceWidth;this.wide=this.surfaceWidth>=840;})
   }

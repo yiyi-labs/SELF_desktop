@@ -1,0 +1,19 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src https://self.local; worker-src 'self' blob:"><style>
+html,body,#universe,#stars{width:100%;height:100%;margin:0;overflow:hidden}
+body{background:
+  radial-gradient(ellipse 35% 30% at 20% 73%,#3e426229,transparent 80%),
+  radial-gradient(ellipse 42% 27% at 79% 22%,#2760711d,transparent 82%),
+  linear-gradient(119deg,transparent 21%,#7776a50b 45%,transparent 69%),
+  radial-gradient(ellipse at 53% 45%,#172746 0%,#0b1730 48%,#080c1b 100%)}
+#stars{position:absolute;inset:0;z-index:0;pointer-events:none}
+#universe{position:absolute;inset:0;z-index:1;background:transparent}
+body{font-family:'HarmonyOS Sans',sans-serif}
+#universe{display:block;touch-action:none}
+#names{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+.galaxy-name{position:absolute;white-space:nowrap;transform:translate(-50%,-50%);color:#e9ecfb;font-size:15px;font-weight:500;letter-spacing:.13em;text-shadow:0 2px 10px #071022,0 0 20px #92a5d8;opacity:0;transition:opacity .4s;pointer-events:auto;cursor:pointer}
+.galaxy-name.chosen{color:#fff;font-size:17px;text-shadow:0 1px 12px #b7c9ed,0 0 25px #6375a5}
+.galaxy-name.chosen::before{content:'✦';font-size:12px;margin-right:9px;color:#d8e9ff}
+.galaxy-name.chosen::after{content:'';position:absolute;left:27%;right:27%;height:1px;bottom:-8px;background:#c3dcff;box-shadow:0 0 8px #9fc1ee}
+#hint{position:absolute;z-index:2;left:0;right:0;bottom:23%;text-align:center;color:#bdcbe5;font-size:13px;letter-spacing:.12em;pointer-events:none;transition:opacity .7s}
+#hint.quiet{opacity:0}
+</style></head><body><canvas id="stars" aria-hidden="true"></canvas><canvas id="universe" aria-label="可滑动的星辰宇宙"></canvas><div id="names"></div><div id="hint">轻轻滑动，走近自己的星辰</div><script src="gs-universe.js"></script></body></html>

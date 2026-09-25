@@ -223,14 +223,17 @@ def opening_view(path: Path) -> dict:
 
 
 def portrait_preview(path: Path) -> dict:
-    from portrait_preview import create, create_3d_lod
+    from portrait_preview import create, create_3d_lod, create_scene_lod
 
     output = create(path)
     lod = create_3d_lod(path)
+    scene = create_scene_lod(path)
     return {"preview": {"file": output.name, "bytes": output.stat().st_size,
                          "sha256": file_sha256(output)},
             "preview3d": {"file": lod.name, "bytes": lod.stat().st_size,
-                          "sha256": file_sha256(lod)}}
+                           "sha256": file_sha256(lod)},
+            "scene3d": {"file": scene.name, "bytes": scene.stat().st_size,
+                        "sha256": file_sha256(scene)}}
 
 
 def discard_training_inputs(path: Path, assets: dict) -> None:
