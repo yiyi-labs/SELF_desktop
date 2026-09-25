@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {selectVisibleSplats, normalizeLasso, makeOriginalColors, applyDigitalTint, applyDigitalLayers, DIGITAL_PRESETS} from '../gs-edit.js';
+import {selectVisibleSplats, normalizeLasso, selectionSlot, shouldRecordLassoPoint, makeOriginalColors, applyDigitalTint, applyDigitalLayers, DIGITAL_PRESETS} from '../gs-edit.js';
 
 function scene() {
   const points=[];
@@ -52,6 +52,25 @@ test('diagonal touch drag becomes an oval while a drawn contour stays intact',()
   assert.ok(drag.some(p=>p.x>90&&p.y>40&&p.y<80));
   const drawn=[{x:20,y:20},{x:100,y:20},{x:100,y:100},{x:20,y:100}];
   assert.equal(normalizeLasso(drawn),drawn);
+});
+
+test('a repeat stroke replaces the last unsent region; adding another is explicit',()=>{
+  assert.equal(selectionSlot(0,false),0);
+  assert.equal(selectionSlot(1,false),0);
+  assert.equal(selectionSlot(2,false),1);
+  assert.equal(selectionSlot(2,true),2);
+  assert.equal(selectionSlot(4,false),3);
+  assert.throws(()=>selectionSlot(4,true),/最多圈选四处/);
+});
+
+test('slow pen movement accumulates against the last recorded point',()=>{
+  const recorded=[{x:0,y:0}];
+  for(let x=1;x<=60;x++){
+    const point={x,y:0};
+    if(shouldRecordLassoPoint(recorded[recorded.length-1],point))recorded.push(point);
+  }
+  assert.ok(recorded.length>12);
+  assert.ok(recorded.every((point,index)=>index===0||point.x-recorded[index-1].x>3));
 });
 
 test('a grouped edit can remove one layer or the whole group without residual tint',()=>{

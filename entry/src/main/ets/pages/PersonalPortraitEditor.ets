@@ -67,6 +67,7 @@ export struct PersonalPortraitEditor {
   @State editCommand:string='';
   @State ready:boolean=false;
   @State tool:string='move';
+  @State toolPressed:boolean=false;
   @State bubble:boolean=false;
   @State selected:boolean=false;
   @State waiting:boolean=false;
@@ -196,23 +197,35 @@ export struct PersonalPortraitEditor {
   private selectedRegion(info:GsSelection,mask:ArrayBuffer):void{
     console.info('SELF_GS_SELECTION_READY '+info.count+' '+info.total+' '+mask.byteLength);
     this.planner.cancel();this.pending=undefined;this.pendingSnapshot=undefined;
-    if(this.selections.length>=4||this.selections.some((item:SelectedGsRegion)=>item.info.regionId===info.regionId))return;
-    this.selections.push({info,mask});this.selectionCount=this.selections.length;
+    const existing=this.selections.findIndex((item:SelectedGsRegion)=>item.info.regionId===info.regionId);
+    if(existing<0&&this.selections.length>=4)return;
+    if(existing>=0)this.selections[existing]={info,mask};
+    else this.selections.push({info,mask});
+    this.selectionCount=this.selections.length;
     this.selected=true;this.candidateReady=false;
-    this.tool='move';this.anchorX=Math.max(.1,Math.min(.9,info.x));this.anchorY=Math.max(.15,Math.min(.7,info.y));
-    const firstPrompts=['这一处会跟着你的立体面容。还想圈别处，或聊聊这里？',
-      '光落在这里了。想试一点变化，还是先看看？','这一处已经记下。可以继续圈，也可以告诉我你的想法。'];
-    this.bubble=true;this.responseText=this.selections.length===1?
-      this.label(firstPrompts[(this.history?.groups.length||0)%firstPrompts.length],
-        'This area follows your portrait. Circle another, or tell me about this one.'):
+    this.anchorX=Math.max(.1,Math.min(.9,info.x));this.anchorY=Math.max(.15,Math.min(.7,info.y));
+    const firstPrompts=['这一处已留下。再画可重选，也可以说说想法。',
+      '光落在这里了。想换一处，直接再画一圈。','这处会跟着你的面容；想微调，还可以重画。'];
+    this.bubble=true;this.responseText=existing>=0?
+      this.label('这一处已经换成刚画的范围。','This area now follows your new selection.'):
+      this.selections.length===1?
+        this.label(firstPrompts[(this.history?.groups.length||0)%firstPrompts.length],
+          'This area follows your portrait. Draw again to replace it, or tell me what you think.'):
       this.label('已经圈出'+this.selections.length+'处。可以一起告诉我每处想试的变化。',
         this.selections.length+' areas selected. Tell me what you would like for each.');
     this.question='';this.choices=[];this.revision++;this.onInteraction();
   }
+  private appendSelection():void{
+    if(!this.ready||this.waiting||this.selectionCount>=4)return;
+    this.getUIContext().animateTo({duration:200,curve:Curve.EaseOut},()=>{this.tool='lasso';this.bubble=false;});
+    this.command('ARM_APPEND');this.onInteraction();
+  }
   private toggleTool():void{
     if(!this.ready||this.waiting)return;
     if(this.comparing)this.previewHistory('');
-    this.tool=this.tool==='move'?'lasso':'move';
+    this.getUIContext().animateTo({duration:240,curve:Curve.EaseOut},()=>{
+      this.tool=this.tool==='move'?'lasso':'move';
+    });
     this.command('TOOL',this.tool);
     if(this.tool==='lasso'){this.bubble=false;this.responseText=this.label('顺着想看的地方画一圈。','Circle an area you want to explore.');}
     this.onInteraction();
@@ -388,9 +401,9 @@ export struct PersonalPortraitEditor {
                 .backgroundColor('#6879A0').borderRadius(17).onClick(()=>this.confirm())}
             }
             if(this.selectionCount>0){Row({space:8}){
-              if(this.selectionCount<4){Button(this.label('再圈一处','Circle another')).fontSize(12).fontColor('#DCEAFF')
-                .backgroundColor('#243D59').borderRadius(15).onClick(()=>this.toggleTool())}
-              Button(this.label('重选','Clear selections')).fontSize(12).fontColor('#DCEAFF')
+              if(this.selectionCount<4){Button(this.label('另圈一处','Add another')).fontSize(12).fontColor('#DCEAFF')
+                .backgroundColor('#243D59').borderRadius(15).onClick(()=>this.appendSelection())}
+              Button(this.label('清空圈选','Clear selections')).fontSize(12).fontColor('#DCEAFF')
                 .backgroundColor('#243D59').borderRadius(15).onClick(()=>this.clearSelection())
             }}
           }
@@ -475,15 +488,11 @@ export struct PersonalPortraitEditor {
       if(this.ready&&!this.libraryOpen){
         if(!this.historyOpen){
           Button({type:ButtonType.Circle,stateEffect:false}){
-            Stack(){
-              Circle().width(23).height(23).fill('#00000000').stroke('#D5E8FF').strokeWidth(1.4)
-              Circle().width(8).height(8).fill('#DDEEFF')
-              Circle().width(4).height(4).fill('#B8D4F3').position({x:31,y:11})
-            }.width(46).height(46)
-          }.id('personal-gs-history').width(46).height(46).borderRadius(23)
-            .backgroundColor(this.historyPressed?'#476B8DDD':'#263E5BC9')
-            .border({width:1,color:this.historyPressed?'#DFEFFF':'#8AA8C6'})
-            .shadow({radius:this.historyPressed?16:7,color:this.historyPressed?'#A7D6F1':'#355A7C'})
+            Image($rawfile('ui/portrait_history.svg')).width(29).height(29)
+          }.id('personal-gs-history').width(48).height(48).borderRadius(24)
+            .backgroundColor(this.historyPressed?'#DA426687':'#C8253D5B')
+            .border({width:1,color:this.historyPressed?'#DFEFFF':'#7193B4'})
+            .shadow({radius:this.historyPressed?13:5,color:this.historyPressed?'#7EB8DC':'#243D5B'})
             .scale({x:this.historyPressed?.93:1,y:this.historyPressed?.93:1})
             .animation({duration:170,curve:Curve.EaseOut})
             .accessibilityText(this.label('变化记录','Changes'))
@@ -494,26 +503,52 @@ export struct PersonalPortraitEditor {
               this.viewportHeight-this.historyPanelHeight()-20))}).zIndex(7)
         }
         if(!this.historyOpen){
-          Button(this.label('✦  护理星图','✦  Care atlas')).id('personal-olay-library').height(43)
-            .padding({left:14,right:14}).fontSize(12).fontColor('#E8F2FF')
-            .backgroundColor('#263E5BBD').border({width:1,color:'#8AA7C4'}).borderRadius(22)
+          Button({type:ButtonType.Capsule,stateEffect:false}){
+            Row({space:8}){
+              Image($rawfile('ui/portrait_care.svg')).width(24).height(24)
+              Text(this.label('护理星图','Care atlas')).fontSize(13).fontColor('#E8F2FF')
+                .fontWeight(FontWeight.Medium)
+            }
+          }.id('personal-olay-library').height(52).padding({left:14,right:17})
+            .backgroundColor('#D3253C59').border({width:1,color:'#7896B4'}).borderRadius(26)
+            .shadow({radius:6,color:'#263D57',offsetY:2})
+            .stateStyles({pressed:{.scale({x:.96,y:.96})},normal:{.scale({x:1,y:1})}})
+            .animation({duration:180,curve:Curve.EaseOut})
             .onClick(()=>{this.bubble=false;this.historyOpen=false;
               this.getUIContext().animateTo({duration:220,curve:Curve.EaseOut},()=>{this.libraryOpen=true;});})
-            .position({x:18,y:Math.max(150,this.viewportHeight-220)}).zIndex(7)
+            .position({x:18,y:Math.max(150,this.viewportHeight-(this.viewportWidth>=840?160:228))}).zIndex(7)
         }
-        Button(this.tool==='lasso'?this.label('◌  圈选','◌  Select'):this.label('✧  移动','✧  Move'))
-          .id('personal-gs-tool').width(108).height(48).fontSize(14).fontWeight(FontWeight.Medium)
-          .fontColor('#F6F3FF')
-          .linearGradient({angle:145,colors:this.tool==='lasso'?
-            [['#B595E4DA',0],['#684CAABF',.52],['#362C70D9',1]]:
-            [['#9A8ACCC9',0],['#514B90BA',.52],['#292D5FD9',1]]})
-          .border({width:1,color:this.tool==='lasso'?'#D7C0FF':'#B6ACDF'}).borderRadius(24)
-          .shadow({radius:12,color:'#644A9A88',offsetY:3})
-          .stateStyles({pressed:{.scale({x:.94,y:.94})},normal:{.scale({x:1,y:1})}})
-          .animation({duration:180,curve:Curve.EaseOut}).onClick(()=>this.toggleTool())
-          .accessibilityText(this.tool==='lasso'?this.label('当前圈选，点按切换移动','Selection mode, tap to move'):
-            this.label('当前移动，点按切换圈选','Move mode, tap to select'))
-          .position({x:Math.max(18,this.viewportWidth-126),y:Math.max(150,this.viewportHeight-220)}).zIndex(7)
+        if(!this.historyOpen){
+          Button({type:ButtonType.Capsule,stateEffect:false}){
+            Stack({alignContent:Alignment.Center}){
+              Row({space:10}){
+                Image($rawfile('ui/portrait_move.svg')).width(30).height(30)
+                Text(this.label('移动','Move')).fontSize(15).fontWeight(FontWeight.Medium).fontColor('#F6F3FF')
+              }.opacity(this.tool==='move'?1:0).scale({x:this.tool==='move'?1:.88,y:this.tool==='move'?1:.88})
+                .animation({duration:220,curve:Curve.EaseOut})
+              Row({space:10}){
+                Image($rawfile('ui/portrait_lasso.svg')).width(30).height(30)
+                Text(this.label('圈选','Select')).fontSize(15).fontWeight(FontWeight.Medium).fontColor('#FAF5FF')
+              }.opacity(this.tool==='lasso'?1:0).scale({x:this.tool==='lasso'?1:.88,y:this.tool==='lasso'?1:.88})
+                .animation({duration:220,curve:Curve.EaseOut})
+            }.width(136).height(56)
+          }.id('personal-gs-tool').width(136).height(56)
+            .backgroundColor(this.tool==='lasso'?'#7957B3':'#294764')
+            .linearGradient({angle:145,colors:this.tool==='lasso'?
+              [['#EAAE91E0',0],['#E17E5DBD',.52],['#EB47377E',1]]:
+              [['#DA597794',0],['#E0365272',.52],['#EC1C304B',1]]})
+            .backgroundBlurStyle(BlurStyle.COMPONENT_ULTRA_THIN)
+            .border({width:1,color:this.tool==='lasso'?'#E5D1FF':'#9DBAD6'}).borderRadius(28)
+            .shadow({radius:this.tool==='lasso'?12:7,color:this.tool==='lasso'?'#7352A0':'#294563',offsetY:3})
+            .scale({x:this.toolPressed?.96:1,y:this.toolPressed?.96:1})
+            .animation({duration:190,curve:Curve.EaseOut})
+            .onTouch((event:TouchEvent)=>{this.toolPressed=event.type===TouchType.Down;})
+            .onClick(()=>this.toggleTool())
+            .accessibilityText(this.tool==='lasso'?this.label('当前圈选，点按切换移动','Selection mode, tap to move'):
+              this.label('当前移动，点按切换圈选','Move mode, tap to select'))
+            .position({x:Math.max(18,this.viewportWidth-154),
+              y:Math.max(150,this.viewportHeight-(this.viewportWidth>=840?164:230))}).zIndex(7)
+        }
       }
       if(this.libraryOpen){
         OlayLibrary({language:this.language,viewportWidth:this.viewportWidth,viewportHeight:this.viewportHeight,

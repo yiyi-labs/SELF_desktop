@@ -1064,8 +1064,9 @@ struct SelfMirrorPage {
               Button(this.language==='en'?'Works':'足迹').id('home-works').softButton().fontColor('#F4F2FF').backgroundColor('#61374766').onClick((event:ClickEvent)=>this.open('作品与记录',event))
             }
           }.justifyContent(FlexAlign.Center)
-          if(!this.skyOpen){Text(this.personalActive()?(this.language==='en'?'Turn gently and meet every side.':'轻轻转动，看看每一面的自己。'):(this.journey==='forming'?'':this.language==='en'?'Start with a gentle capture.':'从一次轻轻的拍摄开始。')).fontSize(12).fontColor('#AFC1D6').textAlign(TextAlign.Center)}
-        }.width('100%').position({x:0,y:Math.max(0,this.surfaceHeight-154)}).zIndex(10)
+          if(!this.skyOpen&&!this.personalActive()){Text(this.journey==='forming'?'':this.language==='en'?'Start with a gentle capture.':'从一次轻轻的拍摄开始。').fontSize(12).fontColor('#AFC1D6').textAlign(TextAlign.Center)}
+        }.width('100%').position({x:0,y:Math.max(0,this.surfaceHeight-154)})
+          .hitTestBehavior(HitTestMode.Transparent).zIndex(10)
       }
       if(this.detail){Column(){this.details()}.id('detail-panel').width(this.panelWidth()).height(this.panelHeight()).position({x:this.panelX(),y:this.panelY()})
         .transition({opacity:0,scale:{x:.82,y:.82,centerX:this.anchorX-this.panelX(),centerY:this.anchorY-this.panelY()},translate:{y:-8}}).zIndex(20)}

@@ -1,5 +1,5 @@
 import { Application, Asset, Entity, FILLMODE_FILL_WINDOW, RESOLUTION_AUTO, WORKBUFFER_UPDATE_ONCE, Color, Vec3 } from 'playcanvas';
-import { selectVisibleSplats, normalizeLasso, makeOriginalColors, applyDigitalTint, applyDigitalLayers, DIGITAL_PRESETS } from './gs-edit.js';
+import { selectVisibleSplats, normalizeLasso, selectionSlot, shouldRecordLassoPoint, makeOriginalColors, applyDigitalTint, applyDigitalLayers, DIGITAL_PRESETS } from './gs-edit.js';
 
 const canvas=document.getElementById('portrait'), outline=document.getElementById('lasso'), status=document.getElementById('status');
 const preview=document.body.dataset.preview==='true';
@@ -54,7 +54,8 @@ async function start(){
       const radius=Math.hypot(...original);if(!Number.isFinite(radius)||radius<.01)throw Error('个人模型相机参数不完整');
       const openingZoom=preview?.9:view.targetFaceFraction===.5?1:1.36;
       let yaw=0,pitch=0,zoom=openingZoom,targetYaw=0,targetPitch=0,targetZoom=openingZoom;
-      let mode='move',touching=false,lastX=0,lastY=0,polygon=[],selectedPolygon=[],selectionYaw=0,selectionPitch=0,mask=null,selected=0;
+      let mode='move',touching=false,lastX=0,lastY=0,polygon=[],selectedPolygon=[],selectionYaw=0,selectionPitch=0,
+        selectionWidth=0,selectionHeight=0,mask=null,selected=0,appendNext=false;
       let appliedRecipe=null,historyLayers=[],selections=[];
       const decodeMask=value=>{
         const decoded=atob(value||'');
@@ -63,11 +64,68 @@ async function start(){
       };
       const drawHistory=layers=>{applyDigitalLayers(resource,originalColors,layers);model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;app.renderNextFrame=true;};
       const resizeOutline=()=>{const r=canvas.getBoundingClientRect();outline.width=Math.round(r.width*devicePixelRatio);outline.height=Math.round(r.height*devicePixelRatio);};
-      const drawOutline=()=>{const ctx=outline.getContext('2d');ctx.clearRect(0,0,outline.width,outline.height);
-        if(polygon.length<2)return;ctx.save();ctx.scale(devicePixelRatio,devicePixelRatio);
-        ctx.beginPath();ctx.moveTo(polygon[0].x,polygon[0].y);for(let i=1;i<polygon.length;i++)ctx.lineTo(polygon[i].x,polygon[i].y);
-        ctx.strokeStyle='#D4E9FF';ctx.lineWidth=2;ctx.shadowColor='#A7C7F3';ctx.shadowBlur=13;ctx.stroke();ctx.restore();};
-      let firstCamera=true;
+      const xs=data.getProp('x'),ys=data.getProp('y'),zs=data.getProp('z');
+      const sampleMask=weights=>{
+        let count=0;for(const weight of weights)if(weight>32)count++;
+        const stride=Math.max(1,Math.ceil(count/120)),points=[];let seen=0;
+        for(let i=0;i<weights.length;i++)if(weights[i]>32&&seen++%stride===0)points.push([xs[i],ys[i],zs[i]]);
+        return points;
+      };
+      const hull=points=>{
+        const sorted=points.slice().sort((a,b)=>a.x-b.x||a.y-b.y),cross=(a,b,c)=>(b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x);
+        const lower=[],upper=[];
+        for(const point of sorted){while(lower.length>1&&cross(lower[lower.length-2],lower[lower.length-1],point)<=0)lower.pop();lower.push(point);}
+        for(let i=sorted.length-1;i>=0;i--){const point=sorted[i];while(upper.length>1&&cross(upper[upper.length-2],upper[upper.length-1],point)<=0)upper.pop();upper.push(point);}
+        return lower.slice(0,-1).concat(upper.slice(0,-1));
+      };
+      const projectedContour=(entry,width,height)=>{
+        if(Math.cos(yaw-entry.yaw)<.28||Math.abs(pitch-entry.pitch)>1.05)return [];
+        const points=[];
+        for(const pos of entry.samples){const p=camera.camera.worldToScreen(new Vec3(...pos));
+          if(Number.isFinite(p.x)&&Number.isFinite(p.y)&&p.x>=0&&p.y>=0&&p.x<width&&p.y<height)points.push({x:p.x,y:p.y});}
+        if(points.length<9)return [];
+        const sortedX=points.map(p=>p.x).sort((a,b)=>a-b),sortedY=points.map(p=>p.y).sort((a,b)=>a-b);
+        const low=Math.floor(points.length*.04),high=Math.ceil(points.length*.96)-1;
+        return hull(points.filter(p=>p.x>=sortedX[low]&&p.x<=sortedX[high]&&p.y>=sortedY[low]&&p.y<=sortedY[high]));
+      };
+      let sparks=[],sparkFrame=0;
+      const trace=(ctx,points,color,closed=false)=>{
+        if(points.length<2)return;
+        ctx.beginPath();ctx.moveTo(points[0].x,points[0].y);
+        for(let i=1;i<points.length;i++)ctx.lineTo(points[i].x,points[i].y);
+        if(closed)ctx.closePath();
+        ctx.strokeStyle=color;ctx.lineWidth=1.6;ctx.shadowColor=color;ctx.shadowBlur=7;ctx.stroke();ctx.shadowBlur=0;
+      };
+      const drawOutline=()=>{
+        const ctx=outline.getContext('2d');ctx.clearRect(0,0,outline.width,outline.height);
+        const r=canvas.getBoundingClientRect();ctx.save();ctx.scale(devicePixelRatio,devicePixelRatio);
+        const colors=['rgba(204,226,255,.88)','rgba(221,197,255,.88)','rgba(177,240,225,.86)','rgba(255,220,190,.86)'];
+        selections.forEach((entry,index)=>{
+          const sameView=Math.abs(yaw-entry.yaw)<.055&&Math.abs(pitch-entry.pitch)<.055&&
+            Math.abs(r.width-entry.width)<1&&Math.abs(r.height-entry.height)<1;
+          const points=sameView?entry.polygon:projectedContour(entry,r.width,r.height);
+          trace(ctx,points,colors[index],true);
+          if(!sameView&&points.length>2){ctx.fillStyle=colors[index];for(let i=0;i<points.length;i+=Math.max(1,Math.floor(points.length/12))){
+            ctx.beginPath();ctx.arc(points[i].x,points[i].y,1.3,0,Math.PI*2);ctx.fill();}}
+        });
+        trace(ctx,polygon,'rgba(234,218,255,.96)');
+        if(polygon.length){const tip=polygon[polygon.length-1];ctx.fillStyle='#F5EDFF';ctx.shadowColor='#CDAAFF';ctx.shadowBlur=12;
+          ctx.beginPath();ctx.arc(tip.x,tip.y,2.5,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;}
+        const now=performance.now();sparks=sparks.filter(s=>now-s.time<560);
+        for(const s of sparks){const life=(now-s.time)/560,alpha=(1-life)*.8;
+          ctx.fillStyle=`rgba(225,213,255,${alpha})`;
+          ctx.beginPath();ctx.arc(s.x+s.vx*life,s.y+s.vy*life,s.radius*(1-life*.6),0,Math.PI*2);ctx.fill();}
+        ctx.restore();
+      };
+      const animateSparks=()=>{sparkFrame=0;drawOutline();if(sparks.length)sparkFrame=requestAnimationFrame(animateSparks);};
+      const addSparks=(point,burst=false)=>{const now=performance.now(),count=burst?9:2;
+        for(let i=0;i<count;i++){const angle=(i*2.399+now*.005)%(Math.PI*2),speed=burst?8+i%3*4:4+i*2;
+          sparks.push({x:point.x,y:point.y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,
+            radius:burst?1.7+(i%3)*.35:1.2,time:now});}
+        if(sparks.length>70)sparks.splice(0,sparks.length-70);
+        if(!sparkFrame)sparkFrame=requestAnimationFrame(animateSparks);
+      };
+      let firstCamera=true,lastOverlay=0;
       const update=()=>{if(preview&&!touching)targetYaw=Math.sin(performance.now()*.00027)*.23;
         if(!firstCamera&&Math.abs(targetYaw-yaw)<.0002&&Math.abs(targetPitch-pitch)<.0002&&Math.abs(targetZoom-zoom)<.0002)return;
         firstCamera=false;
@@ -75,8 +133,9 @@ async function start(){
         const afterYaw=rotate(original,up,yaw),forward=normal(afterYaw.map(x=>-x));
         const right=normal([forward[1]*up[2]-forward[2]*up[1],forward[2]*up[0]-forward[0]*up[2],forward[0]*up[1]-forward[1]*up[0]]);
         const offset=rotate(afterYaw,right,pitch);
-        camera.setPosition(...offset.map((x,i)=>target[i]+x*zoom));camera.lookAt(...target,...up);app.renderNextFrame=true;};
-      app.on('update',update);update();resizeOutline();
+        camera.setPosition(...offset.map((x,i)=>target[i]+x*zoom));camera.lookAt(...target,...up);app.renderNextFrame=true;
+        if(selections.length&&performance.now()-lastOverlay>32){lastOverlay=performance.now();drawOutline();}};
+      app.on('update',update);update();resizeOutline();drawOutline();
       app.systems.gsplat.on('frame:request',()=>{app.renderNextFrame=true;});
       app.autoRender=false;app.renderNextFrame=true;
       let lastInteraction=-2000;
@@ -85,7 +144,9 @@ async function start(){
       canvas.addEventListener('pointerdown',event=>{interaction();touching=true;lastX=event.clientX;lastY=event.clientY;canvas.setPointerCapture(event.pointerId);
         if(mode==='lasso'){polygon=[pointer(event)];drawOutline();}});
       canvas.addEventListener('pointermove',event=>{if(!touching)return;interaction();
-        if(mode==='lasso'){if(polygon.length<512&&Math.hypot(event.clientX-lastX,event.clientY-lastY)>3){polygon.push(pointer(event));drawOutline();}}
+        if(mode==='lasso'){const point=pointer(event),previous=polygon[polygon.length-1];
+          if(polygon.length<512&&shouldRecordLassoPoint(previous,point)){
+            polygon.push(point);if(polygon.length%3===0)addSparks(point);drawOutline();}}
         else{targetYaw+=(event.clientX-lastX)*.008;targetPitch=Math.max(-.9,Math.min(.9,targetPitch+(event.clientY-lastY)*.008));}
         lastX=event.clientX;lastY=event.clientY;});
       canvas.addEventListener('pointerup',()=>{if(!touching)return;touching=false;if(mode!=='lasso')return;
@@ -95,20 +156,26 @@ async function start(){
           const r=canvas.getBoundingClientRect();
           const result=selectVisibleSplats({data,polygon,target,cameraPosition:camera.getPosition().toArray(),
             project:(x,y,z)=>camera.camera.worldToScreen(new Vec3(x,y,z)),width:r.width,height:r.height});
-          if(selections.length>=4)throw Error('一次最多圈选四处；可以先完成这一组');
+          const slot=selectionSlot(selections.length,appendNext);
+          const regionId=selections[slot]?.regionId||`gs-selected-${slot+1}`;
           mask=result.mask;selected=result.selected;selectedPolygon=polygon.slice();selectionYaw=yaw;selectionPitch=pitch;
-          const regionId=`gs-selected-${selections.length+1}`;
-          selections.push({regionId,mask:mask.slice()});
+          selectionWidth=r.width;selectionHeight=r.height;
+          const entry={regionId,mask:mask.slice(),polygon:polygon.slice(),yaw,pitch,width:r.width,height:r.height,
+            samples:sampleMask(mask)};
+          if(slot===selections.length)selections.push(entry);else selections[slot]=entry;
+          appendNext=false;
           send('GS_SELECTION',{regionId,count:selected,total:data.numSplats,x:polygon.reduce((s,p)=>s+p.x,0)/polygon.length/r.width,
             y:polygon.reduce((s,p)=>s+p.y,0)/polygon.length/r.height});
-          sendBytes('gs-mask',mask);mode='move';report('SELECTED',`已圈出 ${selections.length} 处，可继续圈选或一起说出想法`);
+          sendBytes('gs-mask',mask);if(last)addSparks(last,true);
+          report('SELECTED',`已圈出 ${selections.length} 处；再画可替换当前范围`);
         }catch(error){send('GS_FAILED',{message:String(error)});report('SELECTION_FAILED',String(error));}
-        setTimeout(()=>{polygon=[];drawOutline();},900);});
+        polygon=[];drawOutline();});
       canvas.addEventListener('pointercancel',()=>{touching=false;polygon=[];drawOutline();});
       canvas.addEventListener('wheel',event=>{targetZoom=Math.max(.35,Math.min(4,targetZoom*Math.exp(event.deltaY*.001)));event.preventDefault();},{passive:false});
       command=payload=>{
-        if(payload.action==='TOOL'){mode=payload.tool==='lasso'?'lasso':'move';return;}
-        if(payload.action==='CLEAR_SELECTION'){selections=[];mask=null;selected=0;return;}
+        if(payload.action==='TOOL'){mode=payload.tool==='lasso'?'lasso':'move';appendNext=false;return;}
+        if(payload.action==='ARM_APPEND'){mode='lasso';appendNext=true;return;}
+        if(payload.action==='CLEAR_SELECTION'){selections=[];polygon=[];selectedPolygon=[];mask=null;selected=0;appendNext=false;drawOutline();return;}
         if(payload.action==='SET_HISTORY'){
           const incoming=payload.layers;
           if(!Array.isArray(incoming)||incoming.length>16)throw Error('编辑记录过多');
@@ -178,7 +245,8 @@ async function start(){
               ctx.restore();
             }
           }
-          if(selectedPolygon.length>=3&&Math.abs(yaw-selectionYaw)<.04&&Math.abs(pitch-selectionPitch)<.04){ctx.save();ctx.scale(image.width/r.width,image.height/r.height);ctx.beginPath();ctx.moveTo(selectedPolygon[0].x,selectedPolygon[0].y);
+          if(selectedPolygon.length>=3&&Math.abs(yaw-selectionYaw)<.04&&Math.abs(pitch-selectionPitch)<.04&&
+            Math.abs(r.width-selectionWidth)<1&&Math.abs(r.height-selectionHeight)<1){ctx.save();ctx.scale(image.width/r.width,image.height/r.height);ctx.beginPath();ctx.moveTo(selectedPolygon[0].x,selectedPolygon[0].y);
             for(let i=1;i<selectedPolygon.length;i++)ctx.lineTo(selectedPolygon[i].x,selectedPolygon[i].y);ctx.closePath();ctx.strokeStyle='#D7EAFF';ctx.lineWidth=3;ctx.stroke();ctx.restore();}
           sendBytes('gs-annotated',pngBytes(image.toDataURL('image/png')));return;}
       };

@@ -6,6 +6,19 @@ const clamp = (v, low, high) => Math.max(low, Math.min(high, v));
 // and the existing native PolicyEngine. They are not OLAY product profiles.
 export const DIGITAL_PRESETS = Object.freeze({rose:[.66,.12,.30],terracotta:[.65,.25,.18]});
 
+// A new stroke normally replaces the most recent unsent region. The user must
+// explicitly arm another slot to keep multiple regions in one request.
+export function selectionSlot(length,append,max=4) {
+  if(!Number.isInteger(length)||length<0||length>max)throw Error('圈选数量不正确');
+  if(append&&length>=max)throw Error('一次最多圈选四处；可以先完成这一组');
+  return append?length:Math.max(0,length-1);
+}
+
+export function shouldRecordLassoPoint(previous,point,spacing=3) {
+  return !!previous&&Number.isFinite(point.x)&&Number.isFinite(point.y)&&
+    Math.hypot(point.x-previous.x,point.y-previous.y)>spacing;
+}
+
 export function insidePolygon(x, y, points) {
   let inside = false;
   for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
