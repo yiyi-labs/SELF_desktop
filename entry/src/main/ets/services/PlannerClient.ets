@@ -1,10 +1,12 @@
 import { ProductRepository,ProductRecord } from './ProductRepository';
+import { OlayDiscoveryRepository,OlayDiscoveryItem } from './OlayDiscoveryRepository';
 import { http } from '@kit.NetworkKit';
 import { util } from '@kit.ArkTS';
 import { SessionStore } from '../domain/SessionStore';
 import { SceneView, EditOperation, RegionRecord } from '../domain/EditPlan';
 export interface CloudOperation {operation:string;regionId:string;presetId:string;intensityLevel:string;layerId:string;productProfileId:string;}
-export interface CloudPlan {decision:string;shortMessage:string;operations:CloudOperation[];explanationRefs:string[];question:string;choices?:string[];}
+export interface CloudCareGuide {productId:string;whyHere:string;howToUse:string;}
+export interface CloudPlan {decision:string;shortMessage:string;operations:CloudOperation[];explanationRefs:string[];question:string;choices?:string[];careGuide?:CloudCareGuide|null;}
 export interface DialogueTurn {userText:string;reply:string;choices:string[];}
 export interface CloudRegion {regionId:string;description:string;semantic:string;}
 interface CloudLayer {layerId:string;regionId:string;presetId:string;intensityLevel:string;}
@@ -15,6 +17,7 @@ export interface CloudSnapshot {
  imageWidth:number;imageHeight:number;annotatedRegionId:string;
  annotatedRegionIds?:string[];
  dialogue?:DialogueTurn[];resolvedChoice?:string;responseLanguage?:string;
+ careAdviceRequested?:boolean;
 }
 interface ModelEvidence {requestedModel:string;returnedModel:string;systemFingerprint:string|null;elapsedMs:number;}
 export interface CloudResponse {schemaVersion:number;requestId:string;snapshotId:string;assetId:string;assetVersion:string;textureVersion:string;sceneRevision:number;regionVersion:number;plan:CloudPlan;modelEvidence:ModelEvidence;}
@@ -49,9 +52,19 @@ export class PlannerClient {
   validate(plan:CloudPlan,snapshot:CloudSnapshot):void{
   const productFollowup=(snapshot.productContextIds?.length||0)>0&&/^[1-3]$|这款|这个|它|试一下|试试|淡一点|参数|效果/.test(snapshot.userText);
   const namedProduct=/olay|玉兰油|小白瓶|超红瓶|黑管/i.test(snapshot.userText);
+  const separateCare=/通用数字试色/.test(snapshot.userText)&&
+   /(?:顺便|另外|同时|独立).{0,24}(?:olay|玉兰油).{0,16}(?:护理|养护|使用建议)/i.test(snapshot.userText)&&
+   !/(?:用|靠|按).{0,10}(?:olay|玉兰油).{0,16}(?:达到|做出|涂成|变成|还原)/i.test(snapshot.userText);
   const genericNegation=snapshot.userText.includes('通用数字试色')&&/(?:不是|非|不按|不根据).{0,8}(?:产品|护肤)/.test(snapshot.userText);
-  if(plan.decision==='edit'&&(namedProduct||(!genericNegation&&/产品|护肤/.test(snapshot.userText))||productFollowup||plan.explanationRefs.length>0))throw new Error('这款产品还没有可核验的效果参数，不能用通用试色代替它');
-  if(Object.keys(plan).some((key:string)=>!['decision','shortMessage','operations','explanationRefs','question','choices'].includes(key)))throw new Error('候选包含未知字段');
+  if(plan.decision==='edit'&&(!separateCare&&(namedProduct||(!genericNegation&&/产品|护肤/.test(snapshot.userText)))||productFollowup||plan.explanationRefs.length>0))throw new Error('这款产品还没有可核验的效果参数，不能用通用试色代替它');
+  if(Object.keys(plan).some((key:string)=>!['decision','shortMessage','operations','explanationRefs','question','choices','careGuide'].includes(key)))throw new Error('候选包含未知字段');
+  if(plan.careGuide){
+   const guide=plan.careGuide;
+   if(plan.decision!=='edit'||!snapshot.careAdviceRequested||
+    !OlayDiscoveryRepository.records().some((p:OlayDiscoveryItem)=>p.id===guide.productId)||
+    !guide.whyHere||guide.whyHere.length>100||!guide.howToUse||guide.howToUse.length>140)
+    throw new Error('护理建议与本次修改不匹配');
+  }
   if(plan.choices&&plan.choices.length&&(plan.decision!=='clarify'||plan.choices.length<2||plan.choices.length>3||plan.choices.some((c:string)=>!c.trim()||c.length>60)))throw new Error('对话选项无效');
   if(/\brose\b|\bterracotta\b|regionId|presetId|layerId/.test(plan.shortMessage+plan.question+(plan.choices||[]).join(' ')))throw new Error('回复包含内部标识，请重新提出请求');
   if(/^[1-3]$/.test(snapshot.userText.trim())&&plan.decision==='edit'&&!snapshot.resolvedChoice)throw new Error('请说明这个数字对应的选择');

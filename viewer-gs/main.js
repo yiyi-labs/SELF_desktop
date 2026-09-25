@@ -61,19 +61,24 @@ async function start(){
         if(decoded.length!==data.numSplats)throw Error('圈选和个人模型不匹配');
         return Uint8Array.from(decoded,c=>c.charCodeAt(0));
       };
-      const drawHistory=layers=>{applyDigitalLayers(resource,originalColors,layers);model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;};
+      const drawHistory=layers=>{applyDigitalLayers(resource,originalColors,layers);model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;app.renderNextFrame=true;};
       const resizeOutline=()=>{const r=canvas.getBoundingClientRect();outline.width=Math.round(r.width*devicePixelRatio);outline.height=Math.round(r.height*devicePixelRatio);};
       const drawOutline=()=>{const ctx=outline.getContext('2d');ctx.clearRect(0,0,outline.width,outline.height);
         if(polygon.length<2)return;ctx.save();ctx.scale(devicePixelRatio,devicePixelRatio);
         ctx.beginPath();ctx.moveTo(polygon[0].x,polygon[0].y);for(let i=1;i<polygon.length;i++)ctx.lineTo(polygon[i].x,polygon[i].y);
         ctx.strokeStyle='#D4E9FF';ctx.lineWidth=2;ctx.shadowColor='#A7C7F3';ctx.shadowBlur=13;ctx.stroke();ctx.restore();};
+      let firstCamera=true;
       const update=()=>{if(preview&&!touching)targetYaw=Math.sin(performance.now()*.00027)*.23;
+        if(!firstCamera&&Math.abs(targetYaw-yaw)<.0002&&Math.abs(targetPitch-pitch)<.0002&&Math.abs(targetZoom-zoom)<.0002)return;
+        firstCamera=false;
         yaw+=(targetYaw-yaw)*.2;pitch+=(targetPitch-pitch)*.2;zoom+=(targetZoom-zoom)*.2;
         const afterYaw=rotate(original,up,yaw),forward=normal(afterYaw.map(x=>-x));
         const right=normal([forward[1]*up[2]-forward[2]*up[1],forward[2]*up[0]-forward[0]*up[2],forward[0]*up[1]-forward[1]*up[0]]);
         const offset=rotate(afterYaw,right,pitch);
-        camera.setPosition(...offset.map((x,i)=>target[i]+x*zoom));camera.lookAt(...target,...up);};
+        camera.setPosition(...offset.map((x,i)=>target[i]+x*zoom));camera.lookAt(...target,...up);app.renderNextFrame=true;};
       app.on('update',update);update();resizeOutline();
+      app.systems.gsplat.on('frame:request',()=>{app.renderNextFrame=true;});
+      app.autoRender=false;app.renderNextFrame=true;
       let lastInteraction=-2000;
       const interaction=()=>{if(performance.now()-lastInteraction>1800){lastInteraction=performance.now();console.log('SELF_GS_VIEWER_INTERACTION');}};
       const pointer=event=>{const r=canvas.getBoundingClientRect();return {x:event.clientX-r.left,y:event.clientY-r.top};};
@@ -118,22 +123,22 @@ async function start(){
           if(selected<80)throw Error('已存圈选范围不完整');
           if(!Object.hasOwn(DIGITAL_PRESETS,payload.preset)||![.18,.32,.5].includes(payload.strength))throw Error('已存颜色参数不正确');
           applyDigitalTint(resource,originalColors,mask,DIGITAL_PRESETS[payload.preset],payload.strength);
-          model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;
+          model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;app.renderNextFrame=true;
           appliedRecipe={mask:mask.slice(),preset:payload.preset,strength:payload.strength};
           send('GS_APPLIED',{action:'RESTORE',count:selected});return;}
         if(payload.action==='RESET'){applyDigitalTint(resource,originalColors,new Uint8Array(data.numSplats),[.5,.5,.5],0);
-          model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;appliedRecipe=null;send('GS_APPLIED',{action:'RESET'});return;}
+          model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;app.renderNextFrame=true;appliedRecipe=null;send('GS_APPLIED',{action:'RESET'});return;}
         if(payload.action==='COMPARE_ORIGINAL'||payload.action==='COMPARE_EDIT'){
           if(!appliedRecipe)throw Error('还没有可对比的变化');
           if(payload.action==='COMPARE_ORIGINAL')applyDigitalTint(resource,originalColors,new Uint8Array(data.numSplats),[.5,.5,.5],0);
           else applyDigitalTint(resource,originalColors,appliedRecipe.mask,DIGITAL_PRESETS[appliedRecipe.preset],appliedRecipe.strength);
-          model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;
+          model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;app.renderNextFrame=true;
           send('GS_APPLIED',{action:payload.action});return;}
         if(payload.action==='APPLY'){
           if(!mask||selected<80)throw Error('请先圈出想试的地方');
           if(!Object.hasOwn(DIGITAL_PRESETS,payload.preset)||![.18,.32,.5].includes(payload.strength))throw Error('这次的颜色建议还不能使用');
           applyDigitalTint(resource,originalColors,mask,DIGITAL_PRESETS[payload.preset],payload.strength);
-          model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;
+          model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;app.renderNextFrame=true;
           appliedRecipe={mask:mask.slice(),preset:payload.preset,strength:payload.strength};
           send('GS_APPLIED',{action:'APPLY',count:selected});return;}
         if(payload.action==='CAPTURE'){
@@ -181,7 +186,7 @@ async function start(){
       report('READY',`已载入 ${data.numSplats} 个立体细节点，可拖动观察`);
       setTimeout(()=>status.classList.add('quiet'),2200);
       console.log(`SELF_GS_VIEWER_VIEW ${view.sourceFrame} ${view.faceTrackCount} ${view.fovDegrees}`);
-      window.addEventListener('resize',()=>{app.resizeCanvas();resizeOutline();drawOutline();});
+      window.addEventListener('resize',()=>{app.resizeCanvas();resizeOutline();drawOutline();app.renderNextFrame=true;});
     }catch(error){report('ERROR','立体面容绘制失败：'+String(error));}
   });app.assets.load(asset);
 }

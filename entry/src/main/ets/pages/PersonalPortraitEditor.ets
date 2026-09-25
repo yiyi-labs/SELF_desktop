@@ -2,10 +2,13 @@ import { common } from '@kit.AbilityKit';
 import { fileIo as fs } from '@kit.CoreFileKit';
 import { util } from '@kit.ArkTS';
 import { GaussianPortraitSurface, GsSelection } from './GaussianPortraitSurface';
-import { PlannerClient, CloudResponse, CloudSnapshot, CloudRegion, DialogueTurn } from '../services/PlannerClient';
+import { PlannerClient, CloudResponse, CloudSnapshot, CloudRegion, DialogueTurn, CloudCareGuide } from '../services/PlannerClient';
 import { GsRenderLayer } from '../bridge/RendererBridge';
 import { AssetStore } from '../services/AssetStore';
 import { OlayLibrary } from './OlayLibrary';
+import { OlayDiscoveryRepository,OlayDiscoveryItem } from '../services/OlayDiscoveryRepository';
+import { OlayPhotoRepository } from '../services/OlayPhotoRepository';
+import { StarCloseButton } from './StarCloseButton';
 
 interface SavedGsEdit {
   schemaVersion:number;
@@ -25,11 +28,11 @@ interface GsLayer {
   maskChecksum:string;
   maskBase64:string;
 }
-interface GsGroup {groupId:string;label:string;createdAt:number;layers:GsLayer[];}
+interface GsGroup {groupId:string;label:string;createdAt:number;layers:GsLayer[];careGuide?:CloudCareGuide|null;}
 interface GsHistory {schemaVersion:number;assetId:string;assetBytes:number;splatCount:number;groups:GsGroup[];}
 interface SelectedGsRegion {info:GsSelection;mask:ArrayBuffer;}
 interface GsHistoryItem {layerId:string;preset:string;}
-interface GsHistoryDisplay {groupId:string;label:string;items:GsHistoryItem[];}
+interface GsHistoryDisplay {groupId:string;label:string;items:GsHistoryItem[];careGuide?:CloudCareGuide|null;}
 
 /** Personal 3DGS editing remains inside its PlayCanvas surface. The PLY is immutable. */
 @Component
@@ -74,6 +77,7 @@ export struct PersonalPortraitEditor {
   @State keyboardOpen:boolean=false;
   @State historyOpen:boolean=false;
   @State libraryOpen:boolean=false;
+  @State expandedCareGroup:string='';
   @State historyRevision:number=0;
   @State selectionCount:number=0;
   @State historyDisplay:GsHistoryDisplay[]=[];
@@ -85,6 +89,10 @@ export struct PersonalPortraitEditor {
   @State anchorY:number=.5;
 
   private label(zh:string,en:string):string{return this.language==='en'?en:zh;}
+  private careProduct(id:string):OlayDiscoveryItem|undefined{return OlayDiscoveryRepository.records().find((item:OlayDiscoveryItem)=>item.id===id);}
+  private historyPanelWidth():number{return Math.min(this.viewportWidth-24,this.viewportHeight>this.viewportWidth?420:360);}
+  private historyPanelHeight():number{return this.viewportHeight>this.viewportWidth?
+    Math.min(this.viewportHeight*.69,820):Math.min(this.viewportHeight*.62,520);}
   private bubbleLeft():number {
     const width=Math.min(330,this.viewportWidth-36);
     if(this.keyboardOpen&&this.viewportWidth>=840)return 24;
@@ -115,6 +123,11 @@ export struct PersonalPortraitEditor {
           history.groups.some((group:GsGroup)=>!Array.isArray(group.layers)||group.layers.length<1||group.layers.length>4||
             group.groupId.length>80||group.label.length>100)||
           history.groups.reduce((n:number,group:GsGroup)=>n+group.layers.length,0)>16)throw new Error('history_mismatch');
+        for(const group of history.groups){
+          const guide=group.careGuide;
+          if(guide&&(!this.careProduct(guide.productId)||typeof guide.whyHere!=='string'||guide.whyHere.length>100||
+            typeof guide.howToUse!=='string'||guide.howToUse.length>140))group.careGuide=null;
+        }
         const decoder=new util.Base64Helper();
         for(const group of history.groups)for(const layer of group.layers){
           const bytes=decoder.decodeSync(layer.maskBase64);
@@ -154,7 +167,7 @@ export struct PersonalPortraitEditor {
       const items:GsHistoryItem[]=group.layers.map((layer:GsLayer)=>{
         const item:GsHistoryItem={layerId:layer.layerId,preset:layer.preset};return item;
       });
-      const display:GsHistoryDisplay={groupId:group.groupId,label:group.label,items};return display;
+      const display:GsHistoryDisplay={groupId:group.groupId,label:group.label,items,careGuide:group.careGuide};return display;
     });
     this.historyRevision++;
   }
@@ -233,7 +246,7 @@ export struct PersonalPortraitEditor {
       protectedRegionIds:[],productContextIds:[],uploadAuthorized:true,
       imageWidth:width,imageHeight:height,annotatedRegionId:this.selections.length===1?this.selections[0].info.regionId:'',
       annotatedRegionIds:this.selections.map((item:SelectedGsRegion)=>item.info.regionId),
-      dialogue:this.dialogue.slice(-3),responseLanguage:this.language
+      dialogue:this.dialogue.slice(-3),responseLanguage:this.language,careAdviceRequested:true
     };
     this.planner.endpoint=this.backendAddress.trim();this.planner.token=this.backendToken.trim();
     try{
@@ -270,7 +283,8 @@ export struct PersonalPortraitEditor {
         maskBase64:new util.Base64Helper().encodeToStringSync(bytes)};
       return layer;
     });
-    const group:GsGroup={groupId,label:this.requestText.slice(0,28),createdAt:Date.now(),layers};
+    const group:GsGroup={groupId,label:this.requestText.slice(0,28),createdAt:Date.now(),layers,
+      careGuide:reply.plan.careGuide||null};
     this.stageHistory({schemaVersion:2,assetId:old.assetId,assetBytes:old.assetBytes,
       splatCount:this.selections[0].mask.byteLength,groups:old.groups.concat([group])});
     this.pending=undefined;this.pendingSnapshot=undefined;this.candidateReady=false;
@@ -317,7 +331,7 @@ export struct PersonalPortraitEditor {
   private deleteLayer(id:string):void{
     if(!this.history||this.pendingHistory)return;
     const groups=this.history.groups.map((group:GsGroup)=>{
-      const revised:GsGroup={groupId:group.groupId,label:group.label,createdAt:group.createdAt,
+      const revised:GsGroup={groupId:group.groupId,label:group.label,createdAt:group.createdAt,careGuide:null,
         layers:group.layers.filter((layer:GsLayer)=>layer.layerId!==id)};return revised;
     }).filter((group:GsGroup)=>group.layers.length>0);
     this.stageHistory({schemaVersion:2,assetId:this.history.assetId,assetBytes:this.history.assetBytes,
@@ -342,7 +356,7 @@ export struct PersonalPortraitEditor {
       if(this.bubble){
         Column({space:8}){
           Row(){Text('✦ SELF').fontSize(12).letterSpacing(2).fontColor('#BFD8F3').layoutWeight(1);
-            Button('×').fontSize(18).fontColor('#DCEAFF').backgroundColor('#00000000').width(30).height(30).onClick(()=>this.bubble=false)}
+            StarCloseButton({diameter:30,label:this.label('关闭','Close'),onClose:()=>{this.bubble=false;}})}
           Text(this.responseText).fontSize(15).lineHeight(22).fontColor('#F1F5FF').maxLines(3)
           if(this.candidateReady){Text(this.label('✧ 数字预览 · '+this.selectionCount+' 处 · 非产品实测效果',
             '✧ Digital preview · '+this.selectionCount+' areas · not a product effect'))
@@ -386,50 +400,80 @@ export struct PersonalPortraitEditor {
           .position({x:this.bubbleLeft(),y:Math.max(110,Math.min(this.viewportHeight-(this.keyboardOpen?680:470),this.anchorY*this.viewportHeight-92))})
           .transition({opacity:0,scale:{x:.92,y:.92},translate:{y:12}}).zIndex(8)
       }
-      if(this.ready&&!this.libraryOpen){
-        Button(this.label('✧ 变化记录','✧ Changes')).id('personal-gs-history').height(42).fontSize(12)
-          .fontColor('#ECF3FF').backgroundColor('#1C334DC9').border({width:1,color:'#718EAF'})
-          .borderRadius(21).onClick(()=>{this.historyOpen=!this.historyOpen;this.bubble=false;})
-          .position({x:Math.max(16,this.viewportWidth-135),y:92}).zIndex(7)
-      }
       if(this.historyOpen){
-        Column({space:10}){
-          Row(){Text(this.label('这颗星辰的变化','Changes on this portrait')).fontSize(15).fontColor('#F1F6FF').layoutWeight(1)
-            Button('×').fontSize(18).fontColor('#EAF3FF').backgroundColor('#00000000').width(28).height(28)
-              .onClick(()=>{this.historyOpen=false;this.previewHistory('');})}
-          if(this.historyDisplay.length===0){Text(this.label('这里还没有新的变化','No changes yet')).fontSize(13).fontColor('#BBD0E6')}
-          Scroll(){Column({space:10}){
+        Stack(){
+          List({space:9}){
+            ListItem(){Column({space:4}){
+              Text(this.label('这颗星辰的变化','Changes on this portrait')).fontSize(18).fontWeight(FontWeight.Medium).fontColor('#F1F6FF')
+              Text(this.label('轻轻展开，看看每一步','Open a moment to see more')).fontSize(11).fontColor('#A9C2DF')
+            }.alignItems(HorizontalAlign.Start).padding({right:45})}
+            if(this.historyDisplay.length===0){
+              ListItem(){Text(this.label('这里还没有新的变化','No changes yet')).fontSize(13).fontColor('#BBD0E6').padding(12)}
+            }
             ForEach(this.historyDisplay,(group:GsHistoryDisplay)=>{
-              Column({space:6}){
-                Text(group.label||this.label('一次尝试','One exploration')).fontSize(13).fontColor('#F1F6FF').maxLines(2)
-                Row({space:7}){
-                  Button(this.label('看这组','Compare group')).fontSize(11).fontColor('#EAF3FF')
-                    .backgroundColor('#385773').borderRadius(16).onClick(()=>this.previewHistory(group.groupId))
-                  Button(this.label('整组回退','Remove group')).fontSize(11).fontColor('#EAF3FF')
-                    .backgroundColor('#385773').borderRadius(16).onClick(()=>this.deleteGroup(group.groupId))
-                }
+              ListItem(){Column({space:9}){
+                Text(group.label||this.label('一次尝试','One exploration')).fontSize(14).fontWeight(FontWeight.Medium)
+                  .fontColor('#F1F6FF').maxLines(2).width('100%')
+                Row({space:8}){
+                  Button(this.label('看这组','View group')).fontSize(12).fontColor('#EEF6FF')
+                    .backgroundColor('#365574').borderRadius(16).onClick(()=>this.previewHistory(group.groupId))
+                  Button(this.label('移除整组','Remove group')).fontSize(12).fontColor('#D8E9FA')
+                    .backgroundColor('#29425D').borderRadius(16).onClick(()=>this.deleteGroup(group.groupId))
+                }.width('100%')
                 ForEach(group.items,(item:GsHistoryItem,index:number)=>{
-                  Row({space:6}){
+                  Row({space:7}){
                     Text((index+1)+' · '+(item.preset==='rose'?this.label('柔玫瑰','Muted pink'):this.label('暖陶棕','Warm clay')))
                       .fontSize(12).fontColor('#C8D9ED').layoutWeight(1)
-                    Button('◉').fontSize(13).fontColor('#EAF3FF').backgroundColor('#385773').borderRadius(18)
-                      .accessibilityText(this.label('单项对比','Compare layer'))
-                      .onClick(()=>this.previewHistory(item.layerId))
-                    Button('×').fontSize(14).fontColor('#EAF3FF').backgroundColor('#385773').borderRadius(18)
-                      .accessibilityText(this.label('移除这一项','Remove layer'))
-                      .onClick(()=>this.deleteLayer(item.layerId))
-                  }
+                    Button(this.label('对比','Compare')).fontSize(11).fontColor('#EAF3FF').backgroundColor('#365574')
+                      .borderRadius(15).onClick(()=>this.previewHistory(item.layerId))
+                    StarCloseButton({diameter:27,label:this.label('移除这一项','Remove layer'),onClose:()=>this.deleteLayer(item.layerId)})
+                  }.width('100%')
                 },(item:GsHistoryItem)=>item.layerId)
-              }.padding(10).backgroundColor('#243C56CC').borderRadius(16)
+                if(group.careGuide&&this.careProduct(group.careGuide.productId)){
+                  Row({space:8}){
+                    Image(OlayPhotoRepository.thumbnail(group.careGuide.productId)).width(42).height(42).objectFit(ImageFit.Contain)
+                    Column({space:3}){
+                      Text((this.careProduct(group.careGuide.productId) as OlayDiscoveryItem).name).fontSize(12).fontColor('#EBF3FF').maxLines(1)
+                      Text(this.label('✧ 养护小记','✧ Care notes')).fontSize(10).fontColor('#AFC9E3')
+                    }.alignItems(HorizontalAlign.Start).layoutWeight(1)
+                    Text(this.expandedCareGroup===group.groupId?'⌃':'⌄').fontSize(16).fontColor('#C6DDF4')
+                  }.padding({left:8,right:10,top:6,bottom:6}).width('100%').backgroundColor('#294760B9')
+                    .border({width:1,color:'#6588A6'}).borderRadius(15)
+                    .onClick(()=>this.getUIContext().animateTo({duration:210,curve:Curve.EaseOut},()=>{
+                      this.expandedCareGroup=this.expandedCareGroup===group.groupId?'':group.groupId;}))
+                  if(this.expandedCareGroup===group.groupId){
+                    Text(group.careGuide.whyHere).fontSize(12).lineHeight(18).fontColor('#DCEAF8')
+                    Text(group.careGuide.howToUse).fontSize(12).lineHeight(18).fontColor('#DCEAF8')
+                    Text(this.label('日常护理与屏幕里的数字色彩是两件事。','Daily care and the digital colour are separate.'))
+                      .fontSize(10).fontColor('#AFC6DE')
+                  }
+                }else{
+                  Text(this.label('这次先留在数字光色里，没有硬配护理单品。','A digital colour exploration, with no forced product match.'))
+                    .fontSize(11).fontColor('#AFC5DB')
+                }
+              }.padding(12).width('100%').backgroundColor('#29435CC9').border({width:1,color:'#7091B0'}).borderRadius(20)}
             },(group:GsHistoryDisplay)=>group.groupId)
-          }}.height(Math.min(390,this.viewportHeight*.53))
-          if(this.applied){Button(this.label('看全部变化','Show all')).fontSize(12).fontColor('#EAF3FF')
-            .backgroundColor('#385773').borderRadius(18).onClick(()=>this.previewHistory(''))}
-        }.padding(14).width(Math.min(340,this.viewportWidth-32)).backgroundColor('#132940ED')
-          .border({width:1,color:'#6285A8'}).borderRadius(22)
-          .position({x:Math.max(16,this.viewportWidth-Math.min(340,this.viewportWidth-32)-16),y:138}).zIndex(9)
+            if(this.applied){ListItem(){Button(this.label('看全部变化','Show all')).fontSize(12).fontColor('#EAF3FF')
+              .backgroundColor('#365574').borderRadius(18).onClick(()=>this.previewHistory(''))}}
+          }.padding(16).width('100%').height('100%').scrollBar(BarState.Off).edgeEffect(EdgeEffect.Spring)
+          StarCloseButton({diameter:36,label:this.label('关闭','Close'),onClose:()=>{this.historyOpen=false;this.previewHistory('');}})
+            .position({x:this.historyPanelWidth()-52,y:16})
+        }.width(this.historyPanelWidth()).height(this.historyPanelHeight()).backgroundColor('#E912253D')
+          .border({width:1,color:'#5D7998'}).borderRadius(28).shadow({radius:26,color:'#66030813',offsetY:8})
+          .position({x:this.viewportWidth>=840?18:12,
+            y:Math.max(80,this.viewportHeight-this.historyPanelHeight()-90)})
+          .transition({opacity:0,scale:{x:.94,y:.94},translate:{y:12}}).zIndex(9)
       }
       if(this.ready&&!this.libraryOpen){
+        Button(this.label('✧  变化记录','✧  Changes')).id('personal-gs-history').height(46)
+          .padding({left:16,right:16}).fontSize(14).fontWeight(FontWeight.Medium).fontColor('#F3F8FF')
+          .backgroundColor(this.historyOpen?'#426183DD':'#263E5BCE').border({width:1,color:'#9AB9D5'})
+          .borderRadius(23).shadow({radius:8,color:'#416B92'})
+          .stateStyles({pressed:{.scale({x:.95,y:.95})},normal:{.scale({x:1,y:1})}})
+          .animation({duration:170,curve:Curve.EaseOut})
+          .onClick(()=>{this.getUIContext().animateTo({duration:210,curve:Curve.EaseOut},()=>{
+            this.historyOpen=!this.historyOpen;this.bubble=false;});})
+          .position({x:18,y:Math.max(96,this.viewportHeight-274)}).zIndex(7)
         if(!this.libraryOpen){
           Button(this.label('✦  护理星图','✦  Care atlas')).id('personal-olay-library').height(43)
             .padding({left:14,right:14}).fontSize(12).fontColor('#E8F2FF')
@@ -463,7 +507,8 @@ export struct PersonalPortraitEditor {
         OlayLibrary({language:this.language,viewportWidth:this.viewportWidth,viewportHeight:this.viewportHeight,
           onClose:()=>this.getUIContext().animateTo({duration:200,curve:Curve.EaseOut},()=>{this.libraryOpen=false;})})
           .position({x:this.viewportWidth>=840?18:12,
-            y:Math.max(80,this.viewportHeight-(this.viewportWidth>=840?Math.min(this.viewportHeight*.52,400):Math.min(this.viewportHeight*.42,390))-28)})
+            y:Math.max(80,this.viewportHeight-(this.viewportHeight>this.viewportWidth?
+              Math.min(this.viewportHeight*.74,900):Math.min(this.viewportHeight*.62,520))-90)})
           .transition({opacity:0,scale:{x:.94,y:.94},translate:{y:12}}).zIndex(12)
       }
     }.width('100%').height('100%')

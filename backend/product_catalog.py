@@ -25,6 +25,13 @@ def allowed_refs(user_text: str, context_ids: list[str] | None = None) -> set[st
 
 def requests_product_effect(user_text: str, context_ids: list[str] | None = None) -> bool:
     value=user_text.lower()
+    # A clearly separate daily-care question can accompany a generic colour
+    # preview in one conversation. It still cannot authorize a product effect.
+    separate_care = ('通用数字试色' in value and
+        re.search(r'(?:顺便|另外|同时|独立).{0,24}(?:olay|玉兰油).{0,16}(?:护理|养护|使用建议)',value) and
+        not re.search(r'(?:用|靠|按).{0,10}(?:olay|玉兰油).{0,16}(?:达到|做出|涂成|变成|还原)',value))
+    if separate_care:
+        return False
     if any(term in value for term in ('olay','玉兰油','小白瓶','超红瓶','黑管')):
         return True
     # A request explicitly framed as generic digital colour is not a product

@@ -1,0 +1,730 @@
+{
+  "checkedOn": "2026-09-25",
+  "market": "CN",
+  "purpose": "In-app product-appearance thumbnails only; never measured product effect on skin.",
+  "processing": "Retail listing packshots isolated from advertisements via image generation, then split and resized without content retouching. Generated label microtext is not a substitute for the physical packaging.",
+  "reuseRights": "Retail/brand image redistribution rights have not been verified; obtain permission before public release.",
+  "coverage": {
+    "discoveryRecords": 63,
+    "brandPressPackshots": 4,
+    "retailProcessedPackshots": 55,
+    "seriesReferenceRecords": 2,
+    "assembledPairRecords": 1,
+    "duplicateSpecificationRecords": 2
+  },
+  "items": [
+    {
+      "productId": "CN005",
+      "resource": "olay_cn005.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）全新水光小白瓶50ml美白精华液抗糖提亮护肤品中秋节礼物女友孙千",
+          "listingUrl": "https://item.jd.com/100182378712.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/520536/5/12829/66632/6ab2423aFef5bb727/0083320320792c4b.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN006",
+      "resource": "olay_cn006.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）全新淡纹黑管精华液30ml ProX抗皱紧致保湿修护护肤品中秋节礼物",
+          "listingUrl": "https://item.jd.com/100106090037.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/520638/5/2020/77429/6a9a952bF0b71e172/0083320320d445c7.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN007",
+      "resource": "olay_cn007.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）全新淡纹黑管精粹水150ml ProX抗皱紧致补水保湿护肤品中秋节礼物",
+          "listingUrl": "https://item.jd.com/100333524214.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/520154/18/2385/44608/6a9a958eF706deae3/0083320320f812c0.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN008",
+      "resource": "olay_cn008.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）全新淡纹黑管眼霜20g ProX保湿抗皱紧致提拉护肤品中秋节礼物女友",
+          "listingUrl": "https://item.jd.com/100249949001.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/514011/33/8983/61242/6a9a9583F68e526fd/0083320320c38409.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN009",
+      "resource": "olay_cn009.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）全新淡纹黑管面霜50g ProX修护抗皱紧致补水保湿护肤品中秋节礼物",
+          "listingUrl": "https://item.jd.com/100333524212.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/511642/3/11746/64101/6a9a9594Fef5641c9/00833203203da3fc.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN010",
+      "resource": "olay_cn019.png",
+      "mappingStatus": "series_reference",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）第4代淡斑小白瓶80ml传明酸面部精华液ProX护肤品套装中秋节礼物",
+          "listingUrl": "https://item.jd.com/100092327970.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/514658/36/15845/83873/6aacf81fF6fce4d05/00833203203f5908.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN011",
+      "resource": "olay_cn011.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）传明酸冷凝胶次抛精华液保湿面部精华护肤品女友节日礼物 600mg*14支",
+          "listingUrl": "https://item.jd.com/10218358011810.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/418029/18/22330/102793/69e5fa5cFf04d3be1/00833203208f1817.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN012",
+      "resource": "olay_cn012.png",
+      "mappingStatus": "assembled_pair_reference",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）第4代淡斑小白瓶80ml传明酸面部精华液ProX护肤品套装中秋节礼物",
+          "listingUrl": "https://item.jd.com/100092327970.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/514658/36/15845/83873/6aacf81fF6fce4d05/00833203203f5908.jpg"
+        },
+        {
+          "title": "玉兰油（OLAY）传明酸冷凝胶次抛精华液保湿面部精华护肤品女友节日礼物 600mg*14支",
+          "listingUrl": "https://item.jd.com/10218358011810.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/418029/18/22330/102793/69e5fa5cFf04d3be1/00833203208f1817.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN013",
+      "resource": "olay_cn013.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）全新小白伞防晒霜50ml防汗高倍防晒乳隔离霜中秋节礼物送女友",
+          "listingUrl": "https://item.jd.com/100182378406.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/532557/32/2661/68173/6ab2422fF03b53268/0083320320900aee.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN015",
+      "resource": "olay_cn015.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）全新美白精华水150ml补水提亮抗糖爽肤水护肤品中秋节礼物送女友",
+          "listingUrl": "https://item.jd.com/100156256607.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/533657/6/1989/60353/6ab24229Fa8938551/008332032071136b.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN016",
+      "resource": "olay_cn016.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "【准新品】玉兰油（OLAY）【全新升级】美白乳液100ml补水保湿提亮改善暗沉护肤品生日礼物  ",
+          "listingUrl": "https://item.jd.com/100213914066.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/272932/2/11215/14448/67e4fb3fF506b6a64/e9ae8bb77e3391ad.png"
+        }
+      ]
+    },
+    {
+      "productId": "CN017",
+      "resource": "olay_cn017.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）大红瓶精华水250ml保湿抗皱紧致爽肤水护肤品中秋节礼物送女友",
+          "listingUrl": "https://item.jd.com/100000168556.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/504108/23/16725/60179/6a9a951dF494ba44d/00833203205690c7.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN018",
+      "resource": "olay_cn018.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）大红瓶精粹乳100ml保湿抗皱紧致护肤品中秋节礼物送女友",
+          "listingUrl": "https://item.jd.com/100076518059.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/505945/33/13183/43661/6a9a9528F3ce6aff8/00833203201c0d9d.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN019",
+      "resource": "olay_cn019.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）第4代淡斑小白瓶80ml传明酸面部精华液ProX护肤品套装中秋节礼物",
+          "listingUrl": "https://item.jd.com/100092327970.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/514658/36/15845/83873/6aacf81fF6fce4d05/00833203203f5908.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN020",
+      "resource": "olay_cn020.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）美白水乳套装超抗小白瓶礼盒烟酰胺抗糖美白提亮肤色女士护肤品 二代美白水乳6件套+洁面20g",
+          "listingUrl": "https://item.jd.com/10148585599746.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/309119/4/4819/89007/6836e769Feda592b3/a844227710d6c71e.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN021",
+      "resource": "olay_cn021.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）全新超红瓶精萃水180ml保湿抗皱紧致爽肤水护肤品中秋节礼物女友",
+          "listingUrl": "https://item.jd.com/100384885548.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/514364/26/7218/109347/6a9a959cF9cfffb3f/0083320320a7a210.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN022",
+      "resource": "olay_cn018.png",
+      "mappingStatus": "series_reference",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）大红瓶精粹乳100ml保湿抗皱紧致护肤品中秋节礼物送女友",
+          "listingUrl": "https://item.jd.com/100076518059.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/505945/33/13183/43661/6a9a9528F3ce6aff8/00833203201c0d9d.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN023",
+      "resource": "olay_cn023.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）大红瓶精华50ml修护保湿紧致抗皱中秋礼物",
+          "listingUrl": "https://item.jd.com/100142440047.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/382918/9/22694/97235/696a40aaF74dd1225/0083320320c2ddd4.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN024",
+      "resource": "olay_cn024.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）超红瓶胜肽眼霜15g淡化细纹提拉紧致黑眼圈护肤品中秋节礼物女友",
+          "listingUrl": "https://item.jd.com/100129946696.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/508353/8/12834/67457/6a9a952fF9fba2205/00833203203bc3f5.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN025",
+      "resource": "olay_cn025.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油OLAY超A眼霜抗皱眼部霜A醇ProX乳淡纹滋润紧致补水保湿女士护肤品 超A醇眼霜30g",
+          "listingUrl": "https://item.jd.com/10066642390334.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/179883/3/29774/33238/634e6f43Ee654fd27/28b6106f7868091d.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN026",
+      "resource": "olay_cn026.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）多效眼霜15g淡化细纹提拉紧致黑眼圈女士护肤品中秋节礼物送女友",
+          "listingUrl": "https://item.jd.com/216132.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/496794/17/9646/64009/6a9a9519F06f76599/008332032098b444.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN027",
+      "resource": "olay_cn027.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）全新水光小白瓶面膜20片补水美白去黄提亮护肤品中秋节礼物送女友",
+          "listingUrl": "https://item.jd.com/100249185756.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/516151/28/14819/72567/6ab2423aF203f61ab/0083320320ef3f52.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN028",
+      "resource": "olay_cn028.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）大红瓶面膜15片 抗皱紧致保湿面膜护肤品生日礼物送女友",
+          "listingUrl": "https://item.jd.com/100242409073.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/430198/29/15195/58371/6a01b437F0d8cd5d3/0083320320cdd837.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN029",
+      "resource": "olay_cn029.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）全新30氨基酸洁面100g卸妆控油深层清洁洗面奶护肤品中秋节礼物女",
+          "listingUrl": "https://item.jd.com/100160813166.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/522244/32/11953/73085/6ab24237F72ddf03d/0083320320f96af9.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN030",
+      "resource": "olay_cn030.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）乳液透亮洁面乳100g卸妆清洁控油洗面奶护肤品中秋节礼物送女友",
+          "listingUrl": "https://item.jd.com/189580.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/497204/21/6402/81209/6a9a9516F3475ce2b/0083320320d39b8a.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN031",
+      "resource": "olay_cn031.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）高保湿透亮营养水150ml保湿焕白亮白细毛孔护肤品中秋节礼物送女",
+          "listingUrl": "https://item.jd.com/216116.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/515559/15/7648/72687/6a9a9514Fbe0af57f/0083320320c86e41.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN032",
+      "resource": "olay_cn032.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）多效醒肤水150ml紧致保湿补水细致毛孔控油平衡护肤品中秋节礼物",
+          "listingUrl": "https://item.jd.com/189589.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/511117/38/12786/75686/6a9a9519F169168d8/00833203207c76ea.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN033",
+      "resource": "olay_cn033.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）保湿滋润乳液150ml补水润肤不油腻男女中秋礼物",
+          "listingUrl": "https://item.jd.com/100140210004.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/387426/10/12140/54041/696e01b4F14243354/0083320320c38961.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN034",
+      "resource": "olay_cn034.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）大红瓶面霜50g抗皱紧致女士保湿面霜护肤品中秋节礼物送女友",
+          "listingUrl": "https://item.jd.com/819172.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/507233/1/13591/71820/6a9a9520Ffa148db6/0083320320068754.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN035",
+      "resource": "olay_cn035.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油OLAY透亮润肤霜50g  紧致补水保湿提亮肤色面霜护肤",
+          "listingUrl": "https://item.jd.com/100216306424.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/286831/9/17976/45780/685ea686F50f90dbf/1dbfa9b7d0e9b248.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN036",
+      "resource": "olay_cn036.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）多效面霜50g补水润肤抗皱紧致保湿面霜护肤品中秋节礼物送女友",
+          "listingUrl": "https://item.jd.com/189590.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/507591/27/12083/76194/6a9a9517Fad8afdcd/008332032035ed2a.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN037",
+      "resource": "olay_cn037.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）活肤菁华面霜50g抗皱紧致护肤品保湿面霜中秋节礼物送女友",
+          "listingUrl": "https://item.jd.com/216126.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/509358/36/11197/71495/6a9a9515Fc60a5d93/0083320320153110.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN038",
+      "resource": "olay_cn038.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）大红瓶空气霜50g紧致抗皱护肤品保湿面霜中秋节礼物送女友",
+          "listingUrl": "https://item.jd.com/6375779.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/520162/1/2271/70486/6a9a9521F5569499a/0083320320f9f9eb.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN039",
+      "resource": "olay_cn039.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）水润滋养面霜50g焕白亮白女士护肤品保湿面霜中秋节礼物送女友",
+          "listingUrl": "https://item.jd.com/216064.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/507505/20/12546/70605/6a9a9515Fe2017b6c/0083320320f5eb87.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN040",
+      "resource": "olay_cn040.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）水感空气霜50g补水润肤焕白亮白保湿面霜护肤品中秋节礼物送女友",
+          "listingUrl": "https://item.jd.com/6271968.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/518797/39/3462/80945/6a9a9521F096f2813/0083320320f9d0e7.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN041",
+      "resource": "olay_cn041.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）保湿滋润面霜100g补水润肤深层滋养中秋礼物",
+          "listingUrl": "https://item.jd.com/100117614851.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/385602/3/16850/58363/696e01b4F4091ec76/0083320320b5e2cc.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN042",
+      "resource": "olay_cn042.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）七效合一日霜50g防晒隔离保湿淡纹抗初老中秋礼物",
+          "listingUrl": "https://item.jd.com/100053710607.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/386800/36/11215/93257/696a40adF5bfaa251/0083320320f40fb0.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN043",
+      "resource": "olay_cn043.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）七效合一晚霜50g保湿淡细纹抗皱紧致中秋礼物",
+          "listingUrl": "https://item.jd.com/100078550461.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/384608/38/16542/81129/696a40acF7f260ffa/0083320320be3bea.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN044",
+      "resource": "olay_cn015.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）全新美白精华水150ml补水提亮抗糖爽肤水护肤品中秋节礼物送女友",
+          "listingUrl": "https://item.jd.com/100156256607.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/533657/6/1989/60353/6ab24229Fa8938551/008332032071136b.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN045",
+      "resource": "olay_cn016.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "【准新品】玉兰油（OLAY）【全新升级】美白乳液100ml补水保湿提亮改善暗沉护肤品生日礼物  ",
+          "listingUrl": "https://item.jd.com/100213914066.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/272932/2/11215/14448/67e4fb3fF506b6a64/e9ae8bb77e3391ad.png"
+        }
+      ]
+    },
+    {
+      "productId": "CN046",
+      "resource": "olay_cn046.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）超抗美白水乳液美白提亮去黄补水保湿护肤品套装礼盒中秋节礼物女",
+          "listingUrl": "https://item.jd.com/100389923770.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/515840/4/7254/55715/6a9a9580F6c8b7e7e/0083320320965661.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN047",
+      "resource": "olay_cn047.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）桃花水乳液礼盒补水保湿滋润润肤化妆品护肤品套装中秋节礼物送女",
+          "listingUrl": "https://item.jd.com/100037926749.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/516285/17/6326/73463/6a9a9525F837900b6/0083320320dbe13c.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN048",
+      "resource": "olay_cn048.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）全新超红瓶水乳液轻润面霜抗皱紧致保湿护肤品礼盒中秋节礼物女友",
+          "listingUrl": "https://item.jd.com/100408767576.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/522970/3/6380/126707/6aaa6813Fe4815194/0083320320dc3a9b.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN049",
+      "resource": "olay_cn049.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）全新水光小白瓶精华美白水乳液洗面奶礼盒护肤品礼盒中秋节礼物女",
+          "listingUrl": "https://item.jd.com/100156791767.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/531217/3/4104/68496/6ab2422fF5e119c25/008332032047cba1.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN050",
+      "resource": "olay_cn050.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）VERA WANG联名全新超红瓶水乳液滋润面霜抗皱紧致礼盒中秋节礼物",
+          "listingUrl": "https://item.jd.com/100387961904.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/508578/4/12189/80579/6a9a9581Ff0ea4b04/008332032022ae86.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN051",
+      "resource": "olay_cn051.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "玉兰油（OLAY）VERA WANG联名全新淡纹黑管面霜面部精华液ProX礼盒中秋节礼物女",
+          "listingUrl": "https://item.jd.com/100250852125.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/520091/4/2955/83263/6a9a9587F765d9c2c/008332032038ef18.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN052",
+      "resource": "olay_cn052.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "OLAY精华身体乳添加烟酰胺 补水滋润260g 晚香玉 男女士通用",
+          "listingUrl": "https://item.jd.com/100063349872.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/520874/31/10212/51828/6aaca5a5Ff870b28a/00833203209bbf14.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN053",
+      "resource": "olay_cn053.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "OLAY长效滋润保湿身体乳360g椰奶香 添加面护精华烟酰胺持久留香男女 ",
+          "listingUrl": "https://item.jd.com/100280508398.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/530364/10/1702/74390/6aaca5a6F468625dd/00833203202423c0.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN054",
+      "resource": "olay_cn054.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "OLAY超白瓶美白身体乳烟酰胺焕亮260g 轻薄滋润补水保湿润肤男女士",
+          "listingUrl": "https://item.jd.com/100256274724.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/528950/23/3278/52925/6aaca5a1F14036933/0083320320abbaa0.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN055",
+      "resource": "olay_cn055.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "OLAY全新第三代超白瓶美白身体乳烟酰胺焕亮260g改善顽固色沉男女士",
+          "listingUrl": "https://item.jd.com/100386335394.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/521559/2/3520/65406/6a9fcc62F53855970/0083320320b5190a.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN056",
+      "resource": "olay_cn056.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "OLAY新升级 莹亮臻护精华磨砂膏235g 乌木玫瑰香 保湿滋润 温和去角质",
+          "listingUrl": "https://item.jd.com/100281485834.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/514732/29/6337/57321/6a969fc4F4433a52a/0083320320360b22.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN057",
+      "resource": "olay_cn057.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "OLAY全新鎏光润泽沐浴露黄金瓶550g永夜玫瑰香添加角鲨烷持久留香男女",
+          "listingUrl": "https://item.jd.com/100227248081.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/508266/13/10487/122393/6a969fbeFedba9580/0083320320bd2020.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN058",
+      "resource": "olay_cn058.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "OLAY鎏光润泽沐浴露白银瓶550g微醺荔枝香添加果酸精华持久留香男女",
+          "listingUrl": "https://item.jd.com/100303255082.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/514631/16/4685/134653/6a955506F5e76753b/0083320320384083.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN059",
+      "resource": "olay_cn059.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "OLAY全新鎏光润泽桃花瓶沐浴露550g 捕梦桃花香氛 持久留香男女通用",
+          "listingUrl": "https://item.jd.com/100244053679.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/510148/6/10897/103241/6a95551cF31fb9ed3/0083320320c1683c.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN060",
+      "resource": "olay_cn060.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "OLAY玉兰油补水滋润沐浴露 椰奶香530g 锁水 男女士通用 新旧包装随机",
+          "listingUrl": "https://item.jd.com/100065839423.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/516169/18/4562/48673/6a969fafF7c8dd71c/0083320320e298c3.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN061",
+      "resource": "olay_cn061.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "OLAY水润沐浴露舒柔滋润保湿 洋甘菊730ml 大容量男女士 新旧包装随机",
+          "listingUrl": "https://item.jd.com/100013779939.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/515298/11/4905/81015/6a969fa9F8a3d0bcc/008332032070b5ea.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN062",
+      "resource": "olay_cn062.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "OLAY沐浴露深入滋润500g奶绒檀木香添加神经酰胺滋润保湿 男女通用",
+          "listingUrl": "https://item.jd.com/100246335098.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/513750/17/4951/80138/6a969fc1Fc08405c4/0083320320abb11d.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN063",
+      "resource": "olay_cn063.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "OLAY沐浴露轻盈水润500g桂雨玫瑰香添加烟酰胺玻尿酸钠保湿 男女通用",
+          "listingUrl": "https://item.jd.com/100188009855.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/506121/31/16325/73542/6a969fbfF62506703/008332032048ddda.jpg"
+        }
+      ]
+    },
+    {
+      "productId": "CN064",
+      "resource": "olay_cn064.png",
+      "mappingStatus": "matched_retail_listing",
+      "retailSources": [
+        {
+          "title": "OLAY玉兰油璀璨精华身体素颜霜自然版旅行装45g",
+          "listingUrl": "https://item.jd.com/100053539331.html",
+          "imageUrl": "https://img30.360buyimg.com/n7/jfs/t1/456088/39/14461/45127/6a37f976Ff26abdef/0083320320d6bb98.jpg"
+        }
+      ]
+    }
+  ]
+}

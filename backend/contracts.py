@@ -2,6 +2,7 @@
 from typing import Literal, Annotated
 import re
 from product_catalog import allowed_refs, requests_product_effect
+from care_catalog import allowed_care_ids, care_reason, care_usage
 from pydantic import BaseModel, ConfigDict, Field
 
 class StrictModel(BaseModel):
@@ -39,6 +40,7 @@ class Snapshot(StrictModel):
     dialogue: list[DialogueTurn] = Field(default_factory=list, max_length=3)
     resolvedChoice: str = Field(default="", max_length=60)
     responseLanguage: Literal["zh", "en"] = "zh"
+    careAdviceRequested: bool = False
     regions: list[Region] = Field(max_length=32)
     layers: list[Layer] = Field(max_length=8)
     protectedRegionIds: list[str] = Field(max_length=32)
@@ -56,11 +58,17 @@ class Operation(StrictModel):
     layerId: str = Field(default="", description="For set_digital_tint this MUST be empty: a new layer has no existing ID. For set_effect_level/remove_effect use the existing target layerId.")
     productProfileId: Literal[""] = Field(default="", description="Must be empty. No calibrated product profiles are registered.")
 
+class CareGuide(StrictModel):
+    productId: str = Field(min_length=5, max_length=12)
+    whyHere: str = Field(min_length=8, max_length=100)
+    howToUse: str = Field(min_length=8, max_length=140)
+
 class Plan(StrictModel):
     decision: Literal["edit", "explain", "clarify", "support"]
     shortMessage: str = Field(min_length=1, max_length=400)
     operations: list[Operation] = Field(max_length=4)
     explanationRefs: list[str] = Field(max_length=3, description="Only productId from supplied productInformation. Information only, not evidence of a calibrated effect. Without productInformation use [].")
+    careGuide: CareGuide | None = Field(default=None, description="An independent OLAY care suggestion from careOptions; never a claim that a product reproduces a digital edit.")
     question: str = Field(max_length=200, description="Must be empty for edit/explain/support. Only decision=clarify may contain a question; a clarify plan must have operations=[]. Authorization confirmation is handled by the app, not this field.")
     choices: list[str] = Field(default_factory=list, max_length=3, description="Only for clarify: 2 or 3 short choices in responseLanguage answering ONE question, no numeric prefixes. Otherwise []. Never ask to choose a region when annotatedRegionId is already supplied.")
 
@@ -85,6 +93,17 @@ def validate_plan(plan: Plan, snapshot: Snapshot) -> Plan:
         return text
     plan.shortMessage = display(plan.shortMessage)
     plan.question = display(plan.question)
+    if plan.careGuide:
+        if plan.decision != 'edit' or not snapshot.careAdviceRequested or plan.careGuide.productId not in allowed_care_ids(snapshot.userText, True):
+            raise ValueError('unmatched_care_guide')
+        # The model selects a matching identity in the same tool call. Wording
+        # comes from reviewed category guidance: the listing does not support
+        # invented makeup performance, quantities or efficacy claims.
+        plan.careGuide.whyHere = care_reason(plan.careGuide.productId, snapshot.responseLanguage)
+        plan.careGuide.howToUse = care_usage(snapshot.userText, True, plan.careGuide.productId, snapshot.responseLanguage)
+        if re.search(r'保证|必然|立刻|立即|永久|复刻|还原.*(?:试色|数字)|与.*(?:试色|数字).*相同',
+                     plan.careGuide.whyHere + plan.careGuide.howToUse):
+            raise ValueError('uncalibrated_care_claim')
     if listening_only(snapshot.userText) and re.search(r'我(?:会|已经)?记(?:着|住)|已(?:经)?(?:保存|保护)|以后(?:一直|都会)',plan.shortMessage):
         # No preference-write tool exists here. Keep the acknowledgement truthful;
         # this presentation fallback cannot create or authorize an operation.

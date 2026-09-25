@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 from PIL import Image
 from contracts import Snapshot, Plan, TOOL, PRESETS, validate_plan, listening_only
 from product_catalog import lookup
+from care_catalog import care_options
 
 load_dotenv(Path(__file__).with_name(".env"), override=False)
 
@@ -39,6 +40,7 @@ def request_body(snapshot: Snapshot, images: list[bytes], model: str) -> dict:
     context = snapshot.model_dump(exclude={"uploadAuthorized"})
     context["presets"] = PRESETS
     context["productInformation"] = lookup(snapshot.userText,snapshot.productContextIds)
+    context["careOptions"] = care_options(snapshot.userText, snapshot.careAdviceRequested, snapshot.responseLanguage)
     context["calibratedProductEffects"] = []
     context["imageMeaning"] = "First: clean current view, without UI. Optional second: same snapshot with numbered region annotations; these are user selections, NOT skin features. Use only selected regionIds."
     content = [{"type": "text", "text": json.dumps(context, ensure_ascii=False)}]
@@ -59,6 +61,8 @@ def request_body(snapshot: Snapshot, images: list[bytes], model: str) -> dict:
                 "所有面向用户的文字只用中文展示名：柔玫瑰、暖陶棕，不输出 rose、terracotta 或任何内部标识。每次只问一个必要的问题，提供2至3个choices短选项；不要一次同时问区域、颜色、强度。用户没指定强度时可以提议轻柔强度，由候选确认控制，不能声称已生效。"
                 "只引用上下文已登记的 regionId、presetId、layerId。位置不确定时请求手工圈选，绝不编造蒙版。"
                 "数字试色不是品牌实测或真实功效。不推荐未提供证据的产品。提供的产品条目只是大陆渠道名称/规格，非完整目录、非配方认证、非在售保证。未知INCI、浓度、SPF、效果、剂量绝不能推断；不得把护理产品映射成唇色或红色色块。用户询问真实护肤效果时解释无法模拟而不是编辑。"
+                "careOptions 是独立的日常护理候选，已由应用按面部区域与用户文字限缩。用户这次明确希望变化记录附带 OLAY 使用建议；若本次是数字编辑，可从 careOptions 选最多一件真正相关的产品填 careGuide，whyHere 说明与本次观察的关联，howToUse 仅按 ordinaryUse 给温和、可做到的步骤。若没有贴切产品或这是唇妆/眼妆色彩，careGuide 必须为 null。护理不会生成或复刻屏幕中的数字色彩，也不能保证改善或替用户诊断。explanationRefs 与 careGuide 分开：后者仅是独立护理建议，不是编辑依据。"
+                "careGuide 的 whyHere 像化妆师留下的简短小记，直接说这处日常可以怎样观察和照顾；不要说‘你问了 OLAY’、‘资料库显示’、‘与数字试色无关’等流程解释。不要说产品能让上色更服帖、更显色或更持久，这些也没有标定。howToUse 直接使用该 careOption 的 ordinaryUse 原句；不要自行添加剂量、功效或频次。"
                 "calibratedProductEffects 当前为空：凡是依据 OLAY/护肤产品要求的外观修改，必须 explain 或 clarify，operations=[]，不能用通用数字颜色替代产品效果。仅在用户明确询问具体产品且资料相关时引用对应 productId；没有相应需求不要展示或推荐产品。用户仅表达外貌焦虑时不要带出产品。"
                 "productContextIds 是上一轮核验过的产品指代。用户说这款/它/试一下时结合当前 productInformation 理解，不能丢掉产品身份改做通用染色。用户换话题时不要沿用旧产品推荐。"
                 "产品回复尽量60个汉字以内，只说与问题有关的1至2个重点；若给使用建议，只按明确的品类与已给资料说常见顺序和轻柔用法，具体用量、频率及禁忌以实物包装为准。不要把护肤步骤说成当前数字颜色的成因；来源与规格由旁边资料卡展示，不逐字段复述，也不在解释不可模拟后主动推销通用染色。"

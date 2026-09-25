@@ -2,6 +2,7 @@ import { fileUri, fileIo as fs } from '@kit.CoreFileKit';
 import { NativeMirrorSurface } from './NativeMirrorSurface';
 import { GaussianPortraitSurface } from './GaussianPortraitSurface';
 import { PersonalPortraitEditor } from './PersonalPortraitEditor';
+import { StarCloseButton } from './StarCloseButton';
 import { GalaxyUniverseSurface, GalaxyScene } from './GalaxyUniverseSurface';
 import { CameraCaptureView } from './CameraCaptureView';
 import { NightSkySurface } from './NightSkySurface';
@@ -906,9 +907,8 @@ struct SelfMirrorPage {
           Row(){
             Text(this.language==='en'?'My stars':'我的星辰').fontSize(17).fontWeight(FontWeight.Medium).fontColor('#F6F8FF')
             Blank()
-            Button('×').id('galaxy-list-close').width(36).height(36).fontSize(23)
-              .fontColor('#F0F4FF').backgroundColor('#344B6F83').borderRadius(18)
-              .onClick(()=>this.setGalaxyDial(false))
+            StarCloseButton({diameter:36,label:this.language==='en'?'Close':'关闭',onClose:()=>this.setGalaxyDial(false)})
+              .id('galaxy-list-close')
           }.width('100%')
           Scroll(){
             Column({space:4}){

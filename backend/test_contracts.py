@@ -142,4 +142,33 @@ class Contracts(unittest.TestCase):
         p=plan();p["question"]="是否新增？"
         with self.assertRaises(ModelFailure):parse_response(response(p),snapshot())
 
+    def test_care_guide_is_part_of_same_plan_but_not_product_effect(self):
+        s=Snapshot.model_validate({**snapshot().model_dump(), 'userText':'脸颊想柔和一点',
+            'careAdviceRequested':True,'annotatedRegionId':'cheek',
+            'regions':[{'regionId':'cheek','description':'用户圈出的脸颊区域'}]})
+        p=plan();p['operations'][0]['regionId']='cheek'
+        p['careGuide']={'productId':'CN001','whyHere':'在日常护理里关注脸颊的舒适感。',
+                        'howToUse':'清洁后轻轻铺开这款面霜，具体用量看实物包装。'}
+        checked=parse_response(response(p),s)
+        self.assertEqual(checked.careGuide.productId,'CN001')
+        self.assertEqual(checked.careGuide.howToUse,'清洁后轻轻铺开；具体用量和使用频率看实物包装。')
+        out=io.BytesIO();Image.new('RGB',(16,16),'gray').save(out,format='PNG')
+        body=request_body(s,[out.getvalue()],'test')
+        self.assertEqual(body['messages'][1]['content'][0]['type'],'text')
+        context=json.loads(body['messages'][1]['content'][0]['text'])
+        self.assertIn('CN001',{item['productId'] for item in context['careOptions']})
+        for bad in ('CN064','invented'):
+            q=copy.deepcopy(p);q['careGuide']['productId']=bad
+            with self.subTest(bad=bad),self.assertRaises(ModelFailure):parse_response(response(q),s)
+        for unsupported in ('保证立刻复刻屏幕上的数字试色','上色前涂这款面霜，颜色会更服帖。'):
+            q=copy.deepcopy(p);q['careGuide']['whyHere']=unsupported
+            self.assertEqual(parse_response(response(q),s).careGuide.whyHere,
+                             '这处也可以有自己的日常护理节奏，留意自己喜欢的肤感。')
+        lips=s.model_copy(update={'userText':'想涂柔玫瑰唇色'})
+        self.assertRaises(ModelFailure,parse_response,response(p),lips)
+        separate=s.model_copy(update={'userText':'脸颊做通用数字试色：柔玫瑰。顺便给 OLAY 日常护理建议，不说它会产生这个颜色。'})
+        self.assertEqual(parse_response(response(p),separate).careGuide.productId,'CN001')
+        product_effect=s.model_copy(update={'userText':'用 OLAY 面霜把脸颊涂成柔玫瑰'})
+        self.assertRaises(ModelFailure,parse_response,response(p),product_effect)
+
 if __name__=="__main__":unittest.main(verbosity=2)
