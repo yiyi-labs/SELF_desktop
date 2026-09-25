@@ -1,0 +1,37 @@
+{
+  "date": "2026-09-25",
+  "device": "HarmonyOS physical tablet, HDC 6DP0226117002287",
+  "build": "signed HAP build successful; installed over the existing app without clearing data",
+  "recordingOverThirtySeconds": {
+    "input": "user-confirmed blank wall",
+    "elapsedSeconds": 37,
+    "cameraPageVisible": true,
+    "recordingGuidanceVisible": true,
+    "automaticCompletionObserved": false,
+    "end": "system Back cancelled the test recording; no completion event"
+  },
+  "stopButtonTransition": {
+    "input": "separate brief blank-wall test",
+    "cameraClosedAfterStop": true,
+    "starNameInputVisible": true,
+    "saveNameButtonVisible": true,
+    "captureCompletedEvent": true,
+    "expectedBackendResult": "failed: no face in the blank-wall capture",
+    "retakeActionVisibleAfterFailure": true,
+    "testCaptureRemovedFromApp": true,
+    "verifiedFailedTestJobRemovedFromComputer": true
+  },
+  "usbReconnection": {
+    "scheduledTask": "SELF Reconstruction Link",
+    "scheduledTaskState": "Running",
+    "reversePortMappingManuallyRemoved": true,
+    "reversePortMappingRestoredWithinSeconds": 8,
+    "serviceHealthAtTest": "ready"
+  },
+  "homeSmoke": "five navigation controls passed without process restart",
+  "notVerified": [
+    "appearance and timing of the bouncing orb from a screen recording",
+    "successful reconstruction from a new multi-angle face capture",
+    "automatic backend restart after a Windows reboot"
+  ]
+}

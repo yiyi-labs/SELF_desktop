@@ -64,7 +64,6 @@ export struct CameraCaptureView {
  private controller:XComponentController=new XComponentController();
  private capture:CameraCaptureSession=new CameraCaptureSession();
  private faceTimer:number=-1;
- private recordingTimer:number=-1;
  private coverageTimer:number=-1;
  private coverageMilestoneSeen:boolean=false;
  private lastClipPath:string='';
@@ -116,7 +115,6 @@ export struct CameraCaptureView {
   this.busy=true;
   try{
    if(this.recording){
-    clearTimeout(this.recordingTimer);this.recordingTimer=-1;
     this.lastClipPath=await this.capture.stop();this.recording=false;this.clipSaved=true;this.updateCoverage(undefined);
     console.info('SELF_CAMERA_CAPTURE_COMPLETED '+JSON.stringify({videoSaved:true,personal3D:false}));
     const name=this.lastClipPath.substring(this.lastClipPath.lastIndexOf('/')+1);
@@ -126,13 +124,12 @@ export struct CameraCaptureView {
     await this.capture.start();this.clipSaved=false;this.recording=true;
     this.coverage.reset();this.coverageMilestoneSeen=false;this.updateCoverage(undefined);this.showCoverage(2300);
     console.info('SELF_CAMERA_CAPTURE_STARTED');
-    this.recordingTimer=setTimeout(()=>{if(this.recording)this.toggleCapture();},30000);
    }
-  }catch(e){this.status=(e as Error).message;this.info=true;this.recording=false;clearTimeout(this.recordingTimer);this.recordingTimer=-1;}
+  }catch(e){this.status=(e as Error).message;this.info=true;this.recording=false;}
   finally{this.busy=false;}
  }
  private async leave():Promise<void>{
-  if(this.recording){await this.toggleCapture();return;}
+  if(this.recording){this.captureIssue=this.tr('拍摄还在继续。轻触下方方形按钮，结束后会回到星空。','Capture is still running. Tap the square button below to finish.');this.info=true;return;}
   this.onClose();
  }
  private async discardLastClip():Promise<void>{
@@ -146,7 +143,7 @@ export struct CameraCaptureView {
   }catch(e){this.status=this.tr('无法删除这段拍摄，请稍后重试。','Could not delete this capture. Please try again.');}
  }
  private async open():Promise<void>{
-  const epoch=++this.epoch;this.busy=true;this.ready=false;this.detection=false;this.info=false;this.recording=false;this.clipSaved=false;this.transferStatus='';clearTimeout(this.recordingTimer);this.recordingTimer=-1;clearTimeout(this.coverageTimer);this.coverageTimer=-1;this.coverageExpanded=false;clearTimeout(this.faceTimer);this.faceTimer=-1;this.seek();this.checkReconstruction(epoch);
+  const epoch=++this.epoch;this.busy=true;this.ready=false;this.detection=false;this.info=false;this.recording=false;this.clipSaved=false;this.transferStatus='';clearTimeout(this.coverageTimer);this.coverageTimer=-1;this.coverageExpanded=false;clearTimeout(this.faceTimer);this.faceTimer=-1;this.seek();this.checkReconstruction(epoch);
   await this.localGuide.stop();await this.capture.dispose();if(this.expired||!this.foreground||epoch!==this.epoch)return;
   const capture=new CameraCaptureSession();this.capture=capture;this.localGuide=new LocalFaceGuide();
   capture.onFrame=(frame,rotation,format)=>this.localGuide.consume(frame,rotation,format);
@@ -162,11 +159,11 @@ export struct CameraCaptureView {
    this.streamRatio=rotation%180===0?w/h:h/w;
    if(changed){
     this.seek();
-    if(directionChanged&&this.recording){this.captureIssue=this.tr('拍摄时方向发生变化，请重拍这一段。','The device rotated during capture. Please retake this clip.');this.info=true;this.toggleCapture();}
+    if(directionChanged&&this.recording){this.captureIssue=this.tr('方向变了，请尽量保持现在的方向；拍摄会继续，直到你轻触结束。','Orientation changed. Keep this direction steady; capture continues until you stop it.');}
     console.info('SELF_CAMERA_COORDINATES '+JSON.stringify({rawWidth:w,rawHeight:h,previewRotation:rotation,lensOrientation:lens,displayRotation:displayDegrees,front,mirrored:this.mirrorOverlay,viewportWidth:this.viewportWidth,viewportHeight:this.viewportHeight}));
    }
   };
-  capture.onError=(message:string)=>{if(epoch!==this.epoch)return;this.ready=false;this.status=message;capture.dispose();};
+  capture.onError=(message:string)=>{if(epoch!==this.epoch)return;this.ready=false;this.recording=false;this.status=message;this.info=true;capture.dispose();};
   try{const context=this.getUIContext().getHostContext() as common.UIAbilityContext;
    const label=await capture.open(context,this.controller.getXComponentSurfaceId(),this.front,true);
    if(!this.expired&&epoch===this.epoch){
@@ -209,10 +206,10 @@ export struct CameraCaptureView {
   finally{if(epoch===this.epoch)this.busy=false;}
  }
  private visibilityChanged():void{
-  if(!this.foreground){this.epoch++;this.ready=false;this.recording=false;clearTimeout(this.recordingTimer);clearTimeout(this.coverageTimer);this.coverageTimer=-1;clearTimeout(this.faceTimer);this.faceTimer=-1;this.localGuide.stop();this.capture.dispose();}
+  if(!this.foreground){this.epoch++;this.ready=false;this.recording=false;clearTimeout(this.coverageTimer);this.coverageTimer=-1;clearTimeout(this.faceTimer);this.faceTimer=-1;this.localGuide.stop();this.capture.dispose();}
   else if(this.surfaceReady&&!this.expired)this.open();
  }
- aboutToDisappear():void{this.expired=true;this.epoch++;clearTimeout(this.recordingTimer);clearTimeout(this.coverageTimer);clearTimeout(this.faceTimer);this.localGuide.stop();this.capture.dispose();}
+ aboutToDisappear():void{this.expired=true;this.epoch++;clearTimeout(this.coverageTimer);clearTimeout(this.faceTimer);this.localGuide.stop();this.capture.dispose();}
  @Builder icon(symbol:string,label:string,action:()=>void){
   Button(symbol).id(symbol==='ⓘ'?'camera-info':symbol==='‹'?'camera-back':'camera-switch').width(48).height(48).fontSize(25).fontColor(Color.White).backgroundColor('#38FFFFFF')
    .border({width:1,color:'#55FFFFFF'}).borderRadius(24).stateStyles({pressed:{.scale({x:.90,y:.90})},normal:{.scale({x:1,y:1})}}).animation({duration:this.motion?160:0,curve:Curve.EaseOut}).accessibilityText(label).onClick(action)

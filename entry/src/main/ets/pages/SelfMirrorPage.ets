@@ -2,6 +2,7 @@ import { fileUri, fileIo as fs } from '@kit.CoreFileKit';
 import { NativeMirrorSurface } from './NativeMirrorSurface';
 import { GaussianPortraitSurface } from './GaussianPortraitSurface';
 import { CameraCaptureView } from './CameraCaptureView';
+import { FormationOrb } from './FormationOrb';
 import { NightSkySurface } from './NightSkySurface';
 import { ProductCard } from './ProductCard';
 import { NativeRendererPort } from '../bridge/NativeRendererPort';
@@ -59,6 +60,9 @@ struct SelfMirrorPage {
   @State activeStarId:string='';
   @State journey:string='idle';
   @State reconProgress:number=0;
+  @State reconSubmitting:boolean=false;
+  @State reconCanRetry:boolean=false;
+  private pendingCaptureName:string='';
   @State introStage:number=0;
   @State introLine:string='';
   @State introCharacters:number=0;
@@ -336,7 +340,7 @@ struct SelfMirrorPage {
         this.captureStatus=result.message==='face_not_confirmed_in_capture'?'这段拍摄还没能看清完整面容，可以换个光线再试。':
           result.message==='camera_angles_insufficient'?'这次没有拍到面容的两侧。可以保持头部自然不动，让镜头从一侧缓慢绕到另一侧再试。':
           '这段拍摄还不足以生成可靠的立体面容，原片仍为你保留。';
-        this.subtitle=this.captureStatus;this.journey='failed';this.finishReconstruction();return;
+        this.subtitle=this.captureStatus;this.journey='failed';this.reconCanRetry=false;this.finishReconstruction();return;
       }
       if(result.state==='gaussian_ready'){
         const view=await client.downloadView(jobId,this.context.filesDir);
@@ -351,7 +355,7 @@ struct SelfMirrorPage {
         this.reconProgress=100;this.journey='revealing';this.revealOpacity=1;this.revealScale=.35;
         this.captureStatus=result.viewpointQuality?.broadSideCoverage===false?
           '立体面容已打开。想看更清楚的侧面，下次可让镜头再多绕一点。':'你的立体面容正在打开…';
-        this.subtitle=this.captureStatus;this.finishReconstruction();return;
+        this.subtitle=this.captureStatus;this.pendingCaptureName='';this.finishReconstruction();return;
       }
       if(result.state==='complete'){
         const file=await client.downloadMesh(jobId,this.context.filesDir);
@@ -366,16 +370,26 @@ struct SelfMirrorPage {
     finally{this.reconChecking=false;}
   }
   private async submitCapture(name:string):Promise<void>{
-    if(!/^capture-[0-9]+\.mp4$/.test(name)||this.reconJob)return;
+    if(!/^capture-[0-9]+\.mp4$/.test(name)){this.captureStatus='没有找到这段拍摄，请重新选择。';this.journey='failed';return;}
+    if(this.reconJob||this.reconSubmitting)return;
     const client=new ReconstructionTransportClient();client.endpoint=this.backendAddress;client.token=this.backendToken;
+    if(this.detail)this.close();
     try{
-      this.starNameDraft='';this.originMode=true;this.skyOpen=false;
+      if(this.pendingCaptureName!==name)this.starNameDraft='';
+      this.pendingCaptureName=name;this.reconSubmitting=true;this.reconCanRetry=false;this.originMode=true;this.skyOpen=false;
       this.journey='forming';this.reconProgress=5;this.captureStatus='正从光点里，找回你的轮廓。';
       const health=await client.probe();if(health.engine!=='ready')throw new Error('建模服务尚未就绪');
       const path=this.context.filesDir+'/captures/'+name;
+      if(!fs.accessSync(path))throw new Error('拍摄文件没有找到');
       const jobId=await client.uploadCapture(path,(value:number)=>this.reconProgress=Math.max(5,Math.round(value*22)));
       this.trackReconstruction(jobId);
-    }catch(_){this.journey='failed';this.captureStatus='这次还没能描出你的轮廓，拍摄会为你留着。';}
+    }catch(error){
+      const reason=String(error);console.error('SELF_RECON_SUBMIT_FAILED '+reason);
+      this.reconCanRetry=!reason.includes('过大')&&!reason.includes('不完整')&&!reason.includes('没有找到');
+      this.journey='failed';this.captureStatus=this.reconCanRetry?
+        '星光暂时没能连接。拍摄已留下，连接恢复后轻触重试。':
+        '这段拍摄暂时无法使用。原片还在，可以再拍一次。';
+    }finally{this.reconSubmitting=false;}
   }
 
   aboutToAppear(): void {
@@ -643,7 +657,7 @@ struct SelfMirrorPage {
             Column({space:6}){
               Row(){Text(this.tr('私密视频')+' · '+Math.round(clip.bytes/1024)+' KB').fontSize(14).layoutWeight(1);Button('▶').id('play-'+clip.name).softButton().width(48).accessibilityText(this.tr('播放视频')).onClick(()=>this.selectedCapture=clip.name)}.width('100%')
               Row({space:8}){
-                Button(this.tr('开始建模')).softButton().layoutWeight(1).enabled(!this.reconJob).onClick(()=>this.submitCapture(clip.name))
+                Button(this.reconJob||this.reconSubmitting?this.tr('正在寻找中'):this.tr('开始建模')).softButton().layoutWeight(1).enabled(!this.reconJob&&!this.reconSubmitting).onClick(()=>this.submitCapture(clip.name))
                 Button(this.tr('删除原片')).softButton().layoutWeight(1).onClick(()=>{if(this.selectedCapture===clip.name)this.selectedCapture='';new CaptureService(this.context).delete(clip.name);this.captures=new CaptureService(this.context).list();})
               }.width('100%')
             }.padding(10).width('100%').backgroundColor('#B8FFFFFF').borderRadius(18)
@@ -853,7 +867,7 @@ struct SelfMirrorPage {
       }
       if(this.journey==='forming'){
         Column({space:18}){
-          Stack(){Circle().width(104).height(104).fill('#21597DA4').stroke('#9BBBDD').strokeWidth(1).shadow({radius:38,color:'#689DBAE1'});Circle().width(28).height(28).fill('#E7E7FF').shadow({radius:36,color:'#A9BDEB'})}.width(124).height(124)
+          FormationOrb({motion:this.motion})
           Text(this.captureStatus).fontSize(this.wide?21:18).fontColor('#F2F1FF').textAlign(TextAlign.Center)
           Progress({value:this.reconProgress,total:100,type:ProgressType.Linear}).width(Math.min(260,this.surfaceWidth-96)).height(4).color('#BFD5FF').backgroundColor('#3B59799D')
           Text(Math.round(this.reconProgress)+'%').fontSize(12).fontColor('#B3C8DF')
@@ -864,7 +878,13 @@ struct SelfMirrorPage {
             .fontColor('#F5F4FF').backgroundColor('#536787A6').onClick(()=>this.saveStarName())
         }.width(Math.min(this.surfaceWidth-40,400)).padding(22).backgroundColor('#24324764').backgroundBlurStyle(BlurStyle.COMPONENT_ULTRA_THIN).border({width:1,color:'#527F9BBE'}).borderRadius(30)
       }
-      if(this.journey==='failed'&&this.captureStatus){Text(this.captureStatus).fontSize(14).fontColor('#E9E2F4').maxLines(3).padding(16).width(Math.min(this.surfaceWidth-40,440)).backgroundColor('#87505C7F').borderRadius(18).position({x:20,y:this.surfaceHeight*.67})}
+      if(this.journey==='failed'&&this.captureStatus){
+        Column({space:12}){
+          Text(this.captureStatus).fontSize(14).fontColor('#E9E2F4').maxLines(3).textAlign(TextAlign.Center)
+          if(this.pendingCaptureName&&this.reconCanRetry){Button(this.language==='en'?'Try this capture again':'重试这段拍摄').id('retry-reconstruction').softButton().fontColor('#F5F4FF').backgroundColor('#536787A6').onClick(()=>this.submitCapture(this.pendingCaptureName))}
+          else{Button(this.language==='en'?'Capture again':'再拍一次').id('retake-capture').softButton().fontColor('#F5F4FF').backgroundColor('#536787A6').onClick((event:ClickEvent)=>this.open('拍摄面容',event))}
+        }.padding(18).width(Math.min(this.surfaceWidth-40,440)).backgroundColor('#34465C91').border({width:1,color:'#7D9AB9A1'}).borderRadius(22).position({x:Math.max(20,(this.surfaceWidth-Math.min(this.surfaceWidth-40,440))/2),y:this.surfaceHeight*.61})
+      }
       if(!this.detail&&this.journey!=='forming'){
         Column({space:12}){
           Row({space:10}){
