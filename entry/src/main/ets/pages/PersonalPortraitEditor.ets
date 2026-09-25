@@ -5,6 +5,7 @@ import { GaussianPortraitSurface, GsSelection } from './GaussianPortraitSurface'
 import { PlannerClient, CloudResponse, CloudSnapshot, CloudRegion, DialogueTurn } from '../services/PlannerClient';
 import { GsRenderLayer } from '../bridge/RendererBridge';
 import { AssetStore } from '../services/AssetStore';
+import { OlayLibrary } from './OlayLibrary';
 
 interface SavedGsEdit {
   schemaVersion:number;
@@ -72,6 +73,7 @@ export struct PersonalPortraitEditor {
   @State comparing:boolean=false;
   @State keyboardOpen:boolean=false;
   @State historyOpen:boolean=false;
+  @State libraryOpen:boolean=false;
   @State historyRevision:number=0;
   @State selectionCount:number=0;
   @State historyDisplay:GsHistoryDisplay[]=[];
@@ -384,7 +386,7 @@ export struct PersonalPortraitEditor {
           .position({x:this.bubbleLeft(),y:Math.max(110,Math.min(this.viewportHeight-(this.keyboardOpen?680:470),this.anchorY*this.viewportHeight-92))})
           .transition({opacity:0,scale:{x:.92,y:.92},translate:{y:12}}).zIndex(8)
       }
-      if(this.ready){
+      if(this.ready&&!this.libraryOpen){
         Button(this.label('✧ 变化记录','✧ Changes')).id('personal-gs-history').height(42).fontSize(12)
           .fontColor('#ECF3FF').backgroundColor('#1C334DC9').border({width:1,color:'#718EAF'})
           .borderRadius(21).onClick(()=>{this.historyOpen=!this.historyOpen;this.bubble=false;})
@@ -427,7 +429,15 @@ export struct PersonalPortraitEditor {
           .border({width:1,color:'#6285A8'}).borderRadius(22)
           .position({x:Math.max(16,this.viewportWidth-Math.min(340,this.viewportWidth-32)-16),y:138}).zIndex(9)
       }
-      if(this.ready){
+      if(this.ready&&!this.libraryOpen){
+        if(!this.libraryOpen){
+          Button(this.label('✦  护理星图','✦  Care atlas')).id('personal-olay-library').height(43)
+            .padding({left:14,right:14}).fontSize(12).fontColor('#E8F2FF')
+            .backgroundColor('#263E5BBD').border({width:1,color:'#8AA7C4'}).borderRadius(22)
+            .onClick(()=>{this.bubble=false;this.historyOpen=false;
+              this.getUIContext().animateTo({duration:220,curve:Curve.EaseOut},()=>{this.libraryOpen=true;});})
+            .position({x:18,y:Math.max(150,this.viewportHeight-220)}).zIndex(7)
+        }
         if(this.applied){
           Button(this.comparing?this.label('看变化','Preview'):this.label('看原样','Original')).id('personal-gs-compare')
             .height(46).padding({left:12,right:12}).fontSize(12).fontColor('#EFF6FF')
@@ -448,6 +458,13 @@ export struct PersonalPortraitEditor {
           .stateStyles({pressed:{.scale({x:.94,y:.94})},normal:{.scale({x:1,y:1})}})
           .animation({duration:180,curve:Curve.EaseOut}).onClick(()=>this.toggleTool())
           .position({x:Math.max(18,this.viewportWidth-144),y:Math.max(150,this.viewportHeight-220)}).zIndex(7)
+      }
+      if(this.libraryOpen){
+        OlayLibrary({language:this.language,viewportWidth:this.viewportWidth,viewportHeight:this.viewportHeight,
+          onClose:()=>this.getUIContext().animateTo({duration:200,curve:Curve.EaseOut},()=>{this.libraryOpen=false;})})
+          .position({x:this.viewportWidth>=840?18:12,
+            y:Math.max(80,this.viewportHeight-(this.viewportWidth>=840?Math.min(this.viewportHeight*.52,400):Math.min(this.viewportHeight*.42,390))-28)})
+          .transition({opacity:0,scale:{x:.94,y:.94},translate:{y:12}}).zIndex(12)
       }
     }.width('100%').height('100%')
   }

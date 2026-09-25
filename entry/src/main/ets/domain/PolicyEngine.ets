@@ -12,7 +12,7 @@ export class PolicyEngine {
     PolicyEngine.colors(plan.presetId);
     const region=regions.find((r:RegionRecord)=>r.regionId===plan.regionId);
     if(!region || region.assetId!==assetId || region.assetVersion!==version || region.width<=0 || region.height<=0) { throw new Error('区域与当前面容不匹配'); }
-    if(plan.kind==='lipTint' && region.semantic!=='confirmed-lips') { throw new Error('尚未确认唇区，请先精细圈选并确认边界'); }
+    if(plan.kind==='lipTint' && (sourceKind==='PHOTO' || region.semantic!=='confirmed-lips')) { throw new Error('尚未确认立体唇区，请先精细圈选并确认边界'); }
   }
   static authorizedOperation(plan: CandidatePlan, authorizationId: string): EditOperation {
     if(!authorizationId) { throw new Error('缺少本次授权'); }

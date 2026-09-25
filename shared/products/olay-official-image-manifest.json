@@ -1,0 +1,15 @@
+{
+  "sourceArticle": "https://www.prnasia.com/story/543190-1.shtml",
+  "sourcePublisher": "OLAY via PR Newswire Asia, 2026-08-06",
+  "sourceImage": "https://mmx.prnasia.com/media/MS1965096/20260806000009EDT_image5.jpg?id=OA2829849&p=original",
+  "sourceImageSize": [2700, 2541],
+  "processing": "Single-jar transparent-background extraction with imagegen; 512px packaging resize for the app. No promotional background retained.",
+  "reuseRightsStatus": "No app-redistribution permission was identified in the public release; obtain brand permission before public distribution.",
+  "variantMappingBasis": "The press caption lists water cream, lightweight, rich and oil cream in the same top-to-bottom order as the four photographed jars. Individual SKU packaging labels have not been independently checked.",
+  "images": [
+    {"productId":"CN001","pressPosition":"top_left","resource":"olay_cn001.png"},
+    {"productId":"CN002","pressPosition":"upper_right","resource":"olay_cn002.png"},
+    {"productId":"CN003","pressPosition":"lower_left","resource":"olay_cn003.png"},
+    {"productId":"CN004","pressPosition":"bottom_right","resource":"olay_cn004.png"}
+  ]
+}
