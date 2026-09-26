@@ -2,7 +2,7 @@
 from typing import Literal, Annotated
 import re
 from product_catalog import allowed_refs, requests_product_effect
-from care_catalog import allowed_care_ids, care_reason, care_usage
+from care_catalog import allowed_care_ids, care_reason, care_usage, care_options, care_intent
 from pydantic import BaseModel, ConfigDict, Field
 
 class StrictModel(BaseModel):
@@ -65,7 +65,7 @@ class CareGuide(StrictModel):
 
 class Plan(StrictModel):
     decision: Literal["edit", "explain", "clarify", "support"]
-    shortMessage: str = Field(min_length=1, max_length=400)
+    shortMessage: str = Field(min_length=1, max_length=140)
     operations: list[Operation] = Field(max_length=4)
     explanationRefs: list[str] = Field(max_length=3, description="Only productId from supplied productInformation. Information only, not evidence of a calibrated effect. Without productInformation use [].")
     careGuide: CareGuide | None = Field(default=None, description="An independent OLAY care suggestion from careOptions; never a claim that a product reproduces a digital edit.")
@@ -93,14 +93,27 @@ def validate_plan(plan: Plan, snapshot: Snapshot) -> Plan:
         return text
     plan.shortMessage = display(plan.shortMessage)
     plan.question = display(plan.question)
+    # Care questions and concerns should still receive a source-linked routine
+    # when no digital colour edit can honestly represent a product outcome.
+    if (snapshot.careAdviceRequested and care_intent(snapshot.userText) and
+            not listening_only(snapshot.userText) and plan.decision in ('explain', 'clarify') and
+            plan.careGuide is None):
+        options = care_options(snapshot.userText, True, snapshot.responseLanguage)
+        if options:
+            plan.careGuide = CareGuide(productId=options[0]['productId'],
+                whyHere=care_reason(options[0]['productId'], snapshot.responseLanguage, snapshot.userText),
+                howToUse=options[0]['ordinaryUse'])
     if plan.careGuide:
-        if plan.decision != 'edit' or not snapshot.careAdviceRequested or plan.careGuide.productId not in allowed_care_ids(snapshot.userText, True):
+        if plan.decision == 'support' or not snapshot.careAdviceRequested or plan.careGuide.productId not in allowed_care_ids(snapshot.userText, True):
             raise ValueError('unmatched_care_guide')
         # The model selects a matching identity in the same tool call. Wording
         # comes from reviewed category guidance: the listing does not support
         # invented makeup performance, quantities or efficacy claims.
-        plan.careGuide.whyHere = care_reason(plan.careGuide.productId, snapshot.responseLanguage)
+        plan.careGuide.whyHere = care_reason(plan.careGuide.productId, snapshot.responseLanguage, snapshot.userText)
         plan.careGuide.howToUse = care_usage(snapshot.userText, True, plan.careGuide.productId, snapshot.responseLanguage)
+        if plan.decision in ('explain', 'clarify') and re.search(r'做不到|不能.*(?:做|改)|工具.*(?:不行|不支持)', plan.shortMessage):
+            plan.shortMessage = ('We can begin with gentle everyday care and look at a possible on-portrait scenario together.'
+                if snapshot.responseLanguage == 'en' else '可以先从温和的日常护理开始。我把这一步和一种可能的面容变化放在下面，慢慢看。')
         if re.search(r'保证|必然|立刻|立即|永久|复刻|还原.*(?:试色|数字)|与.*(?:试色|数字).*相同',
                      plan.careGuide.whyHere + plan.careGuide.howToUse):
             raise ValueError('uncalibrated_care_claim')
@@ -127,6 +140,8 @@ def validate_plan(plan: Plan, snapshot: Snapshot) -> Plan:
         # There are currently zero experimentally calibrated product profiles.
         # Product facts/INCI cannot authorize a generic tint as a product result.
         raise ValueError('product_effect_not_calibrated')
+    if plan.decision == 'edit' and re.search(r'痘|痘印|疤|acne|pimple|scar', snapshot.userText, re.I):
+        raise ValueError('unsupported_skin_edit')
     if plan.decision != "edit" and plan.operations:
         raise ValueError("non-edit operation")
     if plan.decision == "edit" and not 1 <= len(plan.operations) <= 4:

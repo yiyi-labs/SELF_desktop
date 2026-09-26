@@ -171,4 +171,24 @@ class Contracts(unittest.TestCase):
         product_effect=s.model_copy(update={'userText':'用 OLAY 面霜把脸颊涂成柔玫瑰'})
         self.assertRaises(ModelFailure,parse_response,response(p),product_effect)
 
+    def test_acne_and_care_question_keep_product_step_without_faking_treatment(self):
+        for user_text in ('去掉这颗痘痘', '这块地方怎么养护？'):
+            with self.subTest(user_text=user_text):
+                s=Snapshot.model_validate({**snapshot().model_dump(), 'userText':user_text,
+                    'careAdviceRequested':True,'annotatedRegionId':'skin',
+                    'regions':[{'regionId':'skin','description':'用户圈出的皮肤区域'}]})
+                p={'decision':'explain','shortMessage':'这里的工具做不到。','operations':[],
+                   'explanationRefs':[],'question':''}
+                checked=parse_response(response(p),s)
+                self.assertIsNotNone(checked.careGuide)
+                self.assertIn(checked.careGuide.productId, ('CN001','CN029'))
+                self.assertNotIn('工具做不到',checked.shortMessage)
+                self.assertEqual([],checked.operations)
+                if '痘' in user_text:
+                    self.assertEqual('CN029',checked.careGuide.productId)
+                    self.assertIn('不是祛痘治疗',checked.careGuide.whyHere)
+        s=s.model_copy(update={'userText':'去掉这颗痘痘'})
+        q=plan();q['operations'][0]['regionId']='skin'
+        self.assertRaises(ModelFailure,parse_response,response(q),s)
+
 if __name__=="__main__":unittest.main(verbosity=2)

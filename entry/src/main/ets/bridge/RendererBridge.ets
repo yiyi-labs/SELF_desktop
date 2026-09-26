@@ -31,6 +31,7 @@ export interface MessagePayload {
   protectedSnapshot?: number;
   anchorOperations?: RenderOperation[];
   webgl2?: boolean;
+  light?: boolean;
 }
 export interface GsRenderLayer {maskBase64:string;preset:string;strength:number;}
 export interface RenderOperation {

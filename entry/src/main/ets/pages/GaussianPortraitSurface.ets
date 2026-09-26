@@ -19,6 +19,7 @@ export struct GaussianPortraitSurface {
   onSelection:(selection:GsSelection,mask:ArrayBuffer)=>void=()=>{};
   onCapture:(clean:ArrayBuffer,annotated:ArrayBuffer,width:number,height:number)=>void=()=>{};
   onApplied:(action:string)=>void=()=>{};
+  onBackgroundTone:(light:boolean)=>void=()=>{};
   private controller:webview.WebviewController=new webview.WebviewController();
   private bridge:RendererBridge=new RendererBridge();
   private selection:GsSelection|undefined=undefined;
@@ -46,6 +47,7 @@ export struct GaussianPortraitSurface {
       if(message.type==='GS_CAPTURE'&&message.payload.width!==undefined&&message.payload.height!==undefined&&message.payload.images!==undefined)
         this.capture={width:message.payload.width,height:message.payload.height,images:message.payload.images};
       if(message.type==='GS_APPLIED')this.onApplied(message.payload.action||'');
+      if(message.type==='GS_TONE'&&message.payload.light!==undefined)this.onBackgroundTone(message.payload.light);
     };
     this.bridge.onBytes=(kind:string,bytes:ArrayBuffer)=>{
       if(kind==='gs-mask'&&this.selection){

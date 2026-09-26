@@ -50,6 +50,7 @@ export struct PersonalPortraitEditor {
   onFailure:(message:string)=>void=()=>{};
   onInteraction:()=>void=()=>{};
   onEnableCloud:()=>void=()=>{};
+  onBackgroundTone:(light:boolean)=>void=()=>{};
   private context:common.UIAbilityContext=this.getUIContext().getHostContext() as common.UIAbilityContext;
   private assets:AssetStore=new AssetStore(this.context);
   private planner:PlannerClient=new PlannerClient();
@@ -83,7 +84,17 @@ export struct PersonalPortraitEditor {
   @State historyRevision:number=0;
   @State selectionCount:number=0;
   @State historyDisplay:GsHistoryDisplay[]=[];
-  @State responseText:string='';
+  @State @Watch('responseChanged') responseText:string='';
+  @State replyLines:string[]=[];
+  @State visibleReplyLines:number=0;
+  @State replyBloom:boolean=false;
+  private replyToken:number=0;
+  private carePreviewToken:number=0;
+  @State careProductId:string='';
+  @State careWhy:string='';
+  @State careHow:string='';
+  @State careWeek:number=0;
+  @State careExpanded:boolean=false;
   @State question:string='';
   @State choices:string[]=[];
   @State input:string='';
@@ -91,6 +102,29 @@ export struct PersonalPortraitEditor {
   @State anchorY:number=.5;
 
   private label(zh:string,en:string):string{return this.language==='en'?en:zh;}
+  private setCareWeek(week:number):void{
+    if(week===this.careWeek)return;
+    this.careWeek=week;
+    const token=++this.carePreviewToken;
+    setTimeout(()=>{if(token===this.carePreviewToken&&this.selected&&this.careProductId){
+      this.command('CARE_PREVIEW','','',week);
+    }},90);
+  }
+  private responseChanged():void{
+    const text=this.responseText.trim(),size=this.language==='en'?37:19;
+    const lines:string[]=[];
+    for(let i=0;i<text.length;i+=size)lines.push(text.slice(i,i+size));
+    this.replyLines=lines;this.visibleReplyLines=0;
+    this.revealReply(++this.replyToken);
+  }
+  private revealReply(token:number):void{
+    if(token!==this.replyToken||this.visibleReplyLines>=this.replyLines.length)return;
+    setTimeout(()=>{if(token!==this.replyToken)return;
+      this.visibleReplyLines++;this.replyBloom=true;
+      setTimeout(()=>{if(token===this.replyToken)this.replyBloom=false;},105);
+      this.revealReply(token);
+    },this.visibleReplyLines===0?35:125);
+  }
   private careProduct(id:string):OlayDiscoveryItem|undefined{return OlayDiscoveryRepository.records().find((item:OlayDiscoveryItem)=>item.id===id);}
   private historyPanelWidth():number{return Math.min(this.viewportWidth-24,this.viewportHeight>this.viewportWidth?420:360);}
   private historyPanelHeight():number{return this.viewportHeight>this.viewportWidth?
@@ -197,6 +231,9 @@ export struct PersonalPortraitEditor {
   private selectedRegion(info:GsSelection,mask:ArrayBuffer):void{
     console.info('SELF_GS_SELECTION_READY '+info.count+' '+info.total+' '+mask.byteLength);
     this.planner.cancel();this.pending=undefined;this.pendingSnapshot=undefined;
+    this.carePreviewToken++;
+    if(this.careWeek>0)this.command('CARE_PREVIEW','','',0);
+    this.careWeek=0;this.careProductId='';this.careWhy='';this.careHow='';
     const existing=this.selections.findIndex((item:SelectedGsRegion)=>item.info.regionId===info.regionId);
     if(existing<0&&this.selections.length>=4)return;
     if(existing>=0)this.selections[existing]={info,mask};
@@ -235,6 +272,9 @@ export struct PersonalPortraitEditor {
     if(!text||this.waiting)return;
     if(!this.selected){this.responseText=this.label('先轻轻圈出面容上的一处吧。','First, circle an area on your portrait.');return;}
     this.requestText=text;this.input='';this.pending=undefined;this.pendingSnapshot=undefined;this.candidateReady=false;this.question='';this.choices=[];
+    this.carePreviewToken++;
+    if(this.careWeek>0)this.command('CARE_PREVIEW','','',0);
+    this.careWeek=0;this.careProductId='';this.careWhy='';this.careHow='';
     if(!this.cloudEnabled){this.consentOffer=true;return;}
     this.capture();
   }
@@ -268,6 +308,11 @@ export struct PersonalPortraitEditor {
       if(!this.waiting||this.revision!==rev)return;
       console.info('SELF_GS_PLAN '+reply.plan.decision+' '+reply.modelEvidence.returnedModel);
       this.responseText='✧ '+reply.plan.shortMessage;this.question=reply.plan.question;this.choices=reply.plan.choices||[];
+      const guide=reply.plan.careGuide;
+      if(guide&&this.careProduct(guide.productId)){
+        this.careProductId=guide.productId;this.careWhy=guide.whyHere;this.careHow=guide.howToUse;
+        this.careExpanded=false;this.careWeek=0;
+      }
       this.dialogue.push({userText:this.requestText,reply:reply.plan.question||reply.plan.shortMessage,choices:this.choices.slice()});
       this.dialogue=this.dialogue.slice(-3);
       if(reply.plan.decision==='edit'){this.pending=reply;this.pendingSnapshot=snapshot;this.candidateReady=true;}
@@ -353,10 +398,13 @@ export struct PersonalPortraitEditor {
   }
   private clearSelection():void{
     this.planner.cancel();this.pending=undefined;this.pendingSnapshot=undefined;this.candidateReady=false;
+    this.carePreviewToken++;
     this.selections=[];this.selectionCount=0;this.selected=false;
+    this.waiting=false;this.consentOffer=false;this.question='';this.choices=[];
+    this.careProductId='';this.careWhy='';this.careHow='';this.careWeek=0;
     this.command('CLEAR_SELECTION');this.bubble=false;this.revision++;
   }
-  aboutToDisappear():void{this.planner.cancel();}
+  aboutToDisappear():void{this.planner.cancel();this.replyToken++;}
 
   build(){
     Stack(){
@@ -364,14 +412,47 @@ export struct PersonalPortraitEditor {
         onReady:()=>this.viewerReady(),onFailure:(message:string)=>{this.waiting=false;this.onFailure(message);},
         onEditFailure:(message:string)=>this.editFailed(message),
         onInteraction:()=>this.onInteraction(),
+        onBackgroundTone:(light:boolean)=>this.onBackgroundTone(light),
         onSelection:(info:GsSelection,mask:ArrayBuffer)=>this.selectedRegion(info,mask),
         onCapture:(clean:ArrayBuffer,annotated:ArrayBuffer,width:number,height:number)=>{this.captured(clean,annotated,width,height);},
         onApplied:(action:string)=>this.appliedResult(action)}).width('100%').height('100%')
       if(this.bubble){
         Column({space:8}){
           Row(){Text('✦ SELF').fontSize(12).letterSpacing(2).fontColor('#BFD8F3').layoutWeight(1);
-            StarCloseButton({diameter:30,label:this.label('关闭','Close'),onClose:()=>{this.bubble=false;}})}
-          Text(this.responseText).fontSize(15).lineHeight(22).fontColor('#F1F5FF').maxLines(3)
+            StarCloseButton({diameter:30,label:this.label('关闭','Close'),onClose:()=>this.clearSelection()})}
+          Column({space:1}){
+            ForEach(this.replyLines.slice(0,this.visibleReplyLines),(line:string,index:number)=>{
+              Text(line).fontSize(15).lineHeight(22).fontColor('#F1F5FF')
+                .blur(index===this.visibleReplyLines-1&&this.replyBloom?4:0)
+                .opacity(index===this.visibleReplyLines-1&&this.replyBloom?.7:1)
+                .animation({duration:190,curve:Curve.EaseOut})
+            },(_line:string,index:number)=>index.toString())
+          }.alignItems(HorizontalAlign.Start).width('100%')
+          if(this.careProductId&&this.careProduct(this.careProductId)){
+            Column({space:5}){
+              Row({space:9}){
+                Image(OlayPhotoRepository.thumbnail(this.careProductId)).width(42).height(42).objectFit(ImageFit.Contain)
+                Column({space:2}){
+                  Text((this.careProduct(this.careProductId) as OlayDiscoveryItem).name).fontSize(12)
+                    .fontColor('#F0F5FF').maxLines(1)
+                  Text(this.label('日常一小步','A small care step')).fontSize(10).fontColor('#B8D2EC')
+                }.alignItems(HorizontalAlign.Start).layoutWeight(1)
+                Text(this.careExpanded?'⌃':'⌄').fontSize(17).fontColor('#E1EBFF')
+              }.width('100%').onClick(()=>this.getUIContext().animateTo({duration:240,curve:Curve.EaseOut},()=>{
+                this.careExpanded=!this.careExpanded;}))
+              Text(this.careWhy).fontSize(11).lineHeight(16).fontColor('#D9E7F7')
+              if(this.careExpanded){Text(this.careHow).fontSize(11).lineHeight(16).fontColor('#E5EEFA')}
+              Text(this.label('面容观察 · '+(this.careWeek===0?'现在':'第 '+this.careWeek+' 周'),
+                'Portrait scenario · '+(this.careWeek===0?'now':'week '+this.careWeek)))
+                .fontSize(11).fontColor('#C6D8F0')
+              Slider({value:this.careWeek,min:0,max:8,step:1}).blockColor('#DEE8FF').selectedColor('#8C8CCB')
+                .onChange((value:number)=>this.setCareWeek(Math.round(value)))
+              Text(this.label('仅是可撤销的情景示意，不预测这款产品的疗效或时间。',
+                'Reversible visual scenario, not a prediction of this product’s effect or timing.'))
+                .fontSize(10).fontColor('#B4C7DC').maxLines(2)
+            }.padding(9).width('100%').backgroundColor('#263C58D9')
+              .border({width:1,color:'#7896BA'}).borderRadius(16)
+          }
           if(this.candidateReady){Text(this.label('✧ 数字预览 · '+this.selectionCount+' 处 · 非产品实测效果',
             '✧ Digital preview · '+this.selectionCount+' areas · not a product effect'))
             .fontSize(11).fontColor('#B9CDE4')}
@@ -409,7 +490,9 @@ export struct PersonalPortraitEditor {
           }
         }.padding(14).width(Math.min(330,this.viewportWidth-36)).backgroundColor('#D91A2D47')
           .border({width:1,color:'#657F9D'}).borderRadius(23)
-          .position({x:this.bubbleLeft(),y:Math.max(110,Math.min(this.viewportHeight-(this.keyboardOpen?680:470),this.anchorY*this.viewportHeight-92))})
+          .position({x:this.bubbleLeft(),y:Math.max(58,Math.min(this.viewportHeight-
+            (this.careProductId?342:168)-this.replyLines.length*22-(this.careExpanded?42:0)-
+            (this.question?52:0)-(this.choices.length?40:0),this.anchorY*this.viewportHeight-92))})
           .transition({opacity:0,scale:{x:.92,y:.92},translate:{y:12}}).zIndex(8)
       }
       if(this.historyOpen){

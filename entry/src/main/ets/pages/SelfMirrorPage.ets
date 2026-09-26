@@ -53,6 +53,7 @@ struct SelfMirrorPage {
   @State showPersonal:boolean=true;
   @State legacyEditorOpen:boolean=false;
   @State personalReady:boolean=false;
+  @State personalBackdropLight:boolean=false;
   @State originMode:boolean=true;
   @State skyOpen:boolean=false;
   @State starItems:PortraitStar[]=[];
@@ -115,6 +116,7 @@ struct SelfMirrorPage {
   @State productOpen:boolean=false;
   @State productSelection:ProductRecord=ProductRepository.records()[0];
   @State musicOn:boolean=false;
+  @State navPressed:string='';
   @State audioState:string='off';
   @State motion:boolean=true;
   @State palette:string='quiet';
@@ -972,6 +974,8 @@ struct SelfMirrorPage {
           assetId:this.activeStarId,language:this.language,cloudEnabled:this.cloudSessionEnabled,
           backendAddress:this.backendAddress,backendToken:this.backendToken,
           viewportWidth:this.surfaceWidth,viewportHeight:this.surfaceHeight,
+          onBackgroundTone:(light:boolean)=>{if(this.personalBackdropLight!==light){
+            this.getUIContext().animateTo({duration:this.motion?650:0,curve:Curve.EaseInOut},()=>{this.personalBackdropLight=light;});}},
           onEnableCloud:()=>{this.cloudSessionEnabled=true;},
           onReady:()=>{this.personalReady=true;this.captureStatus='';if(this.journey==='revealing'){
             this.getUIContext().animateTo({duration:this.motion?1350:0,curve:Curve.EaseOut},()=>{this.revealOpacity=0;this.revealScale=7;});
@@ -982,23 +986,65 @@ struct SelfMirrorPage {
         Stack(){Circle().width(72).height(72).fill('#B6C8EC').shadow({radius:80,color:'#A7C7EE'}).scale({x:this.revealScale,y:this.revealScale})}.width('100%').height('100%').backgroundColor('#080C1B').opacity(this.revealOpacity).hitTestBehavior(HitTestMode.None)
       }
       Row({space:10}){
-        Column({space:2}){Text('SELF').fontSize(25).letterSpacing(5).fontWeight(FontWeight.Medium).fontColor('#F5F5FF');Text(this.language==='en'?'Find your own light':'循光，遇见自己').fontSize(10).letterSpacing(2).fontColor('#A9BCD8')}.alignItems(HorizontalAlign.Start).onClick(()=>this.returnOrigin())
+        Column({space:2}){Text('SELF').fontSize(25).letterSpacing(5).fontWeight(FontWeight.Medium)
+          .fontColor(this.personalActive()&&this.personalBackdropLight?'#263149':'#F5F5FF');
+          Text(this.language==='en'?'Find your own light':'循光，遇见自己').fontSize(10).letterSpacing(2)
+            .fontColor(this.personalActive()&&this.personalBackdropLight?'#40516B':'#A9BCD8')}
+          .alignItems(HorizontalAlign.Start).onClick(()=>this.returnOrigin())
         Blank()
-        Button(this.musicOn?'♫':'♩').id('music-toggle').softButton().width(46).height(46).fontSize(22).fontColor('#EFF0FF').backgroundColor('#44314B70').accessibilityText(this.tr(this.musicOn?'音乐开':'音乐关')).onClick(()=>this.toggleMusic(!this.musicOn))
-        Button('✧').id('open-ambience').softButton().width(46).height(46).fontSize(24).fontColor('#EFF0FF').backgroundColor('#44314B70').accessibilityText(this.tr('氛围')).onClick((event:ClickEvent)=>this.open('氛围',event))
-        Button('⋯').id('open-settings').softButton().width(46).height(46).fontSize(25).fontColor('#EFF0FF').backgroundColor('#44314B70').accessibilityText(this.tr('设置')).onClick((event:ClickEvent)=>this.open('设置',event))
+        Button({type:ButtonType.Capsule,stateEffect:false}){
+          Stack(){Image($rawfile('ui/nav_music.svg')).width(28).height(28)
+            if(this.musicOn){Circle().width(4).height(4).fill('#D8E9FF').position({x:40,y:36})}}
+            .width(58).height(46)
+        }.id('music-toggle').width(58).height(46).padding(0).borderRadius(23)
+          .backgroundColor(this.personalActive()&&this.personalBackdropLight?'#334B65C9':'#263A579E')
+          .backgroundBlurStyle(BlurStyle.COMPONENT_ULTRA_THIN)
+          .border({width:1,color:this.navPressed==='music'?'#ECF5FF':this.musicOn?'#B8D9F7':'#819DB9'})
+          .shadow({radius:this.navPressed==='music'?15:this.musicOn?9:5,
+            color:this.navPressed==='music'?'#A9D2F4':this.musicOn?'#7299C9':'#14243D',offsetY:2})
+          .stateStyles({pressed:{.scale({x:.94,y:.9})},normal:{.scale({x:1,y:1})}})
+          .animation({duration:this.motion?170:0,curve:Curve.EaseOut})
+          .onTouch((event:TouchEvent)=>{this.navPressed=event.type===TouchType.Down?'music':'';})
+          .accessibilityText(this.tr(this.musicOn?'音乐开':'音乐关')).onClick(()=>this.toggleMusic(!this.musicOn))
+        Button({type:ButtonType.Circle,stateEffect:false}){
+          Image($rawfile('ui/nav_ambience.svg')).width(28).height(28)
+        }.id('open-ambience').width(48).height(48).padding(0).borderRadius(24)
+          .backgroundColor(this.personalActive()&&this.personalBackdropLight?'#334B65C9':'#263A579E')
+          .backgroundBlurStyle(BlurStyle.COMPONENT_ULTRA_THIN)
+          .border({width:1,color:this.navPressed==='ambience'?'#ECF5FF':'#819DB9'})
+          .shadow({radius:this.navPressed==='ambience'?15:5,
+            color:this.navPressed==='ambience'?'#C4B6F2':'#14243D',offsetY:2})
+          .stateStyles({pressed:{.scale({x:.9,y:.9})},normal:{.scale({x:1,y:1})}})
+          .animation({duration:this.motion?190:0,curve:Curve.EaseOut})
+          .onTouch((event:TouchEvent)=>{this.navPressed=event.type===TouchType.Down?'ambience':'';})
+          .accessibilityText(this.tr('氛围')).onClick((event:ClickEvent)=>this.open('氛围',event))
+        Button({type:ButtonType.Capsule,stateEffect:false}){
+          Image($rawfile('ui/nav_settings.svg')).width(28).height(28)
+        }.id('open-settings').width(52).height(46).padding(0).borderRadius(17)
+          .backgroundColor(this.personalActive()&&this.personalBackdropLight?'#334B65C9':'#263A579E')
+          .backgroundBlurStyle(BlurStyle.COMPONENT_ULTRA_THIN)
+          .border({width:1,color:this.navPressed==='settings'?'#ECF5FF':'#819DB9'})
+          .shadow({radius:this.navPressed==='settings'?14:5,
+            color:this.navPressed==='settings'?'#A8CAE9':'#14243D',offsetY:2})
+          .stateStyles({pressed:{.scale({x:.93,y:.89})},normal:{.scale({x:1,y:1})}})
+          .animation({duration:this.motion?160:0,curve:Curve.EaseOut})
+          .onTouch((event:TouchEvent)=>{this.navPressed=event.type===TouchType.Down?'settings':'';})
+          .accessibilityText(this.tr('设置')).onClick((event:ClickEvent)=>this.open('设置',event))
       }.padding({left:this.wide?40:22,right:this.wide?40:22,top:42,bottom:12}).width('100%').position({x:0,y:0}).zIndex(10)
       if(this.journey==='idle'&&!this.detail){
         Column({space:12}){
           Flex({wrap:FlexWrap.Wrap}){
             ForEach(this.currentStoryLine().split(''),(letter:string,index:number)=>{
-              Text(letter).fontSize(this.wide?27:21).letterSpacing(2).fontWeight(FontWeight.Medium).fontColor('#F5F4FF')
+              Text(letter).fontSize(this.wide?27:21).letterSpacing(2).fontWeight(FontWeight.Medium)
+                .fontColor(this.personalActive()&&this.personalBackdropLight?'#27334D':'#F5F4FF')
                 .opacity(index<this.visibleCharacters?1:0).blur(index<this.visibleCharacters?0:7)
                 .textShadow({radius:5,color:'#7D101528',offsetY:2})
                 .animation({duration:this.motion?280:0,curve:Curve.EaseOut})
             },(_letter:string,index:number)=>this.currentStoryLine()+'-'+index.toString())
           }.width('100%')
-          if(!this.skyOpen){Text(this.personalActive()?(this.language==='en'?'Touch and turn to discover each side.':'轻轻转动，看看每一面的自己。'):this.originTitles()[this.originScene]).fontSize(13).letterSpacing(2).fontColor('#BAC9E0').textShadow({radius:5,color:'#7D101528',offsetY:2})}
+          if(!this.skyOpen){Text(this.personalActive()?(this.language==='en'?'Touch and turn to discover each side.':'轻轻转动，看看每一面的自己。'):this.originTitles()[this.originScene])
+            .fontSize(13).letterSpacing(2).fontColor(this.personalActive()&&this.personalBackdropLight?'#40516B':'#BAC9E0')
+            .textShadow({radius:5,color:'#7D101528',offsetY:2})}
         }.alignItems(HorizontalAlign.Start).width(Math.min(this.surfaceWidth-48,this.wide?460:340)).position({x:this.wide?50:26,y:this.surfaceHeight*(this.wide?.22:.18)}).hitTestBehavior(HitTestMode.None)
       }
       if(this.skyOpen&&!this.detail){

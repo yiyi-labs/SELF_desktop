@@ -20,6 +20,14 @@ _ROUTINES_EN = {
     'cleanser': 'Cleanse gently, then rinse thoroughly.',
 }
 
+_SKIN_CONCERNS = ('痘', '痘印', '疤', '泛红', '敏感', '干燥', '粗糙', '暗沉', 'acne', 'pimple', 'blemish', 'scar', 'redness')
+
+
+def care_intent(text: str) -> bool:
+    value = text.lower()
+    return any(word in value for word in ('养护', '护理', '怎么用', '如何用', '护肤', 'olay', '玉兰油',
+        'care', 'routine', '保湿', '防晒', '洁面', '洗脸', '清洁', *_SKIN_CONCERNS))
+
 
 def care_options(text: str, enabled: bool, language: str = 'zh') -> list[dict]:
     if not enabled:
@@ -31,9 +39,12 @@ def care_options(text: str, enabled: bool, language: str = 'zh') -> list[dict]:
     if value.strip() in {'1', '2', '3', '试一下', '试试', '这个', '这款', '它'}:
         return []
     if not any(word in value for word in ('脸', '面部', '皮肤', '肤', '额头', '鼻', '保湿', '护肤', '护理', '养护',
-                                          'olay', '玉兰油', 'face', 'cheek', 'skin', 'forehead', 'nose', 'care', 'moistur')):
+                                          'olay', '玉兰油', 'face', 'cheek', 'skin', 'forehead', 'nose', 'care', 'moistur', *_SKIN_CONCERNS)):
         return []
-    if any(word in value for word in ('防晒', '紫外线', 'sun')):
+    if any(word in value for word in ('痘', 'acne', 'pimple', 'blemish')):
+        # A cleanser is a routine step, never a claimed acne treatment.
+        ids = ['CN029']
+    elif any(word in value for word in ('防晒', '紫外线', 'sun')):
         ids = ['CN013']
     elif any(word in value for word in ('眼周', '眼下', '眼霜', 'eye')):
         ids = ['CN024']
@@ -60,7 +71,10 @@ def care_usage(text: str, enabled: bool, product_id: str, language: str = 'zh') 
                  if item['productId'] == product_id), '')
 
 
-def care_reason(product_id: str, language: str = 'zh') -> str:
+def care_reason(product_id: str, language: str = 'zh', request_text: str = '') -> str:
+    if any(word in request_text.lower() for word in ('痘', 'acne', 'pimple', 'blemish')):
+        return ('Start with a gentle cleansing step; this cleanser is not an acne treatment.' if language == 'en'
+                else '先轻柔清洁这处，不揉搓；洁面不是祛痘治疗。')
     category = _RECORDS[product_id]['category_id']
     if language == 'en':
         return {

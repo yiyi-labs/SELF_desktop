@@ -1,5 +1,6 @@
 import { Application, Asset, Entity, FILLMODE_FILL_WINDOW, RESOLUTION_AUTO, WORKBUFFER_UPDATE_ONCE, Color, Vec3 } from 'playcanvas';
-import { selectVisibleSplats, normalizeLasso, selectionSlot, shouldRecordLassoPoint, makeOriginalColors, applyDigitalTint, applyDigitalLayers, DIGITAL_PRESETS } from './gs-edit.js';
+import { selectVisibleSplats, normalizeLasso, selectionSlot, shouldRecordLassoPoint, makeOriginalColors, applyDigitalTint, applyDigitalLayers, applyCareScenario, DIGITAL_PRESETS } from './gs-edit.js';
+import { upperLeftLuma, createToneTracker } from './tone.js';
 
 const canvas=document.getElementById('portrait'), outline=document.getElementById('lasso'), status=document.getElementById('status');
 const preview=document.body.dataset.preview==='true';
@@ -56,13 +57,22 @@ async function start(){
       let yaw=0,pitch=0,zoom=openingZoom,targetYaw=0,targetPitch=0,targetZoom=openingZoom;
       let mode='move',touching=false,lastX=0,lastY=0,polygon=[],selectedPolygon=[],selectionYaw=0,selectionPitch=0,
         selectionWidth=0,selectionHeight=0,mask=null,selected=0,appendNext=false;
-      let appliedRecipe=null,historyLayers=[],selections=[];
+      let appliedRecipe=null,historyLayers=[],selections=[],carePreviewActive=false;
       const decodeMask=value=>{
         const decoded=atob(value||'');
         if(decoded.length!==data.numSplats)throw Error('圈选和个人模型不匹配');
         return Uint8Array.from(decoded,c=>c.charCodeAt(0));
       };
       const drawHistory=layers=>{applyDigitalLayers(resource,originalColors,layers);model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;app.renderNextFrame=true;};
+      const toneTracker=createToneTracker(),toneCanvas=document.createElement('canvas');
+      toneCanvas.width=24;toneCanvas.height=16;
+      const sampleTone=()=>{if(!port||!identity||preview)return;
+        try{const context=toneCanvas.getContext('2d',{willReadFrequently:true});
+          context.drawImage(canvas,0,0,toneCanvas.width,toneCanvas.height);
+          const pixels=context.getImageData(0,0,toneCanvas.width,toneCanvas.height).data;
+          const light=toneTracker(upperLeftLuma(pixels,toneCanvas.width,toneCanvas.height));
+          if(light!==null)send('GS_TONE',{light});
+        }catch(error){console.warn('SELF_GS_TONE_UNAVAILABLE '+String(error));}};
       const resizeOutline=()=>{const r=canvas.getBoundingClientRect();outline.width=Math.round(r.width*devicePixelRatio);outline.height=Math.round(r.height*devicePixelRatio);};
       const xs=data.getProp('x'),ys=data.getProp('y'),zs=data.getProp('z');
       const sampleMask=weights=>{
@@ -125,6 +135,13 @@ async function start(){
         if(sparks.length>70)sparks.splice(0,sparks.length-70);
         if(!sparkFrame)sparkFrame=requestAnimationFrame(animateSparks);
       };
+      const dissolveSelections=()=>{for(const entry of selections){
+        const r=canvas.getBoundingClientRect();
+        const points=Math.abs(yaw-entry.yaw)<.055&&Math.abs(pitch-entry.pitch)<.055&&
+          Math.abs(r.width-entry.width)<1&&Math.abs(r.height-entry.height)<1?
+          entry.polygon:projectedContour(entry,r.width,r.height);
+        for(let i=0;i<points.length;i+=Math.max(1,Math.floor(points.length/8)))addSparks(points[i]);
+      }};
       let firstCamera=true,lastOverlay=0;
       const update=()=>{if(preview&&!touching)targetYaw=Math.sin(performance.now()*.00027)*.23;
         if(!firstCamera&&Math.abs(targetYaw-yaw)<.0002&&Math.abs(targetPitch-pitch)<.0002&&Math.abs(targetZoom-zoom)<.0002)return;
@@ -175,12 +192,22 @@ async function start(){
       command=payload=>{
         if(payload.action==='TOOL'){mode=payload.tool==='lasso'?'lasso':'move';appendNext=false;return;}
         if(payload.action==='ARM_APPEND'){mode='lasso';appendNext=true;return;}
-        if(payload.action==='CLEAR_SELECTION'){selections=[];polygon=[];selectedPolygon=[];mask=null;selected=0;appendNext=false;drawOutline();return;}
+        if(payload.action==='CLEAR_SELECTION'){
+          dissolveSelections();selections=[];polygon=[];selectedPolygon=[];mask=null;selected=0;appendNext=false;
+          if(carePreviewActive){drawHistory(historyLayers);carePreviewActive=false;}
+          drawOutline();return;}
+        if(payload.action==='CARE_PREVIEW'){
+          const week=payload.strength;
+          if(!Number.isInteger(week)||week<0||week>8)throw Error('观察时段不正确');
+          if(selections.length<1)throw Error('请先圈选一处');
+          applyCareScenario(resource,originalColors,historyLayers,selections.map(item=>item.mask),week/8);
+          carePreviewActive=week>0;model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;app.renderNextFrame=true;return;
+        }
         if(payload.action==='SET_HISTORY'){
           const incoming=payload.layers;
           if(!Array.isArray(incoming)||incoming.length>16)throw Error('编辑记录过多');
           const next=incoming.map(layer=>({mask:decodeMask(layer.maskBase64),preset:layer.preset,strength:layer.strength}));
-          drawHistory(next);historyLayers=next;appliedRecipe=null;
+          drawHistory(next);historyLayers=next;appliedRecipe=null;carePreviewActive=false;
           send('GS_APPLIED',{action:'SET_HISTORY',count:next.length});return;
         }
         if(payload.action==='RESTORE'){
@@ -202,7 +229,7 @@ async function start(){
           model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;app.renderNextFrame=true;
           send('GS_APPLIED',{action:payload.action});return;}
         if(payload.action==='APPLY'){
-          if(!mask||selected<80)throw Error('请先圈出想试的地方');
+          if(!mask||selected<28)throw Error('请先圈出想试的地方');
           if(!Object.hasOwn(DIGITAL_PRESETS,payload.preset)||![.18,.32,.5].includes(payload.strength))throw Error('这次的颜色建议还不能使用');
           applyDigitalTint(resource,originalColors,mask,DIGITAL_PRESETS[payload.preset],payload.strength);
           model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;app.renderNextFrame=true;
@@ -251,6 +278,7 @@ async function start(){
           sendBytes('gs-annotated',pngBytes(image.toDataURL('image/png')));return;}
       };
       modelReady=true;if(port)port.postMessage(JSON.stringify({schemaVersion:1,type:'READY',payload:{webgl2:true}}));
+      if(!preview){setTimeout(sampleTone,450);setInterval(sampleTone,3200);}
       report('READY',`已载入 ${data.numSplats} 个立体细节点，可拖动观察`);
       setTimeout(()=>status.classList.add('quiet'),2200);
       console.log(`SELF_GS_VIEWER_VIEW ${view.sourceFrame} ${view.faceTrackCount} ${view.fovDegrees}`);

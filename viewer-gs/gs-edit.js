@@ -100,7 +100,8 @@ export function selectVisibleSplats({data, polygon, target, cameraPosition, proj
     const weight = Math.round(255 * feather);
     if (weight > 0) { mask[p.i] = weight; selected++; }
   }
-  if (selected < 80 || selected > count * .6) throw Error('这里的立体范围还不够明确，请圈小一点再试');
+  if (selected < 28) throw Error('这里的立体细节较少，稍稍圈大一点再试');
+  if (selected > count * .6) throw Error('范围太宽了，缩小一点再试');
   return {mask, selected};
 }
 
@@ -151,6 +152,32 @@ export function applyDigitalLayers(resource, original, layers) {
         channels[c][i]+=(clamp(base+(color[c]-base)*amount,0,1)-base)/SH_C0;
       }
     }
+  }
+  resource.updateColorData(data);
+}
+
+/** A reversible, clearly labelled visual scenario on the selected 3D points.
+ * It is deliberately independent of product claims: no OLAY calibration or
+ * therapeutic acne response is inferred from this colour illustration. */
+export function applyCareScenario(resource, original, layers, masks, progress) {
+  applyDigitalLayers(resource, original, layers);
+  if (!Number.isFinite(progress) || progress < 0 || progress > 1) throw Error('观察进度不正确');
+  if (progress === 0) return;
+  const data=resource.gsplatData, count=data.numSplats;
+  if (!Array.isArray(masks) || masks.length < 1 || masks.length > 4 ||
+      masks.some(mask=>!(mask instanceof Uint8Array)||mask.length!==count)) throw Error('观察范围与模型不匹配');
+  const channels=['f_dc_0','f_dc_1','f_dc_2'].map(name=>data.getProp(name));
+  for(let i=0;i<count;i++){
+    let weight=0;for(const mask of masks)weight=Math.max(weight,mask[i]);
+    if(weight===0)continue;
+    const amount=progress*weight/255;
+    const rgb=channels.map(channel=>clamp(.5+channel[i]*SH_C0,0,1));
+    // Retain shading and freckles. Only temper excess red slightly and add a
+    // restrained overall lift; coordinates, opacity, SH detail stay intact.
+    const redExcess=Math.max(0,rgb[0]-(rgb[1]+rgb[2])*.5-.04);
+    const next=[rgb[0]+amount*(.012-Math.min(.07,redExcess*.35)),
+      rgb[1]+amount*.012,rgb[2]+amount*.012];
+    for(let c=0;c<3;c++)channels[c][i]+=(clamp(next[c],0,1)-rgb[c])/SH_C0;
   }
   resource.updateColorData(data);
 }

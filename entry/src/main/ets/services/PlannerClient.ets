@@ -60,7 +60,7 @@ export class PlannerClient {
   if(Object.keys(plan).some((key:string)=>!['decision','shortMessage','operations','explanationRefs','question','choices','careGuide'].includes(key)))throw new Error('候选包含未知字段');
   if(plan.careGuide){
    const guide=plan.careGuide;
-   if(plan.decision!=='edit'||!snapshot.careAdviceRequested||
+   if(plan.decision==='support'||!snapshot.careAdviceRequested||
     !OlayDiscoveryRepository.records().some((p:OlayDiscoveryItem)=>p.id===guide.productId)||
     !guide.whyHere||guide.whyHere.length>100||!guide.howToUse||guide.howToUse.length>140)
     throw new Error('护理建议与本次修改不匹配');
@@ -68,7 +68,7 @@ export class PlannerClient {
   if(plan.choices&&plan.choices.length&&(plan.decision!=='clarify'||plan.choices.length<2||plan.choices.length>3||plan.choices.some((c:string)=>!c.trim()||c.length>60)))throw new Error('对话选项无效');
   if(/\brose\b|\bterracotta\b|regionId|presetId|layerId/.test(plan.shortMessage+plan.question+(plan.choices||[]).join(' ')))throw new Error('回复包含内部标识，请重新提出请求');
   if(/^[1-3]$/.test(snapshot.userText.trim())&&plan.decision==='edit'&&!snapshot.resolvedChoice)throw new Error('请说明这个数字对应的选择');
-  if(!['edit','explain','clarify','support'].includes(plan.decision)||!plan.shortMessage||plan.shortMessage.length>400||plan.operations.length>4||plan.explanationRefs.length>3||plan.explanationRefs.some((id:string)=>!ProductRepository.records().some((p:ProductRecord)=>p.productId===id)))throw new Error('候选计划不符合协议');
+  if(!['edit','explain','clarify','support'].includes(plan.decision)||!plan.shortMessage||plan.shortMessage.length>140||plan.operations.length>4||plan.explanationRefs.length>3||plan.explanationRefs.some((id:string)=>!ProductRepository.records().some((p:ProductRecord)=>p.productId===id)))throw new Error('候选计划不符合协议');
   if(plan.question.length>200||(plan.decision!=='clarify'&&plan.question))throw new Error('候选提问不符合协议');
   if(plan.decision!=='edit'&&plan.operations.length)throw new Error('交流不能夹带编辑');
   if(plan.decision==='edit'&&plan.operations.length<1)throw new Error('需要完整的候选操作');
