@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
-  <path d="M14.5 8.7 22 6.7v11.4" stroke="#F1F6FF" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M14.5 8.7v12" stroke="#F1F6FF" stroke-width="1.9" stroke-linecap="round"/>
-  <path d="M22 6.7v3.1l-7.5 2" stroke="#BDD9F5" stroke-width="1.5" stroke-linecap="round"/>
-  <ellipse cx="11.2" cy="21.1" rx="3.3" ry="2.15" transform="rotate(-20 11.2 21.1)" stroke="#F1F6FF" stroke-width="1.8"/>
-  <ellipse cx="18.7" cy="18.5" rx="3.3" ry="2.15" transform="rotate(-20 18.7 18.5)" stroke="#F1F6FF" stroke-width="1.8"/>
-  <circle cx="6.1" cy="9.1" r="1.1" fill="#BDD9F5"/>
+  <path d="M14.5 8.7 22 6.7v11.4" stroke="#293E59" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M14.5 8.7v12" stroke="#293E59" stroke-width="2.1" stroke-linecap="round"/>
+  <path d="M22 6.7v3.1l-7.5 2" stroke="#536E90" stroke-width="1.6" stroke-linecap="round"/>
+  <ellipse cx="11.2" cy="21.1" rx="3.3" ry="2.15" transform="rotate(-20 11.2 21.1)" stroke="#293E59" stroke-width="2"/>
+  <ellipse cx="18.7" cy="18.5" rx="3.3" ry="2.15" transform="rotate(-20 18.7 18.5)" stroke="#293E59" stroke-width="2"/>
+  <circle cx="6.1" cy="9.1" r="1.1" fill="#536E90"/>
 </svg>

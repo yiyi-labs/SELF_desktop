@@ -103,11 +103,21 @@ struct SelfMirrorPage {
   @State anchorX:number=380;
   @State anchorY:number=16;
   private surfaceTop:number=76;
+  private readonly detailTop:number=110;
   private tr(value:string):string{return UiText.get(value,this.language);}
-  private panelWidth():number{return Math.min(this.surfaceWidth-32,this.detail==='氛围'?360:520);}
-  private panelHeight():number{return Math.min(this.surfaceHeight-24,this.detail==='氛围'?552:this.detail==='设置'?610:600);}
+  private panelWidth():number{return Math.min(this.surfaceWidth-32,this.detail==='氛围'?360:this.detail==='留一句话'?470:520);}
+  private panelPreferredHeight():number{
+    if(this.detail==='氛围')return 552;
+    if(this.detail==='设置')return 610;
+    if(this.detail==='留一句话')return 438;
+    if(this.detail==='作品与记录')return Math.min(570,310+this.workItems.length*62+this.bill.length*24+(this.note.length>0?90:0));
+    return 560;
+  }
+  private panelHeight():number{return Math.max(120,Math.min(this.surfaceHeight-this.detailTop-20,this.panelPreferredHeight()));}
   private panelX():number{return Math.max(16,Math.min(this.surfaceWidth-this.panelWidth()-16,this.anchorX-this.panelWidth()/2));}
-  private panelY():number{return Math.max(12,Math.min(this.surfaceHeight-this.panelHeight()-12,this.anchorY<60?12:this.anchorY-this.panelHeight()-16));}
+  private panelY():number{return Math.max(this.detailTop,Math.min(this.surfaceHeight-this.panelHeight()-20,this.anchorY<this.detailTop?this.detailTop:this.anchorY-this.panelHeight()-58));}
+  private panelFromTop():boolean{return this.anchorY<this.detailTop;}
+  private panelEntranceY():number{return this.panelFromTop()?-17:22;}
   private saveUi():void{UiPreference.save(this.context,{language:this.language,accent:this.accent,palette:this.palette,motion:this.motion,followChat:this.followChat,stylusHints:this.stylusHints});}
   private setLanguage(value:string):void{this.markInteraction();this.language=value;AppStorage.setOrCreate('selfLanguage',value);this.saveUi();this.revealStory();}
   private setAccent(value:string):void{this.getUIContext().animateTo({duration:this.motion?280:0,curve:Curve.EaseOut},()=>this.accent=value);this.saveUi();}
@@ -117,6 +127,11 @@ struct SelfMirrorPage {
   @State productSelection:ProductRecord=ProductRepository.records()[0];
   @State musicOn:boolean=false;
   @State navPressed:string='';
+  @State buttonPulse:string='';
+  @State panelDust:number=1;
+  private pulseTimer:number=-1;
+  private panelOpenTimer:number=-1;
+  private dustTimer:number=-1;
   @State audioState:string='off';
   @State motion:boolean=true;
   @State palette:string='quiet';
@@ -647,7 +662,12 @@ struct SelfMirrorPage {
     else if(intent.action==='supportOffer'){this.support='offered';this.subtitle=intent.text;}
     else this.subtitle=mood?'收到。我们把节奏放轻一点，你可以先看看，也可以说说想尝试什么。':intent.text;
   }
-  private toggleMusic(enabled:boolean):void{this.markInteraction();this.musicOn=enabled;this.audio.configure(enabled,this.palette);}
+  private pulseButton(name:string):void{
+    if(this.pulseTimer>=0)clearTimeout(this.pulseTimer);
+    this.buttonPulse=name;
+    this.pulseTimer=setTimeout(()=>{this.buttonPulse='';this.pulseTimer=-1;},this.motion?210:0);
+  }
+  private toggleMusic(enabled:boolean):void{this.markInteraction();this.pulseButton('music');this.musicOn=enabled;this.audio.configure(enabled,this.palette);}
   private setAtmosphere():void{if(this.bridge.ready)this.bridge.send('SET_ATMOSPHERE',{motion:this.motion&&this.foreground,palette:this.palette});}
   private chooseAtmosphere(mode:string):void{this.getUIContext().animateTo({duration:this.motion?280:0},()=>this.palette=mode);this.setAtmosphere();this.saveUi();if(this.musicOn)this.audio.configure(true,mode);}
   private foregroundChanged():void{this.bridge.foreground(this.foreground&&!this.cameraLive);this.audio.visibility(this.foreground);this.setAtmosphere();if(!this.foreground&&this.timer>=0){clearInterval(this.timer);this.timer=-1;this.playing=false;}}
@@ -660,15 +680,32 @@ struct SelfMirrorPage {
   private open(name:string,event?:ClickEvent):void{
     this.markInteraction();if(this.busy)return;if(name==='产品资料'){this.showProduct();return;}
     if(name==='拍摄面容'){this.cameraLive=true;this.showBeginning=false;if(this.legacyEditorOpen&&this.bridge.ready)this.bridge.send('SET_TOOL',{tool:'DETAIL'});this.bridge.foreground(false);return;}
-    if(event){this.anchorX=event.windowX;this.anchorY=event.windowY-this.surfaceTop;}
-    else if(!this.detail){this.anchorX=this.focusOpen?this.focusX*this.surfaceWidth:this.surfaceWidth-100;this.anchorY=this.focusOpen?this.focusY*this.surfaceHeight:16;}
+    if(this.detail===name){this.close();this.pulseButton(name);return;}
+    if(this.panelOpenTimer>=0&&this.buttonPulse===name){clearTimeout(this.panelOpenTimer);this.panelOpenTimer=-1;this.buttonPulse='';return;}
+    if(!this.detail){
+      if(event){this.anchorX=event.windowX;this.anchorY=event.windowY-this.surfaceTop;}
+      else{this.anchorX=this.focusOpen?this.focusX*this.surfaceWidth:this.surfaceWidth-100;this.anchorY=this.focusOpen?this.focusY*this.surfaceHeight:16;}
+    }
     if(!this.detail)this.previousTool=this.tool;
-    this.getUIContext().animateTo({duration:this.motion?430:0,
-      curve:this.motion?'spring(0,1,420,37)':Curve.EaseOut},()=>this.detail=name);
+    if(this.panelOpenTimer>=0){clearTimeout(this.panelOpenTimer);this.panelOpenTimer=-1;}
+    const reveal=():void=>{
+      if(this.dustTimer>=0){clearTimeout(this.dustTimer);this.dustTimer=-1;}
+      this.panelDust=this.motion?0:1;
+      this.getUIContext().animateTo({duration:this.motion?380:0,
+        curve:this.motion?'spring(0,1,330,37)':Curve.EaseOut},()=>this.detail=name);
+      if(this.motion){this.dustTimer=setTimeout(()=>{
+        this.dustTimer=-1;
+        this.getUIContext().animateTo({duration:580,curve:Curve.EaseInOut},()=>this.panelDust=1);
+      },18);}
+    };
+    if(!this.detail&&['氛围','设置','作品与记录','留一句话'].includes(name)&&this.motion){
+      this.pulseButton(name);
+      this.panelOpenTimer=setTimeout(()=>{this.panelOpenTimer=-1;reveal();},95);
+    }else{reveal();}
     if(this.legacyEditorOpen&&this.bridge.ready)this.bridge.send('SET_TOOL',{tool:'DETAIL'});this.workItems=this.works.list();this.note=this.works.readNote();
     if(name==='采集记录'){this.selectedCapture='';this.captures=new CaptureService(this.context).list();}
   }
-  private close():void{this.markInteraction();this.cameraLive=false;this.bridge.foreground(this.foreground&&this.legacyEditorOpen);if(this.timer>=0)clearInterval(this.timer);this.timer=-1;this.playing=false;this.getUIContext().animateTo({duration:this.motion?300:0,curve:Curve.EaseInOut},()=>this.detail='');this.tool=this.previousTool;if(this.legacyEditorOpen&&this.bridge.ready)this.bridge.send('SET_TOOL',{tool:this.tool});}
+  private close():void{this.markInteraction();if(this.panelOpenTimer>=0){clearTimeout(this.panelOpenTimer);this.panelOpenTimer=-1;}if(this.dustTimer>=0){clearTimeout(this.dustTimer);this.dustTimer=-1;}this.panelDust=1;this.buttonPulse='';this.cameraLive=false;this.bridge.foreground(this.foreground&&this.legacyEditorOpen);if(this.timer>=0)clearInterval(this.timer);this.timer=-1;this.playing=false;this.getUIContext().animateTo({duration:this.motion?260:0,curve:Curve.EaseInOut},()=>this.detail='');this.tool=this.previousTool;if(this.legacyEditorOpen&&this.bridge.ready)this.bridge.send('SET_TOOL',{tool:this.tool});}
   private protect(current:boolean,persistent:boolean):void{
     try{this.session.protect(this.selected,current,persistent);this.sendSnapshot();this.labels();this.close();
       if(persistent)this.works.savePreference(this.session).then(()=>{this.subtitle='已明确保存长期偏好';this.labels();}).catch((e:Error)=>this.fail(e.message));
@@ -700,7 +737,7 @@ struct SelfMirrorPage {
       this.works.loadPreference(this.session);this.bridge.assetId=this.session.assetId;this.bridge.assetVersion=this.session.assetVersion;this.bridge.revision=0;this.identity='示例面容';this.selected='';this.candidate='';this.ready=false;this.close();this.labels();this.bridge.send('INIT',{});this.subtitle='已删除这张照片的应用内源文件、作品、蒙版和私有导出；私密文字保留';
     }catch(e){this.fail(String(e));}
   }
-  aboutToDisappear():void{this.planner.cancel();if(this.timer>=0)clearInterval(this.timer);if(this.storyCueTimer>=0)clearTimeout(this.storyCueTimer);if(this.characterTimer>=0)clearTimeout(this.characterTimer);if(this.formationTimer>=0)clearInterval(this.formationTimer);if(this.introCharacterTimer>=0)clearTimeout(this.introCharacterTimer);if(this.revealTimer>=0)clearTimeout(this.revealTimer);this.introTimers.forEach((timer:number)=>clearTimeout(timer));if(this.reconTimer>=0)clearInterval(this.reconTimer);this.reconTimer=-1;this.audio.dispose();this.bridge.dispose();this.assets.cleanupTemporary();}
+  aboutToDisappear():void{this.planner.cancel();if(this.timer>=0)clearInterval(this.timer);if(this.storyCueTimer>=0)clearTimeout(this.storyCueTimer);if(this.characterTimer>=0)clearTimeout(this.characterTimer);if(this.formationTimer>=0)clearInterval(this.formationTimer);if(this.introCharacterTimer>=0)clearTimeout(this.introCharacterTimer);if(this.revealTimer>=0)clearTimeout(this.revealTimer);if(this.panelOpenTimer>=0)clearTimeout(this.panelOpenTimer);if(this.pulseTimer>=0)clearTimeout(this.pulseTimer);if(this.dustTimer>=0)clearTimeout(this.dustTimer);this.introTimers.forEach((timer:number)=>clearTimeout(timer));if(this.reconTimer>=0)clearInterval(this.reconTimer);this.reconTimer=-1;this.audio.dispose();this.bridge.dispose();this.assets.cleanupTemporary();}
   onBackPress():boolean{if(this.introStage>0){this.finishIntro();return true;}if(this.cameraLive){this.close();return true;}if(this.detail){this.close();return true;}if(this.skyOpen||this.personalActive()){this.returnOrigin();return true;}if(this.productOpen){this.productOpen=false;return true;}if(this.legacyEditorOpen){this.legacyEditorOpen=false;this.ready=false;return true;}if(this.tool!=='NAVIGATE'){this.switchTool(this.tool);return true;}return false;}
   @Builder ambienceTile(mode:string,label:string,color:string){
     Button(){Column({space:8}){Stack(){Circle().width(48).height(48).fill(color);Circle().width(26).height(26).fill('#BBFFFFFF').blur(7).offset({x:8,y:-4})}.width(62).height(60);Text(this.tr(label)).fontSize(13).fontColor('#3B4665')}}.id('palette-'+mode).layoutWeight(1).height(102).backgroundColor(this.palette===mode?'#B9E1EAF8':'#72D1DDEF').border({width:this.palette===mode?1.5:1,color:this.palette===mode?'#CDEBFA':'#88E5F0FF'}).borderRadius(22).stateStyles({pressed:{.scale({x:.96,y:.96})},normal:{.scale({x:1,y:1})}}).animation({duration:this.motion?180:0,curve:Curve.EaseOut}).onClick(()=>this.chooseAtmosphere(mode))
@@ -708,7 +745,13 @@ struct SelfMirrorPage {
   @Builder
   details(){
     Scroll(){Column({space:12}){
-      Row(){Text('✧').fontSize(19).fontColor('#667C9F').margin({right:8});Text(this.tr(this.detail)).fontSize(23).fontWeight(FontWeight.Medium).fontColor('#2C3852').layoutWeight(1);Button(this.tr('×')).id('panel-close').softButton().width(44).backgroundColor('#A8D7E4F1').onClick(()=>this.close())}.width('100%')
+      Row({space:10}){
+        Stack(){Circle().width(28).height(28).fill('#355574').opacity(.16);Text(this.panelFromTop()?'✧':'✦').fontSize(21).fontColor('#425E89')}.width(32).height(32)
+        Text(this.detail==='作品与记录'?(this.language==='en'?'Traces':'足迹'):this.tr(this.detail))
+          .fontSize(22).fontWeight(FontWeight.Medium).fontColor('#263951').layoutWeight(1)
+        StarCloseButton({diameter:38,label:this.language==='en'?'Close':'关闭',onClose:()=>this.close()})
+      }.width('100%').height(44)
+      Rect().width('100%').height(1).fill('#768FAFC0').opacity(.52)
       if(this.detail==='完整回复'){Text(this.tr(this.subtitle)).fontSize(17).lineHeight(28)}
       if(this.detail==='云端理解'){
         Text(this.tr('开启后，每次主动发送会附上当前静态面容图和最近三轮问答，由配置的后端交给 DeepSeek 理解。不会上传相机视频；修改仍需确认。')).fontSize(16).fontColor('#665A72')
@@ -801,8 +844,13 @@ struct SelfMirrorPage {
       }
       if(this.detail==='作品与记录'){
         if(this.legacyEditorOpen&&this.bridge.ready){Button(this.tr('保存当前作品')).softButton().onClick(()=>this.saveWork())}
-        if(this.personalGaussianPath&&!this.legacyEditorOpen){Text(this.tr('你的立体面容已在本机保存，可以随时回到主页观看。')).fontSize(15).fontColor('#665A72')}
+        if(this.personalGaussianPath&&!this.legacyEditorOpen){Text(this.language==='en'?'Your star is here whenever you wish to return.':'这颗星辰仍在这里，随时可以回来看看。').fontSize(15).fontColor('#3A4E6B')}
         if(this.legacyEditorOpen){Text(this.tr('实际成功的操作')).fontSize(17)}
+        if(this.workItems.length===0&&this.bill.length===0&&this.note.length===0){
+          Text('✧').fontSize(26).fontColor('#4D668D').margin({top:18})
+          Text(this.language==='en'?'Your first trace begins with a moment you choose to keep.':'第一段足迹，会从你愿意留下的瞬间开始。')
+            .fontSize(16).lineHeight(24).fontColor('#324766')
+        }
         ForEach(this.bill,(line:string)=>{Text(this.tr(line)).fontSize(15).width('100%')})
         ForEach(this.workItems,(item:WorkItem)=>{Row({space:8}){Button(this.tr(item.label)).id('open-'+item.id).softButton().onClick(()=>this.reopen(item.id));Button(this.tr('删除作品')).id('delete-'+item.id).softButton().onClick(()=>{this.works.delete(item.id);this.workItems=this.works.list();this.subtitle='已删除该作品的私有文件与记录';})}},(item:WorkItem)=>item.id)
         if(this.note.length>0){Text(this.tr(this.note)).fontSize(16);Button(this.tr('修改那句话')).softButton().onClick(()=>this.detail='留一句话');Button(this.tr('删除那句话')).softButton().onClick(()=>{this.works.deleteNote();this.note='';})}
@@ -817,19 +865,47 @@ struct SelfMirrorPage {
         Text(this.tr('参考：WHO Suicide Q&A\nhttps://www.who.int/news-room/questions-and-answers/item/suicide')).fontSize(12).copyOption(CopyOptions.LocalDevice)
       }
       if(this.detail==='留一句话'){
-        Text(this.tr('自愿、私密、可修改和删除。只保存你确认的文字。')).fontSize(16)
-        TextArea({text:this.note,placeholder:this.tr('写给自己的话')}).height(180).maxLength(2000).onChange((v:string)=>this.note=v)
-        Button(this.tr('私密保存这句话')).softButton().onClick(()=>{this.works.saveNote(this.note);this.close();this.subtitle='已私密保存，可在记录中修改或删除';})
-        Button(this.tr('跳过')).softButton().onClick(()=>this.close())
+        Text(this.tr('写给此刻的自己。只有你确认后，这句话才会留下。')).fontSize(15).fontColor('#354B68')
+        TextArea({text:this.note,placeholder:this.tr('写给自己的话')}).height(156).maxLength(2000)
+          .backgroundColor('#B5D9E3F0').border({width:1,color:'#84F3F7FF'}).borderRadius(18)
+          .onChange((v:string)=>this.note=v)
+        Row({space:12}){
+          Button(this.tr('留下这句话')).layoutWeight(1).height(48).fontSize(15).fontColor('#F2F7FF')
+            .backgroundColor('#D23B5879').border({width:1,color:'#83C9DCEB'}).borderRadius(20)
+            .stateStyles({pressed:{.scale({x:.97,y:.94})},normal:{.scale({x:1,y:1})}})
+            .animation({duration:this.motion?180:0,curve:Curve.EaseOut})
+            .onClick(()=>{this.works.saveNote(this.note);this.close();this.subtitle='已私密保存，可在记录中修改或删除';})
+          Button(this.tr('稍后再说')).layoutWeight(1).height(48).fontSize(15).fontColor('#30445F')
+            .backgroundColor('#8BE8EFF8').border({width:1,color:'#92FFFFFF'}).borderRadius(20)
+            .stateStyles({pressed:{.scale({x:.97,y:.94})},normal:{.scale({x:1,y:1})}})
+            .animation({duration:this.motion?180:0,curve:Curve.EaseOut})
+            .onClick(()=>this.close())
+        }.width('100%')
+        Text(this.language==='en'?'Private on this device · change or remove it in Traces.':'私密留在本机 · 可在足迹中改写或删除。')
+          .fontSize(12).fontColor('#4B5F79')
       }
-      if(this.detail!=='氛围'&&this.detail!=='设置'){Button(this.tr('返回设置')).softButton().onClick((event:ClickEvent)=>this.open('设置',event))}
-    }.padding(24).width('100%').alignItems(HorizontalAlign.Start)}.align(Alignment.TopStart).width('100%').height('100%')
-      .backgroundColor(this.legacyEditorOpen?'#C8B7C8E1':'#D5C2D3E8')
-      .backgroundBlurStyle(BlurStyle.COMPONENT_THICK,{colorMode:ThemeColorMode.LIGHT})
-      .linearGradient({angle:145,colors:this.legacyEditorOpen?
-        [['#D8D5E1F1',0],['#C4BCCDE6',.60],['#D9C9DDED',1]]:
-        [['#CEDAEAF2',0],['#BBCBE2E9',.60],['#D9E0F0F2',1]]})
-      .border({width:1,color:'#B8DDEAFF'}).shadow({radius:26,color:'#45314260',offsetY:9}).borderRadius(32)
+    }.padding(22).width('100%').alignItems(HorizontalAlign.Start)}.align(Alignment.TopStart).width('100%').height('100%')
+      .backgroundColor(this.panelFromTop()?'#D0A6B7D2':'#CCAFA9C7')
+      .backgroundBlurStyle(BlurStyle.COMPONENT_ULTRA_THIN,{colorMode:ThemeColorMode.LIGHT})
+      .linearGradient({angle:150,colors:this.panelFromTop()?
+        [['#C7B7C9E1',0],['#C0A5B8D5',.58],['#C8BAC9E0',1]]:
+        [['#C9C0B9D8',0],['#C2B3AACE',.56],['#C8CABDE1',1]]})
+      .border({width:1,color:this.panelFromTop()?'#A0DFEAF7':'#A5E6DDF5'})
+      .shadow({radius:22,color:'#61405477',offsetY:10}).borderRadius(this.panelFromTop()?28:32)
+  }
+  @Builder
+  panelCard(){
+    Stack(){
+      this.details()
+      ForEach(this.sparks.slice(0,24),(index:number)=>{
+        Circle().width(index%5===0?4.5:3).height(index%5===0?4.5:3)
+          .fill(index%3===0?'#F5F6FF':this.panelFromTop()?'#C7E4F8':'#E8D9F8')
+          .opacity(Math.max(0,(.62-this.panelDust*.67)*(index%3===0?1:.72)))
+          .position({x:index%2===0?10+(index%4)*4:this.panelWidth()-16-(index%4)*4,
+            y:5+(index%4)*3+this.panelDust*(48+(index*19)%Math.max(62,this.panelHeight()-75))})
+          .hitTestBehavior(HitTestMode.None)
+      },(index:number)=>index.toString())
+    }.width('100%').height('100%').clip(true).borderRadius(this.panelFromTop()?28:32)
   }
   @Builder
   conversation(){
@@ -994,43 +1070,47 @@ struct SelfMirrorPage {
         Blank()
         Button({type:ButtonType.Capsule,stateEffect:false}){
           Stack(){Image($rawfile('ui/nav_music.svg')).width(28).height(28)
-            if(this.musicOn){Circle().width(4).height(4).fill('#D8E9FF').position({x:40,y:36})}}
+              .scale({x:this.buttonPulse==='music'?1.12:1,y:this.buttonPulse==='music'?1.12:1})
+              .animation({duration:this.motion?210:0,curve:Curve.EaseOut})
+            if(this.musicOn){Circle().width(4).height(4).fill('#46617E').position({x:40,y:36})}}
             .width(58).height(46)
         }.id('music-toggle').width(58).height(46).padding(0).borderRadius(23)
-          .backgroundColor(this.personalActive()&&this.personalBackdropLight?'#334B65C9':'#263A579E')
+          .backgroundColor(this.navPressed==='music'?'#ECEDF3FA':'#D8D8E5F2')
           .backgroundBlurStyle(BlurStyle.COMPONENT_ULTRA_THIN)
-          .border({width:1,color:this.navPressed==='music'?'#ECF5FF':this.musicOn?'#B8D9F7':'#819DB9'})
-          .shadow({radius:this.navPressed==='music'?15:this.musicOn?9:5,
-            color:this.navPressed==='music'?'#A9D2F4':this.musicOn?'#7299C9':'#14243D',offsetY:2})
+          .border({width:1,color:'#B5F8FAFF'})
+          .shadow({radius:6,color:'#3C405878',offsetY:2})
           .stateStyles({pressed:{.scale({x:.94,y:.9})},normal:{.scale({x:1,y:1})}})
           .animation({duration:this.motion?170:0,curve:Curve.EaseOut})
           .onTouch((event:TouchEvent)=>{this.navPressed=event.type===TouchType.Down?'music':'';})
           .accessibilityText(this.tr(this.musicOn?'音乐开':'音乐关')).onClick(()=>this.toggleMusic(!this.musicOn))
         Button({type:ButtonType.Circle,stateEffect:false}){
           Image($rawfile('ui/nav_ambience.svg')).width(28).height(28)
+            .rotate({angle:this.buttonPulse==='氛围'?10:0})
+            .scale({x:this.buttonPulse==='氛围'?1.1:1,y:this.buttonPulse==='氛围'?1.1:1})
+            .animation({duration:this.motion?230:0,curve:Curve.EaseOut})
         }.id('open-ambience').width(48).height(48).padding(0).borderRadius(24)
-          .backgroundColor(this.personalActive()&&this.personalBackdropLight?'#334B65C9':'#263A579E')
+          .backgroundColor(this.navPressed==='ambience'?'#EDEDF0FA':'#D6DFE6F2')
           .backgroundBlurStyle(BlurStyle.COMPONENT_ULTRA_THIN)
-          .border({width:1,color:this.navPressed==='ambience'?'#ECF5FF':'#819DB9'})
-          .shadow({radius:this.navPressed==='ambience'?15:5,
-            color:this.navPressed==='ambience'?'#C4B6F2':'#14243D',offsetY:2})
+          .border({width:1,color:'#B5F8FAFF'})
+          .shadow({radius:6,color:'#3C405878',offsetY:2})
           .stateStyles({pressed:{.scale({x:.9,y:.9})},normal:{.scale({x:1,y:1})}})
           .animation({duration:this.motion?190:0,curve:Curve.EaseOut})
           .onTouch((event:TouchEvent)=>{this.navPressed=event.type===TouchType.Down?'ambience':'';})
           .accessibilityText(this.tr('氛围')).onClick((event:ClickEvent)=>this.open('氛围',event))
         Button({type:ButtonType.Capsule,stateEffect:false}){
           Image($rawfile('ui/nav_settings.svg')).width(28).height(28)
+            .scale({x:this.buttonPulse==='设置'?1.1:1,y:this.buttonPulse==='设置'?1.1:1})
+            .animation({duration:this.motion?210:0,curve:Curve.EaseOut})
         }.id('open-settings').width(52).height(46).padding(0).borderRadius(17)
-          .backgroundColor(this.personalActive()&&this.personalBackdropLight?'#334B65C9':'#263A579E')
+          .backgroundColor(this.navPressed==='settings'?'#ECEDF3FA':'#D8DDE8F2')
           .backgroundBlurStyle(BlurStyle.COMPONENT_ULTRA_THIN)
-          .border({width:1,color:this.navPressed==='settings'?'#ECF5FF':'#819DB9'})
-          .shadow({radius:this.navPressed==='settings'?14:5,
-            color:this.navPressed==='settings'?'#A8CAE9':'#14243D',offsetY:2})
+          .border({width:1,color:'#B5F8FAFF'})
+          .shadow({radius:6,color:'#3C405878',offsetY:2})
           .stateStyles({pressed:{.scale({x:.93,y:.89})},normal:{.scale({x:1,y:1})}})
           .animation({duration:this.motion?160:0,curve:Curve.EaseOut})
           .onTouch((event:TouchEvent)=>{this.navPressed=event.type===TouchType.Down?'settings':'';})
           .accessibilityText(this.tr('设置')).onClick((event:ClickEvent)=>this.open('设置',event))
-      }.padding({left:this.wide?40:22,right:this.wide?40:22,top:42,bottom:12}).width('100%').position({x:0,y:0}).zIndex(10)
+      }.padding({left:this.wide?40:22,right:this.wide?40:22,top:42,bottom:12}).width('100%').position({x:0,y:0}).zIndex(30)
       if(this.journey==='idle'&&!this.detail){
         Column({space:12}){
           Flex({wrap:FlexWrap.Wrap}){
@@ -1091,10 +1171,10 @@ struct SelfMirrorPage {
           else{Button(this.language==='en'?'Capture again':'再拍一次').id('retake-capture').softButton().fontColor('#F5F4FF').backgroundColor('#536787A6').onClick((event:ClickEvent)=>this.open('拍摄面容',event))}
         }.padding(18).width(Math.min(this.surfaceWidth-40,440)).backgroundColor('#34465C91').border({width:1,color:'#7D9AB9A1'}).borderRadius(22).position({x:Math.max(20,(this.surfaceWidth-Math.min(this.surfaceWidth-40,440))/2),y:this.surfaceHeight*.61})
       }
-      if(!this.detail&&this.journey!=='forming'){
+      if((!this.detail||this.detail==='留一句话'||this.detail==='作品与记录')&&this.journey!=='forming'){
         Column({space:12}){
           Row({space:10}){
-            if(!this.personalActive()&&!this.skyOpen){
+            if(!this.detail&&!this.personalActive()&&!this.skyOpen){
               Button(){Row({space:10}){Circle().width(16).height(16).fill('#E8ECFF').shadow({radius:18,color:'#BAC9FF'});Text(this.language==='en'?'Find my portrait':'寻找我的模样').fontSize(16).fontColor('#FFFFFF')}}.id('begin-capture').height(54).padding({left:20,right:20}).backgroundColor('#F0243659').border({width:1,color:'#A1ADC5E9'}).borderRadius(28).shadow({radius:24,color:'#536987BE'}).stateStyles({pressed:{.scale({x:.94,y:.94})},normal:{.scale({x:1,y:1})}}).animation({duration:this.motion?180:0,curve:Curve.EaseOut}).onClick((event:ClickEvent)=>this.open('拍摄面容',event))
             }
             if(this.skyOpen){
@@ -1105,17 +1185,27 @@ struct SelfMirrorPage {
               Button(this.language==='en'?'Sky':'我的星辰').id('open-star-sky').softButton().fontColor('#F4F2FF').backgroundColor('#61374766').onClick(()=>this.enterSky())
               Button(this.language==='en'?'Origin':'回到原点').id('return-origin').softButton().fontColor('#F4F2FF').backgroundColor('#61374766').onClick(()=>this.returnOrigin())
             }else{
-              Button(this.language==='en'?'My stars':'我的星辰').id('open-star-sky-origin').softButton().fontColor('#F4F2FF').backgroundColor('#61374766').onClick(()=>this.enterSky())
-              Button(this.language==='en'?'My words':'留句话').id('home-note').softButton().fontColor('#F4F2FF').backgroundColor('#61374766').onClick((event:ClickEvent)=>this.open('留一句话',event))
-              Button(this.language==='en'?'Works':'足迹').id('home-works').softButton().fontColor('#F4F2FF').backgroundColor('#61374766').onClick((event:ClickEvent)=>this.open('作品与记录',event))
+              if(!this.detail){Button(this.language==='en'?'My stars':'我的星辰').id('open-star-sky-origin').softButton().fontColor('#F4F2FF').backgroundColor('#61374766').onClick(()=>this.enterSky())}
+              Button(this.language==='en'?'My words':'留句话').id('home-note').softButton().fontColor('#F4F2FF')
+                .backgroundColor(this.detail==='留一句话'?'#82536D91':'#61374766')
+                .scale({x:this.buttonPulse==='留一句话'?1.055:1,y:this.buttonPulse==='留一句话'?1.055:1})
+                .shadow({radius:this.buttonPulse==='留一句话'?13:this.detail==='留一句话'?9:5,color:this.buttonPulse==='留一句话'?'#7489B4A8':'#26344B77',offsetY:2})
+                .animation({duration:this.motion?210:0,curve:Curve.EaseOut})
+                .onClick((event:ClickEvent)=>this.open('留一句话',event))
+              Button(this.language==='en'?'Works':'足迹').id('home-works').softButton().fontColor('#F4F2FF')
+                .backgroundColor(this.detail==='作品与记录'?'#82536D91':'#61374766')
+                .scale({x:this.buttonPulse==='作品与记录'?1.055:1,y:this.buttonPulse==='作品与记录'?1.055:1})
+                .shadow({radius:this.buttonPulse==='作品与记录'?13:this.detail==='作品与记录'?9:5,color:this.buttonPulse==='作品与记录'?'#7489B4A8':'#26344B77',offsetY:2})
+                .animation({duration:this.motion?210:0,curve:Curve.EaseOut})
+                .onClick((event:ClickEvent)=>this.open('作品与记录',event))
             }
           }.justifyContent(FlexAlign.Center)
-          if(!this.skyOpen&&!this.personalActive()){Text(this.journey==='forming'?'':this.language==='en'?'Start with a gentle capture.':'从一次轻轻的拍摄开始。').fontSize(12).fontColor('#AFC1D6').textAlign(TextAlign.Center)}
+          if(!this.detail&&!this.skyOpen&&!this.personalActive()){Text(this.journey==='forming'?'':this.language==='en'?'Start with a gentle capture.':'从一次轻轻的拍摄开始。').fontSize(12).fontColor('#AFC1D6').textAlign(TextAlign.Center)}
         }.width('100%').position({x:0,y:Math.max(0,this.surfaceHeight-154)})
           .hitTestBehavior(HitTestMode.Transparent).zIndex(10)
       }
-      if(this.detail){Column(){this.details()}.id('detail-panel').width(this.panelWidth()).height(this.panelHeight()).position({x:this.panelX(),y:this.panelY()})
-        .transition({opacity:0,scale:{x:.82,y:.82,centerX:this.anchorX-this.panelX(),centerY:this.anchorY-this.panelY()},translate:{y:-8}}).zIndex(20)}
+      if(this.detail){Column(){this.panelCard()}.id('detail-panel').width(this.panelWidth()).height(this.panelHeight()).position({x:this.panelX(),y:this.panelY()})
+        .transition({opacity:0,scale:{x:.97,y:.92,centerX:this.anchorX-this.panelX(),centerY:this.anchorY-this.panelY()},translate:{y:this.panelEntranceY()}}).zIndex(20)}
       if(this.introStage>0){this.introOverlay()}
     }.width('100%').height('100%').backgroundColor('#080C1B').onAreaChange((_old:Area,area:Area)=>{this.surfaceWidth=Number(area.width);this.surfaceHeight=Number(area.height);this.surfaceTop=Number(area.globalPosition.y);this.windowWidth=this.surfaceWidth;this.wide=this.surfaceWidth>=840;})
   }
@@ -1175,7 +1265,7 @@ struct SelfMirrorPage {
             Scroll(){this.conversation()}.align(Alignment.TopStart).width('92%').height(this.phoneBubbleHeight()).scrollBar(BarState.Off).position({x:this.surfaceWidth*.04,y:Math.max(48,Math.min(this.surfaceHeight-this.phoneBubbleHeight()-92,this.focusY*this.surfaceHeight+35))}).transition({opacity:0,scale:{x:.94,y:.94},translate:{y:-12}})
           }
         }
-        if(this.detail){Column(){this.details()}.id('legacy-detail-panel').width(this.panelWidth()).height(this.panelHeight()).position({x:this.panelX(),y:this.panelY()}).transition({opacity:0,scale:{x:.3,y:.3,centerX:this.anchorX-this.panelX(),centerY:this.anchorY-this.panelY()}})}
+        if(this.detail){Column(){this.panelCard()}.id('legacy-detail-panel').width(this.panelWidth()).height(this.panelHeight()).position({x:this.panelX(),y:this.panelY()}).transition({opacity:0,scale:{x:.97,y:.92,centerX:this.anchorX-this.panelX(),centerY:this.anchorY-this.panelY()},translate:{y:this.panelEntranceY()}})}
       }.layoutWeight(1).width('100%').onAreaChange((_old:Area,area:Area)=>{this.surfaceWidth=parseFloat(String(area.width));this.surfaceHeight=parseFloat(String(area.height));this.surfaceTop=Number(area.globalPosition.y);})
       if(!this.wide&&!this.detail&&!this.personalActive()){
         if(this.showBeginning){Button(this.tr('从拍摄我的面容开始')).softButton().onClick((event:ClickEvent)=>this.open('拍摄面容',event))}
