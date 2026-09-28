@@ -1,0 +1,69 @@
+{
+  "status": "paused_for_user_windows_restart",
+  "completed": [
+    "full current requests read",
+    "current v2 preparation/trainer and protected file identities checked",
+    "GPU Windows PnP and WSL availability diagnosed",
+    "new local portrait core syntax compile"
+  ],
+  "GPU": {
+    "windowsRTXPresent": false,
+    "onlyPresentDisplay": "Intel Arc 140T",
+    "wslCuda": false,
+    "hardwareScan": "pnputil scan denied by Windows administrative privilege, no change made",
+    "driverVersion": "32.0.16.1714",
+    "reasonNotEstablished": true
+  },
+  "newFiles": {
+    "backend/reconstruction_portrait_model.py": "a6643830813f392b80827fa25b33e7aabd7dc1051087082d4efd021791228ee6"
+  },
+  "protected": {
+    "viewer-gs\\gs-edit.js": {
+      "sha256": "0332bccf9831e93a5dc345cc04e1df090aad9898c0c8c5b7b63789c6a48682b5",
+      "unchanged": true
+    },
+    "backend\\reconstruction_worker.py": {
+      "sha256": "7173bae2b9e5637995e9503000c3c6319c857fa1700bc9f635174253fca3cb15",
+      "unchanged": true
+    },
+    "entry\\src\\main\\resources\\rawfile\\gs-viewer.js": {
+      "sha256": "d633fb2718ef5ed5087aabbd27356058323d2c71e9dda69c95ee32f87718f5d3",
+      "unchanged": true
+    },
+    "package-lock.json": {
+      "sha256": "39f45bee06bae03d273461783742507419d05dd1551ddb034a354ddaa9c0a5ba",
+      "unchanged": true
+    },
+    "backend\\reconstruction_train_joint.py": {
+      "sha256": "4af2934fd6199ae42cdf8ca14e2abdced2af9de2cd635b7cd644dd23cd7f8c6c",
+      "unchanged": true
+    },
+    "build-profile.json5": {
+      "sha256": "fd11bf65f7879a7bb08fa3ebaab69f4ce879bc94526ce55896971dacffe40865",
+      "unchanged": true
+    },
+    "viewer-gs\\main.js": {
+      "sha256": "70c1f8fbe0ce1cbbc76370003a886cb42e2ee443b7a62370c670aedf208dff4e",
+      "unchanged": true
+    },
+    "backend\\recon_transfer.py": {
+      "sha256": "9734394a7a7bbd85cee40f1db36616482fa8d33cc7728ca3930811ed48052e58",
+      "unchanged": true
+    },
+    "backend\\requirements.lock.txt": {
+      "sha256": "c338d5a0733994caf101b7d641af2554c2ffa5937271fbe6d32fc01aede5da1c",
+      "unchanged": true
+    }
+  },
+  "GPUTrainingRun": false,
+  "newAssetExported": false,
+  "tabletPublication": false,
+  "remaining": [
+    "runtime CPU regression and actual-source T0/T1 covariance SH check",
+    "scene assembly and staged common forward trainer",
+    "trainable surface/binding optimizer and recovery transaction runtime checks",
+    "real multiview hair and glasses structure",
+    "T0-T4, strong-soft and capacity visual comparisons",
+    "fixed PLY orbit and full-scene quality gates"
+  ]
+}

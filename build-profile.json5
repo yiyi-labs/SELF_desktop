@@ -1,13 +1,56 @@
 {
   "app": {
-    "signingConfigs": [],
-    "products": [{
-      "name": "default",
-      "targetSdkVersion": "26.0.0", "compatibleSdkVersion": "5.1.1(19)",
-      "runtimeOS": "HarmonyOS",
-      "buildOption": {"strictMode": {"caseSensitiveCheck": true,"useNormalizedOHMUrl": true}}
-    }],
-    "buildModeSet": [{"name":"debug"},{"name":"release"}]
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "C:\\Users\\30243\\.ohos\\config\\default_olay_jBlzs4K3KkqrUrbHOMhjabi4yu-my0bxPjT6RQw7vfE=.cer",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001BB068D431FA4FDA31900A07765867A005B2797772AAE4ADFFCA8201E219BC0345A45B78603D84BA",
+          "profile": "C:\\Users\\30243\\.ohos\\config\\default_olay_jBlzs4K3KkqrUrbHOMhjabi4yu-my0bxPjT6RQw7vfE=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "C:\\Users\\30243\\.ohos\\config\\default_olay_jBlzs4K3KkqrUrbHOMhjabi4yu-my0bxPjT6RQw7vfE=.p12",
+          "storePassword": "0000001B177F2FD558B1F30EF78022181380E5108F97BEBCCD704A443BD1479E7FB552C4FE54693550BED0"
+        }
+      }
+    ],
+    "products": [
+      {
+        "name": "default",
+        "targetSdkVersion": "26.0.0",
+        "compatibleSdkVersion": "5.1.1(19)",
+        "runtimeOS": "HarmonyOS",
+        "buildOption": {
+          "strictMode": {
+            "caseSensitiveCheck": true,
+            "useNormalizedOHMUrl": true
+          }
+        },
+        "signingConfig": "default"
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug"
+      },
+      {
+        "name": "release"
+      }
+    ]
   },
-  "modules": [{"name":"entry","srcPath":"./entry","targets":[{"name":"default","applyToProducts":["default"]}]}]
+  "modules": [
+    {
+      "name": "entry",
+      "srcPath": "./entry",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    }
+  ]
 }

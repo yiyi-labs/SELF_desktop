@@ -1,0 +1,46 @@
+{
+  "backend/reconstruction_worker.py": {
+    "bytes": 28969,
+    "sha256": "da2249ea1e5f883359336e4b42d40c3e00e47fc7147b9303d8c4bbbfdb1a9050"
+  },
+  "backend/reconstruction_train_joint.py": {
+    "bytes": 17859,
+    "sha256": "4af2934fd6199ae42cdf8ca14e2abdced2af9de2cd635b7cd644dd23cd7f8c6c"
+  },
+  "backend/reconstruction_components_v2.py": {
+    "bytes": 24979,
+    "sha256": "832cd8363bc130bed69d07a641ed83170a68ef0bbca2ee85ff2687a6f9163161"
+  },
+  "backend/reconstruction_shared_v2.py": {
+    "bytes": 41831,
+    "sha256": "0a39ea562c3c92edff2c56ef8a6fe43d3ce5a1d09c2980cad84cc8ba830b14c7"
+  },
+  "backend/reconstruction_scene.py": {
+    "bytes": 21194,
+    "sha256": "55c4b22cac0e5b2dfde25a498670ed3695e2030a46e982e9c5587ecfa83b36d5"
+  },
+  "backend/reconstruction_face.py": {
+    "bytes": 14666,
+    "sha256": "f64131100176ca91f38d575704f73244e33dc5c752d665a840e8f8632bbf4659"
+  },
+  "backend/reconstruction_pose.py": {
+    "bytes": 8143,
+    "sha256": "6245271c529db8ea1faa1d9dd4c849add209c9d40c3157e71ae134be4fd3d947"
+  },
+  "backend/reconstruction_observations.py": {
+    "bytes": 10120,
+    "sha256": "15ee432c1e7d9867e2f7d514ba3b9037f3cc2e573854a5d7e0eea3f62e079d56"
+  },
+  "backend/export_flame_appearance_research.py": {
+    "bytes": 15495,
+    "sha256": "f8844a613c36d1f21621b7f19a245cd14e3b66dadce85219ee5663ddfeb256a3"
+  },
+  "viewer-gs/main.js": {
+    "bytes": 28495,
+    "sha256": "70c1f8fbe0ce1cbbc76370003a886cb42e2ee443b7a62370c670aedf208dff4e"
+  },
+  "package-lock.json": {
+    "bytes": 17127,
+    "sha256": "39f45bee06bae03d273461783742507419d05dd1551ddb034a354ddaa9c0a5ba"
+  }
+}

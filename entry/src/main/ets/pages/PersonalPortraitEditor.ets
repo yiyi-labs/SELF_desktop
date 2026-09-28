@@ -1,10 +1,14 @@
 import { common } from '@kit.AbilityKit';
 import { fileIo as fs } from '@kit.CoreFileKit';
 import { util } from '@kit.ArkTS';
+import { display, window, KeyboardAvoidMode } from '@kit.ArkUI';
 import { GaussianPortraitSurface, GsSelection } from './GaussianPortraitSurface';
 import { PlannerClient, CloudResponse, CloudSnapshot, CloudRegion, DialogueTurn, CloudCareGuide } from '../services/PlannerClient';
-import { GsRenderLayer } from '../bridge/RendererBridge';
+import { GsRenderLayer, GsViewSnapshot } from '../bridge/RendererBridge';
 import { AssetStore } from '../services/AssetStore';
+import { StoryConversationClient, StoryRequest, StoryResponse, StoryTurn } from '../services/StoryConversationClient';
+import { StoryObservationStore, StoryObservation } from '../services/StoryObservationStore';
+import { CloudConsentStore, CloudConsentDecision } from '../services/CloudConsentStore';
 import { OlayLibrary } from './OlayLibrary';
 import { OlayDiscoveryRepository,OlayDiscoveryItem } from '../services/OlayDiscoveryRepository';
 import { OlayPhotoRepository } from '../services/OlayPhotoRepository';
@@ -41,7 +45,8 @@ export struct PersonalPortraitEditor {
   @Prop viewPath:string='';
   @Prop assetId:string='';
   @Prop language:string='zh';
-  @Prop cloudEnabled:boolean=false;
+  @Prop @Watch('cloudAccessChanged') cloudEnabled:boolean=false;
+  @Prop cloudConsentDecision:CloudConsentDecision='unknown';
   @Prop backendAddress:string='http://127.0.0.1:8787';
   @Prop backendToken:string='';
   @Prop viewportWidth:number=400;
@@ -49,11 +54,30 @@ export struct PersonalPortraitEditor {
   onReady:()=>void=()=>{};
   onFailure:(message:string)=>void=()=>{};
   onInteraction:()=>void=()=>{};
-  onEnableCloud:()=>void=()=>{};
+  onEnableCloud:()=>boolean=()=>false;
+  onDeclineCloud:()=>void=()=>{};
   onBackgroundTone:(light:boolean)=>void=()=>{};
   private context:common.UIAbilityContext=this.getUIContext().getHostContext() as common.UIAbilityContext;
   private assets:AssetStore=new AssetStore(this.context);
   private planner:PlannerClient=new PlannerClient();
+  private storyClient:StoryConversationClient=new StoryConversationClient();
+  private storyInputController:TextInputController=new TextInputController();
+  private observationStore:StoryObservationStore=new StoryObservationStore(this.context);
+  private storySessionId:string='session-'+Date.now()+'-'+Math.floor(Math.random()*1000000);
+  private storyGeneration:number=0;
+  private storyHintToken:number=0;
+  private appWindow:window.Window|undefined=undefined;
+  private previousKeyboardAvoidMode:KeyboardAvoidMode=KeyboardAvoidMode.OFFSET;
+  private keyboardHeightListener=(height:number):void=>{
+    if(height<=0){this.keyboardTopVp=0;return;}
+    try{const screenHeight=display.getDefaultDisplaySync().height;
+      this.keyboardTopVp=this.getUIContext().px2vp(screenHeight-height);}
+    catch(error){console.warn('SELF_STORY_KEYBOARD_BOUNDS '+String(error));this.keyboardTopVp=0;}
+  };
+  private storyTurns:StoryTurn[]=[];
+  private pendingStoryText:string='';
+  private pendingObservationQuote:string='';
+  private pendingObservationMessageId:string='';
   private selections:SelectedGsRegion[]=[];
   private history:GsHistory|undefined=undefined;
   private pendingHistory:GsHistory|undefined=undefined;
@@ -73,6 +97,7 @@ export struct PersonalPortraitEditor {
   @State selected:boolean=false;
   @State waiting:boolean=false;
   @State consentOffer:boolean=false;
+  @State consentIntent:string='';
   @State candidateReady:boolean=false;
   @State applied:boolean=false;
   @State comparing:boolean=false;
@@ -100,8 +125,183 @@ export struct PersonalPortraitEditor {
   @State input:string='';
   @State anchorX:number=.5;
   @State anchorY:number=.5;
+  @State storyOpen:boolean=false;
+  @State storyWaiting:boolean=false;
+  @State storyInput:string='';
+  @State storyReply:string='';
+  @State storyKind:string='conversation';
+  @State storyLastQuote:string='';
+  @State storyLastMessageId:string='';
+  @State storyNotesOpen:boolean=false;
+  @State storyObservations:StoryObservation[]=[];
+  @State storyPhase:string='start';
+  @State storyHintVisible:number=0;
+  @State composerDust:boolean=false;
+  @State composerDustSpread:boolean=false;
+  @State keyboardTopVp:number=0;
+  private composerDustToken:number=0;
 
   private label(zh:string,en:string):string{return this.language==='en'?en:zh;}
+  private cloudAccessChanged():void{
+    if(this.cloudEnabled)return;
+    this.storyGeneration++;this.storyClient.cancel();this.storyWaiting=false;
+    this.planner.cancel();this.waiting=false;this.consentOffer=false;this.consentIntent='';
+  }
+  private replyPanelHeight():number{
+    if(this.storyNotesOpen)return Math.min(230,this.viewportHeight*.36);
+    const lines=Math.max(1,Math.ceil(this.storyReply.length/(this.viewportWidth>=840?38:24)));
+    const extra=(this.storyLastQuote&&this.storyKind!=='closing'?43:0)+
+      (this.storyKind==='edit_entry'||this.storyKind==='real_effect_boundary'?42:0)+
+       (this.consentOffer&&this.consentIntent==='story'?132:0)+(this.storyWaiting?38:0);
+    return Math.min(this.viewportHeight*.36,Math.max(104,70+Math.min(6,lines)*20+extra));
+  }
+  private composerHeight():number{
+    if(!this.storyOpen)return 62;
+    return this.replyPanelHeight()+59;
+  }
+  private composerBottom():number{
+    return this.keyboardTopVp>0?Math.min(this.viewportHeight-10,this.keyboardTopVp-12):this.viewportHeight-20;
+  }
+  aboutToAppear():void{
+    this.previousKeyboardAvoidMode=this.getUIContext().getKeyboardAvoidMode();
+    window.getLastWindow(this.context).then((found:window.Window)=>{
+      this.appWindow=found;found.on('keyboardHeightChange',this.keyboardHeightListener);
+    }).catch((error:Error)=>console.warn('SELF_STORY_KEYBOARD_OBSERVER '+String(error)));
+  }
+  private storyHint():string{
+    if(this.storyPhase==='discover')return this.label('刚才那句话，想留在这颗星辰里吗？',
+      'Would you like to keep those words with this star?');
+    if(this.storyPhase==='return')return this.label('今天停在这里，也很好。',
+      'You can stop here for today.');
+    if(this.storyPhase==='act')return this.selected?
+      this.label('这一处已经圈好，说说想试怎样的变化。','This area is selected. What would you like to try?'):
+      this.label('想试一点变化，可以先轻轻圈选。','To try a change, gently circle an area first.');
+    if(this.storyPhase==='care')return this.label('可以慢慢说，从你在意的一件事开始。',
+      'Take your time. Start with what matters to you.');
+    return this.label('先转动看看，哪一面让你想停一会儿？',
+      'Turn gently. Where would you like to pause?');
+  }
+  private revealStoryHint():void{
+    this.storyHintVisible=0;const token=++this.storyHintToken,length=this.storyHint().length;
+    const step=()=>{if(token!==this.storyHintToken||this.storyHintVisible>=length)return;
+      this.storyHintVisible++;setTimeout(step,40);};
+    setTimeout(step,80);
+  }
+  private openStory():void{
+    this.bubble=false;this.historyOpen=false;this.libraryOpen=false;this.storyOpen=true;
+    if(!this.storyReply)this.storyReply=this.label('想从哪里开始看？也可以只说说此刻的想法。',
+      'Where would you like to begin? You can simply tell me what is on your mind.');
+  }
+  private closeStory():void{
+    this.storyInputController.stopEditing();
+    this.storyGeneration++;this.storyClient.cancel();this.storyWaiting=false;
+    this.consentOffer=false;this.consentIntent='';this.pendingStoryText='';this.pendingObservationQuote='';
+    this.storyOpen=false;this.storyNotesOpen=false;this.keyboardOpen=false;
+    this.storyPhase='return';this.revealStoryHint();
+  }
+  private sendStory(value:string):void{
+    const text=value.trim();if(!text||this.storyWaiting)return;
+    if(text.length>500){this.storyReply=this.label('这一段稍长，分成两次说也可以。','Please split this into two shorter messages.');return;}
+    if(!this.cloudEnabled){
+      if(this.cloudConsentDecision==='denied'){
+        this.storyReply=this.label('云端对话已关闭。想再继续时，可以在设置里开启。',
+          'Cloud conversations are off. You can turn them on in Settings.');return;
+      }
+      this.pendingStoryText=text;this.consentIntent='story';this.consentOffer=true;return;
+    }
+    this.askStory(text);
+  }
+  private acceptCloudIntroduction():void{
+    const intent=this.consentIntent,text=this.pendingStoryText;
+    if(!this.onEnableCloud()){
+      this.storyReply=this.label('这次没能保存选择，稍后再试。','Could not save your choice. Please try again.');
+      this.responseText=this.storyReply;return;
+    }
+    this.consentOffer=false;this.consentIntent='';
+    if(intent==='story')this.askStory(text);
+    else if(intent==='edit')this.capture();
+  }
+  private declineCloudIntroduction():void{
+    this.onDeclineCloud();this.consentOffer=false;this.consentIntent='';this.pendingStoryText='';
+    if(this.storyOpen)this.storyReply=this.label('好，我们先留在这里。','We can stay here for now.');
+    else this.responseText=this.label('好，画面留在这里。','Okay. The portrait stays here.');
+  }
+  private async askStory(text:string):Promise<void>{
+    this.consentOffer=false;this.consentIntent='';this.pendingStoryText='';
+    if(!CloudConsentStore.allowed(this.context))return;
+    this.storyWaiting=true;
+    const generation=++this.storyGeneration,requestId='story-'+Date.now()+'-'+Math.floor(Math.random()*1000000);
+    const input:StoryRequest={schemaVersion:1,requestId,sessionId:this.storySessionId,assetId:this.assetId,
+      userText:text,responseLanguage:this.language,turns:this.storyTurns.slice(-4),dismissedProducts:false};
+    this.storyClient.endpoint=this.backendAddress.trim();this.storyClient.token=this.backendToken.trim();
+    try{
+      const result:StoryResponse=await this.storyClient.ask(input);
+      if(generation!==this.storyGeneration||!this.storyOpen||result.assetId!==this.assetId||
+        !CloudConsentStore.allowed(this.context))return;
+      this.storyReply=result.message;this.storyKind=result.kind;this.storyLastQuote=text;
+      this.storyLastMessageId=requestId;this.storyInput='';
+      this.storyTurns=this.storyTurns.concat([{userText:text,reply:result.message}]).slice(-4);
+      if(result.kind==='closing')this.storyPhase='return';
+      else if(result.kind==='edit_entry'||result.kind==='product'||result.kind==='real_effect_boundary')this.storyPhase='act';
+      else if(/我发现|我注意到|我喜欢|我记起|我明白/.test(text))this.storyPhase='discover';
+      else this.storyPhase='care';
+      this.revealStoryHint();
+    }catch(error){
+      if(generation===this.storyGeneration&&this.storyOpen){
+        console.warn('SELF_STORY_REQUEST_FAILED '+String(error));
+        this.storyReply=this.label('这次没有接上对话。你仍可以转动、观察，稍后再说。',
+          'This conversation is unavailable right now. You can keep looking and try again later.');
+      }
+    }finally{if(generation===this.storyGeneration)this.storyWaiting=false;}
+  }
+  private enterExistingEdit(text:string):void{
+    this.closeStory();this.input=text;this.bubble=true;
+    this.responseText=this.selected?this.label('圈选还在。说出想试的变化，再由你确认是否留下。',
+      'Your selection is here. Describe a change, then decide whether to keep it.'):
+      this.label('先圈出你想试的地方，再说说想法。','Circle an area first, then tell me what you would like to try.');
+    if(this.tool!=='lasso'){this.animateComposerDust(true);this.tool='lasso';this.command('TOOL','lasso');}
+  }
+  private animateComposerDust(out:boolean):void{
+    const token=++this.composerDustToken;
+    this.composerDust=true;this.composerDustSpread=!out;
+    setTimeout(()=>{
+      if(token!==this.composerDustToken)return;
+      this.getUIContext().animateTo({duration:240,curve:Curve.EaseOut},()=>{this.composerDustSpread=out;});
+    },20);
+    setTimeout(()=>{if(token===this.composerDustToken)this.composerDust=false;},290);
+  }
+  private saveStoryQuote():void{
+    if(!this.storyLastQuote||!this.storyLastMessageId)return;
+    this.pendingObservationQuote=this.storyLastQuote;
+    this.pendingObservationMessageId=this.storyLastMessageId;this.command('VIEW_SNAPSHOT');
+  }
+  private persistObservation(quote:string,messageId:string,view?:GsViewSnapshot):void{
+    try{
+      const record:StoryObservation={recordId:'observation-'+Date.now()+'-'+Math.floor(Math.random()*1000000),
+        messageId,userQuote:quote,starId:this.assetId,assetId:this.assetId,createdAt:Date.now(),
+        recallAllowed:false};
+      if(view)record.view=view;
+      this.storyObservations=this.observationStore.save(this.assetId,record);
+      this.storyReply=this.label('这句话已留在这颗星辰里。以后是否重新提起，仍由你决定。',
+        'Your words are saved with this star. You decide if they come up again.');
+      this.storyLastQuote='';this.storyLastMessageId='';this.storyPhase='return';
+      this.revealStoryHint();
+    }catch(error){this.storyReply=this.label('这句话暂时没能保存，原话还在这里。',
+      'Your words could not be saved yet; they remain here.');console.warn('SELF_STORY_SAVE_FAILED '+String(error));}
+  }
+  private receivedView(view:GsViewSnapshot):void{
+    if(!this.pendingObservationQuote||!this.storyOpen)return;
+    const quote=this.pendingObservationQuote,messageId=this.pendingObservationMessageId;
+    this.pendingObservationQuote='';this.pendingObservationMessageId='';
+    if(view.assetId!==this.assetId||view.frame<1||view.position.length!==3||view.rotation.length!==4){
+      this.persistObservation(quote,messageId);return;
+    }
+    this.persistObservation(quote,messageId,view);
+  }
+  private deleteObservation(id:string):void{
+    try{this.storyObservations=this.observationStore.remove(this.assetId,id);}
+    catch(error){this.storyReply=this.label('这条记录暂时没能移除。','This note could not be removed.');}
+  }
   private setCareWeek(week:number):void{
     if(week===this.careWeek)return;
     this.careWeek=week;
@@ -226,7 +426,8 @@ export struct PersonalPortraitEditor {
     this.responseText=message;this.bubble=true;
   }
   private viewerReady():void{
-    this.ready=true;this.restore();this.onReady();
+    this.ready=true;this.restore();this.storyObservations=this.observationStore.list(this.assetId);
+    this.revealStoryHint();this.onReady();
   }
   private selectedRegion(info:GsSelection,mask:ArrayBuffer):void{
     console.info('SELF_GS_SELECTION_READY '+info.count+' '+info.total+' '+mask.byteLength);
@@ -240,6 +441,7 @@ export struct PersonalPortraitEditor {
     else this.selections.push({info,mask});
     this.selectionCount=this.selections.length;
     this.selected=true;this.candidateReady=false;
+    this.storyPhase='act';this.revealStoryHint();
     this.anchorX=Math.max(.1,Math.min(.9,info.x));this.anchorY=Math.max(.15,Math.min(.7,info.y));
     const firstPrompts=['这一处已留下。再画可重选，也可以说说想法。',
       '光落在这里了。想换一处，直接再画一圈。','这处会跟着你的面容；想微调，还可以重画。'];
@@ -260,11 +462,20 @@ export struct PersonalPortraitEditor {
   private toggleTool():void{
     if(!this.ready||this.waiting)return;
     if(this.comparing)this.previewHistory('');
+    const toLasso=this.tool==='move';
+    this.animateComposerDust(toLasso);
+    if(toLasso){
+      this.storyInputController.stopEditing();
+      this.storyGeneration++;this.storyClient.cancel();this.storyWaiting=false;
+      this.storyOpen=false;this.consentOffer=false;this.consentIntent='';this.storyNotesOpen=false;
+      this.keyboardOpen=false;
+    }
     this.getUIContext().animateTo({duration:240,curve:Curve.EaseOut},()=>{
-      this.tool=this.tool==='move'?'lasso':'move';
+      this.tool=toLasso?'lasso':'move';
+      this.bubble=toLasso&&this.selected;
     });
     this.command('TOOL',this.tool);
-    if(this.tool==='lasso'){this.bubble=false;this.responseText=this.label('顺着想看的地方画一圈。','Circle an area you want to explore.');}
+    if(toLasso&&!this.selected)this.responseText=this.label('顺着想看的地方画一圈。','Circle an area you want to explore.');
     this.onInteraction();
   }
   private submit(value:string):void{
@@ -275,22 +486,34 @@ export struct PersonalPortraitEditor {
     this.carePreviewToken++;
     if(this.careWeek>0)this.command('CARE_PREVIEW','','',0);
     this.careWeek=0;this.careProductId='';this.careWhy='';this.careHow='';
-    if(!this.cloudEnabled){this.consentOffer=true;return;}
+    if(!this.cloudEnabled){
+      if(this.cloudConsentDecision==='denied'){
+        this.responseText=this.label('云端对话已关闭。想再继续时，可以在设置里开启。',
+          'Cloud conversations are off. You can turn them on in Settings.');return;
+      }
+      this.consentIntent='edit';this.consentOffer=true;return;
+    }
     this.capture();
   }
   private capture():void{
-    this.consentOffer=false;this.waiting=true;
+    this.consentOffer=false;this.consentIntent='';
+    if(!CloudConsentStore.allowed(this.context))return;
+    this.waiting=true;
     this.responseText=this.label('我陪你看看这些地方…','Let me look at these areas with you…');
     this.command('CAPTURE');
   }
-  private async captured(clean:ArrayBuffer,annotated:ArrayBuffer,width:number,height:number):Promise<void>{
-    if(!this.waiting||this.selections.length===0)return;
+  private async captured(clean:ArrayBuffer,annotated:ArrayBuffer,width:number,height:number,gsView?:GsViewSnapshot):Promise<void>{
+    if(!this.waiting||this.selections.length===0||!CloudConsentStore.allowed(this.context))return;
+    if(!gsView||gsView.assetId!==this.assetId||gsView.frame<1){
+      this.waiting=false;this.responseText=this.label('当前画面的视角还未就绪，请停一瞬再试。',
+        'The current view is not ready. Pause a moment and try again.');return;
+    }
     const rev=this.revision;
     const id='gs-'+Date.now()+'-'+Math.floor(Math.random()*1000000);
     const snapshot:CloudSnapshot={
       schemaVersion:1,requestId:id,snapshotId:'snapshot-'+id,assetId:this.assetId,assetVersion:this.assetId,
-      textureVersion:'gs-original-v1',sceneRevision:rev,regionVersion:rev,viewRevision:0,
-      view:{yaw:0,pitch:0,distance:1,panX:0,panY:0},userText:this.requestText,
+      textureVersion:'gs-original-v1',sceneRevision:rev,regionVersion:rev,viewRevision:gsView.cameraRevision,
+      view:{yaw:gsView.yaw,pitch:gsView.pitch,distance:gsView.distance,panX:0,panY:0},userText:this.requestText,
       regions:this.selections.map((item:SelectedGsRegion,index:number)=>{
         const region:CloudRegion={regionId:item.info.regionId,
           description:'用户在个人立体面容上手工圈定的第'+(index+1)+'处可见表面；只支持数字颜色预览，不代表品牌产品实测效果',semantic:'manual'};
@@ -305,7 +528,7 @@ export struct PersonalPortraitEditor {
     this.planner.endpoint=this.backendAddress.trim();this.planner.token=this.backendToken.trim();
     try{
       const reply=await this.planner.propose(snapshot,[clean,annotated]);
-      if(!this.waiting||this.revision!==rev)return;
+      if(!this.waiting||this.revision!==rev||!CloudConsentStore.allowed(this.context))return;
       console.info('SELF_GS_PLAN '+reply.plan.decision+' '+reply.modelEvidence.returnedModel);
       this.responseText='✧ '+reply.plan.shortMessage;this.question=reply.plan.question;this.choices=reply.plan.choices||[];
       const guide=reply.plan.careGuide;
@@ -359,6 +582,7 @@ export struct PersonalPortraitEditor {
         this.applied=this.history.groups.length>0;this.comparing=false;this.comparisonTarget='';this.refreshHistoryDisplay();
         this.selections=[];this.selectionCount=0;this.selected=false;
         this.command('CLEAR_SELECTION');this.revision++;
+        this.storyPhase='act';this.revealStoryHint();
         this.responseText=this.label('这组变化已留在你的星辰里。转动看看，也可以逐项对比。',
           'These changes are saved with your portrait. Turn and compare each one.');
       }else if(this.pendingComparison!==undefined){
@@ -400,21 +624,30 @@ export struct PersonalPortraitEditor {
     this.planner.cancel();this.pending=undefined;this.pendingSnapshot=undefined;this.candidateReady=false;
     this.carePreviewToken++;
     this.selections=[];this.selectionCount=0;this.selected=false;
-    this.waiting=false;this.consentOffer=false;this.question='';this.choices=[];
+    this.waiting=false;this.consentOffer=false;this.consentIntent='';this.question='';this.choices=[];
     this.careProductId='';this.careWhy='';this.careHow='';this.careWeek=0;
     this.command('CLEAR_SELECTION');this.bubble=false;this.revision++;
   }
-  aboutToDisappear():void{this.planner.cancel();this.replyToken++;}
+  aboutToDisappear():void{this.planner.cancel();this.storyClient.cancel();this.storyGeneration++;
+    this.storyHintToken++;this.replyToken++;this.composerDustToken++;
+    if(this.appWindow){this.appWindow.off('keyboardHeightChange',this.keyboardHeightListener);this.appWindow=undefined;}
+    this.getUIContext().setKeyboardAvoidMode(this.previousKeyboardAvoidMode);
+  }
 
   build(){
     Stack(){
       GaussianPortraitSurface({gaussianPath:this.gaussianPath,viewPath:this.viewPath,editCommand:this.editCommand,
         onReady:()=>this.viewerReady(),onFailure:(message:string)=>{this.waiting=false;this.onFailure(message);},
-        onEditFailure:(message:string)=>this.editFailed(message),
+        onEditFailure:(message:string)=>{if(this.pendingObservationQuote){
+          const quote=this.pendingObservationQuote,messageId=this.pendingObservationMessageId;
+          this.pendingObservationQuote='';this.pendingObservationMessageId='';
+          this.persistObservation(quote,messageId);}
+          else this.editFailed(message);},
         onInteraction:()=>this.onInteraction(),
         onBackgroundTone:(light:boolean)=>this.onBackgroundTone(light),
         onSelection:(info:GsSelection,mask:ArrayBuffer)=>this.selectedRegion(info,mask),
-        onCapture:(clean:ArrayBuffer,annotated:ArrayBuffer,width:number,height:number)=>{this.captured(clean,annotated,width,height);},
+        onCapture:(clean:ArrayBuffer,annotated:ArrayBuffer,width:number,height:number,view?:GsViewSnapshot)=>{this.captured(clean,annotated,width,height,view);},
+        onViewSnapshot:(view:GsViewSnapshot)=>this.receivedView(view),
         onApplied:(action:string)=>this.appliedResult(action)}).width('100%').height('100%')
       if(this.bubble){
         Column({space:8}){
@@ -442,13 +675,13 @@ export struct PersonalPortraitEditor {
                 this.careExpanded=!this.careExpanded;}))
               Text(this.careWhy).fontSize(11).lineHeight(16).fontColor('#D9E7F7')
               if(this.careExpanded){Text(this.careHow).fontSize(11).lineHeight(16).fontColor('#E5EEFA')}
-              Text(this.label('面容观察 · '+(this.careWeek===0?'现在':'第 '+this.careWeek+' 周'),
-                'Portrait scenario · '+(this.careWeek===0?'now':'week '+this.careWeek)))
+              Text(this.label('数字预览 · '+(this.careWeek===0?'原样':'变化 '+this.careWeek+'/8'),
+                'Digital preview · '+(this.careWeek===0?'original':'step '+this.careWeek+'/8')))
                 .fontSize(11).fontColor('#C6D8F0')
               Slider({value:this.careWeek,min:0,max:8,step:1}).blockColor('#DEE8FF').selectedColor('#8C8CCB')
                 .onChange((value:number)=>this.setCareWeek(Math.round(value)))
-              Text(this.label('仅是可撤销的情景示意，不预测这款产品的疗效或时间。',
-                'Reversible visual scenario, not a prediction of this product’s effect or timing.'))
+              Text(this.label('可撤销的外观示意；不代表这款产品的实际效果或起效时间。',
+                'Reversible visual scenario; not this product’s real effect or timing.'))
                 .fontSize(10).fontColor('#B4C7DC').maxLines(2)
             }.padding(9).width('100%').backgroundColor('#263C58D9')
               .border({width:1,color:'#7896BA'}).borderRadius(16)
@@ -460,14 +693,14 @@ export struct PersonalPortraitEditor {
           if(this.choices.length>0){Row({space:7}){ForEach(this.choices,(choice:string)=>{
             Button(choice).fontSize(12).fontColor('#EAF3FF').backgroundColor('#344C68AA').borderRadius(15).onClick(()=>this.submit(choice))
           },(choice:string)=>choice)}}
-          if(this.consentOffer){
-            Text(this.label('这次会发送当前静态模型画面给 DeepSeek；原模型不上传。','This sends the current still view to DeepSeek. The model file stays here.'))
-              .fontSize(12).fontColor('#BED0E6').maxLines(3)
+          if(this.consentOffer&&this.consentIntent==='edit'){
+            Text(CloudConsentStore.introduction(this.language))
+              .fontSize(12).fontColor('#BED0E6').maxLines(8)
             Row({space:8}){
-              Button(this.label('允许这次发送','Send this view')).fontSize(13).fontColor('#F5F8FF').backgroundColor('#496581').borderRadius(17)
-                .onClick(()=>{this.onEnableCloud();this.capture();})
-              Button(this.label('先不发送','Not now')).fontSize(13).fontColor('#D2E1F1').backgroundColor('#253B54').borderRadius(17)
-                .onClick(()=>{this.consentOffer=false;this.responseText=this.label('好，画面留在这里。','Okay. The portrait stays here.');})
+              Button(this.label('开启对话','Start conversations')).fontSize(13).fontColor('#F5F8FF').backgroundColor('#496581').borderRadius(17)
+                .onClick(()=>this.acceptCloudIntroduction())
+              Button(this.label('现在先不用','Not now')).fontSize(13).fontColor('#D2E1F1').backgroundColor('#253B54').borderRadius(17)
+                .onClick(()=>this.declineCloudIntroduction())
             }
           }else{
             TextInput({text:this.input,placeholder:this.label(this.selectionCount>1?'例如：第一处淡一些，第二处暖一点':'想对这里说些什么？',
@@ -492,8 +725,134 @@ export struct PersonalPortraitEditor {
           .border({width:1,color:'#657F9D'}).borderRadius(23)
           .position({x:this.bubbleLeft(),y:Math.max(58,Math.min(this.viewportHeight-
             (this.careProductId?342:168)-this.replyLines.length*22-(this.careExpanded?42:0)-
-            (this.question?52:0)-(this.choices.length?40:0),this.anchorY*this.viewportHeight-92))})
+             (this.question?52:0)-(this.choices.length?40:0)-
+             (this.consentOffer&&this.consentIntent==='edit'?145:0),this.anchorY*this.viewportHeight-92))})
           .transition({opacity:0,scale:{x:.92,y:.92},translate:{y:12}}).zIndex(8)
+      }
+      if(this.ready&&this.tool!=='lasso'){
+        Column({space:3}){
+          if(this.storyOpen){
+            Column({space:8}){
+            Row({space:9}){
+              Text('✦').fontSize(17).fontColor('#D3DCFF')
+              Text(this.label('这一刻的 SELF','A moment with SELF')).fontSize(14)
+                .fontWeight(FontWeight.Medium).fontColor('#F2F6FF').layoutWeight(1)
+              Button(this.storyNotesOpen?this.label('对话','Words'):this.label('记录','Notes'))
+                .fontSize(11).fontColor('#C9DBF1').backgroundColor('#263C59').borderRadius(14)
+                .onClick(()=>this.storyNotesOpen=!this.storyNotesOpen)
+              StarCloseButton({diameter:30,label:this.label('收起对话','Collapse conversation'),onClose:()=>this.closeStory()})
+            }.width('100%')
+            Scroll(){
+              Column({space:10}){
+                if(this.storyNotesOpen){
+                  if(this.storyObservations.length===0){Text(this.label('还没有留下文字。','No words saved yet.'))
+                    .fontSize(13).fontColor('#C5D4EA')}
+                  ForEach(this.storyObservations,(record:StoryObservation)=>{
+                    Row({space:8}){
+                      Text(record.userQuote).fontSize(13).lineHeight(19).fontColor('#E9F1FF').layoutWeight(1)
+                      StarCloseButton({diameter:27,label:this.label('删除这句话','Delete note'),
+                        onClose:()=>this.deleteObservation(record.recordId)})
+                    }.padding(10).width('100%').backgroundColor('#344861B8').borderRadius(15)
+                  },(record:StoryObservation)=>record.recordId)
+                }else{
+                  Text(this.storyReply).fontSize(14).lineHeight(21).fontColor('#EDF3FF').width('100%')
+                  if(this.storyKind==='edit_entry'){
+                    Button(this.label('去圈选、再确认','Select and decide')).fontSize(12).fontColor('#F3F2FF')
+                      .backgroundColor('#665A8E').borderRadius(17)
+                      .onClick(()=>this.enterExistingEdit(this.storyLastQuote))
+                  }
+                  if(this.storyKind==='real_effect_boundary'){
+                    Row({space:7}){
+                      Button(this.label('说说具体产品','Specify the product')).fontSize(12).fontColor('#EAF2FF')
+                        .backgroundColor('#304B68').borderRadius(16)
+                        .onClick(()=>this.storyInput=this.label('想了解这款 OLAY 的哪一代、哪种规格？',
+                          'Which exact OLAY product and version?'))
+                      Button(this.label('另试数字预览','Separate digital preview')).fontSize(12).fontColor('#F2EEFF')
+                        .backgroundColor('#665A8E').borderRadius(16)
+                        .onClick(()=>this.enterExistingEdit(this.label('我想试一份独立的通用数字试色，不按产品真实效果。',
+                          'I want a separate digital colour preview, not a product effect.')))
+                    }
+                  }
+                  if(this.storyLastQuote&&this.storyKind!=='closing'){
+                    Button(this.label('留下这一刻','Keep this moment')).fontSize(11).fontColor('#DDEBFF')
+                      .backgroundColor('#344E6B').borderRadius(16).onClick(()=>this.saveStoryQuote())
+                  }
+                }
+              }.alignItems(HorizontalAlign.Start).width('100%')
+            }.width('100%').layoutWeight(1).scrollBar(BarState.Off)
+            if(this.consentOffer&&this.consentIntent==='story'){
+              Text(CloudConsentStore.introduction(this.language))
+                .fontSize(11).lineHeight(16).fontColor('#C8D9EF')
+              Row({space:8}){
+                Button(this.label('开启对话','Start conversations')).fontSize(12).fontColor('#F4F7FF')
+                  .backgroundColor('#4B6283').borderRadius(16)
+                  .onClick(()=>this.acceptCloudIntroduction())
+                Button(this.label('现在先不用','Not now')).fontSize(12).fontColor('#C9D8EB')
+                  .backgroundColor('#2A4059').borderRadius(16)
+                  .onClick(()=>this.declineCloudIntroduction())
+              }
+            }
+            if(this.storyWaiting){Button(this.label('停下这次回应','Cancel this reply')).fontSize(12)
+              .fontColor('#D9E8F5').backgroundColor('#30465E').borderRadius(16)
+              .onClick(()=>{this.storyGeneration++;this.storyClient.cancel();this.storyWaiting=false;
+                this.storyReply=this.label('好，这次先停在这里。','Okay, we can pause here.');})}
+            }.padding(12).width('100%').height(this.replyPanelHeight())
+              .backgroundColor('#B3182D47')
+              .border({width:1,color:'#708BAD'}).borderRadius(22)
+              .transition({opacity:0,scale:{x:.98,y:.9},translate:{y:10}})
+          }
+          Row({space:8}){
+            Text('✦').fontSize(17).fontColor('#CFD9FF')
+            Stack({alignContent:Alignment.TopStart}){
+              TextInput({text:this.storyInput,placeholder:'',controller:this.storyInputController})
+                .id('personal-story-input').width('100%').height(42).fontSize(13)
+                .fontColor('#F4F7FF').backgroundColor('#00000000')
+                .maxLength(500).keyboardAppearance(KeyboardAppearance.DARK_IMMERSIVE)
+                .onChange((value:string)=>this.storyInput=value)
+                .onFocus(()=>{this.getUIContext().setKeyboardAvoidMode(KeyboardAvoidMode.NONE);
+                  this.keyboardOpen=true;})
+                .onBlur(()=>{this.keyboardOpen=false;
+                  this.getUIContext().setKeyboardAvoidMode(this.previousKeyboardAvoidMode);})
+              if(!this.storyInput&&!this.keyboardOpen){
+                Row({space:0}){
+                  ForEach(this.storyHint().split(''),(letter:string,index:number)=>{
+                    Text(letter).fontSize(12).fontColor('#AABAD4')
+                      .opacity(index<this.storyHintVisible?.73:0)
+                      .blur(index<this.storyHintVisible?0:5)
+                      .animation({duration:180,curve:Curve.EaseOut})
+                  },(_letter:string,index:number)=>this.storyHint()+'-'+index.toString())
+                }.padding({left:12}).height(42).alignItems(VerticalAlign.Center)
+                  .hitTestBehavior(HitTestMode.None)
+              }
+            }.layoutWeight(1).height(42)
+            Button(){
+              if(this.storyWaiting){Text('···').fontSize(18).fontColor('#F4F7FF')}
+              else{Image($rawfile('ui/story_send.svg')).width(21).height(21)}
+            }.id('personal-story-send').width(42).height(42)
+              .enabled(!this.storyWaiting).backgroundColor('#53698E').borderRadius(21)
+              .stateStyles({pressed:{.scale({x:.91,y:.91})},normal:{.scale({x:1,y:1})}})
+              .animation({duration:170,curve:Curve.EaseOut})
+              .onClick(()=>{this.storyInputController.stopEditing();this.openStory();this.sendStory(this.storyInput);})
+              .accessibilityText(this.label('发送此刻的话','Send message'))
+          }.padding({left:10,right:7,top:5,bottom:5}).width('100%')
+            .backgroundColor('#DC1A2B45')
+            .border({width:1,color:'#708BAD'}).borderRadius(27)
+            .shadow({radius:10,color:'#3C10203E',offsetY:3})
+        }
+          .width(Math.min(this.viewportWidth-32,this.viewportWidth>=840?540:440))
+          .height(this.composerHeight())
+          .position({x:Math.max(16,(this.viewportWidth-Math.min(this.viewportWidth-32,this.viewportWidth>=840?540:440))/2),
+            y:Math.max(75,this.composerBottom()-this.composerHeight())})
+          .transition({opacity:0,scale:{x:.91,y:.84},translate:{y:12}}).zIndex(11)
+      }
+      if(this.composerDust){
+        ForEach([0,1,2,3,4,5,6,7],(index:number)=>{
+          Circle().width(2+index%3).height(2+index%3).fill(index%3===0?'#DBE6FF':'#A7BDD9')
+            .opacity(this.composerDustSpread?0:.75)
+            .position({x:this.viewportWidth*.5+(this.composerDustSpread?(index-3.5)*38:(index-3.5)*8),
+              y:this.viewportHeight-67+(this.composerDustSpread?((index%3)-1)*23:0)})
+            .hitTestBehavior(HitTestMode.None).zIndex(12)
+        },(index:number)=>index.toString())
       }
       if(this.historyOpen){
         Stack(){

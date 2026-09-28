@@ -14,6 +14,21 @@ from app import app
 
 
 class ReconstructionTransportTest(unittest.TestCase):
+    def test_cancel_after_completion_returns_terminal_state_and_preserves_result(self):
+        body={"totalBytes":1024,"sha256":"a"*64,"format":"mp4"}
+        job_id=self.client.post('/v1/reconstruction/jobs',json=body,headers=self.headers).json()['jobId']
+        path=Path(self.root.name)/job_id
+        result=path/'portrait.gaussian.ply';result.write_bytes(b'retained model')
+        for state in ('gaussian_ready','complete'):
+            job=recon_transfer._read_job(path);job.update(state=state)
+            recon_transfer._save_job(path,job)
+            receipt=self.client.post(f'/v1/reconstruction/jobs/{job_id}/cancel',headers=self.headers)
+            self.assertEqual(receipt.status_code,200)
+            self.assertEqual(receipt.json()['state'],state)
+            self.assertEqual(recon_transfer._read_job(path)['state'],state)
+            self.assertEqual(result.read_bytes(),b'retained model')
+            self.assertFalse((path/'cancel.requested').exists())
+
     def setUp(self):
         self.root = tempfile.TemporaryDirectory()
         self.patches = [

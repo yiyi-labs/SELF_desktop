@@ -17,6 +17,7 @@ export interface ReconstructionView {
   schemaVersion:number;sourceFrame:string;target:number[];camera:number[];up:number[];
   fovDegrees:number;faceTrackCount:number;sourceFaceFraction:number;
   targetFaceFraction?:number;
+  reconstructionMethod?:string;surfacePointCount?:number;sourceSha256?:string;assetSha256?:string;
 }
 interface CreatedJob {jobId:string;chunkBytes:number;state:string;}
 interface ChunkReceipt {index:number;sha256:string;received:number;total:number;}
@@ -124,7 +125,7 @@ export class ReconstructionTransportClient {
   async cancelJob(jobId:string):Promise<CancellationReceipt>{
     if(!/^[a-f0-9]{32}$/.test(jobId))throw new Error('建模任务编号无效');
     const result=JSON.parse(await this.json('/jobs/'+jobId+'/cancel',http.RequestMethod.POST,'{}')) as CancellationReceipt;
-    if(result.jobId!==jobId||!['cancelled','cancel_requested'].includes(result.state))throw new Error('取消结果未确认');
+    if(result.jobId!==jobId||!['cancelled','cancel_requested','gaussian_ready','complete'].includes(result.state))throw new Error('取消结果未确认');
     return result;
   }
   async downloadPreview(jobId:string,filesDir:string):Promise<string>{
@@ -286,9 +287,12 @@ export class ReconstructionTransportClient {
     const text=util.TextDecoder.create('utf-8').decodeToString(new Uint8Array(bytes));
     const view=JSON.parse(text) as ReconstructionView;
     const finiteVector=(value:number[]):boolean=>Array.isArray(value)&&value.length===3&&value.every((number:number)=>Number.isFinite(number)&&Math.abs(number)<1000000);
+    const softSurface=view.reconstructionMethod==='portrait-first-soft-surface-0.1-research'&&
+      Number.isInteger(view.surfacePointCount)&&(view.surfacePointCount??0)>=30&&
+      /^[a-f0-9]{64}$/.test(view.sourceSha256??'')&&view.assetSha256===job.assets?.gaussian?.sha256;
     if(view.schemaVersion!==1||!finiteVector(view.target)||!finiteVector(view.camera)||!finiteVector(view.up)||
       !Number.isFinite(view.fovDegrees)||view.fovDegrees<10||view.fovDegrees>90||
-      !Number.isInteger(view.faceTrackCount)||view.faceTrackCount<30)throw new Error('个人模型视角内容无效');
+      (!softSurface&&(!Number.isInteger(view.faceTrackCount)||view.faceTrackCount<30)))throw new Error('个人模型视角内容无效');
     const models=filesDir+'/models';if(!fs.accessSync(models))fs.mkdirSync(models);
     const directory=models+'/'+jobId;if(!fs.accessSync(directory))fs.mkdirSync(directory);
     const path=directory+'/portrait.view.json',temporary=path+'.tmp';

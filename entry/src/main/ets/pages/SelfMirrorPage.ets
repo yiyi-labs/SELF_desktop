@@ -22,6 +22,7 @@ import { CaptureService,CaptureRecord } from '../services/CaptureService';
 import { PortraitStarStore, PortraitStar } from '../services/PortraitStarStore';
 import { ReconstructionTransportClient, ReconstructionView } from '../services/ReconstructionTransportClient';
 import { UiPreference, UiSettings } from '../services/UiPreference';
+import { CloudConsentStore, CloudConsentDecision } from '../services/CloudConsentStore';
 import { UiText } from '../services/UiText';
 import { AmbiencePreference } from '../services/AmbiencePreference';
 
@@ -164,6 +165,7 @@ struct SelfMirrorPage {
   private planner:PlannerClient=new PlannerClient();
   @State cloudWaiting:boolean=false;
   @State cloudSessionEnabled:boolean=false;
+  @State cloudConsentDecision:CloudConsentDecision='unknown';
   @State uploadOffer:boolean=false;
   @State choices:string[]=[];
   @State replyQuestion:string='';
@@ -173,6 +175,16 @@ struct SelfMirrorPage {
   @State backendAddress:string='http://127.0.0.1:8787';
   @State backendToken:string='';
   private pendingCloudText:string='';
+  private setCloudConsent(allowed:boolean):boolean{
+    const decision:CloudConsentDecision=allowed?'allowed':'denied';
+    if(!CloudConsentStore.save(this.context,decision))return false;
+    this.cloudConsentDecision=decision;this.cloudSessionEnabled=allowed;
+    if(!allowed){
+      this.cloudGeneration++;this.planner.cancel();this.cloudWaiting=false;
+      this.pendingCloudText='';this.uploadOffer=false;this.dialogue=[];this.choices=[];
+    }
+    return true;
+  }
   private lastModelProductIds:string[]=[];
   private bridge: NativeRendererPort = new NativeRendererPort();
   private context: common.UIAbilityContext = this.getUIContext().getHostContext() as common.UIAbilityContext;
@@ -402,7 +414,7 @@ struct SelfMirrorPage {
     const client=new ReconstructionTransportClient();client.endpoint=this.backendAddress;client.token=this.backendToken;
     try{
       const result=await client.cancelJob(jobId);
-      if(result.state==='cancelled')this.finishCancelledReconstruction();
+      if(['cancelled','gaussian_ready','complete'].includes(result.state))this.finishCancelledReconstruction();
       else if(!this.reconJob){this.trackReconstruction(jobId);this.reconCancelling=true;this.captureStatus='星光正在慢慢停下。';}
     }catch(error){
       console.error('SELF_RECON_CANCEL_FAILED '+String(error));
@@ -436,7 +448,7 @@ struct SelfMirrorPage {
       if(result.state==='failed'){
         this.captureStatus=result.message==='face_not_confirmed_in_capture'?'这段拍摄还没能看清完整面容，可以换个光线再试。':
           result.message==='camera_angles_insufficient'?'这次没有拍到面容的两侧。可以保持头部自然不动，让镜头从一侧缓慢绕到另一侧再试。':
-          '这段拍摄还不足以生成可靠的立体面容，原片仍为你保留。';
+          '这次立体建模中途停住了。拍摄还在采集记录里，可以直接重试。';
         this.subtitle=this.captureStatus;this.journey='failed';this.reconCanRetry=false;this.finishReconstruction();return;
       }
       if(result.state==='gaussian_ready'){
@@ -515,6 +527,8 @@ struct SelfMirrorPage {
 
   aboutToAppear(): void {
     const ui=UiPreference.load(this.context);this.language=ui.language;this.accent=ui.accent;this.palette=ui.palette;this.motion=ui.motion;this.followChat=ui.followChat;this.stylusHints=ui.stylusHints;AppStorage.setOrCreate('selfLanguage',ui.language);
+    this.cloudConsentDecision=CloudConsentStore.load(this.context);
+    this.cloudSessionEnabled=this.cloudConsentDecision==='allowed';
     this.bridge.onSelectionAnchor=(x:number,y:number,halfWidth:number)=>{this.focusX=x;this.focusY=y;this.focusHalfWidth=halfWidth;};
     this.bridge.onToolChanged=(name:string)=>{this.tool=name;this.focusOpen=false;};
     this.audio.onStatus=(state:string)=>{this.audioState=state;if(state!=='playing')this.musicPulse=0;if(this.context.applicationInfo.debug)console.info('SELF_AUDIO_STATE '+state);if(state==='error'){this.musicOn=false;this.subtitle='音乐暂时无法播放，你可以继续安静地使用镜面。';}};
@@ -553,7 +567,7 @@ struct SelfMirrorPage {
   }
   private fail(message:string):void{this.busy=false;this.subtitle=message;console.error('SELF_ERROR '+message);}
   private async requestCloud():Promise<void>{
-    if(this.cloudWaiting||!this.pendingCloudText||!this.cloudSessionEnabled)return;
+    if(this.cloudWaiting||!this.pendingCloudText||!this.cloudSessionEnabled||!CloudConsentStore.allowed(this.context))return;
     const generation=++this.cloudGeneration;const input=this.pendingCloudText;this.pendingCloudText='';this.planner.endpoint=this.backendAddress.trim();this.planner.token=this.backendToken.trim();
     if(this.detail)this.close();this.uploadOffer=false;this.cloudWaiting=true;this.subtitle='让我想想，怎么更贴近你的想法…';
     const snapshot=this.planner.snapshot(this.session,input);snapshot.productContextIds=this.lastModelProductIds.slice();snapshot.responseLanguage=this.language;
@@ -565,7 +579,7 @@ struct SelfMirrorPage {
       snapshot.regions=snapshot.regions.filter((r)=>r.regionId===regionId||snapshot.layers.some((l)=>l.regionId===r.regionId)||snapshot.protectedRegionIds.includes(r.regionId));
       if(this.session.sceneRevision!==snapshot.sceneRevision||this.session.regionVersion!==snapshot.regionVersion)throw new Error('作品状态已改变，请重新提出请求');
       const response=await this.planner.propose(snapshot,capture.images);
-      if(!this.cloudWaiting||generation!==this.cloudGeneration)return;
+      if(!this.cloudWaiting||generation!==this.cloudGeneration||!CloudConsentStore.allowed(this.context))return;
       if(this.session.pending||this.session.assetId!==snapshot.assetId||this.session.assetVersion!==snapshot.assetVersion||this.session.sceneRevision!==snapshot.sceneRevision||this.session.regionVersion!==snapshot.regionVersion)throw new Error('等待期间作品或规则已改变，这份候选不会执行');
       this.subtitle=response.plan.shortMessage;this.replySources=response.plan.explanationRefs;this.lastModelProductIds=response.plan.explanationRefs.slice();
       this.choices=response.plan.choices||[];
@@ -625,7 +639,9 @@ struct SelfMirrorPage {
     this.productOpen=false;this.replySources=[];
     if(regionId&&regionId!==this.selected){this.selected=regionId;this.dialogue=[];this.choices=[];this.lastModelProductIds=[];}
     this.session.candidate=undefined;this.candidate='';this.pendingCloudText=input;this.lastUtterance=input;
-    if(this.cloudSessionEnabled)this.requestCloud();else this.uploadOffer=true;
+    if(this.cloudSessionEnabled)this.requestCloud();
+    else if(this.cloudConsentDecision==='unknown')this.uploadOffer=true;
+    else{this.pendingCloudText='';this.subtitle='云端对话已关闭。想继续时，可以在设置里开启。';}
   }
   private suggest(lip:boolean):void{
     const id=lip&&this.session.sourceKind==='MESH'?'lip':this.selected;
@@ -754,16 +770,13 @@ struct SelfMirrorPage {
       Rect().width('100%').height(1).fill('#768FAFC0').opacity(.52)
       if(this.detail==='完整回复'){Text(this.tr(this.subtitle)).fontSize(17).lineHeight(28)}
       if(this.detail==='云端理解'){
-        Text(this.tr('开启后，每次主动发送会附上当前静态面容图和最近三轮问答，由配置的后端交给 DeepSeek 理解。不会上传相机视频；修改仍需确认。')).fontSize(16).fontColor('#665A72')
-        Text(this.tr('后端不保存照片；第三方处理与留存依其条款。授权仅本次打开有效，可随时关闭。')).fontSize(14).fontColor('#766C80')
-        Toggle({type:ToggleType.Switch,isOn:this.cloudSessionEnabled}).id('cloud-session-toggle').onChange((v:boolean)=>{this.cloudSessionEnabled=v;if(!v){this.cloudGeneration++;this.planner.cancel();this.cloudWaiting=false;this.pendingCloudText='';this.uploadOffer=false;this.dialogue=[];this.choices=[];}})
+        Text(CloudConsentStore.introduction(this.language)).fontSize(16).fontColor('#665A72')
+        Text(this.language==='en'?'The service does not retain portrait images; third-party handling follows its own terms.':
+          '服务端不保留面容画面；第三方的处理与留存依其条款。').fontSize(14).fontColor('#766C80')
+        Toggle({type:ToggleType.Switch,isOn:this.cloudSessionEnabled}).id('cloud-session-toggle').onChange((v:boolean)=>{
+          if(this.setCloudConsent(v)&&v&&this.pendingCloudText)this.requestCloud();})
         TextInput({text:this.backendAddress,placeholder:this.tr('自己的后端地址')}).onChange((v:string)=>this.backendAddress=v)
         TextInput({text:this.backendToken,placeholder:this.tr('后端访问口令（不是 DeepSeek 密钥）')}).type(InputType.Password).onChange((v:string)=>this.backendToken=v)
-        if(this.pendingCloudText){
-          Text(this.tr('这次请求：'+this.pendingCloudText)).fontSize(15)
-          Button(this.tr('开启并发送')).softButton().enabled(!this.cloudWaiting).onClick(()=>{this.cloudSessionEnabled=true;this.requestCloud();})
-          Button(this.tr('暂不发送，保留现在')).softButton().onClick(()=>{this.pendingCloudText='';this.close();this.subtitle='没有发送图像，当前作品保持不变。';})
-        }
       }
       if(this.detail==='氛围'){
         Row({space:10}){
@@ -912,8 +925,11 @@ struct SelfMirrorPage {
     Column({space:10}){
       Row(){Text(this.tr(this.focusOpen?'从这里开始':'✧  SELF 陪你')).fontSize(13).fontColor('#89759C');Blank();Text(this.tr(this.cloudWaiting?'正在理解':this.cloudSessionEnabled?'云端已开启':'隐私设置')).fontSize(11).fontColor('#95879F').onClick((event:ClickEvent)=>this.open('云端理解',event))}.width('100%')
       if(this.uploadOffer){
-        Text(this.tr('开启本次对话后，发送文字时会附上当前静态面容图和最近问答给 DeepSeek。可随时在隐私设置关闭。')).fontSize(12).fontColor('#756380')
-        Row({space:8}){Button(this.tr('开启并发送')).id('cloud-enable-send').softButton().layoutWeight(1).onClick(()=>{this.cloudSessionEnabled=true;this.requestCloud();});Button(this.tr('暂不发送')).softButton().onClick(()=>{this.uploadOffer=false;this.pendingCloudText='';})}
+        Text(CloudConsentStore.introduction(this.language)).fontSize(12).fontColor('#756380')
+        Row({space:8}){Button(this.language==='en'?'Start conversations':'开启对话').id('cloud-enable-send').softButton().layoutWeight(1).onClick(()=>{
+          if(this.setCloudConsent(true))this.requestCloud();});
+          Button(this.language==='en'?'Not now':'现在先不用').softButton().onClick(()=>{
+            if(this.setCloudConsent(false))this.subtitle='好，画面留在这里。';})}
       }
       if(this.lastUtterance&&(!this.productOpen||this.wide)){Text(this.tr('你说 · '+this.lastUtterance)).fontSize(12).fontColor('#8E819A').maxLines(2).width('100%')}
       Text(this.tr(this.subtitle)).fontSize(15).lineHeight(23).fontColor('#52465F').maxLines(this.productOpen?2:this.wide?5:3).width('100%')
@@ -1048,11 +1064,12 @@ struct SelfMirrorPage {
       if(this.personalActive()&&this.journey!=='forming'){
         PersonalPortraitEditor({gaussianPath:this.personalGaussianPath,viewPath:this.personalViewPath,
           assetId:this.activeStarId,language:this.language,cloudEnabled:this.cloudSessionEnabled,
+          cloudConsentDecision:this.cloudConsentDecision,
           backendAddress:this.backendAddress,backendToken:this.backendToken,
           viewportWidth:this.surfaceWidth,viewportHeight:this.surfaceHeight,
           onBackgroundTone:(light:boolean)=>{if(this.personalBackdropLight!==light){
             this.getUIContext().animateTo({duration:this.motion?650:0,curve:Curve.EaseInOut},()=>{this.personalBackdropLight=light;});}},
-          onEnableCloud:()=>{this.cloudSessionEnabled=true;},
+          onEnableCloud:()=>this.setCloudConsent(true),onDeclineCloud:()=>{this.setCloudConsent(false);},
           onReady:()=>{this.personalReady=true;this.captureStatus='';if(this.journey==='revealing'){
             this.getUIContext().animateTo({duration:this.motion?1350:0,curve:Curve.EaseOut},()=>{this.revealOpacity=0;this.revealScale=7;});
             this.revealTimer=setTimeout(()=>{this.journey='idle';this.revealTimer=-1;},this.motion?1380:50);
@@ -1111,6 +1128,35 @@ struct SelfMirrorPage {
           .onTouch((event:TouchEvent)=>{this.navPressed=event.type===TouchType.Down?'settings':'';})
           .accessibilityText(this.tr('设置')).onClick((event:ClickEvent)=>this.open('设置',event))
       }.padding({left:this.wide?40:22,right:this.wide?40:22,top:42,bottom:12}).width('100%').position({x:0,y:0}).zIndex(30)
+      if(this.personalActive()&&!this.detail&&this.journey!=='forming'){
+        Row({space:0}){
+          Button({type:ButtonType.Normal,stateEffect:false}){
+            Row({space:8}){
+              Text('✦').fontSize(16).fontColor('#C5D7F5')
+              Text(this.language==='en'?'My stars':'我的星辰').fontSize(13)
+                .fontWeight(FontWeight.Medium).fontColor('#F4F7FF')
+            }.justifyContent(FlexAlign.Center)
+          }.id('open-star-sky').width(132).height(44).padding(0)
+            .backgroundColor('#00000000').borderRadius(22)
+            .stateStyles({pressed:{.scale({x:.95,y:.94})},normal:{.scale({x:1,y:1})}})
+            .animation({duration:this.motion?170:0,curve:Curve.EaseOut}).onClick(()=>this.enterSky())
+          Rect().width(1).height(20).fill('#587593')
+          Button({type:ButtonType.Normal,stateEffect:false}){
+            Row({space:8}){
+              Circle().width(12).height(12).fill('#00000000').stroke('#C5D7F5').strokeWidth(1.5)
+              Text(this.language==='en'?'Origin':'回到原点').fontSize(13)
+                .fontWeight(FontWeight.Medium).fontColor('#F4F7FF')
+            }.justifyContent(FlexAlign.Center)
+          }.id('return-origin').width(132).height(44).padding(0)
+            .backgroundColor('#00000000').borderRadius(22)
+            .stateStyles({pressed:{.scale({x:.95,y:.94})},normal:{.scale({x:1,y:1})}})
+            .animation({duration:this.motion?170:0,curve:Curve.EaseOut}).onClick(()=>this.returnOrigin())
+        }.width(277).height(46).justifyContent(FlexAlign.Center)
+          .backgroundColor('#CE1B2D47').backgroundBlurStyle(BlurStyle.COMPONENT_ULTRA_THIN)
+          .border({width:1,color:'#7E9EBE'}).borderRadius(23)
+          .shadow({radius:9,color:'#42101B31',offsetY:2})
+          .position({x:Math.max(14,(this.surfaceWidth-277)/2),y:this.wide?42:105}).zIndex(31)
+      }
       if(this.journey==='idle'&&!this.detail){
         Column({space:12}){
           Flex({wrap:FlexWrap.Wrap}){
@@ -1171,7 +1217,7 @@ struct SelfMirrorPage {
           else{Button(this.language==='en'?'Capture again':'再拍一次').id('retake-capture').softButton().fontColor('#F5F4FF').backgroundColor('#536787A6').onClick((event:ClickEvent)=>this.open('拍摄面容',event))}
         }.padding(18).width(Math.min(this.surfaceWidth-40,440)).backgroundColor('#34465C91').border({width:1,color:'#7D9AB9A1'}).borderRadius(22).position({x:Math.max(20,(this.surfaceWidth-Math.min(this.surfaceWidth-40,440))/2),y:this.surfaceHeight*.61})
       }
-      if((!this.detail||this.detail==='留一句话'||this.detail==='作品与记录')&&this.journey!=='forming'){
+      if((!this.detail||this.detail==='留一句话'||this.detail==='作品与记录')&&this.journey!=='forming'&&!this.personalActive()){
         Column({space:12}){
           Row({space:10}){
             if(!this.detail&&!this.personalActive()&&!this.skyOpen){
@@ -1181,10 +1227,7 @@ struct SelfMirrorPage {
               if(this.previewStarId){Button((this.language==='en'?'Open · ':'走近 · ')+this.currentGalaxyName()).id('open-star-full').softButton().fontColor('#F4F2FF').backgroundColor('#75456683').onClick(()=>this.openStar(this.previewStarId))}
               Button(this.language==='en'?'Origin':'回到原点').id('return-origin-sky').softButton().fontColor('#F4F2FF').backgroundColor('#61374766').onClick(()=>this.returnOrigin())
             }
-            else if(this.personalActive()){
-              Button(this.language==='en'?'Sky':'我的星辰').id('open-star-sky').softButton().fontColor('#F4F2FF').backgroundColor('#61374766').onClick(()=>this.enterSky())
-              Button(this.language==='en'?'Origin':'回到原点').id('return-origin').softButton().fontColor('#F4F2FF').backgroundColor('#61374766').onClick(()=>this.returnOrigin())
-            }else{
+            else{
               if(!this.detail){Button(this.language==='en'?'My stars':'我的星辰').id('open-star-sky-origin').softButton().fontColor('#F4F2FF').backgroundColor('#61374766').onClick(()=>this.enterSky())}
               Button(this.language==='en'?'My words':'留句话').id('home-note').softButton().fontColor('#F4F2FF')
                 .backgroundColor(this.detail==='留一句话'?'#82536D91':'#61374766')

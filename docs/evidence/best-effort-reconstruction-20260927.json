@@ -1,0 +1,37 @@
+{
+  "jobId": "170f10e426e788b474f0588adaede41a",
+  "captureSha256": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+  "captureBytes": 65453964,
+  "protocolChunkBytes": 1048576,
+  "state": "gaussian_ready",
+  "message": "立体面容已生成；这次的细节还可以在下次拍摄时补充",
+  "assets": {
+    "gaussian": {
+      "file": "portrait.gaussian.ply",
+      "bytes": 28793241,
+      "sha256": "be6223e90e70b4765c5d08ec69ac18bee3003c1897775f198985a32536366270"
+    },
+    "view": {
+      "file": "portrait.view.json",
+      "bytes": 509,
+      "sha256": "b704c77585b251c61d122d3aadaf00ad2605f2d0e49718da05f7241b8bb30f05"
+    },
+    "preview": {
+      "file": "portrait.preview.png",
+      "bytes": 42334,
+      "sha256": "a9158623409e0f3e8aa0965eec2027cf03130dc7b7d5e731224d9ade99f8beb3"
+    },
+    "preview3d": {
+      "file": "portrait.preview.gaussian.ply",
+      "bytes": 5665476,
+      "sha256": "c66e5bcff96bb1e8c6e3278acbee6fdfe5754213033a8d08c05a776427f280cb"
+    },
+    "scene3d": {
+      "file": "portrait.scene-v3.gaussian.ply",
+      "bytes": 6609476,
+      "sha256": "93a5dfc3c2855972c690b9e7d85798835b9691f57253ecb3a1c45e8ea197b511"
+    }
+  },
+  "viewDownloadVerified": true,
+  "gaussianDownloadVerified": true
+}

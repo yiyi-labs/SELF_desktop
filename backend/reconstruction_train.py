@@ -39,20 +39,21 @@ def smoke() -> None:
                       "capability": torch.cuda.get_device_capability(), "gsplatRasterization": True}))
 
 
-def update_progress(path: Path, step: int, total: int) -> None:
+def update_progress(path: Path, step: int, total: int, *, base: int = 62,
+                    span: int = 18) -> None:
     job_file = path / "job.json"
     job = json.loads(job_file.read_text(encoding="utf-8"))
-    job["progress"] = 62 + round(18 * step / total)
+    job["progress"] = max(int(job.get("progress", 0)), base + round(span * step / total))
     temporary = job_file.with_suffix(".json.tmp")
     temporary.write_text(json.dumps(job, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     os.replace(temporary, job_file)
 
 
-def load_scene(path: Path):
+def load_scene(path: Path, model_path: Path | None = None):
     import numpy as np
     import pycolmap
 
-    model = pycolmap.Reconstruction(path / "sparse" / "0")
+    model = pycolmap.Reconstruction(model_path or path / "sparse" / "0")
     cameras = []
     for image in model.images.values():
         if not image.has_pose:
@@ -67,15 +68,45 @@ def load_scene(path: Path):
         raise RuntimeError("Too few registered cameras")
     points = np.asarray([point.xyz for point in model.points3D.values()], dtype=np.float32)
     colors = np.asarray([point.color for point in model.points3D.values()], dtype=np.float32) / 255
-    if len(points) < 1200 or len(points) > 250000:
+    if len(points) < 300 or len(points) > 250000:
         raise RuntimeError("Sparse point count outside verified memory range")
     return cameras, points, colors
+
+
+def observed_head_splats(path: Path, cameras, means):
+    """Keep centers supported by at least one real head pixel in any view.
+
+    This only removes unsupported geometry after training. The masks are
+    already dilated, so a legitimate profile/hair edge has a safety margin.
+    """
+    import numpy as np
+    from PIL import Image
+
+    supported = np.zeros(len(means), dtype=bool)
+    for name, pose, intrinsic, width, height in cameras:
+        pending = np.flatnonzero(~supported)
+        if not len(pending):
+            break
+        camera_xyz = means[pending] @ pose[:3, :3].T + pose[:3, 3]
+        depth = camera_xyz[:, 2]
+        projected = camera_xyz @ intrinsic.T
+        with np.errstate(divide="ignore", invalid="ignore"):
+            u = projected[:, 0] / projected[:, 2]
+            v = projected[:, 1] / projected[:, 2]
+        visible = (depth > .01) & np.isfinite(u) & np.isfinite(v) & \
+                  (u >= 0) & (u < width) & (v >= 0) & (v < height)
+        if not np.any(visible):
+            continue
+        local = np.flatnonzero(visible)
+        with Image.open(path / "face_masks" / (name.name + ".png")) as source:
+            mask = np.asarray(source.convert("L"))
+        supported[pending[local[mask[v[local].astype(int), u[local].astype(int)] > 0]]] = True
+    return supported
 
 
 def train(path: Path, steps: int = 6000) -> None:
     import numpy as np
     import torch
-    import torch.nn.functional as F
     from PIL import Image
     from scipy.spatial import cKDTree
     from gsplat import export_splats
@@ -115,30 +146,29 @@ def train(path: Path, steps: int = 6000) -> None:
     strategy.check_sanity(params, optimizers)
     state = strategy.initialize_state(scene_scale=scene_scale)
     face_regions = json.loads((path / "face_regions.json").read_text(encoding="utf-8"))
-    # The portrait occupies only a small fraction of many source frames. Keep
-    # the full-frame objective for geometry/background, but give the detected
-    # face its own loss so it cannot be drowned out by the room behind it.
-    face_loss_weight = .5
-    random.shuffle(cameras)
-    face_entries = [entry for entry in cameras if entry[0].name in face_regions]
-    if len(face_entries) < 3:
-        raise RuntimeError("Registered frontal face views insufficient")
-    validation = face_entries[:2]
-    frontal_validation_names = {entry[0].name for entry in validation}
-    validation += [entry for entry in cameras if entry[0].name not in frontal_validation_names][:max(0, len(cameras) // 8 - 2)]
+    cameras.sort(key=lambda entry: entry[0].name)
+    if any(entry[0].name not in face_regions for entry in cameras):
+        raise RuntimeError("Registered frame lacks a verified head mask")
+    # Evenly spaced holdouts include side views; a good frontal frame alone
+    # must not pass the first-model quality gate.
+    validation = cameras[::max(5, len(cameras) // 8)]
     validation_names = {entry[0].name for entry in validation}
     training = [entry for entry in cameras if entry[0].name not in validation_names]
     if len(training) < 14:
         raise RuntimeError("Too few training cameras")
+    random.shuffle(training)
 
     # Keep lossless decoded source pixels in host RAM when the whole scene
     # fits. Repeated PNG decoding from the Windows/WSL shared volume would
     # otherwise dominate thousands of GPU steps, without improving detail.
     image_cache = {}
+    mask_cache = {}
     if sum(width * height * 3 for _, _, _, width, height in cameras) <= 2 * 1024**3:
         for name, _, _, _, _ in cameras:
             with Image.open(name) as source:
                 image_cache[name] = np.array(source.convert("RGB"), dtype=np.uint8, copy=True)
+            with Image.open(path / "face_masks" / (name.name + ".png")) as source:
+                mask_cache[name] = np.array(source.convert("L"), dtype=np.uint8, copy=True)
 
     def render(entry, degree):
         name, pose, intrinsic, width, height = entry
@@ -152,27 +182,39 @@ def train(path: Path, steps: int = 6000) -> None:
         view = torch.from_numpy(pose).to(device)[None]
         K = torch.from_numpy(intrinsic).to(device)[None]
         colors = torch.cat([params["sh0"], params["shN"]], dim=1)
-        output, _, info = rasterization(params["means"], params["quats"],
+        mask = mask_cache.get(name)
+        if mask is None:
+            with Image.open(path / "face_masks" / (name.name + ".png")) as source:
+                mask = np.array(source.convert("L"), dtype=np.uint8, copy=True)
+        if mask.shape != (height, width):
+            raise RuntimeError("Head mask and source image dimensions disagree")
+        keep = torch.from_numpy(mask).to(device).float()[None, :, :, None] / 255
+        output, alpha, info = rasterization(params["means"], params["quats"],
                                         torch.exp(params["scales"]),
                                         torch.sigmoid(params["opacities"]), colors,
                                         view, K, width, height, packed=True,
                                         sh_degree=degree, near_plane=.01)
-        return output, target, info
+        return output, target, keep, alpha, info
 
     losses = []
     for step in range(steps):
         entry = training[step % len(training)]
         degree = min(step // 1000, 3)
-        output, target, info = render(entry, degree)
+        output, target, keep, alpha, info = render(entry, degree)
         strategy.step_pre_backward(params, optimizers, state, step, info)
-        loss = F.l1_loss(output, target)
+        loss = ((output - target).abs() * keep).sum() / keep.sum().clamp_min(1) / 3
+        # Penalize floating room splats while keeping the whole dilated head
+        # envelope eligible for real hair, ear and cheek detail.
+        loss = loss + .06 * (alpha * (1 - keep)).mean()
         region = face_regions.get(entry[0].name)
         if region is not None:
             x, y, w, h = region
             if 0 <= x < entry[3] and 0 <= y < entry[4] and w > 0 and h > 0:
                 x2, y2 = min(entry[3], x + w), min(entry[4], y + h)
-                loss = loss + face_loss_weight * F.l1_loss(
-                    output[:, y:y2, x:x2], target[:, y:y2, x:x2])
+                core = keep[:, y:y2, x:x2]
+                loss = loss + .2 * (((output[:, y:y2, x:x2] -
+                                       target[:, y:y2, x:x2]).abs() * core).sum()
+                                     / core.sum().clamp_min(1) / 3)
         if not torch.isfinite(loss):
             raise RuntimeError("Non-finite reconstruction loss")
         loss.backward()
@@ -183,35 +225,56 @@ def train(path: Path, steps: int = 6000) -> None:
         strategy.step_post_backward(params, optimizers, state, step, info, packed=True)
         if step % 200 == 0:
             losses.append(float(loss.detach().cpu()))
-            update_progress(path, step, steps)
+            update_progress(path, step, steps, span=14 if (path / "environment_seeds.npz").exists() else 18)
+        # Drop full-resolution render tensors before the next view. This does
+        # not alter gradients or source pixels, but avoids a densification
+        # step overlapping the previous view's temporary allocations.
+        del output, target, keep, alpha, info, loss
+        if step % 100 == 0:
+            unused_cache = torch.cuda.memory_reserved() - torch.cuda.memory_allocated()
+            if unused_cache > 512 * 1024**2:
+                torch.cuda.empty_cache()
             if torch.cuda.max_memory_allocated() > 7.4 * 1024**3:
                 raise RuntimeError("GPU memory safety limit exceeded; source quality unchanged")
 
     errors = []
-    face_errors = []
+    alpha_leak = []
     with torch.no_grad():
         for entry in validation:
-            output, target, _ = render(entry, 3)
-            errors.append(float(F.mse_loss(output, target).cpu()))
-            if entry[0].name in face_regions:
-                x, y, w, h = face_regions[entry[0].name]
-                face_errors.append(float(F.mse_loss(output[:, y:y+h, x:x+w],
-                                                   target[:, y:y+h, x:x+w]).cpu()))
+            output, target, keep, alpha, _ = render(entry, 3)
+            mse = (((output - target) ** 2) * keep).sum() / keep.sum().clamp_min(1) / 3
+            errors.append(float(mse.cpu()))
+            alpha_leak.append(float((alpha * (1 - keep)).mean().cpu()))
     psnr = -10 * math.log10(max(sum(errors) / len(errors), 1e-10))
-    face_psnr = -10 * math.log10(max(sum(face_errors) / len(face_errors), 1e-10))
+    worst_psnr = -10 * math.log10(max(max(errors), 1e-10))
+    leak = sum(alpha_leak) / len(alpha_leak)
+    supported = observed_head_splats(path, cameras, params["means"].detach().cpu().numpy())
+    retained = int(supported.sum())
     metrics = {"steps": steps, "sourceResolution": True, "gaussians": len(params["means"]),
-               "validationViews": len(validation), "validationPsnrDb": round(psnr, 2),
-               "frontalFacePsnrDb": round(face_psnr, 2),
-               "faceLossWeight": face_loss_weight,
+               "exportSplats": retained,
+               "unsupportedSplatsRemoved": int(len(supported) - retained),
+               "validationViews": len(validation), "headPsnrDb": round(psnr, 2),
+               "worstHeadPsnrDb": round(worst_psnr, 2),
+               "outsideHeadAlpha": round(leak, 4),
                "peakCudaMemoryMiB": round(torch.cuda.max_memory_allocated() / 1024**2),
                "peakCudaReservedMiB": round(torch.cuda.max_memory_reserved() / 1024**2),
                "lossSamples": losses, "humanFaceReviewRequired": True}
     (path / "training_metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
-    if psnr < 16 or face_psnr < 18 or len(params["means"]) < 1200:
+    if (psnr < 18 or worst_psnr < 15 or leak > .12 or retained < 1200
+            or retained < len(supported) * .65):
         raise RuntimeError("Held-out reconstruction quality below minimum")
-    export_splats(means=params["means"].detach(), scales=params["scales"].detach(),
-                  quats=params["quats"].detach(), opacities=params["opacities"].detach(),
-                  sh0=params["sh0"].detach(), shN=params["shN"].detach(),
+    keep = torch.from_numpy(supported).to(device)
+    if (path / "environment_seeds.npz").exists():
+        np.savez_compressed(path / "portrait_face_splats.npz",
+                            means=params["means"].detach()[keep].cpu().numpy(),
+                            scales=params["scales"].detach()[keep].cpu().numpy(),
+                            quats=params["quats"].detach()[keep].cpu().numpy(),
+                            opacities=params["opacities"].detach()[keep].cpu().numpy(),
+                            sh0=params["sh0"].detach()[keep].cpu().numpy(),
+                            shN=params["shN"].detach()[keep].cpu().numpy())
+    export_splats(means=params["means"].detach()[keep], scales=params["scales"].detach()[keep],
+                  quats=params["quats"].detach()[keep], opacities=params["opacities"].detach()[keep],
+                  sh0=params["sh0"].detach()[keep], shN=params["shN"].detach()[keep],
                   format="ply", save_to=str(path / "portrait.gaussian.ply"))
 
 

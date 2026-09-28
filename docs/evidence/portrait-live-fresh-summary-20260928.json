@@ -1,0 +1,17 @@
+{
+  "sourceSha256": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+  "assetSha256": "4ed3c378bc9ca68bb3656197ab89a5ed7d5b8b7c0c2c6435076ede6b3fe65a37",
+  "engineVersion": "portrait-first-soft-surface-0.1-research",
+  "preparationSeconds": 220.65413734699996,
+  "trainingSeconds": 132.99923901300008,
+  "allocatedPeakMiB": 218.076171875,
+  "reservedPeakMiB": 444.0,
+  "pointCount": 11341,
+  "localViews": 32,
+  "worldViews": 21,
+  "worldTrain": 17,
+  "worldDevelopment": 4,
+  "releaseApproved": false,
+  "freshObservationPipeline": true,
+  "crossPersonCaptureVerified": false
+}

@@ -1,9 +1,9 @@
 import { fileIo as fs } from '@kit.CoreFileKit';
 import { webview } from '@kit.ArkWeb';
-import { RendererBridge, Envelope, MessagePayload } from '../bridge/RendererBridge';
+import { RendererBridge, Envelope, MessagePayload, GsViewSnapshot } from '../bridge/RendererBridge';
 
 export interface GsSelection {regionId:string;count:number;total:number;x:number;y:number;}
-export interface GsCapture {width:number;height:number;images:number;}
+export interface GsCapture {width:number;height:number;images:number;view?:GsViewSnapshot;}
 
 /** App-private 3DGS bytes served only to the bundled, offline viewer. */
 @Component
@@ -17,7 +17,8 @@ export struct GaussianPortraitSurface {
   onEditFailure:(message:string)=>void=()=>{};
   onInteraction:()=>void=()=>{};
   onSelection:(selection:GsSelection,mask:ArrayBuffer)=>void=()=>{};
-  onCapture:(clean:ArrayBuffer,annotated:ArrayBuffer,width:number,height:number)=>void=()=>{};
+  onCapture:(clean:ArrayBuffer,annotated:ArrayBuffer,width:number,height:number,view?:GsViewSnapshot)=>void=()=>{};
+  onViewSnapshot:(view:GsViewSnapshot)=>void=()=>{};
   onApplied:(action:string)=>void=()=>{};
   onBackgroundTone:(light:boolean)=>void=()=>{};
   private controller:webview.WebviewController=new webview.WebviewController();
@@ -45,7 +46,8 @@ export struct GaussianPortraitSurface {
         message.payload.x!==undefined&&message.payload.y!==undefined)
         this.selection={regionId:message.payload.regionId||'gs-selected',count:message.payload.count,total:message.payload.total,x:message.payload.x,y:message.payload.y};
       if(message.type==='GS_CAPTURE'&&message.payload.width!==undefined&&message.payload.height!==undefined&&message.payload.images!==undefined)
-        this.capture={width:message.payload.width,height:message.payload.height,images:message.payload.images};
+        this.capture={width:message.payload.width,height:message.payload.height,images:message.payload.images,view:message.payload.gsView};
+      if(message.type==='GS_VIEW'&&message.payload.gsView)this.onViewSnapshot(message.payload.gsView);
       if(message.type==='GS_APPLIED')this.onApplied(message.payload.action||'');
       if(message.type==='GS_TONE'&&message.payload.light!==undefined)this.onBackgroundTone(message.payload.light);
     };
@@ -57,7 +59,7 @@ export struct GaussianPortraitSurface {
       }
       if(kind==='gs-clean')this.clean=bytes;
       if(kind==='gs-annotated'&&this.clean&&this.capture){
-        this.onCapture(this.clean,bytes,this.capture.width,this.capture.height);
+        this.onCapture(this.clean,bytes,this.capture.width,this.capture.height,this.capture.view);
         this.clean=undefined;this.capture=undefined;
       }
     };

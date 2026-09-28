@@ -12,11 +12,11 @@ import sys
 from pathlib import Path
 
 
-def derive(path: Path) -> dict:
+def derive(path: Path, model_path: Path | None = None) -> dict:
     import numpy as np
     import pycolmap
 
-    model = pycolmap.Reconstruction(path / "sparse" / "0")
+    model = pycolmap.Reconstruction(model_path or path / "sparse" / "0")
     faces = json.loads((path / "face_regions.json").read_text(encoding="utf-8"))
     candidates = []
     for image in model.images.values():
@@ -45,6 +45,7 @@ def derive(path: Path) -> dict:
             continue
         intrinsic = np.asarray(camera.calibration_matrix(), dtype=np.float64)
         source_fov = 2 * math.atan(camera.height / (2 * intrinsic[1, 1]))
+        source_horizontal_fov = 2 * math.atan(camera.width / (2 * intrinsic[0, 0]))
         face_fraction = h / camera.height
         target_fraction = .5
         fov = 2 * math.atan(math.tan(source_fov / 2) * min(1.0, face_fraction / target_fraction))
@@ -59,6 +60,7 @@ def derive(path: Path) -> dict:
             "camera": [float(v) for v in camera_center],
             "up": [float(v) for v in -world_from_camera[:, 1]],
             "fovDegrees": round(fov_degrees, 3),
+            "captureHorizontalFovDegrees": round(math.degrees(source_horizontal_fov), 3),
             "faceTrackCount": len(visible),
             "sourceFaceFraction": round(face_fraction, 4),
             "targetFaceFraction": target_fraction,
@@ -72,19 +74,21 @@ def derive(path: Path) -> dict:
     return max(early, key=lambda item: item[1])[2]
 
 
-def coverage(path: Path, view: dict) -> dict:
+def coverage(path: Path, view: dict, model_path: Path | None = None) -> dict:
     """Use recovered *camera* positions, not estimated head yaw, as coverage proof."""
     import numpy as np
     import pycolmap
 
-    model = pycolmap.Reconstruction(path / "sparse" / "0")
+    model = pycolmap.Reconstruction(model_path or path / "sparse" / "0")
     target = np.asarray(view["target"], dtype=np.float64)
     front = np.asarray(view["camera"], dtype=np.float64) - target
     front /= np.linalg.norm(front)
     up = np.asarray(view["up"], dtype=np.float64)
+    opening_pitch = math.degrees(math.asin(float(np.clip(front @ up, -1, 1))))
     right = np.cross(up, front)
     right /= np.linalg.norm(right)
     angles = []
+    elevations = []
     for image in model.images.values():
         if not image.has_pose:
             continue
@@ -98,6 +102,8 @@ def coverage(path: Path, view: dict) -> dict:
         yaw = math.degrees(math.atan2(float(direction @ right), float(direction @ front)))
         if math.isfinite(yaw):
             angles.append(yaw)
+            elevations.append(math.degrees(math.asin(float(np.clip(direction @ up, -1, 1))))
+                              - opening_pitch)
     if not angles:
         raise RuntimeError("No usable registered camera poses")
     bins = {round(angle / 10) for angle in angles if abs(angle) <= 55}
@@ -105,6 +111,8 @@ def coverage(path: Path, view: dict) -> dict:
     right_count = sum(angle >= 35 for angle in angles)
     return {"registeredViews": len(angles), "minYawDegrees": round(min(angles), 1),
             "maxYawDegrees": round(max(angles), 1), "tenDegreeBins": len(bins),
+            "minPitchDegrees": round(min(elevations), 1),
+            "maxPitchDegrees": round(max(elevations), 1),
             "leftViews": left, "rightViews": right_count,
             "broadSideCoverage": left >= 2 and right_count >= 2 and len(bins) >= 7}
 

@@ -1,5 +1,11 @@
 import { webview } from '@kit.ArkWeb';
 import { SceneView } from '../domain/EditPlan';
+export interface GsViewSnapshot {
+  snapshotId:string;assetId:string;capturedAt:number;frame:number;cameraRevision:number;editRevision:number;
+  position:number[];rotation:number[];target:number[];yaw:number;pitch:number;distance:number;
+  fovDegrees:number;nearClip:number;farClip:number;viewportWidth:number;viewportHeight:number;
+  mirrored:boolean;crop:string;
+}
 export interface MessagePayload {
   action?:string;
   serial?:number;
@@ -32,6 +38,7 @@ export interface MessagePayload {
   anchorOperations?: RenderOperation[];
   webgl2?: boolean;
   light?: boolean;
+  gsView?: GsViewSnapshot;
 }
 export interface GsRenderLayer {maskBase64:string;preset:string;strength:number;}
 export interface RenderOperation {

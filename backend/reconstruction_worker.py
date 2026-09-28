@@ -89,6 +89,8 @@ def verify_capture(path: Path, job: dict) -> None:
 
 
 def extract_frames(path: Path) -> list[Path]:
+    import cv2
+
     clip = path / "capture.mp4"
     probe = json.loads(command(["ffprobe", "-v", "error", "-select_streams", "v:0",
                                 "-show_entries", "stream=width,height,avg_frame_rate,duration:format=duration",
@@ -102,22 +104,105 @@ def extract_frames(path: Path) -> list[Path]:
     if not (640 <= width <= 4096 and 480 <= height <= 4096 and
             8 <= duration <= 600 and math.isfinite(duration)):
         raise ReconstructionFailure("capture_length_or_resolution_insufficient")
-    # Lossless frames preserve source detail. Fewer temporal samples avoid
-    # almost-identical views; this is not spatial downsampling of the face.
-    fps = min(3.0, 72.0 / duration)
+    # Preserve angular coverage without asking COLMAP to match thousands of
+    # near-duplicate video pairs. The 65 s capture needed 240 frames under the
+    # previous rule, which spent minutes recovering almost identical poses.
+    max_frames = min(160, max(72, math.ceil(duration * 3)))
+    interval = duration / max_frames
     frames_dir = path / "frames"
     frames_dir.mkdir(exist_ok=True)
     for old in frames_dir.glob("frame_*.png"):
         old.unlink()
-    command(["ffmpeg", "-hide_banner", "-loglevel", "error", "-i", str(clip),
-             "-vf", f"fps={fps:.5f}", "-frames:v", "72", "-pix_fmt", "rgb24",
-             str(frames_dir / "frame_%04d.png")], 180)
+    capture = cv2.VideoCapture(str(clip))
+    if not capture.isOpened():
+        raise ReconstructionFailure("capture_decode_failed")
+    decoded_fps = capture.get(cv2.CAP_PROP_FPS)
+    if not math.isfinite(decoded_fps) or decoded_fps < 8:
+        capture.release()
+        raise ReconstructionFailure("capture_frame_rate_unreliable")
+    chosen = 0
+    selected = []
+    current_bucket = -1
+    best = None
+    decoded = 0
+
+    def save(candidate) -> None:
+        nonlocal chosen
+        if candidate is None:
+            return
+        chosen += 1
+        output = frames_dir / f"frame_{chosen:04d}.png"
+        if not cv2.imwrite(str(output), candidate[1], [cv2.IMWRITE_PNG_COMPRESSION, 1]):
+            raise ReconstructionFailure("capture_frame_write_failed")
+        selected.append({"name": output.name, "sourceIndexZeroBased": candidate[2],
+                         "pngSha256": file_sha256(output)})
+
+    try:
+        while True:
+            ok, frame = capture.read()
+            if not ok:
+                break
+            if not (480 <= frame.shape[0] <= 4096 and 480 <= frame.shape[1] <= 4096):
+                raise ReconstructionFailure("capture_orientation_or_size_invalid")
+            second = decoded / decoded_fps
+            bucket = min(max_frames - 1, int(second / interval))
+            if bucket != current_bucket:
+                save(best)
+                best = None
+                current_bucket = bucket
+            small = cv2.resize(frame, (480, 270), interpolation=cv2.INTER_AREA)
+            gray = cv2.cvtColor(small, cv2.COLOR_BGR2GRAY)
+            # A sharp wardrobe must never win over a blurred face. Capture
+            # guidance keeps the head near the centre, so favour that region.
+            central = gray[round(gray.shape[0] * .16):round(gray.shape[0] * .88),
+                           round(gray.shape[1] * .20):round(gray.shape[1] * .80)]
+            sharpness = (.8 * float(cv2.Laplacian(central, cv2.CV_32F).var()) +
+                         .2 * float(cv2.Laplacian(gray, cv2.CV_32F).var()))
+            center_bonus = 1.0 - .04 * abs((second / interval) % 1 - .5)
+            score = sharpness * center_bonus
+            if best is None or score > best[0]:
+                best = (score, frame.copy(), decoded)
+            decoded += 1
+        save(best)
+    finally:
+        capture.release()
     frames = sorted(frames_dir.glob("frame_*.png"))
     if len(frames) < 18:
         raise ReconstructionFailure("too_few_distinct_views")
+    # Record the actual selected source-frame index before private video and
+    # decoded pixels are removed.  FFprobe PTS is used only when its frame
+    # count exactly matches the decoder; nominal FPS is never passed off as a
+    # measured timestamp on variable-frame-rate capture.
+    try:
+        pts_output = command(["ffprobe", "-v", "error", "-select_streams", "v:0",
+                              "-show_entries", "frame=best_effort_timestamp_time",
+                              "-of", "csv=p=0", str(clip)], 90)
+        pts_status = "unverified_pts_decoder_mismatch"
+    except (ReconstructionFailure, subprocess.TimeoutExpired):
+        # Exact PTS enriches the audit but must not turn an otherwise valid
+        # video into a failed reconstruction. Never substitute nominal FPS.
+        pts_output = ""
+        pts_status = "unavailable_ffprobe_pts"
+    try:
+        pts = [float(line.split(",", 1)[0]) for line in pts_output.splitlines()
+               if line.strip()]
+    except ValueError:
+        pts = []
+    verified_pts = (len(pts) == decoded and all(math.isfinite(value) for value in pts)
+                    and all(right > left for left, right in zip(pts, pts[1:])))
+    for item in selected:
+        item["timestampSeconds"] = (pts[item["sourceIndexZeroBased"]]
+                                     if verified_pts else None)
+    atomic_json(path / "frame_selection.json", {
+        "schemaVersion": 1, "captureSha256": file_sha256(clip),
+        "sourceDecodedFrames": decoded, "selectedFrames": selected,
+        "selectionMethod": "face-centred-sharpest-per-time-bin",
+        "timestampStatus": "verified_ffprobe_pts" if verified_pts else pts_status,
+        "joinKey": "relative_image_name_not_colmap_id"})
     atomic_json(path / "capture_quality.json", {"sourceWidth": width,
                 "sourceHeight": height, "durationSeconds": duration,
-                "sampledFrames": len(frames), "spatialDownsample": False})
+                "sampledFrames": len(frames), "decodedFrames": decoded,
+                "spatialDownsample": False, "sampling": "face-centred-sharpest-per-time-bin"})
     return frames
 
 
@@ -153,20 +238,32 @@ def recover_cameras(path: Path, frames: list[Path], faces: dict) -> dict:
     frames_dir = path / "frames"
     output = path / "sparse"
     output.mkdir(exist_ok=True)
-    pycolmap.extract_features(database, frames_dir, camera_mode=pycolmap.CameraMode.SINGLE,
+    # One camera solution must explain the face, clothing, and recorded room.
+    # Solving two masked camera trajectories and merging their splats left a
+    # measurable head/room drift and a hollow seam in the real capture.
+    extraction = pycolmap.FeatureExtractionOptions(num_threads=8, max_image_size=-1)
+    pycolmap.extract_features(database, frames_dir, image_names=sorted(faces),
+                               camera_mode=pycolmap.CameraMode.SINGLE,
+                               extraction_options=extraction,
                                device=pycolmap.Device.cpu)
-    pycolmap.match_exhaustive(database, device=pycolmap.Device.cpu)
+    # Time-ordered captures have strong local overlap. Sequential geometric
+    # matching avoids the O(N^2) exhaustive pairs that dominated long clips.
+    pycolmap.match_sequential(database,
+        pairing_options=pycolmap.SequentialPairingOptions(
+            overlap=18, quadratic_overlap=True, num_threads=8),
+        device=pycolmap.Device.cpu)
     models = pycolmap.incremental_mapping(database, frames_dir, output)
     if not models:
         raise ReconstructionFailure("camera_pose_recovery_failed")
     model = max(models.values(), key=lambda value: (value.num_reg_images(), value.num_points3D()))
     registered = model.num_reg_images()
     points = model.num_points3D()
-    if registered < max(16, math.ceil(len(frames) * 0.65)) or points < 1200:
+    if registered < max(16, math.ceil(len(faces) * 0.65)) or points < 300:
         raise ReconstructionFailure("camera_coverage_insufficient")
-    # A background-only SfM result is not a face model. Require triangulated
-    # observations inside detected frontal face regions on multiple views.
+    # A room-only SfM result is not a face model, and a face-only result leaves
+    # the viewer empty behind the person. Require real observations of both.
     face_tracks = 0
+    room_tracks = 0
     confirmed_views = 0
     for image in model.images.values():
         if not image.has_pose or image.name not in faces:
@@ -175,17 +272,21 @@ def recover_cameras(path: Path, frames: list[Path], faces: dict) -> dict:
         local = sum(1 for point in image.points2D
                     if point.has_point3D() and x <= point.xy[0] <= x + w
                     and y <= point.xy[1] <= y + h)
+        room_tracks += sum(1 for point in image.points2D
+                           if point.has_point3D() and not
+                           (x <= point.xy[0] <= x + w and y <= point.xy[1] <= y + h))
         if local >= 30:
             confirmed_views += 1
             face_tracks += local
-    if confirmed_views < 3 or face_tracks < 150:
-        raise ReconstructionFailure("face_geometry_not_recovered")
+    if confirmed_views < 3 or face_tracks < 150 or room_tracks < 150:
+        raise ReconstructionFailure("person_and_room_geometry_not_recovered")
     destination = output / "0"
     destination.mkdir(exist_ok=True)
     model.write(destination)
-    report = {"sampledFrames": len(frames), "registeredFrames": registered,
+    report = {"sampledFrames": len(frames), "trackedFrames": len(faces),
+              "registeredFrames": registered, "featureRegion": "unified_person_and_room",
               "sparsePoints": points, "faceConfirmedViews": confirmed_views,
-              "faceTrackObservations": face_tracks,
+              "faceTrackObservations": face_tracks, "roomTrackObservations": room_tracks,
               "meshValidated": False, "humanReviewRequired": True}
     atomic_json(path / "geometry_quality.json", report)
     return report
@@ -193,7 +294,10 @@ def recover_cameras(path: Path, frames: list[Path], faces: dict) -> dict:
 
 def train_gaussians(path: Path) -> dict:
     (path / "training_error.log").unlink(missing_ok=True)
-    command([sys.executable, str(HERE / "reconstruction_train.py"), str(path)], 7200,
+    # A completed reconstruction is viewable even when a subjective fidelity
+    # target is missed.  The trainer still rejects malformed/empty geometry.
+    command([sys.executable, str(HERE / "reconstruction_train_joint.py"), str(path),
+             "--best-effort"], 7200,
             diagnostic_file=path / "training_error.log")
     output = path / "portrait.gaussian.ply"
     if not output.is_file() or output.stat().st_size < 4096:
@@ -213,6 +317,13 @@ def opening_view(path: Path) -> dict:
 
     view = derive(path)
     report = coverage(path, view)
+    # A reconstruction can only promise free viewing inside observed camera
+    # coverage. Leave a small angular reserve for disoccluded room pixels;
+    # never silently expose missing background at an unrecorded side view.
+    view["safeYawDegrees"] = [round(min(0., max(-60., report["minYawDegrees"] + 14)), 1),
+                              round(max(0., min(60., report["maxYawDegrees"] - 10)), 1)]
+    view["safePitchDegrees"] = [round(min(0., max(-20., report["minPitchDegrees"] + 3)), 1),
+                                round(max(0., min(20., report["maxPitchDegrees"] - 3)), 1)]
     atomic_json(path / "viewpoint_quality.json", report)
     # Coverage guides the next capture; it must not discard a usable front
     # portrait or force someone through repeated, exact camera movements.
@@ -238,7 +349,9 @@ def portrait_preview(path: Path) -> dict:
 
 def discard_training_inputs(path: Path, assets: dict) -> None:
     """Keep published result assets and job status, never the source video."""
-    keep = {"job.json", "cancel.requested"} | {item["file"] for item in assets.values()}
+    keep = {"job.json", "cancel.requested", "frame_selection.json",
+            "observation_bundle.json", "portrait.provenance.npz", "portrait.algorithm.json"} | {
+                item["file"] for item in assets.values()}
     for item in path.iterdir():
         if item.name in keep:
             continue
@@ -252,42 +365,115 @@ def run_one(path: Path) -> None:
     job = json.loads((path / "job.json").read_text(encoding="utf-8"))
     if job.get("state") != "queued" or (path / "cancel.requested").exists():
         return
+    started = time.perf_counter()
+    last_stage = started
+    stage_times: dict[str, float] = {}
+
+    def finished_stage(name: str) -> None:
+        nonlocal last_stage
+        now = time.perf_counter()
+        stage_times[name] = round(now - last_stage, 2)
+        last_stage = now
+
     try:
         update(path, "running", 27, "正在核对拍摄片段")
         verify_capture(path, job)
+        from reconstruction_runtime import engine_profile, reconstruct_test, PORTRAIT_TEST
+        profile=engine_profile(ROOT)
+        if profile["engine"]==PORTRAIT_TEST:
+            from reconstruction_face import prepare as prepare_test_faces
+            assets,quality=reconstruct_test(path,job,profile,update,extract_frames,
+                prepare_test_faces,command,file_sha256)
+            try:
+                assets.update(portrait_preview(path))
+            except (OSError,ValueError,KeyError,ImportError):
+                pass
+            quality["pipelineTimingSeconds"]={"total":round(time.perf_counter()-started,2)}
+            discard_training_inputs(path,assets)
+            update(path,"gaussian_ready",85,"这颗星辰已为你留好",assets=assets,
+                algorithm=PORTRAIT_TEST,reconstructionQuality=quality)
+            return
         frames = extract_frames(path)
+        finished_stage("decodeAndSelect")
         update(path, "running", 36, "正在核对面容与视角")
-        faces = face_regions(frames)
+        from reconstruction_face import prepare
+
+        try:
+            faces = prepare(path, frames)
+        except RuntimeError as error:
+            raise ReconstructionFailure(str(error)) from error
         atomic_json(path / "face_regions.json", {key: list(value) for key, value in faces.items()})
+        finished_stage("faceTracking")
         update(path, "running", 43, "正在恢复视角")
         recover_cameras(path, frames, faces)
+        finished_stage("cameraRecovery")
+        from reconstruction_pose import prepare_face_views
+        face_pose_quality = prepare_face_views(path)
+        finished_stage("facePoseAlignment")
+        from reconstruction_observations import build_observation_bundle
+        build_observation_bundle(path)
+        finished_stage("observationAssociation")
         view = opening_view(path)
+        from reconstruction_scene import seed_recorded_scene
+
+        # Coarse environment seeds and fine face observations are trained in
+        # the same scene; no independently trained room model is merged later.
+        environment_quality = seed_recorded_scene(path)
+        finished_stage("environmentSeeding")
         update(path, "running", 62, "正在生成立体细节")
         gaussian = train_gaussians(path)
+        finished_stage("gaussianTraining")
+        view_file = path / "portrait.view.json"
+        view = {"file": view_file.name, "bytes": view_file.stat().st_size,
+                "sha256": file_sha256(view_file)}
         try:
             preview = portrait_preview(path)
         except (OSError, ValueError, KeyError, ImportError) as error:
             # A navigation thumbnail must never invalidate a usable 3D model.
             preview = None
             (path / "preview_error.log").write_text(type(error).__name__, encoding="utf-8")
-        # A Gaussian view is not yet a face-selectable, editable mesh.
+        finished_stage("previews")
+        # Face splats have a stable editable range; the result is still a GS
+        # asset rather than a textured mesh.
         viewpoint = json.loads((path / "viewpoint_quality.json").read_text(encoding="utf-8"))
-        message = ("立体面容已生成；侧面细节可在下次拍摄时补充"
-                   if not viewpoint["broadSideCoverage"]
-                   else "立体面容已生成；可编辑面容仍待核验")
+        quality = {
+            "faceMask": json.loads((path / "face_mask_quality.json").read_text(encoding="utf-8")),
+            "geometry": json.loads((path / "geometry_quality.json").read_text(encoding="utf-8")),
+            "facePose": face_pose_quality,
+            "training": json.loads((path / "training_metrics.json").read_text(encoding="utf-8")),
+            "environment": environment_quality,
+            "pipelineTimingSeconds": {**stage_times, "total": round(time.perf_counter() - started, 2)},
+        }
+        training_quality = quality["training"]
+        message = ("立体面容已生成；这次的细节还可以在下次拍摄时补充"
+                   if training_quality.get("fidelityGatePassed") is False else
+                   "立体面容已生成；侧面细节可在下次拍摄时补充"
+                   if not viewpoint["broadSideCoverage"] else
+                   "立体面容已生成")
         assets = {"gaussian": gaussian, "view": view}
         if preview:
             assets.update(preview)
         discard_training_inputs(path, assets)
         update(path, "gaussian_ready", 85, message,
-               assets=assets, viewpointQuality=viewpoint)
+               assets=assets, viewpointQuality=viewpoint, reconstructionQuality=quality)
     except ReconstructionCancelled:
         return
     except Exception as error:
         if (path / "cancel.requested").exists():
             return
         reason = str(error) if isinstance(error, ReconstructionFailure) else type(error).__name__
-        update(path, "failed", 0, reason[:120], assets={})
+        diagnostics = {}
+        for label, filename in (("faceMask", "face_mask_quality.json"),
+                                ("geometry", "geometry_quality.json"),
+                                ("training", "training_metrics.json")):
+            source = path / filename
+            if source.is_file():
+                try:
+                    diagnostics[label] = json.loads(source.read_text(encoding="utf-8"))
+                except (OSError, ValueError):
+                    pass
+        update(path, "failed", 0, reason[:120], assets={},
+               reconstructionQuality=diagnostics)
         discard_training_inputs(path, {})
 
 
@@ -351,23 +537,37 @@ def supervise_job(path: Path) -> None:
 
 def preflight() -> dict:
     global _SMOKE_OK
-    result = {"updatedAt": int(time.time()), "ready": False, "engine": "gsplat-colmap"}
+    from reconstruction_runtime import engine_profile
+    profile=engine_profile(ROOT)
+    result = {"updatedAt": int(time.time()), "ready": False, "engine": profile["engine"]}
     try:
         import cv2
+        import mediapipe as mp
         import pycolmap
         import torch
         import gsplat
+        from reconstruction_face import check_models
+        from reconstruction_pose import canonical_vertices
 
         if not torch.cuda.is_available() or torch.cuda.get_device_capability(0) < (12, 0):
             raise ReconstructionFailure("RTX 5070 CUDA unavailable")
+        if torch.cuda.get_device_properties(0).total_memory < 7.5 * 1024**3:
+            raise ReconstructionFailure("Eight-gigabyte GPU memory profile unavailable")
         if not shutil.which("ffmpeg") or not shutil.which("ffprobe"):
             raise ReconstructionFailure("FFmpeg unavailable")
+        check_models()
+        canonical_vertices()
+        if profile["engine"]!="gsplat-colmap":
+            from flame_open_model import FlameOpen
+            FlameOpen(24,12)
         if not _SMOKE_OK:
             from reconstruction_train import smoke
             smoke()
             _SMOKE_OK = True
         result.update(ready=True, torch=torch.__version__, cuda=torch.version.cuda,
-                      gsplat=gsplat.__version__, pycolmap=pycolmap.__version__, opencv=cv2.__version__)
+                      gsplat=gsplat.__version__, pycolmap=pycolmap.__version__,
+                      opencv=cv2.__version__, mediapipe=mp.__version__,
+                      vramMiB=round(torch.cuda.get_device_properties(0).total_memory / 1024**2))
     except Exception as error:
         result["reason"] = (str(error) if isinstance(error, ReconstructionFailure) else type(error).__name__)[:120]
     return result

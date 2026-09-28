@@ -1,0 +1,3203 @@
+{
+  "date": "2026-09-28",
+  "scope": "isolated research, no product default or tablet publication",
+  "runs": {
+    "d": {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-d",
+      "assetHash": "ae3a896995186a84d90565c500ea29ef2ef70aff923de450015fca672e9ce66a",
+      "sourceHash": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+      "reference": "frame_0111.png",
+      "steps": 1800,
+      "counts": {
+        "room_static": 22020,
+        "skin_face_head": 5486,
+        "hair": 267,
+        "glasses": 16,
+        "neck_shoulder_cloth": 1762
+      },
+      "seconds": 144.2766529520004,
+      "wrapperSeconds": 167.55,
+      "torchAllocatedMiB": 976.82275390625,
+      "torchReservedMiB": 1146.0,
+      "devicePeakUsedMiB": 1543,
+      "trainViews": 59,
+      "developmentViews": 5,
+      "final": {
+        "frame_0015.png": {
+          "faceCoreRgbL1": 0.022957582026720047,
+          "roomRgbL1": 0.0442771352827549,
+          "roomCoverage": 0.9363269209861755,
+          "faceHoleRatio": 0.0,
+          "coreContribution": {
+            "room_static": 0.003280359786003828,
+            "skin_face_head": 0.983568549156189,
+            "hair": 0.000669918314088136,
+            "glasses": 0.007993700914084911,
+            "neck_shoulder_cloth": 0.0041158609092235565
+          },
+          "conservation": 6.556510925292969E-07,
+          "features": {
+            "face": {
+              "fixedPatchRgbL1IncludingMissing": 0.03274517506361008,
+              "signedHorizontalEdgeL1": 0.007976353168487549,
+              "sourceGradientMean": 0.007731352001428604,
+              "renderGradientMean": 0.0029536262154579163
+            },
+            "hair": {
+              "fixedPatchRgbL1IncludingMissing": 0.04165608808398247,
+              "signedHorizontalEdgeL1": 0.009232698008418083,
+              "sourceGradientMean": 0.008967340923845768,
+              "renderGradientMean": 0.0031816475093364716
+            },
+            "nose": {
+              "fixedPatchRgbL1IncludingMissing": 0.04010975733399391,
+              "signedHorizontalEdgeL1": 0.008273815736174583,
+              "sourceGradientMean": 0.008334954269230366,
+              "renderGradientMean": 0.0034049884416162968
+            },
+            "lips": {
+              "fixedPatchRgbL1IncludingMissing": 0.022353168576955795,
+              "signedHorizontalEdgeL1": 0.004848533309996128,
+              "sourceGradientMean": 0.0047782049514353275,
+              "renderGradientMean": 0.002749384380877018
+            },
+            "eyes_glasses": {
+              "fixedPatchRgbL1IncludingMissing": 0.04420715570449829,
+              "signedHorizontalEdgeL1": 0.015611105598509312,
+              "sourceGradientMean": 0.015539140440523624,
+              "renderGradientMean": 0.003920841962099075
+            }
+          },
+          "nativePixelFootprintRadius": {
+            "room_static": [
+              10.0,
+              18.0,
+              60.0
+            ],
+            "skin_face_head": [
+              24.0,
+              32.0,
+              46.0
+            ],
+            "hair": [
+              48.0,
+              82.79998779296875,
+              131.3599853515625
+            ],
+            "glasses": [
+              24.0,
+              32.0,
+              42.20000457763672
+            ],
+            "neck_shoulder_cloth": [
+              28.0,
+              118.0,
+              458.720703125
+            ]
+          }
+        },
+        "frame_0035.png": {
+          "faceCoreRgbL1": 0.01922840252518654,
+          "roomRgbL1": 0.04862111806869507,
+          "roomCoverage": 0.9442288875579834,
+          "faceHoleRatio": 0.0007495315512642264,
+          "coreContribution": {
+            "room_static": 0.0017182102892547846,
+            "skin_face_head": 0.9798785448074341,
+            "hair": 0.0014559911796823144,
+            "glasses": 0.009640266187489033,
+            "neck_shoulder_cloth": 0.0068976921029388905
+          },
+          "conservation": 7.152557373046875E-07,
+          "features": {
+            "face": {
+              "fixedPatchRgbL1IncludingMissing": 0.03189541772007942,
+              "signedHorizontalEdgeL1": 0.007153021637350321,
+              "sourceGradientMean": 0.00668371981009841,
+              "renderGradientMean": 0.002630927599966526
+            },
+            "hair": {
+              "fixedPatchRgbL1IncludingMissing": 0.06353837251663208,
+              "signedHorizontalEdgeL1": 0.01069766003638506,
+              "sourceGradientMean": 0.00997927039861679,
+              "renderGradientMean": 0.0033111688680946827
+            },
+            "nose": {
+              "fixedPatchRgbL1IncludingMissing": 0.03953692689538002,
+              "signedHorizontalEdgeL1": 0.009241396561264992,
+              "sourceGradientMean": 0.008122510276734829,
+              "renderGradientMean": 0.004841862712055445
+            },
+            "lips": {
+              "fixedPatchRgbL1IncludingMissing": 0.02946452610194683,
+              "signedHorizontalEdgeL1": 0.006073926109820604,
+              "sourceGradientMean": 0.005430011544376612,
+              "renderGradientMean": 0.003379977075383067
+            },
+            "eyes_glasses": {
+              "fixedPatchRgbL1IncludingMissing": 0.04856199398636818,
+              "signedHorizontalEdgeL1": 0.016628311946988106,
+              "sourceGradientMean": 0.01551273837685585,
+              "renderGradientMean": 0.004253255669027567
+            }
+          },
+          "nativePixelFootprintRadius": {
+            "room_static": [
+              10.0,
+              18.0,
+              86.0
+            ],
+            "skin_face_head": [
+              24.0,
+              31.0,
+              46.0
+            ],
+            "hair": [
+              48.0,
+              82.79998779296875,
+              136.03997802734375
+            ],
+            "glasses": [
+              24.0,
+              30.0,
+              40.20000457763672
+            ],
+            "neck_shoulder_cloth": [
+              28.0,
+              114.599853515625,
+              447.48193359375
+            ]
+          }
+        },
+        "frame_0115.png": {
+          "faceCoreRgbL1": 0.02299903705716133,
+          "roomRgbL1": 0.06489840894937515,
+          "roomCoverage": 0.9347394108772278,
+          "faceHoleRatio": 0.0002152521483367309,
+          "coreContribution": {
+            "room_static": 0.004541829228401184,
+            "skin_face_head": 0.9843586683273315,
+            "hair": 0.0007609045715071261,
+            "glasses": 0.007064405363053083,
+            "neck_shoulder_cloth": 0.0024764363188296556
+          },
+          "conservation": 5.960464477539062E-07,
+          "features": {
+            "face": {
+              "fixedPatchRgbL1IncludingMissing": 0.07474081963300705,
+              "signedHorizontalEdgeL1": 0.0086574237793684,
+              "sourceGradientMean": 0.007865196093916893,
+              "renderGradientMean": 0.0033258439507335424
+            },
+            "hair": {
+              "fixedPatchRgbL1IncludingMissing": 0.07298305630683899,
+              "signedHorizontalEdgeL1": 0.011761956848204136,
+              "sourceGradientMean": 0.01124631054699421,
+              "renderGradientMean": 0.003326009027659893
+            },
+            "nose": {
+              "fixedPatchRgbL1IncludingMissing": 0.02527160942554474,
+              "signedHorizontalEdgeL1": 0.007961486466228962,
+              "sourceGradientMean": 0.00799053255468607,
+              "renderGradientMean": 0.0029355997685343027
+            },
+            "lips": {
+              "fixedPatchRgbL1IncludingMissing": 0.02154190093278885,
+              "signedHorizontalEdgeL1": 0.003498267848044634,
+              "sourceGradientMean": 0.0032547423616051674,
+              "renderGradientMean": 0.0023804502561688423
+            },
+            "eyes_glasses": {
+              "fixedPatchRgbL1IncludingMissing": 0.03825291991233826,
+              "signedHorizontalEdgeL1": 0.012802829034626484,
+              "sourceGradientMean": 0.012869007885456085,
+              "renderGradientMean": 0.002613920019939542
+            }
+          },
+          "nativePixelFootprintRadius": {
+            "room_static": [
+              10.0,
+              20.0,
+              80.0
+            ],
+            "skin_face_head": [
+              28.0,
+              36.0,
+              52.0
+            ],
+            "hair": [
+              56.0,
+              92.0,
+              140.67999267578125
+            ],
+            "glasses": [
+              30.0,
+              38.0,
+              46.500003814697266
+            ],
+            "neck_shoulder_cloth": [
+              30.0,
+              122.0,
+              444.200439453125
+            ]
+          }
+        },
+        "frame_0130.png": {
+          "faceCoreRgbL1": 0.02714611403644085,
+          "roomRgbL1": 0.05903810262680054,
+          "roomCoverage": 0.9755346179008484,
+          "faceHoleRatio": 0.00563581520691514,
+          "coreContribution": {
+            "room_static": 0.002257247921079397,
+            "skin_face_head": 0.9837419390678406,
+            "hair": 0.0027969651855528355,
+            "glasses": 0.007309403736144304,
+            "neck_shoulder_cloth": 0.0032419271301478148
+          },
+          "conservation": 7.152557373046875E-07,
+          "features": {
+            "face": {
+              "fixedPatchRgbL1IncludingMissing": 0.03624363988637924,
+              "signedHorizontalEdgeL1": 0.006182171870023012,
+              "sourceGradientMean": 0.005693759769201279,
+              "renderGradientMean": 0.0022680102847516537
+            },
+            "hair": {
+              "fixedPatchRgbL1IncludingMissing": 0.07356546074151993,
+              "signedHorizontalEdgeL1": 0.010059177875518799,
+              "sourceGradientMean": 0.009288511238992214,
+              "renderGradientMean": 0.003187041264027357
+            },
+            "nose": {
+              "fixedPatchRgbL1IncludingMissing": 0.04940299317240715,
+              "signedHorizontalEdgeL1": 0.008511621505022049,
+              "sourceGradientMean": 0.007783546578139067,
+              "renderGradientMean": 0.00426555797457695
+            },
+            "lips": {
+              "fixedPatchRgbL1IncludingMissing": 0.03727586194872856,
+              "signedHorizontalEdgeL1": 0.006826599128544331,
+              "sourceGradientMean": 0.00545541662722826,
+              "renderGradientMean": 0.003670854726806283
+            },
+            "eyes_glasses": {
+              "fixedPatchRgbL1IncludingMissing": 0.054810602217912674,
+              "signedHorizontalEdgeL1": 0.015353874303400517,
+              "sourceGradientMean": 0.014945494011044502,
+              "renderGradientMean": 0.003822238417342305
+            }
+          },
+          "nativePixelFootprintRadius": {
+            "room_static": [
+              10.0,
+              22.0,
+              92.0
+            ],
+            "skin_face_head": [
+              26.0,
+              34.0,
+              50.0
+            ],
+            "hair": [
+              52.0,
+              88.0,
+              149.39996337890625
+            ],
+            "glasses": [
+              26.0,
+              32.0,
+              42.20000457763672
+            ],
+            "neck_shoulder_cloth": [
+              30.0,
+              110.0,
+              445.16064453125
+            ]
+          }
+        },
+        "frame_0145.png": {
+          "faceCoreRgbL1": 0.019146474078297615,
+          "roomRgbL1": 0.053381163626909256,
+          "roomCoverage": 0.9705125689506531,
+          "faceHoleRatio": 0.0003253796021454036,
+          "coreContribution": {
+            "room_static": 0.0020655684638768435,
+            "skin_face_head": 0.9820494055747986,
+            "hair": 0.0015506129711866379,
+            "glasses": 0.009382245130836964,
+            "neck_shoulder_cloth": 0.004394493997097015
+          },
+          "conservation": 6.556510925292969E-07,
+          "features": {
+            "face": {
+              "fixedPatchRgbL1IncludingMissing": 0.032069817185401917,
+              "signedHorizontalEdgeL1": 0.006839690264314413,
+              "sourceGradientMean": 0.006422547623515129,
+              "renderGradientMean": 0.0022544092498719692
+            },
+            "hair": {
+              "fixedPatchRgbL1IncludingMissing": 0.08197422325611115,
+              "signedHorizontalEdgeL1": 0.010649316012859344,
+              "sourceGradientMean": 0.010015592910349369,
+              "renderGradientMean": 0.002857525134459138
+            },
+            "nose": {
+              "fixedPatchRgbL1IncludingMissing": 0.04762584716081619,
+              "signedHorizontalEdgeL1": 0.008207089267671108,
+              "sourceGradientMean": 0.007330145686864853,
+              "renderGradientMean": 0.004373408388346434
+            },
+            "lips": {
+              "fixedPatchRgbL1IncludingMissing": 0.037036165595054626,
+              "signedHorizontalEdgeL1": 0.006217643152922392,
+              "sourceGradientMean": 0.0051719690673053265,
+              "renderGradientMean": 0.00332451774738729
+            },
+            "eyes_glasses": {
+              "fixedPatchRgbL1IncludingMissing": 0.053476154804229736,
+              "signedHorizontalEdgeL1": 0.015959015116095543,
+              "sourceGradientMean": 0.015098131261765957,
+              "renderGradientMean": 0.0038158271927386522
+            }
+          },
+          "nativePixelFootprintRadius": {
+            "room_static": [
+              10.0,
+              20.0,
+              98.0
+            ],
+            "skin_face_head": [
+              26.0,
+              34.0,
+              50.0
+            ],
+            "hair": [
+              52.0,
+              90.0,
+              148.03997802734375
+            ],
+            "glasses": [
+              26.0,
+              34.0,
+              44.20000457763672
+            ],
+            "neck_shoulder_cloth": [
+              30.0,
+              118.0,
+              453.76025390625
+            ]
+          }
+        },
+        "frame_0111.png": {
+          "faceCoreRgbL1": 0.02189134620130062,
+          "roomRgbL1": 0.07004369795322418,
+          "roomCoverage": 0.9315816760063171,
+          "faceHoleRatio": 0.0007896015304140747,
+          "coreContribution": {
+            "room_static": 0.005012360867112875,
+            "skin_face_head": 0.9799076318740845,
+            "hair": 0.00033369663287885487,
+            "glasses": 0.008118069730699062,
+            "neck_shoulder_cloth": 0.003998293075710535
+          },
+          "conservation": 6.556510925292969E-07,
+          "features": {
+            "face": {
+              "fixedPatchRgbL1IncludingMissing": 0.0506548136472702,
+              "signedHorizontalEdgeL1": 0.008018389344215393,
+              "sourceGradientMean": 0.00681867403909564,
+              "renderGradientMean": 0.003214418888092041
+            },
+            "hair": {
+              "fixedPatchRgbL1IncludingMissing": 0.06484237313270569,
+              "signedHorizontalEdgeL1": 0.011683870106935501,
+              "sourceGradientMean": 0.010982388630509377,
+              "renderGradientMean": 0.0031082918867468834
+            },
+            "nose": {
+              "fixedPatchRgbL1IncludingMissing": 0.031928129494190216,
+              "signedHorizontalEdgeL1": 0.007653418462723494,
+              "sourceGradientMean": 0.007374814245849848,
+              "renderGradientMean": 0.002994562964886427
+            },
+            "lips": {
+              "fixedPatchRgbL1IncludingMissing": 0.020505391061306,
+              "signedHorizontalEdgeL1": 0.0033063681330531836,
+              "sourceGradientMean": 0.0030930868815630674,
+              "renderGradientMean": 0.0021212610881775618
+            },
+            "eyes_glasses": {
+              "fixedPatchRgbL1IncludingMissing": 0.02968580834567547,
+              "signedHorizontalEdgeL1": 0.011075175367295742,
+              "sourceGradientMean": 0.010823700577020645,
+              "renderGradientMean": 0.0021829898469150066
+            }
+          },
+          "nativePixelFootprintRadius": {
+            "room_static": [
+              10.0,
+              22.0,
+              116.7802734375
+            ],
+            "skin_face_head": [
+              28.0,
+              36.0,
+              52.0
+            ],
+            "hair": [
+              56.0,
+              92.79998779296875,
+              141.3599853515625
+            ],
+            "glasses": [
+              31.0,
+              39.0,
+              46.80000305175781
+            ],
+            "neck_shoulder_cloth": [
+              30.0,
+              130.0,
+              490.87890625
+            ]
+          }
+        }
+      },
+      "topologyEvents": [
+        {
+          "step": 240,
+          "before": 29551,
+          "after": 29551,
+          "rejectedCoverage": true,
+          "beforeCoverage": {
+            "frame_0111.png": {
+              "hole": 0.030399659648537636,
+              "roomAlpha": 0.34666720032691956
+            },
+            "frame_0005.png": {
+              "hole": 0.012521053664386272,
+              "roomAlpha": 0.36655741930007935
+            },
+            "frame_0153.png": {
+              "hole": 0.013089004904031754,
+              "roomAlpha": 0.3811533451080322
+            }
+          },
+          "proposedCoverage": {
+            "frame_0111.png": {
+              "hole": 0.05606171116232872,
+              "roomAlpha": 0.28263866901397705
+            },
+            "frame_0005.png": {
+              "hole": 0.04598468169569969,
+              "roomAlpha": 0.3078923225402832
+            },
+            "frame_0153.png": {
+              "hole": 0.05678843334317207,
+              "roomAlpha": 0.31396299600601196
+            }
+          }
+        },
+        {
+          "step": 360,
+          "before": 29551,
+          "after": 29551,
+          "rejectedCoverage": true,
+          "beforeCoverage": {
+            "frame_0111.png": {
+              "hole": 0.018039358779788017,
+              "roomAlpha": 0.5046866536140442
+            },
+            "frame_0005.png": {
+              "hole": 0.006832554936408997,
+              "roomAlpha": 0.5155155658721924
+            },
+            "frame_0153.png": {
+              "hole": 0.004283674526959658,
+              "roomAlpha": 0.544552743434906
+            }
+          },
+          "proposedCoverage": {
+            "frame_0111.png": {
+              "hole": 0.05138484016060829,
+              "roomAlpha": 0.4236566424369812
+            },
+            "frame_0005.png": {
+              "hole": 0.034798361361026764,
+              "roomAlpha": 0.4423951506614685
+            },
+            "frame_0153.png": {
+              "hole": 0.0398322232067585,
+              "roomAlpha": 0.460730642080307
+            }
+          }
+        },
+        {
+          "step": 480,
+          "before": 29551,
+          "after": 29551,
+          "rejectedCoverage": true,
+          "beforeCoverage": {
+            "frame_0111.png": {
+              "hole": 0.014941691420972347,
+              "roomAlpha": 0.6420454978942871
+            },
+            "frame_0005.png": {
+              "hole": 0.005370705854147673,
+              "roomAlpha": 0.6452600359916687
+            },
+            "frame_0153.png": {
+              "hole": 0.002231080550700426,
+              "roomAlpha": 0.6751577854156494
+            }
+          },
+          "proposedCoverage": {
+            "frame_0111.png": {
+              "hole": 0.03249514102935791,
+              "roomAlpha": 0.5551287531852722
+            },
+            "frame_0005.png": {
+              "hole": 0.018400229513645172,
+              "roomAlpha": 0.5667580366134644
+            },
+            "frame_0153.png": {
+              "hole": 0.02213231846690178,
+              "roomAlpha": 0.5924766063690186
+            }
+          }
+        },
+        {
+          "step": 600,
+          "before": 29551,
+          "after": 29551,
+          "rejectedCoverage": true,
+          "beforeCoverage": {
+            "frame_0111.png": {
+              "hole": 0.011449222452938557,
+              "roomAlpha": 0.7320857644081116
+            },
+            "frame_0005.png": {
+              "hole": 0.0031143738888204098,
+              "roomAlpha": 0.7330198287963867
+            },
+            "frame_0153.png": {
+              "hole": 0.0005354593158699572,
+              "roomAlpha": 0.7509478330612183
+            }
+          },
+          "proposedCoverage": {
+            "frame_0111.png": {
+              "hole": 0.032130710780620575,
+              "roomAlpha": 0.6491940021514893
+            },
+            "frame_0005.png": {
+              "hole": 0.01951250433921814,
+              "roomAlpha": 0.6557838320732117
+            },
+            "frame_0153.png": {
+              "hole": 0.022459542378783226,
+              "roomAlpha": 0.6736748814582825
+            }
+          }
+        },
+        {
+          "step": 720,
+          "before": 29551,
+          "after": 29551,
+          "rejectedCoverage": true,
+          "beforeCoverage": {
+            "frame_0111.png": {
+              "hole": 0.00856413971632719,
+              "roomAlpha": 0.790290355682373
+            },
+            "frame_0005.png": {
+              "hole": 0.0017796421889215708,
+              "roomAlpha": 0.791912853717804
+            },
+            "frame_0153.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.8000415563583374
+            }
+          },
+          "proposedCoverage": {
+            "frame_0111.png": {
+              "hole": 0.0285471323877573,
+              "roomAlpha": 0.7180600166320801
+            },
+            "frame_0005.png": {
+              "hole": 0.017224393784999847,
+              "roomAlpha": 0.7249054908752441
+            },
+            "frame_0153.png": {
+              "hole": 0.020853165537118912,
+              "roomAlpha": 0.7320751547813416
+            }
+          }
+        },
+        {
+          "step": 840,
+          "before": 29551,
+          "after": 29551,
+          "rejectedCoverage": true,
+          "beforeCoverage": {
+            "frame_0111.png": {
+              "hole": 0.006529397331178188,
+              "roomAlpha": 0.8279483914375305
+            },
+            "frame_0005.png": {
+              "hole": 0.0004131312307436019,
+              "roomAlpha": 0.8301207423210144
+            },
+            "frame_0153.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.8331710696220398
+            }
+          },
+          "proposedCoverage": {
+            "frame_0111.png": {
+              "hole": 0.02031705528497696,
+              "roomAlpha": 0.76466965675354
+            },
+            "frame_0005.png": {
+              "hole": 0.009883370250463486,
+              "roomAlpha": 0.7710922360420227
+            },
+            "frame_0153.png": {
+              "hole": 0.012404806911945343,
+              "roomAlpha": 0.7716276049613953
+            }
+          }
+        },
+        {
+          "step": 960,
+          "before": 29551,
+          "after": 29551,
+          "rejectedCoverage": true,
+          "beforeCoverage": {
+            "frame_0111.png": {
+              "hole": 0.005405733827501535,
+              "roomAlpha": 0.8495262265205383
+            },
+            "frame_0005.png": {
+              "hole": 9.533797128824517E-05,
+              "roomAlpha": 0.8515342473983765
+            },
+            "frame_0153.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.8528318405151367
+            }
+          },
+          "proposedCoverage": {
+            "frame_0111.png": {
+              "hole": 0.01709791086614132,
+              "roomAlpha": 0.791824996471405
+            },
+            "frame_0005.png": {
+              "hole": 0.007849493063986301,
+              "roomAlpha": 0.7975049018859863
+            },
+            "frame_0153.png": {
+              "hole": 0.008507853373885155,
+              "roomAlpha": 0.7958585619926453
+            }
+          }
+        },
+        {
+          "step": 1080,
+          "before": 29551,
+          "after": 29551,
+          "rejectedCoverage": true,
+          "beforeCoverage": {
+            "frame_0111.png": {
+              "hole": 0.004525024443864822,
+              "roomAlpha": 0.8605710864067078
+            },
+            "frame_0005.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.8620749711990356
+            },
+            "frame_0153.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.8646461367607117
+            }
+          },
+          "proposedCoverage": {
+            "frame_0111.png": {
+              "hole": 0.013514334335923195,
+              "roomAlpha": 0.8061586618423462
+            },
+            "frame_0005.png": {
+              "hole": 0.00629230635240674,
+              "roomAlpha": 0.8110376000404358
+            },
+            "frame_0153.png": {
+              "hole": 0.007317943964153528,
+              "roomAlpha": 0.8112677335739136
+            }
+          }
+        },
+        {
+          "step": 1200,
+          "before": 29551,
+          "after": 29551,
+          "rejectedCoverage": true,
+          "beforeCoverage": {
+            "frame_0111.png": {
+              "hole": 0.0038265306502580643,
+              "roomAlpha": 0.8678085803985596
+            },
+            "frame_0005.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.8685597777366638
+            },
+            "frame_0153.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.8737486004829407
+            }
+          },
+          "proposedCoverage": {
+            "frame_0111.png": {
+              "hole": 0.013878765515983105,
+              "roomAlpha": 0.8160473704338074
+            },
+            "frame_0005.png": {
+              "hole": 0.006355864927172661,
+              "roomAlpha": 0.8197604417800903
+            },
+            "frame_0153.png": {
+              "hole": 0.007317943964153528,
+              "roomAlpha": 0.8234620094299316
+            }
+          }
+        },
+        {
+          "step": 1320,
+          "before": 29551,
+          "after": 29551,
+          "rejectedCoverage": true,
+          "beforeCoverage": {
+            "frame_0111.png": {
+              "hole": 0.0029458212666213512,
+              "roomAlpha": 0.8751044869422913
+            },
+            "frame_0005.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.8750022649765015
+            },
+            "frame_0153.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.8818214535713196
+            }
+          },
+          "proposedCoverage": {
+            "frame_0111.png": {
+              "hole": 0.012846210040152073,
+              "roomAlpha": 0.8261640071868896
+            },
+            "frame_0005.png": {
+              "hole": 0.005752057768404484,
+              "roomAlpha": 0.8285828232765198
+            },
+            "frame_0153.png": {
+              "hole": 0.005146359093487263,
+              "roomAlpha": 0.8343775272369385
+            }
+          }
+        },
+        {
+          "step": 1440,
+          "before": 29551,
+          "after": 29551,
+          "rejectedCoverage": true,
+          "beforeCoverage": {
+            "frame_0111.png": {
+              "hole": 0.0019132653251290321,
+              "roomAlpha": 0.8843271732330322
+            },
+            "frame_0005.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.8824750781059265
+            },
+            "frame_0153.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.8899558186531067
+            }
+          },
+          "proposedCoverage": {
+            "frame_0111.png": {
+              "hole": 0.012269193306565285,
+              "roomAlpha": 0.8390639424324036
+            },
+            "frame_0005.png": {
+              "hole": 0.005497823003679514,
+              "roomAlpha": 0.8389237523078918
+            },
+            "frame_0153.png": {
+              "hole": 0.007228700444102287,
+              "roomAlpha": 0.8453460931777954
+            }
+          }
+        },
+        {
+          "step": 1560,
+          "before": 29551,
+          "after": 29551,
+          "rejectedCoverage": true,
+          "beforeCoverage": {
+            "frame_0111.png": {
+              "hole": 0.001427356619387865,
+              "roomAlpha": 0.8966851830482483
+            },
+            "frame_0005.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.8914762139320374
+            },
+            "frame_0153.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9006280899047852
+            }
+          },
+          "proposedCoverage": {
+            "frame_0111.png": {
+              "hole": 0.013362487778067589,
+              "roomAlpha": 0.8569042086601257
+            },
+            "frame_0005.png": {
+              "hole": 0.0076588173396885395,
+              "roomAlpha": 0.8516902923583984
+            },
+            "frame_0153.png": {
+              "hole": 0.009251547046005726,
+              "roomAlpha": 0.8599973917007446
+            }
+          }
+        }
+      ],
+      "parameterChanges": {
+        "means": 0.01151511911302805,
+        "scales": 0.16180726885795593,
+        "quats": 0.06184856966137886,
+        "opacities": 0.7862917184829712,
+        "sh": 0.12969952821731567
+      }
+    },
+    "b": {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-b",
+      "assetHash": "3e21bb5566b3b8f476a08f966b76441c3680454dd6a7c10d57edbfc52b2db77e",
+      "sourceHash": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+      "reference": "frame_0111.png",
+      "steps": 1800,
+      "counts": {
+        "room_static": 22935,
+        "skin_face_head": 8499,
+        "hair": 1325,
+        "glasses": 76,
+        "neck_shoulder_cloth": 2552
+      },
+      "seconds": 127.39615218500012,
+      "wrapperSeconds": 162.72,
+      "torchAllocatedMiB": 976.53466796875,
+      "torchReservedMiB": 1158.0,
+      "devicePeakUsedMiB": 1555,
+      "trainViews": 59,
+      "developmentViews": 5,
+      "final": {
+        "frame_0015.png": {
+          "faceCoreRgbL1": 0.023728206753730774,
+          "roomRgbL1": 0.04320979118347168,
+          "roomCoverage": 0.9930011630058289,
+          "faceHoleRatio": 0.0,
+          "coreContribution": {
+            "room_static": 0.0051209209486842155,
+            "skin_face_head": 0.9815994501113892,
+            "hair": 0.00031145039247348905,
+            "glasses": 0.008401849307119846,
+            "neck_shoulder_cloth": 0.003921232186257839
+          },
+          "conservation": 1.0132789611816406E-06,
+          "features": {
+            "face": {
+              "fixedPatchRgbL1IncludingMissing": 0.03318849578499794,
+              "signedHorizontalEdgeL1": 0.007979742251336575,
+              "sourceGradientMean": 0.007731352001428604,
+              "renderGradientMean": 0.0030631173867732286
+            },
+            "hair": {
+              "fixedPatchRgbL1IncludingMissing": 0.03966522961854935,
+              "signedHorizontalEdgeL1": 0.009257799945771694,
+              "sourceGradientMean": 0.008967340923845768,
+              "renderGradientMean": 0.0034523324575275183
+            },
+            "nose": {
+              "fixedPatchRgbL1IncludingMissing": 0.040197763592004776,
+              "signedHorizontalEdgeL1": 0.008500045165419579,
+              "sourceGradientMean": 0.008334954269230366,
+              "renderGradientMean": 0.0038978303782641888
+            },
+            "lips": {
+              "fixedPatchRgbL1IncludingMissing": 0.027393195778131485,
+              "signedHorizontalEdgeL1": 0.004887869581580162,
+              "sourceGradientMean": 0.0047782049514353275,
+              "renderGradientMean": 0.0029518615920096636
+            },
+            "eyes_glasses": {
+              "fixedPatchRgbL1IncludingMissing": 0.04602156952023506,
+              "signedHorizontalEdgeL1": 0.01563713140785694,
+              "sourceGradientMean": 0.015539140440523624,
+              "renderGradientMean": 0.004158290568739176
+            }
+          },
+          "nativePixelFootprintRadius": {
+            "room_static": [
+              10.0,
+              20.0,
+              467.8984375
+            ],
+            "skin_face_head": [
+              22.0,
+              30.0,
+              46.0
+            ],
+            "hair": [
+              38.0,
+              60.0,
+              102.0
+            ],
+            "glasses": [
+              16.0,
+              24.0,
+              32.0
+            ],
+            "neck_shoulder_cloth": [
+              38.0,
+              242.0,
+              596.0
+            ]
+          }
+        },
+        "frame_0035.png": {
+          "faceCoreRgbL1": 0.01682203821837902,
+          "roomRgbL1": 0.042390670627355576,
+          "roomCoverage": 0.9924013614654541,
+          "faceHoleRatio": 0.0,
+          "coreContribution": {
+            "room_static": 0.0031178887002170086,
+            "skin_face_head": 0.979345440864563,
+            "hair": 0.00020251487148925662,
+            "glasses": 0.010221201926469803,
+            "neck_shoulder_cloth": 0.006889149080961943
+          },
+          "conservation": 1.0132789611816406E-06,
+          "features": {
+            "face": {
+              "fixedPatchRgbL1IncludingMissing": 0.029169371351599693,
+              "signedHorizontalEdgeL1": 0.007165784016251564,
+              "sourceGradientMean": 0.00668371981009841,
+              "renderGradientMean": 0.002719360403716564
+            },
+            "hair": {
+              "fixedPatchRgbL1IncludingMissing": 0.05691184476017952,
+              "signedHorizontalEdgeL1": 0.010990702547132969,
+              "sourceGradientMean": 0.00997927039861679,
+              "renderGradientMean": 0.003734179539605975
+            },
+            "nose": {
+              "fixedPatchRgbL1IncludingMissing": 0.03813570737838745,
+              "signedHorizontalEdgeL1": 0.00951703917235136,
+              "sourceGradientMean": 0.008122510276734829,
+              "renderGradientMean": 0.005459968000650406
+            },
+            "lips": {
+              "fixedPatchRgbL1IncludingMissing": 0.02243814803659916,
+              "signedHorizontalEdgeL1": 0.005981626454740763,
+              "sourceGradientMean": 0.005430011544376612,
+              "renderGradientMean": 0.0034706685692071915
+            },
+            "eyes_glasses": {
+              "fixedPatchRgbL1IncludingMissing": 0.045578837394714355,
+              "signedHorizontalEdgeL1": 0.01657138392329216,
+              "sourceGradientMean": 0.01551273837685585,
+              "renderGradientMean": 0.0044132438488304615
+            }
+          },
+          "nativePixelFootprintRadius": {
+            "room_static": [
+              10.0,
+              22.0,
+              424.5390625
+            ],
+            "skin_face_head": [
+              22.0,
+              30.0,
+              46.0
+            ],
+            "hair": [
+              38.0,
+              62.0,
+              102.0
+            ],
+            "glasses": [
+              15.0,
+              23.0,
+              32.0
+            ],
+            "neck_shoulder_cloth": [
+              38.0,
+              238.0,
+              619.080078125
+            ]
+          }
+        },
+        "frame_0115.png": {
+          "faceCoreRgbL1": 0.021685447543859482,
+          "roomRgbL1": 0.05056037753820419,
+          "roomCoverage": 0.9923094511032104,
+          "faceHoleRatio": 0.0003075030690524727,
+          "coreContribution": {
+            "room_static": 0.004192345775663853,
+            "skin_face_head": 0.9828682541847229,
+            "hair": 0.00046376208774745464,
+            "glasses": 0.006974640768021345,
+            "neck_shoulder_cloth": 0.0019103261874988675
+          },
+          "conservation": 1.2516975402832031E-06,
+          "features": {
+            "face": {
+              "fixedPatchRgbL1IncludingMissing": 0.06547772139310837,
+              "signedHorizontalEdgeL1": 0.008744482882320881,
+              "sourceGradientMean": 0.007865196093916893,
+              "renderGradientMean": 0.003769233589991927
+            },
+            "hair": {
+              "fixedPatchRgbL1IncludingMissing": 0.05946415290236473,
+              "signedHorizontalEdgeL1": 0.011866479180753231,
+              "sourceGradientMean": 0.01124631054699421,
+              "renderGradientMean": 0.003876808565109968
+            },
+            "nose": {
+              "fixedPatchRgbL1IncludingMissing": 0.026175322011113167,
+              "signedHorizontalEdgeL1": 0.007969682104885578,
+              "sourceGradientMean": 0.00799053255468607,
+              "renderGradientMean": 0.0034335555974394083
+            },
+            "lips": {
+              "fixedPatchRgbL1IncludingMissing": 0.018684010952711105,
+              "signedHorizontalEdgeL1": 0.0033910737838596106,
+              "sourceGradientMean": 0.0032547423616051674,
+              "renderGradientMean": 0.0022620861418545246
+            },
+            "eyes_glasses": {
+              "fixedPatchRgbL1IncludingMissing": 0.03604060411453247,
+              "signedHorizontalEdgeL1": 0.01285067293792963,
+              "sourceGradientMean": 0.012869007885456085,
+              "renderGradientMean": 0.002918599871918559
+            }
+          },
+          "nativePixelFootprintRadius": {
+            "room_static": [
+              12.0,
+              24.0,
+              638.080078125
+            ],
+            "skin_face_head": [
+              24.0,
+              34.0,
+              50.0
+            ],
+            "hair": [
+              42.0,
+              66.0,
+              113.52001953125
+            ],
+            "glasses": [
+              18.0,
+              30.0,
+              38.0
+            ],
+            "neck_shoulder_cloth": [
+              38.0,
+              252.0,
+              581.1201171875
+            ]
+          }
+        },
+        "frame_0130.png": {
+          "faceCoreRgbL1": 0.029855459928512573,
+          "roomRgbL1": 0.05269550532102585,
+          "roomCoverage": 0.9973677396774292,
+          "faceHoleRatio": 0.00031751071219332516,
+          "coreContribution": {
+            "room_static": 0.0023319970350712538,
+            "skin_face_head": 0.9862574338912964,
+            "hair": 0.0010218939278274775,
+            "glasses": 0.007606209721416235,
+            "neck_shoulder_cloth": 0.0024497774429619312
+          },
+          "conservation": 1.2516975402832031E-06,
+          "features": {
+            "face": {
+              "fixedPatchRgbL1IncludingMissing": 0.037224963307380676,
+              "signedHorizontalEdgeL1": 0.006239305716007948,
+              "sourceGradientMean": 0.005693759769201279,
+              "renderGradientMean": 0.0024025843013077974
+            },
+            "hair": {
+              "fixedPatchRgbL1IncludingMissing": 0.0734405666589737,
+              "signedHorizontalEdgeL1": 0.010307622142136097,
+              "sourceGradientMean": 0.009288511238992214,
+              "renderGradientMean": 0.0035132335033267736
+            },
+            "nose": {
+              "fixedPatchRgbL1IncludingMissing": 0.04808299243450165,
+              "signedHorizontalEdgeL1": 0.00899258442223072,
+              "sourceGradientMean": 0.007783546578139067,
+              "renderGradientMean": 0.005225545261055231
+            },
+            "lips": {
+              "fixedPatchRgbL1IncludingMissing": 0.036657560616731644,
+              "signedHorizontalEdgeL1": 0.007050677202641964,
+              "sourceGradientMean": 0.00545541662722826,
+              "renderGradientMean": 0.003855933900922537
+            },
+            "eyes_glasses": {
+              "fixedPatchRgbL1IncludingMissing": 0.05729600787162781,
+              "signedHorizontalEdgeL1": 0.015432239510118961,
+              "sourceGradientMean": 0.014945494011044502,
+              "renderGradientMean": 0.004403258208185434
+            }
+          },
+          "nativePixelFootprintRadius": {
+            "room_static": [
+              10.0,
+              28.0,
+              302.0
+            ],
+            "skin_face_head": [
+              22.0,
+              32.0,
+              50.0
+            ],
+            "hair": [
+              42.0,
+              67.199951171875,
+              111.52001953125
+            ],
+            "glasses": [
+              16.0,
+              24.0,
+              34.0
+            ],
+            "neck_shoulder_cloth": [
+              40.0,
+              236.0,
+              680.3603515625
+            ]
+          }
+        },
+        "frame_0145.png": {
+          "faceCoreRgbL1": 0.020059842616319656,
+          "roomRgbL1": 0.05204832926392555,
+          "roomCoverage": 0.9958806037902832,
+          "faceHoleRatio": 0.0,
+          "coreContribution": {
+            "room_static": 0.003552785376086831,
+            "skin_face_head": 0.981816828250885,
+            "hair": 0.0002525224699638784,
+            "glasses": 0.009946496225893497,
+            "neck_shoulder_cloth": 0.00403580954298377
+          },
+          "conservation": 1.0728836059570312E-06,
+          "features": {
+            "face": {
+              "fixedPatchRgbL1IncludingMissing": 0.031575240194797516,
+              "signedHorizontalEdgeL1": 0.006907964125275612,
+              "sourceGradientMean": 0.006422547623515129,
+              "renderGradientMean": 0.0024239683989435434
+            },
+            "hair": {
+              "fixedPatchRgbL1IncludingMissing": 0.07347488403320312,
+              "signedHorizontalEdgeL1": 0.010867246426641941,
+              "sourceGradientMean": 0.010015592910349369,
+              "renderGradientMean": 0.003219934180378914
+            },
+            "nose": {
+              "fixedPatchRgbL1IncludingMissing": 0.042038802057504654,
+              "signedHorizontalEdgeL1": 0.008379638195037842,
+              "sourceGradientMean": 0.007330145686864853,
+              "renderGradientMean": 0.005070507526397705
+            },
+            "lips": {
+              "fixedPatchRgbL1IncludingMissing": 0.03501006215810776,
+              "signedHorizontalEdgeL1": 0.006264758296310902,
+              "sourceGradientMean": 0.0051719690673053265,
+              "renderGradientMean": 0.0034042035695165396
+            },
+            "eyes_glasses": {
+              "fixedPatchRgbL1IncludingMissing": 0.05448763817548752,
+              "signedHorizontalEdgeL1": 0.016149306669831276,
+              "sourceGradientMean": 0.015098131261765957,
+              "renderGradientMean": 0.004085414577275515
+            }
+          },
+          "nativePixelFootprintRadius": {
+            "room_static": [
+              10.0,
+              24.0,
+              370.0
+            ],
+            "skin_face_head": [
+              24.0,
+              32.0,
+              50.0
+            ],
+            "hair": [
+              42.0,
+              66.0,
+              111.52001953125
+            ],
+            "glasses": [
+              16.0,
+              26.0,
+              34.0
+            ],
+            "neck_shoulder_cloth": [
+              40.0,
+              250.0,
+              667.080078125
+            ]
+          }
+        },
+        "frame_0111.png": {
+          "faceCoreRgbL1": 0.020914020016789436,
+          "roomRgbL1": 0.056570883840322495,
+          "roomCoverage": 0.977328360080719,
+          "faceHoleRatio": 0.000273323617875576,
+          "coreContribution": {
+            "room_static": 0.0064532943069934845,
+            "skin_face_head": 0.9774796366691589,
+            "hair": 0.0001332853571511805,
+            "glasses": 0.008802559226751328,
+            "neck_shoulder_cloth": 0.0023892251774668694
+          },
+          "conservation": 9.5367431640625E-07,
+          "features": {
+            "face": {
+              "fixedPatchRgbL1IncludingMissing": 0.042704250663518906,
+              "signedHorizontalEdgeL1": 0.008134991861879826,
+              "sourceGradientMean": 0.00681867403909564,
+              "renderGradientMean": 0.003554008435457945
+            },
+            "hair": {
+              "fixedPatchRgbL1IncludingMissing": 0.05239943787455559,
+              "signedHorizontalEdgeL1": 0.01189258974045515,
+              "sourceGradientMean": 0.010982388630509377,
+              "renderGradientMean": 0.003692613448947668
+            },
+            "nose": {
+              "fixedPatchRgbL1IncludingMissing": 0.030309544876217842,
+              "signedHorizontalEdgeL1": 0.007635766640305519,
+              "sourceGradientMean": 0.007374814245849848,
+              "renderGradientMean": 0.0034155321773141623
+            },
+            "lips": {
+              "fixedPatchRgbL1IncludingMissing": 0.019901758059859276,
+              "signedHorizontalEdgeL1": 0.0031802868470549583,
+              "sourceGradientMean": 0.0030930868815630674,
+              "renderGradientMean": 0.0021229006815701723
+            },
+            "eyes_glasses": {
+              "fixedPatchRgbL1IncludingMissing": 0.02939208224415779,
+              "signedHorizontalEdgeL1": 0.01113402284681797,
+              "sourceGradientMean": 0.010823700577020645,
+              "renderGradientMean": 0.0024873968213796616
+            }
+          },
+          "nativePixelFootprintRadius": {
+            "room_static": [
+              10.0,
+              30.0,
+              812.0
+            ],
+            "skin_face_head": [
+              26.0,
+              34.0,
+              50.0
+            ],
+            "hair": [
+              42.0,
+              67.199951171875,
+              112.0
+            ],
+            "glasses": [
+              20.0,
+              30.0,
+              38.0
+            ],
+            "neck_shoulder_cloth": [
+              40.0,
+              262.0,
+              656.6796875
+            ]
+          }
+        }
+      },
+      "topologyEvents": [
+        {
+          "step": 240,
+          "before": 29551,
+          "after": 30443,
+          "parts": {
+            "room_static": {
+              "replaceParentsProposed": 175,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 175
+            },
+            "skin_face_head": {
+              "replaceParentsProposed": 500,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 500
+            },
+            "hair": {
+              "replaceParentsProposed": 100,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 86
+            },
+            "glasses": {
+              "replaceParentsProposed": 16,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 10
+            },
+            "neck_shoulder_cloth": {
+              "replaceParentsProposed": 121,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 121
+            }
+          }
+        },
+        {
+          "step": 360,
+          "before": 30443,
+          "after": 31330,
+          "parts": {
+            "room_static": {
+              "replaceParentsProposed": 164,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 164
+            },
+            "skin_face_head": {
+              "replaceParentsProposed": 500,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 496
+            },
+            "hair": {
+              "replaceParentsProposed": 100,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 87
+            },
+            "glasses": {
+              "replaceParentsProposed": 25,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 18
+            },
+            "neck_shoulder_cloth": {
+              "replaceParentsProposed": 122,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 122
+            }
+          }
+        },
+        {
+          "step": 480,
+          "before": 31330,
+          "after": 32149,
+          "parts": {
+            "room_static": {
+              "replaceParentsProposed": 128,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 128
+            },
+            "skin_face_head": {
+              "replaceParentsProposed": 500,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 495
+            },
+            "hair": {
+              "replaceParentsProposed": 100,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 89
+            },
+            "glasses": {
+              "replaceParentsProposed": 8,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 2
+            },
+            "neck_shoulder_cloth": {
+              "replaceParentsProposed": 108,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 105
+            }
+          }
+        },
+        {
+          "step": 600,
+          "before": 32149,
+          "after": 32851,
+          "parts": {
+            "room_static": {
+              "replaceParentsProposed": 82,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 82
+            },
+            "skin_face_head": {
+              "replaceParentsProposed": 447,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 444
+            },
+            "hair": {
+              "replaceParentsProposed": 100,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 90
+            },
+            "glasses": {
+              "replaceParentsProposed": 13,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 7
+            },
+            "neck_shoulder_cloth": {
+              "replaceParentsProposed": 85,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 79
+            }
+          }
+        },
+        {
+          "step": 720,
+          "before": 32851,
+          "after": 33370,
+          "parts": {
+            "room_static": {
+              "replaceParentsProposed": 92,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 90
+            },
+            "skin_face_head": {
+              "replaceParentsProposed": 264,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 260
+            },
+            "hair": {
+              "replaceParentsProposed": 100,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 89
+            },
+            "glasses": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 5
+            },
+            "neck_shoulder_cloth": {
+              "replaceParentsProposed": 82,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 75
+            }
+          }
+        },
+        {
+          "step": 840,
+          "before": 33370,
+          "after": 33768,
+          "parts": {
+            "room_static": {
+              "replaceParentsProposed": 69,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 66
+            },
+            "skin_face_head": {
+              "replaceParentsProposed": 195,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 190
+            },
+            "hair": {
+              "replaceParentsProposed": 100,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 89
+            },
+            "glasses": {
+              "replaceParentsProposed": 7,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 0
+            },
+            "neck_shoulder_cloth": {
+              "replaceParentsProposed": 63,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 53
+            }
+          }
+        },
+        {
+          "step": 960,
+          "before": 33768,
+          "after": 34056,
+          "parts": {
+            "room_static": {
+              "replaceParentsProposed": 38,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 35
+            },
+            "skin_face_head": {
+              "replaceParentsProposed": 123,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 121
+            },
+            "hair": {
+              "replaceParentsProposed": 100,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 89
+            },
+            "glasses": {
+              "replaceParentsProposed": 9,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 2
+            },
+            "neck_shoulder_cloth": {
+              "replaceParentsProposed": 52,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 41
+            }
+          }
+        },
+        {
+          "step": 1080,
+          "before": 34056,
+          "after": 34356,
+          "parts": {
+            "room_static": {
+              "replaceParentsProposed": 26,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 23
+            },
+            "skin_face_head": {
+              "replaceParentsProposed": 137,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 135
+            },
+            "hair": {
+              "replaceParentsProposed": 100,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 89
+            },
+            "glasses": {
+              "replaceParentsProposed": 14,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 6
+            },
+            "neck_shoulder_cloth": {
+              "replaceParentsProposed": 59,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 47
+            }
+          }
+        },
+        {
+          "step": 1200,
+          "before": 34356,
+          "after": 34644,
+          "parts": {
+            "room_static": {
+              "replaceParentsProposed": 43,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 40
+            },
+            "skin_face_head": {
+              "replaceParentsProposed": 120,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 116
+            },
+            "hair": {
+              "replaceParentsProposed": 100,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 89
+            },
+            "glasses": {
+              "replaceParentsProposed": 8,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 1
+            },
+            "neck_shoulder_cloth": {
+              "replaceParentsProposed": 54,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 42
+            }
+          }
+        },
+        {
+          "step": 1320,
+          "before": 34644,
+          "after": 34915,
+          "parts": {
+            "room_static": {
+              "replaceParentsProposed": 44,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 40
+            },
+            "skin_face_head": {
+              "replaceParentsProposed": 103,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 100
+            },
+            "hair": {
+              "replaceParentsProposed": 100,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 88
+            },
+            "glasses": {
+              "replaceParentsProposed": 11,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 2
+            },
+            "neck_shoulder_cloth": {
+              "replaceParentsProposed": 55,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 41
+            }
+          }
+        },
+        {
+          "step": 1440,
+          "before": 34915,
+          "after": 35143,
+          "parts": {
+            "room_static": {
+              "replaceParentsProposed": 33,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 29
+            },
+            "skin_face_head": {
+              "replaceParentsProposed": 86,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 83
+            },
+            "hair": {
+              "replaceParentsProposed": 100,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 86
+            },
+            "glasses": {
+              "replaceParentsProposed": 15,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 5
+            },
+            "neck_shoulder_cloth": {
+              "replaceParentsProposed": 39,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 25
+            }
+          }
+        },
+        {
+          "step": 1560,
+          "before": 35143,
+          "after": 35387,
+          "parts": {
+            "room_static": {
+              "replaceParentsProposed": 47,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 43
+            },
+            "skin_face_head": {
+              "replaceParentsProposed": 75,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 73
+            },
+            "hair": {
+              "replaceParentsProposed": 100,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 87
+            },
+            "glasses": {
+              "replaceParentsProposed": 10,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 2
+            },
+            "neck_shoulder_cloth": {
+              "replaceParentsProposed": 54,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 39
+            }
+          }
+        }
+      ],
+      "parameterChanges": {
+        "means": 0.0172154288738966,
+        "scales": 0.1940552294254303,
+        "quats": 0.07172301411628723,
+        "opacities": 0.9078308343887329,
+        "sh": 0.13494360446929932
+      }
+    },
+    "e": {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-e",
+      "assetHash": "1b2fe713df73ab87ce86458bf2b689c81eba1195f1004a6fa67e556841a9ccb3",
+      "sourceHash": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+      "reference": "frame_0111.png",
+      "steps": 1800,
+      "counts": {
+        "room_static": 22138,
+        "skin_face_head": 6033,
+        "hair": 396,
+        "glasses": 24,
+        "neck_shoulder_cloth": 1795
+      },
+      "seconds": 179.65016003100027,
+      "wrapperSeconds": 200.61,
+      "torchAllocatedMiB": 977.7392578125,
+      "torchReservedMiB": 1176.0,
+      "devicePeakUsedMiB": 1573,
+      "trainViews": 59,
+      "developmentViews": 5,
+      "final": {
+        "frame_0015.png": {
+          "faceCoreRgbL1": 0.02141004614531994,
+          "roomRgbL1": 0.0396978035569191,
+          "roomCoverage": 0.988418459892273,
+          "faceHoleRatio": 0.0,
+          "coreContribution": {
+            "room_static": 0.0035186749882996082,
+            "skin_face_head": 0.9831849336624146,
+            "hair": 0.00029817421454936266,
+            "glasses": 0.009286785498261452,
+            "neck_shoulder_cloth": 0.0034318985417485237
+          },
+          "conservation": 6.556510925292969E-07,
+          "features": {
+            "face": {
+              "fixedPatchRgbL1IncludingMissing": 0.031533192843198776,
+              "signedHorizontalEdgeL1": 0.007962494157254696,
+              "sourceGradientMean": 0.007731352001428604,
+              "renderGradientMean": 0.002962578320875764
+            },
+            "hair": {
+              "fixedPatchRgbL1IncludingMissing": 0.039196036756038666,
+              "signedHorizontalEdgeL1": 0.009258602745831013,
+              "sourceGradientMean": 0.008967340923845768,
+              "renderGradientMean": 0.0033119358122348785
+            },
+            "nose": {
+              "fixedPatchRgbL1IncludingMissing": 0.0359669029712677,
+              "signedHorizontalEdgeL1": 0.008257227949798107,
+              "sourceGradientMean": 0.008334954269230366,
+              "renderGradientMean": 0.003706951392814517
+            },
+            "lips": {
+              "fixedPatchRgbL1IncludingMissing": 0.022722885012626648,
+              "signedHorizontalEdgeL1": 0.004927452187985182,
+              "sourceGradientMean": 0.0047782049514353275,
+              "renderGradientMean": 0.0027586265932768583
+            },
+            "eyes_glasses": {
+              "fixedPatchRgbL1IncludingMissing": 0.04479103907942772,
+              "signedHorizontalEdgeL1": 0.01558709517121315,
+              "sourceGradientMean": 0.015539140440523624,
+              "renderGradientMean": 0.0039708614349365234
+            }
+          },
+          "nativePixelFootprintRadius": {
+            "room_static": [
+              10.0,
+              18.0,
+              82.44140625
+            ],
+            "skin_face_head": [
+              24.0,
+              30.0,
+              44.0
+            ],
+            "hair": [
+              46.0,
+              66.0,
+              78.2000732421875
+            ],
+            "glasses": [
+              24.0,
+              32.0,
+              40.160003662109375
+            ],
+            "neck_shoulder_cloth": [
+              28.0,
+              141.7998046875,
+              442.7197265625
+            ]
+          }
+        },
+        "frame_0035.png": {
+          "faceCoreRgbL1": 0.019136805087327957,
+          "roomRgbL1": 0.042771115899086,
+          "roomCoverage": 0.9807893633842468,
+          "faceHoleRatio": 0.0,
+          "coreContribution": {
+            "room_static": 0.0025692887138575315,
+            "skin_face_head": 0.9810322523117065,
+            "hair": 0.0002788431302178651,
+            "glasses": 0.008946250192821026,
+            "neck_shoulder_cloth": 0.006971157621592283
+          },
+          "conservation": 7.152557373046875E-07,
+          "features": {
+            "face": {
+              "fixedPatchRgbL1IncludingMissing": 0.029727235436439514,
+              "signedHorizontalEdgeL1": 0.007111173123121262,
+              "sourceGradientMean": 0.00668371981009841,
+              "renderGradientMean": 0.002653718227520585
+            },
+            "hair": {
+              "fixedPatchRgbL1IncludingMissing": 0.05958146974444389,
+              "signedHorizontalEdgeL1": 0.010755753144621849,
+              "sourceGradientMean": 0.00997927039861679,
+              "renderGradientMean": 0.0034997747279703617
+            },
+            "nose": {
+              "fixedPatchRgbL1IncludingMissing": 0.036004889756441116,
+              "signedHorizontalEdgeL1": 0.009164460934698582,
+              "sourceGradientMean": 0.008122510276734829,
+              "renderGradientMean": 0.005148026626557112
+            },
+            "lips": {
+              "fixedPatchRgbL1IncludingMissing": 0.023508109152317047,
+              "signedHorizontalEdgeL1": 0.005953763611614704,
+              "sourceGradientMean": 0.005430011544376612,
+              "renderGradientMean": 0.003290928900241852
+            },
+            "eyes_glasses": {
+              "fixedPatchRgbL1IncludingMissing": 0.04753264784812927,
+              "signedHorizontalEdgeL1": 0.016333606094121933,
+              "sourceGradientMean": 0.01551273837685585,
+              "renderGradientMean": 0.0041301497258245945
+            }
+          },
+          "nativePixelFootprintRadius": {
+            "room_static": [
+              10.0,
+              18.0,
+              123.140625
+            ],
+            "skin_face_head": [
+              24.0,
+              30.0,
+              44.0
+            ],
+            "hair": [
+              46.0,
+              66.0,
+              84.0
+            ],
+            "glasses": [
+              24.0,
+              31.39999771118164,
+              36.62000274658203
+            ],
+            "neck_shoulder_cloth": [
+              28.0,
+              138.0,
+              434.39990234375
+            ]
+          }
+        },
+        "frame_0115.png": {
+          "faceCoreRgbL1": 0.02272087335586548,
+          "roomRgbL1": 0.048021793365478516,
+          "roomCoverage": 0.9913042187690735,
+          "faceHoleRatio": 0.0005535055533982813,
+          "coreContribution": {
+            "room_static": 0.005042216740548611,
+            "skin_face_head": 0.9840741157531738,
+            "hair": 0.00044964460539631546,
+            "glasses": 0.007989306934177876,
+            "neck_shoulder_cloth": 0.0016018797177821398
+          },
+          "conservation": 8.344650268554688E-07,
+          "features": {
+            "face": {
+              "fixedPatchRgbL1IncludingMissing": 0.06937233358621597,
+              "signedHorizontalEdgeL1": 0.008755895309150219,
+              "sourceGradientMean": 0.007865196093916893,
+              "renderGradientMean": 0.0036720316857099533
+            },
+            "hair": {
+              "fixedPatchRgbL1IncludingMissing": 0.06132548674941063,
+              "signedHorizontalEdgeL1": 0.011863174848258495,
+              "sourceGradientMean": 0.01124631054699421,
+              "renderGradientMean": 0.0037151032593101263
+            },
+            "nose": {
+              "fixedPatchRgbL1IncludingMissing": 0.026970094069838524,
+              "signedHorizontalEdgeL1": 0.0078347222879529,
+              "sourceGradientMean": 0.00799053255468607,
+              "renderGradientMean": 0.0032253852114081383
+            },
+            "lips": {
+              "fixedPatchRgbL1IncludingMissing": 0.021944286301732063,
+              "signedHorizontalEdgeL1": 0.003364807926118374,
+              "sourceGradientMean": 0.0032547423616051674,
+              "renderGradientMean": 0.0022231522016227245
+            },
+            "eyes_glasses": {
+              "fixedPatchRgbL1IncludingMissing": 0.03573824465274811,
+              "signedHorizontalEdgeL1": 0.012748733162879944,
+              "sourceGradientMean": 0.012869007885456085,
+              "renderGradientMean": 0.0026740971952676773
+            }
+          },
+          "nativePixelFootprintRadius": {
+            "room_static": [
+              10.0,
+              20.0,
+              147.380859375
+            ],
+            "skin_face_head": [
+              26.0,
+              34.0,
+              50.0
+            ],
+            "hair": [
+              54.0,
+              71.0,
+              88.10003662109375
+            ],
+            "glasses": [
+              28.0,
+              38.0,
+              45.70000457763672
+            ],
+            "neck_shoulder_cloth": [
+              30.0,
+              146.0,
+              464.899658203125
+            ]
+          }
+        },
+        "frame_0130.png": {
+          "faceCoreRgbL1": 0.02769848145544529,
+          "roomRgbL1": 0.04849306866526604,
+          "roomCoverage": 0.9884353280067444,
+          "faceHoleRatio": 0.00047626608284190297,
+          "coreContribution": {
+            "room_static": 0.0029922963585704565,
+            "skin_face_head": 0.9870606064796448,
+            "hair": 0.0009489848162047565,
+            "glasses": 0.0059935301542282104,
+            "neck_shoulder_cloth": 0.002785349730402231
+          },
+          "conservation": 7.152557373046875E-07,
+          "features": {
+            "face": {
+              "fixedPatchRgbL1IncludingMissing": 0.036456361413002014,
+              "signedHorizontalEdgeL1": 0.006159225944429636,
+              "sourceGradientMean": 0.005693759769201279,
+              "renderGradientMean": 0.0022704030852764845
+            },
+            "hair": {
+              "fixedPatchRgbL1IncludingMissing": 0.07317406684160233,
+              "signedHorizontalEdgeL1": 0.010217621922492981,
+              "sourceGradientMean": 0.009288511238992214,
+              "renderGradientMean": 0.0033579852897673845
+            },
+            "nose": {
+              "fixedPatchRgbL1IncludingMissing": 0.0475955605506897,
+              "signedHorizontalEdgeL1": 0.0084208520129323,
+              "sourceGradientMean": 0.007783546578139067,
+              "renderGradientMean": 0.0043730102479457855
+            },
+            "lips": {
+              "fixedPatchRgbL1IncludingMissing": 0.04014763608574867,
+              "signedHorizontalEdgeL1": 0.006850977428257465,
+              "sourceGradientMean": 0.00545541662722826,
+              "renderGradientMean": 0.003545454004779458
+            },
+            "eyes_glasses": {
+              "fixedPatchRgbL1IncludingMissing": 0.05168791860342026,
+              "signedHorizontalEdgeL1": 0.0151709308847785,
+              "sourceGradientMean": 0.014945494011044502,
+              "renderGradientMean": 0.00396928284317255
+            }
+          },
+          "nativePixelFootprintRadius": {
+            "room_static": [
+              10.0,
+              22.0,
+              114.0
+            ],
+            "skin_face_head": [
+              26.0,
+              34.0,
+              48.0
+            ],
+            "hair": [
+              50.0,
+              72.0,
+              92.30010986328125
+            ],
+            "glasses": [
+              26.0,
+              33.39999771118164,
+              38.62000274658203
+            ],
+            "neck_shoulder_cloth": [
+              30.0,
+              133.7998046875,
+              448.7197265625
+            ]
+          }
+        },
+        "frame_0145.png": {
+          "faceCoreRgbL1": 0.0184977687895298,
+          "roomRgbL1": 0.04474383965134621,
+          "roomCoverage": 0.9864712953567505,
+          "faceHoleRatio": 0.0,
+          "coreContribution": {
+            "room_static": 0.003128909273073077,
+            "skin_face_head": 0.9838780164718628,
+            "hair": 0.00038569484604522586,
+            "glasses": 0.008292003534734249,
+            "neck_shoulder_cloth": 0.0040969811379909515
+          },
+          "conservation": 7.748603820800781E-07,
+          "features": {
+            "face": {
+              "fixedPatchRgbL1IncludingMissing": 0.030929606407880783,
+              "signedHorizontalEdgeL1": 0.006853644270449877,
+              "sourceGradientMean": 0.006422547623515129,
+              "renderGradientMean": 0.002305063884705305
+            },
+            "hair": {
+              "fixedPatchRgbL1IncludingMissing": 0.07046681642532349,
+              "signedHorizontalEdgeL1": 0.010571540333330631,
+              "sourceGradientMean": 0.010015592910349369,
+              "renderGradientMean": 0.0030029683839529753
+            },
+            "nose": {
+              "fixedPatchRgbL1IncludingMissing": 0.044671256095170975,
+              "signedHorizontalEdgeL1": 0.00827616173774004,
+              "sourceGradientMean": 0.007330145686864853,
+              "renderGradientMean": 0.004606256727129221
+            },
+            "lips": {
+              "fixedPatchRgbL1IncludingMissing": 0.03771073371171951,
+              "signedHorizontalEdgeL1": 0.006234077271074057,
+              "sourceGradientMean": 0.0051719690673053265,
+              "renderGradientMean": 0.0033432617783546448
+            },
+            "eyes_glasses": {
+              "fixedPatchRgbL1IncludingMissing": 0.05299704894423485,
+              "signedHorizontalEdgeL1": 0.015922004356980324,
+              "sourceGradientMean": 0.015098131261765957,
+              "renderGradientMean": 0.0037532488349825144
+            }
+          },
+          "nativePixelFootprintRadius": {
+            "room_static": [
+              10.0,
+              20.0,
+              129.8203125
+            ],
+            "skin_face_head": [
+              26.0,
+              34.0,
+              48.0
+            ],
+            "hair": [
+              50.0,
+              72.0,
+              90.10003662109375
+            ],
+            "glasses": [
+              26.0,
+              34.0,
+              40.160003662109375
+            ],
+            "neck_shoulder_cloth": [
+              30.0,
+              140.199951171875,
+              456.419677734375
+            ]
+          }
+        },
+        "frame_0111.png": {
+          "faceCoreRgbL1": 0.02119705267250538,
+          "roomRgbL1": 0.06298326700925827,
+          "roomCoverage": 0.9868344068527222,
+          "faceHoleRatio": 0.0007592322654090822,
+          "coreContribution": {
+            "room_static": 0.007076368201524019,
+            "skin_face_head": 0.9793329834938049,
+            "hair": 0.0002094876836054027,
+            "glasses": 0.010079634375870228,
+            "neck_shoulder_cloth": 0.002304500201717019
+          },
+          "conservation": 7.152557373046875E-07,
+          "features": {
+            "face": {
+              "fixedPatchRgbL1IncludingMissing": 0.0463852696120739,
+              "signedHorizontalEdgeL1": 0.008138892240822315,
+              "sourceGradientMean": 0.00681867403909564,
+              "renderGradientMean": 0.003454974852502346
+            },
+            "hair": {
+              "fixedPatchRgbL1IncludingMissing": 0.05618494749069214,
+              "signedHorizontalEdgeL1": 0.011744076386094093,
+              "sourceGradientMean": 0.010982388630509377,
+              "renderGradientMean": 0.003420404391363263
+            },
+            "nose": {
+              "fixedPatchRgbL1IncludingMissing": 0.030031098052859306,
+              "signedHorizontalEdgeL1": 0.007788779214024544,
+              "sourceGradientMean": 0.007374814245849848,
+              "renderGradientMean": 0.00312661100178957
+            },
+            "lips": {
+              "fixedPatchRgbL1IncludingMissing": 0.018038736656308174,
+              "signedHorizontalEdgeL1": 0.0032301251776516438,
+              "sourceGradientMean": 0.0030930868815630674,
+              "renderGradientMean": 0.0020903523545712233
+            },
+            "eyes_glasses": {
+              "fixedPatchRgbL1IncludingMissing": 0.03083672747015953,
+              "signedHorizontalEdgeL1": 0.011134589090943336,
+              "sourceGradientMean": 0.010823700577020645,
+              "renderGradientMean": 0.0023417610209435225
+            }
+          },
+          "nativePixelFootprintRadius": {
+            "room_static": [
+              10.0,
+              22.0,
+              520.51953125
+            ],
+            "skin_face_head": [
+              28.0,
+              36.0,
+              50.0
+            ],
+            "hair": [
+              54.0,
+              72.0,
+              92.0
+            ],
+            "glasses": [
+              29.0,
+              38.0,
+              44.160003662109375
+            ],
+            "neck_shoulder_cloth": [
+              30.0,
+              156.599853515625,
+              498.260009765625
+            ]
+          }
+        }
+      },
+      "topologyEvents": [
+        {
+          "step": 240,
+          "before": 29551,
+          "after": 29631,
+          "parts": {
+            "room_static": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 12
+            },
+            "skin_face_head": {
+              "replaceParentsProposed": 48,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 47
+            },
+            "hair": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 9
+            },
+            "glasses": {
+              "replaceParentsProposed": 4,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 2
+            },
+            "neck_shoulder_cloth": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 10
+            }
+          },
+          "beforeCoverage": {
+            "frame_0111.png": {
+              "hole": 0.030399659648537636,
+              "roomAlpha": 0.3466673791408539
+            },
+            "frame_0005.png": {
+              "hole": 0.012521053664386272,
+              "roomAlpha": 0.366559773683548
+            },
+            "frame_0153.png": {
+              "hole": 0.013089004904031754,
+              "roomAlpha": 0.38115400075912476
+            }
+          },
+          "afterCoverage": {
+            "frame_0111.png": {
+              "hole": 0.029488580301404,
+              "roomAlpha": 0.3618604838848114
+            },
+            "frame_0005.png": {
+              "hole": 0.012330377474427223,
+              "roomAlpha": 0.37920185923576355
+            },
+            "frame_0153.png": {
+              "hole": 0.011899095959961414,
+              "roomAlpha": 0.3941941261291504
+            }
+          }
+        },
+        {
+          "step": 360,
+          "before": 29631,
+          "after": 29704,
+          "parts": {
+            "room_static": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 12
+            },
+            "skin_face_head": {
+              "replaceParentsProposed": 48,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 47
+            },
+            "hair": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 8
+            },
+            "glasses": {
+              "replaceParentsProposed": 4,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 1
+            },
+            "neck_shoulder_cloth": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 5
+            }
+          },
+          "beforeCoverage": {
+            "frame_0111.png": {
+              "hole": 0.01806972734630108,
+              "roomAlpha": 0.6386070847511292
+            },
+            "frame_0005.png": {
+              "hole": 0.006610099691897631,
+              "roomAlpha": 0.6379157304763794
+            },
+            "frame_0153.png": {
+              "hole": 0.0035399808548390865,
+              "roomAlpha": 0.6742990016937256
+            }
+          },
+          "afterCoverage": {
+            "frame_0111.png": {
+              "hole": 0.017462342977523804,
+              "roomAlpha": 0.6540100574493408
+            },
+            "frame_0005.png": {
+              "hole": 0.006514761596918106,
+              "roomAlpha": 0.6579773426055908
+            },
+            "frame_0153.png": {
+              "hole": 0.0031830081716179848,
+              "roomAlpha": 0.7027106881141663
+            }
+          }
+        },
+        {
+          "step": 480,
+          "before": 29704,
+          "after": 29779,
+          "parts": {
+            "room_static": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 12
+            },
+            "skin_face_head": {
+              "replaceParentsProposed": 48,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 47
+            },
+            "hair": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 12
+            },
+            "glasses": {
+              "replaceParentsProposed": 4,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 1
+            },
+            "neck_shoulder_cloth": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 3
+            }
+          },
+          "beforeCoverage": {
+            "frame_0111.png": {
+              "hole": 0.015063168480992317,
+              "roomAlpha": 0.7985659241676331
+            },
+            "frame_0005.png": {
+              "hole": 0.004226650111377239,
+              "roomAlpha": 0.789098858833313
+            },
+            "frame_0153.png": {
+              "hole": 0.000327225134242326,
+              "roomAlpha": 0.8374617099761963
+            }
+          },
+          "afterCoverage": {
+            "frame_0111.png": {
+              "hole": 0.014941691420972347,
+              "roomAlpha": 0.8115774393081665
+            },
+            "frame_0005.png": {
+              "hole": 0.004131312016397715,
+              "roomAlpha": 0.8018220663070679
+            },
+            "frame_0153.png": {
+              "hole": 0.00014873869076836854,
+              "roomAlpha": 0.856200098991394
+            }
+          }
+        },
+        {
+          "step": 600,
+          "before": 29779,
+          "after": 29851,
+          "parts": {
+            "room_static": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 12
+            },
+            "skin_face_head": {
+              "replaceParentsProposed": 48,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 46
+            },
+            "hair": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 12
+            },
+            "glasses": {
+              "replaceParentsProposed": 4,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 1
+            },
+            "neck_shoulder_cloth": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 1
+            }
+          },
+          "beforeCoverage": {
+            "frame_0111.png": {
+              "hole": 0.011358114890754223,
+              "roomAlpha": 0.8814682364463806
+            },
+            "frame_0005.png": {
+              "hole": 0.0013029522961005569,
+              "roomAlpha": 0.8718416690826416
+            },
+            "frame_0153.png": {
+              "hole": 5.9495479945326224E-05,
+              "roomAlpha": 0.9146649837493896
+            }
+          },
+          "afterCoverage": {
+            "frame_0111.png": {
+              "hole": 0.010234450921416283,
+              "roomAlpha": 0.8880138397216797
+            },
+            "frame_0005.png": {
+              "hole": 0.0006991451373323798,
+              "roomAlpha": 0.878266453742981
+            },
+            "frame_0153.png": {
+              "hole": 5.9495479945326224E-05,
+              "roomAlpha": 0.9228655099868774
+            }
+          }
+        },
+        {
+          "step": 720,
+          "before": 29851,
+          "after": 29921,
+          "parts": {
+            "room_static": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 11
+            },
+            "skin_face_head": {
+              "replaceParentsProposed": 48,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 46
+            },
+            "hair": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 12
+            },
+            "glasses": {
+              "replaceParentsProposed": 4,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 0
+            },
+            "neck_shoulder_cloth": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 1
+            }
+          },
+          "beforeCoverage": {
+            "frame_0111.png": {
+              "hole": 0.006316812243312597,
+              "roomAlpha": 0.9263832569122314
+            },
+            "frame_0005.png": {
+              "hole": 0.00012711729505099356,
+              "roomAlpha": 0.9225584268569946
+            },
+            "frame_0153.png": {
+              "hole": 5.9495479945326224E-05,
+              "roomAlpha": 0.9520825743675232
+            }
+          },
+          "afterCoverage": {
+            "frame_0111.png": {
+              "hole": 0.00558794941753149,
+              "roomAlpha": 0.930252730846405
+            },
+            "frame_0005.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9279692769050598
+            },
+            "frame_0153.png": {
+              "hole": 5.9495479945326224E-05,
+              "roomAlpha": 0.9552798271179199
+            }
+          }
+        },
+        {
+          "step": 840,
+          "before": 29921,
+          "after": 29990,
+          "parts": {
+            "room_static": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 11
+            },
+            "skin_face_head": {
+              "replaceParentsProposed": 48,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 45
+            },
+            "hair": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 12
+            },
+            "glasses": {
+              "replaceParentsProposed": 4,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 0
+            },
+            "neck_shoulder_cloth": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 1
+            }
+          },
+          "beforeCoverage": {
+            "frame_0111.png": {
+              "hole": 0.003401360474526882,
+              "roomAlpha": 0.9468474388122559
+            },
+            "frame_0005.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9481067657470703
+            },
+            "frame_0153.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9658522605895996
+            }
+          },
+          "afterCoverage": {
+            "frame_0111.png": {
+              "hole": 0.0034924685023725033,
+              "roomAlpha": 0.9510518908500671
+            },
+            "frame_0005.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.952939510345459
+            },
+            "frame_0153.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9667331576347351
+            }
+          }
+        },
+        {
+          "step": 960,
+          "before": 29990,
+          "after": 30056,
+          "parts": {
+            "room_static": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 9
+            },
+            "skin_face_head": {
+              "replaceParentsProposed": 48,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 45
+            },
+            "hair": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 11
+            },
+            "glasses": {
+              "replaceParentsProposed": 4,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 0
+            },
+            "neck_shoulder_cloth": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 1
+            }
+          },
+          "beforeCoverage": {
+            "frame_0111.png": {
+              "hole": 0.0022776967380195856,
+              "roomAlpha": 0.9615457653999329
+            },
+            "frame_0005.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9657977223396301
+            },
+            "frame_0153.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9742653369903564
+            }
+          },
+          "afterCoverage": {
+            "frame_0111.png": {
+              "hole": 0.0022776967380195856,
+              "roomAlpha": 0.9623473286628723
+            },
+            "frame_0005.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9666957259178162
+            },
+            "frame_0153.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9748868942260742
+            }
+          }
+        },
+        {
+          "step": 1080,
+          "before": 30056,
+          "after": 30123,
+          "parts": {
+            "room_static": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 9
+            },
+            "skin_face_head": {
+              "replaceParentsProposed": 48,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 45
+            },
+            "hair": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 11
+            },
+            "glasses": {
+              "replaceParentsProposed": 4,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 0
+            },
+            "neck_shoulder_cloth": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 2
+            }
+          },
+          "beforeCoverage": {
+            "frame_0111.png": {
+              "hole": 0.0018525266787037253,
+              "roomAlpha": 0.9681986570358276
+            },
+            "frame_0005.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9735018610954285
+            },
+            "frame_0153.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9768006205558777
+            }
+          },
+          "afterCoverage": {
+            "frame_0111.png": {
+              "hole": 0.0018525266787037253,
+              "roomAlpha": 0.9683635830879211
+            },
+            "frame_0005.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9734982252120972
+            },
+            "frame_0153.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9767906069755554
+            }
+          }
+        },
+        {
+          "step": 1200,
+          "before": 30123,
+          "after": 30192,
+          "parts": {
+            "room_static": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 9
+            },
+            "skin_face_head": {
+              "replaceParentsProposed": 48,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 45
+            },
+            "hair": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 11
+            },
+            "glasses": {
+              "replaceParentsProposed": 4,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 1
+            },
+            "neck_shoulder_cloth": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 3
+            }
+          },
+          "beforeCoverage": {
+            "frame_0111.png": {
+              "hole": 0.0017917881486937404,
+              "roomAlpha": 0.9740228652954102
+            },
+            "frame_0005.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9791619777679443
+            },
+            "frame_0153.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9788763523101807
+            }
+          },
+          "afterCoverage": {
+            "frame_0111.png": {
+              "hole": 0.0017614188836887479,
+              "roomAlpha": 0.9743680357933044
+            },
+            "frame_0005.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9798054695129395
+            },
+            "frame_0153.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9795626401901245
+            }
+          }
+        },
+        {
+          "step": 1320,
+          "before": 30192,
+          "after": 30258,
+          "parts": {
+            "room_static": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 8
+            },
+            "skin_face_head": {
+              "replaceParentsProposed": 48,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 45
+            },
+            "hair": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 11
+            },
+            "glasses": {
+              "replaceParentsProposed": 4,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 1
+            },
+            "neck_shoulder_cloth": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 1
+            }
+          },
+          "beforeCoverage": {
+            "frame_0111.png": {
+              "hole": 0.0015792030608281493,
+              "roomAlpha": 0.9783449172973633
+            },
+            "frame_0005.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.983178436756134
+            },
+            "frame_0153.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9823281764984131
+            }
+          },
+          "afterCoverage": {
+            "frame_0111.png": {
+              "hole": 0.0015792030608281493,
+              "roomAlpha": 0.978509783744812
+            },
+            "frame_0005.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9832740426063538
+            },
+            "frame_0153.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9826268553733826
+            }
+          }
+        },
+        {
+          "step": 1440,
+          "before": 30258,
+          "after": 30322,
+          "parts": {
+            "room_static": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 7
+            },
+            "skin_face_head": {
+              "replaceParentsProposed": 48,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 45
+            },
+            "hair": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 10
+            },
+            "glasses": {
+              "replaceParentsProposed": 4,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 0
+            },
+            "neck_shoulder_cloth": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 2
+            }
+          },
+          "beforeCoverage": {
+            "frame_0111.png": {
+              "hole": 0.0013362488243728876,
+              "roomAlpha": 0.9821341633796692
+            },
+            "frame_0005.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9858959317207336
+            },
+            "frame_0153.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9846875071525574
+            }
+          },
+          "afterCoverage": {
+            "frame_0111.png": {
+              "hole": 0.0013362488243728876,
+              "roomAlpha": 0.982275664806366
+            },
+            "frame_0005.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9860381484031677
+            },
+            "frame_0153.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9847329258918762
+            }
+          }
+        },
+        {
+          "step": 1560,
+          "before": 30322,
+          "after": 30386,
+          "parts": {
+            "room_static": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 6
+            },
+            "skin_face_head": {
+              "replaceParentsProposed": 48,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 44
+            },
+            "hair": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 10
+            },
+            "glasses": {
+              "replaceParentsProposed": 4,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 1
+            },
+            "neck_shoulder_cloth": {
+              "replaceParentsProposed": 12,
+              "duplicate": 0,
+              "prune": 0,
+              "replaceParentsAccepted": 3
+            }
+          },
+          "beforeCoverage": {
+            "frame_0111.png": {
+              "hole": 0.0012755101779475808,
+              "roomAlpha": 0.9835858345031738
+            },
+            "frame_0005.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9870076775550842
+            },
+            "frame_0153.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9859949350357056
+            }
+          },
+          "afterCoverage": {
+            "frame_0111.png": {
+              "hole": 0.0013058794429525733,
+              "roomAlpha": 0.9838363528251648
+            },
+            "frame_0005.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9872162938117981
+            },
+            "frame_0153.png": {
+              "hole": 0.0,
+              "roomAlpha": 0.9860650897026062
+            }
+          }
+        }
+      ],
+      "parameterChanges": {
+        "means": 0.019194724038243294,
+        "scales": 0.1568303108215332,
+        "quats": 0.0625477060675621,
+        "opacities": 0.7777843475341797,
+        "sh": 0.12532208859920502
+      }
+    }
+  },
+  "frozenProductHashes": {
+    "viewer-gs\\gs-edit.js": "0332bccf9831e93a5dc345cc04e1df090aad9898c0c8c5b7b63789c6a48682b5",
+    "backend\\reconstruction_worker.py": "7173bae2b9e5637995e9503000c3c6319c857fa1700bc9f635174253fca3cb15",
+    "entry\\src\\main\\resources\\rawfile\\gs-viewer.js": "d633fb2718ef5ed5087aabbd27356058323d2c71e9dda69c95ee32f87718f5d3",
+    "package-lock.json": "39f45bee06bae03d273461783742507419d05dd1551ddb034a354ddaa9c0a5ba",
+    "backend\\reconstruction_train_joint.py": "4af2934fd6199ae42cdf8ca14e2abdced2af9de2cd635b7cd644dd23cd7f8c6c",
+    "build-profile.json5": "fd11bf65f7879a7bb08fa3ebaab69f4ce879bc94526ce55896971dacffe40865",
+    "viewer-gs\\main.js": "70c1f8fbe0ce1cbbc76370003a886cb42e2ee443b7a62370c670aedf208dff4e",
+    "backend\\recon_transfer.py": "9734394a7a7bbd85cee40f1db36616482fa8d33cc7728ca3930811ed48052e58",
+    "backend\\requirements.lock.txt": "c338d5a0733994caf101b7d641af2554c2ffa5937271fbe6d32fc01aede5da1c"
+  },
+  "freezeMeaning": "Current file identities, not a fabricated before-after baseline",
+  "lineageParts": {
+    "room_static": {
+      "count": 22138,
+      "descendants": 131,
+      "supportMinMedianMax": [
+        3.0,
+        40.0,
+        74.0
+      ],
+      "descendantSupportMinMedianMax": [
+        3.0,
+        18.0,
+        59.0
+      ],
+      "bound": 0,
+      "sourceKinds": {
+        "0": 2118,
+        "1": 20020
+      }
+    },
+    "skin_face_head": {
+      "count": 6033,
+      "descendants": 837,
+      "supportMinMedianMax": [
+        3.0,
+        56.0,
+        91.0
+      ],
+      "descendantSupportMinMedianMax": [
+        3.0,
+        59.0,
+        59.0
+      ],
+      "bound": 6033,
+      "sourceKinds": {
+        "2": 6033
+      }
+    },
+    "hair": {
+      "count": 396,
+      "descendants": 166,
+      "supportMinMedianMax": [
+        3.0,
+        3.0,
+        59.0
+      ],
+      "descendantSupportMinMedianMax": [
+        3.0,
+        30.5,
+        59.0
+      ],
+      "bound": 0,
+      "sourceKinds": {
+        "3": 396
+      }
+    },
+    "glasses": {
+      "count": 24,
+      "descendants": 15,
+      "supportMinMedianMax": [
+        3.0,
+        5.0,
+        21.0
+      ],
+      "descendantSupportMinMedianMax": [
+        3.0,
+        10.0,
+        21.0
+      ],
+      "bound": 0,
+      "sourceKinds": {
+        "4": 24
+      }
+    },
+    "neck_shoulder_cloth": {
+      "count": 1795,
+      "descendants": 52,
+      "supportMinMedianMax": [
+        3.0,
+        25.0,
+        86.0
+      ],
+      "descendantSupportMinMedianMax": [
+        4.0,
+        54.5,
+        59.0
+      ],
+      "bound": 1414,
+      "sourceKinds": {
+        "2": 1414,
+        "5": 381
+      }
+    }
+  },
+  "pointOrder": {
+    "plySha256": "1b2fe713df73ab87ce86458bf2b689c81eba1195f1004a6fa67e556841a9ccb3",
+    "originalXyzSha256": "47749ad327066415549554653fab631bdefabdd7b2c0cafc8a9d613a1b2fda49",
+    "duplicatePositionCount": 10,
+    "originalBundleSha256": "d633fb2718ef5ed5087aabbd27356058323d2c71e9dda69c95ee32f87718f5d3",
+    "results": [
+      {
+        "mode": "existing_product_loader",
+        "count": 30386,
+        "editableSplats": 6033,
+        "ordered": 1,
+        "exactXyzIndexMatches": 1,
+        "missing": 0,
+        "editableInPrefix": 0,
+        "editableOutsidePrefix": 6033,
+        "loadedXyzSha256": "8bb38a79e7146d7064046aa9db412d76a91712a0df242a868b8778228b8e02a8"
+      },
+      {
+        "mode": "isolated_loader_reorder_false_diagnostic",
+        "count": 30386,
+        "editableSplats": 6033,
+        "ordered": 30376,
+        "exactXyzIndexMatches": 30386,
+        "missing": 0,
+        "editableInPrefix": 6033,
+        "editableOutsidePrefix": 0,
+        "loadedXyzSha256": "47749ad327066415549554653fab631bdefabdd7b2c0cafc8a9d613a1b2fda49"
+      }
+    ],
+    "limits": [
+      "Accessor instrumentation is isolated; no product file changed",
+      "reorder:false is a diagnostic variant, not a product or Harmony pass"
+    ]
+  },
+  "GPUAfterTraining": {
+    "windowsGpu": "NVIDIA RTX 5070 Laptop GPU",
+    "windowsStatus": "Unknown",
+    "IsPresent": false,
+    "wslCudaAvailable": false,
+    "postTrainingAudits": "E source combined table, supplemental rendered masks, E exact cross-renderer not completed",
+    "workerRefreshedWhenIdle": true,
+    "workerReady": false
+  },
+  "publication": {
+    "newAssetReturnedToTablet": false,
+    "oldWorksReplaced": false,
+    "productionAlgorithmChanged": false,
+    "harmonyNewAssetTest": "not_run"
+  }
+}
