@@ -1,0 +1,1264 @@
+{
+  "files": [
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-baseline-heldout-20260927-a\\audit.json",
+      "bytes": 17912,
+      "sha256": "cdb10e3624b7b2c8e94a5427b6d149169ff63224f28c83ef22a2e7a97d785e17"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-baseline-heldout-20260927-a\\frame_0001-source-joint-contribution.png",
+      "bytes": 1042281,
+      "sha256": "2245af94a7b8024a0c958fe6b012d578e614b3ab9fb18639851c50ae22b417eb"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-baseline-heldout-20260927-a\\frame_0081-source-joint-contribution.png",
+      "bytes": 1145565,
+      "sha256": "cc7c9efbd94b67f0a041ff9bb416f442d9090dd48071ee43c8704f0e719eb9fd"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-baseline-heldout-20260927-a\\frame_0145-source-joint-contribution.png",
+      "bytes": 1056017,
+      "sha256": "39eaf29965a7c840fb6ce7aee9e79de3edff5c3ffa07dbe93d1fc745c57e82ca"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-baseline-heldout-20260927-a\\private-point-visible-weights.npz",
+      "bytes": 267361,
+      "sha256": "65767405acd0b43dc5852b9be854bd163ab94ffefaded24e75b979d2424d5691"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-clean-joint-3000-20260927-a\\job.json",
+      "bytes": 15,
+      "sha256": "e556a55863dc4a9abd74dcba4e754ad9398cf35d167dca19aadf4a2fc65fb343"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-clean-joint-3000-20260927-a\\portrait.gaussian.ply",
+      "bytes": 23651981,
+      "sha256": "80233ff166d89dd9ab9ee686efaa3f5da0b12a73019326b91d7f866fbedf1793"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-clean-joint-3000-20260927-a\\portrait.provenance.npz",
+      "bytes": 454890,
+      "sha256": "d9a712566c9c6a122c042d1df022a86421e93c8f61d05f52a7ea41233b079f95"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-clean-joint-3000-20260927-a\\portrait.view.json",
+      "bytes": 446,
+      "sha256": "f39aa0559b5e86a991658ffaa6b16e981f7cc92798dc3ff0445ab4b50acac626"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-clean-joint-3000-20260927-a\\research-audit.json",
+      "bytes": 2999,
+      "sha256": "d757f817dee65dadd16545be05f071dd1c8473461a470d3aad584b9d8b5389dc"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-clean-joint-3000-20260927-a\\training_metrics.json",
+      "bytes": 1907,
+      "sha256": "0f011bd894601818f0bf93ad227e00b96cfa0920d5bf94aba3719d6e1fa7df71"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-a\\cloth-support-audit.json",
+      "bytes": 254,
+      "sha256": "c49e5350c272f62798f5cc0b073a57cfb1f872d46ac59eed5549c1667005fe59"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-a\\cloth_supported_seeds.npz",
+      "bytes": 758,
+      "sha256": "e92240ff0a5a44cd267a870c0ef3077ce3f5ed1f5d7622f07375f27ceed092db"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-a\\component-seed-audit.json",
+      "bytes": 12579,
+      "sha256": "37df8ac197d621929888ee9f70ec3a949f3a99985190eaa82c62c8f1a73d3d08"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-a\\component_observations.json",
+      "bytes": 83543,
+      "sha256": "08c6af740b026547e15488c55713091eaaef63045c392d73886a57787836e3f1"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-a\\glasses_multiview_seeds.npz",
+      "bytes": 1297,
+      "sha256": "51433c43139ae4d73dfca3b66ad95480287d0a5b3227d984df7a3c367e065fbe"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-a\\hair_multiview_seeds.npz",
+      "bytes": 1331,
+      "sha256": "8d9b4402efe0aa779a81a3a62d27115107d70d06db94f794d711b62f96530bdd"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-a\\initialization.json",
+      "bytes": 478,
+      "sha256": "14703e2c73efee595f9e317d50f556d6f8e6c1f992ab2760a63616874438dcb9"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-a\\local_geometry.npz",
+      "bytes": 1291753,
+      "sha256": "b691e18cc1b070e5616aeb4db69235273790d2cbf8d441b02149ad888d98cdcf"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-a\\pose-and-scale-audit.json",
+      "bytes": 10239,
+      "sha256": "b824d4b428a6451ba2d379704a2f4c92cc3b98683e3fd73ac8a38833e0688a34"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-a\\preparation-time.json",
+      "bytes": 35,
+      "sha256": "2c7123ab66fcd3bcf5a5e62567330c2d28baf7fd646d04a4bdb0f4f684c07914"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-a\\preparation.json",
+      "bytes": 1663,
+      "sha256": "20364f13492cb76de02d853995b4c510f3e7aa4dfc9b6971d0d8d96b3435df7a"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-a\\static-surface-audit.json",
+      "bytes": 662,
+      "sha256": "2d63b6cdb07a19c1117330dba8558b6014e90b3216a6a644fc684fb9c0d51211"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-a\\static_surface_seeds.npz",
+      "bytes": 49581,
+      "sha256": "3afd9e3be2b86245d7adecb1a80e86c85634d648694d6e60f8ab7b39296e9c06"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-b\\cloth-new-multiview-audit.json",
+      "bytes": 84002,
+      "sha256": "f96f1e5a57f613641142fa0902270d374954645d354892dc7e3b24e28781a083"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-b\\cloth-support-audit.json",
+      "bytes": 254,
+      "sha256": "c49e5350c272f62798f5cc0b073a57cfb1f872d46ac59eed5549c1667005fe59"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-b\\cloth_supported_seeds.npz",
+      "bytes": 10090,
+      "sha256": "3dda310a71f172577d62e52d74016e06b7594745bca0b5da1f8f90bf17225f43"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-b\\component-seed-audit.json",
+      "bytes": 306246,
+      "sha256": "26b0111b67f881714286b82d644c0b07a0e3d2fb097e394e81d235dadf66dfb6"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-b\\component_observations.json",
+      "bytes": 375315,
+      "sha256": "55a27a8aa8256fdbec1e0fa39217e9ca46e47feed367571041ccef60b92ecdad"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-b\\glasses_multiview_seeds.npz",
+      "bytes": 2024,
+      "sha256": "25e60a6a7398ddb3d9925f88b7c83f61f816ee24c54461af6c7360fe2d2e3351"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-b\\gpu-telemetry.json",
+      "bytes": 25849,
+      "sha256": "ed918ee423138c366fbdbde3b3d1eb93d71f4658270002904701b39491f64893"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-b\\hair_multiview_seeds.npz",
+      "bytes": 7738,
+      "sha256": "dc525970cf87258740cf5c812f9cfc0acc86ff8d9788e765a00b13349e610cb4"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-b\\initialization.json",
+      "bytes": 483,
+      "sha256": "fc1c3eaf3ad8681415c9ddc90db20ac5c2d780dab4882eac98b8d8f13859f3c9"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-b\\local_geometry.npz",
+      "bytes": 5805053,
+      "sha256": "fae308b496a50dad7c67c58ee2767d20ea9c9957f2c8dcbd811bb337d44f07e0"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-b\\portrait.components.npz",
+      "bytes": 666804,
+      "sha256": "980449c5e35cadd684c4f2205c065ad146161452910177d7fa5450a65045a847"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-b\\portrait.gaussian.ply",
+      "bytes": 8352808,
+      "sha256": "3e21bb5566b3b8f476a08f966b76441c3680454dd6a7c10d57edbfc52b2db77e"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-b\\portrait.view.json",
+      "bytes": 655,
+      "sha256": "2376e7f800c830eeedfbefe7adb311c7d917b02567132f67e4415e40b2494e3a"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-b\\pose-and-scale-audit.json",
+      "bytes": 49307,
+      "sha256": "0572e3b6fb8d26a99e605c635dbaed7605c92fa98db362ce6879232a76caab25"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-b\\preparation-time.json",
+      "bytes": 35,
+      "sha256": "4d5b65a2e17f4b0ccd7650030c4a365a5cb3372b91372185056b54166d99c6b2"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-b\\preparation.json",
+      "bytes": 2799,
+      "sha256": "e67d4dce02f9874e0befe15486532f80458f8a62a23221324fcc5abefc2e5301"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-b\\research-audit.json",
+      "bytes": 53168,
+      "sha256": "3c2ac5ed7b9501816187fbc7f951669cde5e75f5181299c09321a6ddf5292e75"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-b\\static-surface-audit.json",
+      "bytes": 1769,
+      "sha256": "694b9dfb99b9420e001a133225ab7060664569880b8dd028425d069ff36b7813"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-b\\static_surface_seeds.npz",
+      "bytes": 477607,
+      "sha256": "22296697a46475e5099a5fe2430852422876150cfc9aaccc3e0b6f124b11ad35"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-b\\trained_parameters.npz",
+      "bytes": 3614443,
+      "sha256": "8383b3946d45abf5b08fbdc390b2a25b955f646e1befbcdf7ca330c4a3378a5e"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-c\\cloth-new-multiview-audit.json",
+      "bytes": 84002,
+      "sha256": "f96f1e5a57f613641142fa0902270d374954645d354892dc7e3b24e28781a083"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-c\\cloth_supported_seeds.npz",
+      "bytes": 10090,
+      "sha256": "3dda310a71f172577d62e52d74016e06b7594745bca0b5da1f8f90bf17225f43"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-c\\component-seed-audit.json",
+      "bytes": 306246,
+      "sha256": "26b0111b67f881714286b82d644c0b07a0e3d2fb097e394e81d235dadf66dfb6"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-c\\component_observations.json",
+      "bytes": 375315,
+      "sha256": "55a27a8aa8256fdbec1e0fa39217e9ca46e47feed367571041ccef60b92ecdad"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-c\\failure.json",
+      "bytes": 233,
+      "sha256": "d62930499b7cd2fea2f38682a0c88a4b130d62ebfeff5e21f8ec6a052f36e771"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-c\\frozen-inputs.json",
+      "bytes": 1713,
+      "sha256": "b4ec12dcf0c5d734be3070eba0688b289b913e4148600cbbc11c7fa34d479baf"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-c\\glasses_multiview_seeds.npz",
+      "bytes": 2024,
+      "sha256": "25e60a6a7398ddb3d9925f88b7c83f61f816ee24c54461af6c7360fe2d2e3351"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-c\\gpu-telemetry.json",
+      "bytes": 11094,
+      "sha256": "58982092cf9c174258ef6ead95c710fcc90c5d293c5787b583041c29680cfec4"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-c\\hair_multiview_seeds.npz",
+      "bytes": 7738,
+      "sha256": "dc525970cf87258740cf5c812f9cfc0acc86ff8d9788e765a00b13349e610cb4"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-c\\initialization.json",
+      "bytes": 483,
+      "sha256": "fc1c3eaf3ad8681415c9ddc90db20ac5c2d780dab4882eac98b8d8f13859f3c9"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-c\\local_geometry.npz",
+      "bytes": 5805053,
+      "sha256": "fae308b496a50dad7c67c58ee2767d20ea9c9957f2c8dcbd811bb337d44f07e0"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-c\\pose-and-scale-audit.json",
+      "bytes": 49307,
+      "sha256": "0572e3b6fb8d26a99e605c635dbaed7605c92fa98db362ce6879232a76caab25"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-c\\preparation-time.json",
+      "bytes": 35,
+      "sha256": "4d5b65a2e17f4b0ccd7650030c4a365a5cb3372b91372185056b54166d99c6b2"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-c\\preparation.json",
+      "bytes": 2799,
+      "sha256": "e67d4dce02f9874e0befe15486532f80458f8a62a23221324fcc5abefc2e5301"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-c\\static-surface-audit.json",
+      "bytes": 1769,
+      "sha256": "694b9dfb99b9420e001a133225ab7060664569880b8dd028425d069ff36b7813"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-c\\static_surface_seeds.npz",
+      "bytes": 477607,
+      "sha256": "22296697a46475e5099a5fe2430852422876150cfc9aaccc3e0b6f124b11ad35"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-d\\cloth-new-multiview-audit.json",
+      "bytes": 84002,
+      "sha256": "f96f1e5a57f613641142fa0902270d374954645d354892dc7e3b24e28781a083"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-d\\cloth_supported_seeds.npz",
+      "bytes": 10090,
+      "sha256": "3dda310a71f172577d62e52d74016e06b7594745bca0b5da1f8f90bf17225f43"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-d\\component-seed-audit.json",
+      "bytes": 306246,
+      "sha256": "26b0111b67f881714286b82d644c0b07a0e3d2fb097e394e81d235dadf66dfb6"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-d\\component_observations.json",
+      "bytes": 375315,
+      "sha256": "55a27a8aa8256fdbec1e0fa39217e9ca46e47feed367571041ccef60b92ecdad"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-d\\frozen-inputs.json",
+      "bytes": 508,
+      "sha256": "b088a294e9f494531dc9d3f532becfb38174c84696801161739edb0eec129a85"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-d\\glasses_multiview_seeds.npz",
+      "bytes": 2024,
+      "sha256": "25e60a6a7398ddb3d9925f88b7c83f61f816ee24c54461af6c7360fe2d2e3351"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-d\\gpu-telemetry.json",
+      "bytes": 26635,
+      "sha256": "c1bc736f23ef9ad09a6c3aab3b1fd06706206fba11a8c4bf534ed8682e5f82e8"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-d\\hair_multiview_seeds.npz",
+      "bytes": 7738,
+      "sha256": "dc525970cf87258740cf5c812f9cfc0acc86ff8d9788e765a00b13349e610cb4"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-d\\initialization.json",
+      "bytes": 483,
+      "sha256": "fc1c3eaf3ad8681415c9ddc90db20ac5c2d780dab4882eac98b8d8f13859f3c9"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-d\\local_geometry.npz",
+      "bytes": 5805053,
+      "sha256": "fae308b496a50dad7c67c58ee2767d20ea9c9957f2c8dcbd811bb337d44f07e0"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-d\\point-order-audit.json",
+      "bytes": 990,
+      "sha256": "5d0d4c28442b7a31dcb4098e7daa0cb5acac2c42778d1439ed4bfa15f95e03f5"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-d\\portrait.components.npz",
+      "bytes": 682277,
+      "sha256": "5c2d756b250b35ff205d77b93a81fa4f2f34df9042edfe13e1459a8d7b67b6ec"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-d\\portrait.gaussian.ply",
+      "bytes": 6975512,
+      "sha256": "ae3a896995186a84d90565c500ea29ef2ef70aff923de450015fca672e9ce66a"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-d\\portrait.view.json",
+      "bytes": 654,
+      "sha256": "028ac6f4204041631fb82085b0ea49565e1e67145d2d939c63bb99a1b8220a27"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-d\\pose-and-scale-audit.json",
+      "bytes": 49307,
+      "sha256": "0572e3b6fb8d26a99e605c635dbaed7605c92fa98db362ce6879232a76caab25"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-d\\preparation-time.json",
+      "bytes": 35,
+      "sha256": "4d5b65a2e17f4b0ccd7650030c4a365a5cb3372b91372185056b54166d99c6b2"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-d\\preparation.json",
+      "bytes": 2799,
+      "sha256": "e67d4dce02f9874e0befe15486532f80458f8a62a23221324fcc5abefc2e5301"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-d\\research-audit.json",
+      "bytes": 52978,
+      "sha256": "f544818930debab86124dd106c356c41a00625e5f7f09931e53a13fd682a6de0"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-d\\static-surface-audit.json",
+      "bytes": 1769,
+      "sha256": "694b9dfb99b9420e001a133225ab7060664569880b8dd028425d069ff36b7813"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-d\\static_surface_seeds.npz",
+      "bytes": 477607,
+      "sha256": "22296697a46475e5099a5fe2430852422876150cfc9aaccc3e0b6f124b11ad35"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-d\\trained_parameters.npz",
+      "bytes": 3135565,
+      "sha256": "a030eb213c4bc7ec3ed3a72de479846bca036e74be5e88f0c0945d165acda51b"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-e\\cloth-new-multiview-audit.json",
+      "bytes": 84002,
+      "sha256": "f96f1e5a57f613641142fa0902270d374954645d354892dc7e3b24e28781a083"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-e\\cloth_supported_seeds.npz",
+      "bytes": 10090,
+      "sha256": "3dda310a71f172577d62e52d74016e06b7594745bca0b5da1f8f90bf17225f43"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-e\\component-seed-audit.json",
+      "bytes": 306246,
+      "sha256": "26b0111b67f881714286b82d644c0b07a0e3d2fb097e394e81d235dadf66dfb6"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-e\\component_observations.json",
+      "bytes": 375315,
+      "sha256": "55a27a8aa8256fdbec1e0fa39217e9ca46e47feed367571041ccef60b92ecdad"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-e\\frozen-code.json",
+      "bytes": 534,
+      "sha256": "e30bedd149289eae59ec1bb0312a8cda267c6968ef44409b501a7f5e77358651"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-e\\glasses_multiview_seeds.npz",
+      "bytes": 2024,
+      "sha256": "25e60a6a7398ddb3d9925f88b7c83f61f816ee24c54461af6c7360fe2d2e3351"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-e\\gpu-telemetry.json",
+      "bytes": 31744,
+      "sha256": "c32bb0a6587ba31404338324ce13b89c0d8ff5a0f96d7c834013e04ad165a435"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-e\\hair_multiview_seeds.npz",
+      "bytes": 7738,
+      "sha256": "dc525970cf87258740cf5c812f9cfc0acc86ff8d9788e765a00b13349e610cb4"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-e\\initialization.json",
+      "bytes": 483,
+      "sha256": "fc1c3eaf3ad8681415c9ddc90db20ac5c2d780dab4882eac98b8d8f13859f3c9"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-e\\local_geometry.npz",
+      "bytes": 5805053,
+      "sha256": "fae308b496a50dad7c67c58ee2767d20ea9c9957f2c8dcbd811bb337d44f07e0"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-e\\point-order-audit.json",
+      "bytes": 1183,
+      "sha256": "6eba77b8e2766cf6ceb2fa54139dda06d4df4afab7a2735cceaa7572b86a21f9"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-e\\portrait.components.npz",
+      "bytes": 709962,
+      "sha256": "2b0f146a67f43548f26e475bd6af44781c3d11788979ee74efcaf20cfe584231"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-e\\portrait.gaussian.ply",
+      "bytes": 7172572,
+      "sha256": "1b2fe713df73ab87ce86458bf2b689c81eba1195f1004a6fa67e556841a9ccb3"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-e\\portrait.view.json",
+      "bytes": 655,
+      "sha256": "d8f2d860d886c8d0a34e55f9aeddaa64d4df2fdc6636d0bb9874869354019f05"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-e\\pose-and-scale-audit.json",
+      "bytes": 49307,
+      "sha256": "0572e3b6fb8d26a99e605c635dbaed7605c92fa98db362ce6879232a76caab25"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-e\\preparation-time.json",
+      "bytes": 35,
+      "sha256": "4d5b65a2e17f4b0ccd7650030c4a365a5cb3372b91372185056b54166d99c6b2"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-e\\preparation.json",
+      "bytes": 2799,
+      "sha256": "e67d4dce02f9874e0befe15486532f80458f8a62a23221324fcc5abefc2e5301"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-e\\research-audit.json",
+      "bytes": 62416,
+      "sha256": "ebad8e1c49121d2c37b5f047cb054940ac613307f4d614a84713c0833b0acc7d"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-e\\static-surface-audit.json",
+      "bytes": 1769,
+      "sha256": "694b9dfb99b9420e001a133225ab7060664569880b8dd028425d069ff36b7813"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-e\\static_surface_seeds.npz",
+      "bytes": 477607,
+      "sha256": "22296697a46475e5099a5fe2430852422876150cfc9aaccc3e0b6f124b11ad35"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-e\\trained_parameters.npz",
+      "bytes": 3232051,
+      "sha256": "108130d8feb71a46e9a2e2fefc3a6ec441dbc11ff721b5ba79528978475084b8"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-e\\worker-environment-refresh.json",
+      "bytes": 244,
+      "sha256": "404df697e3d0ca234b1666633fc2c2ab2c1707f964fa975fac5d2308853b24a0"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-counterfactual-clean-20260927-a\\audit.json",
+      "bytes": 3496,
+      "sha256": "f07cdd10f80ccccc9c107db91278c1f9bbddafe4bd6889f8f8058fafc2a1b536"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-counterfactual-clean-20260927-a\\frame_0025-source-base-clean.png",
+      "bytes": 971326,
+      "sha256": "0b924feb0419666bba88178c5bb3c31bfd8224657abb03fe23ca62819333b11c"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-counterfactual-clean-20260927-a\\frame_0080-source-base-clean.png",
+      "bytes": 912233,
+      "sha256": "2a0d0020f69dbf6218554122ff11bd9a214069552856e1eeaf9d547bccf635de"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-counterfactual-clean-20260927-a\\frame_0136-source-base-clean.png",
+      "bytes": 1011302,
+      "sha256": "b37a5573230ab6fb658f9a09e34c01bd53cc911421cf538a5d8d0d72d12689c1"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-counterfactual-clean-20260927-b\\audit.json",
+      "bytes": 5379,
+      "sha256": "212323149b22d8e28f679e808442b615cf24edd64404b1815c9fb6a020455e93"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-counterfactual-clean-20260927-b\\frame_0025-source-base-clean.png",
+      "bytes": 996097,
+      "sha256": "386bbdd48c4cdcc686ffbe043e7fe7fa6e733f7c2c6aa8dc410144a4c96c722e"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-counterfactual-clean-20260927-b\\frame_0080-source-base-clean.png",
+      "bytes": 953382,
+      "sha256": "1070d1e31d3c5590f7c48ba29a336abaf9f157abc1502819b253658ccdff01d0"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-counterfactual-clean-20260927-b\\frame_0136-source-base-clean.png",
+      "bytes": 1041975,
+      "sha256": "013fa4e539ba431adaa6c59795be3e0522de5bde5351027c58a9db4246ec7a61"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-detail-joint-3000-20260927-a\\job.json",
+      "bytes": 15,
+      "sha256": "e556a55863dc4a9abd74dcba4e754ad9398cf35d167dca19aadf4a2fc65fb343"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-detail-joint-3000-20260927-a\\portrait.gaussian.ply",
+      "bytes": 23121688,
+      "sha256": "fbd560f3a2a4cd7513fa9aabfb61f782d1cec5f7c2dc619d7c4c0d6b2fcc4af7"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-detail-joint-3000-20260927-a\\portrait.provenance.npz",
+      "bytes": 449649,
+      "sha256": "c09816916e2518a4f0959dbe3db1414f33c16f955e105b169b3fdeef022499f1"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-detail-joint-3000-20260927-a\\portrait.view.json",
+      "bytes": 446,
+      "sha256": "b952fa5316b13d775b4ab466a987c2a0aa6282a92228d5a6c389837ed01a35c2"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-detail-joint-3000-20260927-a\\research-audit.json",
+      "bytes": 3065,
+      "sha256": "670407d9b51b3ccb826e553632619faa5b1d659ec7409a83269bdbafe83653dd"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-detail-joint-3000-20260927-a\\training_metrics.json",
+      "bytes": 1934,
+      "sha256": "36a5013506f57d4391b0f63521f2cabc343d4c63b7123f0707f4af25a56fca60"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-native-face-compare-20260927-a\\audit.json",
+      "bytes": 5162,
+      "sha256": "e52318577a61006f441cc2230c505bed0441e18a5ff12a1f01ad6d2969f0c391"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-native-face-compare-20260927-a\\frame_0001-native-face-comparison.png",
+      "bytes": 3839845,
+      "sha256": "1dfa2727281e3c804e03a91d6ffe99cf629e61d5373e54b15978c4e9702b6262"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-native-face-compare-20260927-a\\frame_0081-native-face-comparison.png",
+      "bytes": 4575831,
+      "sha256": "1cca6facc61906b07702da0731261b7fda975d599bfb2b7f44f53d5b8bcd9468"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-native-face-compare-20260927-a\\frame_0145-native-face-comparison.png",
+      "bytes": 3783387,
+      "sha256": "37cf9caf82e8043180c73dda3fcbbc9c14c66ef2c365edd6def9d4b79409e3a9"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-shared-joint-3000-20260927-a\\job.json",
+      "bytes": 15,
+      "sha256": "e556a55863dc4a9abd74dcba4e754ad9398cf35d167dca19aadf4a2fc65fb343"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-shared-joint-3000-20260927-a\\point-order-audit.json",
+      "bytes": 1190,
+      "sha256": "b372f24d3c7f332e3bdfef842769a32d9572a86bed8b2ef1c6730e2196a09372"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-shared-joint-3000-20260927-a\\portrait.gaussian.ply",
+      "bytes": 23068588,
+      "sha256": "304da69078f6bb2519c1e049c65fe39734eaf60bfc2f0b40144f794feac1f610"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-shared-joint-3000-20260927-a\\portrait.provenance.npz",
+      "bytes": 447636,
+      "sha256": "61b9ecea5b530f649ef4ce6e9018112fc6e85eb6b1260912e1b6a9648f2ac5d9"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-shared-joint-3000-20260927-a\\portrait.view.json",
+      "bytes": 446,
+      "sha256": "abeb346d3674c5fea024b85b2f2c5d3ad67214b59aaeaf6cd2c8c9b2213ecd4b"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-shared-joint-3000-20260927-a\\research-audit.json",
+      "bytes": 2897,
+      "sha256": "4b7c2388f6fdd9867f577471a743c9090e580c9cc2feb8578422925d380949b0"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-shared-joint-3000-20260927-a\\training_metrics.json",
+      "bytes": 1852,
+      "sha256": "74a95ca80f89fcd0004a21b7f8b27c25156ad4f86e631b5b4f18dc62ed2907b5"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-shared-joint-900-20260927-a\\job.json",
+      "bytes": 15,
+      "sha256": "e7114c354938378346793a9c4f2ea78117498008eae58f3cef6ee34aca389e99"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-shared-joint-900-20260927-a\\portrait.gaussian.ply",
+      "bytes": 10943380,
+      "sha256": "60e5e577f7fc123d8f18612a27f459ee60cb2fa3cec65a1f8af16e902486c2cb"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-shared-joint-900-20260927-a\\portrait.provenance.npz",
+      "bytes": 222805,
+      "sha256": "e19ea70b8871f7cd7df37bff7e40f4448a53241b89828cca2aa79b37ddb896dc"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-shared-joint-900-20260927-a\\portrait.view.json",
+      "bytes": 446,
+      "sha256": "8aed9d1fe08981c93232cc7d3431c9b80025a653c2027d7954d9044c1633ad44"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-shared-joint-900-20260927-a\\research-audit.json",
+      "bytes": 1686,
+      "sha256": "4fcae7c72013146ae1736ce9bad5a0610c2a4d515b53a60109d3106805baaafa"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-shared-joint-900-20260927-a\\training_metrics.json",
+      "bytes": 846,
+      "sha256": "8b71eca1049eb4e9b904cbaeb88ceb90e06d44f046ef48a33afb85a74889f956"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-visibility-audit-20260927-b\\audit.json",
+      "bytes": 3374,
+      "sha256": "1b90ec03e4d4b67e337215c9e4b0475530919ce5108cb3eef862a87d3395d9eb"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-visibility-audit-20260927-b\\frame_0025-candidate-centers-not-render.png",
+      "bytes": 520094,
+      "sha256": "ce6f583a8d98616e83b26a07213b3b68c0ebd2ea194dbcc44d5eaa2d26df9ff6"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-visibility-audit-20260927-b\\frame_0080-candidate-centers-not-render.png",
+      "bytes": 459873,
+      "sha256": "ea52e5c3615328c8a7c4d31052773681f0dbde0f8a6ddcd5060df23049228164"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-visibility-audit-20260927-b\\frame_0136-candidate-centers-not-render.png",
+      "bytes": 537314,
+      "sha256": "08cb6439ec29420c34f9d28387c999980f3a37c960c966430c767f300a30e909"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-visibility-audit-20260927-c\\audit.json",
+      "bytes": 17765,
+      "sha256": "257470f9c566c9c07ef3209e640e5d1a93db18fa52d90411faaa74c909593571"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-visibility-audit-20260927-c\\frame_0025-source-joint-contribution.png",
+      "bytes": 1121389,
+      "sha256": "e121d5e51394c58897c38730928f825b7f9b64983cbf99bb61c05df8ce16dd04"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-visibility-audit-20260927-c\\frame_0080-source-joint-contribution.png",
+      "bytes": 1172560,
+      "sha256": "0c87bcee318190cecc8abe66a4283665ca3418ef2d28d9852f4db2949952ce28"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-visibility-audit-20260927-c\\frame_0136-source-joint-contribution.png",
+      "bytes": 1180213,
+      "sha256": "dc1d1fe8ba8189974fdd79496a3144201a3b8e78fd192cc53a98930df77138a3"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-visibility-audit-20260927-d\\audit.json",
+      "bytes": 17773,
+      "sha256": "5e0e8e5574fffbc6c7efccb9a50f47207200d0d010ecbc1e1421b1ad8e14399d"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-visibility-audit-20260927-d\\frame_0025-source-joint-contribution.png",
+      "bytes": 1121389,
+      "sha256": "e121d5e51394c58897c38730928f825b7f9b64983cbf99bb61c05df8ce16dd04"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-visibility-audit-20260927-d\\frame_0080-source-joint-contribution.png",
+      "bytes": 1172560,
+      "sha256": "0c87bcee318190cecc8abe66a4283665ca3418ef2d28d9852f4db2949952ce28"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-visibility-audit-20260927-d\\frame_0136-source-joint-contribution.png",
+      "bytes": 1180213,
+      "sha256": "dc1d1fe8ba8189974fdd79496a3144201a3b8e78fd192cc53a98930df77138a3"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-visibility-audit-20260927-d\\private-point-visible-weights.npz",
+      "bytes": 325620,
+      "sha256": "c27b60bfce10c0589b8ecaf8d2339dac74cebdd4c65caecf3e17f665b5851f50"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-live-fresh-20260928-a\\capture_quality.json",
+      "bytes": 179,
+      "sha256": "1b0102e61c3615e6f04f0c8c6d37081945a0264278278fde5b8f90851f74c500"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-live-fresh-20260928-a\\face_landmarks.npz",
+      "bytes": 556050,
+      "sha256": "aef8e8c67cea4b605127af3a1a708be3ab26de90e62de7dc0f93b5a1b4da04d9"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-live-fresh-20260928-a\\face_mask_quality.json",
+      "bytes": 213,
+      "sha256": "913f8ba6c960fcdd6c6e54816b0f01713f0322e884954aebbed40c9467d1d9d2"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-live-fresh-20260928-a\\frame_selection.json",
+      "bytes": 26056,
+      "sha256": "6c6f5af807c5e15b574941a61a2b67e8598be534d28e84cb4811b1b08283381c"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-capacity\\cloth_supported_seeds.npz",
+      "bytes": 10090,
+      "sha256": "3dda310a71f172577d62e52d74016e06b7594745bca0b5da1f8f90bf17225f43"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-capacity\\initialization.json",
+      "bytes": 483,
+      "sha256": "fc1c3eaf3ad8681415c9ddc90db20ac5c2d780dab4882eac98b8d8f13859f3c9"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-capacity\\portrait-import.json",
+      "bytes": 3858,
+      "sha256": "ee22b5a40b96a543ab80c363a9f1b3062a248644c80c22dc2c239863653d5890"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-capacity\\portrait.components.npz",
+      "bytes": 283967,
+      "sha256": "753fc01349cbf51cd77bdc7d92edcf3163dedbd874fd3b8fab6ae6082b350ceb"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-capacity\\portrait.gaussian.ply",
+      "bytes": 8045064,
+      "sha256": "382e4a5c515dd989adae26db0240dc644e92d625cf5c0d7ab14fdb66b5e87239"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-capacity\\portrait.view.json",
+      "bytes": 652,
+      "sha256": "74029003cae4be04b986080a22ec7f21b115faa6ea17137237d70890945333e0"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-capacity\\report.json",
+      "bytes": 44780,
+      "sha256": "8e406a01b911c005409c84d25131f140d1908e90f30d950ddc2a619cfa2f9e98"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-capacity\\trained-state.pt",
+      "bytes": 5396007,
+      "sha256": "bfbdef6914e2ebcdc642304c6eab7c29c808e3ea1b2150873290a0dd485d9362"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-capacity-r2\\cloth_supported_seeds.npz",
+      "bytes": 10090,
+      "sha256": "3dda310a71f172577d62e52d74016e06b7594745bca0b5da1f8f90bf17225f43"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-capacity-r2\\initialization.json",
+      "bytes": 483,
+      "sha256": "fc1c3eaf3ad8681415c9ddc90db20ac5c2d780dab4882eac98b8d8f13859f3c9"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-capacity-r2\\portrait-import.json",
+      "bytes": 3858,
+      "sha256": "ee22b5a40b96a543ab80c363a9f1b3062a248644c80c22dc2c239863653d5890"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-capacity-r2\\portrait.components.npz",
+      "bytes": 283967,
+      "sha256": "753fc01349cbf51cd77bdc7d92edcf3163dedbd874fd3b8fab6ae6082b350ceb"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-capacity-r2\\portrait.gaussian.ply",
+      "bytes": 8045064,
+      "sha256": "382e4a5c515dd989adae26db0240dc644e92d625cf5c0d7ab14fdb66b5e87239"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-capacity-r2\\portrait.view.json",
+      "bytes": 652,
+      "sha256": "74029003cae4be04b986080a22ec7f21b115faa6ea17137237d70890945333e0"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-capacity-r2\\report.json",
+      "bytes": 44776,
+      "sha256": "a1c9fe5e833bb72686450555a05679d87d78dbfaaf0821276fc4e077b06b3ee4"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-capacity-r2\\trained-state.pt",
+      "bytes": 5396007,
+      "sha256": "bfbdef6914e2ebcdc642304c6eab7c29c808e3ea1b2150873290a0dd485d9362"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-glasses-lines\\audit.json",
+      "bytes": 309982,
+      "sha256": "7137ed80e8b09d1699f6a7d7a82be66c88e26f6a063ed1d3851f616723d9e4fd"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-glasses-lines\\frame_0002.png-line-audit.png",
+      "bytes": 108340,
+      "sha256": "07874224576cb50ab1c0abb198b22031da5bea84c274096df8797c2cf8bb2e78"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-glasses-lines\\frame_0024.png-line-audit.png",
+      "bytes": 82050,
+      "sha256": "8621ba1696932fbe5cb77ba8e49ea8a08a45ef328a780a516fbf7b332cefb29e"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-glasses-lines\\frame_0050.png-line-audit.png",
+      "bytes": 97448,
+      "sha256": "aa3b0418e92224e9e9c8295e3f519410fec11b35ce52f91f038369b63158bd14"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-glasses-lines\\frame_0072.png-line-audit.png",
+      "bytes": 88158,
+      "sha256": "ab66b2b2be6613050d4c6f55c901c8be601a232b5f9e19b9466eb344873732c1"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-glasses-lines\\frame_0101.png-line-audit.png",
+      "bytes": 109656,
+      "sha256": "fdb2af58d50d1f55c9724eba863dc8940d6699000dbca7278962b2bfc6aad990"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-glasses-lines\\frame_0122.png-line-audit.png",
+      "bytes": 93268,
+      "sha256": "b0a60db7f78bf271b9c1ceab820902bb629506a00236912fad23f9ca27ede7da"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-glasses-lines\\frame_0153.png-line-audit.png",
+      "bytes": 99865,
+      "sha256": "c8a2cf14d6b9535128d0bc7f0976625968627b0f9f5c23c4eff2a11cb029ba87"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-glasses-lines\\glasses_lines.npz",
+      "bytes": 16344,
+      "sha256": "efe6cd2572d036ce60752fdc213a9381816f3576ad7cc475fde3eb862c36e904"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-glasses-lines-anchored\\audit.json",
+      "bytes": 7917,
+      "sha256": "2577cdfd941d72d2275798aef6f57f96363f6c09b35315417615ed1a44a14229"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-glasses-lines-anchored\\frame_0002.png-line-audit.png",
+      "bytes": 85083,
+      "sha256": "29e303d8c3d09def0e355d194272342f8cbfdd59c53888bcec8624ea7d9ce312"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-glasses-lines-anchored\\frame_0024.png-line-audit.png",
+      "bytes": 69079,
+      "sha256": "19cdda103f4e98a49449c5cb3541d75da2f15edccc0246c20b767857d46dff49"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-glasses-lines-anchored\\frame_0050.png-line-audit.png",
+      "bytes": 72246,
+      "sha256": "7bdad65619b5c11b940dabcee1836810e9c620c0af895939fdb6d39213cb406e"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-glasses-lines-anchored\\frame_0072.png-line-audit.png",
+      "bytes": 74131,
+      "sha256": "aa5fd9970fa710fbfc861330c73012e8c124de5797436d75eaff7bedf541e77c"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-glasses-lines-anchored\\frame_0101.png-line-audit.png",
+      "bytes": 89106,
+      "sha256": "33367ab45922170fd5d787dc6f652967217b85e24aa74f25481ead44a066c3ab"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-glasses-lines-anchored\\frame_0122.png-line-audit.png",
+      "bytes": 76704,
+      "sha256": "e65eba5698bba52b34fba12a2054d44cc95bee6a3cff2a8881981f0390c035bc"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-glasses-lines-anchored\\frame_0153.png-line-audit.png",
+      "bytes": 78958,
+      "sha256": "79b0949e9086e5e4ea876cb3e6590595194a06216b79a7bb36f6ea06bba42bb0"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-glasses-lines-anchored\\glasses_lines.npz",
+      "bytes": 708,
+      "sha256": "99496cf7180ebedd80875884996aba28fd53b74e0fb821abb3a02c2561a760b2"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-review\\evidence.json",
+      "bytes": 78106,
+      "sha256": "816f4f8e8ca35b3839e953b0cb485cd709dc8113989ab6ac9625d97032c2665b"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-review\\frame_0035.png-controlled-comparison.png",
+      "bytes": 1191399,
+      "sha256": "d57e37a672f800aba21f046a44c78a227047d58ddd1ce40ebcc4f8d7a495b2de"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-review\\frame_0075.png-controlled-comparison.png",
+      "bytes": 1528479,
+      "sha256": "8705984e4b6e9b56b7dc74745c13202368bf953826ce1134b682c665767d3fe9"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-review\\frame_0145.png-controlled-comparison.png",
+      "bytes": 1426661,
+      "sha256": "e2c19adff8fd70acb9f3080ff8b83844b73768a98515d162efaaf89c2f94643e"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-scene-r3\\cloth_supported_seeds.npz",
+      "bytes": 10090,
+      "sha256": "3dda310a71f172577d62e52d74016e06b7594745bca0b5da1f8f90bf17225f43"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-scene-r3\\config.json",
+      "bytes": 963,
+      "sha256": "153ca2d277efeb75da60da40593e94057b27deede573d495bb45a2f83a87b5a2"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-scene-r3\\initialization.json",
+      "bytes": 483,
+      "sha256": "fc1c3eaf3ad8681415c9ddc90db20ac5c2d780dab4882eac98b8d8f13859f3c9"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-scene-r3\\portrait-import.json",
+      "bytes": 3858,
+      "sha256": "ee22b5a40b96a543ab80c363a9f1b3062a248644c80c22dc2c239863653d5890"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-scene-r3\\portrait.components.npz",
+      "bytes": 284002,
+      "sha256": "274a9da12b749ad2aa85fbedc82f01d37134122b4dff511033c2bba8d8d90d10"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-scene-r3\\portrait.gaussian.ply",
+      "bytes": 8045064,
+      "sha256": "bf99793534905804f2361a91f7065b382065ed2614aec8e05c6fe8f69e6ce031"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-scene-r3\\portrait.view.json",
+      "bytes": 653,
+      "sha256": "f9dd8aad20457ab9f0f4113699391cd104535e34c39fe448d2a979ce399f408a"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-scene-r3\\report.json",
+      "bytes": 97995,
+      "sha256": "8330954973c3fe093d28fe9b3231c30858e186ab9178f84f254ddfe614253ab5"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-scene-r3\\T3-state.pt",
+      "bytes": 5397033,
+      "sha256": "e6d0eecb0bd88dd13cac901117b9bd3a5a4709d73e915e5328462b070b342f0e"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-scene-r3\\T3-training.json",
+      "bytes": 1988,
+      "sha256": "2e29f97628817f8744b6774dc3c930326adcfdfd8573d61ccad5994caaaab4d2"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-scene-r3\\T4-state.pt",
+      "bytes": 7678911,
+      "sha256": "92e068dee41dbdb8e296aed37b3661f4df2c444d43e04cbefdb79b74eac1faf5"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-scene-r3\\T4-training.json",
+      "bytes": 3837,
+      "sha256": "7f8a380ff3924a416a0f7fd988888e4f7af6cf6fc0fefa58227aa9e524ce79fd"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-scene-r3\\trained-state.pt",
+      "bytes": 5396007,
+      "sha256": "b8b6d335a7ac1bd205a4af41454274f88c15005372be1b36ed91c021e36c7937"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-soft\\cloth_supported_seeds.npz",
+      "bytes": 10090,
+      "sha256": "3dda310a71f172577d62e52d74016e06b7594745bca0b5da1f8f90bf17225f43"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-soft\\config.json",
+      "bytes": 796,
+      "sha256": "956b354a286ebb71de885be60274b0862827948e1b46f5a43dd546606d29f15a"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-soft\\initialization.json",
+      "bytes": 483,
+      "sha256": "fc1c3eaf3ad8681415c9ddc90db20ac5c2d780dab4882eac98b8d8f13859f3c9"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-soft\\local-training.json",
+      "bytes": 9349,
+      "sha256": "88a2edaf0c2913c8a57f5845a9f2b9a9ecd0d056e6a54ee1e6b31b95b0ea9799"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-soft\\portrait-import.json",
+      "bytes": 3858,
+      "sha256": "ee22b5a40b96a543ab80c363a9f1b3062a248644c80c22dc2c239863653d5890"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-soft\\reserved-final-observations.json",
+      "bytes": 393,
+      "sha256": "da57cfd4a4ce78377c20bf5386fbbfb81238877b2dd7f9f45da408251ba6c6dd"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-soft-r2\\cloth_supported_seeds.npz",
+      "bytes": 10090,
+      "sha256": "3dda310a71f172577d62e52d74016e06b7594745bca0b5da1f8f90bf17225f43"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-soft-r2\\config.json",
+      "bytes": 796,
+      "sha256": "7b97df374037c547047eb68b3f41f788a8b8376de42fbfb8ca02b7d98849eb30"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-soft-r2\\initialization.json",
+      "bytes": 483,
+      "sha256": "fc1c3eaf3ad8681415c9ddc90db20ac5c2d780dab4882eac98b8d8f13859f3c9"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-soft-r2\\local-state.pt",
+      "bytes": 7679216,
+      "sha256": "1da89048bf44dead6db6db65c8cb7f7a82ffd31af310c7cc447db778f29a5345"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-soft-r2\\local-training.json",
+      "bytes": 9354,
+      "sha256": "82f6103caecc1470159505beedcb587a4f5b3755ea2061691924ed30445f6283"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-soft-r2\\portrait-import.json",
+      "bytes": 3858,
+      "sha256": "ee22b5a40b96a543ab80c363a9f1b3062a248644c80c22dc2c239863653d5890"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-soft-r2\\portrait.components.npz",
+      "bytes": 284015,
+      "sha256": "b1a0facc0b72207065cd6b45c198249cb5471967e38717f290aadeeba619e40a"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-soft-r2\\portrait.gaussian.ply",
+      "bytes": 8045064,
+      "sha256": "e8e09b3db3d28824ef4c59846312b3b0e0cc3c9ded7ca9c90c3920ead90408e7"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-soft-r2\\portrait.view.json",
+      "bytes": 654,
+      "sha256": "44500ca267b265d501a274ea49bc106ce5dee3d9557914115e01ffc198d36113"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-soft-r2\\report.json",
+      "bytes": 108606,
+      "sha256": "ea4cbd8a4cb9797a16dc855ef9c8cba0e4291755d2bfa02d1e815956bce49894"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-soft-r2\\T3-state.pt",
+      "bytes": 5397033,
+      "sha256": "11797eb6605ed7231e82cdde4f0c65b011f8c7de199fa1f745987795bb3137df"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-soft-r2\\T3-training.json",
+      "bytes": 2075,
+      "sha256": "2f0439bd2940c694af87e72059b052fd1f1fe2cffec0e78177f3d88586d9cdf1"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-soft-r2\\T4-state.pt",
+      "bytes": 7678911,
+      "sha256": "96ef3eef150de4e12c369883b3cd10588096389a272f1e8743896d7318fca665"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-soft-r2\\T4-training.json",
+      "bytes": 3831,
+      "sha256": "de5d75e7eed256ff1a40007d8d098bc2dbd25b48fecc92efc776ccfedaa29245"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-soft-r2\\trained-state.pt",
+      "bytes": 5396007,
+      "sha256": "a88702c4e55214cb9d6dc32a175d3b97fb0e4d0f852d14c745138df2c2c77b18"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-strong\\cloth_supported_seeds.npz",
+      "bytes": 10090,
+      "sha256": "3dda310a71f172577d62e52d74016e06b7594745bca0b5da1f8f90bf17225f43"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-strong\\config.json",
+      "bytes": 793,
+      "sha256": "09255c326ad7f782e634a78275b3ed8003fe86468ef1ffcd9c471b90f53dd3e8"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-strong\\initialization.json",
+      "bytes": 483,
+      "sha256": "fc1c3eaf3ad8681415c9ddc90db20ac5c2d780dab4882eac98b8d8f13859f3c9"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-strong\\local-training.json",
+      "bytes": 4269,
+      "sha256": "224f73f4cad644be39fd53bbef0256dec0499a2845f24286804ebc621bc0b7ff"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-strong\\portrait-import.json",
+      "bytes": 3858,
+      "sha256": "ee22b5a40b96a543ab80c363a9f1b3062a248644c80c22dc2c239863653d5890"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-strong\\portrait.components.npz",
+      "bytes": 284027,
+      "sha256": "d363dc35c47d2237deeea036f3625b360e1a4a82410e230eba7a350dbd37306a"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-strong\\portrait.gaussian.ply",
+      "bytes": 8045064,
+      "sha256": "7ceca14e2fa188f874288c682d6c92dc35f905b438d092e778db3bac1d1443ea"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-strong\\portrait.view.json",
+      "bytes": 653,
+      "sha256": "64e37db8fb233996ec4cb73568e48c48306e2c2fc79915a26110d2add1402375"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-strong\\report.json",
+      "bytes": 95846,
+      "sha256": "19894b064865238f81408d8b0062933a7f198d4e584107f0379f38aaf4a5ed82"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-strong\\trained-state.pt",
+      "bytes": 5396007,
+      "sha256": "f7e2b114ba8649b192921c3ce3b32a6488b07e070b3c7ff96fb72c3654fba319"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-transfer\\cloth_supported_seeds.npz",
+      "bytes": 10090,
+      "sha256": "3dda310a71f172577d62e52d74016e06b7594745bca0b5da1f8f90bf17225f43"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-transfer\\config.json",
+      "bytes": 790,
+      "sha256": "7d58c8cd9a8e6dd1566169db0d8964a76ce3d70196f2a653498fd225c373d597"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-transfer\\initialization.json",
+      "bytes": 483,
+      "sha256": "fc1c3eaf3ad8681415c9ddc90db20ac5c2d780dab4882eac98b8d8f13859f3c9"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-transfer\\portrait-import.json",
+      "bytes": 3858,
+      "sha256": "ee22b5a40b96a543ab80c363a9f1b3062a248644c80c22dc2c239863653d5890"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-transfer\\portrait.components.npz",
+      "bytes": 283916,
+      "sha256": "f722547279852c83d30b648756d30a19eb504d0efcfe2da4fa88f79e8a5fdccb"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-transfer\\portrait.gaussian.ply",
+      "bytes": 8045064,
+      "sha256": "dc8e3e7651e271672a373c591742d43567e2046f24fad483b0202e68d8276d92"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-transfer\\portrait.view.json",
+      "bytes": 653,
+      "sha256": "5b0da2af8e040e28f1409299d6809f0e4d61f1eb3be454745962144431cff4d5"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-transfer\\report.json",
+      "bytes": 90890,
+      "sha256": "4dbbd16a28ad4c5c25b872ded11cadd104286eed14f2663c82bfc7c7fcc0310a"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\portrait-soft-surface-20260928-transfer\\trained-state.pt",
+      "bytes": 5396007,
+      "sha256": "9d1221ebaf43d0f394c16ce4920a31c29c04b026e1d4f99abb6c39429a035fe4"
+    }
+  ],
+  "skipped": [
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-clean-joint-3000-20260927-a\\environment_seeds.npz",
+      "error": "[WinError 1920] \u7cfb\u7edf\u65e0\u6cd5\u8bbf\u95ee\u6b64\u6587\u4ef6\u3002: 'D:\\\\STUDY\\\\College\\\\mine\\\\olay\\\\backend\\\\.sources\\\\integrated-clean-joint-3000-20260927-a\\\\environment_seeds.npz'"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-clean-joint-3000-20260927-a\\face_camera_poses.npz",
+      "error": "[WinError 1920] \u7cfb\u7edf\u65e0\u6cd5\u8bbf\u95ee\u6b64\u6587\u4ef6\u3002: 'D:\\\\STUDY\\\\College\\\\mine\\\\olay\\\\backend\\\\.sources\\\\integrated-clean-joint-3000-20260927-a\\\\face_camera_poses.npz'"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-clean-joint-3000-20260927-a\\face_regions.json",
+      "error": "[WinError 1920] \u7cfb\u7edf\u65e0\u6cd5\u8bbf\u95ee\u6b64\u6587\u4ef6\u3002: 'D:\\\\STUDY\\\\College\\\\mine\\\\olay\\\\backend\\\\.sources\\\\integrated-clean-joint-3000-20260927-a\\\\face_regions.json'"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-detail-joint-3000-20260927-a\\environment_seeds.npz",
+      "error": "[WinError 1920] \u7cfb\u7edf\u65e0\u6cd5\u8bbf\u95ee\u6b64\u6587\u4ef6\u3002: 'D:\\\\STUDY\\\\College\\\\mine\\\\olay\\\\backend\\\\.sources\\\\integrated-detail-joint-3000-20260927-a\\\\environment_seeds.npz'"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-detail-joint-3000-20260927-a\\face_camera_poses.npz",
+      "error": "[WinError 1920] \u7cfb\u7edf\u65e0\u6cd5\u8bbf\u95ee\u6b64\u6587\u4ef6\u3002: 'D:\\\\STUDY\\\\College\\\\mine\\\\olay\\\\backend\\\\.sources\\\\integrated-detail-joint-3000-20260927-a\\\\face_camera_poses.npz'"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-detail-joint-3000-20260927-a\\face_regions.json",
+      "error": "[WinError 1920] \u7cfb\u7edf\u65e0\u6cd5\u8bbf\u95ee\u6b64\u6587\u4ef6\u3002: 'D:\\\\STUDY\\\\College\\\\mine\\\\olay\\\\backend\\\\.sources\\\\integrated-detail-joint-3000-20260927-a\\\\face_regions.json'"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-shared-joint-3000-20260927-a\\environment_seeds.npz",
+      "error": "[WinError 1920] \u7cfb\u7edf\u65e0\u6cd5\u8bbf\u95ee\u6b64\u6587\u4ef6\u3002: 'D:\\\\STUDY\\\\College\\\\mine\\\\olay\\\\backend\\\\.sources\\\\integrated-shared-joint-3000-20260927-a\\\\environment_seeds.npz'"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-shared-joint-3000-20260927-a\\face_camera_poses.npz",
+      "error": "[WinError 1920] \u7cfb\u7edf\u65e0\u6cd5\u8bbf\u95ee\u6b64\u6587\u4ef6\u3002: 'D:\\\\STUDY\\\\College\\\\mine\\\\olay\\\\backend\\\\.sources\\\\integrated-shared-joint-3000-20260927-a\\\\face_camera_poses.npz'"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-shared-joint-3000-20260927-a\\face_regions.json",
+      "error": "[WinError 1920] \u7cfb\u7edf\u65e0\u6cd5\u8bbf\u95ee\u6b64\u6587\u4ef6\u3002: 'D:\\\\STUDY\\\\College\\\\mine\\\\olay\\\\backend\\\\.sources\\\\integrated-shared-joint-3000-20260927-a\\\\face_regions.json'"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-shared-joint-900-20260927-a\\environment_seeds.npz",
+      "error": "[WinError 1920] \u7cfb\u7edf\u65e0\u6cd5\u8bbf\u95ee\u6b64\u6587\u4ef6\u3002: 'D:\\\\STUDY\\\\College\\\\mine\\\\olay\\\\backend\\\\.sources\\\\integrated-shared-joint-900-20260927-a\\\\environment_seeds.npz'"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-shared-joint-900-20260927-a\\face_camera_poses.npz",
+      "error": "[WinError 1920] \u7cfb\u7edf\u65e0\u6cd5\u8bbf\u95ee\u6b64\u6587\u4ef6\u3002: 'D:\\\\STUDY\\\\College\\\\mine\\\\olay\\\\backend\\\\.sources\\\\integrated-shared-joint-900-20260927-a\\\\face_camera_poses.npz'"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-shared-joint-900-20260927-a\\face_regions.json",
+      "error": "[WinError 1920] \u7cfb\u7edf\u65e0\u6cd5\u8bbf\u95ee\u6b64\u6587\u4ef6\u3002: 'D:\\\\STUDY\\\\College\\\\mine\\\\olay\\\\backend\\\\.sources\\\\integrated-shared-joint-900-20260927-a\\\\face_regions.json'"
+    }
+  ]
+}
