@@ -408,3 +408,327 @@ def recover_environment_points(path: Path) -> dict:
     (path / "environment_quality.json").write_text(json.dumps(report, separators=(",", ":")),
                                                      encoding="utf-8")
     return report
+
+# Prepare-only research path. The legacy supported_static_surfaces above remains
+# byte-for-byte unchanged; no caller or production default selects this path.
+def surface_source_key(namespace, kind, source_id):
+    return (str(namespace), int(kind), str(source_id))
+
+
+def _surface_token(*parts):
+    import hashlib
+    return hashlib.sha256('|'.join(map(str, parts)).encode()).hexdigest()
+
+
+def _surface_point_votes(sampled, valid, reference):
+    """Same point-level support/color/conflict rules as the legacy preparer."""
+    import numpy as np
+    agree = np.abs(sampled-sampled[reference:reference+1]).mean(-1) < .10
+    positive = valid & agree; conflict = valid & ~agree
+    votes = positive.sum(0); bad = conflict.sum(0)
+    colors = (sampled*positive[:, :, None]).sum(0,dtype=np.float64)/np.maximum(votes[:, None], 1)
+    return (votes >= 3) & (bad <= 1), votes, bad, colors, positive, conflict
+
+
+def _surface_bits(mask):
+    import numpy as np
+    if len(mask) > 64:
+        raise ValueError('explicit_multiword_evidence_adapter_required_above_64_views')
+    return np.bitwise_or.reduce(mask.astype(np.uint64) *
+        np.left_shift(np.uint64(1), np.arange(len(mask), dtype=np.uint64))[:, None], axis=0)
+
+
+def collect_supported_surface_pool(model, views, masks, rgb_images, original_anchors,
+                                   output, *, namespace, max_edge_pixels=80,
+                                   wall_seconds=1200, rss_limit_bytes=10*1024**3,
+                                   unknown_masks=None, progress=None):
+    """Exhaustive OLD-rule proposals; no sampling budget is consulted here.
+
+    Per-origin point evidence is retained. Whole triangles are hypothesis upper
+    bounds, not continuous validated surface. No near-coordinate geometry merge.
+    """
+    import cv2
+    import json
+    import math
+    import resource
+    import time
+    import numpy as np
+    from scipy.spatial import Delaunay
+    output = Path(output)
+    if output.exists(): raise ValueError('never_overwrite_candidate_pool')
+    output.mkdir(parents=True)
+    start = time.perf_counter(); names = sorted(views); completed = []
+    if set(names) != set(masks) or set(names) != set(rgb_images):
+        raise ValueError('candidate_inputs_must_be_train_only_same_names')
+    if len(names) > 64: raise ValueError('evidence_bitmap_capacity_not_silent_truncation')
+    def checkpoint(stage):
+        rss = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024
+        if time.perf_counter()-start > wall_seconds or rss > rss_limit_bytes:
+            state = {'complete':False,'stage':stage,'completedViews':completed,
+                     'elapsed':time.perf_counter()-start,'peakRssBytes':rss,
+                     'reason':'explicit_resource_limit_no_completed_pool'}
+            (output/'incomplete.json').write_text(json.dumps(state,indent=2))
+            raise RuntimeError('candidate_enumeration_incomplete:'+stage)
+    try:
+        # Retain native point-map iteration for the same Delaunay tie convention.
+        images = {im.name:im for im in model.images.values() if im.has_pose}
+        candidates = {}; anchor_reject = {'trackOrError':0,'supportOrConflict':0}
+        for point_id,point in model.points3D.items():
+            if point.error > 2.5 or point.track.length() < 3:
+                anchor_reject['trackOrError'] += 1; continue
+            support=[]; color=[]; conflict=0
+            for element in point.track.elements:
+                im=model.images[element.image_id]
+                if im.name not in views: continue
+                C,K=views[im.name]; camera=C[:3,:3]@np.asarray(point.xyz)+C[:3,3]
+                if camera[2] <= .01: continue
+                pixel=K@camera; u,v=(pixel[:2]/pixel[2]).round().astype(int); mask=masks[im.name]
+                if not (0<=u<mask.shape[1] and 0<=v<mask.shape[0]):continue
+                if mask[v,u]:support.append(im.name);color.append(rgb_images[im.name][v,u])
+                else:conflict+=1
+            if len(support)>=3 and conflict==0:
+                candidates[int(point_id)]=(np.asarray(point.xyz),np.median(color,axis=0),support)
+            else:anchor_reject['supportOrConflict']+=1
+        expected = original_anchors['source_id'].tolist()
+        if set(candidates) != set(expected): raise ValueError('old_anchor_selection_changed')
+        for i,key in enumerate(expected):
+            xyz,rgb,_=candidates[key]
+            if not np.array_equal(xyz.astype(np.float32),original_anchors['xyz'][i]) or not np.array_equal(rgb.astype(np.float32),original_anchors['rgb'][i]):
+                raise ValueError('old_anchor_geometry_or_color_changed:'+str(key))
+        if len(candidates)<32:raise ValueError('static_surface_tracks_insufficient')
+        blurred={name:cv2.GaussianBlur(rgb_images[name],(3,3),0) for name in names}
+        per_view={}; surfaces={}; proposal_rows=[]
+        # Collect every triangle proposal FIRST, irrespective of sample budget.
+        for name in names:
+            checkpoint('triangles:'+name)
+            C,K=views[name]; keys=[key for key,val in candidates.items() if name in val[2]]
+            counts=dict(raw=0,edge=0,depthSpread=0,degenerate=0,normal=0,noInteriorSamples=0,geometryAccepted=0)
+            if len(keys)>=40:
+                xyz=np.stack([candidates[key][0] for key in keys]); cam=xyz@C[:3,:3].T+C[:3,3]
+                uv=cam@K.T;uv=uv[:,:2]/uv[:,2:]
+                for tri in Delaunay(uv).simplices:
+                    counts['raw']+=1; pix=uv[tri];world=xyz[tri];depth=cam[tri,2]
+                    ids=tuple(keys[int(i)] for i in tri);canonical=tuple(sorted(ids))
+                    sid=_surface_token(namespace,1,*canonical)
+                    edge=max(np.linalg.norm(pix[i]-pix[j]) for i,j in ((0,1),(1,2),(2,0)))
+                    spread=float(np.ptp(depth)/max(np.median(depth),1e-6))
+                    normal=np.cross(world[1]-world[0],world[2]-world[0]);norm=np.linalg.norm(normal)
+                    normal=normal/max(norm,1e-30)
+                    ray=world.mean(0)-np.linalg.inv(C)[:3,3];ray/=np.linalg.norm(ray)
+                    cosine=float(abs(normal@ray));divisions=min(10,max(2,int(edge/9)))
+                    reason=('edge' if edge>max_edge_pixels or edge<7 else
+                            'depthSpread' if spread>.06 else 'degenerate' if norm<1e-8 else
+                            'normal' if cosine<.25 else 'noInteriorSamples' if divisions<3 else 'geometryAccepted')
+                    counts[reason]+=1
+                    record={'view':name,'surfaceId':sid,'orderedPointIds':ids,'normal':normal.tolist(),
+                            'edge':float(edge),'depthSpread':spread,'cosine':cosine,'divisions':divisions,'firstDecision':reason}
+                    proposal_rows.append(record)
+                    if reason!='geometryAccepted':continue
+                    stat='newGeometrySurface' if sid not in surfaces else 'repeatedGeometrySurface'
+                    counts[stat]=counts.get(stat,0)+1
+                    if sid not in surfaces:
+                        surfaces[sid]={'ids':canonical,'proposals':[]}
+                    surfaces[sid]['proposals'].append(record)
+            per_view[name]=counts;completed.append(name)
+            if progress:progress('triangles',name,counts)
+        # The pool is not complete until point-level evidence is also evaluated.
+        checkpoint('point-evidence-start')
+        by_name={n:i for i,n in enumerate(names)};Cs=np.stack([views[n][0] for n in names]);Ks=np.stack([views[n][1] for n in names])
+        wh=np.array([[masks[n].shape[1],masks[n].shape[0]] for n in names])
+        points=[];surface_records=[];sample_evidence_count=0
+        evidence_stream=(output/'sample-evidence.jsonl').open('w')
+        for si,(sid,element) in enumerate(sorted(surfaces.items())):
+            if si%64==0:checkpoint('point-evidence:'+str(si))
+            proposals=element['proposals'];canonical=element['ids']
+            world=np.stack([candidates[k][0] for k in canonical])
+            # Exact rational barycentric identities merge the same sample across
+            # different source ordering/divisions without Euclidean near merging.
+            domain={}
+            for pr in proposals:
+                div=pr['divisions'];order=[canonical.index(i) for i in pr['orderedPointIds']]
+                for a in range(1,div):
+                    for b in range(1,div-a):
+                        ints=[0,0,0]
+                        for j,value in zip(order,[a,b,div-a-b]):ints[j]=value
+                        divisor=math.gcd(math.gcd(*ints[:2]),ints[2]);key=tuple(i//divisor for i in ints)
+                        domain.setdefault(key,[]).append(pr)
+            keys=sorted(domain);bary=np.array([np.array(k)/sum(k) for k in keys]);xyz=bary@world
+            cp=np.einsum('vij,pj->vpi',Cs[:,:3,:3],xyz)+Cs[:,:3,3,None].transpose(0,2,1)
+            pu=np.einsum('vij,vpj->vpi',Ks,cp);xy=np.rint(pu[:,:,:2]/np.maximum(pu[:,:,2:],1e-8)).astype(np.int64)
+            sampled=[];valid=[];unknown=[];excluded=[]
+            for vi,n in enumerate(names):
+                u,v=xy[vi].T;om=masks[n];ix=u.clip(0,om.shape[1]-1);iy=v.clip(0,om.shape[0]-1)
+                inside=(cp[vi,:,2]>.01)&(u>=2)&(v>=2)&(u<om.shape[1]-2)&(v<om.shape[0]-2)
+                valid.append(inside&(om[iy,ix]>0));sampled.append(blurred[n][iy,ix])
+                unknown.append(inside&unknown_masks[n][iy,ix] if unknown_masks is not None else np.zeros(len(keys),bool))
+                excluded.append(inside&~om[iy,ix].astype(bool))
+            sampled=np.stack(sampled);valid=np.stack(valid);unknown=np.stack(unknown);excluded=np.stack(excluded)
+            unknown_bits=_surface_bits(unknown);excluded_bits=_surface_bits(excluded)
+            by_origin={}
+            for pr in proposals:by_origin.setdefault(pr['view'],pr)
+            evaluations={}
+            for origin in sorted(by_origin):
+                evaluations[origin]=_surface_point_votes(sampled,valid,by_name[origin])
+            valid_count=0
+            for pi,key in enumerate(keys):
+                pid=_surface_token(namespace,1,sid,*key);best=None;legal_origins=[]
+                for pr in sorted(domain[key],key=lambda r:r['view']):
+                    origin=pr['view'];keep,votes,bad,colors,positive,conflicts=evaluations[origin]
+                    support_bits=int(_surface_bits(positive[:,pi:pi+1])[0]);conflict_bits=int(_surface_bits(conflicts[:,pi:pi+1])[0])
+                    evidence={'pointId':pid,'surfaceId':sid,'origin':origin,
+                        'divisions':pr['divisions'],'baryNumerator':key,'accepted':bool(keep[pi]),
+                        'supportBits':support_bits,'conflictBits':conflict_bits,
+                        'unknownBits':int(unknown_bits[pi]),'maskExcludedBits':int(excluded_bits[pi]),
+                        'rejectionLabels':(['votes<3'] if votes[pi]<3 else [])+(['conflict>1'] if bad[pi]>1 else [])}
+                    evidence_stream.write(json.dumps(evidence,separators=(',',':'))+'\n');sample_evidence_count+=1
+                    tally=per_view[origin];tally['sampleProposals']=tally.get('sampleProposals',0)+1
+                    stat='sampleAccepted' if keep[pi] else 'sampleRejected'
+                    tally[stat]=tally.get(stat,0)+1
+                    if not keep[pi]:continue
+                    legal_origins.append(origin)
+                    rank=(-int(votes[pi]),int(bad[pi]),origin)
+                    if best is None or rank<best[0]:
+                        best=(rank,colors[pi],int(votes[pi]),support_bits,conflict_bits,pr)
+                if best is None:continue
+                valid_count+=1;pr=best[5]
+                points.append({'pointId':pid,'surfaceId':sid,'xyz':xyz[pi].tolist(),'rgb':best[1].tolist(),
+                    'support':best[2],'supportBits':best[3],'conflictBits':best[4],
+                    'unknownBits':int(unknown_bits[pi]),'maskExcludedBits':int(excluded_bits[pi]),
+                    'triangleSources':pr['orderedPointIds'],'canonicalPointIds':canonical,'baryNumerator':key,
+                    'origin':pr['view'],'acceptedOrigins':sorted(set(legal_origins))})
+            surface_records.append({'surfaceId':sid,'canonicalPointIds':canonical,'domainUniquePoints':len(keys),'legalPoints':valid_count,
+                'proposals':[{'view':q['view'],'orderedPointIds':q['orderedPointIds'],'normal':q['normal'],'divisions':q['divisions']} for q in proposals],
+                'orientation':'same immutable map vertices; opposite winding retained, two-sided surface hypothesis'})
+            if progress and si%512==0:progress('samples',str(si),{'uniqueLegalSamples':len(points)})
+        evidence_stream.close()
+        checkpoint('complete')
+        points.sort(key=lambda p:p['pointId'])
+        for point in points:
+            origin=point['acceptedOrigins'][0]
+            per_view[origin]['firstLegalPointEvidence']=per_view[origin].get('firstLegalPointEvidence',0)+1
+        usable=sum(r['legalPoints']>0 for r in surface_records)
+        report={'complete':True,'namespace':namespace,'trainingViews':names,'completedViews':completed,
+            'anchorCount':len(candidates),'anchorRejected':anchor_reject,'proposalCount':len(proposal_rows),
+            'geometryUniqueSurfaces':len(surfaces),'usableUniqueSurfaces':usable,'legalUniqueSamples':len(points),
+            'sampleEvidenceRows':sample_evidence_count,'perView':per_view,
+            'rejectionSemantics':'triangle first rejection; point keep requires votes>=3 and conflict<=1; never missing surface area',
+            'thresholds':{'trackErrorMax':2.5,'trackViewsMin':3,'anchorConflictMax':0,'edge':[7,max_edge_pixels],
+                'relativeDepthSpreadMax':.06,'absNormalRayMin':.25,'sampleColorL1StrictMax':.10,'sampleVotesMin':3,'sampleConflictsMax':1},
+            'seconds':time.perf_counter()-start,'peakRssBytes':resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024,
+            'randomness':'none; exact rational grids and stable IDs; sorted view evaluation',
+            'surfaceHypothesesNotDepthTruth':True}
+        for file,items in [('triangle-proposals.jsonl',proposal_rows),('surfaces.jsonl',surface_records),('legal-samples.jsonl',points)]:
+            with (output/file).open('w') as stream:
+                for row in items:stream.write(json.dumps(row,separators=(',',':'))+'\n')
+        (output/'summary.json').write_text(json.dumps(report,indent=2))
+        anchor_evidence={str(k):sorted(v[2]) for k,v in candidates.items()}
+        (output/'anchor-evidence.json').write_text(json.dumps(anchor_evidence))
+        return {'points':points,'surfaces':surface_records,'report':report,'anchorEvidence':anchor_evidence}
+    except Exception as error:
+        if 'evidence_stream' in locals():evidence_stream.close()
+        if not (output/'incomplete.json').exists():
+            (output/'incomplete.json').write_text(json.dumps({'complete':False,'error':repr(error),'completedViews':completed,'seconds':time.perf_counter()-start},indent=2))
+        raise
+
+
+def allocate_surface_pool(pool, anchors, views, masks, *, namespace, max_points,
+                          retained_surfaces=(), coarse_pixels=32, fine_pixels=4, wall_seconds=600):
+    """Deterministic lazy marginal-coverage greedy; only training observations.
+
+    The world cells are an allocation aid, not new geometry. No repeated filling
+    after both projected and spatial novelty are exhausted.
+    """
+    import heapq
+    import time
+    import numpy as np
+    from scipy.spatial import cKDTree
+    if not pool['report']['complete']:raise ValueError('incomplete_pool_cannot_allocate')
+    if set(views)!=set(pool['report']['trainingViews']):raise ValueError('allocation_views_differ_from_train_pool')
+    nanchor=len(anchors['xyz']);budget=max_points-nanchor
+    if budget<0:raise ValueError('budget_cannot_drop_original_anchors')
+    started=time.perf_counter()
+    points=pool['points'];names=pool['report']['trainingViews'];N=len(points)
+    xyz=np.array([p['xyz'] for p in points]).reshape(-1,3)
+    spatial_step=float(np.median(cKDTree(anchors['xyz']).query(anchors['xyz'],k=2)[0][:,1]))
+    spatial_step=max(spatial_step,1e-6)
+    world_keys=[tuple(x) for x in np.floor(xyz/spatial_step).astype(np.int64)]
+    seen_world=set(tuple(x) for x in np.floor(anchors['xyz']/spatial_step).astype(np.int64))
+    def projection_cells(values, require_support):
+        result=[[] for _ in range(len(values))];fine=[[] for _ in range(len(values))];co=0;fi=0
+        for vi,name in enumerate(names):
+            C,K=views[name];cam=values@C[:3,:3].T+C[:3,3];uv=cam@K.T;uv=uv[:,:2]/np.maximum(uv[:,2:],1e-8)
+            u,v=np.rint(uv).astype(np.int64).T;h,w=masks[name].shape
+            ok=(cam[:,2]>.01)&(u>=0)&(v>=0)&(u<w)&(v<h)
+            inside=np.flatnonzero(ok);ok[inside]&=masks[name][v[inside],u[inside]].astype(bool)
+            if require_support:ok &= np.array([(p['supportBits']>>vi)&1 for p in points],bool)
+            cw=(w+coarse_pixels-1)//coarse_pixels;fw=(w+fine_pixels-1)//fine_pixels
+            for j in np.flatnonzero(ok):
+                result[j].append(co+(v[j]//coarse_pixels)*cw+u[j]//coarse_pixels)
+                fine[j].append(fi+(v[j]//fine_pixels)*fw+u[j]//fine_pixels)
+            co+=cw*((h+coarse_pixels-1)//coarse_pixels);fi+=fw*((h+fine_pixels-1)//fine_pixels)
+        return [np.asarray(r,np.int64) for r in result],[np.asarray(r,np.int64) for r in fine],co,fi
+    coarse,fine,nc,nf=projection_cells(xyz,True)
+    ac,af,_,_=projection_cells(anchors['xyz'],False)
+    covered_c=np.zeros(nc,bool);covered_f=np.zeros(nf,bool)
+    for c,f in zip(ac,af):covered_c[c]=True;covered_f[f]=True
+    selected=[];is_selected=np.zeros(N,bool);gains=[]
+    xyz_keys=[row.astype(np.float32).tobytes() for row in xyz]
+    seen_xyz={row.astype(np.float32).tobytes() for row in anchors['xyz']}
+    def score(i):
+        if xyz_keys[i] in seen_xyz:return 0,0,0,0
+        c=int((~covered_c[coarse[i]]).sum());f=int((~covered_f[fine[i]]).sum());novel=world_keys[i] not in seen_world
+        return 4*c+f+4*int(novel),c,f,int(novel)
+    def take(i,reason):
+        s,c,f,v=score(i)
+        if not s:return False
+        selected.append(i);is_selected[i]=True;covered_c[coarse[i]]=True;covered_f[fine[i]]=True;seen_world.add(world_keys[i]);seen_xyz.add(xyz_keys[i])
+        gains.append((i,c,f,v,reason));return True
+    # Retain old supported domains before allocating new marginal coverage.
+    groups={}
+    for i,point in enumerate(points):groups.setdefault(point['surfaceId'],[]).append(i)
+    retained_missing=[]
+    for sid in sorted(set(retained_surfaces)):
+        options=groups.get(sid,[])
+        if not options:retained_missing.append(sid);continue
+        if len(selected)>=budget:break
+        best=max(options,key=lambda i:(score(i)[0],-i))
+        take(best,'old-domain')
+    heap=[(-score(i)[0],i) for i in range(N) if not is_selected[i]];heapq.heapify(heap)
+    while heap and len(selected)<budget:
+        if time.perf_counter()-started>wall_seconds:raise RuntimeError('allocation_incomplete_resource_limit')
+        upper,i=heapq.heappop(heap);current=score(i)[0]
+        if current==0:continue
+        if heap and -current>heap[0][0]:heapq.heappush(heap,(-current,i));continue
+        take(i,'marginal-coverage')
+    selected.sort(key=lambda i:points[i]['pointId'])
+    chosen=[points[i] for i in selected]
+    arr=lambda key,dtype:np.asarray([q[key] for q in chosen],dtype=dtype)
+    sample_source=np.array([int(p['pointId'][:16],16)&((1<<63)-1) for p in chosen],np.int64)
+    if len(np.unique(sample_source))!=len(sample_source):raise ValueError('stable_sample_source_id_collision')
+    anchor_bits=np.array([sum(1<<names.index(n) for n in pool['anchorEvidence'][str(int(i))]) for i in anchors['source_id']],np.uint64)
+    data={'xyz':np.concatenate([anchors['xyz'],arr('xyz',np.float32).reshape(-1,3)]),
+          'rgb':np.concatenate([anchors['rgb'],arr('rgb',np.float32).reshape(-1,3)]),
+          'support':np.concatenate([anchors['support'],arr('support',np.int16)]),
+          'source_kind':np.concatenate([anchors['source_kind'],np.ones(len(chosen),np.uint8)]),
+          'source_id':np.concatenate([anchors['source_id'],sample_source]),
+          'triangle_sources':np.concatenate([anchors['triangle_sources'],arr('triangleSources',np.int64).reshape(-1,3)]),
+          'surface_id':np.array(['']*nanchor+[q['surfaceId'] for q in chosen]),
+          'point_id':np.array([_surface_token(namespace,0,int(i)) for i in anchors['source_id']]+[q['pointId'] for q in chosen]),
+          'canonical_point_ids':np.concatenate([np.repeat(anchors['source_id'][:,None],3,axis=1),arr('canonicalPointIds',np.int64).reshape(-1,3)]),
+          'sample_bary_numerator':np.concatenate([np.zeros((nanchor,3),np.int16),arr('baryNumerator',np.int16).reshape(-1,3)]),
+          'sample_origin':np.array(['static-track']*nanchor+[q['origin'] for q in chosen]),
+          'support_bits':np.concatenate([anchor_bits,arr('supportBits',np.uint64)]),
+          'conflict_bits':np.concatenate([np.zeros(nanchor,np.uint64),arr('conflictBits',np.uint64)]),
+          'unknown_bits':np.concatenate([np.zeros(nanchor,np.uint64),arr('unknownBits',np.uint64)]),
+          'mask_excluded_bits':np.concatenate([np.zeros(nanchor,np.uint64),arr('maskExcludedBits',np.uint64)]),
+          'evidence_scope':np.concatenate([np.zeros(nanchor,np.uint8),np.ones(len(chosen),np.uint8)])}
+    report={'budget':max_points,'anchors':nanchor,'selectedSamples':len(chosen),'total':len(data['xyz']),
+        'unusedBudget':max_points-len(data['xyz']),'legalPoolSamples':N,'notSelectedSamples':N-len(chosen),
+        'selectedUniqueSurfaces':len(set(q['surfaceId'] for q in chosen)),
+        'oldSurfaceIdsAbsentFromLegalPool':retained_missing,'coveredCoarseCells':int(covered_c.sum()),'coveredFineCells':int(covered_f.sum()),
+        'coarsePixels':coarse_pixels,'finePixels':fine_pixels,'worldCellSize':spatial_step,
+        'score':'4*newCoarseCells + newFineCells + 4*newWorldCell; overlap has zero marginal gain',
+        'uniqueXYZ':len(np.unique(data['xyz'],axis=0)), 'trainOnly':True,'selectedPointIds':[q['pointId'] for q in chosen],
+        'exactCoordinateDuplicatesNotReallocated':True,'geometryMerging':False,
+        'sampleGains':gains,'defaultLegacyUnchanged':True}
+    return data,report
