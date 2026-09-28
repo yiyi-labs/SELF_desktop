@@ -1,0 +1,1497 @@
+[
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\A-observations.json",
+    "sha256": "338428e7eb8101125379e3445f8f1adc76dd28c467532c4dd8e87ab27753ac3f",
+    "bytes": 169229
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\adapter-check.json",
+    "sha256": "8cd4ccc4529c46a8af8eef6fc98ceb4d38c95b4758fdd99800fbd6dc9dde427f",
+    "bytes": 150
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\B-attachments.pt",
+    "sha256": "b27919d18e67c5653120e631748242bc2370384724f2e49b3f9f9a6ebef42faf",
+    "bytes": 107235
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\B-training.json",
+    "sha256": "2f72b354d63cbd66e96a0b4b123e2433c343dcd444515b33c83acf89688ffc43",
+    "bytes": 3281
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\C-static.pt",
+    "sha256": "13dd4aa905987266371a1bb2d391eabe9ed91dfc9f0e38ca9da5f4a408a366c4",
+    "bytes": 7054709
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\C-training.json",
+    "sha256": "2fccbbbbcadd82a50a1d38f0c1d261ea99dd4d764a4579dd820814ba6d3400ee",
+    "bytes": 1301
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\cloth_supported_seeds.npz",
+    "sha256": "3dda310a71f172577d62e52d74016e06b7594745bca0b5da1f8f90bf17225f43",
+    "bytes": 10090
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\config.json",
+    "sha256": "b26b2343a89add443d16047c3064d44734dbd57a82cc228164c17c304b787adf",
+    "bytes": 1578
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\D-front-evidence.json",
+    "sha256": "1565743c39208ff3273c3a3dbe05de38cd03108a3d0e58dda948d26038ed3521",
+    "bytes": 432
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\D-front-evidence.npz",
+    "sha256": "12caad92ae652f7f4a673fd5e004b358df7dbb8a2c6b294d6c1ca846bd20677a",
+    "bytes": 56656
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\gpu-telemetry.json",
+    "sha256": "2d1efc1c684f9882b9ca902937f2a21891471013ee5f8a9debe5d466b7208859",
+    "bytes": 11152
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initialization.json",
+    "sha256": "fc1c3eaf3ad8681415c9ddc90db20ac5c2d780dab4882eac98b8d8f13859f3c9",
+    "bytes": 483
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\point-order-v3.json",
+    "sha256": "b1d89dacad543e238ec82265cd88dfb0252d05afdd052ad8cd7ae912ad77449a",
+    "bytes": 10496
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\portrait-import.json",
+    "sha256": "ee22b5a40b96a543ab80c363a9f1b3062a248644c80c22dc2c239863653d5890",
+    "bytes": 3858
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\portrait.components.json",
+    "sha256": "f549728407c5926d39e4816f05418416063522699a9fdc262427b973a90fd44a",
+    "bytes": 735
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\portrait.components.npz",
+    "sha256": "e91bff540aea5fe455eb7a19014f000ca6a4ae8d0d4103332fc270e1f56e4c2f",
+    "bytes": 284462
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\portrait.gaussian.ply",
+    "sha256": "143d0529db257656f71e32b8f6786e26eafe1037f993d7d2f359dc447600dace",
+    "bytes": 7423440
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\portrait.view.json",
+    "sha256": "157396f1960d76a128f53c2fb191f8b9f7f459ccfd804a79997a8c2c651de335",
+    "bytes": 676
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\report.json",
+    "sha256": "a80f2a2a0bdf9a30f1156fdd5e29dc7db785af431a95184cddb24e372171f518",
+    "bytes": 37505
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\research-viewer.js",
+    "sha256": "ecafe12617d9591fa91b90d1e6e0b3fcfd433d269c8925d628d745ff7e6f1035",
+    "bytes": 2010766
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0015.png-eyes_glasses.png",
+    "sha256": "dcb1f409d979fd4793f632a849d7170d49a0c3a8e77ab0cbf304e6d56b4ae23f",
+    "bytes": 168596
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0015.png-face.png",
+    "sha256": "c75c8dc5a964d936d960e716613fe6f4c51fb306a290d74f5f0465f6e3193d50",
+    "bytes": 776482
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0015.png-hair.png",
+    "sha256": "c3be9ebb6f66873a09f78c3da537028f6af13544501b285d7e1efc1c6e816a86",
+    "bytes": 979150
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0015.png-lips.png",
+    "sha256": "26c357903d15078fbd61b3e9bf05dc51c79be13d186ac22dc95f3b867cff6fc8",
+    "bytes": 78375
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0015.png-nose.png",
+    "sha256": "3846a4ae666b8ec01ec1ed919a5fc32bc78555ad3e2b05a4a0505a13e4eba923",
+    "bytes": 65838
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0015.png-scene.png",
+    "sha256": "117e6918ed887548a37ea26bf444278486700ef5eaf0984bb6a26412bc44eb16",
+    "bytes": 1902060
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0035.png-eyes_glasses.png",
+    "sha256": "5f9a5adfe6683e279dd1907050df2b79219e8d7b7ef08c4284d8772ba450696a",
+    "bytes": 148570
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0035.png-face.png",
+    "sha256": "1e2427ab1eea46d56e9fc891ef918fc95158461313c5b7ec16bc2a640f7f5677",
+    "bytes": 692489
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0035.png-hair.png",
+    "sha256": "4d9a5769660dafcb71afa6084b40b0768f685a3986be1d9e24351202562b7108",
+    "bytes": 637212
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0035.png-lips.png",
+    "sha256": "a7d84b68541d6abdab392fabc8d04187d74204e20737e3bf395abf8d5ace9835",
+    "bytes": 74897
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0035.png-nose.png",
+    "sha256": "18ac9a17400726a877c9e324b6b9ae8bb1ad3b2ec7a1527da2482044242ef01b",
+    "bytes": 65278
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0035.png-scene.png",
+    "sha256": "b9b1a547a142a3dd0868338f883203dcc914129ce278c34419d0657074e363ca",
+    "bytes": 2005231
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0055.png-eyes_glasses.png",
+    "sha256": "0e26cf7dee096ccf320d2dc0438c005863ede711b344b577c6b96e00331ad5ee",
+    "bytes": 127737
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0055.png-face.png",
+    "sha256": "5d2b1188b4dafc73d8cdb93d2673ab79c2e0c534266ed992e21f7abb820968de",
+    "bytes": 706328
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0055.png-hair.png",
+    "sha256": "570e24e7ea6117ddfa8af48ac2c850cb3dce1bafb65922ede9395e4711d14bc7",
+    "bytes": 517298
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0055.png-lips.png",
+    "sha256": "3c578cb7ed5afb033c4c438933d2ea9d33c9d1ef08203e4c2fcd8b23b112d2fb",
+    "bytes": 73110
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0055.png-nose.png",
+    "sha256": "55769988be44b6484a850d0e82270923c9b1be48fe466511cc13503cc3f1ee0a",
+    "bytes": 55631
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0075.png-eyes_glasses.png",
+    "sha256": "f8d0f3c5c7559f1df43ee80894d8a9035af9ee0aa0042870e8f48c67107f49d5",
+    "bytes": 118938
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0075.png-face.png",
+    "sha256": "dd2658eebb248973157db7fbcdad5d74db349b1024e40d10af88386cf3abb596",
+    "bytes": 713440
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0075.png-hair.png",
+    "sha256": "1eb10fd08df1c7eda50ff29e53899b69fc36d91269fd76827642e6257fa34c48",
+    "bytes": 1091302
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0075.png-lips.png",
+    "sha256": "9c798daa9ee595b1144a9de3454c7fb4603df27f7235ad17d68e934a2aee965c",
+    "bytes": 55759
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0075.png-nose.png",
+    "sha256": "d0f7e5b1469565f955ded728ec0dced1a6bf25b47b57c76b2d0b4687be4587fe",
+    "bytes": 44142
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0095.png-eyes_glasses.png",
+    "sha256": "5d5675ff7b5bb0583bd718a413002f9a38fca00927961ce9248e2c460b331170",
+    "bytes": 141725
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0095.png-face.png",
+    "sha256": "2cf5fda33252e20a4a1e3b18747974605800a8ca90c0c687c79d156bc42dccc8",
+    "bytes": 670157
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0095.png-hair.png",
+    "sha256": "bc6cf2c3dab09451968e4799c8c5d09d5595055cce83cd7149268ef8bcdd09bf",
+    "bytes": 649514
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0095.png-lips.png",
+    "sha256": "9c4eb25fae562d9071a207d9560682a6baadfacdd255db7d2b0f79c987cdcb43",
+    "bytes": 66053
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0095.png-nose.png",
+    "sha256": "b2bfbf29c9bd1d5da6c9fafd4f85a499d754fa90141886bad48c6fa151b1915f",
+    "bytes": 60489
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0115.png-eyes_glasses.png",
+    "sha256": "1efe271ce55453c7cbcba98f7a8d81607aa92fdef90c613948351d6546d2a99a",
+    "bytes": 172585
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0115.png-face.png",
+    "sha256": "84193eea37d9afc955d357be825f2a04580a0fda10809845d79a657770aa47e1",
+    "bytes": 937378
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0115.png-hair.png",
+    "sha256": "09474592591cd7dfc150638d8714ad6e5750e6b05578a4965149afb680b3d388",
+    "bytes": 703012
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0115.png-lips.png",
+    "sha256": "215d372222747f977048ba1c179af7baec7f07a207f1e2124430265bfa76c776",
+    "bytes": 91038
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0115.png-nose.png",
+    "sha256": "2de87635b4364c490bc505ee34126668fafc41c8f482707ce05f022c44e3ea44",
+    "bytes": 69363
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0115.png-scene.png",
+    "sha256": "9020f41af3add2bea6c3bf35012ff2ed5b37a1392abfd46920e3b1789c8ff6b2",
+    "bytes": 1812854
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0130.png-eyes_glasses.png",
+    "sha256": "7a5f154c4dba794e8caa340a51d75146c682c47c9e2d8d8e1aa4d14962f17533",
+    "bytes": 158511
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0130.png-face.png",
+    "sha256": "83211c352f9de1b939cd08afed1e97d08169e18fe7407190687f5805d99e0063",
+    "bytes": 699921
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0130.png-hair.png",
+    "sha256": "eb300244b3df0626e36703c68fa0c3f07a1020ceef756ce132c12923a9199c30",
+    "bytes": 1069199
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0130.png-lips.png",
+    "sha256": "114a0aa3d7bc90cbdd2af395aece0cdc5a9358685ae5703d266165f9c62d213b",
+    "bytes": 76111
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0130.png-nose.png",
+    "sha256": "679461469e8d9bf4281810f7b325c20b8908e2312bf523f046d7a36a6c321ef9",
+    "bytes": 67814
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0130.png-scene.png",
+    "sha256": "0ca80da62d1f743cf9bd47935e9e3af0736296153e73063ef50f84cda113794d",
+    "bytes": 2364989
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0145.png-eyes_glasses.png",
+    "sha256": "ea064c5780918c4fe899392f7588cb1d1e3f5176616c2f99ce8f81f31cc99c2c",
+    "bytes": 162623
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0145.png-face.png",
+    "sha256": "34d3921bbbc26fbe2a10e63bffd4b492044f7af8bc65036d39796f78b87ed2b3",
+    "bytes": 751405
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0145.png-hair.png",
+    "sha256": "a446b26667c6c39d7480c155509d16b68a6cca26386c08a0a890019816da578d",
+    "bytes": 700192
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0145.png-lips.png",
+    "sha256": "4fe890cc62b604ac5c5056c01207c015fff818afb016fced5a6f8179f99b7a5a",
+    "bytes": 82120
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0145.png-nose.png",
+    "sha256": "f772bc634235462c092bc988a92a4f421286072dac7396ae3a399a6925a594e3",
+    "bytes": 67391
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\frame_0145.png-scene.png",
+    "sha256": "5ece34a7f37466c244de9e075c0bb658b362d2179f972b27bbf110a3182d6b34",
+    "bytes": 2197183
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\after-local\\metrics.json",
+    "sha256": "b3fd1d8a04d2b7e2ec417b48986eb966a02036a5e87a82f2bc92b1f8dcb9b9c4",
+    "bytes": 63031
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\algorithm-source\\audit_reconstruction_v3.py",
+    "sha256": "91d62e2708406451804a389db4e5fd2d6d0b87ed113e21d4c827eb3f6b871942",
+    "bytes": 7142
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\algorithm-source\\reconstruction_components_v3.py",
+    "sha256": "493155fa4ab81fa875ec3754a706142c07031890d2aa03fafa5b851d09b3acdf",
+    "bytes": 4827
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\algorithm-source\\reconstruction_compose_v3.py",
+    "sha256": "b3680d2a05d59b9a90289b28cad7a47a4928336b579e916d8d06c703b96bd5e6",
+    "bytes": 4026
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\algorithm-source\\reconstruction_portrait_local_v3.py",
+    "sha256": "5dbac45b5846e05afd2b09951f48caa4dd433058c0c47b83e2d0f947538edb91",
+    "bytes": 4209
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\algorithm-source\\reconstruction_world_static_v3.py",
+    "sha256": "b8240eccfaff555ff37fdc20fbf1bf254452b2cc1959447c5c9f46e5934b85cd",
+    "bytes": 2496
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\algorithm-source\\run_reconstruction_v3.py",
+    "sha256": "6502cf97eb4abafeae492f6b521606aa11ff0df701b077d8186f4524202d07d6",
+    "bytes": 10042
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\continuous-orbit\\audit.json",
+    "sha256": "daf419d8ae89c1750b00ba4472a71dd177a7912b18e47c91e2c27c06095c43d8",
+    "bytes": 7651
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\continuous-orbit\\private-fixed-asset-continuous-orbit.webm",
+    "sha256": "f3b6ed8ae6b6f1cc226e08ffe7fedfe4d0df6daa61c0dbf7e9c58a0b6a71320a",
+    "bytes": 2606873
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\continuous-orbit\\private-front-return-canvas.png",
+    "sha256": "8849e81897547f5d0d2619c30ad59d514f8309047b78fcda22f352f99d9a495e",
+    "bytes": 1023490
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\continuous-orbit\\private-front-settled-canvas.png",
+    "sha256": "8849e81897547f5d0d2619c30ad59d514f8309047b78fcda22f352f99d9a495e",
+    "bytes": 1023490
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\continuous-orbit\\private-front-start-canvas.png",
+    "sha256": "eb37626a228d1bd11a0bb842c912e7d96b08def9765b71843600f5d959b0828b",
+    "bytes": 1024448
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\continuous-orbit\\private-front-ui.png",
+    "sha256": "ba2a851eadd9d47ad5678bb75f9ae4264869affe18bc17fa104f758b20647cff",
+    "bytes": 762045
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\continuous-orbit\\private-yaw-negative-about-60-canvas.png",
+    "sha256": "f411c0c775ea55f80e11ffa17692389e26b1cdd49ec499cfdfaf4bbc1b424992",
+    "bytes": 840922
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\continuous-orbit\\private-yaw-positive-about-60-canvas.png",
+    "sha256": "48f54f42770800148f6cf0684535000ce2fb4baa65b344137556ada2580de73e",
+    "bytes": 1385106
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\edit-compatibility-full-scene-v2\\audit.json",
+    "sha256": "135005499ed5bba753bfffe352e3b9f5ca4dfc2efe3bc20ebaba7ba3f208aa58",
+    "bytes": 3529
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\edit-compatibility-full-scene-v2\\private-changed.png",
+    "sha256": "3e8920853dbe213c8d2d693b10e9da3a77abf554ec1b59dea2540130fe0704ee",
+    "bytes": 1024129
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\edit-compatibility-full-scene-v2\\private-original.png",
+    "sha256": "eb37626a228d1bd11a0bb842c912e7d96b08def9765b71843600f5d959b0828b",
+    "bytes": 1024448
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\edit-compatibility-full-scene-v2\\private-replayed.png",
+    "sha256": "3e8920853dbe213c8d2d693b10e9da3a77abf554ec1b59dea2540130fe0704ee",
+    "bytes": 1024129
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\edit-compatibility-full-scene-v2\\private-restored.png",
+    "sha256": "eb37626a228d1bd11a0bb842c912e7d96b08def9765b71843600f5d959b0828b",
+    "bytes": 1024448
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\edit-compatibility-full-scene-v2\\private-selection-mask.bin",
+    "sha256": "9fa12908d186274f31d0feba097de400d3a0e66b608d9cabecb24d6fe21be120",
+    "bytes": 31449
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0015.png-eyes_glasses.png",
+    "sha256": "e7771d5154cee2230395f9fb830e1f1b0bad1e776503d32a4cbdbcfdf2cd8408",
+    "bytes": 168568
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0015.png-face.png",
+    "sha256": "e0a67a24e64ec44d81f34d42ecd8e89951afbf685b7100c924d1d4041cb34656",
+    "bytes": 778834
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0015.png-hair.png",
+    "sha256": "3f76edc7ccc4cec38098cfd6e32cb88f87753912ff32a78660561bef30022e22",
+    "bytes": 981836
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0015.png-lips.png",
+    "sha256": "c1b45ae7cb80ee4e9be7343bfafe6a778c3c42f8c9a9f418cb04611a4d8e85cd",
+    "bytes": 78374
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0015.png-nose.png",
+    "sha256": "28e7b613ddd9294ad844d3b83669589e3691ef433317c3527af1c84b9b1d9397",
+    "bytes": 65837
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0015.png-scene.png",
+    "sha256": "e6ea6fb94b47d9a39e95c78a0a70f3b9dbe50bdd0b77bebd51fecdb72c31b9f1",
+    "bytes": 2207908
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0035.png-eyes_glasses.png",
+    "sha256": "2de7243f5d64807efa00d118f6273e17bf3be6490f2b75518f803c4ffd590815",
+    "bytes": 148407
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0035.png-face.png",
+    "sha256": "27cf707a7649c58687dc2fdb1e83b7b339ef4d51d238ce34a4a939915095216f",
+    "bytes": 693503
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0035.png-hair.png",
+    "sha256": "2c336853e78fbb3888075054dae062f98c7d070ff034a24c69ad41804a851e70",
+    "bytes": 642780
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0035.png-lips.png",
+    "sha256": "89a0d1d1bdb3539a5995c15117bb3f129f6dfa4bc83276e35d07c41f16251f94",
+    "bytes": 74866
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0035.png-nose.png",
+    "sha256": "83d41e2e785ea76f8138127febfc22822b03d39c4e3eb1b62c6df819e525a316",
+    "bytes": 65230
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0035.png-scene.png",
+    "sha256": "4a856631987d4291579546795c6c0348aa79e38af9bd3a218ef0bd432c860ff9",
+    "bytes": 2295629
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0055.png-eyes_glasses.png",
+    "sha256": "0e26cf7dee096ccf320d2dc0438c005863ede711b344b577c6b96e00331ad5ee",
+    "bytes": 127737
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0055.png-face.png",
+    "sha256": "5d2b1188b4dafc73d8cdb93d2673ab79c2e0c534266ed992e21f7abb820968de",
+    "bytes": 706328
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0055.png-hair.png",
+    "sha256": "570e24e7ea6117ddfa8af48ac2c850cb3dce1bafb65922ede9395e4711d14bc7",
+    "bytes": 517298
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0055.png-lips.png",
+    "sha256": "3c578cb7ed5afb033c4c438933d2ea9d33c9d1ef08203e4c2fcd8b23b112d2fb",
+    "bytes": 73110
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0055.png-nose.png",
+    "sha256": "55769988be44b6484a850d0e82270923c9b1be48fe466511cc13503cc3f1ee0a",
+    "bytes": 55631
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0075.png-eyes_glasses.png",
+    "sha256": "f8d0f3c5c7559f1df43ee80894d8a9035af9ee0aa0042870e8f48c67107f49d5",
+    "bytes": 118938
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0075.png-face.png",
+    "sha256": "dd2658eebb248973157db7fbcdad5d74db349b1024e40d10af88386cf3abb596",
+    "bytes": 713440
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0075.png-hair.png",
+    "sha256": "1eb10fd08df1c7eda50ff29e53899b69fc36d91269fd76827642e6257fa34c48",
+    "bytes": 1091302
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0075.png-lips.png",
+    "sha256": "9c798daa9ee595b1144a9de3454c7fb4603df27f7235ad17d68e934a2aee965c",
+    "bytes": 55759
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0075.png-nose.png",
+    "sha256": "d0f7e5b1469565f955ded728ec0dced1a6bf25b47b57c76b2d0b4687be4587fe",
+    "bytes": 44142
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0095.png-eyes_glasses.png",
+    "sha256": "5d5675ff7b5bb0583bd718a413002f9a38fca00927961ce9248e2c460b331170",
+    "bytes": 141725
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0095.png-face.png",
+    "sha256": "2cf5fda33252e20a4a1e3b18747974605800a8ca90c0c687c79d156bc42dccc8",
+    "bytes": 670157
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0095.png-hair.png",
+    "sha256": "bc6cf2c3dab09451968e4799c8c5d09d5595055cce83cd7149268ef8bcdd09bf",
+    "bytes": 649514
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0095.png-lips.png",
+    "sha256": "9c4eb25fae562d9071a207d9560682a6baadfacdd255db7d2b0f79c987cdcb43",
+    "bytes": 66053
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0095.png-nose.png",
+    "sha256": "b2bfbf29c9bd1d5da6c9fafd4f85a499d754fa90141886bad48c6fa151b1915f",
+    "bytes": 60489
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0115.png-eyes_glasses.png",
+    "sha256": "ab5c7b9c41e1a2111657f96cc2ab09579815910da202d8fde76bf12f4a5c16f6",
+    "bytes": 172554
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0115.png-face.png",
+    "sha256": "a07b140dd784cc8a391827236acce691ebbcaa5c8dd725fd52541d09e452880e",
+    "bytes": 938632
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0115.png-hair.png",
+    "sha256": "12ec9e2c7dc0ca7b9d8de1aa04463188511c9d39a71543ee0577c03034db764a",
+    "bytes": 704691
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0115.png-lips.png",
+    "sha256": "48e89840b6ab6194c1660fd4d488055c431f059c156c59232972be351312aa3c",
+    "bytes": 91042
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0115.png-nose.png",
+    "sha256": "ae8c3839bcba5553e40f352fab03841b4989cf4e7dcffe36f4742388093a2516",
+    "bytes": 69381
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0115.png-scene.png",
+    "sha256": "ed8b661de1d4786d1cc09b43f266b4c6f46e33466a9726d0ad6890ae6f29453c",
+    "bytes": 2044193
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0130.png-eyes_glasses.png",
+    "sha256": "58958e4d5d587a775e1b95023392a513bf37df2c1cab27ee0b50994508ded5c8",
+    "bytes": 158477
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0130.png-face.png",
+    "sha256": "0e201595bbb6a9f2c864991c7a709e4b5563db4482000d919750cf6233da7e9a",
+    "bytes": 697696
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0130.png-hair.png",
+    "sha256": "a6c36f47e392a5c874b358dd64dc9a77319f467e41e4a46cfc8f00bd0a2632e2",
+    "bytes": 1081481
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0130.png-lips.png",
+    "sha256": "18e716af9cc53607d95e5ccec7a33a3d994c0036acdcfe8098e014507f93d204",
+    "bytes": 75581
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0130.png-nose.png",
+    "sha256": "22a04094d77553efa5b1b3dd21d898e826ab59f5477f87e1b1a3ffdee4652b23",
+    "bytes": 68132
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0130.png-scene.png",
+    "sha256": "a1a9b6f27f71313265c3b86cbd28d0984e07e751a6ce55501d8c16cb2d4b7247",
+    "bytes": 2565512
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0145.png-eyes_glasses.png",
+    "sha256": "b99c8e2d7b2e4e21a63489e1dedc0d97fed4969e4783d8c9246785b45b7b6433",
+    "bytes": 162680
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0145.png-face.png",
+    "sha256": "5dd23b0a380881097d982cc67125f4ed6bfca7a894b2d6cdef84009c97d4a695",
+    "bytes": 750311
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0145.png-hair.png",
+    "sha256": "072cb83f8eb25fa04738cda77934f81e592458ad58c6d06859cfd9753f30fe0d",
+    "bytes": 706504
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0145.png-lips.png",
+    "sha256": "ec4786dfe8a2d941c87ae750524bba681964a856e12179c343a90a5ffaf130f4",
+    "bytes": 82144
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0145.png-nose.png",
+    "sha256": "c1119908fdb7e9692b661ccf0ed077e3303ac04df6b36d95b175a2d859180584",
+    "bytes": 67383
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\frame_0145.png-scene.png",
+    "sha256": "b1e36ba12f7e9838c771e348f6ad6f633c35a6e18d6359ea8301aa6d2f41469a",
+    "bytes": 2444706
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\final\\metrics.json",
+    "sha256": "bfd9816b9eb17dfe6cfdeeaf214a9b07113621f6f95bc419cb4620487230be0d",
+    "bytes": 63185
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0015.png-eyes_glasses.png",
+    "sha256": "0a1a5f5243d144fb27f9e3f777cc8bc394044353c52cf78fe84f569df4a4472a",
+    "bytes": 170361
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0015.png-face.png",
+    "sha256": "42ec021c44adf4ca87d8bbe9840c4901a2a844b26abdd6d857ddc6268d099b01",
+    "bytes": 784372
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0015.png-hair.png",
+    "sha256": "d4a4253253dd37bf8861387b40df4377e9bd5cc6b652634d2ffc3bcf12d36506",
+    "bytes": 988818
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0015.png-lips.png",
+    "sha256": "26c357903d15078fbd61b3e9bf05dc51c79be13d186ac22dc95f3b867cff6fc8",
+    "bytes": 78375
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0015.png-nose.png",
+    "sha256": "0953765d84e2f9fc76206b93d3634ad3104408e7a93e386ecbd830873f26d4e1",
+    "bytes": 65839
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0015.png-scene.png",
+    "sha256": "c6655f6c66cbe9f216e00b518eafd2c0d2e6304a24ddd7c2ca5cdf8031b79f71",
+    "bytes": 1907855
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0035.png-eyes_glasses.png",
+    "sha256": "e522e953edcb934d10e0f7a145c0754e0665bfcfa196e31ac7f0e83a8390f9f1",
+    "bytes": 149868
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0035.png-face.png",
+    "sha256": "19743cd58a950fa4c2a55f3a96803a1504561387a47c0ca60a08ab6ce5205c0d",
+    "bytes": 697617
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0035.png-hair.png",
+    "sha256": "7c9072ff4d11e19397a07196ebb4b6a30c611c904727fb00ba815eb30223b93f",
+    "bytes": 643876
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0035.png-lips.png",
+    "sha256": "a7d84b68541d6abdab392fabc8d04187d74204e20737e3bf395abf8d5ace9835",
+    "bytes": 74897
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0035.png-nose.png",
+    "sha256": "18ac9a17400726a877c9e324b6b9ae8bb1ad3b2ec7a1527da2482044242ef01b",
+    "bytes": 65278
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0035.png-scene.png",
+    "sha256": "99d037aa47d4d28b790c89c51e6ae52d84bc87afd902c31d19431847326223bf",
+    "bytes": 2010018
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0055.png-eyes_glasses.png",
+    "sha256": "9c3bfcd05cc3173bf1b4614f61960e96d9fb75f1db354b14bf5b76bb07d3f3bf",
+    "bytes": 128710
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0055.png-face.png",
+    "sha256": "22830137055da3487dc7db66a5355bbd057990acb8ff85b903cb74cf4836be12",
+    "bytes": 709874
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0055.png-hair.png",
+    "sha256": "87b2c8ccd226eb3cfa7e248b78100ec964a7d054d4714e8f03ed3e9993a30202",
+    "bytes": 521725
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0055.png-lips.png",
+    "sha256": "3c578cb7ed5afb033c4c438933d2ea9d33c9d1ef08203e4c2fcd8b23b112d2fb",
+    "bytes": 73110
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0055.png-nose.png",
+    "sha256": "21712e718c3389e7e21859b06488f7502f1f8ba02556e160803465e0e41b23d9",
+    "bytes": 55633
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0075.png-eyes_glasses.png",
+    "sha256": "97f90a4f254f6418d69d1c4a3187286b458802359691f6a114f0475386d176a7",
+    "bytes": 119860
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0075.png-face.png",
+    "sha256": "c00e4c564deb211e222d1b433dd0f3903389006ab9d35b879fdb46599d5648c1",
+    "bytes": 711853
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0075.png-hair.png",
+    "sha256": "c92b7075be270b77d9f1d37c9da536c548af44903610627c60cf43e41d345d0f",
+    "bytes": 1082862
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0075.png-lips.png",
+    "sha256": "9c798daa9ee595b1144a9de3454c7fb4603df27f7235ad17d68e934a2aee965c",
+    "bytes": 55759
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0075.png-nose.png",
+    "sha256": "cd020cfcad42cfe25502345e2ba33e017e01a9320d90130bfac6257f53b62014",
+    "bytes": 44145
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0095.png-eyes_glasses.png",
+    "sha256": "6ee8fad594e6edd51613e07556f18ad661205a57775cd3202a66f3cd5f553df4",
+    "bytes": 142674
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0095.png-face.png",
+    "sha256": "c63844ec9911c4e392026e2e1e27ce329aa4a301f70372e93b97ff16ca4da795",
+    "bytes": 670120
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0095.png-hair.png",
+    "sha256": "0269ce6081cb462f9dd080924b864934537426e54cac4838f2ac1277ed2a75e6",
+    "bytes": 643945
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0095.png-lips.png",
+    "sha256": "9c4eb25fae562d9071a207d9560682a6baadfacdd255db7d2b0f79c987cdcb43",
+    "bytes": 66053
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0095.png-nose.png",
+    "sha256": "e23aaf5890ad9285adfe53618ec6ceb3694267b773c4c07368797a50089dd780",
+    "bytes": 60489
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0115.png-eyes_glasses.png",
+    "sha256": "c4ab59b434854b99ab4daa0d27f33274b75041783eaceb9d44af055aed5b5def",
+    "bytes": 174526
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0115.png-face.png",
+    "sha256": "9e60bb359981a48d537d908e5c0445d8b5be205a6af92975fc9bef2ed38d8fce",
+    "bytes": 948259
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0115.png-hair.png",
+    "sha256": "14027dd72439ec98c6fb0ee546df5556333469819f97089c59b56e31952d83ba",
+    "bytes": 717394
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0115.png-lips.png",
+    "sha256": "215d372222747f977048ba1c179af7baec7f07a207f1e2124430265bfa76c776",
+    "bytes": 91038
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0115.png-nose.png",
+    "sha256": "909f115c21705adec6239481fe9c07903b181e097065f36dfd2ee514438eaada",
+    "bytes": 69366
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0115.png-scene.png",
+    "sha256": "c124eb75ea95b4c91fe002ae7349452aed5f7655715648ebce44cdbddcfd6147",
+    "bytes": 1817735
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0130.png-eyes_glasses.png",
+    "sha256": "9e003b4136a311524cc9c25f611866f884420a526f133d1485be127de527b2ce",
+    "bytes": 159666
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0130.png-face.png",
+    "sha256": "cf7553d38902fd764e95e021498c0b2016fffc5d949dc59d521fd7b4aeb6582f",
+    "bytes": 701857
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0130.png-hair.png",
+    "sha256": "4785ad3cc0dcc90546b1c5e68b433c45c192e30c2c05c6ddc4bbd223cd09e5d9",
+    "bytes": 1057832
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0130.png-lips.png",
+    "sha256": "114a0aa3d7bc90cbdd2af395aece0cdc5a9358685ae5703d266165f9c62d213b",
+    "bytes": 76111
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0130.png-nose.png",
+    "sha256": "679461469e8d9bf4281810f7b325c20b8908e2312bf523f046d7a36a6c321ef9",
+    "bytes": 67814
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0130.png-scene.png",
+    "sha256": "146da6d60d2e86f8a8114a9d7a4a09cfdbabb2941267f480918bb7f5a10053c0",
+    "bytes": 2363735
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0145.png-eyes_glasses.png",
+    "sha256": "b0a7f6ff4d5a5754e60d6ed0e7ea06a206beabd9d1c5200fe4ab6ac5cd4dbecf",
+    "bytes": 164193
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0145.png-face.png",
+    "sha256": "1bf0f29cfaf84417dee0bb7452227b505c652c301f279348864fa4c633570985",
+    "bytes": 754935
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0145.png-hair.png",
+    "sha256": "b278013bd4d2220a99db9e1ddfe2264aba2be9e2e727caeda839adddda028280",
+    "bytes": 697961
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0145.png-lips.png",
+    "sha256": "4fe890cc62b604ac5c5056c01207c015fff818afb016fced5a6f8179f99b7a5a",
+    "bytes": 82120
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0145.png-nose.png",
+    "sha256": "01a59d79a06b44ae7284123ff86e63ebf66c6a068f5276dc565094413c88c3de",
+    "bytes": 67391
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\frame_0145.png-scene.png",
+    "sha256": "5e841586f46d6aed5367aa26c8d56db6b3c03d32bf2d371ec3f9fa2807e64b42",
+    "bytes": 2198035
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\initial\\metrics.json",
+    "sha256": "1273bd70e58648fa96f7636f32722d132d60245fcc906838ab72ba198d5ffd70",
+    "bytes": 62941
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\A-observations.json",
+    "sha256": "6c8249e2e84c439fbffc5f226094154d1e54875acc4cd809293f3682df5761fb",
+    "bytes": 188621
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\cloth_supported_seeds.npz",
+    "sha256": "3dda310a71f172577d62e52d74016e06b7594745bca0b5da1f8f90bf17225f43",
+    "bytes": 10090
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\image-index.json",
+    "sha256": "cd8b46904ce34f8e830ed6d4a52ed36c542045710a758130ca8cea0f76b4aa3b",
+    "bytes": 121998
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initialization.json",
+    "sha256": "fc1c3eaf3ad8681415c9ddc90db20ac5c2d780dab4882eac98b8d8f13859f3c9",
+    "bytes": 483
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\portrait-import.json",
+    "sha256": "ee22b5a40b96a543ab80c363a9f1b3062a248644c80c22dc2c239863653d5890",
+    "bytes": 3858
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\replay.json",
+    "sha256": "65d8e43a732d46c0a9c01881aa5cba729da6e16645dfcb746879d529e5ae9077",
+    "bytes": 493
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0015.png-eyes_glasses.png",
+    "sha256": "e7771d5154cee2230395f9fb830e1f1b0bad1e776503d32a4cbdbcfdf2cd8408",
+    "bytes": 168568
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0015.png-face.png",
+    "sha256": "e0a67a24e64ec44d81f34d42ecd8e89951afbf685b7100c924d1d4041cb34656",
+    "bytes": 778834
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0015.png-hair.png",
+    "sha256": "3f76edc7ccc4cec38098cfd6e32cb88f87753912ff32a78660561bef30022e22",
+    "bytes": 981836
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0015.png-head-overview.png",
+    "sha256": "ecff026b38071a40b7414af2dd8369eb9792132b23ccb311b1137a3a41b1b81d",
+    "bytes": 1122782
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0015.png-lips.png",
+    "sha256": "c1b45ae7cb80ee4e9be7343bfafe6a778c3c42f8c9a9f418cb04611a4d8e85cd",
+    "bytes": 78374
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0015.png-nose.png",
+    "sha256": "28e7b613ddd9294ad844d3b83669589e3691ef433317c3527af1c84b9b1d9397",
+    "bytes": 65837
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0015.png-scene.png",
+    "sha256": "e6ea6fb94b47d9a39e95c78a0a70f3b9dbe50bdd0b77bebd51fecdb72c31b9f1",
+    "bytes": 2207908
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0035.png-eyes_glasses.png",
+    "sha256": "2de7243f5d64807efa00d118f6273e17bf3be6490f2b75518f803c4ffd590815",
+    "bytes": 148407
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0035.png-face.png",
+    "sha256": "27cf707a7649c58687dc2fdb1e83b7b339ef4d51d238ce34a4a939915095216f",
+    "bytes": 693503
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0035.png-hair.png",
+    "sha256": "2c336853e78fbb3888075054dae062f98c7d070ff034a24c69ad41804a851e70",
+    "bytes": 642780
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0035.png-head-overview.png",
+    "sha256": "04b4405c755580a8416eb2256f63154e985e30191f21cec50085ada7874e92de",
+    "bytes": 1172764
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0035.png-lips.png",
+    "sha256": "89a0d1d1bdb3539a5995c15117bb3f129f6dfa4bc83276e35d07c41f16251f94",
+    "bytes": 74866
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0035.png-nose.png",
+    "sha256": "83d41e2e785ea76f8138127febfc22822b03d39c4e3eb1b62c6df819e525a316",
+    "bytes": 65230
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0035.png-scene.png",
+    "sha256": "4a856631987d4291579546795c6c0348aa79e38af9bd3a218ef0bd432c860ff9",
+    "bytes": 2295629
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0055.png-eyes_glasses.png",
+    "sha256": "0e26cf7dee096ccf320d2dc0438c005863ede711b344b577c6b96e00331ad5ee",
+    "bytes": 127737
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0055.png-face.png",
+    "sha256": "5d2b1188b4dafc73d8cdb93d2673ab79c2e0c534266ed992e21f7abb820968de",
+    "bytes": 706328
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0055.png-hair.png",
+    "sha256": "570e24e7ea6117ddfa8af48ac2c850cb3dce1bafb65922ede9395e4711d14bc7",
+    "bytes": 517298
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0055.png-head-overview.png",
+    "sha256": "42bc268afa0e8f739e9ff367af5930374eb5d6cab50f4b47dfd8bb424397168e",
+    "bytes": 929971
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0055.png-lips.png",
+    "sha256": "3c578cb7ed5afb033c4c438933d2ea9d33c9d1ef08203e4c2fcd8b23b112d2fb",
+    "bytes": 73110
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0055.png-nose.png",
+    "sha256": "55769988be44b6484a850d0e82270923c9b1be48fe466511cc13503cc3f1ee0a",
+    "bytes": 55631
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0075.png-eyes_glasses.png",
+    "sha256": "f8d0f3c5c7559f1df43ee80894d8a9035af9ee0aa0042870e8f48c67107f49d5",
+    "bytes": 118938
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0075.png-face.png",
+    "sha256": "dd2658eebb248973157db7fbcdad5d74db349b1024e40d10af88386cf3abb596",
+    "bytes": 713440
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0075.png-hair.png",
+    "sha256": "1eb10fd08df1c7eda50ff29e53899b69fc36d91269fd76827642e6257fa34c48",
+    "bytes": 1091302
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0075.png-head-overview.png",
+    "sha256": "2b71a0d44ef7fbed3e2b4bbc1e85f7f457b85716fb699ef5a9875505b49bdd85",
+    "bytes": 1283676
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0075.png-lips.png",
+    "sha256": "9c798daa9ee595b1144a9de3454c7fb4603df27f7235ad17d68e934a2aee965c",
+    "bytes": 55759
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0075.png-nose.png",
+    "sha256": "d0f7e5b1469565f955ded728ec0dced1a6bf25b47b57c76b2d0b4687be4587fe",
+    "bytes": 44142
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0095.png-eyes_glasses.png",
+    "sha256": "5d5675ff7b5bb0583bd718a413002f9a38fca00927961ce9248e2c460b331170",
+    "bytes": 141725
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0095.png-face.png",
+    "sha256": "2cf5fda33252e20a4a1e3b18747974605800a8ca90c0c687c79d156bc42dccc8",
+    "bytes": 670157
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0095.png-hair.png",
+    "sha256": "bc6cf2c3dab09451968e4799c8c5d09d5595055cce83cd7149268ef8bcdd09bf",
+    "bytes": 649514
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0095.png-head-overview.png",
+    "sha256": "952e5c0c41cbae24999a4b8e41796d858342e90b4c4cdef3f120e2a85bd8f9b4",
+    "bytes": 1221344
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0095.png-lips.png",
+    "sha256": "9c4eb25fae562d9071a207d9560682a6baadfacdd255db7d2b0f79c987cdcb43",
+    "bytes": 66053
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0095.png-nose.png",
+    "sha256": "b2bfbf29c9bd1d5da6c9fafd4f85a499d754fa90141886bad48c6fa151b1915f",
+    "bytes": 60489
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0115.png-eyes_glasses.png",
+    "sha256": "ab5c7b9c41e1a2111657f96cc2ab09579815910da202d8fde76bf12f4a5c16f6",
+    "bytes": 172554
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0115.png-face.png",
+    "sha256": "a07b140dd784cc8a391827236acce691ebbcaa5c8dd725fd52541d09e452880e",
+    "bytes": 938632
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0115.png-hair.png",
+    "sha256": "12ec9e2c7dc0ca7b9d8de1aa04463188511c9d39a71543ee0577c03034db764a",
+    "bytes": 704691
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0115.png-head-overview.png",
+    "sha256": "0c991ac32080aaafa15d6d48293ee8c2e4b14bdc1b74d46a5bee2814e0c13a9b",
+    "bytes": 1226813
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0115.png-lips.png",
+    "sha256": "48e89840b6ab6194c1660fd4d488055c431f059c156c59232972be351312aa3c",
+    "bytes": 91042
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0115.png-nose.png",
+    "sha256": "ae8c3839bcba5553e40f352fab03841b4989cf4e7dcffe36f4742388093a2516",
+    "bytes": 69381
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0115.png-scene.png",
+    "sha256": "ed8b661de1d4786d1cc09b43f266b4c6f46e33466a9726d0ad6890ae6f29453c",
+    "bytes": 2044193
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0130.png-eyes_glasses.png",
+    "sha256": "58958e4d5d587a775e1b95023392a513bf37df2c1cab27ee0b50994508ded5c8",
+    "bytes": 158477
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0130.png-face.png",
+    "sha256": "0e201595bbb6a9f2c864991c7a709e4b5563db4482000d919750cf6233da7e9a",
+    "bytes": 697696
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0130.png-hair.png",
+    "sha256": "a6c36f47e392a5c874b358dd64dc9a77319f467e41e4a46cfc8f00bd0a2632e2",
+    "bytes": 1081481
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0130.png-head-overview.png",
+    "sha256": "0aa73955bd319c198726487682e5934c4339d7236cd59c78c15b13179427e97d",
+    "bytes": 1443803
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0130.png-lips.png",
+    "sha256": "18e716af9cc53607d95e5ccec7a33a3d994c0036acdcfe8098e014507f93d204",
+    "bytes": 75581
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0130.png-nose.png",
+    "sha256": "22a04094d77553efa5b1b3dd21d898e826ab59f5477f87e1b1a3ffdee4652b23",
+    "bytes": 68132
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0130.png-scene.png",
+    "sha256": "a1a9b6f27f71313265c3b86cbd28d0984e07e751a6ce55501d8c16cb2d4b7247",
+    "bytes": 2565512
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0145.png-eyes_glasses.png",
+    "sha256": "b99c8e2d7b2e4e21a63489e1dedc0d97fed4969e4783d8c9246785b45b7b6433",
+    "bytes": 162680
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0145.png-face.png",
+    "sha256": "5dd23b0a380881097d982cc67125f4ed6bfca7a894b2d6cdef84009c97d4a695",
+    "bytes": 750311
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0145.png-hair.png",
+    "sha256": "072cb83f8eb25fa04738cda77934f81e592458ad58c6d06859cfd9753f30fe0d",
+    "bytes": 706504
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0145.png-head-overview.png",
+    "sha256": "47f485af3f49bda29bd31e6f174e265c513b7ef44c26ba62c045838cd62b90d4",
+    "bytes": 1397865
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0145.png-lips.png",
+    "sha256": "ec4786dfe8a2d941c87ae750524bba681964a856e12179c343a90a5ffaf130f4",
+    "bytes": 82144
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0145.png-nose.png",
+    "sha256": "c1119908fdb7e9692b661ccf0ed077e3303ac04df6b36d95b175a2d859180584",
+    "bytes": 67383
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\frame_0145.png-scene.png",
+    "sha256": "b1e36ba12f7e9838c771e348f6ad6f633c35a6e18d6359ea8301aa6d2f41469a",
+    "bytes": 2444706
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\final\\metrics.json",
+    "sha256": "95b723f5a7705106bb3f10b92b67fd50d8087a9365e13cbe43b78c4a4a4f19ee",
+    "bytes": 64556
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0015.png-eyes_glasses.png",
+    "sha256": "0a1a5f5243d144fb27f9e3f777cc8bc394044353c52cf78fe84f569df4a4472a",
+    "bytes": 170361
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0015.png-face.png",
+    "sha256": "42ec021c44adf4ca87d8bbe9840c4901a2a844b26abdd6d857ddc6268d099b01",
+    "bytes": 784372
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0015.png-hair.png",
+    "sha256": "d4a4253253dd37bf8861387b40df4377e9bd5cc6b652634d2ffc3bcf12d36506",
+    "bytes": 988818
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0015.png-head-overview.png",
+    "sha256": "f88e3041bf41d3988f85600175f10ebb6f964fde7c3e13cb6996d470e0bc323e",
+    "bytes": 1128707
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0015.png-lips.png",
+    "sha256": "26c357903d15078fbd61b3e9bf05dc51c79be13d186ac22dc95f3b867cff6fc8",
+    "bytes": 78375
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0015.png-nose.png",
+    "sha256": "0953765d84e2f9fc76206b93d3634ad3104408e7a93e386ecbd830873f26d4e1",
+    "bytes": 65839
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0015.png-scene.png",
+    "sha256": "c6655f6c66cbe9f216e00b518eafd2c0d2e6304a24ddd7c2ca5cdf8031b79f71",
+    "bytes": 1907855
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0035.png-eyes_glasses.png",
+    "sha256": "e522e953edcb934d10e0f7a145c0754e0665bfcfa196e31ac7f0e83a8390f9f1",
+    "bytes": 149868
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0035.png-face.png",
+    "sha256": "19743cd58a950fa4c2a55f3a96803a1504561387a47c0ca60a08ab6ce5205c0d",
+    "bytes": 697617
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0035.png-hair.png",
+    "sha256": "7c9072ff4d11e19397a07196ebb4b6a30c611c904727fb00ba815eb30223b93f",
+    "bytes": 643876
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0035.png-head-overview.png",
+    "sha256": "2eae06d780e724511c6f3e00a6106c9303523053fe767d34ae4c6480625e278b",
+    "bytes": 1169881
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0035.png-lips.png",
+    "sha256": "a7d84b68541d6abdab392fabc8d04187d74204e20737e3bf395abf8d5ace9835",
+    "bytes": 74897
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0035.png-nose.png",
+    "sha256": "18ac9a17400726a877c9e324b6b9ae8bb1ad3b2ec7a1527da2482044242ef01b",
+    "bytes": 65278
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0035.png-scene.png",
+    "sha256": "99d037aa47d4d28b790c89c51e6ae52d84bc87afd902c31d19431847326223bf",
+    "bytes": 2010018
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0055.png-eyes_glasses.png",
+    "sha256": "9c3bfcd05cc3173bf1b4614f61960e96d9fb75f1db354b14bf5b76bb07d3f3bf",
+    "bytes": 128710
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0055.png-face.png",
+    "sha256": "22830137055da3487dc7db66a5355bbd057990acb8ff85b903cb74cf4836be12",
+    "bytes": 709874
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0055.png-hair.png",
+    "sha256": "87b2c8ccd226eb3cfa7e248b78100ec964a7d054d4714e8f03ed3e9993a30202",
+    "bytes": 521725
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0055.png-head-overview.png",
+    "sha256": "7394833a856decef1ae0fd6e7f528d0c50a53b7783ea91cb41f065c1a87e5001",
+    "bytes": 934093
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0055.png-lips.png",
+    "sha256": "3c578cb7ed5afb033c4c438933d2ea9d33c9d1ef08203e4c2fcd8b23b112d2fb",
+    "bytes": 73110
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0055.png-nose.png",
+    "sha256": "21712e718c3389e7e21859b06488f7502f1f8ba02556e160803465e0e41b23d9",
+    "bytes": 55633
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0075.png-eyes_glasses.png",
+    "sha256": "97f90a4f254f6418d69d1c4a3187286b458802359691f6a114f0475386d176a7",
+    "bytes": 119860
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0075.png-face.png",
+    "sha256": "c00e4c564deb211e222d1b433dd0f3903389006ab9d35b879fdb46599d5648c1",
+    "bytes": 711853
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0075.png-hair.png",
+    "sha256": "c92b7075be270b77d9f1d37c9da536c548af44903610627c60cf43e41d345d0f",
+    "bytes": 1082862
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0075.png-head-overview.png",
+    "sha256": "512eae4db9142a4950c7bc2592edc165cce46a94007951cba8c4473666708d08",
+    "bytes": 1275205
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0075.png-lips.png",
+    "sha256": "9c798daa9ee595b1144a9de3454c7fb4603df27f7235ad17d68e934a2aee965c",
+    "bytes": 55759
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0075.png-nose.png",
+    "sha256": "cd020cfcad42cfe25502345e2ba33e017e01a9320d90130bfac6257f53b62014",
+    "bytes": 44145
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0095.png-eyes_glasses.png",
+    "sha256": "6ee8fad594e6edd51613e07556f18ad661205a57775cd3202a66f3cd5f553df4",
+    "bytes": 142674
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0095.png-face.png",
+    "sha256": "c63844ec9911c4e392026e2e1e27ce329aa4a301f70372e93b97ff16ca4da795",
+    "bytes": 670120
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0095.png-hair.png",
+    "sha256": "0269ce6081cb462f9dd080924b864934537426e54cac4838f2ac1277ed2a75e6",
+    "bytes": 643945
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0095.png-head-overview.png",
+    "sha256": "5ec23a3fc78f796465cca416ba16ec4e1c372a565996ec91d35411cd52ac0f94",
+    "bytes": 1215675
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0095.png-lips.png",
+    "sha256": "9c4eb25fae562d9071a207d9560682a6baadfacdd255db7d2b0f79c987cdcb43",
+    "bytes": 66053
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0095.png-nose.png",
+    "sha256": "e23aaf5890ad9285adfe53618ec6ceb3694267b773c4c07368797a50089dd780",
+    "bytes": 60489
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0115.png-eyes_glasses.png",
+    "sha256": "c4ab59b434854b99ab4daa0d27f33274b75041783eaceb9d44af055aed5b5def",
+    "bytes": 174526
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0115.png-face.png",
+    "sha256": "9e60bb359981a48d537d908e5c0445d8b5be205a6af92975fc9bef2ed38d8fce",
+    "bytes": 948259
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0115.png-hair.png",
+    "sha256": "14027dd72439ec98c6fb0ee546df5556333469819f97089c59b56e31952d83ba",
+    "bytes": 717394
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0115.png-head-overview.png",
+    "sha256": "9764a616720f384cf55c87a67e51f0eed364668e5a092df6de33191f3fec02ca",
+    "bytes": 1236434
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0115.png-lips.png",
+    "sha256": "215d372222747f977048ba1c179af7baec7f07a207f1e2124430265bfa76c776",
+    "bytes": 91038
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0115.png-nose.png",
+    "sha256": "909f115c21705adec6239481fe9c07903b181e097065f36dfd2ee514438eaada",
+    "bytes": 69366
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0115.png-scene.png",
+    "sha256": "c124eb75ea95b4c91fe002ae7349452aed5f7655715648ebce44cdbddcfd6147",
+    "bytes": 1817735
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0130.png-eyes_glasses.png",
+    "sha256": "9e003b4136a311524cc9c25f611866f884420a526f133d1485be127de527b2ce",
+    "bytes": 159666
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0130.png-face.png",
+    "sha256": "cf7553d38902fd764e95e021498c0b2016fffc5d949dc59d521fd7b4aeb6582f",
+    "bytes": 701857
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0130.png-hair.png",
+    "sha256": "4785ad3cc0dcc90546b1c5e68b433c45c192e30c2c05c6ddc4bbd223cd09e5d9",
+    "bytes": 1057832
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0130.png-head-overview.png",
+    "sha256": "e9d252e3d361d6af6e2676c75750d4338b0c8b0d6a1efebf54ebb06fd0b8af59",
+    "bytes": 1416057
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0130.png-lips.png",
+    "sha256": "114a0aa3d7bc90cbdd2af395aece0cdc5a9358685ae5703d266165f9c62d213b",
+    "bytes": 76111
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0130.png-nose.png",
+    "sha256": "679461469e8d9bf4281810f7b325c20b8908e2312bf523f046d7a36a6c321ef9",
+    "bytes": 67814
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0130.png-scene.png",
+    "sha256": "146da6d60d2e86f8a8114a9d7a4a09cfdbabb2941267f480918bb7f5a10053c0",
+    "bytes": 2363735
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0145.png-eyes_glasses.png",
+    "sha256": "b0a7f6ff4d5a5754e60d6ed0e7ea06a206beabd9d1c5200fe4ab6ac5cd4dbecf",
+    "bytes": 164193
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0145.png-face.png",
+    "sha256": "1bf0f29cfaf84417dee0bb7452227b505c652c301f279348864fa4c633570985",
+    "bytes": 754935
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0145.png-hair.png",
+    "sha256": "b278013bd4d2220a99db9e1ddfe2264aba2be9e2e727caeda839adddda028280",
+    "bytes": 697961
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0145.png-head-overview.png",
+    "sha256": "bb52b193e06cd78d6f05277a25d4f8c01a4acd12ec0243d7760b4b674e0a4e3c",
+    "bytes": 1382286
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0145.png-lips.png",
+    "sha256": "4fe890cc62b604ac5c5056c01207c015fff818afb016fced5a6f8179f99b7a5a",
+    "bytes": 82120
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0145.png-nose.png",
+    "sha256": "01a59d79a06b44ae7284123ff86e63ebf66c6a068f5276dc565094413c88c3de",
+    "bytes": 67391
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\frame_0145.png-scene.png",
+    "sha256": "5e841586f46d6aed5367aa26c8d56db6b3c03d32bf2d371ec3f9fa2807e64b42",
+    "bytes": 2198035
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-audit\\initial\\metrics.json",
+    "sha256": "a75c3a3868e1e44fdbd5b6ae28a22c808a7d2c5b5c899b4a95ddf95c5276ade2",
+    "bytes": 64315
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-footprint\\A-observations.json",
+    "bytes": 188621,
+    "sha256": "6c8249e2e84c439fbffc5f226094154d1e54875acc4cd809293f3682df5761fb"
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-footprint\\cloth_supported_seeds.npz",
+    "bytes": 10090,
+    "sha256": "3dda310a71f172577d62e52d74016e06b7594745bca0b5da1f8f90bf17225f43"
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-footprint\\D-front-evidence.json",
+    "bytes": 612,
+    "sha256": "017b4e15d22cc5e8aca757844409c682a09d650f6aab55520c33a5bc4153cfff"
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-footprint\\D-front-evidence.npz",
+    "bytes": 57815,
+    "sha256": "af0dab1b56de2e66154e4dacbda220683614114b7283e5f865a2bce34d935d8d"
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-footprint\\initialization.json",
+    "bytes": 483,
+    "sha256": "fc1c3eaf3ad8681415c9ddc90db20ac5c2d780dab4882eac98b8d8f13859f3c9"
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-footprint\\portrait-import.json",
+    "bytes": 3858,
+    "sha256": "ee22b5a40b96a543ab80c363a9f1b3062a248644c80c22dc2c239863653d5890"
+  },
+  {
+    "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a-footprint\\replay.json",
+    "bytes": 329,
+    "sha256": "1bfdd5a4ff2affb76c03bc9bb9a4da363f58d8d470c93438ab403163dc534095"
+  }
+]

@@ -1,0 +1,502 @@
+{
+  "runId": "reconstruction-v3-20260928-a",
+  "sourceSha256": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+  "assetSha256": "143d0529db257656f71e32b8f6786e26eafe1037f993d7d2f359dc447600dace",
+  "points": {
+    "static_scene": 22020,
+    "face_skin": 8798,
+    "hair": 267,
+    "accessory": 16,
+    "neck_shoulder_cloth": 348
+  },
+  "steps": {
+    "B": 360,
+    "C": 360
+  },
+  "seconds": 96.19608023099863,
+  "Bseconds": 27.427060754000195,
+  "Cseconds": 27.718135339999208,
+  "torchAllocatedPeakMiB": 314.1337890625,
+  "torchReservedPeakMiB": 548.0,
+  "deviceSamples": 156,
+  "devicePeakMiB": 1717.0,
+  "deviceIncludesOtherProcesses": true,
+  "perFrame": {
+    "frame_0015.png": {
+      "retainedHairL1": 0.028571048751473427,
+      "seedInitialHairL1": 0.08601313084363937,
+      "trainedHairL1": 0.03836696967482567,
+      "hairVisibleCoverage": 0.8209357857704163,
+      "fullSceneRoomHole": 0.876735508441925,
+      "faceCoreL1": 0.024159682914614677
+    },
+    "frame_0035.png": {
+      "retainedHairL1": 0.038587119430303574,
+      "seedInitialHairL1": 0.10515967011451721,
+      "trainedHairL1": 0.053917787969112396,
+      "hairVisibleCoverage": 0.7064956426620483,
+      "fullSceneRoomHole": 0.8817429542541504,
+      "faceCoreL1": 0.019061541184782982
+    },
+    "frame_0055.png": {
+      "retainedHairL1": 0.05640066787600517,
+      "seedInitialHairL1": 0.09533850103616714,
+      "trainedHairL1": 0.06297075003385544,
+      "hairVisibleCoverage": 0.8408389091491699,
+      "fullSceneRoomHole": null,
+      "faceCoreL1": 0.052869558334350586
+    },
+    "frame_0075.png": {
+      "retainedHairL1": 0.047789156436920166,
+      "seedInitialHairL1": 0.09862570464611053,
+      "trainedHairL1": 0.06421826779842377,
+      "hairVisibleCoverage": 0.5576125979423523,
+      "fullSceneRoomHole": null,
+      "faceCoreL1": 0.02426665648818016
+    },
+    "frame_0095.png": {
+      "retainedHairL1": 0.03962363302707672,
+      "seedInitialHairL1": 0.09847689419984818,
+      "trainedHairL1": 0.05372603237628937,
+      "hairVisibleCoverage": 0.6250975131988525,
+      "fullSceneRoomHole": null,
+      "faceCoreL1": 0.03085300140082836
+    },
+    "frame_0115.png": {
+      "retainedHairL1": 0.047587741166353226,
+      "seedInitialHairL1": 0.08744963258504868,
+      "trainedHairL1": 0.054671283811330795,
+      "hairVisibleCoverage": 0.8876155018806458,
+      "fullSceneRoomHole": 0.9009414911270142,
+      "faceCoreL1": 0.027367593720555305
+    },
+    "frame_0130.png": {
+      "retainedHairL1": 0.055298011749982834,
+      "seedInitialHairL1": 0.10638181120157242,
+      "trainedHairL1": 0.06582283973693848,
+      "hairVisibleCoverage": 0.6104331016540527,
+      "fullSceneRoomHole": 0.7651423811912537,
+      "faceCoreL1": 0.030144408345222473
+    },
+    "frame_0145.png": {
+      "retainedHairL1": 0.04000247269868851,
+      "seedInitialHairL1": 0.10396303236484528,
+      "trainedHairL1": 0.06339989602565765,
+      "hairVisibleCoverage": 0.6647740006446838,
+      "fullSceneRoomHole": 0.8475479483604431,
+      "faceCoreL1": 0.02110067382454872
+    }
+  },
+  "pointOrder": {
+    "plySha256": "143d0529db257656f71e32b8f6786e26eafe1037f993d7d2f359dc447600dace",
+    "sidecarSha256": "e91bff540aea5fe455eb7a19014f000ca6a4ae8d0d4103332fc270e1f56e4c2f",
+    "sourceSha256": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+    "sourceCount": 31449,
+    "loadedCount": 31449,
+    "fields": 59,
+    "mismatches": [],
+    "allFieldsSameOrder": true,
+    "expected": {
+      "x": "029c4a7c60023ffef9e02222a1c5c36bc1279fa9817da242886f4f573813e657",
+      "y": "53a2c2a8c6f91ded78c22a8edee5c2c6265f34fa417b6b1094a2375afe0a888c",
+      "z": "9d7d1a1257ee34d2ce48a68bbed1783402091db29a1c245b02a5e86e41e78e3c",
+      "f_dc_0": "a26919a480f43f8bc5db1f78d0b9ad2fa294c4ae908df299085230c612377994",
+      "f_dc_1": "f3936dff3e343fe78d673c368fc48f7ac921886c520fac0686756f9ba6dfacb0",
+      "f_dc_2": "0a3e33d5eff6c707fc406ce026aaadc109c65d9bea3d62305e9053690a7fc435",
+      "f_rest_0": "d7af87386d2eb5f5f115575034e4b104322ef0871fdced14940f8c6f4203334c",
+      "f_rest_1": "108815c5c9b4e3ac4afb920dae22308b96e602ce0a252505e12e20c91919051b",
+      "f_rest_2": "10782d5e9e9a45eafbb1a26bd7cca16c1e69ac4eb48817b6f88a39e27073b760",
+      "f_rest_3": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_4": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_5": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_6": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_7": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_8": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_9": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_10": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_11": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_12": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_13": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_14": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_15": "604b2af9fb909855465d04760d90aa322f64dc270155a7d17fbccf123b5915e5",
+      "f_rest_16": "66b69bb71f6c0d3719daed6b14eaf851de930c94b7d2272737e0e2b8ce04ec91",
+      "f_rest_17": "5dc7939e11fb5f872bf3d7d79e350441c89413beeb7c66cfd848316a424913f6",
+      "f_rest_18": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_19": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_20": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_21": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_22": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_23": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_24": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_25": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_26": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_27": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_28": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_29": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_30": "c7aa7981b66b901ce9a38c80d91c499706df35ae098083d38ef0edff879dcd2b",
+      "f_rest_31": "6ae00dc1e37976a8e6f7ff02ea08f13a026a3d81fa079f100d6e263f9c0b9ebe",
+      "f_rest_32": "7452778cd396e01b48b83c0531ae9184385f63d813aa97d09bb3813ab01a946c",
+      "f_rest_33": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_34": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_35": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_36": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_37": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_38": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_39": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_40": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_41": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_42": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_43": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_44": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "opacity": "03fdfd3513be8c9e3a53923f98629b3ffb8d2753e7d779722eb73a81e18e1602",
+      "scale_0": "3cb6a38fe46af605eb58e8207736f7b1dd386a331f97f8cc5d26d05c0a91681d",
+      "scale_1": "8ffc15bb82f6ce382909fbc82e213fcc1b16f51699c4a1aac33ddf7b5945570e",
+      "scale_2": "388be2371f80ccf654e3e39b48efb5c6e0b5971cb93c7024e6844fa20f54f7bc",
+      "rot_0": "25cd2749b4fda31f683c1c6714235ce912d181d34f82228860c21f207219052d",
+      "rot_1": "80d253f00d3af1b86c0a419869b6ebd466d5f2f3fef9f969d5f193c65a132a1f",
+      "rot_2": "5345ebb0aac6bd17af27df5f540db8c91aaae8b304baf4c9a589efb9ef1120b9",
+      "rot_3": "f0db007f1e2175bf0225e5658d9a0e30f2628e60475b4b011ac1b2dc06b2b157"
+    },
+    "actual": {
+      "x": "029c4a7c60023ffef9e02222a1c5c36bc1279fa9817da242886f4f573813e657",
+      "y": "53a2c2a8c6f91ded78c22a8edee5c2c6265f34fa417b6b1094a2375afe0a888c",
+      "z": "9d7d1a1257ee34d2ce48a68bbed1783402091db29a1c245b02a5e86e41e78e3c",
+      "f_dc_0": "a26919a480f43f8bc5db1f78d0b9ad2fa294c4ae908df299085230c612377994",
+      "f_dc_1": "f3936dff3e343fe78d673c368fc48f7ac921886c520fac0686756f9ba6dfacb0",
+      "f_dc_2": "0a3e33d5eff6c707fc406ce026aaadc109c65d9bea3d62305e9053690a7fc435",
+      "f_rest_0": "d7af87386d2eb5f5f115575034e4b104322ef0871fdced14940f8c6f4203334c",
+      "f_rest_1": "108815c5c9b4e3ac4afb920dae22308b96e602ce0a252505e12e20c91919051b",
+      "f_rest_2": "10782d5e9e9a45eafbb1a26bd7cca16c1e69ac4eb48817b6f88a39e27073b760",
+      "f_rest_3": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_4": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_5": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_6": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_7": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_8": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_9": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_10": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_11": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_12": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_13": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_14": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_15": "604b2af9fb909855465d04760d90aa322f64dc270155a7d17fbccf123b5915e5",
+      "f_rest_16": "66b69bb71f6c0d3719daed6b14eaf851de930c94b7d2272737e0e2b8ce04ec91",
+      "f_rest_17": "5dc7939e11fb5f872bf3d7d79e350441c89413beeb7c66cfd848316a424913f6",
+      "f_rest_18": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_19": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_20": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_21": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_22": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_23": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_24": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_25": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_26": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_27": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_28": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_29": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_30": "c7aa7981b66b901ce9a38c80d91c499706df35ae098083d38ef0edff879dcd2b",
+      "f_rest_31": "6ae00dc1e37976a8e6f7ff02ea08f13a026a3d81fa079f100d6e263f9c0b9ebe",
+      "f_rest_32": "7452778cd396e01b48b83c0531ae9184385f63d813aa97d09bb3813ab01a946c",
+      "f_rest_33": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_34": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_35": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_36": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_37": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_38": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_39": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_40": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_41": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_42": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_43": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "f_rest_44": "e5a07bbaca75c8b780f3e9a9e1659cb6e17c0847e70b98bb7f4e7a8fcc4195b8",
+      "opacity": "03fdfd3513be8c9e3a53923f98629b3ffb8d2753e7d779722eb73a81e18e1602",
+      "scale_0": "3cb6a38fe46af605eb58e8207736f7b1dd386a331f97f8cc5d26d05c0a91681d",
+      "scale_1": "8ffc15bb82f6ce382909fbc82e213fcc1b16f51699c4a1aac33ddf7b5945570e",
+      "scale_2": "388be2371f80ccf654e3e39b48efb5c6e0b5971cb93c7024e6844fa20f54f7bc",
+      "rot_0": "25cd2749b4fda31f683c1c6714235ce912d181d34f82228860c21f207219052d",
+      "rot_1": "80d253f00d3af1b86c0a419869b6ebd466d5f2f3fef9f969d5f193c65a132a1f",
+      "rot_2": "5345ebb0aac6bd17af27df5f540db8c91aaae8b304baf4c9a589efb9ef1120b9",
+      "rot_3": "f0db007f1e2175bf0225e5658d9a0e30f2628e60475b4b011ac1b2dc06b2b157"
+    },
+    "loader": "PlayCanvas 2.22.4, reorder:false",
+    "drawDepthSorting": "unchanged",
+    "basis": "all source field arrays, not nearest XYZ or editable-prefix proxy",
+    "Harmony": "not_tested"
+  },
+  "edit": {
+    "plySha256": "143d0529db257656f71e32b8f6786e26eafe1037f993d7d2f359dc447600dace",
+    "browserErrors": [],
+    "selectedEditableCount": 176,
+    "selectedEnvironmentCount": 0,
+    "visualChanged": true,
+    "exactRestored": true,
+    "exactReplayed": true
+  },
+  "orbit": {
+    "status": "single_unreleased_asset_real_playcanvas_continuous_orbit",
+    "assetScope": "recorded_person_and_room",
+    "playcanvas": "2.22.4",
+    "browserBackend": "Chrome SwiftShader WebGL2",
+    "interactionScope": "large_yaw",
+    "sourceAsset": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\portrait.gaussian.ply",
+    "plySha256": "143d0529db257656f71e32b8f6786e26eafe1037f993d7d2f359dc447600dace",
+    "sourceView": {
+      "schemaVersion": 1,
+      "sourceFrame": "frame_0111.png",
+      "target": [
+        3.354588031768799,
+        0.23904453217983246,
+        3.171447992324829
+      ],
+      "camera": [
+        -1.526124871966287,
+        -0.2535107125155608,
+        0.16933475379322893
+      ],
+      "up": [
+        -0.04387391471813079,
+        -0.9941176623695914,
+        0.09902097238527408
+      ],
+      "fovDegrees": 77.83132016578153,
+      "targetFaceFraction": 0.5,
+      "editableSplats": 8798,
+      "recordedEnvironmentSplats": 22020,
+      "pointCount": 31449,
+      "researchOnly": true,
+      "sourceSha256": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+      "assetSha256": "143d0529db257656f71e32b8f6786e26eafe1037f993d7d2f359dc447600dace"
+    },
+    "video": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\continuous-orbit\\private-fixed-asset-continuous-orbit.webm",
+    "videoSha256": "f3b6ed8ae6b6f1cc226e08ffe7fedfe4d0df6daa61c0dbf7e9c58a0b6a71320a",
+    "samples": [
+      {
+        "label": "front-start",
+        "gsView": {
+          "snapshotId": "gs-view-2",
+          "assetId": "",
+          "capturedAt": 1790582782830,
+          "frame": 2,
+          "cameraRevision": 1,
+          "editRevision": 0,
+          "position": [
+            -1.5261248350143433,
+            -0.2535107135772705,
+            0.1693347543478012
+          ],
+          "rotation": [
+            0.8719609982860861,
+            -0.026105296927479742,
+            -0.48472139180491947,
+            0.06362156290882896
+          ],
+          "target": [
+            3.354588031768799,
+            0.23904453217983246,
+            3.171447992324829
+          ],
+          "yaw": 0,
+          "pitch": 0,
+          "distance": 5.751230533698182,
+          "fovDegrees": 77.83132016578153,
+          "nearClip": 0.01,
+          "farClip": 10000,
+          "viewportWidth": 720,
+          "viewportHeight": 1280,
+          "mirrored": false,
+          "crop": "fill-window"
+        },
+        "rawImage": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\continuous-orbit\\private-front-start-canvas.png"
+      },
+      {
+        "label": "yaw-positive-about-60",
+        "gsView": {
+          "snapshotId": "gs-view-172",
+          "assetId": "unreleased-fixed-asset",
+          "capturedAt": 1790582788189,
+          "frame": 172,
+          "cameraRevision": 170,
+          "editRevision": 0,
+          "position": [
+            3.5259883403778076,
+            -0.7416609525680542,
+            -2.492957592010498
+          ],
+          "rotation": [
+            0.9959822638217003,
+            -0.02170149863898074,
+            0.01681855016482931,
+            0.085237969707029
+          ],
+          "target": [
+            3.354588031768799,
+            0.23904453217983246,
+            3.171447992324829
+          ],
+          "yaw": 1.046119161042482,
+          "pitch": 0,
+          "distance": 5.751230471599542,
+          "fovDegrees": 77.83132016578153,
+          "nearClip": 0.01,
+          "farClip": 10000,
+          "viewportWidth": 720,
+          "viewportHeight": 1280,
+          "mirrored": false,
+          "crop": "fill-window"
+        },
+        "rawImage": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\continuous-orbit\\private-yaw-positive-about-60-canvas.png"
+      },
+      {
+        "label": "yaw-negative-about-60",
+        "gsView": {
+          "snapshotId": "gs-view-598",
+          "assetId": "unreleased-fixed-asset",
+          "capturedAt": 1790582797624,
+          "frame": 598,
+          "cameraRevision": 593,
+          "editRevision": 0,
+          "position": [
+            -1.7239623069763184,
+            0.3229677379131317,
+            5.869213104248047
+          ],
+          "rotation": [
+            -0.514692519572946,
+            0.02352725265430449,
+            0.856687718584455,
+            -0.024984625367507878
+          ],
+          "target": [
+            3.354588031768799,
+            0.23904453217983246,
+            3.171447992324829
+          ],
+          "yaw": -1.0462971603835987,
+          "pitch": 0,
+          "distance": 5.7512305854259385,
+          "fovDegrees": 77.83132016578153,
+          "nearClip": 0.01,
+          "farClip": 10000,
+          "viewportWidth": 720,
+          "viewportHeight": 1280,
+          "mirrored": false,
+          "crop": "fill-window"
+        },
+        "rawImage": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\continuous-orbit\\private-yaw-negative-about-60-canvas.png"
+      },
+      {
+        "label": "front-return",
+        "gsView": {
+          "snapshotId": "gs-view-787",
+          "assetId": "unreleased-fixed-asset",
+          "capturedAt": 1790582801659,
+          "frame": 787,
+          "cameraRevision": 781,
+          "editRevision": 0,
+          "position": [
+            -1.5309940576553345,
+            -0.2525220811367035,
+            0.17710280418395996
+          ],
+          "rotation": [
+            0.8715736097136797,
+            -0.02610675731820542,
+            -0.48542388027060435,
+            0.06357308027793271
+          ],
+          "target": [
+            3.354588031768799,
+            0.23904453217983246,
+            3.171447992324829
+          ],
+          "yaw": -0.0016073484703539344,
+          "pitch": 0,
+          "distance": 5.751230580803708,
+          "fovDegrees": 77.83132016578153,
+          "nearClip": 0.01,
+          "farClip": 10000,
+          "viewportWidth": 720,
+          "viewportHeight": 1280,
+          "mirrored": false,
+          "crop": "fill-window"
+        },
+        "rawImage": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\continuous-orbit\\private-front-return-canvas.png"
+      },
+      {
+        "label": "front-settled",
+        "gsView": {
+          "snapshotId": "gs-view-788",
+          "assetId": "unreleased-fixed-asset",
+          "capturedAt": 1790582801952,
+          "frame": 788,
+          "cameraRevision": 781,
+          "editRevision": 0,
+          "position": [
+            -1.5309940576553345,
+            -0.2525220811367035,
+            0.17710280418395996
+          ],
+          "rotation": [
+            0.8715736097136797,
+            -0.02610675731820542,
+            -0.48542388027060435,
+            0.06357308027793271
+          ],
+          "target": [
+            3.354588031768799,
+            0.23904453217983246,
+            3.171447992324829
+          ],
+          "yaw": -0.0016073484703539344,
+          "pitch": 0,
+          "distance": 5.751230580803708,
+          "fovDegrees": 77.83132016578153,
+          "nearClip": 0.01,
+          "farClip": 10000,
+          "viewportWidth": 720,
+          "viewportHeight": 1280,
+          "mirrored": false,
+          "crop": "fill-window"
+        },
+        "rawImage": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\reconstruction-v3-20260928-a\\continuous-orbit\\private-front-settled-canvas.png"
+      }
+    ],
+    "browserErrors": [],
+    "limits": [
+      "One frozen reference person and room; no expression change",
+      "Continuous orbit is graphics evidence, not truthful unobserved-side geometry",
+      "Desktop SwiftShader is not target-device performance evidence"
+    ]
+  },
+  "qualityApproved": false,
+  "Harmony": "not_tested",
+  "published": false,
+  "frontEvidenceInitialCenterTest": {
+    "scenePoints": 22020,
+    "frontInThreeResearchViews": 0,
+    "supportedStaticPoints": 22020,
+    "bufferProtectedPoints": 12908,
+    "verifiedCameraCount": 0,
+    "eligibleForConservativeSuppression": 0,
+    "actualPruned": 0,
+    "actualOpacityChanged": 0,
+    "status": "diagnostic_only_no_E1_accepted_cameras",
+    "limits": "center plus conservative radius test; incomplete coverage/uncertain head depth not classified as false background"
+  },
+  "frontEvidence": {
+    "scenePoints": 22020,
+    "frontInThreeResearchViews": 0,
+    "actualFootprintOverlapPoints": 20,
+    "overlapMissedByCenterTest": 13,
+    "supportedStaticPoints": 22020,
+    "bufferProtectedPoints": 12099,
+    "verifiedCameraCount": 0,
+    "eligibleForConservativeSuppression": 0,
+    "actualPruned": 0,
+    "actualOpacityChanged": 0,
+    "status": "diagnostic_only_no_E1_accepted_cameras",
+    "method": "shared_sorted_per_point_adjoint_weights_and_contribution_weighted_head_depth",
+    "limits": "head expected depth is a prior, not a measured z-buffer; conservative radius rejects uncertain crossings; no deletion without E1"
+  },
+  "distinctRegressionTests": 21
+}

@@ -1,0 +1,10 @@
+import {build} from 'esbuild';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+const out=path.resolve(process.argv[2]||'');
+const rel=path.relative(path.resolve('backend/.sources'),out);
+if(!rel||rel.startsWith('..')||path.isAbsolute(rel))throw Error('private_isolated_output_required');
+const dependency=JSON.parse(await fs.readFile('node_modules/playcanvas/package.json','utf8'));
+if(dependency.version!=='2.22.4'||dependency.license!=='MIT')throw Error('pinned_engine_changed');
+await build({entryPoints:['viewer-gs/main.js'],bundle:true,platform:'browser',format:'iife',target:'es2020',minify:true,external:['node:worker_threads'],outfile:path.join(out,'research-viewer.js')});
+console.log('Isolated research viewer built; Harmony rawfile untouched.');

@@ -45,7 +45,9 @@ async function start(){
   const camera=new Entity('Portrait camera');
   camera.addComponent('camera',{clearColor:new Color(.04,.06,.11,0),fov:view.fovDegrees,nearClip:.01,farClip:10000});
   app.root.addChild(camera);
-  const asset=new Asset('Personal 3DGS','gsplat',{url:'https://self.local/portrait.gaussian.ply'});
+  // PLY vertex indices are the edit-mask/sidecar identity. Morton storage
+  // reordering would invalidate that contract; draw-time depth sorting stays active.
+  const asset=new Asset('Personal 3DGS','gsplat',{url:'https://self.local/portrait.gaussian.ply'},{reorder:false});
   app.assets.add(asset);asset.on('error',error=>report('ERROR','立体面容暂时无法打开：'+String(error)));
   asset.on('load',()=>{
     try{

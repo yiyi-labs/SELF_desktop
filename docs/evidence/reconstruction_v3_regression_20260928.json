@@ -1,0 +1,23 @@
+{
+  "runner": "WSL Ubuntu-22.04 /opt/self-reconstruction/venv/bin/python -m unittest -v",
+  "modules": [
+    "test_reconstruction_v3",
+    "test_reconstruction_portrait_model",
+    "test_reconstruction_parent_replacement",
+    "test_reconstruction_components_v2",
+    "test_reconstruction_source_lineage",
+    "test_reconstruction_joint_visibility"
+  ],
+  "tests": 20,
+  "seconds": 2.549,
+  "result": "OK",
+  "warning": "existing components_v2 test converts gradient tensor to float; no test failure",
+  "sourceScope": "isolated worktree, no Harmony build",
+  "additionalActualCudaTest": "off_center_gaussian_is_seen_in_actual_face_footprint",
+  "v3FiveTestsRerun": {
+    "tests": 5,
+    "seconds": 2.86,
+    "result": "OK"
+  },
+  "distinctTestsTotal": 21
+}
