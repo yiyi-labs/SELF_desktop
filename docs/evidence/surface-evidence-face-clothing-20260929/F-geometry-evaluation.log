@@ -1,0 +1,1 @@
+{"tracks": 102, "reliableDepth": 102, "surfaceTracks": 63, "updatedVertices": 476, "maxDisplacement": 0.0010165174026042223, "failures": ["frame_0002.png", "frame_0008.png", "frame_0022.png", "frame_0133.png", "frame_0147.png"], "geometryAccepted": false, "seconds": 38.737244667999995, "allocatedMiB": 401.2978515625, "reservedMiB": 436.0, "published": false}

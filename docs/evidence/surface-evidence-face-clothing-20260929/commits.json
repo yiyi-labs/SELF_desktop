@@ -1,0 +1,45 @@
+[
+  {
+    "commit": "d940568bc9bf98e1f0d1f8dbed0bc05a08117395",
+    "files": [
+      "backend/reconstruction_surface_evidence.py",
+      "backend/reconstruction_mvs_contract.py",
+      "backend/reconstruction_evidence_stage.py",
+      "backend/test_reconstruction_surface_evidence.py",
+      "backend/run_surface_geometry.py"
+    ],
+    "message": "feat(research): add measured shared surface geometry stage"
+  },
+  {
+    "commit": "601e3657c594a72273451f541afb9bfa6ccca055",
+    "files": [
+      "backend/run_surface_window.py",
+      "backend/run_surface_body_motion.py",
+      "backend/run_garment_surface_patch.py",
+      "backend/run_surface_component_training.py"
+    ],
+    "message": "feat(research): train finite garment surfaces with independent body motion"
+  },
+  {
+    "commit": "2295c7a4824d71454e28317b61da9766a0b99c37",
+    "files": [
+      "backend/run_static_surface_window.py",
+      "backend/run_room_surface_replacement.py",
+      "backend/audit_room_retirement_scope.py"
+    ],
+    "message": "feat(research): reconstruct static surfaces with explicit retirement scope"
+  },
+  {
+    "commit": "b07a463b07de66cc1f6a110253fe93704f3526e1",
+    "files": [
+      "backend/audit_surface_control_asset.py",
+      "backend/audit_surface_render_contract.py",
+      "backend/audit_surface_final_evidence.py",
+      "backend/audit_surface_identity.py",
+      "backend/audit_surface_orbit.py",
+      "backend/audit_surface_summary.py",
+      "scripts/probe-surface-render-contract.mjs"
+    ],
+    "message": "test(research): compare fixed assets across gsplat and PlayCanvas"
+  }
+]

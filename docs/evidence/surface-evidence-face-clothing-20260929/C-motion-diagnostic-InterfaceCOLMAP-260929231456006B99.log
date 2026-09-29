@@ -1,0 +1,23 @@
+23:14:56 [App     ] OpenMVS x64 v2.4.0
+23:14:56 [App     ] Build date: Jan 20 2026, 00:13:37
+23:14:56 [App     ] CPU: Intel(R) Core(TM) Ultra 9 285H (16 cores)
+23:14:56 [App     ] RAM: 63.59GB Physical Memory 128.00TB Virtual Memory
+23:14:56 [App     ] OS: Windows 11+ x64
+23:14:56 [App     ] Disk: 336.60GB (951.65GB) space
+23:14:56 [App     ] SSE & AVX compatible CPU & OS detected
+23:14:56 [App     ] Command line: InterfaceCOLMAP --working-folder C:\Users\30243\.codex\worktrees\reconstruction-bottom-up-20260928\olay\backend\.sources\surface-evidence-face-clothing-20260929-a\C-motion-diagnostic --input-file C:\Users\30243\.codex\worktrees\reconstruction-bottom-up-20260928\olay\backend\.sources\surface-evidence-face-clothing-20260929-a\C-motion-diagnostic/colmap --image-folder C:\Users\30243\.codex\worktrees\reconstruction-bottom-up-20260928\olay\backend\.sources\surface-evidence-face-clothing-20260929-a\C-motion-diagnostic/colmap/images --output-file C:\Users\30243\.codex\worktrees\reconstruction-bottom-up-20260928\olay\backend\.sources\surface-evidence-face-clothing-20260929-a\C-motion-diagnostic/scene.mvs --max-threads 4 --normalize 0
+23:14:56 [App     ] Reading cameras: C:/Users/30243/.codex/worktrees/reconstruction-bottom-up-20260928/olay/backend/.sources/surface-evidence-face-clothing-20260929-a/C-motion-diagnostic/colmap/sparse/cameras.txt
+23:14:56 [App     ] Reading images: C:/Users/30243/.codex/worktrees/reconstruction-bottom-up-20260928/olay/backend/.sources/surface-evidence-face-clothing-20260929-a/C-motion-diagnostic/colmap/sparse/images.txt
+23:14:56 [App     ] Reading points: C:/Users/30243/.codex/worktrees/reconstruction-bottom-up-20260928/olay/backend/.sources/surface-evidence-face-clothing-20260929-a/C-motion-diagnostic/colmap/sparse/points3D.txt
+23:14:56 [App     ] Exported data: 7 images, 30 points (6ms)
+23:14:56 [App     ] MEMORYINFO: {
+23:14:56 [App     ] 	PageFaultCount 2035
+23:14:56 [App     ] 	PeakWorkingSetSize 7.67MB
+23:14:56 [App     ] 	WorkingSetSize 7.67MB
+23:14:56 [App     ] 	QuotaPeakPagedPoolUsage 88.30KB
+23:14:56 [App     ] 	QuotaPagedPoolUsage 88.30KB
+23:14:56 [App     ] 	QuotaPeakNonPagedPoolUsage 10.77KB
+23:14:56 [App     ] 	QuotaNonPagedPoolUsage 10.63KB
+23:14:56 [App     ] 	PagefileUsage 1.52MB
+23:14:56 [App     ] 	PeakPagefileUsage 1.52MB
+23:14:56 [App     ] } ENDINFO

@@ -1,0 +1,11 @@
+{"step": 1, "name": "frame_0028.png", "loss": 0.09405498206615448}
+{"step": 40, "name": "frame_0028.png", "loss": 0.05843540281057358}
+{"step": 80, "name": "frame_0022.png", "loss": 0.030766312032938004}
+{"step": 120, "name": "frame_0022.png", "loss": 0.02705051749944687}
+{"step": 160, "name": "frame_0027.png", "loss": 0.0755729079246521}
+{"step": 200, "name": "frame_0025.png", "loss": 0.07516910135746002}
+{"step": 240, "name": "frame_0026.png", "loss": 0.11321945488452911}
+/mnt/c/Users/30243/.codex/worktrees/reconstruction-bottom-up-20260928/olay/backend/run_surface_component_training.py:57: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  save_json(out/'result.json',{'points':N,'steps':steps,'curve':curve,'before':before,'after':after,'updates':{k:float((getattr(model,k)-initial[k]).abs().mean()) for k in rates},'trainEvaluationSeconds':time.perf_counter()-trainstart,'totalSeconds':time.perf_counter()-start,'allocatedMiB':torch.cuda.max_memory_allocated()/1048576,'reservedMiB':torch.cuda.max_memory_reserved()/1048576,'motionQualityAccepted':obs.get('motionQualityAccepted',False),'accepted':False,'reason':'finite cloth patch only; short-window body geometry not accepted; full garment coverage missing','published':False})
+CLOTH_ACTUAL_TRAINING_FINISHED_REJECTED_COMPLETE_ASSET

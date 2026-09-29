@@ -1,0 +1,19 @@
+{
+  "release": "https://github.com/cdcseacave/openMVS/releases/tag/v2.4.0",
+  "published": "2026-01-20T06:29:16Z",
+  "tag": "v2.4.0",
+  "tagObject": {
+    "sha": "58117204c86bbb11a0b25b26a8987676cf11274d",
+    "type": "commit",
+    "url": "https://api.github.com/repos/cdcseacave/openMVS/git/commits/58117204c86bbb11a0b25b26a8987676cf11274d"
+  },
+  "asset": {
+    "name": "OpenMVS_Windows_x64.zip",
+    "size": 22363227,
+    "browser_download_url": "https://github.com/cdcseacave/openMVS/releases/download/v2.4.0/OpenMVS_Windows_x64.zip",
+    "digest": "sha256:0c31660c15c9ebc4c106873cf67564d9570d404aef7a6403451da1b6178b2167"
+  },
+  "downloadSha": "0C31660C15C9EBC4C106873CF67564D9570D404AEF7A6403451DA1B6178B2167",
+  "license": "AGPL-3.0; research process separation does not waive redistribution/source obligations",
+  "install": "portable only; original locked Python/CUDA unchanged"
+}

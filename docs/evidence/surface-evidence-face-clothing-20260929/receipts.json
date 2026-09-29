@@ -1,0 +1,2889 @@
+{
+  "inputs": [
+    {
+      "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\fullframe-surface-patch-20260929-b\\R0-frozen.pt",
+      "sha256": "2468edc379f8b76eac97fccfbf9e9a4c775f980102b95283ee15b2dc4cee7cb8"
+    },
+    {
+      "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\haze-shared-surface-context-20260929-a\\D\\R0-frozen-T2.ply",
+      "sha256": "9fd631a133065c4e02fced9f650914abacd0a716d63f33afe3eb7df49c2cc094"
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-e\\preparation.json",
+      "sha256": "e67d4dce02f9874e0befe15486532f80458f8a62a23221324fcc5abefc2e5301"
+    }
+  ],
+  "files": [
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\collect_receipts.py",
+      "sha256": "8eb62dd8c5daffbdfecc07fd1238715451246a8005d2571387f314ec54ba5944",
+      "bytes": 2799
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\identity-receipts.json",
+      "sha256": "269932fb86b0b7e8a4d76942305774ef231177c0ce9be7e7c7320820f1ae4a35",
+      "bytes": 2789
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\stage.json",
+      "sha256": "be4b663cd7ef82809c0525adec95514e19bf935305c49a5b3ec4a0d86930dd69",
+      "bytes": 417
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\summary-console.json",
+      "sha256": "0f042c900b81fbf74f98fdcbff7389b7ff70baa3bf791afed9ad92a7d126472f",
+      "bytes": 16765
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-mvs\\contract.json",
+      "sha256": "75e4c12cd7dcf6d21c0360fbc90c9d9cf3bea2f295c23eec019d60cd157acb86",
+      "bytes": 7191
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-mvs\\dense.ply",
+      "sha256": "d1db11d29c3f77a3ebeff676335f29b9ef6536214a48c50e810441df7fad87fb",
+      "bytes": 1764600
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-mvs\\tracks.json",
+      "sha256": "1a8d0108b5af77ad0f0832f5e6b685cb9b9ae7c21bfc3f4fc71c9825fb35e7a1",
+      "bytes": 1081883
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\B-T2-gsplat.npz",
+      "sha256": "b050f9d77590721417fa683aed7e46b07c7de3820873d7fe1c1e7198ecda5ecb",
+      "bytes": 28087747
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\candidate-final.pt",
+      "sha256": "4149f9136ffc53c48a6c7adea409a098c2b0e23a2cbfe6c61e2eb0d59d104d29",
+      "bytes": 20664741
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\contract.json",
+      "sha256": "d88dda07e2338dc5ecc1356a4126dba1e9eabf033b48e128a4397b8439a61582",
+      "bytes": 5611
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\display.json",
+      "sha256": "f2ffb7b62a93a902ac3cf214717d1102088754bca3a52f5d7d5a1d243c20e3ca",
+      "bytes": 1430
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\fixed-B-T2.identity.json",
+      "sha256": "1c20d96d4532063f74245a61d719aa09d7d58daf6582a0e1d5f5dbe1d931eaba",
+      "bytes": 887
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\fixed-B-T2.identity.npz",
+      "sha256": "a6467b573c5a2c48090a24b81f4755fe33efe109c636b251cc5e0ffef0a88180",
+      "bytes": 330020
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\fixed-B-T2.ply",
+      "sha256": "7dfe27e1bd0909f3dc2abbe81d9d5f6aedfeaa851bb9a0178b99eb0d0d189ba5",
+      "bytes": 10234436
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\initial.pt",
+      "sha256": "bb9b6de3bc8f8bb360966e4dad2e44ef2e40ecc54a1d3d7a1e534875d0b87698",
+      "bytes": 19860809
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\mid.pt",
+      "sha256": "ac7014c8995bd99075ee73e4d76585fce5f5568db0a3ceb477db4b07982860a7",
+      "bytes": 20663845
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\restoration.json",
+      "sha256": "0cd221a91a7970a493d88d8ad02353ec5ecf27ee00ca8791c8443e9f0e5c0b03",
+      "bytes": 154
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\restored.pt",
+      "sha256": "2ecd28b18a088721742ed2e1957665be6fb27ab465acb336eb6788906d8bd872",
+      "bytes": 19860845
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\result.json",
+      "sha256": "4cc047ee0941471113359d81c59fd3da34f3cc5c59833f64c5482b160a58a937",
+      "bytes": 21429
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\selection.json",
+      "sha256": "70d3b2ddd11be72bab1eb8fba403563452547fb7e69b5b3a7e5c622deadd4969",
+      "bytes": 433
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\spec.json",
+      "sha256": "2644fea6e09109241b2653ee2d2e6b63bb2a6d179feb93c0f341c580d116bdbb",
+      "bytes": 428
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\training-contract.json",
+      "sha256": "6fe1390e6e2a554ecff7d8805d693e185148794c3c7d924c7d1ee957248fc190",
+      "bytes": 5941
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\B-T2-gsplat.npz",
+      "sha256": "b050f9d77590721417fa683aed7e46b07c7de3820873d7fe1c1e7198ecda5ecb",
+      "bytes": 28087747
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\contract.json",
+      "sha256": "6f0a890e8c327a1756cb614addc6aaf2e959052b91a7ce19132938f286e42ef3",
+      "bytes": 5611
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\display.json",
+      "sha256": "aebeee2cd8dc369410955cc7cf4511e0779cc142a8fe7b2bb2e92e07c1b032ce",
+      "bytes": 1438
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\fixed-scoped-B-T2.identity.npz",
+      "sha256": "b29d07f50249752c942e506d78966d5e489f00ef4d57bd95a0fe577bb027f78a",
+      "bytes": 272814
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\fixed-scoped-B-T2.ply",
+      "sha256": "b769e83b82e304b8607874aa827c840f8cdc67b7139ec3c9c47c2f40ea12fadf",
+      "bytes": 10236324
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\result.json",
+      "sha256": "514d7543319307c0c59932c7bb605ad6687425f6cd85911f4aec2f8fc53d4a0e",
+      "bytes": 4864
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\retirement.json",
+      "sha256": "d8e32174de0fe844671ba9b211ca1c316141d241aa7676e5bf08260475942862",
+      "bytes": 338
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\spec.json",
+      "sha256": "2644fea6e09109241b2653ee2d2e6b63bb2a6d179feb93c0f341c580d116bdbb",
+      "bytes": 428
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-motion\\observations.json",
+      "sha256": "a503826d0bd03110c8bbb85f352cc3259977ec9e3bb877ace747977137599c33",
+      "bytes": 180334
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-motion\\optimizer.json",
+      "sha256": "eeb9ea8304b8867efa9c5497aba48e033d8c3ea9027bb1dc669e9af2207dc7c7",
+      "bytes": 622
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-motion\\result.json",
+      "sha256": "7b9fb30ac6e9a811967158fbb1ff8c877d40ed44a04aca9a244ac8f8e13cf96c",
+      "bytes": 420
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-motion-diagnostic\\contract.json",
+      "sha256": "058c63dcf67f05278d2ae9da6c73e8c4a150ea3b43037c8dc6183ddcb73d3253",
+      "bytes": 11910
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-motion-diagnostic\\observations.json",
+      "sha256": "a503826d0bd03110c8bbb85f352cc3259977ec9e3bb877ace747977137599c33",
+      "bytes": 180334
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-motion-diagnostic\\optimizer.json",
+      "sha256": "eeb9ea8304b8867efa9c5497aba48e033d8c3ea9027bb1dc669e9af2207dc7c7",
+      "bytes": 622
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-motion-diagnostic\\result.json",
+      "sha256": "4cbf1b88661d680c0b01ac03f4cfb4bfa3cb2e406008c1f78834e3fa910312b3",
+      "bytes": 421
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-motion-diagnostic\\tracks.json",
+      "sha256": "37e942c3a7bab2e01e8c6c950e35026bb9593d7e963ded7af31db9c279b53114",
+      "bytes": 51109
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-motion-multiseed\\contract.json",
+      "sha256": "5306c4792ec16471a275d32db27d25bb64f8c924b2dd2d4e55b5764b7c91087e",
+      "bytes": 11874
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-motion-multiseed\\observations.json",
+      "sha256": "1b205c4f815e018e72a4dc69586849e734a2db906838c71b82815032c5a25ffe",
+      "bytes": 303651
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-motion-multiseed\\optimizer.json",
+      "sha256": "6cf4e27af244f1a97f8b628fca256c1ebb3aa5a9cdcdc9cae9238fcda3622f2f",
+      "bytes": 906
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-motion-multiseed\\result.json",
+      "sha256": "695474b7eae600e1f5a91339f4ff177d22c4ecfeaf1a885f9742c231d6240451",
+      "bytes": 420
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-motion-multiseed\\tracks.json",
+      "sha256": "b9c416d68ff6ed94aff353d3f3e499bfe45421fe22e8a4c9e013b060c5d44b44",
+      "bytes": 49602
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-surface\\observations.json",
+      "sha256": "5306c4792ec16471a275d32db27d25bb64f8c924b2dd2d4e55b5764b7c91087e",
+      "bytes": 11874
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-surface\\regions.npz",
+      "sha256": "7049ac77c44f820e29e90b84b95bb313dd00e6eec0478af288699eda39001c2c",
+      "bytes": 22625
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-surface\\result.json",
+      "sha256": "06c91b1d58c654d6b860dca3f7cc0e0a0231b2048df50daede927938f4af5aa2",
+      "bytes": 422
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-surface\\surface.npz",
+      "sha256": "1e01d6479c6b1ad18b3d376e8aac6a13d357ca5e9fef5307bd7d85667d571ca9",
+      "bytes": 310953
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-surface\\triangles.json",
+      "sha256": "88a2f7dedee695a19d2bdca46228d3a284faf40be3a5998c5c9a1a364bfbe265",
+      "bytes": 9438
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\candidate-final.pt",
+      "sha256": "579b3e1ee30c13ff83b87543d1930402d8650c0262c5d92a0269bbbfdafa4558",
+      "bytes": 3743273
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\config.json",
+      "sha256": "4f1175aa1c1351c9a4c4b43659a727fb2a88bbaa70546b38e7b5384eaabb767a",
+      "bytes": 406
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\contract.json",
+      "sha256": "9d8e0eec30d017674211ec1dd82d584df8d148f964f35da565fa4400984ba3df",
+      "bytes": 5505
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\display.json",
+      "sha256": "1d0de1f084139178acf2648605f7aa63499bf7987735cccad48f47cb3214e4f5",
+      "bytes": 1442
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\fixed-garment.bindings.npz",
+      "sha256": "2c674806a07e3ff85e553020af6b495752b27083e51bdcf2f87d695bbcc4ea52",
+      "bytes": 311238
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\fixed-garment.ply",
+      "sha256": "bbc19f7ebc05106803b8ceccc7990fb7f2889dfd30f0db3dc74f31892f8ffd93",
+      "bytes": 1619727
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\fixed-T2-garment-diagnostic.identity.json",
+      "sha256": "332752db1d733badccb87722816302abeba96a2257bd4b4c908b01ee151354f2",
+      "bytes": 901
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\fixed-T2-garment-diagnostic.identity.npz",
+      "sha256": "20b0a1eeba1c895b3e366c25e65ec9c1c34788b167158fa9e625eea939beecbc",
+      "bytes": 342749
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\fixed-T2-garment-diagnostic.ply",
+      "sha256": "fe3fd1c8067139949d46d79df2c9cd491f5fd46e52c3c7cd40f5253be0ed312d",
+      "bytes": 10593392
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\initial.pt",
+      "sha256": "027266a5ed26b77786c63454e71c10764db5836cc27d78d4ced6131a37c2ea16",
+      "bytes": 2642733
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\mid.pt",
+      "sha256": "07259cabc68489d18fc3a4109ed74a04f5dcf6765ec44b76ff701fc9e1f511f7",
+      "bytes": 3742649
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\restored-complete.pt",
+      "sha256": "f0e26d1ee1ad73b4fedadfa495c2bc05369032ff51851b57349c0026b8ad80ec",
+      "bytes": 2643037
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\restored.pt",
+      "sha256": "bf5c11891408ca8e74b28eda783d50121e82d18c7ae717112dcc00dce9db3de2",
+      "bytes": 3742957
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\result.json",
+      "sha256": "b336d4f3219ff18d2934ac4a378f8761472db5928d15051ad3d4e490255d9daf",
+      "bytes": 5865
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\spec.json",
+      "sha256": "2644fea6e09109241b2653ee2d2e6b63bb2a6d179feb93c0f341c580d116bdbb",
+      "bytes": 428
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\T2-gsplat.npz",
+      "sha256": "0ffae5032e190f7d7567581d48a6ccc9efc5e60fad0df7ceb17110750c32906d",
+      "bytes": 27905240
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-window\\result.json",
+      "sha256": "b9434cfe1099dd7b985a285d7d07b2170081274552e9567486b706e038bb457e",
+      "bytes": 5770
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-window\\window-candidates.json",
+      "sha256": "9ab4b182fa021d96a1f4c9f4d18dc84e7ed36a4c4866d4875fdaf3ad85c07d4b",
+      "bytes": 5225
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\config.json",
+      "sha256": "1c2c6d7632ec679c4f9cfbe730f31a343b5ed4b082b32a618276e82777d6a82c",
+      "bytes": 1769
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\contract.json",
+      "sha256": "b4ed13a4b25eb0cbfbd71146815dc9ada3c11dfc98ff085802ae2f9aa93cd764",
+      "bytes": 5396
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\initial.pt",
+      "sha256": "684b4b09ab5af204bf9396c0af3a18c1ec2d5ebb6546294cbfef456e1327c1f3",
+      "bytes": 7825077
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\spec.json",
+      "sha256": "2644fea6e09109241b2653ee2d2e6b63bb2a6d179feb93c0f341c580d116bdbb",
+      "bytes": 428
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\tracks.json",
+      "sha256": "b3859716bb3368ccd64debb70f3b6e6552e77273de33d929eca0cbe1f16c2241",
+      "bytes": 306163
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\candidate-final.pt",
+      "sha256": "2d6c453d6163e921cc3bea0752f4a5de25f7088c066c26598f308a08fe6465f3",
+      "bytes": 7825845
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\config.json",
+      "sha256": "1c2c6d7632ec679c4f9cfbe730f31a343b5ed4b082b32a618276e82777d6a82c",
+      "bytes": 1769
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\contract.json",
+      "sha256": "cd1d44e8ec722d563d9e03d8c91507d00a1e289e0faba5476681ae83870b59b9",
+      "bytes": 5396
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\initial.pt",
+      "sha256": "62c672bd9b2937b61da1e7a21611c0b1e34a7e764b24ec16d48af699144882b0",
+      "bytes": 7825077
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\restored.pt",
+      "sha256": "a7d62ae76c7c9ee623885e4fb15cc1943502ad720b9a94a3d3223b74fba4344a",
+      "bytes": 7825141
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\result.json",
+      "sha256": "3b6394598d343994bd0a9793824874a2f7bab0142c293913d8891a9e0450085a",
+      "bytes": 71035
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\spec.json",
+      "sha256": "2644fea6e09109241b2653ee2d2e6b63bb2a6d179feb93c0f341c580d116bdbb",
+      "bytes": 428
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\surface-field.npz",
+      "sha256": "04a09d36ce3d77370600acb9fab5cdb99ab975a19555106505c4be08f3834d4c",
+      "bytes": 6785
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\tracks.json",
+      "sha256": "b3859716bb3368ccd64debb70f3b6e6552e77273de33d929eca0cbe1f16c2241",
+      "bytes": 306163
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-code\\audit_room_retirement_scope.py",
+      "sha256": "033e50560f7a92600f2e83a24b962f39bff2c9e4c348aa0a4583e2e43e3d6b19",
+      "bytes": 4815
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-code\\audit_surface_control_asset.py",
+      "sha256": "f8ca4ef2880ca8ead1e8047282926411baf3746eec99f4a26e92475ab0e6a2ae",
+      "bytes": 2385
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-code\\audit_surface_final_evidence.py",
+      "sha256": "7f2ebf511db47923152646926b5df4a3b279bc32113ac1f5149947926dd20670",
+      "bytes": 5580
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-code\\audit_surface_identity.py",
+      "sha256": "2e1303d8a507ac120696b9fcff194a714711ef3096521681cca1547251e78187",
+      "bytes": 3891
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-code\\audit_surface_orbit.py",
+      "sha256": "3ebece174f98d440c3e251c8b78f75780bfd80464b157b002533e80d21113bac",
+      "bytes": 2335
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-code\\audit_surface_render_contract.py",
+      "sha256": "d763b7e7ae5fa787231421beff5b3f38223c4138d4f7afb21d7540b0a923b3c0",
+      "bytes": 1459
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-code\\audit_surface_summary.py",
+      "sha256": "9f0fb1b750629f238292c368ac27803ade50e0a98868f533b5ae229727475d32",
+      "bytes": 3508
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-code\\probe-surface-render-contract.mjs",
+      "sha256": "5cf2d9fd4e03d6e423c12e348441ad7a8c79e48b9147a6781ebbe346c4df9d44",
+      "bytes": 6345
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-code\\reconstruction_evidence_stage.py",
+      "sha256": "11946055270af7b5b7ab6cd8074584e4291b3b3a68af2c6a220349f0b52e18d5",
+      "bytes": 2333
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-code\\reconstruction_mvs_contract.py",
+      "sha256": "a64e07950d5c805d1d91e48e09ee45b106f725fa19f4b1a115137c2785359e1c",
+      "bytes": 2473
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-code\\reconstruction_surface_evidence.py",
+      "sha256": "949713b00e320162455493981cef1df66fafcecad6967820dd2b8aa6dcc84f96",
+      "bytes": 6808
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-code\\run_garment_surface_patch.py",
+      "sha256": "c4d0ee67388fe66ea0e76329eacee563923b01df303eaab738b4b38931faf2a6",
+      "bytes": 5159
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-code\\run_room_surface_replacement.py",
+      "sha256": "695a6e77daf7206b82b620a22f1a5de4b0406812013ef14170296cb929060981",
+      "bytes": 10675
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-code\\run_static_surface_window.py",
+      "sha256": "a26912b3c22ac0d5a9e0d842ee2876d1b5e8c76e657f39e50a4373eaa47f446a",
+      "bytes": 2529
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-code\\run_surface_body_motion.py",
+      "sha256": "89c0e3b08dff9353404e6a81b8f0c755c6e2049891e182fa3c27bc2ec6a71817",
+      "bytes": 6234
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-code\\run_surface_component_training.py",
+      "sha256": "b915e2e928f191d504f13d06443b226e01343c1539b1e9b6489daa710339843a",
+      "bytes": 8586
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-code\\run_surface_geometry.py",
+      "sha256": "74ec1ce234cecc3b06da0af8e3a04ad241c89c1b42f25630fa8bdc6de74d8ff6",
+      "bytes": 9747
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-code\\run_surface_window.py",
+      "sha256": "b623cf30e4bab4417dd12de7ea9be2c6d5bae19a3b8b1fb3e63dcdf6ecca3505",
+      "bytes": 4617
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-code\\test_reconstruction_surface_evidence.py",
+      "sha256": "d7c48ef3769d1a5ad57c1c8f80779e1bffc72f221465e1e99823426c66845539",
+      "bytes": 3774
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\contract.json",
+      "sha256": "6f0a890e8c327a1756cb614addc6aaf2e959052b91a7ce19132938f286e42ef3",
+      "bytes": 5611
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\display.json",
+      "sha256": "77a3c5d670601d318cda0178b92aa1b74bff8979a2affe8a1bce06fc80e874f9",
+      "bytes": 1435
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\F-local-gsplat.npz",
+      "sha256": "c86063811f5f0686a5a77b89ab0a52b11376425a55487d25bf0d694822117577",
+      "bytes": 4561177
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\fixed-B-orbit.mp4",
+      "sha256": "86d73a351d2f71758b62ddae374883aca9a528652154bba4de923b937bfca115",
+      "bytes": 806068
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\fixed-F-local.identity.json",
+      "sha256": "27e8fb70a3131e2b4bded2845eb9b8f44ed401f8a84778b6d2cd3a03da98bdf7",
+      "bytes": 891
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\fixed-F-local.identity.npz",
+      "sha256": "e04876ba7b9ad5b25a6f32deb56faded2cdfb74834e4e1306abeaff1409cae25",
+      "bytes": 237045
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\fixed-F-local.ply",
+      "sha256": "29118cb7ff195d780e2a337f86d4af70d3db6fe481b2128095f601e166bcb7d9",
+      "bytes": 2826396
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\result.json",
+      "sha256": "3a7b57fbc035a4529597b2d9d6ae48714c426753a0fe3409546201f3c215c0f1",
+      "bytes": 30881
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\spec.json",
+      "sha256": "2644fea6e09109241b2653ee2d2e6b63bb2a6d179feb93c0f341c580d116bdbb",
+      "bytes": 428
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\R\\comparison.json",
+      "sha256": "1056f42759227e72823e0ab64311cb411e13fbf2526b21c52654f5232c275cc7",
+      "bytes": 1200
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\R\\display.json",
+      "sha256": "ceea6081edc45e85bc533198d7e2615880e6c93592e49f98d2ab007d3b828d30",
+      "bytes": 1580
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\R-control\\display.json",
+      "sha256": "3fe50c2adad0661187e27add44997a017abd9a47ac3ee9eeddd545c546d3c83b",
+      "bytes": 1305
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\R-control\\normal-gsplat.npz",
+      "sha256": "e2cc3d2d8c4a87d71398985b882b567333eb13e3e3970c2b740a546648d911ec",
+      "bytes": 3222364
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\R-control\\normal.ply",
+      "sha256": "445e79ca292b5614dc8daa6a79937c7fc13d738b389040a86236397d7d7f6c06",
+      "bytes": 892375
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\R-control\\wide-gsplat.npz",
+      "sha256": "218057d6813d5c76fc944a317558a7282b31073858f1a6ce84b54c9037ff2439",
+      "bytes": 13270010
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\R-control\\wide.ply",
+      "sha256": "031721a3aeee3ba4aec8b9b5ab56f986e10a1f54fddabef54f76b398a150eff1",
+      "bytes": 892611
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-mvs\\colmap\\sparse\\cameras.txt",
+      "sha256": "f14e5abbc3243cc98454bd8e9ed9761bd6254d16e6b13777dd1b9a575c1e0955",
+      "bytes": 56
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-mvs\\colmap\\sparse\\images.txt",
+      "sha256": "5808d8b0ca54e7795bccd0d0c801224c0be2206f804e17b73bd58d5fc197adbc",
+      "bytes": 221760
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-mvs\\colmap\\sparse\\points3D.txt",
+      "sha256": "cd3a337ef5eccd8369e05d0a288ae1043c162d3225d8df052a3d49b4a4c7e20d",
+      "bytes": 118946
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\appearance_direction_contract.py",
+      "sha256": "ca446dd11de3c2c89fc0a10680d1d792efda827b8d2da54adf80bfb05048a0fa",
+      "bytes": 1748
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\audit_portrait_priority_handoff.py",
+      "sha256": "fff454cd6caf0e9366986314e68cf5bacc0b5e711ce62c3f1ad8a579f8c31be4",
+      "bytes": 10260
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\audit_portrait_priority_joint.py",
+      "sha256": "5a6dc3ae6c0ae5e4b50a40ceae0b1c05b2507cc4d363c24edc20aca2d20c283f",
+      "bytes": 2869
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\audit_portrait_priority_preflight.py",
+      "sha256": "fdcf0a0ea0c740101fcc70625e83432d3e7eebbb46cb9feb8c4f4fe3734e1d29",
+      "bytes": 3682
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\flame_open_model.py",
+      "sha256": "d3684ea1e8578fa18b1b4ee132aadd01c1fd1668b3f4500dec3748bedcefe0bd",
+      "bytes": 9196
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_accessories.py",
+      "sha256": "6da683a49a31fb37b61a3a8890440575d56c3c459de52850ea476f4b826d0e95",
+      "bytes": 3779
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_components_v2.py",
+      "sha256": "832cd8363bc130bed69d07a641ed83170a68ef0bbca2ee85ff2687a6f9163161",
+      "bytes": 24979
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_components_v3.py",
+      "sha256": "baa1c1ddf9253b30d298fce74c4e113cc58833bcb45c549459d2c944f31962b8",
+      "bytes": 6747
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_compose_v3.py",
+      "sha256": "31149af0609ae0d488fef0c7412a0865c0cb59cf11730fe342bacb170ec3dd0d",
+      "bytes": 5700
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_detail_controlled.py",
+      "sha256": "e20c3782f5bec58bcbd2d418d23705f50f147dc0798b24f4a268e763c0cb110e",
+      "bytes": 18310
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_evidence_stage.py",
+      "sha256": "11946055270af7b5b7ab6cd8074584e4291b3b3a68af2c6a220349f0b52e18d5",
+      "bytes": 2333
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_face.py",
+      "sha256": "f64131100176ca91f38d575704f73244e33dc5c752d665a840e8f8632bbf4659",
+      "bytes": 14666
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_fullframe.py",
+      "sha256": "4080839cd67c91f33594929a41ee55b84153a5ba39ebdd6335f34a9fad928478",
+      "bytes": 2755
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_joint_visibility.py",
+      "sha256": "1916590fea23ae92a6a87cb2d010f863151a489d49b8c6c697bbb71300b4e224",
+      "bytes": 9618
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_live_prepare.py",
+      "sha256": "8f66b3ecaf9955db44c5f3f88bdc987f7748aec2549e0f47290dab0efc6fc17f",
+      "bytes": 13207
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_local_lines.py",
+      "sha256": "d77b11c307d7f66cab9332b2e4976602e2e052620903fed7389ba187725ef526",
+      "bytes": 10119
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_mvs_contract.py",
+      "sha256": "a45468854590badbd99533d1c3730133342bc2ab30da0faaab69c61b9d73e28e",
+      "bytes": 1826
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_observations.py",
+      "sha256": "15ee432c1e7d9867e2f7d514ba3b9037f3cc2e573854a5d7e0eea3f62e079d56",
+      "bytes": 10120
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_patch_acceptance.py",
+      "sha256": "8ff54407e7cddb72f473108b1f60dd03ab82456e9e6f89fdae6f3e80c69d3624",
+      "bytes": 1213
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_patch_correspondence.py",
+      "sha256": "1e397bb96939435697a782b4f38716eed0c3a50663ec5411db109fe1e9b893d4",
+      "bytes": 5518
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_portrait_capacity.py",
+      "sha256": "1dc2a696f7163fc855d307ae89729a2c2f25ca83e9cb2912bfb3effe984a1d4d",
+      "bytes": 5955
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_portrait_local_v3.py",
+      "sha256": "5dbac45b5846e05afd2b09951f48caa4dd433058c0c47b83e2d0f947538edb91",
+      "bytes": 4209
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_portrait_model.py",
+      "sha256": "626f0efeef69be398323ee3979dc19384284c88943d87fd87d7341e91b8c084d",
+      "bytes": 22538
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_portrait_pipeline.py",
+      "sha256": "1ae6a8259c6ef5c8d9e93fda365f781f62ccb8e6fcaef9a2f1da457584d9b175",
+      "bytes": 25876
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_portrait_priority.py",
+      "sha256": "799014fa9883e6c4eeba62d12e5dbb4385f719f2b3ab14cb76d4fb8ef8ce262c",
+      "bytes": 30990
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_pose.py",
+      "sha256": "6245271c529db8ea1faa1d9dd4c849add209c9d40c3157e71ae134be4fd3d947",
+      "bytes": 8143
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_reference_static.py",
+      "sha256": "a0bc2a77718770072b043585df75e48fb255736518a08d246182ade53c113cc0",
+      "bytes": 8879
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_research_state.py",
+      "sha256": "4cd7f18137b15441064a0b0f41a15b20c713c45ce47e9849b03b860ba54cc202",
+      "bytes": 10078
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_runtime.py",
+      "sha256": "c6327ea800e06e91179df3a41bdedee5714c04a7b0f591c62dd4615295f5ccbe",
+      "bytes": 4370
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_scene.py",
+      "sha256": "b19b7d9f6b3c632961561fbedc5b3fb136a09c5b5d1baf7ee33a55375df7e677",
+      "bytes": 43974
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_schedule.py",
+      "sha256": "0cc7561776241f4f6f0765d4df0ae01b9e24f038687ac0a66b0c2f9f1b66d60a",
+      "bytes": 794
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_shared_surface.py",
+      "sha256": "3847850c34a86d02b575fe9913eb98ce6fc007a80fa646fe3915543178e73801",
+      "bytes": 4325
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_shared_v2.py",
+      "sha256": "0a39ea562c3c92edff2c56ef8a6fe43d3ce5a1d09c2980cad84cc8ba830b14c7",
+      "bytes": 41831
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_surface_evidence.py",
+      "sha256": "949713b00e320162455493981cef1df66fafcecad6967820dd2b8aa6dcc84f96",
+      "bytes": 6808
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_surface_patch.py",
+      "sha256": "fe7ad773b916b8dffe8d50aa197cabe8213e2f56637bbbb8f1e25c98f32ad392",
+      "bytes": 16217
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_t2_local.py",
+      "sha256": "187fa3ed6e420709ba5051e1146f4c7215cf561addaa3758e65dee7e646d5a88",
+      "bytes": 8043
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_train.py",
+      "sha256": "a2055c031452638d99c53b947a0ba13158ee4ed0588095a33269ccfea45854f0",
+      "bytes": 14802
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_train_environment.py",
+      "sha256": "dc11a58b07907dfb3ba6eff489cca2f94efd5de34d77f232c10d73016456000b",
+      "bytes": 9960
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_train_joint.py",
+      "sha256": "4af2934fd6199ae42cdf8ca14e2abdced2af9de2cd635b7cd644dd23cd7f8c6c",
+      "bytes": 17859
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_view.py",
+      "sha256": "544d61c3e7d0bdefc34b8a0506090bf36fc05d0feb3819cad5fc40ac3c084651",
+      "bytes": 6053
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_worker.py",
+      "sha256": "da2249ea1e5f883359336e4b42d40c3e00e47fc7147b9303d8c4bbbfdb1a9050",
+      "bytes": 28969
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\reconstruction_world_static_v3.py",
+      "sha256": "b8240eccfaff555ff37fdc20fbf1bf254452b2cc1959447c5c9f46e5934b85cd",
+      "bytes": 2496
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\run_surface_body_motion.py",
+      "sha256": "89c0e3b08dff9353404e6a81b8f0c755c6e2049891e182fa3c27bc2ec6a71817",
+      "bytes": 6234
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\run_surface_component_training.py",
+      "sha256": "ff847a89bd69cd9334fa9d7b0d197fe27b10754e5efb9bf05cca1c01f170d379",
+      "bytes": 8488
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\run_surface_geometry.py",
+      "sha256": "74ec1ce234cecc3b06da0af8e3a04ad241c89c1b42f25630fa8bdc6de74d8ff6",
+      "bytes": 9747
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\algorithm-source\\run_surface_window.py",
+      "sha256": "b623cf30e4bab4417dd12de7ea9be2c6d5bae19a3b8b1fb3e63dcdf6ecca3505",
+      "bytes": 4617
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\final-images\\frame_0015.png.npz",
+      "sha256": "c40bc8464abf5fbbeeea4daa76478f3a836912a731aae96f2e7db80dbb80bd09",
+      "bytes": 34983039
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\final-images\\frame_0035.png.npz",
+      "sha256": "cd52dc56d65ac203d4594d63c7970b0339d8fecb5a8a97223e28fc97fca8542f",
+      "bytes": 35047908
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\final-images\\frame_0111.png.npz",
+      "sha256": "da249bdff102e9175ac9947e8c6e85bca5a16267dd8d2a9323c3aa2fa4025d1b",
+      "bytes": 34749988
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\final-images\\frame_0115.png.npz",
+      "sha256": "78d4d9d985d0af4e685fa0760884620172f0ec3b7d75adbea2bfdd47a2e17a8e",
+      "bytes": 35154605
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\final-images\\frame_0130.png.npz",
+      "sha256": "6eed27db7f13db8a9398ab703ff161b8ab7b7463e00243cb2cc871d3ce78c7d4",
+      "bytes": 34797111
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\final-images\\frame_0133.png.npz",
+      "sha256": "21e6bc7ca3550a351c2d6589b2730a73ad4bd88cac1f014e9a891c526b292f19",
+      "bytes": 34724727
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\final-images\\frame_0134.png.npz",
+      "sha256": "8d9867b633c0ea25de16e5eab79417cb1ef569c45523dd13956bdc098fd66eae",
+      "bytes": 34674720
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\final-images\\frame_0135.png.npz",
+      "sha256": "cd39e10cb7886f293914cb2bd92e2b780f18815fcd802a48a46553fd9443ff9b",
+      "bytes": 34618626
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\final-images\\frame_0136.png.npz",
+      "sha256": "26f6df37a3f077ade9cbe957448e11fdbb274787b3f12599f400b86cf17a4a0f",
+      "bytes": 34624301
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\final-images\\frame_0137.png.npz",
+      "sha256": "00865682343ae8152ea0668fade79c0f4d279afeed8f208e901e68135a542204",
+      "bytes": 34628749
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\final-images\\frame_0138.png.npz",
+      "sha256": "2c0880830ce65e4ac12fc890624fb4a614e0eead94e03d329acd2d7e7e185adf",
+      "bytes": 34591710
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\final-images\\frame_0139.png.npz",
+      "sha256": "21b4496b7ad1089c680b16198af73ebeba681ac04d6f1dd648147dc2c1db81e1",
+      "bytes": 34626002
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\final-images\\frame_0145.png.npz",
+      "sha256": "a3cabc31281c4fcc37088f737a85a510b78b8a99a95ed5685b74e32dc6ea9b1c",
+      "bytes": 34832769
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\final-images\\metrics.json",
+      "sha256": "b06eccd2adcc0ab4d47a467a13251eab8df2dc906fe010b07c9bb7341a944f55",
+      "bytes": 6053
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\initial-images\\frame_0015.png.npz",
+      "sha256": "8b8b189021b9f7698add07b9bb664338e0088db1ec75d0d21634013833952882",
+      "bytes": 34979607
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\initial-images\\frame_0035.png.npz",
+      "sha256": "86bd7af7bdc4f5b6d74bc8c1b2333a0743eb4080a151ba1b8b733d8f12e5e406",
+      "bytes": 35046347
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\initial-images\\frame_0111.png.npz",
+      "sha256": "da249bdff102e9175ac9947e8c6e85bca5a16267dd8d2a9323c3aa2fa4025d1b",
+      "bytes": 34749988
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\initial-images\\frame_0115.png.npz",
+      "sha256": "78d4d9d985d0af4e685fa0760884620172f0ec3b7d75adbea2bfdd47a2e17a8e",
+      "bytes": 35154605
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\initial-images\\frame_0130.png.npz",
+      "sha256": "272342daae5cc77b7a708917af4305ee5b56feb7a1343ae5a53033bfb896d24c",
+      "bytes": 34810335
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\initial-images\\frame_0133.png.npz",
+      "sha256": "e2fbb8117c0499643b61d758a289b460a70a1c6e04c8af4c31560b6a3d725f66",
+      "bytes": 34745336
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\initial-images\\frame_0134.png.npz",
+      "sha256": "40e4e8a3628886c3ca6f0cc8edca9a883bd218992497508c229cdb6c33a57b3d",
+      "bytes": 34694642
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\initial-images\\frame_0135.png.npz",
+      "sha256": "7c02ec2049eb78eb6da33007f517c22bb5b725614c1196dbe3435a0b3a601a13",
+      "bytes": 34636548
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\initial-images\\frame_0136.png.npz",
+      "sha256": "0768e5b7cd14296f543e594e7828525736f6554a7df5f43b598d028f8f667114",
+      "bytes": 34642471
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\initial-images\\frame_0137.png.npz",
+      "sha256": "0fb34c6235b0b0c3198e63c74e436c0b44394a6e24ce7bc532a871bd84bde121",
+      "bytes": 34648043
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\initial-images\\frame_0138.png.npz",
+      "sha256": "a8a961c0b28bde90eb6a813daae2a68b609587cba7afd7c96a35503787361d1c",
+      "bytes": 34611740
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\initial-images\\frame_0139.png.npz",
+      "sha256": "529726616ea817823265045cad3cc948004d7793fa59241e49066fc4cc1b2eff",
+      "bytes": 34646436
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\initial-images\\frame_0145.png.npz",
+      "sha256": "2e2435a77b2ff82cfcd0506cd3442b7712c257767a934b5b77e0b50a6c7dd244",
+      "bytes": 34838277
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\initial-images\\metrics.json",
+      "sha256": "f388173a74165faa8731fba277fa9c2a3133b80f459978ac6789e639c2cb036f",
+      "bytes": 6054
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\loading\\cloth_supported_seeds.npz",
+      "sha256": "3dda310a71f172577d62e52d74016e06b7594745bca0b5da1f8f90bf17225f43",
+      "bytes": 10090
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\loading\\initialization.json",
+      "sha256": "fc1c3eaf3ad8681415c9ddc90db20ac5c2d780dab4882eac98b8d8f13859f3c9",
+      "bytes": 483
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\loading\\portrait-import.json",
+      "sha256": "ee22b5a40b96a543ab80c363a9f1b3062a248644c80c22dc2c239863653d5890",
+      "bytes": 3858
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\old-images\\frame_0015.png.npz",
+      "sha256": "84b4d0aac9b2a2c64afb3cbbf5777b335bbf1f4e418be3136809bddeeff203ed",
+      "bytes": 34583824
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\old-images\\frame_0035.png.npz",
+      "sha256": "4ae676552de00255a9ffbec5b5b4fc628b09598143a2b369e00f2b2ec201b75b",
+      "bytes": 34589779
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\old-images\\frame_0111.png.npz",
+      "sha256": "86ae1c4dbf6167477190662b8b9b73aa4df35b114e13c7b1457910386ce58f88",
+      "bytes": 33970578
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\old-images\\frame_0115.png.npz",
+      "sha256": "740ec704e6d8dc8c3539894ae634d51214ec3531181ab4b71d2ab8dd5c403d74",
+      "bytes": 34166393
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\old-images\\frame_0130.png.npz",
+      "sha256": "5046a593e629ec965dc738259be9107ffdd279821c92ce5ba70faa64282e8ca5",
+      "bytes": 34599326
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\old-images\\frame_0133.png.npz",
+      "sha256": "2d19f69e3d3e64d06482199a15169e67bce5a0a493466c60f43ac3733761e2bf",
+      "bytes": 34644425
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\old-images\\frame_0134.png.npz",
+      "sha256": "d2582a5d9a7e0efab15238491ba986c47b378e67ab429898f4703562eb9befe6",
+      "bytes": 34658829
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\old-images\\frame_0135.png.npz",
+      "sha256": "41bec84eba0432ac14ceae6eabf92291b188abe382fa197b9db14bee51cb794d",
+      "bytes": 34655295
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\old-images\\frame_0136.png.npz",
+      "sha256": "bff85022dd80634a2521d0fbeeba7c432fd68f0fe2d65e918af332b480cdf62f",
+      "bytes": 34654951
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\old-images\\frame_0137.png.npz",
+      "sha256": "3f45f86502d4e306bb24abf480b90d41532298edb3aabe98d70f94ae9fa14f50",
+      "bytes": 34690355
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\old-images\\frame_0138.png.npz",
+      "sha256": "fa9f6f1c7e6ed78ca6e07ba8d5c8fb5b88dff00a27a0617fdd42aefc841db169",
+      "bytes": 34633710
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\old-images\\frame_0139.png.npz",
+      "sha256": "53585b57186707f4f50d41673e9e59532396c2151b7ce077dcc72ff00ba5430f",
+      "bytes": 34649178
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\old-images\\frame_0145.png.npz",
+      "sha256": "945985097c8ccbd179c45b71a32329190bbabc7fa774547b3150ab61da7872f0",
+      "bytes": 34586297
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\old-images\\metrics.json",
+      "sha256": "28f49cf4c0d948a3b4f66c4d24fada9b567b2cd2315f2dce2236863f08efd877",
+      "bytes": 6051
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\playcanvas-baseline-01\\B-T2.rgba",
+      "sha256": "85a21381fd678f51f52055e79b1b4399dfbd585496e259279058fe6d1789b02e",
+      "bytes": 8294400
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-replacement\\playcanvas-baseline-01\\report.json",
+      "sha256": "890f3d13e3e156daa4338f2b7d825a45f1d054f41c2cc704b2afc48d3b2d6b72",
+      "bytes": 4287
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\appearance_direction_contract.py",
+      "sha256": "ca446dd11de3c2c89fc0a10680d1d792efda827b8d2da54adf80bfb05048a0fa",
+      "bytes": 1748
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\audit_portrait_priority_handoff.py",
+      "sha256": "fff454cd6caf0e9366986314e68cf5bacc0b5e711ce62c3f1ad8a579f8c31be4",
+      "bytes": 10260
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\audit_portrait_priority_joint.py",
+      "sha256": "5a6dc3ae6c0ae5e4b50a40ceae0b1c05b2507cc4d363c24edc20aca2d20c283f",
+      "bytes": 2869
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\audit_portrait_priority_preflight.py",
+      "sha256": "fdcf0a0ea0c740101fcc70625e83432d3e7eebbb46cb9feb8c4f4fe3734e1d29",
+      "bytes": 3682
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\flame_open_model.py",
+      "sha256": "d3684ea1e8578fa18b1b4ee132aadd01c1fd1668b3f4500dec3748bedcefe0bd",
+      "bytes": 9196
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_accessories.py",
+      "sha256": "6da683a49a31fb37b61a3a8890440575d56c3c459de52850ea476f4b826d0e95",
+      "bytes": 3779
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_components_v2.py",
+      "sha256": "832cd8363bc130bed69d07a641ed83170a68ef0bbca2ee85ff2687a6f9163161",
+      "bytes": 24979
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_components_v3.py",
+      "sha256": "baa1c1ddf9253b30d298fce74c4e113cc58833bcb45c549459d2c944f31962b8",
+      "bytes": 6747
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_compose_v3.py",
+      "sha256": "31149af0609ae0d488fef0c7412a0865c0cb59cf11730fe342bacb170ec3dd0d",
+      "bytes": 5700
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_detail_controlled.py",
+      "sha256": "e20c3782f5bec58bcbd2d418d23705f50f147dc0798b24f4a268e763c0cb110e",
+      "bytes": 18310
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_evidence_stage.py",
+      "sha256": "11946055270af7b5b7ab6cd8074584e4291b3b3a68af2c6a220349f0b52e18d5",
+      "bytes": 2333
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_face.py",
+      "sha256": "f64131100176ca91f38d575704f73244e33dc5c752d665a840e8f8632bbf4659",
+      "bytes": 14666
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_fullframe.py",
+      "sha256": "4080839cd67c91f33594929a41ee55b84153a5ba39ebdd6335f34a9fad928478",
+      "bytes": 2755
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_joint_visibility.py",
+      "sha256": "1916590fea23ae92a6a87cb2d010f863151a489d49b8c6c697bbb71300b4e224",
+      "bytes": 9618
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_live_prepare.py",
+      "sha256": "8f66b3ecaf9955db44c5f3f88bdc987f7748aec2549e0f47290dab0efc6fc17f",
+      "bytes": 13207
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_local_lines.py",
+      "sha256": "d77b11c307d7f66cab9332b2e4976602e2e052620903fed7389ba187725ef526",
+      "bytes": 10119
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_mvs_contract.py",
+      "sha256": "a45468854590badbd99533d1c3730133342bc2ab30da0faaab69c61b9d73e28e",
+      "bytes": 1826
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_observations.py",
+      "sha256": "15ee432c1e7d9867e2f7d514ba3b9037f3cc2e573854a5d7e0eea3f62e079d56",
+      "bytes": 10120
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_patch_acceptance.py",
+      "sha256": "8ff54407e7cddb72f473108b1f60dd03ab82456e9e6f89fdae6f3e80c69d3624",
+      "bytes": 1213
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_patch_correspondence.py",
+      "sha256": "1e397bb96939435697a782b4f38716eed0c3a50663ec5411db109fe1e9b893d4",
+      "bytes": 5518
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_portrait_capacity.py",
+      "sha256": "1dc2a696f7163fc855d307ae89729a2c2f25ca83e9cb2912bfb3effe984a1d4d",
+      "bytes": 5955
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_portrait_local_v3.py",
+      "sha256": "5dbac45b5846e05afd2b09951f48caa4dd433058c0c47b83e2d0f947538edb91",
+      "bytes": 4209
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_portrait_model.py",
+      "sha256": "626f0efeef69be398323ee3979dc19384284c88943d87fd87d7341e91b8c084d",
+      "bytes": 22538
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_portrait_pipeline.py",
+      "sha256": "1ae6a8259c6ef5c8d9e93fda365f781f62ccb8e6fcaef9a2f1da457584d9b175",
+      "bytes": 25876
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_portrait_priority.py",
+      "sha256": "799014fa9883e6c4eeba62d12e5dbb4385f719f2b3ab14cb76d4fb8ef8ce262c",
+      "bytes": 30990
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_pose.py",
+      "sha256": "6245271c529db8ea1faa1d9dd4c849add209c9d40c3157e71ae134be4fd3d947",
+      "bytes": 8143
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_reference_static.py",
+      "sha256": "a0bc2a77718770072b043585df75e48fb255736518a08d246182ade53c113cc0",
+      "bytes": 8879
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_research_state.py",
+      "sha256": "4cd7f18137b15441064a0b0f41a15b20c713c45ce47e9849b03b860ba54cc202",
+      "bytes": 10078
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_runtime.py",
+      "sha256": "c6327ea800e06e91179df3a41bdedee5714c04a7b0f591c62dd4615295f5ccbe",
+      "bytes": 4370
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_scene.py",
+      "sha256": "b19b7d9f6b3c632961561fbedc5b3fb136a09c5b5d1baf7ee33a55375df7e677",
+      "bytes": 43974
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_schedule.py",
+      "sha256": "0cc7561776241f4f6f0765d4df0ae01b9e24f038687ac0a66b0c2f9f1b66d60a",
+      "bytes": 794
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_shared_surface.py",
+      "sha256": "3847850c34a86d02b575fe9913eb98ce6fc007a80fa646fe3915543178e73801",
+      "bytes": 4325
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_shared_v2.py",
+      "sha256": "0a39ea562c3c92edff2c56ef8a6fe43d3ce5a1d09c2980cad84cc8ba830b14c7",
+      "bytes": 41831
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_surface_evidence.py",
+      "sha256": "949713b00e320162455493981cef1df66fafcecad6967820dd2b8aa6dcc84f96",
+      "bytes": 6808
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_surface_patch.py",
+      "sha256": "fe7ad773b916b8dffe8d50aa197cabe8213e2f56637bbbb8f1e25c98f32ad392",
+      "bytes": 16217
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_t2_local.py",
+      "sha256": "187fa3ed6e420709ba5051e1146f4c7215cf561addaa3758e65dee7e646d5a88",
+      "bytes": 8043
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_train.py",
+      "sha256": "a2055c031452638d99c53b947a0ba13158ee4ed0588095a33269ccfea45854f0",
+      "bytes": 14802
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_train_environment.py",
+      "sha256": "dc11a58b07907dfb3ba6eff489cca2f94efd5de34d77f232c10d73016456000b",
+      "bytes": 9960
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_train_joint.py",
+      "sha256": "4af2934fd6199ae42cdf8ca14e2abdced2af9de2cd635b7cd644dd23cd7f8c6c",
+      "bytes": 17859
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_view.py",
+      "sha256": "544d61c3e7d0bdefc34b8a0506090bf36fc05d0feb3819cad5fc40ac3c084651",
+      "bytes": 6053
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_worker.py",
+      "sha256": "da2249ea1e5f883359336e4b42d40c3e00e47fc7147b9303d8c4bbbfdb1a9050",
+      "bytes": 28969
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\reconstruction_world_static_v3.py",
+      "sha256": "b8240eccfaff555ff37fdc20fbf1bf254452b2cc1959447c5c9f46e5934b85cd",
+      "bytes": 2496
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\run_surface_body_motion.py",
+      "sha256": "89c0e3b08dff9353404e6a81b8f0c755c6e2049891e182fa3c27bc2ec6a71817",
+      "bytes": 6234
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\run_surface_component_training.py",
+      "sha256": "b915e2e928f191d504f13d06443b226e01343c1539b1e9b6489daa710339843a",
+      "bytes": 8586
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\run_surface_geometry.py",
+      "sha256": "74ec1ce234cecc3b06da0af8e3a04ad241c89c1b42f25630fa8bdc6de74d8ff6",
+      "bytes": 9747
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\algorithm-source\\run_surface_window.py",
+      "sha256": "b623cf30e4bab4417dd12de7ea9be2c6d5bae19a3b8b1fb3e63dcdf6ecca3505",
+      "bytes": 4617
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\loading\\cloth_supported_seeds.npz",
+      "sha256": "3dda310a71f172577d62e52d74016e06b7594745bca0b5da1f8f90bf17225f43",
+      "bytes": 10090
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\loading\\initialization.json",
+      "sha256": "fc1c3eaf3ad8681415c9ddc90db20ac5c2d780dab4882eac98b8d8f13859f3c9",
+      "bytes": 483
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\loading\\portrait-import.json",
+      "sha256": "ee22b5a40b96a543ab80c363a9f1b3062a248644c80c22dc2c239863653d5890",
+      "bytes": 3858
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\orbit\\contract.json",
+      "sha256": "9635a2fd3c7a15fdd05b9c5100344fa5dac7ebcfe59640ff0ff6b657b7c421a1",
+      "bytes": 30447
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\orbit\\fixed-asset-orbit.mp4",
+      "sha256": "9194fcf43be97467388148fa690f9f7035ef336b3df8bd4784f2f4b9bf3b1db8",
+      "bytes": 805717
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\playcanvas-baseline-01\\B-T2.rgba",
+      "sha256": "f8a347a27d6023c56d0222f404d05d2306733672a76493fe259febd513cead2e",
+      "bytes": 8294400
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\B-scoped-replay\\playcanvas-baseline-01\\report.json",
+      "sha256": "fa4bb101e3f26ca1a35dcf1fd3e18a0182ad6ef6cac2718170628170fb651dda",
+      "bytes": 4304
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-motion-diagnostic\\colmap\\sparse\\cameras.txt",
+      "sha256": "f14e5abbc3243cc98454bd8e9ed9761bd6254d16e6b13777dd1b9a575c1e0955",
+      "bytes": 56
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-motion-diagnostic\\colmap\\sparse\\images.txt",
+      "sha256": "dce1ac3511f114c21ab427b20d5abafa143651b3b53c1b8dc760966140674c2d",
+      "bytes": 4900
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-motion-diagnostic\\colmap\\sparse\\points3D.txt",
+      "sha256": "abd79947296727db97709e3a4ee0307c489f87b68ed37b6170bb813ac5f88e21",
+      "bytes": 3160
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-motion-multiseed\\colmap\\sparse\\cameras.txt",
+      "sha256": "f14e5abbc3243cc98454bd8e9ed9761bd6254d16e6b13777dd1b9a575c1e0955",
+      "bytes": 56
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-motion-multiseed\\colmap\\sparse\\images.txt",
+      "sha256": "7adc60f65157234929253cb3e4bcd6df8162b80efc2ecde5eb110d2916a305ea",
+      "bytes": 4757
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-motion-multiseed\\colmap\\sparse\\points3D.txt",
+      "sha256": "6db813095bc0f381e3728c8ae21d273f075fee772a35a8770adf69aaf0ed85d4",
+      "bytes": 3056
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\appearance_direction_contract.py",
+      "sha256": "ca446dd11de3c2c89fc0a10680d1d792efda827b8d2da54adf80bfb05048a0fa",
+      "bytes": 1748
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\audit_portrait_priority_handoff.py",
+      "sha256": "fff454cd6caf0e9366986314e68cf5bacc0b5e711ce62c3f1ad8a579f8c31be4",
+      "bytes": 10260
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\audit_portrait_priority_joint.py",
+      "sha256": "5a6dc3ae6c0ae5e4b50a40ceae0b1c05b2507cc4d363c24edc20aca2d20c283f",
+      "bytes": 2869
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\audit_portrait_priority_preflight.py",
+      "sha256": "fdcf0a0ea0c740101fcc70625e83432d3e7eebbb46cb9feb8c4f4fe3734e1d29",
+      "bytes": 3682
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\flame_open_model.py",
+      "sha256": "d3684ea1e8578fa18b1b4ee132aadd01c1fd1668b3f4500dec3748bedcefe0bd",
+      "bytes": 9196
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_accessories.py",
+      "sha256": "6da683a49a31fb37b61a3a8890440575d56c3c459de52850ea476f4b826d0e95",
+      "bytes": 3779
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_components_v2.py",
+      "sha256": "832cd8363bc130bed69d07a641ed83170a68ef0bbca2ee85ff2687a6f9163161",
+      "bytes": 24979
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_components_v3.py",
+      "sha256": "baa1c1ddf9253b30d298fce74c4e113cc58833bcb45c549459d2c944f31962b8",
+      "bytes": 6747
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_compose_v3.py",
+      "sha256": "31149af0609ae0d488fef0c7412a0865c0cb59cf11730fe342bacb170ec3dd0d",
+      "bytes": 5700
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_detail_controlled.py",
+      "sha256": "e20c3782f5bec58bcbd2d418d23705f50f147dc0798b24f4a268e763c0cb110e",
+      "bytes": 18310
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_evidence_stage.py",
+      "sha256": "11946055270af7b5b7ab6cd8074584e4291b3b3a68af2c6a220349f0b52e18d5",
+      "bytes": 2333
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_face.py",
+      "sha256": "f64131100176ca91f38d575704f73244e33dc5c752d665a840e8f8632bbf4659",
+      "bytes": 14666
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_fullframe.py",
+      "sha256": "4080839cd67c91f33594929a41ee55b84153a5ba39ebdd6335f34a9fad928478",
+      "bytes": 2755
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_joint_visibility.py",
+      "sha256": "1916590fea23ae92a6a87cb2d010f863151a489d49b8c6c697bbb71300b4e224",
+      "bytes": 9618
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_live_prepare.py",
+      "sha256": "8f66b3ecaf9955db44c5f3f88bdc987f7748aec2549e0f47290dab0efc6fc17f",
+      "bytes": 13207
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_local_lines.py",
+      "sha256": "d77b11c307d7f66cab9332b2e4976602e2e052620903fed7389ba187725ef526",
+      "bytes": 10119
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_observations.py",
+      "sha256": "15ee432c1e7d9867e2f7d514ba3b9037f3cc2e573854a5d7e0eea3f62e079d56",
+      "bytes": 10120
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_patch_acceptance.py",
+      "sha256": "8ff54407e7cddb72f473108b1f60dd03ab82456e9e6f89fdae6f3e80c69d3624",
+      "bytes": 1213
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_patch_correspondence.py",
+      "sha256": "1e397bb96939435697a782b4f38716eed0c3a50663ec5411db109fe1e9b893d4",
+      "bytes": 5518
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_portrait_capacity.py",
+      "sha256": "1dc2a696f7163fc855d307ae89729a2c2f25ca83e9cb2912bfb3effe984a1d4d",
+      "bytes": 5955
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_portrait_local_v3.py",
+      "sha256": "5dbac45b5846e05afd2b09951f48caa4dd433058c0c47b83e2d0f947538edb91",
+      "bytes": 4209
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_portrait_model.py",
+      "sha256": "626f0efeef69be398323ee3979dc19384284c88943d87fd87d7341e91b8c084d",
+      "bytes": 22538
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_portrait_pipeline.py",
+      "sha256": "1ae6a8259c6ef5c8d9e93fda365f781f62ccb8e6fcaef9a2f1da457584d9b175",
+      "bytes": 25876
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_portrait_priority.py",
+      "sha256": "799014fa9883e6c4eeba62d12e5dbb4385f719f2b3ab14cb76d4fb8ef8ce262c",
+      "bytes": 30990
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_pose.py",
+      "sha256": "6245271c529db8ea1faa1d9dd4c849add209c9d40c3157e71ae134be4fd3d947",
+      "bytes": 8143
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_reference_static.py",
+      "sha256": "a0bc2a77718770072b043585df75e48fb255736518a08d246182ade53c113cc0",
+      "bytes": 8879
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_research_state.py",
+      "sha256": "4cd7f18137b15441064a0b0f41a15b20c713c45ce47e9849b03b860ba54cc202",
+      "bytes": 10078
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_runtime.py",
+      "sha256": "c6327ea800e06e91179df3a41bdedee5714c04a7b0f591c62dd4615295f5ccbe",
+      "bytes": 4370
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_scene.py",
+      "sha256": "b19b7d9f6b3c632961561fbedc5b3fb136a09c5b5d1baf7ee33a55375df7e677",
+      "bytes": 43974
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_schedule.py",
+      "sha256": "0cc7561776241f4f6f0765d4df0ae01b9e24f038687ac0a66b0c2f9f1b66d60a",
+      "bytes": 794
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_shared_surface.py",
+      "sha256": "3847850c34a86d02b575fe9913eb98ce6fc007a80fa646fe3915543178e73801",
+      "bytes": 4325
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_shared_v2.py",
+      "sha256": "0a39ea562c3c92edff2c56ef8a6fe43d3ce5a1d09c2980cad84cc8ba830b14c7",
+      "bytes": 41831
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_surface_evidence.py",
+      "sha256": "949713b00e320162455493981cef1df66fafcecad6967820dd2b8aa6dcc84f96",
+      "bytes": 6808
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_surface_patch.py",
+      "sha256": "fe7ad773b916b8dffe8d50aa197cabe8213e2f56637bbbb8f1e25c98f32ad392",
+      "bytes": 16217
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_t2_local.py",
+      "sha256": "187fa3ed6e420709ba5051e1146f4c7215cf561addaa3758e65dee7e646d5a88",
+      "bytes": 8043
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_train.py",
+      "sha256": "a2055c031452638d99c53b947a0ba13158ee4ed0588095a33269ccfea45854f0",
+      "bytes": 14802
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_train_environment.py",
+      "sha256": "dc11a58b07907dfb3ba6eff489cca2f94efd5de34d77f232c10d73016456000b",
+      "bytes": 9960
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_train_joint.py",
+      "sha256": "4af2934fd6199ae42cdf8ca14e2abdced2af9de2cd635b7cd644dd23cd7f8c6c",
+      "bytes": 17859
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_view.py",
+      "sha256": "544d61c3e7d0bdefc34b8a0506090bf36fc05d0feb3819cad5fc40ac3c084651",
+      "bytes": 6053
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_worker.py",
+      "sha256": "da2249ea1e5f883359336e4b42d40c3e00e47fc7147b9303d8c4bbbfdb1a9050",
+      "bytes": 28969
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\reconstruction_world_static_v3.py",
+      "sha256": "b8240eccfaff555ff37fdc20fbf1bf254452b2cc1959447c5c9f46e5934b85cd",
+      "bytes": 2496
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\run_surface_body_motion.py",
+      "sha256": "89c0e3b08dff9353404e6a81b8f0c755c6e2049891e182fa3c27bc2ec6a71817",
+      "bytes": 6234
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\run_surface_component_training.py",
+      "sha256": "ff847a89bd69cd9334fa9d7b0d197fe27b10754e5efb9bf05cca1c01f170d379",
+      "bytes": 8488
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\run_surface_geometry.py",
+      "sha256": "74ec1ce234cecc3b06da0af8e3a04ad241c89c1b42f25630fa8bdc6de74d8ff6",
+      "bytes": 9747
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\algorithm-source\\run_surface_window.py",
+      "sha256": "b623cf30e4bab4417dd12de7ea9be2c6d5bae19a3b8b1fb3e63dcdf6ecca3505",
+      "bytes": 4617
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\final-images\\frame_0022.png.npz",
+      "sha256": "40dbb8c4df8f730ddbd6ff23c821f30ed13f7c24d721f32539a667aea167716f",
+      "bytes": 299112
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\final-images\\frame_0023.png.npz",
+      "sha256": "7429eb32b7437f11cf0a2ab97b2ffe33232e4cb1fe39a43bc4e10cc6715964ee",
+      "bytes": 297960
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\final-images\\frame_0024.png.npz",
+      "sha256": "b047e0c7092d3d48484b041eb46db53e3133b061c812a606aba76235df721ed1",
+      "bytes": 295472
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\final-images\\frame_0025.png.npz",
+      "sha256": "df83ca18c7f07ac9acde9ddd378f063c63f11be4a40b5260613fe6346dfc4090",
+      "bytes": 296722
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\final-images\\frame_0026.png.npz",
+      "sha256": "002d94698b43327ab7dec2cb6b30ac9d334ce284d1352ae9f36acb8ffa2abf5b",
+      "bytes": 291061
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\final-images\\frame_0027.png.npz",
+      "sha256": "a1bb6627e76c189958824c4690fab22c3115ab6317b0aa39b5d7c6f76f34acae",
+      "bytes": 288958
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\final-images\\frame_0028.png.npz",
+      "sha256": "93e7566b53c9b2d1440212be59d07e36cef183d7cfe293d4b77756d4b600e256",
+      "bytes": 290189
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\final-images\\metrics.json",
+      "sha256": "363b11f348056c4653af56f8a48a640adbe5279e3eec19c7195de3a343af9735",
+      "bytes": 2184
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\initial-images\\frame_0022.png.npz",
+      "sha256": "eaee4205678221ac7fafb6858a7d6aafaf2c135287bcae622754bf643923d5bd",
+      "bytes": 296179
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\initial-images\\frame_0023.png.npz",
+      "sha256": "1bec2a599299027fefc4b140939182ed89645b4906e06741bf441e8e287a7316",
+      "bytes": 295305
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\initial-images\\frame_0024.png.npz",
+      "sha256": "4ae6df0a63ba80027f555ea611b97326668af9a546b7265e0adab618f4f8a52b",
+      "bytes": 292698
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\initial-images\\frame_0025.png.npz",
+      "sha256": "7a5c6f481211f63b7f547ad714e7c7c53a4cc9807b5e9353834d1ef485cdb936",
+      "bytes": 294141
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\initial-images\\frame_0026.png.npz",
+      "sha256": "c2fa1e1412d1e88864bde826fca32164c8b0f92a2dbbfd6c492f393714a1bf09",
+      "bytes": 288563
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\initial-images\\frame_0027.png.npz",
+      "sha256": "bace3135c9627c25e534d52c11f611f144f26991d57688a08865af520cd51948",
+      "bytes": 285745
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\initial-images\\frame_0028.png.npz",
+      "sha256": "190a792e9e9e34f636aba3222d445c64103995b4bee023e625c6022f3d5dcda3",
+      "bytes": 287267
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\initial-images\\metrics.json",
+      "sha256": "7fb6580eaac1a99ec82270befeabb43c0310d97bdb4df8ed1b2d547c982767a0",
+      "bytes": 2183
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\loading\\cloth_supported_seeds.npz",
+      "sha256": "3dda310a71f172577d62e52d74016e06b7594745bca0b5da1f8f90bf17225f43",
+      "bytes": 10090
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\loading\\initialization.json",
+      "sha256": "fc1c3eaf3ad8681415c9ddc90db20ac5c2d780dab4882eac98b8d8f13859f3c9",
+      "bytes": 483
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\loading\\portrait-import.json",
+      "sha256": "ee22b5a40b96a543ab80c363a9f1b3062a248644c80c22dc2c239863653d5890",
+      "bytes": 3858
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\mid-images\\frame_0022.png.npz",
+      "sha256": "41b0844d310045d36ed4780946c1a16eea168f20f3373feacf9c70537add6d29",
+      "bytes": 298330
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\mid-images\\frame_0023.png.npz",
+      "sha256": "58ea5fd9be5dc6829f035798cbc5ec57c1cc90e21725a1425491f9a7d37b7755",
+      "bytes": 297352
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\mid-images\\frame_0024.png.npz",
+      "sha256": "e471f9b2ed33c38aae00b652b51335a05ce083b0379b2d17c3919fd7233d5912",
+      "bytes": 295033
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\mid-images\\frame_0025.png.npz",
+      "sha256": "f3598902f0202dfa921a8c65b5cd155a18889ae4075e4fd2b3d5f13832ffb156",
+      "bytes": 296324
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\mid-images\\frame_0026.png.npz",
+      "sha256": "8fc15f262ba6f474571dac230f2d6ba5e1bff0ea26ef6cb5a6d6dd4993bf046c",
+      "bytes": 290556
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\mid-images\\frame_0027.png.npz",
+      "sha256": "2d9b719dc65e0178fdec4294dd8e48bcf3cd525a43c32d18ba68ce563b8b50a5",
+      "bytes": 288089
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\mid-images\\frame_0028.png.npz",
+      "sha256": "6e6cdb6947dc55e95671e074a51f2b227071925845ed4d4a5c070b92192532e8",
+      "bytes": 289677
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\mid-images\\metrics.json",
+      "sha256": "f74c71b0ed12946aab1536ea3811dabb32bb3e3154bda0e263129b2711a4bffa",
+      "bytes": 2183
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\playcanvas-baseline-01\\report.json",
+      "sha256": "e4ccd0287690e869729ce701acbcc1282e1572021c4bc99475c02497cb850961",
+      "bytes": 4309
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\C-training\\playcanvas-baseline-01\\T2.rgba",
+      "sha256": "e780b2dae97e6436d348881bea4c5aacb82bc5c43d1da148200e3217a590d559",
+      "bytes": 8294400
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\appearance_direction_contract.py",
+      "sha256": "ca446dd11de3c2c89fc0a10680d1d792efda827b8d2da54adf80bfb05048a0fa",
+      "bytes": 1748
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\audit_portrait_priority_handoff.py",
+      "sha256": "fff454cd6caf0e9366986314e68cf5bacc0b5e711ce62c3f1ad8a579f8c31be4",
+      "bytes": 10260
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\audit_portrait_priority_joint.py",
+      "sha256": "5a6dc3ae6c0ae5e4b50a40ceae0b1c05b2507cc4d363c24edc20aca2d20c283f",
+      "bytes": 2869
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\audit_portrait_priority_preflight.py",
+      "sha256": "fdcf0a0ea0c740101fcc70625e83432d3e7eebbb46cb9feb8c4f4fe3734e1d29",
+      "bytes": 3682
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\flame_open_model.py",
+      "sha256": "d3684ea1e8578fa18b1b4ee132aadd01c1fd1668b3f4500dec3748bedcefe0bd",
+      "bytes": 9196
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_accessories.py",
+      "sha256": "6da683a49a31fb37b61a3a8890440575d56c3c459de52850ea476f4b826d0e95",
+      "bytes": 3779
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_components_v2.py",
+      "sha256": "832cd8363bc130bed69d07a641ed83170a68ef0bbca2ee85ff2687a6f9163161",
+      "bytes": 24979
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_components_v3.py",
+      "sha256": "baa1c1ddf9253b30d298fce74c4e113cc58833bcb45c549459d2c944f31962b8",
+      "bytes": 6747
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_compose_v3.py",
+      "sha256": "31149af0609ae0d488fef0c7412a0865c0cb59cf11730fe342bacb170ec3dd0d",
+      "bytes": 5700
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_detail_controlled.py",
+      "sha256": "e20c3782f5bec58bcbd2d418d23705f50f147dc0798b24f4a268e763c0cb110e",
+      "bytes": 18310
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_evidence_stage.py",
+      "sha256": "11946055270af7b5b7ab6cd8074584e4291b3b3a68af2c6a220349f0b52e18d5",
+      "bytes": 2333
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_face.py",
+      "sha256": "f64131100176ca91f38d575704f73244e33dc5c752d665a840e8f8632bbf4659",
+      "bytes": 14666
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_fullframe.py",
+      "sha256": "4080839cd67c91f33594929a41ee55b84153a5ba39ebdd6335f34a9fad928478",
+      "bytes": 2755
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_joint_visibility.py",
+      "sha256": "1916590fea23ae92a6a87cb2d010f863151a489d49b8c6c697bbb71300b4e224",
+      "bytes": 9618
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_live_prepare.py",
+      "sha256": "8f66b3ecaf9955db44c5f3f88bdc987f7748aec2549e0f47290dab0efc6fc17f",
+      "bytes": 13207
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_local_lines.py",
+      "sha256": "d77b11c307d7f66cab9332b2e4976602e2e052620903fed7389ba187725ef526",
+      "bytes": 10119
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_observations.py",
+      "sha256": "15ee432c1e7d9867e2f7d514ba3b9037f3cc2e573854a5d7e0eea3f62e079d56",
+      "bytes": 10120
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_patch_acceptance.py",
+      "sha256": "8ff54407e7cddb72f473108b1f60dd03ab82456e9e6f89fdae6f3e80c69d3624",
+      "bytes": 1213
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_patch_correspondence.py",
+      "sha256": "1e397bb96939435697a782b4f38716eed0c3a50663ec5411db109fe1e9b893d4",
+      "bytes": 5518
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_portrait_capacity.py",
+      "sha256": "1dc2a696f7163fc855d307ae89729a2c2f25ca83e9cb2912bfb3effe984a1d4d",
+      "bytes": 5955
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_portrait_local_v3.py",
+      "sha256": "5dbac45b5846e05afd2b09951f48caa4dd433058c0c47b83e2d0f947538edb91",
+      "bytes": 4209
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_portrait_model.py",
+      "sha256": "626f0efeef69be398323ee3979dc19384284c88943d87fd87d7341e91b8c084d",
+      "bytes": 22538
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_portrait_pipeline.py",
+      "sha256": "1ae6a8259c6ef5c8d9e93fda365f781f62ccb8e6fcaef9a2f1da457584d9b175",
+      "bytes": 25876
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_portrait_priority.py",
+      "sha256": "799014fa9883e6c4eeba62d12e5dbb4385f719f2b3ab14cb76d4fb8ef8ce262c",
+      "bytes": 30990
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_pose.py",
+      "sha256": "6245271c529db8ea1faa1d9dd4c849add209c9d40c3157e71ae134be4fd3d947",
+      "bytes": 8143
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_reference_static.py",
+      "sha256": "a0bc2a77718770072b043585df75e48fb255736518a08d246182ade53c113cc0",
+      "bytes": 8879
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_research_state.py",
+      "sha256": "4cd7f18137b15441064a0b0f41a15b20c713c45ce47e9849b03b860ba54cc202",
+      "bytes": 10078
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_runtime.py",
+      "sha256": "c6327ea800e06e91179df3a41bdedee5714c04a7b0f591c62dd4615295f5ccbe",
+      "bytes": 4370
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_scene.py",
+      "sha256": "b19b7d9f6b3c632961561fbedc5b3fb136a09c5b5d1baf7ee33a55375df7e677",
+      "bytes": 43974
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_schedule.py",
+      "sha256": "0cc7561776241f4f6f0765d4df0ae01b9e24f038687ac0a66b0c2f9f1b66d60a",
+      "bytes": 794
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_shared_surface.py",
+      "sha256": "3847850c34a86d02b575fe9913eb98ce6fc007a80fa646fe3915543178e73801",
+      "bytes": 4325
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_shared_v2.py",
+      "sha256": "0a39ea562c3c92edff2c56ef8a6fe43d3ce5a1d09c2980cad84cc8ba830b14c7",
+      "bytes": 41831
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_surface_evidence.py",
+      "sha256": "949713b00e320162455493981cef1df66fafcecad6967820dd2b8aa6dcc84f96",
+      "bytes": 6808
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_surface_patch.py",
+      "sha256": "fe7ad773b916b8dffe8d50aa197cabe8213e2f56637bbbb8f1e25c98f32ad392",
+      "bytes": 16217
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_t2_local.py",
+      "sha256": "187fa3ed6e420709ba5051e1146f4c7215cf561addaa3758e65dee7e646d5a88",
+      "bytes": 8043
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_train.py",
+      "sha256": "a2055c031452638d99c53b947a0ba13158ee4ed0588095a33269ccfea45854f0",
+      "bytes": 14802
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_train_environment.py",
+      "sha256": "dc11a58b07907dfb3ba6eff489cca2f94efd5de34d77f232c10d73016456000b",
+      "bytes": 9960
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_train_joint.py",
+      "sha256": "4af2934fd6199ae42cdf8ca14e2abdced2af9de2cd635b7cd644dd23cd7f8c6c",
+      "bytes": 17859
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_view.py",
+      "sha256": "544d61c3e7d0bdefc34b8a0506090bf36fc05d0feb3819cad5fc40ac3c084651",
+      "bytes": 6053
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_worker.py",
+      "sha256": "da2249ea1e5f883359336e4b42d40c3e00e47fc7147b9303d8c4bbbfdb1a9050",
+      "bytes": 28969
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\reconstruction_world_static_v3.py",
+      "sha256": "b8240eccfaff555ff37fdc20fbf1bf254452b2cc1959447c5c9f46e5934b85cd",
+      "bytes": 2496
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\run_surface_body_motion.py",
+      "sha256": "d634f046c15e1e5a3dbbb336ca82b023cd245119101a5c14d5b87e8ccef240bb",
+      "bytes": 5581
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\run_surface_geometry.py",
+      "sha256": "a41b25497346a67d793443fdd473f8363d539f60f153829d1c90e44d6f195dfa",
+      "bytes": 9419
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\algorithm-source\\run_surface_window.py",
+      "sha256": "b623cf30e4bab4417dd12de7ea9be2c6d5bae19a3b8b1fb3e63dcdf6ecca3505",
+      "bytes": 4617
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G0-images\\frame_0015.png.npz",
+      "sha256": "0e022f035d91371943640480d2ed45f648bc4ba10e569f87d6a0a4e9a5158ab1",
+      "bytes": 4821378
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G0-images\\frame_0035.png.npz",
+      "sha256": "f0703ca444823f98078f312be4ff8793e1e20986fbc652d5f4d3ad5b91103846",
+      "bytes": 5131598
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G0-images\\frame_0055.png.npz",
+      "sha256": "eb88199c2a6f2dea5477427e8a64a0e8d206b54f850beb239280927aa6381d01",
+      "bytes": 5244551
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G0-images\\frame_0058.png.npz",
+      "sha256": "9ef5653c5d171f62197fd98740eb6897faf5383580df97fd349d0d789566ce2b",
+      "bytes": 5481652
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G0-images\\frame_0059.png.npz",
+      "sha256": "b181edd2ac57da4becb26ea7068fd880a582c6fa219b81078900af8a36ca8738",
+      "bytes": 5689186
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G0-images\\frame_0061.png.npz",
+      "sha256": "c2c66b2c39f6a34d5e73a6314396e34508a458eded58ac576fbc0ebd6d8e1a4f",
+      "bytes": 6067232
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G0-images\\frame_0075.png.npz",
+      "sha256": "88a7d38551c416478db114452ebe4fa84d9c1fcd9b464371034f87db13f01a75",
+      "bytes": 8369069
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G0-images\\frame_0080.png.npz",
+      "sha256": "7f0c0788e1eb752f44e6283c01447c710389b2306586dbc4636b7f38384bf2d6",
+      "bytes": 9018546
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G0-images\\frame_0095.png.npz",
+      "sha256": "1e249869f4b7c6db29b13675f705e2ac26ea65f8a090d2df213759ed24c04975",
+      "bytes": 7810666
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G0-images\\frame_0098.png.npz",
+      "sha256": "04e4582aef175ab4891c49ff3f92444ba3a94484e9fa60c312b27e1edc2ffbef",
+      "bytes": 7457336
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G0-images\\frame_0099.png.npz",
+      "sha256": "14aa47b067ca3a175069e563bf47cd26f9a4f521bf8867df8ab4153aaef56ecf",
+      "bytes": 7598005
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G0-images\\frame_0101.png.npz",
+      "sha256": "b7b0c16395a01e2ed983d827217538afbcabab25124fa16d077fd5e20a615ce1",
+      "bytes": 6994513
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G0-images\\frame_0115.png.npz",
+      "sha256": "f294cdae85089303c21a1409a41e1109ac153ffab4d7a5e4e1cac4be30cfff9b",
+      "bytes": 5336011
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G0-images\\frame_0130.png.npz",
+      "sha256": "87426dcc65e60c23922259dbc552b54fea7fa74ac2791c7d1cdfd47f2d12a31f",
+      "bytes": 6467744
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G0-images\\frame_0145.png.npz",
+      "sha256": "2b55aa7870d0190523f103fec4cfa65ca4564c0a3d9f648ee6227202920c4bdf",
+      "bytes": 6208097
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G0-images\\metrics.json",
+      "sha256": "86bbc1914e5229d218eb5f61bb4b1e4722eb58f545a5ebcb6fc11df167af65bc",
+      "bytes": 36563
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G1-geometry-images\\frame_0015.png.npz",
+      "sha256": "cbc56593ffc21cb65f281d280fefbbca6c98f503218ac8f4ba6f03c4d5db230a",
+      "bytes": 4821033
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G1-geometry-images\\frame_0035.png.npz",
+      "sha256": "5aa869001b5460d0843e9806820cb1ac84b8eea6e3635c3111f14e51249d34ef",
+      "bytes": 5131627
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G1-geometry-images\\frame_0055.png.npz",
+      "sha256": "a08fdd7dc322758374a7cde74fc1b6da20ce9ee4c5fdeaf29bd3872be19ac11a",
+      "bytes": 5245043
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G1-geometry-images\\frame_0058.png.npz",
+      "sha256": "9d044c58c5d268385e30adda7aa854991d6a595c100e8008527c93ec5970d23a",
+      "bytes": 5482130
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G1-geometry-images\\frame_0059.png.npz",
+      "sha256": "d60e86e853d9c6b89989f76eee0e40272b5743ffee5f8147f4d28ab76e8014dc",
+      "bytes": 5688927
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G1-geometry-images\\frame_0061.png.npz",
+      "sha256": "3f20500bdd5b62a3bd8f81f5421aea60132f7ff728ed3a1fb01feca7700a9305",
+      "bytes": 6067178
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G1-geometry-images\\frame_0075.png.npz",
+      "sha256": "d44e1e3602708e485ffa3d358632c9c5b3d0b8df008c17e0be5382daca6ae571",
+      "bytes": 8366697
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G1-geometry-images\\frame_0080.png.npz",
+      "sha256": "efac6de89dc2bf6a4ea98b1cdcd0821c5a305bf06adf1670cdd4d3636a00a7a8",
+      "bytes": 9017330
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G1-geometry-images\\frame_0095.png.npz",
+      "sha256": "2c0e85ee75202495cb602b1b5ce3e8d1465994387e9db194ad4b184d3b8ac634",
+      "bytes": 7807369
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G1-geometry-images\\frame_0098.png.npz",
+      "sha256": "d531a3f34697cafa119c3a6d07937e442d12ab127f5dc9ec015ff82660b729d4",
+      "bytes": 7457216
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G1-geometry-images\\frame_0099.png.npz",
+      "sha256": "b2926847050884d68129c02e33fdf7d7d1b7eb833b368df80a1cff89b793a189",
+      "bytes": 7596493
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G1-geometry-images\\frame_0101.png.npz",
+      "sha256": "29b7c66b1b32099b44cfb14f37bcd9cff5325a1c2ca80c23281315cab7054758",
+      "bytes": 6994296
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G1-geometry-images\\frame_0115.png.npz",
+      "sha256": "5ae795245b5f426026e85d9f87a51ca4fffdc23fe19963993825808b7af81e4b",
+      "bytes": 5336372
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G1-geometry-images\\frame_0130.png.npz",
+      "sha256": "bff8e10d325da5a0c92c7cec3b9eaf2fd5ba1ea32f4abdc0f2f152604532712e",
+      "bytes": 6467994
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G1-geometry-images\\frame_0145.png.npz",
+      "sha256": "2a5e73ce789cd888c27a85f34a3364c13209ad145be07bc62e057865fa6dc894",
+      "bytes": 6208223
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\G1-geometry-images\\metrics.json",
+      "sha256": "c02bd19825e2c9be28fbd6547d129fd5002ecec790d74703e0a1ed2d7a7026aa",
+      "bytes": 36567
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\loading\\cloth_supported_seeds.npz",
+      "sha256": "3dda310a71f172577d62e52d74016e06b7594745bca0b5da1f8f90bf17225f43",
+      "bytes": 10090
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\loading\\initialization.json",
+      "sha256": "fc1c3eaf3ad8681415c9ddc90db20ac5c2d780dab4882eac98b8d8f13859f3c9",
+      "bytes": 483
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry\\loading\\portrait-import.json",
+      "sha256": "ee22b5a40b96a543ab80c363a9f1b3062a248644c80c22dc2c239863653d5890",
+      "bytes": 3858
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\appearance_direction_contract.py",
+      "sha256": "ca446dd11de3c2c89fc0a10680d1d792efda827b8d2da54adf80bfb05048a0fa",
+      "bytes": 1748
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\audit_portrait_priority_handoff.py",
+      "sha256": "fff454cd6caf0e9366986314e68cf5bacc0b5e711ce62c3f1ad8a579f8c31be4",
+      "bytes": 10260
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\audit_portrait_priority_joint.py",
+      "sha256": "5a6dc3ae6c0ae5e4b50a40ceae0b1c05b2507cc4d363c24edc20aca2d20c283f",
+      "bytes": 2869
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\audit_portrait_priority_preflight.py",
+      "sha256": "fdcf0a0ea0c740101fcc70625e83432d3e7eebbb46cb9feb8c4f4fe3734e1d29",
+      "bytes": 3682
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\flame_open_model.py",
+      "sha256": "d3684ea1e8578fa18b1b4ee132aadd01c1fd1668b3f4500dec3748bedcefe0bd",
+      "bytes": 9196
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_accessories.py",
+      "sha256": "6da683a49a31fb37b61a3a8890440575d56c3c459de52850ea476f4b826d0e95",
+      "bytes": 3779
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_components_v2.py",
+      "sha256": "832cd8363bc130bed69d07a641ed83170a68ef0bbca2ee85ff2687a6f9163161",
+      "bytes": 24979
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_components_v3.py",
+      "sha256": "baa1c1ddf9253b30d298fce74c4e113cc58833bcb45c549459d2c944f31962b8",
+      "bytes": 6747
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_compose_v3.py",
+      "sha256": "31149af0609ae0d488fef0c7412a0865c0cb59cf11730fe342bacb170ec3dd0d",
+      "bytes": 5700
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_detail_controlled.py",
+      "sha256": "e20c3782f5bec58bcbd2d418d23705f50f147dc0798b24f4a268e763c0cb110e",
+      "bytes": 18310
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_evidence_stage.py",
+      "sha256": "11946055270af7b5b7ab6cd8074584e4291b3b3a68af2c6a220349f0b52e18d5",
+      "bytes": 2333
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_face.py",
+      "sha256": "f64131100176ca91f38d575704f73244e33dc5c752d665a840e8f8632bbf4659",
+      "bytes": 14666
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_fullframe.py",
+      "sha256": "4080839cd67c91f33594929a41ee55b84153a5ba39ebdd6335f34a9fad928478",
+      "bytes": 2755
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_joint_visibility.py",
+      "sha256": "1916590fea23ae92a6a87cb2d010f863151a489d49b8c6c697bbb71300b4e224",
+      "bytes": 9618
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_live_prepare.py",
+      "sha256": "8f66b3ecaf9955db44c5f3f88bdc987f7748aec2549e0f47290dab0efc6fc17f",
+      "bytes": 13207
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_local_lines.py",
+      "sha256": "d77b11c307d7f66cab9332b2e4976602e2e052620903fed7389ba187725ef526",
+      "bytes": 10119
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_observations.py",
+      "sha256": "15ee432c1e7d9867e2f7d514ba3b9037f3cc2e573854a5d7e0eea3f62e079d56",
+      "bytes": 10120
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_patch_acceptance.py",
+      "sha256": "8ff54407e7cddb72f473108b1f60dd03ab82456e9e6f89fdae6f3e80c69d3624",
+      "bytes": 1213
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_patch_correspondence.py",
+      "sha256": "1e397bb96939435697a782b4f38716eed0c3a50663ec5411db109fe1e9b893d4",
+      "bytes": 5518
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_portrait_capacity.py",
+      "sha256": "1dc2a696f7163fc855d307ae89729a2c2f25ca83e9cb2912bfb3effe984a1d4d",
+      "bytes": 5955
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_portrait_local_v3.py",
+      "sha256": "5dbac45b5846e05afd2b09951f48caa4dd433058c0c47b83e2d0f947538edb91",
+      "bytes": 4209
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_portrait_model.py",
+      "sha256": "626f0efeef69be398323ee3979dc19384284c88943d87fd87d7341e91b8c084d",
+      "bytes": 22538
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_portrait_pipeline.py",
+      "sha256": "1ae6a8259c6ef5c8d9e93fda365f781f62ccb8e6fcaef9a2f1da457584d9b175",
+      "bytes": 25876
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_portrait_priority.py",
+      "sha256": "799014fa9883e6c4eeba62d12e5dbb4385f719f2b3ab14cb76d4fb8ef8ce262c",
+      "bytes": 30990
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_pose.py",
+      "sha256": "6245271c529db8ea1faa1d9dd4c849add209c9d40c3157e71ae134be4fd3d947",
+      "bytes": 8143
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_reference_static.py",
+      "sha256": "a0bc2a77718770072b043585df75e48fb255736518a08d246182ade53c113cc0",
+      "bytes": 8879
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_research_state.py",
+      "sha256": "4cd7f18137b15441064a0b0f41a15b20c713c45ce47e9849b03b860ba54cc202",
+      "bytes": 10078
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_runtime.py",
+      "sha256": "c6327ea800e06e91179df3a41bdedee5714c04a7b0f591c62dd4615295f5ccbe",
+      "bytes": 4370
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_scene.py",
+      "sha256": "b19b7d9f6b3c632961561fbedc5b3fb136a09c5b5d1baf7ee33a55375df7e677",
+      "bytes": 43974
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_schedule.py",
+      "sha256": "0cc7561776241f4f6f0765d4df0ae01b9e24f038687ac0a66b0c2f9f1b66d60a",
+      "bytes": 794
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_shared_surface.py",
+      "sha256": "3847850c34a86d02b575fe9913eb98ce6fc007a80fa646fe3915543178e73801",
+      "bytes": 4325
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_shared_v2.py",
+      "sha256": "0a39ea562c3c92edff2c56ef8a6fe43d3ce5a1d09c2980cad84cc8ba830b14c7",
+      "bytes": 41831
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_surface_evidence.py",
+      "sha256": "949713b00e320162455493981cef1df66fafcecad6967820dd2b8aa6dcc84f96",
+      "bytes": 6808
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_surface_patch.py",
+      "sha256": "fe7ad773b916b8dffe8d50aa197cabe8213e2f56637bbbb8f1e25c98f32ad392",
+      "bytes": 16217
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_t2_local.py",
+      "sha256": "187fa3ed6e420709ba5051e1146f4c7215cf561addaa3758e65dee7e646d5a88",
+      "bytes": 8043
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_train.py",
+      "sha256": "a2055c031452638d99c53b947a0ba13158ee4ed0588095a33269ccfea45854f0",
+      "bytes": 14802
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_train_environment.py",
+      "sha256": "dc11a58b07907dfb3ba6eff489cca2f94efd5de34d77f232c10d73016456000b",
+      "bytes": 9960
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_train_joint.py",
+      "sha256": "4af2934fd6199ae42cdf8ca14e2abdced2af9de2cd635b7cd644dd23cd7f8c6c",
+      "bytes": 17859
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_view.py",
+      "sha256": "544d61c3e7d0bdefc34b8a0506090bf36fc05d0feb3819cad5fc40ac3c084651",
+      "bytes": 6053
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_worker.py",
+      "sha256": "da2249ea1e5f883359336e4b42d40c3e00e47fc7147b9303d8c4bbbfdb1a9050",
+      "bytes": 28969
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\reconstruction_world_static_v3.py",
+      "sha256": "b8240eccfaff555ff37fdc20fbf1bf254452b2cc1959447c5c9f46e5934b85cd",
+      "bytes": 2496
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\run_surface_body_motion.py",
+      "sha256": "89c0e3b08dff9353404e6a81b8f0c755c6e2049891e182fa3c27bc2ec6a71817",
+      "bytes": 6234
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\run_surface_geometry.py",
+      "sha256": "74ec1ce234cecc3b06da0af8e3a04ad241c89c1b42f25630fa8bdc6de74d8ff6",
+      "bytes": 9747
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\algorithm-source\\run_surface_window.py",
+      "sha256": "b623cf30e4bab4417dd12de7ea9be2c6d5bae19a3b8b1fb3e63dcdf6ecca3505",
+      "bytes": 4617
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G0-images\\frame_0015.png.npz",
+      "sha256": "0e022f035d91371943640480d2ed45f648bc4ba10e569f87d6a0a4e9a5158ab1",
+      "bytes": 4821378
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G0-images\\frame_0035.png.npz",
+      "sha256": "f0703ca444823f98078f312be4ff8793e1e20986fbc652d5f4d3ad5b91103846",
+      "bytes": 5131598
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G0-images\\frame_0055.png.npz",
+      "sha256": "eb88199c2a6f2dea5477427e8a64a0e8d206b54f850beb239280927aa6381d01",
+      "bytes": 5244551
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G0-images\\frame_0058.png.npz",
+      "sha256": "9ef5653c5d171f62197fd98740eb6897faf5383580df97fd349d0d789566ce2b",
+      "bytes": 5481652
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G0-images\\frame_0059.png.npz",
+      "sha256": "b181edd2ac57da4becb26ea7068fd880a582c6fa219b81078900af8a36ca8738",
+      "bytes": 5689186
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G0-images\\frame_0061.png.npz",
+      "sha256": "c2c66b2c39f6a34d5e73a6314396e34508a458eded58ac576fbc0ebd6d8e1a4f",
+      "bytes": 6067232
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G0-images\\frame_0075.png.npz",
+      "sha256": "88a7d38551c416478db114452ebe4fa84d9c1fcd9b464371034f87db13f01a75",
+      "bytes": 8369069
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G0-images\\frame_0080.png.npz",
+      "sha256": "7f0c0788e1eb752f44e6283c01447c710389b2306586dbc4636b7f38384bf2d6",
+      "bytes": 9018546
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G0-images\\frame_0095.png.npz",
+      "sha256": "1e249869f4b7c6db29b13675f705e2ac26ea65f8a090d2df213759ed24c04975",
+      "bytes": 7810666
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G0-images\\frame_0098.png.npz",
+      "sha256": "04e4582aef175ab4891c49ff3f92444ba3a94484e9fa60c312b27e1edc2ffbef",
+      "bytes": 7457336
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G0-images\\frame_0099.png.npz",
+      "sha256": "14aa47b067ca3a175069e563bf47cd26f9a4f521bf8867df8ab4153aaef56ecf",
+      "bytes": 7598005
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G0-images\\frame_0101.png.npz",
+      "sha256": "b7b0c16395a01e2ed983d827217538afbcabab25124fa16d077fd5e20a615ce1",
+      "bytes": 6994513
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G0-images\\frame_0115.png.npz",
+      "sha256": "f294cdae85089303c21a1409a41e1109ac153ffab4d7a5e4e1cac4be30cfff9b",
+      "bytes": 5336011
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G0-images\\frame_0130.png.npz",
+      "sha256": "87426dcc65e60c23922259dbc552b54fea7fa74ac2791c7d1cdfd47f2d12a31f",
+      "bytes": 6467744
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G0-images\\frame_0145.png.npz",
+      "sha256": "2b55aa7870d0190523f103fec4cfa65ca4564c0a3d9f648ee6227202920c4bdf",
+      "bytes": 6208097
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G0-images\\metrics.json",
+      "sha256": "86bbc1914e5229d218eb5f61bb4b1e4722eb58f545a5ebcb6fc11df167af65bc",
+      "bytes": 36563
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G1-geometry-images\\frame_0015.png.npz",
+      "sha256": "cbc56593ffc21cb65f281d280fefbbca6c98f503218ac8f4ba6f03c4d5db230a",
+      "bytes": 4821033
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G1-geometry-images\\frame_0035.png.npz",
+      "sha256": "5aa869001b5460d0843e9806820cb1ac84b8eea6e3635c3111f14e51249d34ef",
+      "bytes": 5131627
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G1-geometry-images\\frame_0055.png.npz",
+      "sha256": "a08fdd7dc322758374a7cde74fc1b6da20ce9ee4c5fdeaf29bd3872be19ac11a",
+      "bytes": 5245043
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G1-geometry-images\\frame_0058.png.npz",
+      "sha256": "9d044c58c5d268385e30adda7aa854991d6a595c100e8008527c93ec5970d23a",
+      "bytes": 5482130
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G1-geometry-images\\frame_0059.png.npz",
+      "sha256": "d60e86e853d9c6b89989f76eee0e40272b5743ffee5f8147f4d28ab76e8014dc",
+      "bytes": 5688927
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G1-geometry-images\\frame_0061.png.npz",
+      "sha256": "3f20500bdd5b62a3bd8f81f5421aea60132f7ff728ed3a1fb01feca7700a9305",
+      "bytes": 6067178
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G1-geometry-images\\frame_0075.png.npz",
+      "sha256": "d44e1e3602708e485ffa3d358632c9c5b3d0b8df008c17e0be5382daca6ae571",
+      "bytes": 8366697
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G1-geometry-images\\frame_0080.png.npz",
+      "sha256": "efac6de89dc2bf6a4ea98b1cdcd0821c5a305bf06adf1670cdd4d3636a00a7a8",
+      "bytes": 9017330
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G1-geometry-images\\frame_0095.png.npz",
+      "sha256": "2c0e85ee75202495cb602b1b5ce3e8d1465994387e9db194ad4b184d3b8ac634",
+      "bytes": 7807369
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G1-geometry-images\\frame_0098.png.npz",
+      "sha256": "d531a3f34697cafa119c3a6d07937e442d12ab127f5dc9ec015ff82660b729d4",
+      "bytes": 7457216
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G1-geometry-images\\frame_0099.png.npz",
+      "sha256": "b2926847050884d68129c02e33fdf7d7d1b7eb833b368df80a1cff89b793a189",
+      "bytes": 7596493
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G1-geometry-images\\frame_0101.png.npz",
+      "sha256": "29b7c66b1b32099b44cfb14f37bcd9cff5325a1c2ca80c23281315cab7054758",
+      "bytes": 6994296
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G1-geometry-images\\frame_0115.png.npz",
+      "sha256": "5ae795245b5f426026e85d9f87a51ca4fffdc23fe19963993825808b7af81e4b",
+      "bytes": 5336372
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G1-geometry-images\\frame_0130.png.npz",
+      "sha256": "bff8e10d325da5a0c92c7cec3b9eaf2fd5ba1ea32f4abdc0f2f152604532712e",
+      "bytes": 6467994
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G1-geometry-images\\frame_0145.png.npz",
+      "sha256": "2a5e73ce789cd888c27a85f34a3364c13209ad145be07bc62e057865fa6dc894",
+      "bytes": 6208223
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\G1-geometry-images\\metrics.json",
+      "sha256": "c02bd19825e2c9be28fbd6547d129fd5002ecec790d74703e0a1ed2d7a7026aa",
+      "bytes": 36567
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\loading\\cloth_supported_seeds.npz",
+      "sha256": "3dda310a71f172577d62e52d74016e06b7594745bca0b5da1f8f90bf17225f43",
+      "bytes": 10090
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\loading\\initialization.json",
+      "sha256": "fc1c3eaf3ad8681415c9ddc90db20ac5c2d780dab4882eac98b8d8f13859f3c9",
+      "bytes": 483
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\F-geometry-evaluation\\loading\\portrait-import.json",
+      "sha256": "ee22b5a40b96a543ab80c363a9f1b3062a248644c80c22dc2c239863653d5890",
+      "bytes": 3858
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\appearance_direction_contract.py",
+      "sha256": "ca446dd11de3c2c89fc0a10680d1d792efda827b8d2da54adf80bfb05048a0fa",
+      "bytes": 1748
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\audit_portrait_priority_handoff.py",
+      "sha256": "fff454cd6caf0e9366986314e68cf5bacc0b5e711ce62c3f1ad8a579f8c31be4",
+      "bytes": 10260
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\audit_portrait_priority_joint.py",
+      "sha256": "5a6dc3ae6c0ae5e4b50a40ceae0b1c05b2507cc4d363c24edc20aca2d20c283f",
+      "bytes": 2869
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\audit_portrait_priority_preflight.py",
+      "sha256": "fdcf0a0ea0c740101fcc70625e83432d3e7eebbb46cb9feb8c4f4fe3734e1d29",
+      "bytes": 3682
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\flame_open_model.py",
+      "sha256": "d3684ea1e8578fa18b1b4ee132aadd01c1fd1668b3f4500dec3748bedcefe0bd",
+      "bytes": 9196
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_accessories.py",
+      "sha256": "6da683a49a31fb37b61a3a8890440575d56c3c459de52850ea476f4b826d0e95",
+      "bytes": 3779
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_components_v2.py",
+      "sha256": "832cd8363bc130bed69d07a641ed83170a68ef0bbca2ee85ff2687a6f9163161",
+      "bytes": 24979
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_components_v3.py",
+      "sha256": "baa1c1ddf9253b30d298fce74c4e113cc58833bcb45c549459d2c944f31962b8",
+      "bytes": 6747
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_compose_v3.py",
+      "sha256": "31149af0609ae0d488fef0c7412a0865c0cb59cf11730fe342bacb170ec3dd0d",
+      "bytes": 5700
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_detail_controlled.py",
+      "sha256": "e20c3782f5bec58bcbd2d418d23705f50f147dc0798b24f4a268e763c0cb110e",
+      "bytes": 18310
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_evidence_stage.py",
+      "sha256": "11946055270af7b5b7ab6cd8074584e4291b3b3a68af2c6a220349f0b52e18d5",
+      "bytes": 2333
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_face.py",
+      "sha256": "f64131100176ca91f38d575704f73244e33dc5c752d665a840e8f8632bbf4659",
+      "bytes": 14666
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_fullframe.py",
+      "sha256": "4080839cd67c91f33594929a41ee55b84153a5ba39ebdd6335f34a9fad928478",
+      "bytes": 2755
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_joint_visibility.py",
+      "sha256": "1916590fea23ae92a6a87cb2d010f863151a489d49b8c6c697bbb71300b4e224",
+      "bytes": 9618
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_live_prepare.py",
+      "sha256": "8f66b3ecaf9955db44c5f3f88bdc987f7748aec2549e0f47290dab0efc6fc17f",
+      "bytes": 13207
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_local_lines.py",
+      "sha256": "d77b11c307d7f66cab9332b2e4976602e2e052620903fed7389ba187725ef526",
+      "bytes": 10119
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_mvs_contract.py",
+      "sha256": "a45468854590badbd99533d1c3730133342bc2ab30da0faaab69c61b9d73e28e",
+      "bytes": 1826
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_observations.py",
+      "sha256": "15ee432c1e7d9867e2f7d514ba3b9037f3cc2e573854a5d7e0eea3f62e079d56",
+      "bytes": 10120
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_patch_acceptance.py",
+      "sha256": "8ff54407e7cddb72f473108b1f60dd03ab82456e9e6f89fdae6f3e80c69d3624",
+      "bytes": 1213
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_patch_correspondence.py",
+      "sha256": "1e397bb96939435697a782b4f38716eed0c3a50663ec5411db109fe1e9b893d4",
+      "bytes": 5518
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_portrait_capacity.py",
+      "sha256": "1dc2a696f7163fc855d307ae89729a2c2f25ca83e9cb2912bfb3effe984a1d4d",
+      "bytes": 5955
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_portrait_local_v3.py",
+      "sha256": "5dbac45b5846e05afd2b09951f48caa4dd433058c0c47b83e2d0f947538edb91",
+      "bytes": 4209
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_portrait_model.py",
+      "sha256": "626f0efeef69be398323ee3979dc19384284c88943d87fd87d7341e91b8c084d",
+      "bytes": 22538
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_portrait_pipeline.py",
+      "sha256": "1ae6a8259c6ef5c8d9e93fda365f781f62ccb8e6fcaef9a2f1da457584d9b175",
+      "bytes": 25876
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_portrait_priority.py",
+      "sha256": "799014fa9883e6c4eeba62d12e5dbb4385f719f2b3ab14cb76d4fb8ef8ce262c",
+      "bytes": 30990
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_pose.py",
+      "sha256": "6245271c529db8ea1faa1d9dd4c849add209c9d40c3157e71ae134be4fd3d947",
+      "bytes": 8143
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_reference_static.py",
+      "sha256": "a0bc2a77718770072b043585df75e48fb255736518a08d246182ade53c113cc0",
+      "bytes": 8879
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_research_state.py",
+      "sha256": "4cd7f18137b15441064a0b0f41a15b20c713c45ce47e9849b03b860ba54cc202",
+      "bytes": 10078
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_runtime.py",
+      "sha256": "c6327ea800e06e91179df3a41bdedee5714c04a7b0f591c62dd4615295f5ccbe",
+      "bytes": 4370
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_scene.py",
+      "sha256": "b19b7d9f6b3c632961561fbedc5b3fb136a09c5b5d1baf7ee33a55375df7e677",
+      "bytes": 43974
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_schedule.py",
+      "sha256": "0cc7561776241f4f6f0765d4df0ae01b9e24f038687ac0a66b0c2f9f1b66d60a",
+      "bytes": 794
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_shared_surface.py",
+      "sha256": "3847850c34a86d02b575fe9913eb98ce6fc007a80fa646fe3915543178e73801",
+      "bytes": 4325
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_shared_v2.py",
+      "sha256": "0a39ea562c3c92edff2c56ef8a6fe43d3ce5a1d09c2980cad84cc8ba830b14c7",
+      "bytes": 41831
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_surface_evidence.py",
+      "sha256": "949713b00e320162455493981cef1df66fafcecad6967820dd2b8aa6dcc84f96",
+      "bytes": 6808
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_surface_patch.py",
+      "sha256": "fe7ad773b916b8dffe8d50aa197cabe8213e2f56637bbbb8f1e25c98f32ad392",
+      "bytes": 16217
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_t2_local.py",
+      "sha256": "187fa3ed6e420709ba5051e1146f4c7215cf561addaa3758e65dee7e646d5a88",
+      "bytes": 8043
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_train.py",
+      "sha256": "a2055c031452638d99c53b947a0ba13158ee4ed0588095a33269ccfea45854f0",
+      "bytes": 14802
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_train_environment.py",
+      "sha256": "dc11a58b07907dfb3ba6eff489cca2f94efd5de34d77f232c10d73016456000b",
+      "bytes": 9960
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_train_joint.py",
+      "sha256": "4af2934fd6199ae42cdf8ca14e2abdced2af9de2cd635b7cd644dd23cd7f8c6c",
+      "bytes": 17859
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_view.py",
+      "sha256": "544d61c3e7d0bdefc34b8a0506090bf36fc05d0feb3819cad5fc40ac3c084651",
+      "bytes": 6053
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_worker.py",
+      "sha256": "da2249ea1e5f883359336e4b42d40c3e00e47fc7147b9303d8c4bbbfdb1a9050",
+      "bytes": 28969
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\reconstruction_world_static_v3.py",
+      "sha256": "b8240eccfaff555ff37fdc20fbf1bf254452b2cc1959447c5c9f46e5934b85cd",
+      "bytes": 2496
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\run_surface_body_motion.py",
+      "sha256": "89c0e3b08dff9353404e6a81b8f0c755c6e2049891e182fa3c27bc2ec6a71817",
+      "bytes": 6234
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\run_surface_component_training.py",
+      "sha256": "b915e2e928f191d504f13d06443b226e01343c1539b1e9b6489daa710339843a",
+      "bytes": 8586
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\run_surface_geometry.py",
+      "sha256": "74ec1ce234cecc3b06da0af8e3a04ad241c89c1b42f25630fa8bdc6de74d8ff6",
+      "bytes": 9747
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\algorithm-source\\run_surface_window.py",
+      "sha256": "b623cf30e4bab4417dd12de7ea9be2c6d5bae19a3b8b1fb3e63dcdf6ecca3505",
+      "bytes": 4617
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\extra-F\\frame_0028.png.npz",
+      "sha256": "6eddef9aca2dc254e648ed89dd3cc69bfea9bf5d8ab0f721e7ceba826e5ce387",
+      "bytes": 5294926
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\extra-F\\frame_0042.png.npz",
+      "sha256": "7afa63c333d87eeb6a7258e79bd0e52f75366b3c2c17b51ea4c0e40288e967cf",
+      "bytes": 5002568
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\extra-F\\frame_0080.png.npz",
+      "sha256": "efac6de89dc2bf6a4ea98b1cdcd0821c5a305bf06adf1670cdd4d3636a00a7a8",
+      "bytes": 9017330
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\extra-F\\metrics.json",
+      "sha256": "de262aa6154c1c69e8fe8fae88c73450718fcf7bd4e24bbc13e8291f005368de",
+      "bytes": 7286
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\extra-R0\\frame_0028.png.npz",
+      "sha256": "56046183f6b48a5d0ba8325f79e706a8d5bd94a64b892da7eaf1b8b607fc4c37",
+      "bytes": 5294786
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\extra-R0\\frame_0042.png.npz",
+      "sha256": "e6499d60d7f8692f134fadf28ddd11c8adc000e17175d8b98589697b0c20dcc1",
+      "bytes": 5002375
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\extra-R0\\frame_0080.png.npz",
+      "sha256": "7f0c0788e1eb752f44e6283c01447c710389b2306586dbc4636b7f38384bf2d6",
+      "bytes": 9018546
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\extra-R0\\metrics.json",
+      "sha256": "013b86014e7088165b31f94953c4e083eedd1b4ac2e605556fe5841f0de07f4f",
+      "bytes": 7291
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\loading\\cloth_supported_seeds.npz",
+      "sha256": "3dda310a71f172577d62e52d74016e06b7594745bca0b5da1f8f90bf17225f43",
+      "bytes": 10090
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\loading\\initialization.json",
+      "sha256": "fc1c3eaf3ad8681415c9ddc90db20ac5c2d780dab4882eac98b8d8f13859f3c9",
+      "bytes": 483
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\loading\\portrait-import.json",
+      "sha256": "ee22b5a40b96a543ab80c363a9f1b3062a248644c80c22dc2c239863653d5890",
+      "bytes": 3858
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\playcanvas-baseline-01\\F-local.rgba",
+      "sha256": "f65a8d6bd99109959a3e570b6b2d723537faf5ed0a6baac234c0f8a4c780d51a",
+      "bytes": 8294400
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\final-evidence\\playcanvas-baseline-01\\report.json",
+      "sha256": "8aaf29720a74cfd70256c8dfb0f0b566f8c6cc07feb18138c6ce5c9607929db7",
+      "bytes": 4303
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\R\\playcanvas-fine-01\\R0.rgba",
+      "sha256": "6867a07e2fa983c4d594b81df181f6a335ccfa43d343f1c170dc61baaf3914d2",
+      "bytes": 8294400
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\R\\playcanvas-fine-01\\report.json",
+      "sha256": "3378ba9a967d8c66d85bb2f93fb9126b019021ec8c8c497c3dfdb7284fa256a7",
+      "bytes": 4352
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\R\\playcanvas-large-01\\R0.rgba",
+      "sha256": "2845df1484e486e8ada8e8fc3e46d9738d8e97524295f6866063ec7d022670c1",
+      "bytes": 8294400
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\R\\playcanvas-large-01\\report.json",
+      "sha256": "8db738b77ceba2737f268f4077d1bccc6fd606d06b7de9a24a5231dab89f67c5",
+      "bytes": 4348
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\R-control\\playcanvas-baseline-01\\normal.rgba",
+      "sha256": "7be5203edb0ff4e39cd53598853d1250eb5045ca1174357fe28a17718a21e227",
+      "bytes": 8294400
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\R-control\\playcanvas-baseline-01\\report.json",
+      "sha256": "1d3abd48f9a97ac71e7f94e18d349132141f0ff847db4b1a180962d684fedc8c",
+      "bytes": 6212
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\R-control\\playcanvas-baseline-01\\wide.rgba",
+      "sha256": "7ead507a3fdd7d0df55bc10838f606b6c63ddbb039adbe6465e55873a3d04e6c",
+      "bytes": 8294400
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\R-control\\playcanvas-fine-01\\normal.rgba",
+      "sha256": "7be5203edb0ff4e39cd53598853d1250eb5045ca1174357fe28a17718a21e227",
+      "bytes": 8294400
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\R-control\\playcanvas-fine-01\\report.json",
+      "sha256": "e8675c9750895341c47f33a6ee3eb33ecc725f88d5c28ebf9be108a023fd9e8f",
+      "bytes": 6216
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\R-control\\playcanvas-fine-01\\wide.rgba",
+      "sha256": "7ead507a3fdd7d0df55bc10838f606b6c63ddbb039adbe6465e55873a3d04e6c",
+      "bytes": 8294400
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\R-control\\playcanvas-large-01\\normal.rgba",
+      "sha256": "8a2f7f9790708545b1a48440b777fce89a18b91054f0598c8afe7cb120c688e6",
+      "bytes": 8294400
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\R-control\\playcanvas-large-01\\report.json",
+      "sha256": "f823c95f288d3400e55410237980859d16e5f88bffbf45a6f5921dbed94a2586",
+      "bytes": 6208
+    },
+    {
+      "path": "backend\\.sources\\surface-evidence-face-clothing-20260929-a\\R-control\\playcanvas-large-01\\wide.rgba",
+      "sha256": "9c4c3d5c4b9c09e29c18e8520fd889079fb1eaf884129f4bd5a9fec1eee3b3a9",
+      "bytes": 8294400
+    }
+  ],
+  "note": "local private assets; hashes and Git are not an independent asset backup"
+}

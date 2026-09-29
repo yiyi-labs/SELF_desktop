@@ -1,0 +1,10 @@
+/mnt/c/Users/30243/.codex/worktrees/reconstruction-bottom-up-20260928/olay/backend/run_room_surface_replacement.py:23: UserWarning: Creating a tensor from a list of numpy.ndarrays is extremely slow. Please consider converting the list to a single numpy.ndarray with numpy.array() before converting to a tensor. (Triggered internally at /pytorch/torch/csrc/utils/tensor_new.cpp:253.)
+  out=Path(out).resolve();start=time.perf_counter();data,plan,m,contract=load_stage(manifest,out);mvs=Path(mvs);observations=json.loads((mvs/'contract.json').read_text());names=observations['names'];cloud=read_mvs_cloud(mvs/'dense.ply');xyz=cloud['xyz'];K=data['K'];C=data['worlds'];d=torch.device('cuda');t=lambda a:torch.as_tensor(a,device=d,dtype=torch.float32)
+{"step": 1, "name": "frame_0139.png", "loss": 0.19402235746383667}
+{"step": 30, "name": "frame_0139.png", "loss": 0.18498098850250244}
+{"step": 60, "name": "frame_0138.png", "loss": 0.1786821335554123}
+{"step": 90, "name": "frame_0136.png", "loss": 0.17106543481349945}
+{"step": 120, "name": "frame_0133.png", "loss": 0.1585657149553299}
+{"step": 150, "name": "frame_0135.png", "loss": 0.16086776554584503}
+{"step": 180, "name": "frame_0134.png", "loss": 0.154790461063385}
+ROOM_SURFACE_REPLACEMENT_CANDIDATE_COMPLETE_NOT_PUBLISHED

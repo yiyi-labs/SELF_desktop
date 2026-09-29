@@ -1,0 +1,18 @@
+test_family_members_without_explicit_evidence_remain (test_reconstruction_surface_evidence.RetirementTests) ... ok
+test_unknown_or_wrong_namespace_cannot_be_retired (test_reconstruction_surface_evidence.RetirementTests) ... ok
+test_export_preserves_rgb_and_explicit_image_identity (test_reconstruction_surface_evidence.SurfaceContractTests) ... ok
+test_known_geometry_uses_same_shared_point (test_reconstruction_surface_evidence.SurfaceContractTests) ... ok
+test_mvs_views_and_weights_are_not_dropped (test_reconstruction_surface_evidence.SurfaceContractTests) ... ok
+test_patch_refinement_known_subpixel_translation (test_reconstruction_surface_evidence.SurfaceContractTests) ... ok
+test_model_serialization_keeps_surface_base_and_binding (test_reconstruction_shared_surface.SharedObservationTests) ... ok
+test_one_anchor_multiple_observations_have_surface_gradients (test_reconstruction_shared_surface.SharedObservationTests) ... /mnt/c/Users/30243/.codex/worktrees/reconstruction-bottom-up-20260928/olay/backend/test_reconstruction_shared_surface.py:40: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  self.assertLessEqual(float(m.displacement().norm(dim=-1).max()),.10000001)
+ok
+test_bounded_rotation_gradcheck (test_reconstruction_shared_surface.SharedSurfaceTests) ... ok
+test_transport_gradient_and_identity (test_reconstruction_shared_surface.SharedSurfaceTests) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.632s
+
+OK

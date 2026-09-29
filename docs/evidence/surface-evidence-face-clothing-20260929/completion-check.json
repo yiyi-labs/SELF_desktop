@@ -1,0 +1,30 @@
+{
+  "PUnchanged": true,
+  "frozenBaseIsAncestor": true,
+  "explicitCodeFiles": [
+    "backend/audit_room_retirement_scope.py",
+    "backend/audit_surface_control_asset.py",
+    "backend/audit_surface_final_evidence.py",
+    "backend/audit_surface_identity.py",
+    "backend/audit_surface_orbit.py",
+    "backend/audit_surface_render_contract.py",
+    "backend/audit_surface_summary.py",
+    "backend/reconstruction_evidence_stage.py",
+    "backend/reconstruction_mvs_contract.py",
+    "backend/reconstruction_surface_evidence.py",
+    "backend/run_garment_surface_patch.py",
+    "backend/run_room_surface_replacement.py",
+    "backend/run_static_surface_window.py",
+    "backend/run_surface_body_motion.py",
+    "backend/run_surface_component_training.py",
+    "backend/run_surface_geometry.py",
+    "backend/run_surface_window.py",
+    "backend/test_reconstruction_surface_evidence.py",
+    "scripts/probe-surface-render-contract.mjs"
+  ],
+  "finalCodeSnapshotMatches": true,
+  "reportArtifactLinksChecked": 6,
+  "stagedBeforeDocs": [],
+  "deployed": false,
+  "transferred": false
+}
