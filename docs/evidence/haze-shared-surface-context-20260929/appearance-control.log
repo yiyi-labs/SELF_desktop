@@ -1,0 +1,11 @@
+{"step": 1, "views": [{"name": "frame_0025.png", "loss": 0.015044305473566055}, {"name": "frame_0039.png", "loss": 0.015692586079239845}]}
+{"step": 20, "views": [{"name": "frame_0014.png", "loss": 0.025445988401770592}, {"name": "frame_0025.png", "loss": 0.013754711486399174}]}
+{"step": 40, "views": [{"name": "frame_0039.png", "loss": 0.01408697385340929}, {"name": "frame_0134.png", "loss": 0.031599562615156174}]}
+{"step": 60, "views": [{"name": "frame_0014.png", "loss": 0.025707557797431946}, {"name": "frame_0042.png", "loss": 0.01344742625951767}]}
+{"step": 80, "views": [{"name": "frame_0135.png", "loss": 0.012546882964670658}, {"name": "frame_0038.png", "loss": 0.016336947679519653}]}
+{"step": 100, "views": [{"name": "frame_0139.png", "loss": 0.015432010404765606}, {"name": "frame_0010.png", "loss": 0.016015371307730675}]}
+{"step": 120, "views": [{"name": "frame_0042.png", "loss": 0.014020442962646484}, {"name": "frame_0027.png", "loss": 0.018625032156705856}]}
+/mnt/c/Users/30243/.codex/worktrees/reconstruction-bottom-up-20260928/olay/backend/run_haze_appearance_control.py:52: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  result={'rows':rows,'seconds':time.perf_counter()-start,'curve':curve,'updates':{k:float((getattr(p,k)[active]-original[k][active]).abs().mean()) for k in keys},
+{"seconds": 17.934327787999997, "updates": {"sh": 0.017749708145856857, "opacity_logits": 0.07274764031171799, "log_scales": 0.01925993524491787, "quats": 0.005387548822909594}, "peakAllocatedMiB": 612.76318359375, "peakReservedMiB": 692.0, "G1Executed": false, "G1Reason": "both_geometry_candidates_failed_multi_view_checks", "published": false}

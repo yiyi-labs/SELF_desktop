@@ -1,0 +1,11 @@
+{'step': 1, 'loss': 1.5729743242263794}
+{'step': 20, 'loss': 1.1805472373962402}
+{'step': 40, 'loss': 0.981723427772522}
+{'step': 60, 'loss': 0.8953911662101746}
+{'step': 80, 'loss': 0.8900889158248901}
+{'step': 100, 'loss': 0.8875313997268677}
+{'step': 120, 'loss': 0.8854297399520874}
+/mnt/c/Users/30243/.codex/worktrees/reconstruction-bottom-up-20260928/olay/backend/run_haze_bounded_pose.py:55: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  'poseMaxRawChange':float((m.pose.delta-pose_start).abs().max()),'areaRatioMin':float(ratio.min()),'normalCosMin':float(cos.min()),'surfaceMaxPixels':float(m.displacement().norm(dim=-1).max()/m.portrait.metric_per_pixel.median()),'published':False}
+{"geometryScreen": false, "failures": ["view_regression:frame_0028.png", "view_regression:frame_0042.png"], "seconds": 46.225846411000006, "poseMaxRawChange": 0.20000001788139343, "areaRatioMin": 0.9846037030220032, "normalCosMin": 0.9999336004257202, "surfaceMaxPixels": 0.6662384867668152, "published": false}

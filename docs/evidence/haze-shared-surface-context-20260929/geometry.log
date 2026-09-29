@@ -1,0 +1,12 @@
+/mnt/c/Users/30243/.codex/worktrees/reconstruction-bottom-up-20260928/olay/backend/run_haze_shared_surface.py:155: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  row={'step':step,'loss':float(loss.detach()),'maxDisplacement':float(m.displacement().norm(dim=-1).max()),'controlGrad':float(m.surface_control.grad.norm())};curve.append(row);print(json.dumps(row),flush=True)
+{"step": 1, "loss": 1.5729743242263794, "maxDisplacement": 5.1685703510884196e-05, "controlGrad": 0.31023070216178894}
+{"step": 30, "loss": 1.2703217267990112, "maxDisplacement": 0.0006057472783140838, "controlGrad": 0.03709493950009346}
+{"step": 60, "loss": 1.240130066871643, "maxDisplacement": 0.0006498980801552534, "controlGrad": 0.01739528216421604}
+{"step": 90, "loss": 1.2282663583755493, "maxDisplacement": 0.0007282184669747949, "controlGrad": 0.008897672407329082}
+{"step": 120, "loss": 1.222288727760315, "maxDisplacement": 0.0007688446203246713, "controlGrad": 0.006408688146620989}
+{"step": 150, "loss": 1.2188118696212769, "maxDisplacement": 0.0007957033812999725, "controlGrad": 0.004782385192811489}
+{"step": 180, "loss": 1.216614007949829, "maxDisplacement": 0.0008138833800330758, "controlGrad": 0.0036979790311306715}
+{"geometryScreen": false, "failures": ["source_anchor_drift", "view_regression:frame_0005.png", "view_regression:frame_0013.png", "view_regression:frame_0025.png", "view_regression:frame_0028.png", "view_regression:frame_0037.png", "view_regression:frame_0039.png", "view_regression:frame_0042.png", "view_regression:frame_0134.png", "no_shared_improvement:third-withheld"], "tracks": 56, "seconds": 39.981901148999995}
+{"totalSeconds": 74.183006564, "allocatedMiB": 416.61328125, "reservedMiB": 470.0}

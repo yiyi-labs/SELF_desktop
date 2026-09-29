@@ -1,0 +1,20 @@
+{
+  "PHead": "f68587bb34f8970d21bda9231e15b2536a33df97",
+  "PStatusMatchesBefore": true,
+  "PHeadMatchesBefore": true,
+  "WHeadBeforeEvidenceCommit": "3f399ad044ce817c948e82d9ad1f1576fd321e3d",
+  "WStatus": [
+    "?? docs/evidence/haze-shared-surface-context-20260929/",
+    "?? docs/evidence/portrait-priority-pause-20260929.md",
+    "?? docs/evidence/portrait-priority-training-20260929/P-git-state.json",
+    "?? docs/evidence/portrait-priority-training-20260929/W-git-state.json",
+    "?? docs/evidence/reconstruction-stage2a-20260928/replay-report.md",
+    "?? docs/evidence/reconstruction-v3-targeted-audit-20260928/"
+  ],
+  "commits": [
+    "3f399ad044ce817c948e82d9ad1f1576fd321e3d Separate native display differences from finite room surface support",
+    "05fb04e408672d1c8ccbed1329ae8015faa4e74d Run bounded shared-surface geometry and appearance controls from frozen R0",
+    "461bf74efdd4164d05c6823a40cb1eb6481b953c Add isolated shared-surface anchors and differentiable covariance transport"
+  ],
+  "stagedBeforeEvidence": []
+}
