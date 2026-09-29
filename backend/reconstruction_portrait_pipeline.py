@@ -62,6 +62,7 @@ def tensor(x, device="cuda"):
 def make_frame(data, name, *, crop=True, half=False, device="cuda"):
     rgb = data["rgb"][name]; labels = data["labels"][name]
     K = data["K"].copy(); h, w = rgb.shape[:2]; rectangle = (0, 0, w, h)
+    full_size = (w, h); full_K = K.copy()
     if crop:
         observed = labels["face_core"] | labels["face_boundary"] | labels["hair_visible"] | labels["glasses_visible"]
         y, x = np.where(observed)
@@ -79,7 +80,8 @@ def make_frame(data, name, *, crop=True, half=False, device="cuda"):
             "K": tensor(K, device), "F": tensor(data["local"][name]["F"], device),
             "C": tensor(data["worlds"][name], device) if name in data["worlds"] else None,
             "mesh": tensor(data["local"][name]["mesh"], device), "rectangle": rectangle,
-            "name": name, "nativeScale": 2 if half else 1}
+            "name": name, "nativeScale": 2 if half else 1,
+            "fullSize": full_size, "fullK": tensor(full_K, device)}
 
 
 def head_loss(rendered, frame):

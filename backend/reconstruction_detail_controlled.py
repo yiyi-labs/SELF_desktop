@@ -17,6 +17,7 @@ from reconstruction_portrait_pipeline import make_frame,draw,head_loss,metrics,m
 from reconstruction_reference_static import BudgetedStaticStrategy,static_loss,static_regularization,valid_static_mask,valid_window_structure
 from reconstruction_research_state import FrameSampler,save_checkpoint,rng_state,restore_rng,replace_face_with_lineage
 from reconstruction_components_v3 import save_json,exact_state_hash
+from reconstruction_fullframe import draw_frame
 
 COMPONENTS=('skin_face','hair','glasses','neck_shoulders','clothing_upper')
 
@@ -73,11 +74,11 @@ class DetailModel(ResearchModel):
         return GaussianState(means,s.quats,s.scales,s.opacity,s.sh,parts)
     def render(self,frame,stage):
         f=self.adjusted_frame(frame);head=self.head_state(f);h,w=f['rgb'].shape[:2]
-        if stage=='T0':return draw(head,f['F'],f['K'],w,h)
+        if stage=='T0':return draw_frame(head,f['F'],f)
         if f['C'] is None:raise ValueError('no_measured_world_camera')
         head=head.to_world(f['C'],f['F'],self.scale)
         if stage!='T1':head=joined_state(head,self.room.state(),self.body_state(f['name']))
-        return draw(head,f['C'],f['K'],w,h,unit_scale=self.scale)
+        return draw_frame(head,f['C'],f,unit_scale=self.scale)
     def component_manifest(self):
         labels=self.component_origin[self.portrait.origin_index]
         return {'counts':{k:int((labels==i).sum()) if i<4 else len(self.body['means']) for i,k in enumerate(COMPONENTS)},
