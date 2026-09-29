@@ -438,6 +438,20 @@ def _surface_bits(mask):
         np.left_shift(np.uint64(1), np.arange(len(mask), dtype=np.uint64))[:, None], axis=0)
 
 
+def surface_barycentric_numerators(divisions):
+    """d=2 proposes one 3D centroid; other positive integer grids unchanged.
+
+    Identity reduction merges d=3/d=6 centroids. Triangle and point filters
+    remain mandatory; interpolated samples are not new depth measurements.
+    """
+    if divisions < 2:
+        raise ValueError('surface_divisions_must_be_at_least_two')
+    if divisions == 2:
+        return [(1, 1, 1)]
+    return [(a, b, divisions-a-b) for a in range(1, divisions)
+            for b in range(1, divisions-a)]
+
+
 def collect_supported_surface_pool(model, views, masks, rgb_images, original_anchors,
                                    output, *, namespace, max_edge_pixels=80,
                                    wall_seconds=1200, rss_limit_bytes=10*1024**3,
@@ -518,7 +532,7 @@ def collect_supported_surface_pool(model, views, masks, rgb_images, original_anc
                     cosine=float(abs(normal@ray));divisions=min(10,max(2,int(edge/9)))
                     reason=('edge' if edge>max_edge_pixels or edge<7 else
                             'depthSpread' if spread>.06 else 'degenerate' if norm<1e-8 else
-                            'normal' if cosine<.25 else 'noInteriorSamples' if divisions<3 else 'geometryAccepted')
+                            'normal' if cosine<.25 else 'geometryAccepted')
                     counts[reason]+=1
                     record={'view':name,'surfaceId':sid,'orderedPointIds':ids,'normal':normal.tolist(),
                             'edge':float(edge),'depthSpread':spread,'cosine':cosine,'divisions':divisions,'firstDecision':reason}
@@ -546,12 +560,11 @@ def collect_supported_surface_pool(model, views, masks, rgb_images, original_anc
             domain={}
             for pr in proposals:
                 div=pr['divisions'];order=[canonical.index(i) for i in pr['orderedPointIds']]
-                for a in range(1,div):
-                    for b in range(1,div-a):
-                        ints=[0,0,0]
-                        for j,value in zip(order,[a,b,div-a-b]):ints[j]=value
-                        divisor=math.gcd(math.gcd(*ints[:2]),ints[2]);key=tuple(i//divisor for i in ints)
-                        domain.setdefault(key,[]).append(pr)
+                for numerator in surface_barycentric_numerators(div):
+                    ints=[0,0,0]
+                    for j,value in zip(order,numerator):ints[j]=value
+                    divisor=math.gcd(math.gcd(*ints[:2]),ints[2]);key=tuple(i//divisor for i in ints)
+                    domain.setdefault(key,[]).append(pr)
             keys=sorted(domain);bary=np.array([np.array(k)/sum(k) for k in keys]);xyz=bary@world
             cp=np.einsum('vij,pj->vpi',Cs[:,:3,:3],xyz)+Cs[:,:3,3,None].transpose(0,2,1)
             pu=np.einsum('vij,vpj->vpi',Ks,cp);xy=np.rint(pu[:,:,:2]/np.maximum(pu[:,:,2:],1e-8)).astype(np.int64)
