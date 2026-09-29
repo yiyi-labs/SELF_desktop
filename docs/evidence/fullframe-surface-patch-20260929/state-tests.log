@@ -1,0 +1,1 @@
+{"passed": true, "sameInitialParameters": true, "sameViewSequenceAndBudget": true, "retired": 117, "children": 468, "outsidePatchExactlyUnchanged": true, "normalCovarianceRelativeMax": 8.550658776584896e-07, "bindingsAndAdamShapes": true, "fullRestoreStatePresent": true}

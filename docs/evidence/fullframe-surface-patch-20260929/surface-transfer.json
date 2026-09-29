@@ -1,0 +1,115 @@
+{
+  "pixelChecks": [
+    {
+      "a": "frame_0005.png",
+      "b": "frame_0006.png",
+      "count": 43,
+      "beforeMedian": 1.833470344543457,
+      "afterMedian": 0.7486637234687805,
+      "afterP90": 1.4395960569381714,
+      "acceptedForLocalCapacity": true
+    },
+    {
+      "a": "frame_0006.png",
+      "b": "frame_0008.png",
+      "count": 29,
+      "beforeMedian": 1.6393219232559204,
+      "afterMedian": 1.1611573696136475,
+      "afterP90": 2.689101457595825,
+      "acceptedForLocalCapacity": true
+    },
+    {
+      "a": "frame_0010.png",
+      "b": "frame_0012.png",
+      "count": 13,
+      "beforeMedian": 1.0860422849655151,
+      "afterMedian": 0.4233095943927765,
+      "afterP90": 1.178182601928711,
+      "acceptedForLocalCapacity": true
+    },
+    {
+      "a": "frame_0012.png",
+      "b": "frame_0013.png",
+      "count": 12,
+      "beforeMedian": 0.6379008293151855,
+      "afterMedian": 0.4198354482650757,
+      "afterP90": 0.8710803985595703,
+      "acceptedForLocalCapacity": true
+    },
+    {
+      "a": "frame_0028.png",
+      "b": "frame_0037.png",
+      "count": 11,
+      "beforeMedian": 3.3644254207611084,
+      "afterMedian": 2.4802474975585938,
+      "afterP90": 3.167414903640747,
+      "acceptedForLocalCapacity": true
+    },
+    {
+      "a": "frame_0037.png",
+      "b": "frame_0038.png",
+      "count": 10,
+      "beforeMedian": 3.3227462768554688,
+      "afterMedian": 2.212401866912842,
+      "afterP90": 2.572962999343872,
+      "acceptedForLocalCapacity": true
+    },
+    {
+      "a": "frame_0119.png",
+      "b": "frame_0122.png",
+      "count": 17,
+      "beforeMedian": 2.1835687160491943,
+      "afterMedian": 1.744319200515747,
+      "afterP90": 3.3180534839630127,
+      "acceptedForLocalCapacity": true
+    },
+    {
+      "a": "frame_0135.png",
+      "b": "frame_0139.png",
+      "count": 5,
+      "beforeMedian": 2.8735313415527344,
+      "afterMedian": 1.789570689201355,
+      "afterP90": 4.1273040771484375,
+      "acceptedForLocalCapacity": true
+    }
+  ],
+  "optimizerSteps": 64,
+  "curve": [
+    {
+      "step": 0,
+      "loss": 1.008433222770691
+    },
+    {
+      "step": 16,
+      "loss": 0.8205804228782654
+    },
+    {
+      "step": 32,
+      "loss": 0.6815571784973145
+    },
+    {
+      "step": 48,
+      "loss": 0.6187645196914673
+    }
+  ],
+  "selectedTrainingNames": [
+    "frame_0005.png",
+    "frame_0006.png",
+    "frame_0008.png",
+    "frame_0010.png",
+    "frame_0012.png",
+    "frame_0013.png",
+    "frame_0028.png",
+    "frame_0037.png",
+    "frame_0038.png",
+    "frame_0119.png",
+    "frame_0122.png",
+    "frame_0135.png",
+    "frame_0139.png"
+  ],
+  "maximumRawPoseDeltaChange": 0.20000001788139343,
+  "bound": "+/-0.20 raw tanh parameter; original 1 degree/.0015 head-unit caps retained",
+  "fixed": "K, world C, identity, expression, mesh, scene scale, source-ray triangle bindings",
+  "independentEvidence": "bidirectional real RGB texture tracks; local depth still conditional on F and low frequency mesh",
+  "sufficient": true
+}

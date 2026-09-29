@@ -1,0 +1,259 @@
+{
+  "R2": {
+    "accepted": false,
+    "failedLocalViews": [
+      {
+        "name": "frame_0015.png",
+        "before": {
+          "pixels": 2499,
+          "patchL1": 0.021453870460391045,
+          "patchEdge": 0.004214087966829538,
+          "patchHole": 0.0,
+          "childContributionFraction": null,
+          "sigmaQuantiles": [
+            [
+              5.708588123321533,
+              6.853082180023193
+            ],
+            [
+              6.821656703948975,
+              8.094902992248535
+            ],
+            [
+              7.9606523513793945,
+              10.165741920471191
+            ]
+          ],
+          "use": "development"
+        },
+        "after": {
+          "pixels": 2499,
+          "patchL1": 0.025804761797189713,
+          "patchEdge": 0.0042647551745176315,
+          "patchHole": 0.0,
+          "childContributionFraction": 0.8107328414916992,
+          "sigmaQuantiles": [
+            [
+              3.552694797515869,
+              4.303890228271484
+            ],
+            [
+              4.101876258850098,
+              5.111569881439209
+            ],
+            [
+              4.785578727722168,
+              6.174209117889404
+            ]
+          ],
+          "use": "development"
+        }
+      },
+      {
+        "name": "frame_0035.png",
+        "before": {
+          "pixels": 1600,
+          "patchL1": 0.019188011065125465,
+          "patchEdge": 0.0034079072065651417,
+          "patchHole": 0.0,
+          "childContributionFraction": null,
+          "sigmaQuantiles": [
+            [
+              4.849102020263672,
+              6.267392158508301
+            ],
+            [
+              6.226654529571533,
+              7.654409885406494
+            ],
+            [
+              7.406851768493652,
+              9.672310829162598
+            ]
+          ],
+          "use": "development"
+        },
+        "after": {
+          "pixels": 1600,
+          "patchL1": 0.021406060084700584,
+          "patchEdge": 0.0033644484356045723,
+          "patchHole": 0.0,
+          "childContributionFraction": 0.9149102568626404,
+          "sigmaQuantiles": [
+            [
+              3.1897103786468506,
+              4.226509094238281
+            ],
+            [
+              3.847921371459961,
+              5.013867378234863
+            ],
+            [
+              4.4504594802856445,
+              6.020937442779541
+            ]
+          ],
+          "use": "development"
+        }
+      },
+      {
+        "name": "frame_0058.png",
+        "before": {
+          "pixels": 4420,
+          "patchL1": 0.0706581249833107,
+          "patchEdge": 0.0033814171329140663,
+          "patchHole": 0.0,
+          "childContributionFraction": null,
+          "sigmaQuantiles": [
+            [
+              6.498840808868408,
+              7.774381637573242
+            ],
+            [
+              7.573446273803711,
+              9.213825225830078
+            ],
+            [
+              8.910655975341797,
+              10.93001937866211
+            ]
+          ],
+          "use": "fixed-regression"
+        },
+        "after": {
+          "pixels": 4420,
+          "patchL1": 0.06818170845508575,
+          "patchEdge": 0.0036925419699400663,
+          "patchHole": 0.0,
+          "childContributionFraction": 0.8017540574073792,
+          "sigmaQuantiles": [
+            [
+              4.199371814727783,
+              5.431490421295166
+            ],
+            [
+              4.98173189163208,
+              6.398985385894775
+            ],
+            [
+              5.754819869995117,
+              7.448126316070557
+            ]
+          ],
+          "use": "fixed-regression"
+        }
+      },
+      {
+        "name": "frame_0059.png",
+        "before": {
+          "pixels": 4216,
+          "patchL1": 0.06847759336233139,
+          "patchEdge": 0.003470977768301964,
+          "patchHole": 0.0,
+          "childContributionFraction": null,
+          "sigmaQuantiles": [
+            [
+              6.442725658416748,
+              7.800225257873535
+            ],
+            [
+              7.510663986206055,
+              9.24380874633789
+            ],
+            [
+              8.851123809814453,
+              11.168285369873047
+            ]
+          ],
+          "use": "fixed-regression"
+        },
+        "after": {
+          "pixels": 4216,
+          "patchL1": 0.07069893181324005,
+          "patchEdge": 0.0038310103118419647,
+          "patchHole": 0.0,
+          "childContributionFraction": 0.8053170442581177,
+          "sigmaQuantiles": [
+            [
+              4.217243671417236,
+              5.480983257293701
+            ],
+            [
+              4.9712347984313965,
+              6.472437381744385
+            ],
+            [
+              5.7892608642578125,
+              7.575230598449707
+            ]
+          ],
+          "use": "fixed-regression"
+        }
+      },
+      {
+        "name": "frame_0061.png",
+        "before": {
+          "pixels": 2016,
+          "patchL1": 0.0499747134745121,
+          "patchEdge": 0.004478554707020521,
+          "patchHole": 0.0,
+          "childContributionFraction": null,
+          "sigmaQuantiles": [
+            [
+              6.281500816345215,
+              7.67857027053833
+            ],
+            [
+              7.298940658569336,
+              9.201899528503418
+            ],
+            [
+              8.814733505249023,
+              11.529973030090332
+            ]
+          ],
+          "use": "fixed-regression"
+        },
+        "after": {
+          "pixels": 2016,
+          "patchL1": 0.09094774723052979,
+          "patchEdge": 0.004891331307590008,
+          "patchHole": 0.0,
+          "childContributionFraction": 0.780332088470459,
+          "sigmaQuantiles": [
+            [
+              4.198200702667236,
+              5.630049705505371
+            ],
+            [
+              4.9343390464782715,
+              6.712730407714844
+            ],
+            [
+              6.173418998718262,
+              8.440771102905273
+            ]
+          ],
+          "use": "fixed-regression"
+        }
+      }
+    ],
+    "visual": "no clear recovered source texture; some cheek regions acquire incorrect gradients; no multi-view detail acceptance",
+    "rollback": ".sources/fullframe-surface-patch-20260929-b/R2/review-rollback.pt",
+    "rollbackSha256": "a58aa1f0d4a2cbd7e579911a8a49e437932b7ba475e80dfa36a0b41b81882755",
+    "byteExactInitialState": true,
+    "retiredParentsRestored": 117,
+    "failedCandidateRetained": true
+  },
+  "O1": {
+    "accepted": false,
+    "reason": "face visibility improves but room hole ratio grows by 16.14 to 53.16 percentage points across five development views",
+    "rollback": ".sources/fullframe-t2-source-recovery-20260929-a/review-rollback.pt",
+    "rollbackSha256": "82de2e2635aeacfb99f13d21e2ffa382a325b746a8edc63d835a704fb0816014",
+    "byteExactR0State": true,
+    "failedCandidateRetained": true
+  },
+  "productionChanged": false,
+  "published": false,
+  "newT3T4": false
+}

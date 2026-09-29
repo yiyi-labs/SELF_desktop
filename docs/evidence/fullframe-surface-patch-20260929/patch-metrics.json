@@ -1,0 +1,1595 @@
+{
+  "R0": {
+    "frame_0015.png": {
+      "pixels": 2499,
+      "patchL1": 0.021453870460391045,
+      "patchEdge": 0.004214087966829538,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          5.708588123321533,
+          6.853082180023193
+        ],
+        [
+          6.821656703948975,
+          8.094902992248535
+        ],
+        [
+          7.9606523513793945,
+          10.165741920471191
+        ]
+      ],
+      "use": "development"
+    },
+    "frame_0035.png": {
+      "pixels": 1600,
+      "patchL1": 0.019188011065125465,
+      "patchEdge": 0.0034079072065651417,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          4.849102020263672,
+          6.267392158508301
+        ],
+        [
+          6.226654529571533,
+          7.654409885406494
+        ],
+        [
+          7.406851768493652,
+          9.672310829162598
+        ]
+      ],
+      "use": "development"
+    },
+    "frame_0055.png": {
+      "pixels": 4224,
+      "patchL1": 0.055001989006996155,
+      "patchEdge": 0.003908625803887844,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          6.451507091522217,
+          7.823646545410156
+        ],
+        [
+          7.686692237854004,
+          9.31588363647461
+        ],
+        [
+          8.886524200439453,
+          11.354279518127441
+        ]
+      ],
+      "use": "development"
+    },
+    "frame_0075.png": {
+      "pixels": 0,
+      "patchL1": 0.0,
+      "patchEdge": 0.0,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [],
+      "use": "development"
+    },
+    "frame_0095.png": {
+      "pixels": 0,
+      "patchL1": 0.0,
+      "patchEdge": 0.0,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [],
+      "use": "development"
+    },
+    "frame_0115.png": {
+      "pixels": 4488,
+      "patchL1": 0.04149552062153816,
+      "patchEdge": 0.0035788174718618393,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          6.440091609954834,
+          8.010708808898926
+        ],
+        [
+          7.797778129577637,
+          9.347436904907227
+        ],
+        [
+          9.055415153503418,
+          11.448278427124023
+        ]
+      ],
+      "use": "development"
+    },
+    "frame_0130.png": {
+      "pixels": 1443,
+      "patchL1": 0.00909709557890892,
+      "patchEdge": 0.003120496403425932,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          5.120307922363281,
+          6.883374214172363
+        ],
+        [
+          6.22173547744751,
+          8.162219047546387
+        ],
+        [
+          7.609218597412109,
+          9.967500686645508
+        ]
+      ],
+      "use": "development"
+    },
+    "frame_0145.png": {
+      "pixels": 1980,
+      "patchL1": 0.009720481932163239,
+      "patchEdge": 0.0031014017295092344,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          5.194211483001709,
+          6.857752799987793
+        ],
+        [
+          6.801743507385254,
+          8.51187801361084
+        ],
+        [
+          8.186511993408203,
+          10.806034088134766
+        ]
+      ],
+      "use": "development"
+    },
+    "frame_0058.png": {
+      "pixels": 4420,
+      "patchL1": 0.0706581249833107,
+      "patchEdge": 0.0033814171329140663,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          6.498840808868408,
+          7.774381637573242
+        ],
+        [
+          7.573446273803711,
+          9.213825225830078
+        ],
+        [
+          8.910655975341797,
+          10.93001937866211
+        ]
+      ],
+      "use": "fixed-regression"
+    },
+    "frame_0059.png": {
+      "pixels": 4216,
+      "patchL1": 0.06847759336233139,
+      "patchEdge": 0.003470977768301964,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          6.442725658416748,
+          7.800225257873535
+        ],
+        [
+          7.510663986206055,
+          9.24380874633789
+        ],
+        [
+          8.851123809814453,
+          11.168285369873047
+        ]
+      ],
+      "use": "fixed-regression"
+    },
+    "frame_0061.png": {
+      "pixels": 2016,
+      "patchL1": 0.0499747134745121,
+      "patchEdge": 0.004478554707020521,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          6.281500816345215,
+          7.67857027053833
+        ],
+        [
+          7.298940658569336,
+          9.201899528503418
+        ],
+        [
+          8.814733505249023,
+          11.529973030090332
+        ]
+      ],
+      "use": "fixed-regression"
+    },
+    "frame_0098.png": {
+      "pixels": 0,
+      "patchL1": 0.0,
+      "patchEdge": 0.0,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [],
+      "use": "fixed-regression"
+    },
+    "frame_0099.png": {
+      "pixels": 0,
+      "patchL1": 0.0,
+      "patchEdge": 0.0,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [],
+      "use": "fixed-regression"
+    },
+    "frame_0101.png": {
+      "pixels": 0,
+      "patchL1": 0.0,
+      "patchEdge": 0.0,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [],
+      "use": "fixed-regression"
+    },
+    "frame_0005.png": {
+      "pixels": 3968,
+      "patchL1": 0.010458655655384064,
+      "patchEdge": 0.0038443708326667547,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          6.4026198387146,
+          7.797122478485107
+        ],
+        [
+          7.665624618530273,
+          9.092626571655273
+        ],
+        [
+          8.841455459594727,
+          11.151476860046387
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0006.png": {
+      "pixels": 3843,
+      "patchL1": 0.010287327691912651,
+      "patchEdge": 0.0037214839830994606,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          6.310539245605469,
+          7.702749252319336
+        ],
+        [
+          7.610363006591797,
+          9.021728515625
+        ],
+        [
+          8.748109817504883,
+          11.052556991577148
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0008.png": {
+      "pixels": 3660,
+      "patchL1": 0.008716309443116188,
+      "patchEdge": 0.003370865248143673,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          6.2513604164123535,
+          7.655869007110596
+        ],
+        [
+          7.557737350463867,
+          8.99496078491211
+        ],
+        [
+          8.70324993133545,
+          11.030254364013672
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0010.png": {
+      "pixels": 3190,
+      "patchL1": 0.011289353482425213,
+      "patchEdge": 0.00387604720890522,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          5.882596015930176,
+          7.303862571716309
+        ],
+        [
+          7.152858257293701,
+          8.487141609191895
+        ],
+        [
+          8.128582954406738,
+          10.471214294433594
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0012.png": {
+      "pixels": 2808,
+      "patchL1": 0.013442259281873703,
+      "patchEdge": 0.004367193207144737,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          5.702389240264893,
+          7.1314849853515625
+        ],
+        [
+          6.9886274337768555,
+          8.348098754882812
+        ],
+        [
+          8.041550636291504,
+          10.19021987915039
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0013.png": {
+      "pixels": 2650,
+      "patchL1": 0.014459673315286636,
+      "patchEdge": 0.004068626556545496,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          5.851709842681885,
+          6.972689151763916
+        ],
+        [
+          6.957435607910156,
+          8.230537414550781
+        ],
+        [
+          8.1005220413208,
+          10.262434959411621
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0028.png": {
+      "pixels": 1599,
+      "patchL1": 0.00785482581704855,
+      "patchEdge": 0.00402789656072855,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          5.183679580688477,
+          6.550293922424316
+        ],
+        [
+          6.200812339782715,
+          7.798320770263672
+        ],
+        [
+          7.340693473815918,
+          9.909435272216797
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0037.png": {
+      "pixels": 1892,
+      "patchL1": 0.010276354849338531,
+      "patchEdge": 0.003989606164395809,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          5.218635082244873,
+          6.464325428009033
+        ],
+        [
+          6.356361389160156,
+          7.777006149291992
+        ],
+        [
+          7.554986953735352,
+          9.890892028808594
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0038.png": {
+      "pixels": 2162,
+      "patchL1": 0.014066985808312893,
+      "patchEdge": 0.0038994201458990574,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          5.49231481552124,
+          6.7546796798706055
+        ],
+        [
+          6.70542049407959,
+          8.10065746307373
+        ],
+        [
+          7.876916885375977,
+          10.264145851135254
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0119.png": {
+      "pixels": 3420,
+      "patchL1": 0.02228664606809616,
+      "patchEdge": 0.003483075648546219,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          6.227273941040039,
+          7.631712913513184
+        ],
+        [
+          7.5488786697387695,
+          8.913339614868164
+        ],
+        [
+          8.734589576721191,
+          10.85227108001709
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0122.png": {
+      "pixels": 2650,
+      "patchL1": 0.008419045247137547,
+      "patchEdge": 0.0038005460519343615,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          6.085427761077881,
+          7.307374954223633
+        ],
+        [
+          7.221103668212891,
+          8.626890182495117
+        ],
+        [
+          8.425732612609863,
+          10.845297813415527
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0135.png": {
+      "pixels": 812,
+      "patchL1": 0.009586154483258724,
+      "patchEdge": 0.0036959261633455753,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          4.6741251945495605,
+          6.8140764236450195
+        ],
+        [
+          5.711551666259766,
+          8.07132339477539
+        ],
+        [
+          7.008747577667236,
+          9.693602561950684
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0139.png": {
+      "pixels": 1088,
+      "patchL1": 0.009952463209629059,
+      "patchEdge": 0.0035626699682325125,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          4.711982727050781,
+          6.5886454582214355
+        ],
+        [
+          5.76469612121582,
+          7.766993522644043
+        ],
+        [
+          7.055398464202881,
+          9.310912132263184
+        ]
+      ],
+      "use": "train"
+    }
+  },
+  "R1": {
+    "frame_0015.png": {
+      "pixels": 2499,
+      "patchL1": 0.02344501204788685,
+      "patchEdge": 0.0042183781042695045,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          5.595691204071045,
+          6.860172271728516
+        ],
+        [
+          6.740637302398682,
+          8.086627960205078
+        ],
+        [
+          8.07771110534668,
+          10.209029197692871
+        ]
+      ],
+      "use": "development"
+    },
+    "frame_0035.png": {
+      "pixels": 1600,
+      "patchL1": 0.016956765204668045,
+      "patchEdge": 0.0034073679707944393,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          4.689912796020508,
+          6.263906478881836
+        ],
+        [
+          6.197041034698486,
+          7.60936975479126
+        ],
+        [
+          7.4155683517456055,
+          9.779386520385742
+        ]
+      ],
+      "use": "development"
+    },
+    "frame_0055.png": {
+      "pixels": 4224,
+      "patchL1": 0.053840272128582,
+      "patchEdge": 0.003953505773097277,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          6.263700485229492,
+          7.806836128234863
+        ],
+        [
+          7.721153259277344,
+          9.379321098327637
+        ],
+        [
+          9.06638240814209,
+          11.404458045959473
+        ]
+      ],
+      "use": "development"
+    },
+    "frame_0075.png": {
+      "pixels": 0,
+      "patchL1": 0.0,
+      "patchEdge": 0.0,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [],
+      "use": "development"
+    },
+    "frame_0095.png": {
+      "pixels": 0,
+      "patchL1": 0.0,
+      "patchEdge": 0.0,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [],
+      "use": "development"
+    },
+    "frame_0115.png": {
+      "pixels": 4488,
+      "patchL1": 0.04275796189904213,
+      "patchEdge": 0.0035483911633491516,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          6.3348612785339355,
+          7.957307815551758
+        ],
+        [
+          7.815779209136963,
+          9.363791465759277
+        ],
+        [
+          9.126446723937988,
+          11.447604179382324
+        ]
+      ],
+      "use": "development"
+    },
+    "frame_0130.png": {
+      "pixels": 1443,
+      "patchL1": 0.010260523296892643,
+      "patchEdge": 0.00314124021679163,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          4.959066390991211,
+          6.814127445220947
+        ],
+        [
+          6.210618495941162,
+          8.090067863464355
+        ],
+        [
+          7.550053596496582,
+          10.204655647277832
+        ]
+      ],
+      "use": "development"
+    },
+    "frame_0145.png": {
+      "pixels": 1980,
+      "patchL1": 0.01156054250895977,
+      "patchEdge": 0.0031079878099262714,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          4.880276203155518,
+          6.849758625030518
+        ],
+        [
+          6.779073715209961,
+          8.46467399597168
+        ],
+        [
+          8.169758796691895,
+          10.857179641723633
+        ]
+      ],
+      "use": "development"
+    },
+    "frame_0058.png": {
+      "pixels": 4420,
+      "patchL1": 0.07170279324054718,
+      "patchEdge": 0.0035145385190844536,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          6.373696804046631,
+          7.68745756149292
+        ],
+        [
+          7.527370452880859,
+          9.263422966003418
+        ],
+        [
+          8.869362831115723,
+          11.111001968383789
+        ]
+      ],
+      "use": "fixed-regression"
+    },
+    "frame_0059.png": {
+      "pixels": 4216,
+      "patchL1": 0.06933435797691345,
+      "patchEdge": 0.0036344898398965597,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          6.287607669830322,
+          7.716115474700928
+        ],
+        [
+          7.445652008056641,
+          9.278400421142578
+        ],
+        [
+          8.872745513916016,
+          11.177347183227539
+        ]
+      ],
+      "use": "fixed-regression"
+    },
+    "frame_0061.png": {
+      "pixels": 2016,
+      "patchL1": 0.045498158782720566,
+      "patchEdge": 0.0045465705916285515,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          6.250607490539551,
+          7.723721504211426
+        ],
+        [
+          7.3168044090271,
+          9.227088928222656
+        ],
+        [
+          8.836286544799805,
+          11.56057071685791
+        ]
+      ],
+      "use": "fixed-regression"
+    },
+    "frame_0098.png": {
+      "pixels": 0,
+      "patchL1": 0.0,
+      "patchEdge": 0.0,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [],
+      "use": "fixed-regression"
+    },
+    "frame_0099.png": {
+      "pixels": 0,
+      "patchL1": 0.0,
+      "patchEdge": 0.0,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [],
+      "use": "fixed-regression"
+    },
+    "frame_0101.png": {
+      "pixels": 0,
+      "patchL1": 0.0,
+      "patchEdge": 0.0,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [],
+      "use": "fixed-regression"
+    },
+    "frame_0005.png": {
+      "pixels": 3968,
+      "patchL1": 0.008660989813506603,
+      "patchEdge": 0.003811997827142477,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          6.38240385055542,
+          7.716571807861328
+        ],
+        [
+          7.6815690994262695,
+          9.129719734191895
+        ],
+        [
+          8.985254287719727,
+          11.042383193969727
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0006.png": {
+      "pixels": 3843,
+      "patchL1": 0.00892535038292408,
+      "patchEdge": 0.003675607265904546,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          6.308358192443848,
+          7.59126615524292
+        ],
+        [
+          7.602121353149414,
+          9.012579917907715
+        ],
+        [
+          8.874837875366211,
+          10.871110916137695
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0008.png": {
+      "pixels": 3660,
+      "patchL1": 0.007087297271937132,
+      "patchEdge": 0.003319335635751486,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          6.144641399383545,
+          7.580812931060791
+        ],
+        [
+          7.542074680328369,
+          9.035587310791016
+        ],
+        [
+          8.854190826416016,
+          10.82267951965332
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0010.png": {
+      "pixels": 3190,
+      "patchL1": 0.010258827358484268,
+      "patchEdge": 0.003833644324913621,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          5.900640487670898,
+          7.161792755126953
+        ],
+        [
+          7.141845226287842,
+          8.473085403442383
+        ],
+        [
+          8.311731338500977,
+          10.343082427978516
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0012.png": {
+      "pixels": 2808,
+      "patchL1": 0.012979380786418915,
+      "patchEdge": 0.004358393140137196,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          5.484259128570557,
+          6.987419128417969
+        ],
+        [
+          6.90737771987915,
+          8.337444305419922
+        ],
+        [
+          8.15932846069336,
+          10.23323917388916
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0013.png": {
+      "pixels": 2650,
+      "patchL1": 0.01573112979531288,
+      "patchEdge": 0.004018072038888931,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          5.746251583099365,
+          6.942989349365234
+        ],
+        [
+          6.93169641494751,
+          8.24439811706543
+        ],
+        [
+          8.228240966796875,
+          10.330294609069824
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0028.png": {
+      "pixels": 1599,
+      "patchL1": 0.00791722908616066,
+      "patchEdge": 0.0040045687928795815,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          5.08535099029541,
+          6.4759521484375
+        ],
+        [
+          6.177006721496582,
+          7.829062461853027
+        ],
+        [
+          7.403360843658447,
+          9.932395935058594
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0037.png": {
+      "pixels": 1892,
+      "patchL1": 0.008664603345096111,
+      "patchEdge": 0.003937010187655687,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          5.077832221984863,
+          6.447803497314453
+        ],
+        [
+          6.219908714294434,
+          7.675297260284424
+        ],
+        [
+          7.557629585266113,
+          9.929612159729004
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0038.png": {
+      "pixels": 2162,
+      "patchL1": 0.010292944498360157,
+      "patchEdge": 0.0038819750770926476,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          5.375868797302246,
+          6.746574878692627
+        ],
+        [
+          6.573594093322754,
+          8.131839752197266
+        ],
+        [
+          7.978935718536377,
+          10.277576446533203
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0119.png": {
+      "pixels": 3420,
+      "patchL1": 0.019296912476420403,
+      "patchEdge": 0.003460993990302086,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          6.254687309265137,
+          7.462618350982666
+        ],
+        [
+          7.471654415130615,
+          8.841775894165039
+        ],
+        [
+          8.845481872558594,
+          10.873839378356934
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0122.png": {
+      "pixels": 2650,
+      "patchL1": 0.006982020102441311,
+      "patchEdge": 0.0037900914903730154,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          5.973396301269531,
+          7.293282508850098
+        ],
+        [
+          7.106442928314209,
+          8.592026710510254
+        ],
+        [
+          8.524227142333984,
+          10.817244529724121
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0135.png": {
+      "pixels": 812,
+      "patchL1": 0.008499031886458397,
+      "patchEdge": 0.003636046312749386,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          4.567733287811279,
+          6.912327766418457
+        ],
+        [
+          5.653439998626709,
+          7.894014835357666
+        ],
+        [
+          7.042304992675781,
+          9.771807670593262
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0139.png": {
+      "pixels": 1088,
+      "patchL1": 0.007737820502370596,
+      "patchEdge": 0.0035793038550764322,
+      "patchHole": 0.0,
+      "childContributionFraction": null,
+      "sigmaQuantiles": [
+        [
+          4.630607604980469,
+          6.474675178527832
+        ],
+        [
+          5.694255352020264,
+          7.697812557220459
+        ],
+        [
+          7.081641674041748,
+          9.545049667358398
+        ]
+      ],
+      "use": "train"
+    }
+  },
+  "R2": {
+    "frame_0015.png": {
+      "pixels": 2499,
+      "patchL1": 0.025804761797189713,
+      "patchEdge": 0.0042647551745176315,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.8107328414916992,
+      "sigmaQuantiles": [
+        [
+          3.552694797515869,
+          4.303890228271484
+        ],
+        [
+          4.101876258850098,
+          5.111569881439209
+        ],
+        [
+          4.785578727722168,
+          6.174209117889404
+        ]
+      ],
+      "use": "development"
+    },
+    "frame_0035.png": {
+      "pixels": 1600,
+      "patchL1": 0.021406060084700584,
+      "patchEdge": 0.0033644484356045723,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.9149102568626404,
+      "sigmaQuantiles": [
+        [
+          3.1897103786468506,
+          4.226509094238281
+        ],
+        [
+          3.847921371459961,
+          5.013867378234863
+        ],
+        [
+          4.4504594802856445,
+          6.020937442779541
+        ]
+      ],
+      "use": "development"
+    },
+    "frame_0055.png": {
+      "pixels": 4224,
+      "patchL1": 0.05106113851070404,
+      "patchEdge": 0.003969555255025625,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.7830040454864502,
+      "sigmaQuantiles": [
+        [
+          4.13389253616333,
+          5.299411773681641
+        ],
+        [
+          4.936157703399658,
+          6.2589287757873535
+        ],
+        [
+          5.716219425201416,
+          7.278812885284424
+        ]
+      ],
+      "use": "development"
+    },
+    "frame_0075.png": {
+      "pixels": 0,
+      "patchL1": 0.0,
+      "patchEdge": 0.0,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.0,
+      "sigmaQuantiles": [],
+      "use": "development"
+    },
+    "frame_0095.png": {
+      "pixels": 0,
+      "patchL1": 0.0,
+      "patchEdge": 0.0,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.0,
+      "sigmaQuantiles": [],
+      "use": "development"
+    },
+    "frame_0115.png": {
+      "pixels": 4488,
+      "patchL1": 0.04344891384243965,
+      "patchEdge": 0.0036232296843081713,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.7349134683609009,
+      "sigmaQuantiles": [
+        [
+          4.147724628448486,
+          5.276401996612549
+        ],
+        [
+          4.918552398681641,
+          6.148157119750977
+        ],
+        [
+          5.71216344833374,
+          7.11977481842041
+        ]
+      ],
+      "use": "development"
+    },
+    "frame_0130.png": {
+      "pixels": 1443,
+      "patchL1": 0.008928454481065273,
+      "patchEdge": 0.0031793867237865925,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.9252337217330933,
+      "sigmaQuantiles": [
+        [
+          3.120924234390259,
+          4.58579683303833
+        ],
+        [
+          4.058653354644775,
+          5.518742084503174
+        ],
+        [
+          4.733002662658691,
+          6.6103057861328125
+        ]
+      ],
+      "use": "development"
+    },
+    "frame_0145.png": {
+      "pixels": 1980,
+      "patchL1": 0.009638804011046886,
+      "patchEdge": 0.0030836514197289944,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.8673988580703735,
+      "sigmaQuantiles": [
+        [
+          3.525709390640259,
+          4.641064643859863
+        ],
+        [
+          4.270382881164551,
+          5.516140937805176
+        ],
+        [
+          4.907581806182861,
+          6.690699577331543
+        ]
+      ],
+      "use": "development"
+    },
+    "frame_0058.png": {
+      "pixels": 4420,
+      "patchL1": 0.06818170845508575,
+      "patchEdge": 0.0036925419699400663,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.8017540574073792,
+      "sigmaQuantiles": [
+        [
+          4.199371814727783,
+          5.431490421295166
+        ],
+        [
+          4.98173189163208,
+          6.398985385894775
+        ],
+        [
+          5.754819869995117,
+          7.448126316070557
+        ]
+      ],
+      "use": "fixed-regression"
+    },
+    "frame_0059.png": {
+      "pixels": 4216,
+      "patchL1": 0.07069893181324005,
+      "patchEdge": 0.0038310103118419647,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.8053170442581177,
+      "sigmaQuantiles": [
+        [
+          4.217243671417236,
+          5.480983257293701
+        ],
+        [
+          4.9712347984313965,
+          6.472437381744385
+        ],
+        [
+          5.7892608642578125,
+          7.575230598449707
+        ]
+      ],
+      "use": "fixed-regression"
+    },
+    "frame_0061.png": {
+      "pixels": 2016,
+      "patchL1": 0.09094774723052979,
+      "patchEdge": 0.004891331307590008,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.780332088470459,
+      "sigmaQuantiles": [
+        [
+          4.198200702667236,
+          5.630049705505371
+        ],
+        [
+          4.9343390464782715,
+          6.712730407714844
+        ],
+        [
+          6.173418998718262,
+          8.440771102905273
+        ]
+      ],
+      "use": "fixed-regression"
+    },
+    "frame_0098.png": {
+      "pixels": 0,
+      "patchL1": 0.0,
+      "patchEdge": 0.0,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.0,
+      "sigmaQuantiles": [],
+      "use": "fixed-regression"
+    },
+    "frame_0099.png": {
+      "pixels": 0,
+      "patchL1": 0.0,
+      "patchEdge": 0.0,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.0,
+      "sigmaQuantiles": [],
+      "use": "fixed-regression"
+    },
+    "frame_0101.png": {
+      "pixels": 0,
+      "patchL1": 0.0,
+      "patchEdge": 0.0,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.0,
+      "sigmaQuantiles": [],
+      "use": "fixed-regression"
+    },
+    "frame_0005.png": {
+      "pixels": 3968,
+      "patchL1": 0.011620007455348969,
+      "patchEdge": 0.0038647563196718693,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.7973342537879944,
+      "sigmaQuantiles": [
+        [
+          4.107220649719238,
+          5.0077595710754395
+        ],
+        [
+          4.790018081665039,
+          5.9514689445495605
+        ],
+        [
+          5.608928680419922,
+          6.928897857666016
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0006.png": {
+      "pixels": 3843,
+      "patchL1": 0.00971446093171835,
+      "patchEdge": 0.003699321299791336,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.7998925447463989,
+      "sigmaQuantiles": [
+        [
+          4.051721572875977,
+          4.917977809906006
+        ],
+        [
+          4.74247932434082,
+          5.817757606506348
+        ],
+        [
+          5.493935585021973,
+          6.814806938171387
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0008.png": {
+      "pixels": 3660,
+      "patchL1": 0.0072531080804765224,
+      "patchEdge": 0.0033477740362286568,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.7993813157081604,
+      "sigmaQuantiles": [
+        [
+          3.9662375450134277,
+          4.8631110191345215
+        ],
+        [
+          4.697445392608643,
+          5.753306865692139
+        ],
+        [
+          5.47396183013916,
+          6.79946231842041
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0010.png": {
+      "pixels": 3190,
+      "patchL1": 0.009810530580580235,
+      "patchEdge": 0.0038362215273082256,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.8039556741714478,
+      "sigmaQuantiles": [
+        [
+          3.704235792160034,
+          4.495910167694092
+        ],
+        [
+          4.384002685546875,
+          5.373763084411621
+        ],
+        [
+          5.081506729125977,
+          6.391469955444336
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0012.png": {
+      "pixels": 2808,
+      "patchL1": 0.013309633359313011,
+      "patchEdge": 0.004287992604076862,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.8166182637214661,
+      "sigmaQuantiles": [
+        [
+          3.617509603500366,
+          4.372491836547852
+        ],
+        [
+          4.273263454437256,
+          5.2804484367370605
+        ],
+        [
+          4.967776298522949,
+          6.309391498565674
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0013.png": {
+      "pixels": 2650,
+      "patchL1": 0.018119987100362778,
+      "patchEdge": 0.003995395265519619,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.8366703987121582,
+      "sigmaQuantiles": [
+        [
+          3.6138999462127686,
+          4.353911399841309
+        ],
+        [
+          4.189537525177002,
+          5.185496807098389
+        ],
+        [
+          4.874831676483154,
+          6.271649360656738
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0028.png": {
+      "pixels": 1599,
+      "patchL1": 0.007987560704350471,
+      "patchEdge": 0.004094819538295269,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.8985742330551147,
+      "sigmaQuantiles": [
+        [
+          3.2004213333129883,
+          4.362367153167725
+        ],
+        [
+          3.879171371459961,
+          5.203641891479492
+        ],
+        [
+          4.493228912353516,
+          6.218649864196777
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0037.png": {
+      "pixels": 1892,
+      "patchL1": 0.00770656717941165,
+      "patchEdge": 0.0039570205844938755,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.8528587818145752,
+      "sigmaQuantiles": [
+        [
+          3.3421924114227295,
+          4.312880516052246
+        ],
+        [
+          3.952683448791504,
+          5.105014801025391
+        ],
+        [
+          4.57621431350708,
+          6.149787425994873
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0038.png": {
+      "pixels": 2162,
+      "patchL1": 0.01031580287963152,
+      "patchEdge": 0.0038810044061392546,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.8575696349143982,
+      "sigmaQuantiles": [
+        [
+          3.4836974143981934,
+          4.390905857086182
+        ],
+        [
+          4.0571184158325195,
+          5.189970016479492
+        ],
+        [
+          4.7572855949401855,
+          6.257492542266846
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0119.png": {
+      "pixels": 3420,
+      "patchL1": 0.020641319453716278,
+      "patchEdge": 0.0034648519940674305,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.8534651398658752,
+      "sigmaQuantiles": [
+        [
+          3.9438328742980957,
+          4.673641204833984
+        ],
+        [
+          4.618493556976318,
+          5.5636091232299805
+        ],
+        [
+          5.349257469177246,
+          6.617957592010498
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0122.png": {
+      "pixels": 2650,
+      "patchL1": 0.008193626068532467,
+      "patchEdge": 0.0038086711429059505,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.8496294021606445,
+      "sigmaQuantiles": [
+        [
+          3.7529401779174805,
+          4.56641960144043
+        ],
+        [
+          4.306413650512695,
+          5.392049312591553
+        ],
+        [
+          5.052148818969727,
+          6.529808044433594
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0135.png": {
+      "pixels": 812,
+      "patchL1": 0.00742481742054224,
+      "patchEdge": 0.0033871610648930073,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.9894073605537415,
+      "sigmaQuantiles": [
+        [
+          2.907515525817871,
+          4.67110538482666
+        ],
+        [
+          3.8223485946655273,
+          5.5622968673706055
+        ],
+        [
+          4.516402721405029,
+          6.586841106414795
+        ]
+      ],
+      "use": "train"
+    },
+    "frame_0139.png": {
+      "pixels": 1088,
+      "patchL1": 0.009122361429035664,
+      "patchEdge": 0.0035476787015795708,
+      "patchHole": 0.0,
+      "childContributionFraction": 0.973781168460846,
+      "sigmaQuantiles": [
+        [
+          2.856713056564331,
+          4.351506233215332
+        ],
+        [
+          3.7760820388793945,
+          5.255000114440918
+        ],
+        [
+          4.465328216552734,
+          6.365658760070801
+        ]
+      ],
+      "use": "train"
+    }
+  }
+}

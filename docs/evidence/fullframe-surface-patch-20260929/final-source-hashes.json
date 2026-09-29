@@ -1,0 +1,17 @@
+{
+  "audit_fullframe_surface_patch.py": "23aa489d86be3c1b7c8c97687cf4d2b33bb456173dde51a1dbaa71c88352cb13",
+  "audit_patch_geometry_freeze.py": "dff6e2ae9157036aae2930c3e9cd5a020f0e634e319d3ac2bc2311fc5e901f83",
+  "finalize_fullframe_review.py": "0418a9ba9c6d0f6e4cd7dea94647859e835541d912b6ee68900c991b56d4cc30",
+  "reconstruction_fullframe.py": "4080839cd67c91f33594929a41ee55b84153a5ba39ebdd6335f34a9fad928478",
+  "reconstruction_portrait_pipeline.py": "1ae6a8259c6ef5c8d9e93fda365f781f62ccb8e6fcaef9a2f1da457584d9b175",
+  "reconstruction_portrait_priority.py": "799014fa9883e6c4eeba62d12e5dbb4385f719f2b3ab14cb76d4fb8ef8ce262c",
+  "reconstruction_detail_controlled.py": "e20c3782f5bec58bcbd2d418d23705f50f147dc0798b24f4a268e763c0cb110e",
+  "reconstruction_surface_patch.py": "fe7ad773b916b8dffe8d50aa197cabe8213e2f56637bbbb8f1e25c98f32ad392",
+  "reconstruction_patch_correspondence.py": "1e397bb96939435697a782b4f38716eed0c3a50663ec5411db109fe1e9b893d4",
+  "reconstruction_patch_acceptance.py": "8ff54407e7cddb72f473108b1f60dd03ab82456e9e6f89fdae6f3e80c69d3624",
+  "run_fullframe_surface_patch.py": "005f8a798ed1ed7b93738d6df358daad545eae048676fd814c6c2589c2f81585",
+  "reconstruction_t2_local.py": "187fa3ed6e420709ba5051e1146f4c7215cf561addaa3758e65dee7e646d5a88",
+  "audit_t2_source_bundle.py": "d54257eab268ed6cf5133cc5a3503a8203d31113b867351082ae1134cf627ff1",
+  "test_surface_patch_state.py": "80a869a4039d120ba36796b97bce269584dfc6da3557315335a684ca25d50f84",
+  "test_fullframe_contract.py": "e52b60bfed85f9e5845d8b59cc854872b06f2d3ea18012561ea85da8b0c66c63"
+}

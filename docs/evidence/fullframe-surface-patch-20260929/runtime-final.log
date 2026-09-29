@@ -1,0 +1,1 @@
+{"torch": "2.8.0+cu128", "cuda": "12.8", "gsplat": "1.5.3", "cudaAvailable": true, "device": "NVIDIA GeForce RTX 5070 Laptop GPU"}

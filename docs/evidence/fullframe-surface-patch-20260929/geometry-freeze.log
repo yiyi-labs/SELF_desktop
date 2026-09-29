@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/mnt/c/Users/30243/.codex/worktrees/reconstruction-bottom-up-20260928/olay/backend/audit_patch_geometry_freeze.py", line 25, in <module>
+    p=argparse.ArgumentParser();p.add_argument('prepared',type=Path);p.add_argument('run',type=Path);run(p.parse_args())
+  File "/mnt/c/Users/30243/.codex/worktrees/reconstruction-bottom-up-20260928/olay/backend/audit_patch_geometry_freeze.py", line 20, in run
+    delta=(project(pose0)-project(pose1)).norm(dim=-1).detach().numpy();rows.append({'source':r['a'],'target':r['b'],'medianSourceDriftPx':float(np.median(delta)),'p90SourceDriftPx':float(np.quantile(delta,.9)),'maxSourceDriftPx':float(delta.max())})
+  File "/mnt/c/Users/30243/.codex/worktrees/reconstruction-bottom-up-20260928/olay/backend/audit_patch_geometry_freeze.py", line 19, in project
+    f=pose(r['a'],F);v=xyz@f[:3,:3].T+f[:3,3];u=v@K.T;return u[:,:2]/u[:,2:]
+RuntimeError: expected m1 and m2 to have the same dtype, but got: float != double

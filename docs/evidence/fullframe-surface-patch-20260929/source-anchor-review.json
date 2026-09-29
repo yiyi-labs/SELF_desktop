@@ -1,0 +1,63 @@
+{
+  "rows": [
+    {
+      "source": "frame_0005.png",
+      "target": "frame_0006.png",
+      "medianSourceDriftPx": 0.0,
+      "p90SourceDriftPx": 0.0,
+      "maxSourceDriftPx": 0.0
+    },
+    {
+      "source": "frame_0006.png",
+      "target": "frame_0008.png",
+      "medianSourceDriftPx": 1.3152196407318115,
+      "p90SourceDriftPx": 1.3626492023468018,
+      "maxSourceDriftPx": 1.3908191919326782
+    },
+    {
+      "source": "frame_0010.png",
+      "target": "frame_0012.png",
+      "medianSourceDriftPx": 0.0,
+      "p90SourceDriftPx": 0.0,
+      "maxSourceDriftPx": 0.0
+    },
+    {
+      "source": "frame_0012.png",
+      "target": "frame_0013.png",
+      "medianSourceDriftPx": 1.022293210029602,
+      "p90SourceDriftPx": 1.0419131517410278,
+      "maxSourceDriftPx": 1.0455175638198853
+    },
+    {
+      "source": "frame_0028.png",
+      "target": "frame_0037.png",
+      "medianSourceDriftPx": 0.0,
+      "p90SourceDriftPx": 0.0,
+      "maxSourceDriftPx": 0.0
+    },
+    {
+      "source": "frame_0037.png",
+      "target": "frame_0038.png",
+      "medianSourceDriftPx": 0.889045238494873,
+      "p90SourceDriftPx": 0.9033303260803223,
+      "maxSourceDriftPx": 0.9188073873519897
+    },
+    {
+      "source": "frame_0119.png",
+      "target": "frame_0122.png",
+      "medianSourceDriftPx": 0.0,
+      "p90SourceDriftPx": 0.0,
+      "maxSourceDriftPx": 0.0
+    },
+    {
+      "source": "frame_0135.png",
+      "target": "frame_0139.png",
+      "medianSourceDriftPx": 0.0,
+      "p90SourceDriftPx": 0.0,
+      "maxSourceDriftPx": 0.0
+    }
+  ],
+  "allOtherModelTensorsExactlyFrozen": true,
+  "maxSourceAnchorDrift": 1.3908191919326782,
+  "note": "post-correction validation; target residual optimizer did not jointly minimise source and target errors"
+}
