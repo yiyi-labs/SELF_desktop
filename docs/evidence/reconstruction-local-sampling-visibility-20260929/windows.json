@@ -1,0 +1,129 @@
+{
+  "frozenAtUtc": "2026-09-29T00:51:28.308666+00:00",
+  "selection": "All three projected vertices at positive depth must be inside the inclusive native-pixel rectangle in the recorded origin. Keep every cached proposal in these windows; no point-budget or score selection. Windows describe static cabinet/ceiling landmarks, NOT guaranteed visibility: foreground intrusion is assessed by the original masks, never relabeled room.",
+  "detailedViewsOnly": [
+    25,
+    26,
+    40,
+    133,
+    134,
+    136,
+    111,
+    112,
+    118
+  ],
+  "devImagesRead": false,
+  "geometrySpace": "original COLMAP map float64; original pinhole K/C and rectified RGB",
+  "pointRule": "all 59 original training observations; unchanged source-first 3x3 blur, boundaries, masks, L1<0.10, votes>=3, conflicts<=1",
+  "exampleRule": "per window: smallest stable ID among accepted d2, rejected d2, original rejected; additionally first invalid-reference or cross-mask case if present, up to 2 of each. Detailed patch targets restricted to nine fixed views, ranked by original color discrepancy with stable name tie-break, maximum 3 conflicts per source. Selection never feeds back to proposal/acceptance.",
+  "windows": [
+    {
+      "group": "upper-cabinet",
+      "imageName": "frame_0025.png",
+      "rect": [
+        260,
+        150,
+        820,
+        630
+      ],
+      "rgbSha256": "bd500bd2b33b91e3af6f17d79377e8c650731a2190b7eef0aeb04a6e2f6ddae4",
+      "maskSha256": "6bceab599f9a39e0bc6189d7c468499647e11e146762a27baed686908f6dd265"
+    },
+    {
+      "group": "upper-cabinet",
+      "imageName": "frame_0026.png",
+      "rect": [
+        260,
+        150,
+        820,
+        630
+      ],
+      "rgbSha256": "cf7d9dd8e20136f13d073b28b01f2a6f687aebf21dd7037d4b5f14fd7177b2dc",
+      "maskSha256": "9a90dbcdf21d313922a560ffb9dadb197fb6c5b7320b13728ed2f652095d6382"
+    },
+    {
+      "group": "upper-cabinet",
+      "imageName": "frame_0040.png",
+      "rect": [
+        170,
+        80,
+        650,
+        610
+      ],
+      "rgbSha256": "149e2f421ec465788baefef1871bab0c1bbea4fa142b55e21188b48210e10dc0",
+      "maskSha256": "644f43b5fbfc3dd333c20c85206891de47726df0c05d48ffb3eb43012247831d"
+    },
+    {
+      "group": "lower-left-panel",
+      "imageName": "frame_0133.png",
+      "rect": [
+        290,
+        470,
+        440,
+        1510
+      ],
+      "rgbSha256": "dcc4aa586c5938e8ee5cd4c4901e7575cf0a9ec9725ccb93ac5fe38c3d6b7fc9",
+      "maskSha256": "36b21ff9afe9ae384c9caa369d638318b9cda0fb6718d12192515296935c288b"
+    },
+    {
+      "group": "lower-left-panel",
+      "imageName": "frame_0134.png",
+      "rect": [
+        290,
+        470,
+        440,
+        1510
+      ],
+      "rgbSha256": "ecf0e04be27cf1bb854c578e1c58638daff705b754129ab7164eda2d031df237",
+      "maskSha256": "e05e53c7ba5c37ea16243710823bdce3a9b401551f7b91658c3296d9208dda36"
+    },
+    {
+      "group": "lower-left-panel",
+      "imageName": "frame_0136.png",
+      "rect": [
+        280,
+        430,
+        440,
+        1500
+      ],
+      "rgbSha256": "89906c732c5955632c5c3e03be549716e6da7152452b57eb4a524f99de5a6fe6",
+      "maskSha256": "46c8cabb923eddd48919f4a5949ea231b7ccfaa0179a22fc7d6934011770ae7a"
+    },
+    {
+      "group": "ceiling-top",
+      "imageName": "frame_0111.png",
+      "rect": [
+        10,
+        10,
+        740,
+        560
+      ],
+      "rgbSha256": "7c54cbf633bde5f88eae1e4bc45d745e2b17b39eb9e8d88c24fa6504db255b3d",
+      "maskSha256": "d622a911679aa32d0f51e8646b874089c096790bbb65667c6f41e11c5c664829"
+    },
+    {
+      "group": "ceiling-top",
+      "imageName": "frame_0112.png",
+      "rect": [
+        10,
+        10,
+        740,
+        560
+      ],
+      "rgbSha256": "6f326375a3c53937d1e731016801c8d8a0f09aacc484d485f6698ae86f0b3ba8",
+      "maskSha256": "865b1515139e9c839f2647f9d252082159c73a55d78b58b235e6e9032cfefdbb"
+    },
+    {
+      "group": "ceiling-top",
+      "imageName": "frame_0118.png",
+      "rect": [
+        10,
+        10,
+        740,
+        560
+      ],
+      "rgbSha256": "b0259ade4d725cfa261b4ab0b2a6e643bb130d70dc8d5db856cbe50bdd751182",
+      "maskSha256": "537c4bf4462e0eabf259b99058460839fdc15e8868c9a7212e14a143d37af1ab"
+    }
+  ]
+}
