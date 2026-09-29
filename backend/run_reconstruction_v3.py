@@ -56,6 +56,9 @@ def export_research(face,attachments,body,room,data,out):
 
 
 def run(args):
+    if getattr(args, 'portrait_priority_config', None) is not None:
+        from reconstruction_portrait_priority import run_priority
+        return run_priority(args)
     out=args.output.resolve()
     private=Path(__file__).resolve().parent/'.sources'
     if not out.is_relative_to(private):raise ValueError('output_must_be_in_this_isolated_private_sources')
@@ -138,4 +141,6 @@ def run(args):
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('prepared',type=Path);p.add_argument('output',type=Path)
     p.add_argument('--attachment-steps',type=int,default=360);p.add_argument('--static-steps',type=int,default=360)
-    p.add_argument('--research-cameras',action='store_true');run(p.parse_args())
+    p.add_argument('--research-cameras',action='store_true')
+    p.add_argument('--portrait-priority-config',type=Path,help='Explicit isolated finite research configuration; no publishing')
+    run(p.parse_args())

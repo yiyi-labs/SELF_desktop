@@ -1,0 +1,36 @@
+{
+  "seed": 290929,
+  "face_steps": 900,
+  "room_steps": 900,
+  "joint_frozen_steps": 120,
+  "joint_steps": 120,
+  "audit_names": [
+    "frame_0058.png",
+    "frame_0059.png",
+    "frame_0061.png",
+    "frame_0098.png",
+    "frame_0099.png",
+    "frame_0101.png"
+  ],
+  "max_face_views": 32,
+  "stage_seconds": 1200,
+  "max_allocated_mib": 6900,
+  "face_split_steps": [
+    350,
+    550
+  ],
+  "face_split_parents": 128,
+  "recovery_steps": 24,
+  "room_refine_start": 120,
+  "room_refine_stop": 600,
+  "room_refine_every": 100,
+  "room_reset_steps": [
+    300
+  ],
+  "room_max_points": 40000,
+  "room_max_growth": 1024,
+  "geometry_archives": [
+    "/mnt/d/STUDY/College/mine/olay/backend/.sources/quality-geometry-20260926-temp/flame_open_e2_20260927/private-fit-parameters.npz",
+    "/mnt/d/STUDY/College/mine/olay/backend/.sources/quality-geometry-20260926-temp/flame_open_e2_20260927/private-held-local-parameters.npz"
+  ]
+}

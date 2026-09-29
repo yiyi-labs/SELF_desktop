@@ -1,0 +1,65 @@
+{
+  "means": {
+    "\u57fa\u7ebf": {
+      "development": {
+        "face": 0.033756916876882315,
+        "hair": 0.04423248139210045,
+        "glasses": 0.13729750365018845
+      },
+      "audit": {
+        "face": 0.040159858763217926,
+        "hair": 0.044039820631345115,
+        "glasses": 0.1574441815416018
+      }
+    },
+    "\u5c40\u90e8\u8bad\u7ec3\u540e": {
+      "development": {
+        "face": 0.03147399751469493,
+        "hair": 0.03945224592462182,
+        "glasses": 0.13475535064935684
+      },
+      "audit": {
+        "face": 0.04114154043296973,
+        "hair": 0.04323094400266806,
+        "glasses": 0.16233555227518082
+      }
+    },
+    "\u8054\u5408\u540e": {
+      "development": {
+        "face": 0.03241732018068433,
+        "hair": 0.03959835693240166,
+        "glasses": 0.13466663286089897
+      },
+      "audit": {
+        "face": 0.044051628559827805,
+        "hair": 0.04305291175842285,
+        "glasses": 0.16279207170009613
+      }
+    }
+  },
+  "trainingRun": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\portrait-priority-training-20260929-a",
+  "handoff": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\portrait-priority-handoff-20260929-b",
+  "asset": {
+    "schemaVersion": 1,
+    "researchOnly": true,
+    "engine": "reconstruction-v3-isolated-0.1",
+    "assetSha256": "f3ca3845936d1b19b2cf278fcfd7165c30f66973517f268dccf583537e11348e",
+    "sourceSha256": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+    "reference": "frame_0111.png",
+    "pointCount": 38430,
+    "editableSplats": 9052,
+    "indexSemantics": "exact_PLY_vertex_index",
+    "loaderReorder": false,
+    "sidecarSha256": "2d441c052b97657ef338ef839331ce8419d50abd5aeb853a360d5b277e432adc",
+    "componentCounts": {
+      "static_scene": 26113,
+      "face_skin": 9052,
+      "hair": 2917,
+      "accessory": 0,
+      "neck_shoulder_cloth": 348
+    },
+    "note": "explicit identities do not certify geometry or authorize publication"
+  },
+  "qualityApproved": false,
+  "published": false
+}
