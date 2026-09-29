@@ -1,0 +1,7 @@
+{
+  "portrait": false,
+  "jointRun": false,
+  "denseAssist": false,
+  "publish": false,
+  "reason": "review audit and visual portrait regression; no new joint allowed; installed pycolmap has_cuda=False"
+}

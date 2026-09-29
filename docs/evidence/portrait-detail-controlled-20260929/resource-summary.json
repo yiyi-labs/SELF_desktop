@@ -1,0 +1,10 @@
+{
+  "deviceSampleCount": 83,
+  "deviceSamplePeakMiB": 2211.0,
+  "scope": "2s sampling began after process launch; not guaranteed instantaneous whole-run peak",
+  "torch": {
+    "seconds": 262.195677912,
+    "allocatedPeakMiB": 713.50390625,
+    "reservedPeakMiB": 1010.0
+  }
+}

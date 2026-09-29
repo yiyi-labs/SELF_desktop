@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/mnt/c/Users/30243/.codex/worktrees/reconstruction-bottom-up-20260928/olay/backend/audit_detail_projection.py", line 60, in <module>
+    run(p.parse_args())
+  File "/opt/self-reconstruction/venv/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+  File "/mnt/c/Users/30243/.codex/worktrees/reconstruction-bottom-up-20260928/olay/backend/audit_detail_projection.py", line 18, in run
+    s=GaussianState(raw['means'],raw['quats'],raw['scales'],raw['opacity'],raw['sh'][:,:4],mapping[fine])
+IndexError: tensors used as indices must be long, int, byte or bool tensors
