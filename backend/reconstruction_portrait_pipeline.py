@@ -136,14 +136,15 @@ class SceneAssembly(torch.nn.Module):
                              p["opacities"].sigmoid(), p["sh"], self.environment_parts)
 
     def render(self, frame, stage, *, antialiased=False, absgrad=False):
+        from reconstruction_fullframe import draw_frame
         state = self.portrait.local_state(frame["mesh"])
         h, w = frame["rgb"].shape[:2]
         if stage == "T0":
-            return draw(state, frame["F"], frame["K"], w, h, antialiased=antialiased, absgrad=absgrad)
+            return draw_frame(state, frame["F"], frame, antialiased=antialiased, absgrad=absgrad)
         if frame["C"] is None: raise ValueError("world_render_requires_real_world_observation")
         state = state.to_world(frame["C"], frame["F"], self.scale)
         if stage != "T1": state = joined_state(state, self.environment_state())
-        return draw(state, frame["C"], frame["K"], w, h, unit_scale=self.scale,
+        return draw_frame(state, frame["C"], frame, unit_scale=self.scale,
                     antialiased=antialiased, absgrad=absgrad)
 
 

@@ -1,0 +1,4 @@
+{"debugPixel": 0.0, "debugGradient": 0.00048828125, "gradientMagnitude": 1896.191162109375}
+{"debugPixel": 0.0, "debugGradient": 0.000244140625, "gradientMagnitude": 1465.701171875}
+{"debugPixel": 0.0, "debugGradient": 0.0003662109375, "gradientMagnitude": 1332.822021484375}
+{"passed": true, "cases": [{"roi": [50, 60, 105, 130], "pixelMax": 0.0, "parameterGradientMax": 0.00048828125}, {"roi": [6, 8, 83, 100], "pixelMax": 0.0, "parameterGradientMax": 0.000244140625}, {"roi": [87, 92, 152, 180], "pixelMax": 0.0, "parameterGradientMax": 0.0003662109375}], "statistics": [{"width": 160, "height": 192, "count": 4, "gradientL1": 70.479736328125}, {"width": 160, "height": 192, "count": 4, "gradientL1": 52.478309631347656}, {"width": 160, "height": 192, "count": 4, "gradientL1": 24.267183303833008}], "coverage": "off-ROI large kernel, off-axis, fine kernel, skin/room mutual occlusion, K metadata rejection; means/quats/scales/alpha/SH gradients"}

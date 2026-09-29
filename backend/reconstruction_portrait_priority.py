@@ -93,12 +93,13 @@ class ResearchModel(torch.nn.Module):
         self.body_sources={k:v[body.cpu().numpy()] for k,v in scene.environment_sources.items()}
     def adjusted_frame(self,frame):return {**frame,'F':self.pose(frame['name'],frame['F'])}
     def render(self,frame,stage):
+        from reconstruction_fullframe import draw_frame
         frame=self.adjusted_frame(frame);head=self.portrait.local_state(frame['mesh']);h,w=frame['rgb'].shape[:2]
-        if stage=='T0':return draw(head,frame['F'],frame['K'],w,h)
+        if stage=='T0':return draw_frame(head,frame['F'],frame)
         if frame['C'] is None:raise ValueError('missing_evidenced_world_C')
         head=head.to_world(frame['C'],frame['F'],self.scale)
         if stage!='T1':head=joined_state(head,self.room.state(),self.body_state(frame['name']))
-        return draw(head,frame['C'],frame['K'],w,h,unit_scale=self.scale)
+        return draw_frame(head,frame['C'],frame,unit_scale=self.scale)
     def body_state(self,name=None):
         from reconstruction_portrait_model import GaussianState
         p=self.body

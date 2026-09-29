@@ -31,6 +31,26 @@ def run():
         results.append({'roi':rect,'pixelMax':error,'parameterGradientMax':grad})
     assert len(stats.views)==3 and all(v['width']==w and v['height']==h for v in stats.views)
     assert all(v['gradientL1']>0 for v in stats.summary())
+    from types import SimpleNamespace
+    from reconstruction_portrait_pipeline import SceneAssembly
+    from reconstruction_portrait_priority import ResearchModel
+    from reconstruction_detail_controlled import DetailModel
+    from reconstruction_portrait_model import joined_state
+    st=GaussianState(*values,parts);empty=GaussianState(*[v[:0] for v in values],parts[:0])
+    frame={**f,'F':C,'C':C,'mesh':torch.zeros(1,3,device=device),'name':'synthetic'}
+    shim=SimpleNamespace(portrait=SimpleNamespace(local_state=lambda mesh:st),head_state=lambda f:st,adjusted_frame=lambda f:f,
+        scale=1.,environment_state=lambda:empty,room=SimpleNamespace(state=lambda:empty),body_state=lambda name:empty)
+    reference=draw_frame(st,C,frame)
+    crop_only={k:v for k,v in frame.items() if k!='fullK'}
+    assert torch.equal(draw_frame(st,C,crop_only)['rgb'],reference['rgb'])
+    try:draw_frame(st,C,{k:v for k,v in crop_only.items() if k!='fullSize'})
+    except ValueError:pass
+    else:raise AssertionError('missing canvas metadata accepted')
+    for cls in (SceneAssembly,ResearchModel,DetailModel):
+        for stage in ('T0','T1','T2'):
+            value=cls.render(shim,frame,stage)
+            assert torch.allclose(value['rgb'],reference['rgb'],rtol=1e-5,atol=1e-6),(cls.__name__,stage)
+            assert value['info']['width']==w and value['info']['height']==h
     try:draw_frame(GaussianState(*values,parts),C,{**f,'fullK':K+1})
     except ValueError:pass
     else:raise AssertionError('wrong K accepted')
