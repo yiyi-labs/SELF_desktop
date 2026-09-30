@@ -122,3 +122,18 @@ def build_surfaces(prepared,depth_dir,out,*,head_budget=22000,room_budget=30000,
         config=dict(headBudget=head_budget,roomBudget=room_budget,stride=stride,minViews=min_views,relativeDepthTolerance=.03),
         groups=output,counts=counts,knownCamerasUnchanged=True,supervision='predicted_multiview_depth_hypothesis_not_measurement_truth',published=False))
     return output
+
+if __name__=='__main__':
+    import argparse,traceback
+    p=argparse.ArgumentParser()
+    for key in ('prepared','depth','out'):p.add_argument('--'+key,required=True)
+    p.add_argument('--head-budget',type=int,default=22000);p.add_argument('--room-budget',type=int,default=30000)
+    p.add_argument('--stride',type=int,default=2);p.add_argument('--min-views',type=int,default=3)
+    a=p.parse_args();existed=Path(a.out).exists()
+    try:
+        if min(a.head_budget,a.room_budget,a.stride,a.min_views)<=0:raise ValueError('positive_surface_budget_required')
+        build_surfaces(a.prepared,a.depth,a.out,head_budget=a.head_budget,room_budget=a.room_budget,stride=a.stride,min_views=a.min_views)
+    except Exception as error:
+        if not existed and Path(a.out).is_dir() and not (Path(a.out)/'failure.json').exists():
+            write_json(Path(a.out)/'failure.json',{'type':type(error).__name__,'message':str(error),'traceback':traceback.format_exc(),'published':False})
+        raise

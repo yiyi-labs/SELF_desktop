@@ -56,9 +56,13 @@ def align_camera_scale(predicted,known):
                   "cameraCentreRmsRelative":float(np.sqrt(np.mean(residual**2))/baseline),
                   "inputBaseline":baseline,"perFrameScale":False}
 def bilinear(array,uv):
-    q=np.asarray(uv,dtype=np.float32)
-    return cv2.remap(np.asarray(array,dtype=np.float32),q[:,0,None],q[:,1,None],
-                     cv2.INTER_LINEAR,borderMode=cv2.BORDER_CONSTANT,borderValue=np.nan)[:,0]
+    # cv2.remap output dimensions are signed-short; dense point lists may
+    # exceed 32767 rows. Chunk the requests, NOT the source image or geometry.
+    q=np.asarray(uv,dtype=np.float32);array=np.asarray(array,dtype=np.float32)
+    if not len(q):return np.empty((0,)+array.shape[2:],np.float32)
+    return np.concatenate([cv2.remap(array,r[:,0,None],r[:,1,None],cv2.INTER_LINEAR,
+        borderMode=cv2.BORDER_CONSTANT,borderValue=np.nan)[:,0] for r in
+        (q[i:i+16000] for i in range(0,len(q),16000))],axis=0)
 def classify_depth(candidate_z, observed_z, relative_tolerance=.03):
     """Occlusion is UNKNOWN, never independent visible contradiction."""
     candidate_z=np.asarray(candidate_z);observed_z=np.asarray(observed_z)
@@ -92,3 +96,23 @@ def complete_parameter_aliases(required,loaded):
         if not same:raise ValueError('missing_independent_weight:'+key)
         result[key]=result[same[0]];aliases.append({'key':key,'sameParameterAs':same[0]})
     return result,aliases
+def validate_surface_source(meta, arrays, expected_source_hash):
+    """A shared source hash is necessary, not a geometry quality approval."""
+    if not expected_source_hash or meta.get('sourceHash') != expected_source_hash:
+        raise ValueError('surface_source_mismatch')
+    for label,arr in arrays.items():
+        if 'source_hash' not in arr or str(arr['source_hash']) != expected_source_hash:
+            raise ValueError('surface_array_source_mismatch:'+label)
+        required=('means','quats','scales','opacity','sh','parts','uid','support','confidence','source_image','source_uv')
+        if any(k not in arr for k in required):
+            raise ValueError('surface_fields_missing:'+label)
+        n=len(arr['means'])
+        if any(len(arr[k]) != n for k in required):
+            raise ValueError('surface_field_length_mismatch:'+label)
+        if len(np.unique(arr['uid'])) != n:
+            raise ValueError('surface_uid_collision:'+label)
+        if any(not np.isfinite(arr[k]).all() for k in ('means','quats','scales','opacity','sh','confidence')):
+            raise ValueError('surface_nonfinite:'+label)
+        if np.any(arr['scales']<=0) or np.any(arr['opacity']<=0) or np.any(arr['opacity']>1):
+            raise ValueError('surface_invalid_scale_or_alpha:'+label)
+    return True

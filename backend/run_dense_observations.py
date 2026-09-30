@@ -6,13 +6,14 @@ import argparse,json,time,sys,shutil,gc
 from pathlib import Path
 import cv2,numpy as np,torch
 from reconstruction_dense_contract import *
-def select_names(raw,plan,limit):
+def select_names(raw,plan,limit,source_frames):
     index={str(n):i for i,n in enumerate(raw["names"])}
     forbidden=set(plan["development"])|set(plan["audit"])
     train=[n for n in plan["train"] if n in index and n not in forbidden]
     if len(train)<3:raise ValueError("insufficient_training_observations")
     # Uniform time coverage, independent of development RGB, plus readable metadata.
-    train=sorted(train,key=lambda n:index[n])
+    if any(n not in source_frames for n in train):raise ValueError("missing_capture_identity")
+    train=sorted(train,key=lambda n:(source_frames[n]["timestampSeconds"],source_frames[n]["sourceIndexZeroBased"]))
     if len(train)>limit:train=[train[i] for i in np.unique(np.rint(np.linspace(0,len(train)-1,limit)).astype(int))]
     return train,index
 def run(prepared,split,tool,out,limit=24,batch=8,resolution=504):
@@ -39,13 +40,14 @@ def run(prepared,split,tool,out,limit=24,batch=8,resolution=504):
     write_json(out/"checkpoint-aliases.json",aliases)
     net=net.cuda().eval();processor=InputProcessor()
     meta=json.loads((prep/"preparation.json").read_text());raw=dict(np.load(prep/"local_geometry.npz"))
-    plan=json.loads(Path(split).read_text());names,index=select_names(raw,plan,limit)
+    plan=json.loads(Path(split).read_text())
     world={str(n):raw["C"][i] for i,n in enumerate(raw["world_names"])}
     source_root=(prep.parent.parent/meta["source"]).resolve()
     frames=json.loads((source_root/"frame_manifest.audit.json").read_text())
     if digest(source_root/"capture.mp4")!=meta["sourceHash"] or frames["captureSha256"]!=meta["sourceHash"]:
         raise ValueError("source_identity_changed")
     by={r["name"]:r for r in frames["frames"]};K=raw["K"]
+    names,index=select_names(raw,plan,limit,by)
     rgb={n:cv2.cvtColor(cv2.imread(str(prep/"rectified_observations"/n)),cv2.COLOR_BGR2RGB) for n in names}
     labels={n:dict(np.load(prep/"rectified_observations"/(n+".npz"))) for n in names}
     h,w=rgb[names[0]].shape[:2]
@@ -125,13 +127,13 @@ if __name__=="__main__":
     p=argparse.ArgumentParser()
     for k in ["prepared","split","tool","out"]:p.add_argument("--"+k,required=True)
     p.add_argument("--limit",type=int,default=24);p.add_argument("--batch",type=int,default=8)
-    a=p.parse_args()
+    a=p.parse_args();existed=Path(a.out).exists()
     try:run(a.prepared,a.split,a.tool,a.out,a.limit,a.batch)
     except Exception as error:
         # Save failed evidence; never manufacture a usable manifest or retry
         # under weaker thresholds. A new invocation requires a new run directory.
         failed=Path(a.out)/'failure.json'
-        if Path(a.out).is_dir() and not failed.exists():
+        if not existed and Path(a.out).is_dir() and not failed.exists():
             import traceback
             write_json(failed,{'status':'failed','type':type(error).__name__,'message':str(error),
                 'traceback':traceback.format_exc(),'published':False})

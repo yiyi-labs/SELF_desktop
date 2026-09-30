@@ -48,4 +48,47 @@ class DenseContractTests(unittest.TestCase):
     def test_independent_missing_weight_cannot_be_randomly_filled(self):
         with self.assertRaisesRegex(ValueError,'missing_independent_weight'):
             complete_parameter_aliases({'a':object(),'b':object()},{'a':np.ones(3)})
+    def test_window_uses_capture_time_not_geometry_row(self):
+        from run_dense_observations import select_names
+        raw={'names':['b','c','a','d']};plan={'train':['a','b','c'],'development':['d'],'audit':[]}
+        source={n:{'timestampSeconds':v,'sourceIndexZeroBased':int(v*10)} for n,v in [('a',0.),('b',1.),('c',2.),('d',3.)]}
+        selected,index=select_names(raw,plan,3,source)
+        self.assertEqual(selected,['a','b','c']);self.assertEqual(index['a'],2)
+    def test_dense_sampling_exceeds_cv_short_without_changing_pixels(self):
+        yy,xx=np.mgrid[:60,:80];image=np.stack([xx+2*yy,xx-yy,yy],axis=-1).astype(np.float32)
+        uv=np.tile([[20.5,30.5],[45.,15.],[79.,59.]],(15000,1))
+        sampled=bilinear(image,uv)
+        np.testing.assert_allclose(sampled[:2],[[81.5,-10.,30.5],[75.,30.,15.]])
+        np.testing.assert_allclose(sampled[0],sampled[39000]);self.assertEqual(sampled.shape,(45000,3))
+
+    def test_surface_job_and_uid_contract(self):
+        arr=dict(means=np.zeros((2,3)),quats=np.tile([1.,0,0,0],(2,1)),scales=np.ones((2,3)),
+            opacity=np.ones(2)*.6,sh=np.zeros((2,4,3)),parts=np.array([2,2]),uid=np.array([4,5]),
+            support=np.array([3,3]),confidence=np.ones(2),source_image=np.array(['a','b']),
+            source_uv=np.zeros((2,2)),source_hash=np.array('source-a'))
+        self.assertTrue(validate_surface_source({'sourceHash':'source-a'},{'head':arr},'source-a'))
+        with self.assertRaisesRegex(ValueError,'surface_source_mismatch'):
+            validate_surface_source({'sourceHash':'source-a'},{'head':arr},'source-b')
+        wrong=dict(arr,source_hash=np.array('source-b'))
+        with self.assertRaisesRegex(ValueError,'surface_array_source_mismatch'):
+            validate_surface_source({'sourceHash':'source-a'},{'head':wrong},'source-a')
+        wrong=dict(arr,uid=np.array([4,4]))
+        with self.assertRaisesRegex(ValueError,'surface_uid_collision'):
+            validate_surface_source({'sourceHash':'source-a'},{'head':wrong},'source-a')
+        wrong=dict(arr);wrong.pop('source_uv')
+        with self.assertRaisesRegex(ValueError,'surface_fields_missing'):
+            validate_surface_source({'sourceHash':'source-a'},{'head':wrong},'source-a')
+    def test_existing_run_is_not_mutated_by_cli_failure(self):
+        import tempfile,subprocess,sys
+        from pathlib import Path
+        with tempfile.TemporaryDirectory() as directory:
+            folder=Path(directory)/'old-run';folder.mkdir();(folder/'receipt.json').write_text('old')
+            command=[sys.executable,str(Path(__file__).with_name('run_dense_observations.py'))]
+            for k in ('prepared','split','tool'):command+=['--'+k,str(Path(directory)/'missing')]
+            command+=['--out',str(folder)]
+            result=subprocess.run(command,capture_output=True)
+            self.assertNotEqual(result.returncode,0)
+            self.assertEqual([p.name for p in folder.iterdir()],['receipt.json'])
+            self.assertEqual((folder/'receipt.json').read_text(),'old')
+
 if __name__=="__main__":unittest.main()
