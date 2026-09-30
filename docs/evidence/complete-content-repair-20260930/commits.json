@@ -1,0 +1,8 @@
+{
+  "base": "b636334816d4997a27e713c7c86356fe5ea6de19",
+  "implementation": [
+    "a193dbd8608b1048f5ca9ff5d13c4ba2d8052e17 Train explicit room replacement with retained context and validate complete handoff",
+    "f1230e126e11f5a6c2046192a9b9706d43dcc7cd Add bounded head pose comparison and actual continuous-surface verification",
+    "a119c5df4f0bb735725a4ff7a4e2f152913c64a2 Add target-preserving patch contracts and pinned visible tracking stage"
+  ]
+}

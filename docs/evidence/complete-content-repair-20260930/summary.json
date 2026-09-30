@@ -1,0 +1,140 @@
+{
+  "face": {
+    "R0": {
+      "development": 0.031100130174309015,
+      "review_audit": 0.041770072653889656
+    },
+    "fixed-F": {
+      "development": 0.03111949423328042,
+      "review_audit": 0.041795491240918636
+    },
+    "bounded-F": {
+      "development": 0.031125901266932487,
+      "review_audit": 0.041796086666484676
+    }
+  },
+  "room": {
+    "before": {
+      "face": 0.045653753699018404,
+      "room": 0.044181307061360434
+    },
+    "initial": {
+      "face": 0.021250553644047335,
+      "room": 0.14393519724790865
+    },
+    "after": {
+      "face": 0.021250535877278216,
+      "room": 0.1232826285637342
+    },
+    "trainingRoom": {
+      "before": 0.04564605546849115,
+      "initial": 0.12541772531611578,
+      "after": 0.09525540364640099
+    }
+  },
+  "roomParameterChanges": {
+    "offset": {
+      "meanAbs": 0.20775625109672546,
+      "maxAbs": 1.2650716304779053
+    },
+    "log_scales": {
+      "meanAbs": 0.10692877322435379,
+      "maxAbs": 0.3364722728729248
+    },
+    "quats": {
+      "meanAbs": 0.03993069380521774,
+      "maxAbs": 0.25179722905158997
+    },
+    "opacity": {
+      "meanAbs": 1.4412071704864502,
+      "maxAbs": 6.79564094543457
+    },
+    "sh": {
+      "meanAbs": 0.31120583415031433,
+      "maxAbs": 2.936971426010132
+    }
+  },
+  "roomSteps": 480,
+  "roomSeconds": 135.692084841,
+  "torchAllocatedMiB": 766.70556640625,
+  "torchReservedMiB": 1034.0,
+  "deviceSamplePeakMiB": 1274,
+  "deviceSamples": 202,
+  "roomInitialRestored": {
+    "model": true,
+    "optimizers": true,
+    "samplers": true,
+    "rng": true,
+    "strategy": true
+  },
+  "checkpointKeys": [
+    "schema",
+    "stage",
+    "step",
+    "contract",
+    "model",
+    "trainable",
+    "optimizers",
+    "bindings",
+    "samplers",
+    "rng",
+    "strategy",
+    "scheduler",
+    "extra"
+  ],
+  "renderers": {
+    "reference": {
+      "assetHash": "f00d9475341a1dc2fc7b82b5634782da204c44a56bf61ea9897a94df28b1f4fd",
+      "rgbL1Full": 0.030852437019348145,
+      "rgbL1UnionAlphaSupport": 0.030852466821670532,
+      "alphaL1Full": 0.09843309968709946,
+      "nativeCanvas": [
+        1080,
+        1920
+      ],
+      "errors": [],
+      "renderer": "PlayCanvas2.22.4 SwiftShader; not HarmonyOS",
+      "face_core": {
+        "rendererRgbL1": 0.0060373106971383095,
+        "pcSourceL1": 0.030092454219441723,
+        "gsSourceL1": 0.03047098883686171
+      },
+      "room_visible": {
+        "rendererRgbL1": 0.04324289411306381,
+        "pcSourceL1": 0.2486496242941261,
+        "gsSourceL1": 0.2558242192530193
+      },
+      "neck_cloth_visible": {
+        "rendererRgbL1": 0.01167109701782465,
+        "pcSourceL1": 0.16587077146883422,
+        "gsSourceL1": 0.16318299041086703
+      }
+    },
+    "orbit12": {
+      "assetHash": "f00d9475341a1dc2fc7b82b5634782da204c44a56bf61ea9897a94df28b1f4fd",
+      "rgbL1Full": 0.013414825312793255,
+      "rgbL1UnionAlphaSupport": 0.013414820656180382,
+      "alphaL1Full": 0.10717710107564926,
+      "nativeCanvas": [
+        1080,
+        1920
+      ],
+      "errors": [],
+      "renderer": "PlayCanvas2.22.4 SwiftShader; not HarmonyOS"
+    },
+    "orbit35": {
+      "assetHash": "f00d9475341a1dc2fc7b82b5634782da204c44a56bf61ea9897a94df28b1f4fd",
+      "rgbL1Full": 0.022039618343114853,
+      "rgbL1UnionAlphaSupport": 0.02203962951898575,
+      "alphaL1Full": 0.14606885612010956,
+      "nativeCanvas": [
+        1080,
+        1920
+      ],
+      "errors": [],
+      "renderer": "PlayCanvas2.22.4 SwiftShader; not HarmonyOS"
+    }
+  },
+  "fixedAssetHash": "f00d9475341a1dc2fc7b82b5634782da204c44a56bf61ea9897a94df28b1f4fd",
+  "notPublished": true
+}

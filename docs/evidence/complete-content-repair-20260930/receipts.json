@@ -1,0 +1,17 @@
+{
+  "privateRoot": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\complete-content-repair-20260930-a",
+  "privateInventoryHash": "906bbdb95c72cf832461bc29158150a5eec57055757a6fac70dbaa7630c6fe73",
+  "count": 448,
+  "backup": "R0 checkpoint local copy only; source/PT/PLY remain in local .sources, no independent large backup created; Git not asset backup",
+  "files": {
+    "reconstruction_complete_contract.py": "ba17d9c13e889379578d3983fce484aaa1f090764550eb5f45429e834bc5adaf",
+    "run_complete_observations.py": "221cd8ff80a0072c3c586ea8f464dbbb8fec0236db06ae7915bd3d2d6d9ac0e7",
+    "test_reconstruction_complete_contract.py": "29fd58815334248f6b7c389a97c41ebae619a82c3754e71c8e4fb36774a879d2",
+    "run_complete_geometry.py": "8cda94c99b6b06591635a54b0de8f5c05fe5ac1252e58bde80c65be77115fb68",
+    "run_complete_surface_check.py": "4ae0cdea341d1be1ac0e9841e26d80f9cc6907bde3645ebadb05951217078381",
+    "run_complete_room_training.py": "3848a215b6add8c127ce270a7269f80a24874da76ba796a7adb14119812db183",
+    "audit_complete_content.py": "f6ec21bb639c7689a57f2478f0e4a31c5b4dae359272c7542261b362e9dc00b3",
+    "audit_complete_handoff.py": "78dc80d06aee4a0bb2651d4d97e506de6326adae8945a93ecae9c1633960ac25",
+    "audit_complete_summary.py": "bc4ed8341a5ccb1c347390b9813a0a8b00d1e04e07c18c47cfe28c8aff7184bc"
+  }
+}
