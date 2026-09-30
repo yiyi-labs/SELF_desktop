@@ -1,0 +1,34 @@
+{
+  "currentSourceHashes": {
+    "reconstruction_dense_contract.py": "e5476cc89a34acd319971506a22332274b2be375b3e5d8fda60431f2000a0ca0",
+    "run_dense_observations.py": "49ec705fad769c983311cf27316ce6617c8e25a8893b8b3fac74a65ce545d3c6",
+    "reconstruction_dense_surfaces.py": "fd3929151a351cab5ea12c4517b528fabbf8fdc53480f3923e31ba6476b95891",
+    "test_reconstruction_dense_contract.py": "99b2e48a5d67733f0d9cbc6b83d4dc8d2ce81f45e01a8b9db028e91eeea04700",
+    "run_dense_surface_training.py": "fd1c4d81082c993b3d4666dc260ebbd47e74906872dbdfe1a0dad2138aa96c89",
+    "audit_dense_surface_asset.py": "7dee51b0a24857a64ea33c245a75b195f440ed0827cad13694327fafc9f2af8e",
+    "audit_dense_surface_training.py": "ac9a71622d4f9b84c291a0541ca6aceffea347cdf5ac4e1a4965a6be3fe5a38e"
+  },
+  "savedAfterTraining": true,
+  "noRetrainingInReceipt": true,
+  "versions": {
+    "torch": "2.8.0+cu128",
+    "gsplat": "1.5.3",
+    "numpy": "2.2.6",
+    "scipy": "1.15.3",
+    "opencv-library": "4.12.0"
+  },
+  "device": "NVIDIA GeForce RTX 5070 Laptop GPU",
+  "deviceTotalBytes": 8518041600,
+  "R0Hash": "2468edc379f8b76eac97fccfbf9e9a4c775f980102b95283ee15b2dc4cee7cb8",
+  "candidateCheckpointHash": "8662157d679d120eae6a09f563c0f64c991106a9fde988cf3cf4c432b8865637",
+  "assetHash": "cd39aac5afe2b018daf7689c00c1fcdf07eb0cc9202a030fde657153513cf8a9",
+  "checkpointHashes": {
+    "candidate-final.pt": "8662157d679d120eae6a09f563c0f64c991106a9fde988cf3cf4c432b8865637",
+    "initial.pt": "f0f39d939d6c8904853454919448f0bc9487053507557717e014ca6828da25ae",
+    "restored.pt": "02d35ab6e7f19d12cc77614ddc175cb9c23ff0b0f7f17f43c1c8a4c272c36ffd",
+    "step-120.pt": "b8ea553c7c64f162c7dee9e04cafe849ef04d59d784b66ca352b7f71390b4c42",
+    "step-240.pt": "31e5b9f05ad12fbd2563060896c04cd92add76dd49686336129d90391e173bc9",
+    "step-360.pt": "e2e6fd6474b651e8a59c04fe150271eae850ec9e896545fc0d394d48ff27603c"
+  },
+  "postRunChangedCodeExplanation": "metadata and UID guards, old-run failure guard, generic CLI and post-run audits; numerical training source preserved in training/algorithm-source"
+}
