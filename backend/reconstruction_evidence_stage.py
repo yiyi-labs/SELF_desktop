@@ -14,7 +14,7 @@ class MeasuredSurfaceModel(SharedSurfaceModel):
     def displacement(self):return self.measured_surface_field
 
 
-def load_stage(manifest,out):
+def load_stage(manifest,out,*,model_class=None):
     spec=json.loads(Path(manifest).read_text(encoding='utf-8-sig'));out=Path(out).resolve();private=Path(__file__).resolve().parent/'.sources'
     if not out.is_relative_to(private):raise ValueError('research output must stay in .sources')
     out.mkdir(parents=True,exist_ok=False);save_json(out/'spec.json',spec);src=out/'algorithm-source';src.mkdir()
@@ -23,9 +23,10 @@ def load_stage(manifest,out):
         if p.name.startswith(('reconstruction_','run_surface','flame_open','appearance_direction','audit_portrait_priority')):shutil.copyfile(p,src/p.name)
     prep=Path(spec['prepared']);data=load_v3_prepared(prep);plan=json.loads(Path(spec['observations']).read_text());plan.pop('new_audit',None)
     loading=out/'loading';loading.mkdir();shutil.copyfile(prep/'cloth_supported_seeds.npz',loading/'cloth_supported_seeds.npz')
-    scene=initialize_scene(data,loading);model=MeasuredSurfaceModel(scene,data,plan['train']);del scene;model.enable_components(data,plan['train'])
+    scene=initialize_scene(data,loading);model=(model_class or MeasuredSurfaceModel)(scene,data,plan['train']);del scene;model.enable_components(data,plan['train'])
     ck=torch.load(spec['checkpoint'],map_location='cuda',weights_only=False);restore_tensors(model,ck['model']);model.room.metadata=ck['extra']['roomMetadata'];model.body_sources=ck['extra']['bodySources']
-    model.attach_field(torch.zeros_like(model.portrait.surface_residual))
+    if model_class is None:model.attach_field(torch.zeros_like(model.portrait.surface_residual))
+    else:model.attach_canonical_field()
     for p in model.parameters():p.requires_grad_(False)
     contract={'sourceHash':data['sourceHash'],'checkpointHash':sha(spec['checkpoint']),'preparedHash':sha(prep/'preparation.json'),'spec':spec,'sources':{p.name:sha(p) for p in src.glob('*.py')},'published':False}
     save_json(out/'contract.json',contract)
