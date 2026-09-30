@@ -1,0 +1,27 @@
+{
+  "testsRun": 16,
+  "testsPassed": true,
+  "compilePassed": true,
+  "sourceHashes": {
+    "reconstruction_dense_contract.py": "bb88237643b37f137e73ae4b502c610bab42bf977875ad7e73bba52f4d1adb47",
+    "reconstruction_dense_surfaces.py": "1a8a94cbd54aff624a6882c37acd17b5bd728c4e2330b71ffa85815256eb7a91",
+    "run_dense_observations.py": "2bfef6ed1e7f00ecc5ab0cf6479763b281ed37bfa5377fae63f3be44205e791b",
+    "setup_reconstruction_dense_tool.py": "28bce3b9ae1a95a33bf73fa681f28017573d2f9ff1896b41c9e1a00b382bef7d",
+    "test_reconstruction_dense_contract.py": "e61993708d4dc1b78fcd662cc240263a00471ce0f094c24bd2e67385a473d5b2",
+    "test_reconstruction_dense_surfaces.py": "4646df8332fc2032ff30ca0107899dc0bb5dcceb5b5771f960d795384fb430e7"
+  },
+  "weightsHashPassed": true,
+  "actualWeights": {
+    "config.json": "5e34115ebc17bd2d8d43033c5f72e9446ac8833fd61d3fa160b7e67e0bb5b7b5",
+    "README.md": "5388563071b4361b11d6d811b354d454f26aed2adba634fcf4ee3775c8eda480",
+    "model.safetensors": "e01067dc1659613083d9145a9a2547ccdbe6ccbbf83c4fe7b3e8a4e2bdae78b5"
+  },
+  "originalPackageChanges": {},
+  "trainingExecuted": false,
+  "usableDepthManifestCreated": false,
+  "qualityPassed": false,
+  "published": false,
+  "deployed": false,
+  "deviceTransfer": false,
+  "scope": "current code/CPU interchange acceptance; not reconstruction quality acceptance"
+}

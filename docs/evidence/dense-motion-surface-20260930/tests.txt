@@ -1,0 +1,21 @@
+test_bad_camera_rejected (test_reconstruction_dense_contract.DenseContractTests) ... ok
+test_identity_and_split_gate (test_reconstruction_dense_contract.DenseContractTests) ... ok
+test_independent_missing_weight_cannot_be_randomly_filled (test_reconstruction_dense_contract.DenseContractTests) ... ok
+test_negative_depth_invalid (test_reconstruction_dense_contract.DenseContractTests) ... ok
+test_occlusion_not_free_space (test_reconstruction_dense_contract.DenseContractTests) ... ok
+test_one_scale_not_frame_scale (test_reconstruction_dense_contract.DenseContractTests) ... ok
+test_only_shared_parameter_alias_can_load (test_reconstruction_dense_contract.DenseContractTests) ... ok
+test_resize_full_and_crop_rays (test_reconstruction_dense_contract.DenseContractTests) ... ok
+test_rotated_project_unproject (test_reconstruction_dense_contract.DenseContractTests) ... ok
+test_stationary_scale_rejected (test_reconstruction_dense_contract.DenseContractTests) ... ok
+test_depth_jump_excluded (test_reconstruction_dense_surfaces.DenseSurfaceTests) ... ok
+test_native_pixel_inverse (test_reconstruction_dense_surfaces.DenseSurfaceTests) ... ok
+test_occluded_not_accepted_or_free_space (test_reconstruction_dense_surfaces.DenseSurfaceTests) ... ok
+test_planar_covariance_and_no_normal_flip (test_reconstruction_dense_surfaces.DenseSurfaceTests) ... ok
+test_predicted_multiview_agreement_is_only_hypothesis (test_reconstruction_dense_surfaces.DenseSurfaceTests) ... ok
+test_unique_views_not_window_duplicates (test_reconstruction_dense_surfaces.DenseSurfaceTests) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.068s
+
+OK
