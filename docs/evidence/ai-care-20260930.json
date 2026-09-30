@@ -1,0 +1,212 @@
+{
+  "input": "Original 512x512 drawn synthetic face; no user portraits, camera data or model files.",
+  "checks": [
+    {
+      "case": "eye_selection_without_brand",
+      "pass": true,
+      "result": {
+        "schemaVersion": 1,
+        "requestId": "test-1",
+        "snapshotId": "snap-1",
+        "assetId": "sample",
+        "assetVersion": "v1",
+        "textureVersion": "t1",
+        "sceneRevision": 2,
+        "regionVersion": 1,
+        "plan": {
+          "decision": "explain",
+          "shortMessage": "你圈的是眼周。日常先做两步：清洁时眼周放轻带过，别反复揉搓；冲净后轻轻按干，再取一点眼霜在眼周轻轻点开、避开眼内。用量和频率以实物包装为准。",
+          "operations": [],
+          "explanationRefs": [],
+          "careGuide": {
+            "productId": "CN008",
+            "whyHere": "眼周也可以有轻柔的日常节奏，留意自己喜欢的舒适感。",
+            "howToUse": "在眼周轻轻点开，避开眼内；具体用量看实物包装。"
+          },
+          "question": "",
+          "choices": [],
+          "selectionObservations": [
+            {
+              "regionId": "circle-1",
+              "area": "eye",
+              "concern": "none",
+              "confidence": "clear",
+              "basis": "image"
+            }
+          ]
+        },
+        "modelEvidence": {
+          "requestedModel": "deepseek-flash",
+          "returnedModel": "deepseek-flash",
+          "systemFingerprint": "aeb56401ca74e127821c4f9126dcb669",
+          "elapsedMs": 1968,
+          "usage": {
+            "prompt_tokens": 13208,
+            "completion_tokens": 297,
+            "total_tokens": 13505,
+            "prompt_tokens_details": {
+              "cached_tokens": 13056
+            },
+            "prompt_cache_hit_tokens": 13056,
+            "prompt_cache_miss_tokens": 152
+          },
+          "providerResponseId": "e70303ca-5f07-44c6-83ee-8be8db8fdfc3"
+        }
+      }
+    },
+    {
+      "case": "eye_product_followup",
+      "pass": true,
+      "result": {
+        "schemaVersion": 1,
+        "requestId": "test-1",
+        "snapshotId": "snap-1",
+        "assetId": "sample",
+        "assetVersion": "v1",
+        "textureVersion": "t1",
+        "sceneRevision": 2,
+        "regionVersion": 1,
+        "plan": {
+          "decision": "explain",
+          "shortMessage": "眼周用法：取一点在眼周轻轻点开，避开眼内；别用力拉扯或来回搓。用量和频率以实物包装标注为准。上妆前先等它吸收再动眼周。",
+          "operations": [],
+          "explanationRefs": [
+            "CN008"
+          ],
+          "careGuide": null,
+          "question": "",
+          "choices": [],
+          "selectionObservations": [
+            {
+              "regionId": "circle-1",
+              "area": "eye",
+              "concern": "none",
+              "confidence": "clear",
+              "basis": "image"
+            }
+          ]
+        },
+        "modelEvidence": {
+          "requestedModel": "deepseek-flash",
+          "returnedModel": "deepseek-flash",
+          "systemFingerprint": "aeb56401ca74e127821c4f9126dcb669",
+          "elapsedMs": 2234,
+          "usage": {
+            "prompt_tokens": 11617,
+            "completion_tokens": 287,
+            "total_tokens": 11904,
+            "prompt_tokens_details": {
+              "cached_tokens": 2304
+            },
+            "prompt_cache_hit_tokens": 2304,
+            "prompt_cache_miss_tokens": 9313
+          },
+          "providerResponseId": "2a4745ae-69df-44b3-ad44-3d4c87f078bc"
+        }
+      }
+    },
+    {
+      "case": "declined_products",
+      "pass": true,
+      "result": {
+        "schemaVersion": 1,
+        "requestId": "test-1",
+        "snapshotId": "snap-1",
+        "assetId": "sample",
+        "assetVersion": "v1",
+        "textureVersion": "t1",
+        "sceneRevision": 2,
+        "regionVersion": 1,
+        "plan": {
+          "decision": "explain",
+          "shortMessage": "好，这次不推产品。眼周日常就三步：卸妆或洁面时放轻带过、不反复揉搓；冲净后用毛巾轻按吸水，不来回擦；白天出门做好遮挡防晒，风大干燥时可加一层轻薄保湿。手法一律轻，具体用量看包装。",
+          "operations": [],
+          "explanationRefs": [],
+          "careGuide": null,
+          "question": "",
+          "choices": [],
+          "selectionObservations": [
+            {
+              "regionId": "circle-1",
+              "area": "eye",
+              "concern": "none",
+              "confidence": "clear",
+              "basis": "image"
+            }
+          ]
+        },
+        "modelEvidence": {
+          "requestedModel": "deepseek-flash",
+          "returnedModel": "deepseek-flash",
+          "systemFingerprint": "aeb56401ca74e127821c4f9126dcb669",
+          "elapsedMs": 2437,
+          "usage": {
+            "prompt_tokens": 9862,
+            "completion_tokens": 234,
+            "total_tokens": 10096,
+            "prompt_tokens_details": {
+              "cached_tokens": 2304
+            },
+            "prompt_cache_hit_tokens": 2304,
+            "prompt_cache_miss_tokens": 7558
+          },
+          "providerResponseId": "90674552-007f-46af-a2f6-9f016229b7ef"
+        }
+      }
+    },
+    {
+      "case": "cheek_bump_selection",
+      "pass": true,
+      "result": {
+        "schemaVersion": 1,
+        "requestId": "test-1",
+        "snapshotId": "snap-1",
+        "assetId": "sample",
+        "assetVersion": "v1",
+        "textureVersion": "t1",
+        "sceneRevision": 2,
+        "regionVersion": 1,
+        "plan": {
+          "decision": "explain",
+          "shortMessage": "你圈的是脸颊上一处可能的小凸起。护理上先做两件小事：洗脸时只轻柔带过，不搓不挤；冲净后用干净毛巾轻轻按干。保湿照常薄薄铺一层即可，别在那处反复揉。",
+          "operations": [],
+          "explanationRefs": [],
+          "careGuide": {
+            "productId": "CN029",
+            "whyHere": "先轻柔清洁这处，不揉搓；洁面不是祛痘治疗。",
+            "howToUse": "清洁时轻柔带过，随后充分冲净。"
+          },
+          "question": "",
+          "choices": [],
+          "selectionObservations": [
+            {
+              "regionId": "circle-1",
+              "area": "cheek",
+              "concern": "blemish",
+              "confidence": "clear",
+              "basis": "image"
+            }
+          ]
+        },
+        "modelEvidence": {
+          "requestedModel": "deepseek-flash",
+          "returnedModel": "deepseek-flash",
+          "systemFingerprint": "aeb56401ca74e127821c4f9126dcb669",
+          "elapsedMs": 2250,
+          "usage": {
+            "prompt_tokens": 11078,
+            "completion_tokens": 285,
+            "total_tokens": 11363,
+            "prompt_tokens_details": {
+              "cached_tokens": 10880
+            },
+            "prompt_cache_hit_tokens": 10880,
+            "prompt_cache_miss_tokens": 198
+          },
+          "providerResponseId": "3735f857-5d84-49e2-bdf0-f37087db9b88"
+        }
+      }
+    }
+  ],
+  "pass": true
+}

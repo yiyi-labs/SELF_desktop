@@ -515,4 +515,95 @@ export class OlayDiscoveryRepository {
     "section": "catalog"
   }
 ]; }
+  static researchRecords():OlayDiscoveryItem[]{ return [
+  {
+    "id": "CN014",
+    "name": "大师防晒（官方索引线索）",
+    "category": "sunscreen",
+    "family": "大师防晒",
+    "source": "https://weibo.com/olay?index=55&tabtype=album&uid=1645365377",
+    "section": "research"
+  },
+  {
+    "id": "H001",
+    "name": "第4代超红瓶·轻润（历史）",
+    "category": "cream",
+    "family": "第4代超红瓶·轻润（历史）",
+    "source": "https://www.prnasia.com/story/459234-1.shtml",
+    "section": "research"
+  },
+  {
+    "id": "H002",
+    "name": "第4代超红瓶·滋润（历史）",
+    "category": "cream",
+    "family": "第4代超红瓶·滋润（历史）",
+    "source": "https://www.prnasia.com/story/459234-1.shtml",
+    "section": "research"
+  },
+  {
+    "id": "H003",
+    "name": "第3代淡斑小白瓶（历史）",
+    "category": "serum",
+    "family": "第3代淡斑小白瓶（历史）",
+    "source": "https://www.prnasia.com/story/438448-1.shtml",
+    "section": "research"
+  },
+  {
+    "id": "H004",
+    "name": "首代淡纹黑管精华（历史）",
+    "category": "serum",
+    "family": "首代淡纹黑管精华（历史）",
+    "source": "https://www.prnasia.com/story/455819-1.shtml",
+    "section": "research"
+  },
+  {
+    "id": "H005",
+    "name": "超抗小白瓶（2024历史线索）",
+    "category": "serum",
+    "family": "超抗小白瓶（2024历史线索）",
+    "source": "https://www.prnasia.com/story/438472-1.shtml",
+    "section": "research"
+  },
+  {
+    "id": "H006",
+    "name": "第5代超红瓶·水霜（零售历史）",
+    "category": "cream",
+    "family": "第5代超红瓶·水霜（零售历史）",
+    "source": "https://www.jd.com/hprm/1316cc2749dc5b0b51ec.html?electedExtAttrSet=&extAttrValue=expand_name,&page=2&sort_type=sort_default",
+    "section": "research"
+  },
+  {
+    "id": "H007",
+    "name": "第5代超红瓶·轻润（零售历史）",
+    "category": "cream",
+    "family": "第5代超红瓶·轻润（零售历史）",
+    "source": "https://www.jd.com/hprm/1316cc2749dc5b0b51ec.html?electedExtAttrSet=&extAttrValue=expand_name,@&page=3&sort_type=sort_default",
+    "section": "research"
+  },
+  {
+    "id": "H008",
+    "name": "第5代超红瓶·油霜（零售历史）",
+    "category": "cream",
+    "family": "第5代超红瓶·油霜（零售历史）",
+    "source": "https://www.jd.com/hprm/1316cc2749dc5b0b51ec.html?electedExtAttrSet=&extAttrValue=expand_name,@&page=3&sort_type=sort_default",
+    "section": "research"
+  },
+  {
+    "id": "H009",
+    "name": "修红特护水乳（2024资料）",
+    "category": "set",
+    "family": "修红特护水乳（2024资料）",
+    "source": "https://www.prnasia.com/story/438448-1.shtml",
+    "section": "research"
+  },
+  {
+    "id": "H010",
+    "name": "超红瓶水霜（2026年3月旧文，代际未明）",
+    "category": "cream",
+    "family": "超红瓶水霜（2026年3月旧文，代际未明）",
+    "source": "https://www.sina.cn/news/detail/5278242060633082.html",
+    "section": "research"
+  }
+]; }
+  static allRecords():OlayDiscoveryItem[]{return OlayDiscoveryRepository.records().concat(OlayDiscoveryRepository.researchRecords());}
 }

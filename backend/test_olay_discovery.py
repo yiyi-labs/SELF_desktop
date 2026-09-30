@@ -14,9 +14,12 @@ class OlayDiscoveryTest(unittest.TestCase):
         expected = {row['product_id'] for row in rows
                     if row['record_status'] in {'brand_2026_observed', 'catalog_only'}}
         code = (ROOT / 'entry/src/main/ets/services/OlayDiscoveryRepository.ets').read_text(encoding='utf-8')
-        actual = set(re.findall(r'"id": "(CN\d+)"', code))
+        current, research = code.split('static researchRecords()', 1)
+        actual = set(re.findall(r'"id": "(CN\d+)"', current))
         self.assertEqual(63, len(expected))
         self.assertEqual(expected, actual)
+        self.assertEqual({row['product_id'] for row in rows}, actual | set(re.findall(r'"id": "((?:CN|H)\d+)"', research)))
+        self.assertIn('"section": "research"', research)
         self.assertTrue(all(not row['can_render_product_effect'] for row in rows if row['product_id'] in actual))
 
     def test_official_press_cutouts_are_single_product_transparent_assets(self):

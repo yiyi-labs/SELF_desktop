@@ -23,6 +23,7 @@ export struct OlayLibrary {
   @Prop language:string='zh';
   @Prop viewportWidth:number=400;
   @Prop viewportHeight:number=600;
+  @Prop initialProductId:string='';
   onClose:()=>void=()=>{};
   @State section:string='brand';
   @State selectedId:string='';
@@ -33,13 +34,17 @@ export struct OlayLibrary {
   private panelWidth():number{return Math.min(this.viewportWidth-24,this.viewportHeight>this.viewportWidth?420:360);}
   private panelHeight():number{return this.viewportHeight>this.viewportWidth?
     Math.min(this.viewportHeight*.74,900):Math.min(this.viewportHeight*.62,520);}
-  private records():OlayDiscoveryItem[]{return OlayDiscoveryRepository.records().filter((p:OlayDiscoveryItem)=>p.section===this.section);}
-  private selected():OlayDiscoveryItem|undefined{return OlayDiscoveryRepository.records().find((p:OlayDiscoveryItem)=>p.id===this.selectedId);}
+  private records():OlayDiscoveryItem[]{return OlayDiscoveryRepository.allRecords().filter((p:OlayDiscoveryItem)=>p.section===this.section);}
+  private selected():OlayDiscoveryItem|undefined{return OlayDiscoveryRepository.allRecords().find((p:OlayDiscoveryItem)=>p.id===this.selectedId);}
   private productPhoto(id:string):Resource{return OlayPhotoRepository.photo(id);}
   private changeSection(section:string):void{
     this.section=section;this.selectedId='';this.week=0;this.listData.setData(this.records());
   }
-  aboutToAppear():void{this.listData.setData(this.records());}
+  aboutToAppear():void{
+    const item=OlayDiscoveryRepository.allRecords().find((p:OlayDiscoveryItem)=>p.id===this.initialProductId);
+    if(item){this.section=item.section;this.selectedId=item.id;}
+    this.listData.setData(this.records());
+  }
   private category(value:string):string{
     if(value==='cream')return this.label('面霜','Cream');
     if(value==='serum')return this.label('精华','Serum');
@@ -84,6 +89,9 @@ export struct OlayLibrary {
             Button(this.label('更多资料','More records')).fontSize(12).fontColor('#E7F1FF')
               .backgroundColor(this.section==='catalog'?'#5E7797':'#243B54')
               .borderRadius(17).onClick(()=>this.changeSection('catalog'))
+            Button(this.label('历史与研究','Research')).fontSize(12).fontColor('#E7F1FF')
+              .backgroundColor(this.section==='research'?'#5E7797':'#243B54')
+              .borderRadius(17).onClick(()=>this.changeSection('research'))
           }.width('100%')
         }
         if(!this.selected()){
@@ -118,8 +126,12 @@ export struct OlayLibrary {
                   }
                 }.alignItems(HorizontalAlign.Start).layoutWeight(1)
               }
-              Text(this.routine((this.selected() as OlayDiscoveryItem).category)).fontSize(12).lineHeight(18).fontColor('#E1ECF9')
-              if(this.hasTimeline((this.selected() as OlayDiscoveryItem).category)){
+              if(this.section==='research'){
+                Text(this.label('历史或研究线索，供核对身份；当前版本与在售信息尚未确认。',
+                  'Historical or research identity; current version and availability are unverified.'))
+                  .fontSize(12).lineHeight(18).fontColor('#E1ECF9')
+              }else{Text(this.routine((this.selected() as OlayDiscoveryItem).category)).fontSize(12).lineHeight(18).fontColor('#E1ECF9')}
+              if(this.section!=='research'&&this.hasTimeline((this.selected() as OlayDiscoveryItem).category)){
                 Text(this.label('预期观察 · '+(this.week===0?'今天':'第'+this.week+'周'),'What to observe · '+(this.week===0?'today':'week '+this.week)))
                   .fontSize(11).fontColor('#C9DCF0')
                 Slider({value:this.week,min:0,max:8,step:1}).blockColor('#D9EAF9').selectedColor('#799CBC')

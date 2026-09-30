@@ -63,7 +63,16 @@ async function start(){
         if(decoded.length!==data.numSplats)throw Error('圈选和个人模型不匹配');
         return Uint8Array.from(decoded,c=>c.charCodeAt(0));
       };
-      const drawHistory=layers=>{applyDigitalLayers(resource,originalColors,layers);model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;app.renderNextFrame=true;};
+      let editRevision=0,cameraRevision=0,renderFrame=0,lastRenderedView=null;
+      const viewSnapshot=()=>{const pos=camera.getPosition(),q=camera.getRotation(),rect=canvas.getBoundingClientRect();
+        return {snapshotId:`gs-view-${renderFrame}`,assetId:identity?.assetId||'',capturedAt:Date.now(),frame:renderFrame,
+          cameraRevision,editRevision,position:[pos.x,pos.y,pos.z],rotation:[q.x,q.y,q.z,q.w],target:target.slice(),
+          yaw,pitch,distance:Math.hypot(pos.x-target[0],pos.y-target[1],pos.z-target[2]),
+          fovDegrees:camera.camera.fov,nearClip:camera.camera.nearClip,farClip:camera.camera.farClip,
+          viewportWidth:rect.width,viewportHeight:rect.height,mirrored:false,crop:'fill-window'};};
+      app.on('postrender',()=>{renderFrame++;lastRenderedView=viewSnapshot();});
+      const drawHistory=layers=>{applyDigitalLayers(resource,originalColors,layers);editRevision++;
+        model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;app.renderNextFrame=true;};
       const toneTracker=createToneTracker(),toneCanvas=document.createElement('canvas');
       toneCanvas.width=24;toneCanvas.height=16;
       const sampleTone=()=>{if(!port||!identity||preview)return;
@@ -150,7 +159,7 @@ async function start(){
         const afterYaw=rotate(original,up,yaw),forward=normal(afterYaw.map(x=>-x));
         const right=normal([forward[1]*up[2]-forward[2]*up[1],forward[2]*up[0]-forward[0]*up[2],forward[0]*up[1]-forward[1]*up[0]]);
         const offset=rotate(afterYaw,right,pitch);
-        camera.setPosition(...offset.map((x,i)=>target[i]+x*zoom));camera.lookAt(...target,...up);app.renderNextFrame=true;
+        camera.setPosition(...offset.map((x,i)=>target[i]+x*zoom));camera.lookAt(...target,...up);cameraRevision++;app.renderNextFrame=true;
         if(selections.length&&performance.now()-lastOverlay>32){lastOverlay=performance.now();drawOutline();}};
       app.on('update',update);update();resizeOutline();drawOutline();
       app.systems.gsplat.on('frame:request',()=>{app.renderNextFrame=true;});
@@ -190,6 +199,10 @@ async function start(){
       canvas.addEventListener('pointercancel',()=>{touching=false;polygon=[];drawOutline();});
       canvas.addEventListener('wheel',event=>{targetZoom=Math.max(.35,Math.min(4,targetZoom*Math.exp(event.deltaY*.001)));event.preventDefault();},{passive:false});
       command=payload=>{
+        if(payload.action==='VIEW_SNAPSHOT'){
+          if(!lastRenderedView){send('GS_FAILED',{message:'当前视角尚未绘制完成'});return;}
+          send('GS_VIEW',{gsView:lastRenderedView});return;
+        }
         if(payload.action==='TOOL'){mode=payload.tool==='lasso'?'lasso':'move';appendNext=false;return;}
         if(payload.action==='ARM_APPEND'){mode='lasso';appendNext=true;return;}
         if(payload.action==='CLEAR_SELECTION'){
@@ -200,7 +213,7 @@ async function start(){
           const week=payload.strength;
           if(!Number.isInteger(week)||week<0||week>8)throw Error('观察时段不正确');
           if(selections.length<1)throw Error('请先圈选一处');
-          applyCareScenario(resource,originalColors,historyLayers,selections.map(item=>item.mask),week/8);
+          applyCareScenario(resource,originalColors,historyLayers,selections.map(item=>item.mask),week/8);editRevision++;
           carePreviewActive=week>0;model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;app.renderNextFrame=true;return;
         }
         if(payload.action==='SET_HISTORY'){
@@ -216,22 +229,23 @@ async function start(){
           mask=Uint8Array.from(decoded,c=>c.charCodeAt(0));selected=mask.reduce((n,v)=>n+(v>0?1:0),0);
           if(selected<80)throw Error('已存圈选范围不完整');
           if(!Object.hasOwn(DIGITAL_PRESETS,payload.preset)||![.18,.32,.5].includes(payload.strength))throw Error('已存颜色参数不正确');
-          applyDigitalTint(resource,originalColors,mask,DIGITAL_PRESETS[payload.preset],payload.strength);
+          applyDigitalTint(resource,originalColors,mask,DIGITAL_PRESETS[payload.preset],payload.strength);editRevision++;
           model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;app.renderNextFrame=true;
           appliedRecipe={mask:mask.slice(),preset:payload.preset,strength:payload.strength};
           send('GS_APPLIED',{action:'RESTORE',count:selected});return;}
-        if(payload.action==='RESET'){applyDigitalTint(resource,originalColors,new Uint8Array(data.numSplats),[.5,.5,.5],0);
+        if(payload.action==='RESET'){applyDigitalTint(resource,originalColors,new Uint8Array(data.numSplats),[.5,.5,.5],0);editRevision++;
           model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;app.renderNextFrame=true;appliedRecipe=null;send('GS_APPLIED',{action:'RESET'});return;}
         if(payload.action==='COMPARE_ORIGINAL'||payload.action==='COMPARE_EDIT'){
           if(!appliedRecipe)throw Error('还没有可对比的变化');
           if(payload.action==='COMPARE_ORIGINAL')applyDigitalTint(resource,originalColors,new Uint8Array(data.numSplats),[.5,.5,.5],0);
           else applyDigitalTint(resource,originalColors,appliedRecipe.mask,DIGITAL_PRESETS[appliedRecipe.preset],appliedRecipe.strength);
+          editRevision++;
           model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;app.renderNextFrame=true;
           send('GS_APPLIED',{action:payload.action});return;}
         if(payload.action==='APPLY'){
           if(!mask||selected<28)throw Error('请先圈出想试的地方');
           if(!Object.hasOwn(DIGITAL_PRESETS,payload.preset)||![.18,.32,.5].includes(payload.strength))throw Error('这次的颜色建议还不能使用');
-          applyDigitalTint(resource,originalColors,mask,DIGITAL_PRESETS[payload.preset],payload.strength);
+          applyDigitalTint(resource,originalColors,mask,DIGITAL_PRESETS[payload.preset],payload.strength);editRevision++;
           model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;app.renderNextFrame=true;
           appliedRecipe={mask:mask.slice(),preset:payload.preset,strength:payload.strength};
           send('GS_APPLIED',{action:'APPLY',count:selected});return;}
@@ -239,7 +253,7 @@ async function start(){
           const r=canvas.getBoundingClientRect(),scale=Math.min(1,1024/Math.max(r.width,r.height));
           const image=document.createElement('canvas');image.width=Math.max(8,Math.round(r.width*scale));image.height=Math.max(8,Math.round(r.height*scale));
           const ctx=image.getContext('2d');ctx.drawImage(canvas,0,0,image.width,image.height);
-          send('GS_CAPTURE',{width:image.width,height:image.height,images:2});sendBytes('gs-clean',pngBytes(image.toDataURL('image/png')));
+          send('GS_CAPTURE',{width:image.width,height:image.height,images:2,gsView:lastRenderedView||viewSnapshot()});sendBytes('gs-clean',pngBytes(image.toDataURL('image/png')));
           // Reproject the selected 3D points into this camera. The annotation
           // stays aligned after orbiting, unlike reusing the old screen lasso.
           if(selections.length){

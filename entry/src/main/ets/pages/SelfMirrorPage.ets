@@ -7,6 +7,8 @@ import { GalaxyUniverseSurface, GalaxyScene } from './GalaxyUniverseSurface';
 import { CameraCaptureView } from './CameraCaptureView';
 import { NightSkySurface } from './NightSkySurface';
 import { ProductCard } from './ProductCard';
+import { OlayLibrary } from './OlayLibrary';
+import { OlayDiscoveryRepository, OlayDiscoveryItem } from '../services/OlayDiscoveryRepository';
 import { NativeRendererPort } from '../bridge/NativeRendererPort';
 import { PlannerClient, CloudResponse, CloudSnapshot, DialogueTurn } from '../services/PlannerClient';
 import { common } from '@kit.AbilityKit';
@@ -22,6 +24,7 @@ import { CaptureService,CaptureRecord } from '../services/CaptureService';
 import { PortraitStarStore, PortraitStar } from '../services/PortraitStarStore';
 import { ReconstructionTransportClient, ReconstructionView } from '../services/ReconstructionTransportClient';
 import { UiPreference, UiSettings } from '../services/UiPreference';
+import { CloudConsentStore, CloudConsentDecision } from '../services/CloudConsentStore';
 import { UiText } from '../services/UiText';
 import { AmbiencePreference } from '../services/AmbiencePreference';
 
@@ -124,6 +127,9 @@ struct SelfMirrorPage {
   @State showBeginning:boolean=true;
   @State replySources:string[]=[];
   @State productOpen:boolean=false;
+  @State careLibraryOpen:boolean=false;
+  @State careLibraryProductId:string='';
+  @State careGuideText:string='';
   @State productSelection:ProductRecord=ProductRepository.records()[0];
   @State musicOn:boolean=false;
   @State navPressed:string='';
@@ -164,6 +170,7 @@ struct SelfMirrorPage {
   private planner:PlannerClient=new PlannerClient();
   @State cloudWaiting:boolean=false;
   @State cloudSessionEnabled:boolean=false;
+  @State cloudConsentDecision:CloudConsentDecision='unknown';
   @State uploadOffer:boolean=false;
   @State choices:string[]=[];
   @State replyQuestion:string='';
@@ -173,6 +180,16 @@ struct SelfMirrorPage {
   @State backendAddress:string='http://127.0.0.1:8787';
   @State backendToken:string='';
   private pendingCloudText:string='';
+  private setCloudConsent(allowed:boolean):boolean{
+    const decision:CloudConsentDecision=allowed?'allowed':'denied';
+    if(!CloudConsentStore.save(this.context,decision))return false;
+    this.cloudConsentDecision=decision;this.cloudSessionEnabled=allowed;
+    if(!allowed){
+      this.cloudGeneration++;this.planner.cancel();this.cloudWaiting=false;
+      this.pendingCloudText='';this.uploadOffer=false;this.dialogue=[];this.choices=[];
+    }
+    return true;
+  }
   private lastModelProductIds:string[]=[];
   private bridge: NativeRendererPort = new NativeRendererPort();
   private context: common.UIAbilityContext = this.getUIContext().getHostContext() as common.UIAbilityContext;
@@ -515,6 +532,8 @@ struct SelfMirrorPage {
 
   aboutToAppear(): void {
     const ui=UiPreference.load(this.context);this.language=ui.language;this.accent=ui.accent;this.palette=ui.palette;this.motion=ui.motion;this.followChat=ui.followChat;this.stylusHints=ui.stylusHints;AppStorage.setOrCreate('selfLanguage',ui.language);
+    this.cloudConsentDecision=CloudConsentStore.load(this.context);
+    this.cloudSessionEnabled=this.cloudConsentDecision==='allowed';
     this.bridge.onSelectionAnchor=(x:number,y:number,halfWidth:number)=>{this.focusX=x;this.focusY=y;this.focusHalfWidth=halfWidth;};
     this.bridge.onToolChanged=(name:string)=>{this.tool=name;this.focusOpen=false;};
     this.audio.onStatus=(state:string)=>{this.audioState=state;if(state!=='playing')this.musicPulse=0;if(this.context.applicationInfo.debug)console.info('SELF_AUDIO_STATE '+state);if(state==='error'){this.musicOn=false;this.subtitle='音乐暂时无法播放，你可以继续安静地使用镜面。';}};
@@ -553,10 +572,11 @@ struct SelfMirrorPage {
   }
   private fail(message:string):void{this.busy=false;this.subtitle=message;console.error('SELF_ERROR '+message);}
   private async requestCloud():Promise<void>{
-    if(this.cloudWaiting||!this.pendingCloudText||!this.cloudSessionEnabled)return;
+    if(this.cloudWaiting||!this.pendingCloudText||!this.cloudSessionEnabled||!CloudConsentStore.allowed(this.context))return;
     const generation=++this.cloudGeneration;const input=this.pendingCloudText;this.pendingCloudText='';this.planner.endpoint=this.backendAddress.trim();this.planner.token=this.backendToken.trim();
     if(this.detail)this.close();this.uploadOffer=false;this.cloudWaiting=true;this.subtitle='让我想想，怎么更贴近你的想法…';
     const snapshot=this.planner.snapshot(this.session,input);snapshot.productContextIds=this.lastModelProductIds.slice();snapshot.responseLanguage=this.language;
+    snapshot.careAdviceRequested=true;
     snapshot.dialogue=this.dialogue.slice(-3);
     if(/^[1-3]$/.test(input)&&this.choices.length>=Number(input))snapshot.resolvedChoice=this.choices[Number(input)-1];
     else if(this.choices.includes(input))snapshot.resolvedChoice=input;
@@ -565,13 +585,18 @@ struct SelfMirrorPage {
       snapshot.regions=snapshot.regions.filter((r)=>r.regionId===regionId||snapshot.layers.some((l)=>l.regionId===r.regionId)||snapshot.protectedRegionIds.includes(r.regionId));
       if(this.session.sceneRevision!==snapshot.sceneRevision||this.session.regionVersion!==snapshot.regionVersion)throw new Error('作品状态已改变，请重新提出请求');
       const response=await this.planner.propose(snapshot,capture.images);
-      if(!this.cloudWaiting||generation!==this.cloudGeneration)return;
+      if(!this.cloudWaiting||generation!==this.cloudGeneration||!CloudConsentStore.allowed(this.context))return;
       if(this.session.pending||this.session.assetId!==snapshot.assetId||this.session.assetVersion!==snapshot.assetVersion||this.session.sceneRevision!==snapshot.sceneRevision||this.session.regionVersion!==snapshot.regionVersion)throw new Error('等待期间作品或规则已改变，这份候选不会执行');
-      this.subtitle=response.plan.shortMessage;this.replySources=response.plan.explanationRefs;this.lastModelProductIds=response.plan.explanationRefs.slice();
+      this.subtitle=response.plan.shortMessage;
+      const guide=response.plan.careGuide;
+      this.careGuideText=guide?guide.howToUse:'';
+      this.replySources=response.plan.explanationRefs.concat(guide?[guide.productId]:[])
+        .filter((value:string,index:number,all:string[])=>all.indexOf(value)===index).slice(0,3);
+      if(this.replySources.length)this.lastModelProductIds=this.replySources.slice();
       this.choices=response.plan.choices||[];
       this.replyQuestion=response.plan.question;this.replyQuestionKey=response.plan.shortMessage;
-      this.dialogue.push({userText:input,reply:response.plan.question||response.plan.shortMessage,choices:this.choices.slice()});this.dialogue=this.dialogue.slice(-3);
-      if(this.replySources.length>0)this.showProduct(this.replySources[0]);
+      this.dialogue.push({userText:input,reply:[response.plan.shortMessage,response.plan.question,this.careGuideText].filter((part:string)=>!!part).join(' ').slice(0,400),choices:this.choices.slice(),productIds:this.replySources.slice()});this.dialogue=this.dialogue.slice(-3);
+      if(this.replySources.length>0&&ProductRepository.records().some((p:ProductRecord)=>p.productId===this.replySources[0]))this.showProduct(this.replySources[0]);
       if(response.plan.decision==='edit'){
         const op=response.plan.operations[0];
         const region=this.session.regions.find((r:RegionRecord)=>r.regionId===op.regionId);
@@ -602,7 +627,7 @@ struct SelfMirrorPage {
   private async loadSource():Promise<void>{
     this.dialogue=[];this.choices=[];this.uploadOffer=false;this.pendingCloudText='';
     this.lastModelProductIds=[];
-    this.productOpen=false;this.replySources=[];
+    this.productOpen=false;this.replySources=[];this.careGuideText='';
     const bytes=await this.assets.read(this.session.assetId);this.bridge.sendBytes(this.session.sourceKind==='MESH'?'glb':bytes[0]===137?'photo/png':'photo/jpeg',bytes);
     for(const r of this.session.regions)this.bridge.sendBytes('mask:'+r.regionId,await this.assets.read(r.regionId));
     this.bridge.send('VIEW_SET',{view:this.session.view});this.setAtmosphere();
@@ -625,7 +650,9 @@ struct SelfMirrorPage {
     this.productOpen=false;this.replySources=[];
     if(regionId&&regionId!==this.selected){this.selected=regionId;this.dialogue=[];this.choices=[];this.lastModelProductIds=[];}
     this.session.candidate=undefined;this.candidate='';this.pendingCloudText=input;this.lastUtterance=input;
-    if(this.cloudSessionEnabled)this.requestCloud();else this.uploadOffer=true;
+    if(this.cloudSessionEnabled)this.requestCloud();
+    else if(this.cloudConsentDecision==='unknown')this.uploadOffer=true;
+    else{this.pendingCloudText='';this.subtitle='云端对话已关闭。想继续时，可以在设置里开启。';}
   }
   private suggest(lip:boolean):void{
     const id=lip&&this.session.sourceKind==='MESH'?'lip':this.selected;
@@ -675,7 +702,15 @@ struct SelfMirrorPage {
   private undo(direction:number):void{this.lastModelProductIds=[];this.productOpen=false;this.replySources=[];try{this.session.replay(direction);this.busy=true;this.sendSnapshot();}catch(e){this.fail(String(e));}}
   private reset():void{this.lastModelProductIds=[];this.productOpen=false;this.replySources=[];try{this.session.reset();this.busy=true;this.sendSnapshot();}catch(e){this.fail(String(e));}}
   private switchTool(next:string):void{if(this.busy||!this.legacyEditorOpen||!this.bridge.ready)return;this.showBeginning=false;this.tool=this.tool===next?'NAVIGATE':next;this.bridge.send('SET_TOOL',{tool:this.tool});}
-  private showProduct(id:string=''):void{if(!id||!this.replySources.includes(id)){this.askModel('我想了解与我关注的问题相关的OLAY产品，请先询问我的具体需求，不要默认推荐产品或修改面容。');return;}if(this.detail)this.close();const found=ProductRepository.records().find((p:ProductRecord)=>p.productId===id);if(found)this.productSelection=found;this.getUIContext().animateTo({duration:this.motion?300:0,curve:Curve.EaseOut},()=>{this.productOpen=true;});}
+  private showProduct(id:string=''):void{
+    if(OlayDiscoveryRepository.allRecords().some((p:OlayDiscoveryItem)=>p.id===id)&&this.replySources.includes(id)){
+      this.careLibraryProductId=id;this.careLibraryOpen=true;return;
+    }
+    if(!id||!this.replySources.includes(id)){this.askModel('我想了解与我关注的问题相关的OLAY产品，请先询问我的具体需求，不要默认推荐产品或修改面容。');return;}
+    if(this.detail)this.close();const found=ProductRepository.records().find((p:ProductRecord)=>p.productId===id);
+    if(!found)return;this.productSelection=found;
+    this.getUIContext().animateTo({duration:this.motion?300:0,curve:Curve.EaseOut},()=>{this.productOpen=true;});
+  }
   private chooseProduct(direction:number):void{const all=ProductRepository.records().filter((p:ProductRecord)=>this.replySources.includes(p.productId));if(!all.length)return;const index=all.findIndex((p:ProductRecord)=>p.productId===this.productSelection.productId);this.productSelection=all[(index+direction+all.length)%all.length];}
   private open(name:string,event?:ClickEvent):void{
     this.markInteraction();if(this.busy)return;if(name==='产品资料'){this.showProduct();return;}
@@ -754,16 +789,13 @@ struct SelfMirrorPage {
       Rect().width('100%').height(1).fill('#768FAFC0').opacity(.52)
       if(this.detail==='完整回复'){Text(this.tr(this.subtitle)).fontSize(17).lineHeight(28)}
       if(this.detail==='云端理解'){
-        Text(this.tr('开启后，每次主动发送会附上当前静态面容图和最近三轮问答，由配置的后端交给 DeepSeek 理解。不会上传相机视频；修改仍需确认。')).fontSize(16).fontColor('#665A72')
-        Text(this.tr('后端不保存照片；第三方处理与留存依其条款。授权仅本次打开有效，可随时关闭。')).fontSize(14).fontColor('#766C80')
-        Toggle({type:ToggleType.Switch,isOn:this.cloudSessionEnabled}).id('cloud-session-toggle').onChange((v:boolean)=>{this.cloudSessionEnabled=v;if(!v){this.cloudGeneration++;this.planner.cancel();this.cloudWaiting=false;this.pendingCloudText='';this.uploadOffer=false;this.dialogue=[];this.choices=[];}})
+        Text(CloudConsentStore.introduction(this.language)).fontSize(16).fontColor('#665A72')
+        Text(this.language==='en'?'The service does not retain portrait images; third-party handling follows its own terms.':
+          '服务端不保留面容画面；第三方的处理与留存依其条款。').fontSize(14).fontColor('#766C80')
+        Toggle({type:ToggleType.Switch,isOn:this.cloudSessionEnabled}).id('cloud-session-toggle').onChange((v:boolean)=>{
+          if(this.setCloudConsent(v)&&v&&this.pendingCloudText)this.requestCloud();})
         TextInput({text:this.backendAddress,placeholder:this.tr('自己的后端地址')}).onChange((v:string)=>this.backendAddress=v)
         TextInput({text:this.backendToken,placeholder:this.tr('后端访问口令（不是 DeepSeek 密钥）')}).type(InputType.Password).onChange((v:string)=>this.backendToken=v)
-        if(this.pendingCloudText){
-          Text(this.tr('这次请求：'+this.pendingCloudText)).fontSize(15)
-          Button(this.tr('开启并发送')).softButton().enabled(!this.cloudWaiting).onClick(()=>{this.cloudSessionEnabled=true;this.requestCloud();})
-          Button(this.tr('暂不发送，保留现在')).softButton().onClick(()=>{this.pendingCloudText='';this.close();this.subtitle='没有发送图像，当前作品保持不变。';})
-        }
       }
       if(this.detail==='氛围'){
         Row({space:10}){
@@ -912,11 +944,15 @@ struct SelfMirrorPage {
     Column({space:10}){
       Row(){Text(this.tr(this.focusOpen?'从这里开始':'✧  SELF 陪你')).fontSize(13).fontColor('#89759C');Blank();Text(this.tr(this.cloudWaiting?'正在理解':this.cloudSessionEnabled?'云端已开启':'隐私设置')).fontSize(11).fontColor('#95879F').onClick((event:ClickEvent)=>this.open('云端理解',event))}.width('100%')
       if(this.uploadOffer){
-        Text(this.tr('开启本次对话后，发送文字时会附上当前静态面容图和最近问答给 DeepSeek。可随时在隐私设置关闭。')).fontSize(12).fontColor('#756380')
-        Row({space:8}){Button(this.tr('开启并发送')).id('cloud-enable-send').softButton().layoutWeight(1).onClick(()=>{this.cloudSessionEnabled=true;this.requestCloud();});Button(this.tr('暂不发送')).softButton().onClick(()=>{this.uploadOffer=false;this.pendingCloudText='';})}
+        Text(CloudConsentStore.introduction(this.language)).fontSize(12).fontColor('#756380')
+        Row({space:8}){Button(this.language==='en'?'Start conversations':'开启对话').id('cloud-enable-send').softButton().layoutWeight(1).onClick(()=>{
+          if(this.setCloudConsent(true))this.requestCloud();});
+          Button(this.language==='en'?'Not now':'现在先不用').softButton().onClick(()=>{
+            if(this.setCloudConsent(false))this.subtitle='好，画面留在这里。';})}
       }
       if(this.lastUtterance&&(!this.productOpen||this.wide)){Text(this.tr('你说 · '+this.lastUtterance)).fontSize(12).fontColor('#8E819A').maxLines(2).width('100%')}
       Text(this.tr(this.subtitle)).fontSize(15).lineHeight(23).fontColor('#52465F').maxLines(this.productOpen?2:this.wide?5:3).width('100%')
+      if(this.careGuideText){Text(this.careGuideText).fontSize(13).lineHeight(20).fontColor('#685571').width('100%')}
       if(this.replyQuestion&&this.replyQuestionKey===this.subtitle){Text(this.tr(this.replyQuestion)).fontSize(15).lineHeight(23).fontColor('#685571').width('100%')}
       if(this.choices.length>0&&!this.cloudWaiting&&!this.uploadOffer){Flex({wrap:FlexWrap.Wrap}){ForEach(this.choices,(choice:string,index:number)=>{Button(this.tr((index+1)+' · '+choice)).softButton().fontSize(13).margin(3).onClick(()=>this.askModel(choice))},(choice:string)=>choice)}}
       if(this.subtitle.length>70){Button(this.tr('完整回复')).softButton().height(this.productOpen?30:48).fontSize(12).onClick((event:ClickEvent)=>this.open('完整回复',event))}
@@ -1048,11 +1084,12 @@ struct SelfMirrorPage {
       if(this.personalActive()&&this.journey!=='forming'){
         PersonalPortraitEditor({gaussianPath:this.personalGaussianPath,viewPath:this.personalViewPath,
           assetId:this.activeStarId,language:this.language,cloudEnabled:this.cloudSessionEnabled,
+          cloudConsentDecision:this.cloudConsentDecision,
           backendAddress:this.backendAddress,backendToken:this.backendToken,
           viewportWidth:this.surfaceWidth,viewportHeight:this.surfaceHeight,
           onBackgroundTone:(light:boolean)=>{if(this.personalBackdropLight!==light){
             this.getUIContext().animateTo({duration:this.motion?650:0,curve:Curve.EaseInOut},()=>{this.personalBackdropLight=light;});}},
-          onEnableCloud:()=>{this.cloudSessionEnabled=true;},
+          onEnableCloud:()=>this.setCloudConsent(true),onDeclineCloud:()=>{this.setCloudConsent(false);},
           onReady:()=>{this.personalReady=true;this.captureStatus='';if(this.journey==='revealing'){
             this.getUIContext().animateTo({duration:this.motion?1350:0,curve:Curve.EaseOut},()=>{this.revealOpacity=0;this.revealScale=7;});
             this.revealTimer=setTimeout(()=>{this.journey='idle';this.revealTimer=-1;},this.motion?1380:50);
@@ -1276,6 +1313,11 @@ struct SelfMirrorPage {
     }.width('100%').height('100%').backgroundColor('#F3F1F5').onAreaChange((_old:Area,area:Area)=>{this.windowWidth=parseFloat(String(area.width));this.wide=this.windowWidth>=840;if(this.context.applicationInfo.debug)console.info('SELF_WINDOW '+JSON.stringify({width:this.windowWidth,wide:this.wide}));}).linearGradient({angle:145,colors:[['#EDF0F8',0],['#F8F0E9',.6],['#F3F1F5',1]]})
     }
     if(this.cameraLive){CameraCaptureView({motion:this.motion,language:this.language,backendAddress:this.backendAddress,backendToken:this.backendToken,onCapture:(name:string)=>this.submitCapture(name),onClose:()=>this.close()}).zIndex(100)}
+    if(this.careLibraryOpen){
+      OlayLibrary({language:this.language,viewportWidth:this.windowWidth,viewportHeight:this.surfaceHeight,
+        initialProductId:this.careLibraryProductId,onClose:()=>this.careLibraryOpen=false})
+        .position({x:12,y:80}).zIndex(80)
+    }
     }.width('100%').height('100%').expandSafeArea([SafeAreaType.SYSTEM],[SafeAreaEdge.TOP,SafeAreaEdge.BOTTOM])
   }
 }

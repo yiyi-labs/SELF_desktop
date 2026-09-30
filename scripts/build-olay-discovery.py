@@ -38,8 +38,13 @@ export interface OlayDiscoveryItem {
 }
 export class OlayDiscoveryRepository {
   static records():OlayDiscoveryItem[]{ return '''
-footer = '''; }
+research = [{'id': r['product_id'], 'name': r['marketing_name'], 'category': r['category_id'],
+             'family': r['family'], 'source': r['primary_url'], 'section': 'research'}
+            for r in records if r not in included]
+assert len(items) + len(research) == len(records) == 74
+footer = '; }\n  static researchRecords():OlayDiscoveryItem[]{ return ' + json.dumps(research, ensure_ascii=False, indent=2) + '''; }
+  static allRecords():OlayDiscoveryItem[]{return OlayDiscoveryRepository.records().concat(OlayDiscoveryRepository.researchRecords());}
 }
 '''
 DEST.write_text(header + json.dumps(items, ensure_ascii=False, indent=2) + footer, encoding='utf-8')
-print(f'Generated {len(items)} source-linked identity records; no product render parameters.')
+print(f'Generated {len(items)} care identities + {len(research)} historical/research identities; all {len(records)} dossiers linked.')

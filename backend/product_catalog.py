@@ -2,13 +2,21 @@
 import json
 import re
 from pathlib import Path
+from product_knowledge import exact_identities, contextual_products
 
 CATALOG = json.loads((Path(__file__).resolve().parents[1] / 'shared/products/olay-cn-catalog.json').read_text(encoding='utf-8'))
 
 def lookup(user_text: str, context_ids: list[str] | None = None) -> list[dict]:
-    continuation = user_text.strip() in ('1','2','3') or any(word in user_text for word in ('这款','这个','它','试一下','试试','淡一点','参数','效果'))
+    exact = exact_identities(user_text)
+    if exact:
+        return exact
+    continuation = user_text.strip() in ('1','2','3') or any(word in user_text.lower() for word in ('这款','这个','它','试一下','试试','淡一点','参数','效果','怎么用','用法','成分','还有','为什么','this','it','use'))
     explicit = any(word in user_text.lower() for word in ['olay','玉兰油','产品','护肤','小白瓶','超红瓶','黑管'])
     if not explicit and not (continuation and context_ids):return []
+    if continuation and context_ids and not explicit:
+        joined = contextual_products(context_ids)
+        if joined:
+            return joined
     score = lambda p: sum(k.lower() in user_text.lower() for k in p['keywords'])
     matches = sorted(CATALOG['records'], key=score, reverse=True)
     # Generic "OLAY" is not consent to promote whichever records happen to be

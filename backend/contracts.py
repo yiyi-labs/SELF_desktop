@@ -1,8 +1,8 @@
 """Only proposals cross this boundary. Authorization and pixels remain on the phone."""
 from typing import Literal, Annotated
 import re
-from product_catalog import allowed_refs, requests_product_effect
-from care_catalog import allowed_care_ids, care_reason, care_usage, care_options, care_intent
+from product_catalog import allowed_refs, requests_product_effect, lookup
+from care_catalog import allowed_care_ids, care_reason, care_usage, care_options, care_intent, products_declined, care_feedback
 from pydantic import BaseModel, ConfigDict, Field
 
 class StrictModel(BaseModel):
@@ -23,6 +23,7 @@ class DialogueTurn(StrictModel):
     userText: str = Field(max_length=2000)
     reply: str = Field(max_length=400)
     choices: list[Annotated[str, Field(min_length=1,max_length=60)]] = Field(default_factory=list, max_length=3)
+    productIds: list[str] = Field(default_factory=list, max_length=3)
 
 class Snapshot(StrictModel):
     schemaVersion: Literal[1] = 1
@@ -41,6 +42,7 @@ class Snapshot(StrictModel):
     resolvedChoice: str = Field(default="", max_length=60)
     responseLanguage: Literal["zh", "en"] = "zh"
     careAdviceRequested: bool = False
+    dismissedProducts: bool = False
     regions: list[Region] = Field(max_length=32)
     layers: list[Layer] = Field(max_length=8)
     protectedRegionIds: list[str] = Field(max_length=32)
@@ -63,6 +65,13 @@ class CareGuide(StrictModel):
     whyHere: str = Field(min_length=8, max_length=100)
     howToUse: str = Field(min_length=8, max_length=140)
 
+class SelectionObservation(StrictModel):
+    regionId: str = Field(min_length=1, max_length=100)
+    area: Literal['eye', 'cheek', 'forehead', 'nose', 'chin', 'lips', 'brow', 'face', 'body', 'unknown']
+    concern: Literal['none', 'blemish', 'dryness', 'texture', 'unknown'] = 'none'
+    confidence: Literal['clear', 'uncertain']
+    basis: Literal['image', 'user']
+
 class Plan(StrictModel):
     decision: Literal["edit", "explain", "clarify", "support"]
     shortMessage: str = Field(min_length=1, max_length=140)
@@ -71,6 +80,8 @@ class Plan(StrictModel):
     careGuide: CareGuide | None = Field(default=None, description="An independent OLAY care suggestion from careOptions; never a claim that a product reproduces a digital edit.")
     question: str = Field(max_length=200, description="Must be empty for edit/explain/support. Only decision=clarify may contain a question; a clarify plan must have operations=[]. Authorization confirmation is handled by the app, not this field.")
     choices: list[str] = Field(default_factory=list, max_length=3, description="Only for clarify: 2 or 3 short choices in responseLanguage answering ONE question, no numeric prefixes. Otherwise []. Never ask to choose a region when annotatedRegionId is already supplied.")
+    selectionObservations: list[SelectionObservation] = Field(default_factory=list, max_length=4,
+        description='Identify each numbered selection using the current clean/annotated images or explicit user text. Areas are visible anatomy, blemish is only a possible visible bump, never a diagnosis. If unclear use area=unknown, confidence=uncertain. Never infer health or skin type.')
 
 PRESETS = {"rose": {"displayName": "柔玫瑰", "color": [0.66, 0.12, 0.30]}, "terracotta": {"displayName": "暖陶棕", "color": [0.65, 0.25, 0.18]}}
 EN_PRESETS = {"rose":"Muted pink", "terracotta":"Warm clay"}
@@ -84,6 +95,9 @@ def listening_only(text: str) -> bool:
 def validate_plan(plan: Plan, snapshot: Snapshot) -> Plan:
     if listening_only(snapshot.userText) and plan.decision=='edit':
         raise ValueError('conversation_only')
+    if (plan.decision == 'support' and snapshot.careAdviceRequested and care_intent(snapshot.userText)
+            and not listening_only(snapshot.userText) and not plan.operations):
+        plan.decision = 'explain'
     # Display labels are a deterministic presentation mapping, never an edit rewrite.
     def display(text):
         for key, preset in PRESETS.items():
@@ -93,27 +107,57 @@ def validate_plan(plan: Plan, snapshot: Snapshot) -> Plan:
         return text
     plan.shortMessage = display(plan.shortMessage)
     plan.question = display(plan.question)
+    if plan.decision != 'clarify' and re.search(r'[？?]', plan.shortMessage):
+        raise ValueError('question_outside_clarification')
+    if snapshot.careAdviceRequested and care_intent(snapshot.userText) and re.search(
+            r'米粒|豌豆|黄豆|\d+\s*(?:滴|泵|克|毫升|ml|g)|每日|每天|早晚各|rice.grain|pea.sized', plan.shortMessage, re.I):
+        raise ValueError('unsupported_care_amount')
+    if (care_intent(snapshot.userText) and not re.search(r'试色|颜色|柔玫瑰|暖陶棕|tint|colou?r', snapshot.userText, re.I)
+            and re.search(r'透一点颜色|轻轻晕开|数字试色|数字上色|边缘轻轻散开', plan.shortMessage)):
+        raise ValueError('care_replaced_by_tint')
+    if products_declined(snapshot.userText) and re.search(r'(?:可以|不妨|建议|想再).{0,15}(?:看看|考虑|选|试|用).{0,8}(?:眼霜|面霜|olay|玉兰油|产品)', plan.shortMessage, re.I):
+        raise ValueError('declined_product_pitch')
+    selected = snapshot.annotatedRegionIds or ([snapshot.annotatedRegionId] if snapshot.annotatedRegionId else [])
+    observations = plan.selectionObservations
+    if len({o.regionId for o in observations}) != len(observations) or any(o.regionId not in selected for o in observations):
+        raise ValueError('unselected_observation')
+    if any(o.confidence == 'uncertain' and o.area != 'unknown' for o in observations):
+        raise ValueError('uncertain_anatomy')
+    clear = [o for o in observations if o.confidence == 'clear']
+    areas = {o.area for o in clear}
+    area = next(iter(areas)) if len(areas) == 1 else ''
+    concern = 'blemish' if any(o.concern == 'blemish' for o in clear) else ''
+    previous_products = snapshot.productContextIds + [i for turn in snapshot.dialogue for i in turn.productIds]
+    explicit_product = bool(re.search(r'olay|玉兰油|产品|推荐|眼霜|面霜|精华|怎么用|用法|ingredients|recommend|product', snapshot.userText, re.I))
+    declined = products_declined(snapshot.userText) or care_feedback(snapshot.userText) or (snapshot.dismissedProducts and not explicit_product)
+    if observations and not clear:
+        declined = True
+    alternative = bool(re.search(r'换|其他|别款|推荐|哪款|alternative|recommend', snapshot.userText, re.I))
+    newly_named = bool({p['productId'] for p in lookup(snapshot.userText, snapshot.productContextIds)} - set(previous_products))
+    offer = not declined and (not previous_products or alternative or newly_named)
+    if not offer:
+        plan.careGuide = None
     # Care questions and concerns should still receive a source-linked routine
     # when no digital colour edit can honestly represent a product outcome.
-    if (snapshot.careAdviceRequested and care_intent(snapshot.userText) and
+    if (offer and snapshot.careAdviceRequested and care_intent(snapshot.userText) and
             not listening_only(snapshot.userText) and plan.decision in ('explain', 'clarify') and
             plan.careGuide is None):
-        options = care_options(snapshot.userText, True, snapshot.responseLanguage)
+        options = care_options(snapshot.userText, True, snapshot.responseLanguage, area, concern)
         if options:
             plan.careGuide = CareGuide(productId=options[0]['productId'],
-                whyHere=care_reason(options[0]['productId'], snapshot.responseLanguage, snapshot.userText),
+                whyHere=care_reason(options[0]['productId'], snapshot.responseLanguage, snapshot.userText + (' 痘' if concern == 'blemish' else '')),
                 howToUse=options[0]['ordinaryUse'])
     if plan.careGuide:
-        if plan.decision == 'support' or not snapshot.careAdviceRequested or plan.careGuide.productId not in allowed_care_ids(snapshot.userText, True):
+        if plan.decision == 'support' or not snapshot.careAdviceRequested or plan.careGuide.productId not in allowed_care_ids(snapshot.userText, True, area, concern):
             raise ValueError('unmatched_care_guide')
         # The model selects a matching identity in the same tool call. Wording
         # comes from reviewed category guidance: the listing does not support
         # invented makeup performance, quantities or efficacy claims.
-        plan.careGuide.whyHere = care_reason(plan.careGuide.productId, snapshot.responseLanguage, snapshot.userText)
+        plan.careGuide.whyHere = care_reason(plan.careGuide.productId, snapshot.responseLanguage, snapshot.userText + (' 痘' if concern == 'blemish' else ''))
         plan.careGuide.howToUse = care_usage(snapshot.userText, True, plan.careGuide.productId, snapshot.responseLanguage)
         if plan.decision in ('explain', 'clarify') and re.search(r'做不到|不能.*(?:做|改)|工具.*(?:不行|不支持)', plan.shortMessage):
-            plan.shortMessage = ('We can begin with gentle everyday care and look at a possible on-portrait scenario together.'
-                if snapshot.responseLanguage == 'en' else '可以先从温和的日常护理开始。我把这一步和一种可能的面容变化放在下面，慢慢看。')
+            plan.shortMessage = ('Begin with a gentle routine for this area; the care card below gives one practical step.'
+                if snapshot.responseLanguage == 'en' else '先把这处的日常护理放轻一些，下面是可以直接做的一步。')
         if re.search(r'保证|必然|立刻|立即|永久|复刻|还原.*(?:试色|数字)|与.*(?:试色|数字).*相同',
                      plan.careGuide.whyHere + plan.careGuide.howToUse):
             raise ValueError('uncalibrated_care_claim')
@@ -146,7 +190,10 @@ def validate_plan(plan: Plan, snapshot: Snapshot) -> Plan:
         raise ValueError("non-edit operation")
     if plan.decision == "edit" and not 1 <= len(plan.operations) <= 4:
         raise ValueError("one to four operations required")
-    if set(plan.explanationRefs) - allowed_refs(snapshot.userText,snapshot.productContextIds):
+    available_refs = allowed_refs(snapshot.userText,snapshot.productContextIds)
+    if plan.careGuide:
+        available_refs.add(plan.careGuide.productId)
+    if set(plan.explanationRefs) - available_refs:
         raise ValueError("unregistered evidence")
     if plan.decision != "clarify" and plan.question:
         raise ValueError("unexpected question")
