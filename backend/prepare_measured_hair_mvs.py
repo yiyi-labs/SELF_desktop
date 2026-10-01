@@ -36,7 +36,7 @@ def retriangulate_fixed_records(records,cameras,K):
     return accepted,rejected
 
 
-def run(prepared,tracks,out,native_object_roi=False,include_face_anchors=False,complete=None):
+def run(prepared,tracks,out,native_object_roi=False,include_face_anchors=False,complete=None,window_index=None):
     p=Path(prepared);out=Path(out);out.mkdir(parents=True,exist_ok=False);started=time.perf_counter()
     cache=json.loads(Path(tracks).read_text());meta=json.loads((p/'preparation.json').read_text());z=np.load(p/'local_geometry.npz');names0=[str(n) for n in z['names']];K=z['K']
     if cache['sourceHash']!=meta['sourceHash']:raise ValueError('source_identity_changed')
@@ -44,7 +44,10 @@ def run(prepared,tracks,out,native_object_roi=False,include_face_anchors=False,c
     for wi,block in enumerate(cache['windows']):
         records=[t for t in cache['tracks'] if t['region']=='hair' and 'xyz' in t and t['id'].startswith(str(wi)+':')]
         groups.append((len(records),wi,records,block))
-    _,wi,records,block=max(groups,key=lambda a:(a[0],-a[1]))
+    if window_index is not None:
+        if not 0<=window_index<len(groups):raise ValueError('invalid_observed_window_index')
+        _,wi,records,block=groups[window_index]
+    else:_,wi,records,block=max(groups,key=lambda a:(a[0],-a[1]))
     hair_count=len(records)
     if include_face_anchors:records=records+[t for t in cache['tracks'] if t['region']=='face' and 'xyz' in t and t['id'].startswith(str(wi)+':')]
     names=sorted({o['name'] for t in records for o in t['observations']})
@@ -71,10 +74,10 @@ def run(prepared,tracks,out,native_object_roi=False,include_face_anchors=False,c
     if native_object_roi:images,masks,K,points,rectangle=native_object_crop(images,masks,K,points)
     exported=export_native_mvs_window(out/'colmap',images,masks,names,cameras,K,points,input_pixel_center='opencv_integer')
     save_json(out/'contract.json',dict(schema='self.surface-window.v1',sourceHash=cache['sourceHash'],prepared=str(p.resolve()),preparedHash=sha(p/'preparation.json'),names=names,cameraFrame='head-local',contract=exported,
-        nativeK=K.tolist(),fullK=fullK.tolist(),nativeObjectRectangle=rectangle,restoredCompleteCheckpointHash=restored['completeCheckpointHash'] if restored else None,retriangulatedRejected=retriangulated_rejections,RGBResized=False,worldCUsed=False,includeFaceAnchors=include_face_anchors,hairAnchorCount=hair_count,faceAnchorCount=len(records)-hair_count,selection='most supported native training hair trajectories among fixed timestamp windows',geometryConditionalOnExistingF=True,
+        nativeK=K.tolist(),fullK=fullK.tolist(),nativeObjectRectangle=rectangle,restoredCompleteCheckpointHash=restored['completeCheckpointHash'] if restored else None,retriangulatedRejected=retriangulated_rejections,RGBResized=False,worldCUsed=False,includeFaceAnchors=include_face_anchors,hairAnchorCount=hair_count,faceAnchorCount=len(records)-hair_count,selection=('explicit cached training window' if window_index is not None else 'most supported native training hair trajectories among fixed timestamp windows'),selectedWindow=wi,geometryConditionalOnExistingF=True,
         rigidAssumption='short head-local visible hair; not neck or clothes',use='training_only_head' if include_face_anchors else 'training_only_hair',mask='observed head' if include_face_anchors else 'observed hair',unknownExcluded=True,sourceRGBUnchanged=True,
         stageBudget=dict(maximumMVSSeconds=360,maximumThreads=4,resolutionLevel=1,maximumImages=12),trackHash=sha(tracks),published=False))
     save_json(out/'tracks.json',points);shutil.copyfile(__file__,out/Path(__file__).name)
     print(json.dumps(dict(window=wi,names=names,tracks=len(points),seconds=time.perf_counter()-started)),flush=True)
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--prepared',required=True);p.add_argument('--tracks',required=True);p.add_argument('--out',required=True);p.add_argument('--native-object-roi',action='store_true');p.add_argument('--include-face-anchors',action='store_true');p.add_argument('--complete');a=p.parse_args();run(a.prepared,a.tracks,a.out,a.native_object_roi,a.include_face_anchors,a.complete)
+    p=argparse.ArgumentParser();p.add_argument('--prepared',required=True);p.add_argument('--tracks',required=True);p.add_argument('--out',required=True);p.add_argument('--native-object-roi',action='store_true');p.add_argument('--include-face-anchors',action='store_true');p.add_argument('--complete');p.add_argument('--window-index',type=int);a=p.parse_args();run(a.prepared,a.tracks,a.out,a.native_object_roi,a.include_face_anchors,a.complete,a.window_index)

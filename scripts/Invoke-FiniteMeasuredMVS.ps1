@@ -1,4 +1,4 @@
-param([Parameter(Mandatory=$true)][string]$Folder,[Parameter(Mandatory=$true)][string]$ToolDirectory,[int]$Seconds=360)
+param([Parameter(Mandatory=$true)][string]$Folder,[Parameter(Mandatory=$true)][string]$ToolDirectory,[int]$Seconds=360,[string]$DenseConfig,[int]$Verbosity=2)
 $ErrorActionPreference='Stop'
 $taskFolder=(Resolve-Path -LiteralPath $Folder).Path
 $toolFolder=(Resolve-Path -LiteralPath $ToolDirectory).Path
@@ -19,6 +19,8 @@ $importArgs=@('--working-folder',$taskFolder,'--input-file',(Join-Path $taskFold
 $first=Invoke-OwnedTool 'InterfaceCOLMAP.exe' $importArgs 60;$records+=,$first
 if($first.exitCode -eq 0 -and !$first.timedOut){
     $denseArgs=@('--working-folder',$taskFolder,'--input-file',(Join-Path $taskFolder 'scene.mvs'),'--output-file',(Join-Path $taskFolder 'dense.mvs'),'--max-threads','4','--resolution-level','1','--max-resolution','1920','--min-resolution','640','--number-views','3','--number-views-fuse','3','--ignore-mask-label','0','--iters','3','--geometric-iters','2','--estimate-normals','2','--estimate-colors','2','--estimate-roi','0','--crop-to-roi','0','--tower-mode','0','--normalize-coordinates','0','--remove-dmaps','0')
+    $denseArgs+=@('--verbosity',[string]$Verbosity)
+    if($DenseConfig){$denseArgs+=@('--dense-config-file',(Resolve-Path -LiteralPath $DenseConfig).Path)}
     $records+=,(Invoke-OwnedTool 'DensifyPointCloud.exe' $denseArgs $Seconds)
 }
 $result=[pscustomobject]@{records=$records;denseExists=(Test-Path -LiteralPath (Join-Path $taskFolder 'dense.ply'));published=$false;installationChanged=$false}
