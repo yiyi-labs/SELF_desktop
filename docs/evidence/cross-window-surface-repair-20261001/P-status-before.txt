@@ -1,0 +1,161 @@
+ M README-native.md
+ M backend/recon_transfer.py
+ M backend/reconstruction_train.py
+ M backend/reconstruction_view.py
+ M backend/reconstruction_worker.py
+ M backend/setup_reconstruction_wsl.sh
+ M backend/test_recon_transfer.py
+ M backend/test_reconstruction_cancel.py
+ M build-profile.json5
+ M docs/evidence/hap-build.log
+ M entry/src/main/ets/pages/SelfMirrorPage.ets
+ M entry/src/main/ets/services/ReconstructionTransportClient.ets
+ M entry/src/main/resources/rawfile/gs-viewer.html
+ M entry/src/main/resources/rawfile/gs-viewer.js
+ M viewer-gs/gs-edit.js
+ M viewer-gs/index.html
+ M viewer-gs/main.js
+ M viewer-gs/tests/gs-edit.test.mjs
+?? .clang-tidy
+?? .clangd
+?? Start-SELF.cmd
+?? backend/appearance_direction_contract.py
+?? backend/audit_appearance_parameters.py
+?? backend/audit_components_v2_detail.py
+?? backend/audit_integrated_components_v2.py
+?? backend/audit_joint_reconstruction_visibility.py
+?? backend/audit_native_face_comparison.py
+?? backend/audit_playcanvas_head.py
+?? backend/audit_portrait_research_run.py
+?? backend/audit_reconstruction_provenance.py
+?? backend/audit_v2_fixed_playcanvas.py
+?? backend/benchmark_reconstruction_memory.py
+?? backend/compare_flame_appearance_ab.py
+?? backend/counterfactual_reconstruction_clean.py
+?? backend/export_flame_appearance_research.py
+?? backend/flame_open_model.py
+?? backend/models/README.md
+?? backend/models/canonical_face_model.obj
+?? backend/models/face_landmarker.task
+?? backend/models/selfie_multiclass_256x256.tflite
+?? backend/probe_aliked_anchor_map.py
+?? backend/probe_aliked_pair.py
+?? backend/probe_best_effort_reconstruction.py
+?? backend/probe_component_seed_support.py
+?? backend/probe_cross_renderer_image.py
+?? backend/probe_face_detail_sampling.py
+?? backend/probe_flame_hair_gate.py
+?? backend/probe_flame_hair_hull.py
+?? backend/probe_flame_observations.py
+?? backend/probe_flame_open_fit.py
+?? backend/probe_flame_real_appearance.py
+?? backend/probe_flame_region_errors.py
+?? backend/probe_frame_manifest.py
+?? backend/probe_gpu_process_telemetry.py
+?? backend/probe_gs_contract.py
+?? backend/probe_hair_plane_sweep.py
+?? backend/probe_local_component_tracks.py
+?? backend/probe_local_face_footprint_budget.py
+?? backend/probe_masked_graph.py
+?? backend/probe_orbit_component_contribution.py
+?? backend/probe_orbit_micro_attribution.py
+?? backend/probe_orbit_observation_coverage.py
+?? backend/probe_orbit_video_frames.py
+?? backend/probe_parameter_candidate_scores.py
+?? backend/probe_person_motion_contract.py
+?? backend/probe_personal_fixed_asset_render.py
+?? backend/probe_portrait_components.py
+?? backend/probe_real_joint_pilot.py
+?? backend/probe_register_static_gap.py
+?? backend/probe_source_bridge_frames.py
+?? backend/probe_source_frame_coverage.py
+?? backend/probe_static_alignment.py
+?? backend/probe_static_calibrated.py
+?? backend/probe_static_camera.py
+?? backend/probe_static_evidence_images.py
+?? backend/probe_static_fair_incremental.py
+?? backend/probe_static_frame_quality.py
+?? backend/probe_static_geometry.py
+?? backend/probe_static_global.py
+?? backend/probe_static_klt_tracks.py
+?? backend/probe_static_mask_edges.py
+?? backend/probe_static_stability.py
+?? backend/probe_synthetic_reconstruction.py
+?? backend/probe_targeted_consensus.py
+?? backend/probe_targeted_static_pairs.py
+?? backend/probe_trusted_views.py
+?? backend/probe_visibility_channels.py
+?? backend/reconstruction_accessories.py
+?? backend/reconstruction_components_v2.py
+?? backend/reconstruction_face.py
+?? backend/reconstruction_joint_visibility.py
+?? backend/reconstruction_live_prepare.py
+?? backend/reconstruction_local_lines.py
+?? backend/reconstruction_observations.py
+?? backend/reconstruction_portrait_capacity.py
+?? backend/reconstruction_portrait_model.py
+?? backend/reconstruction_portrait_pipeline.py
+?? backend/reconstruction_pose.py
+?? backend/reconstruction_runtime.py
+?? backend/reconstruction_scene.py
+?? backend/reconstruction_schedule.py
+?? backend/reconstruction_shared_v2.py
+?? backend/reconstruction_train_environment.py
+?? backend/reconstruction_train_joint.py
+?? backend/research_face_surface_refinement.py
+?? backend/research_hair_observed_color.py
+?? backend/research_local_hair_seed_geometry.py
+?? backend/run_integrated_joint_research.py
+?? backend/run_integrated_shared_v2.py
+?? backend/test_flame_appearance_contract.py
+?? backend/test_flame_observations.py
+?? backend/test_flame_open_model.py
+?? backend/test_reconstruction_accessories.py
+?? backend/test_reconstruction_components_v2.py
+?? backend/test_reconstruction_face.py
+?? backend/test_reconstruction_joint_visibility.py
+?? backend/test_reconstruction_parent_replacement.py
+?? backend/test_reconstruction_portrait_model.py
+?? backend/test_reconstruction_provenance.py
+?? backend/test_reconstruction_quality_policy.py
+?? backend/test_reconstruction_runtime.py
+?? backend/test_reconstruction_scene.py
+?? backend/test_reconstruction_schedule.py
+?? backend/test_reconstruction_source_detail.py
+?? backend/test_reconstruction_source_lineage.py
+?? backend/train_flame_local_appearance.py
+?? docs/SELF_Current_Technical_Route_GPT_Handoff_20260928.md
+?? docs/evidence/after-flame-ab-quality-geometry-orbit-20260927.md
+?? docs/evidence/best-effort-reconstruction-20260927.json
+?? docs/evidence/cloud-dialogue-consent-tablet-20260926.md
+?? docs/evidence/face-reconstruction-8gb-20260926.md
+?? docs/evidence/flame-appearance-ab-hair-renderer-20260927.md
+?? docs/evidence/flame-appearance-restart-checkpoint-20260927.md
+?? docs/evidence/flame-local-appearance-optimization-20260927.md
+?? docs/evidence/flame-real-portrait-hair-audit-20260927.md
+?? docs/evidence/gpu-and-cancel-repair-20260928.md
+?? docs/evidence/integrated-components-v2-20260928.json
+?? docs/evidence/integrated-components-v2-20260928.md
+?? docs/evidence/integrated-detail-occlusion-20260927.md
+?? docs/evidence/manual-desktop-startup-20260929.md
+?? docs/evidence/portrait-first-soft-surface-20260928.md
+?? docs/evidence/portrait-live-code-freeze-20260928.json
+?? docs/evidence/portrait-live-fresh-summary-20260928.json
+?? docs/evidence/portrait-live-integration-20260928.md
+?? docs/evidence/portrait-reconstruction-route-audit-20260926.md
+?? docs/evidence/portrait-soft-surface-checkpoint-20260928.json
+?? docs/evidence/portrait-soft-surface-current-20260928.json
+?? docs/evidence/portrait-soft-surface-restart-20260928.md
+?? docs/evidence/portrait-surface-detail-edit-readiness-20260927.md
+?? docs/evidence/reconstruction-next-gates-20260927.md
+?? docs/evidence/story-conversation-tablet-20260926.md
+?? docs/evidence/tablet-research-preview-20260927/portrait-stars.before.json
+?? docs/evidence/unified-person-room-reconstruction-20260926.md
+?? scripts/Set-ReconstructionManualStartup.ps1
+?? scripts/Start-ReconstructionDesktop.ps1
+?? scripts/probe-personal-continuous-orbit.mjs
+?? scripts/probe-personal-playcanvas.mjs
+?? scripts/probe-playcanvas-render.mjs
+?? scripts/probe-research-edit-contract.mjs
+?? scripts/probe-research-point-order.mjs
+?? viewer-gs/tests/ply-contract.test.mjs

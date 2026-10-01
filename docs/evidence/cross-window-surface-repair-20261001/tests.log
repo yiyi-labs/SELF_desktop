@@ -1,0 +1,8 @@
+Executed in Ubuntu-22.04 /opt/self-reconstruction/venv/bin/python -B:
+-m unittest test_observation_protection test_asset_order test_cross_window_contract test_surface_consensus test_measured_head_surface_repair test_reconstruction_surface_continuity test_reconstruction_continuity_surface test_reconstruction_motion_surface
+.......................................................
+Ran 55 tests in 0.247s
+OK
+
+This is an executed contract regression result, not a visual quality approval.
+The sole torch scalar-conversion warning came from a test assertion.

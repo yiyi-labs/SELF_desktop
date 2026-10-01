@@ -1,0 +1,175 @@
+{
+  "renderer": "gsplat1.5.3 / PlayCanvas2.22.4 desktop SwiftShader",
+  "assets": {
+    "baseline": {
+      "assetHash": "a343ccf05292ce1e174c7fd63795122347a8d03bd0202a19395a9a414b691f41",
+      "pointCount": 50095,
+      "fullRGBMean": 0.09077023714780807,
+      "cameraMatrixMax": 5.446398299024935E-08,
+      "regions": {
+        "face": {
+          "rgb": 0.08969626575708389,
+          "alpha": 0.000535580504219979,
+          "gsplatToSource": 0.09632270038127899,
+          "playcanvasToSource": 0.02521171048283577
+        },
+        "hair": {
+          "rgb": 0.20348873734474182,
+          "alpha": 0.004713559057563543,
+          "gsplatToSource": 0.224790558218956,
+          "playcanvasToSource": 0.04477532580494881
+        },
+        "cloth": {
+          "rgb": 0.02026870846748352,
+          "alpha": 0.014413747936487198,
+          "gsplatToSource": 0.0505625382065773,
+          "playcanvasToSource": 0.05599498376250267
+        },
+        "room": {
+          "rgb": 0.12157674878835678,
+          "alpha": 0.14705951511859894,
+          "gsplatToSource": 0.0257010105997324,
+          "playcanvasToSource": 0.13003243505954742
+        }
+      },
+      "version": "2.22.4",
+      "canvas": [
+        1080,
+        1920
+      ],
+      "gamma": 1,
+      "exposure": 1,
+      "fog": "none",
+      "format": "compact",
+      "minPixelSize": 2
+    },
+    "context": {
+      "assetHash": "6be102d44de3f9e2a660c6d07145161639c4422dfab187800a7cbc44c4e888df",
+      "pointCount": 50095,
+      "fullRGBMean": 0.08951368182897568,
+      "cameraMatrixMax": 5.446398299024935E-08,
+      "regions": {
+        "face": {
+          "rgb": 0.08108365535736084,
+          "alpha": 0.0005403739050962031,
+          "gsplatToSource": 0.08832503855228424,
+          "playcanvasToSource": 0.025337817147374153
+        },
+        "hair": {
+          "rgb": 0.19946430623531342,
+          "alpha": 0.00474118534475565,
+          "gsplatToSource": 0.22065481543540955,
+          "playcanvasToSource": 0.0446607731282711
+        },
+        "cloth": {
+          "rgb": 0.01722538098692894,
+          "alpha": 0.014492985792458057,
+          "gsplatToSource": 0.049687620252370834,
+          "playcanvasToSource": 0.05274682864546776
+        },
+        "room": {
+          "rgb": 0.1223740503191948,
+          "alpha": 0.14843040704727173,
+          "gsplatToSource": 0.02470565401017666,
+          "playcanvasToSource": 0.13062098622322083
+        }
+      },
+      "version": "2.22.4",
+      "canvas": [
+        1080,
+        1920
+      ],
+      "gamma": 1,
+      "exposure": 1,
+      "fog": "none",
+      "format": "compact",
+      "minPixelSize": 2
+    },
+    "face-fixed-order": {
+      "assetHash": "8615059bbf320ac3f26a1dd3ef7ccbb71e5cf78532ae585b7175edf81d30d9bc",
+      "pointCount": 50095,
+      "fullRGBMean": 0.09075895696878433,
+      "cameraMatrixMax": 5.446398299024935E-08,
+      "regions": {
+        "face": {
+          "rgb": 0.08975443989038467,
+          "alpha": 0.0005308167892508209,
+          "gsplatToSource": 0.09626579284667969,
+          "playcanvasToSource": 0.02509813942015171
+        },
+        "hair": {
+          "rgb": 0.20338848233222961,
+          "alpha": 0.004712403751909733,
+          "gsplatToSource": 0.22490087151527405,
+          "playcanvasToSource": 0.04479137808084488
+        },
+        "cloth": {
+          "rgb": 0.0202606450766325,
+          "alpha": 0.01441354863345623,
+          "gsplatToSource": 0.05056370794773102,
+          "playcanvasToSource": 0.05598685145378113
+        },
+        "room": {
+          "rgb": 0.12157715111970901,
+          "alpha": 0.14705923199653625,
+          "gsplatToSource": 0.025703275576233864,
+          "playcanvasToSource": 0.13003185391426086
+        }
+      },
+      "version": "2.22.4",
+      "canvas": [
+        1080,
+        1920
+      ],
+      "gamma": 1,
+      "exposure": 1,
+      "fog": "none",
+      "format": "compact",
+      "minPixelSize": 2
+    },
+    "hair-protected": {
+      "assetHash": "bc80a47ae667e3d05bd3ebd5fa2437d5a8f10b2815e1e669d6f2bd12198640de",
+      "pointCount": 56036,
+      "fullRGBMean": 0.08987697958946228,
+      "cameraMatrixMax": 5.446398299024935E-08,
+      "regions": {
+        "face": {
+          "rgb": 0.08916260302066803,
+          "alpha": 0.0005379297072067857,
+          "gsplatToSource": 0.09583735466003418,
+          "playcanvasToSource": 0.025213975459337234
+        },
+        "hair": {
+          "rgb": 0.18440599739551544,
+          "alpha": 0.0031162044033408165,
+          "gsplatToSource": 0.19647398591041565,
+          "playcanvasToSource": 0.04146362096071243
+        },
+        "cloth": {
+          "rgb": 0.02026870846748352,
+          "alpha": 0.014413747936487198,
+          "gsplatToSource": 0.0505625382065773,
+          "playcanvasToSource": 0.05599498376250267
+        },
+        "room": {
+          "rgb": 0.12083275616168976,
+          "alpha": 0.14589278399944305,
+          "gsplatToSource": 0.027960559353232384,
+          "playcanvasToSource": 0.13199308514595032
+        }
+      },
+      "version": "2.22.4",
+      "canvas": [
+        1080,
+        1920
+      ],
+      "gamma": 1,
+      "exposure": 1,
+      "fog": "none",
+      "format": "compact",
+      "minPixelSize": 2
+    }
+  },
+  "HarmonyOSTested": false,
+  "published": false
+}

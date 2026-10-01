@@ -1,0 +1,20 @@
+{
+  "records": {
+    ".sources/cross-window-surface-repair-20261001-a/hair-observed-empty": {
+      "fields": {
+        "model": true,
+        "optimizers": true,
+        "bindings": true,
+        "samplers": true,
+        "rng": true,
+        "strategy": true,
+        "trainable": true
+      },
+      "initialHash": "61eecf56e3768d4621c8d7d86012975147e464ecef9686af1c67d799442b2b36",
+      "candidateHash": "160ada5dfd05872b89c25bb0944cdf80224d9b4eabb6d6d4a3a55ee81504420f",
+      "restoredHash": "04f3d6d83dd8a5ab309c6a4aa3cbbf34992527d7f3a7839ba74a8dd6239004a6"
+    }
+  },
+  "published": false,
+  "geometryQualityCertified": false
+}

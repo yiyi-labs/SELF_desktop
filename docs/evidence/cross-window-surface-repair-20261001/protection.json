@@ -1,0 +1,27 @@
+{
+  "frozenInputs": [
+    {
+      "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\cross-window-surface-repair-20261001-a\\..\\continuity-physical-surfaces-20261001-b\\body-transition-sh\\candidate-research-only.ply",
+      "before": "a343ccf05292ce1e174c7fd63795122347a8d03bd0202a19395a9a414b691f41",
+      "after": "a343ccf05292ce1e174c7fd63795122347a8d03bd0202a19395a9a414b691f41",
+      "exact": true
+    },
+    {
+      "path": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\cross-window-surface-repair-20261001-a\\..\\continuity-physical-surfaces-20261001-b\\body-transition-sh\\candidate-final.pt",
+      "before": "c3425ba01892940353909dbf3f95d5058ef507e023357ef864d4cb1460cac344",
+      "after": "c3425ba01892940353909dbf3f95d5058ef507e023357ef864d4cb1460cac344",
+      "exact": true
+    },
+    {
+      "path": "D:\\STUDY\\College\\mine\\olay\\backend\\.sources\\integrated-components-v2-20260928-e\\preparation.json",
+      "before": "e67d4dce02f9874e0befe15486532f80458f8a62a23221324fcc5abefc2e5301",
+      "after": "e67d4dce02f9874e0befe15486532f80458f8a62a23221324fcc5abefc2e5301",
+      "exact": true
+    }
+  ],
+  "originalProjectWritten": false,
+  "originalProjectHEAD": "3dad0cd5651824cc06d9e88d61aabdd2642c0b30",
+  "productionChanged": false,
+  "published": false,
+  "independentPrivateAssetBackup": false
+}

@@ -1,0 +1,14 @@
+ M backend/build_continuity_candidates.py
+?? backend/audit_observed_coverage_results.py
+?? backend/audit_observed_room_pool.py
+?? backend/build_observed_room_coverage.py
+?? backend/reconstruction_observed_coverage.py
+?? backend/run_observed_room_recovery.py
+?? backend/test_observed_coverage.py
+?? docs/evidence/cross-window-surface-repair-20261001/W-head.txt
+?? docs/evidence/observed-coverage-haze-20261001/report.md
+?? docs/evidence/portrait-priority-pause-20260929.md
+?? docs/evidence/portrait-priority-training-20260929/P-git-state.json
+?? docs/evidence/portrait-priority-training-20260929/W-git-state.json
+?? docs/evidence/reconstruction-stage2a-20260928/replay-report.md
+?? docs/evidence/reconstruction-v3-targeted-audit-20260928/report.md

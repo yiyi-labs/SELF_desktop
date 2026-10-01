@@ -1,0 +1,62 @@
+{
+  "records": {
+    ".sources/cross-window-surface-repair-20261001-a/hair-all-window/old-patch-control": {
+      "fields": {
+        "model": true,
+        "optimizers": true,
+        "bindings": true,
+        "samplers": true,
+        "rng": true,
+        "strategy": true,
+        "trainable": true
+      },
+      "initialHash": "cda5cb4a53e66a62f13cbd137b099fe8465ba451a305f6c72408ec3e7b6fef03",
+      "candidateHash": "e6caf963258840d0fe9d8128a584377fd4cc737ec96a6c71ad769995a8465dac",
+      "restoredHash": "375f046a9c6c77fb9ce3ab8e3a1df2aefd4902561d007168364d5703a2792c4c"
+    },
+    ".sources/cross-window-surface-repair-20261001-a/hair-all-window/actual-surface-candidate": {
+      "fields": {
+        "model": true,
+        "optimizers": true,
+        "bindings": true,
+        "samplers": true,
+        "rng": true,
+        "strategy": true,
+        "trainable": true
+      },
+      "initialHash": "99dc29d4f93bfba82a3b18881e9d1eb54257d8663a74abdc216f418a55f05e41",
+      "candidateHash": "ad355f590d22c7c7d2338f6c7ccfc897165e0579890306533cf4bab432469d08",
+      "restoredHash": "467225b07aaa0d1a2836cec9004d2b925d5de8263a46738557fa4477308e427a"
+    },
+    ".sources/cross-window-surface-repair-20261001-a/context-appearance-b": {
+      "fields": {
+        "model": true,
+        "optimizers": true,
+        "bindings": true,
+        "samplers": true,
+        "rng": true,
+        "strategy": true,
+        "trainable": true
+      },
+      "initialHash": "bb10da0509d003be808ae5b3641bf6625b8f537beeae847aae60588062a34005",
+      "candidateHash": "ab671ad9ee5d66c6099dd749ad48bb0b6fed0178f0933be39a02db45ce3c42dd",
+      "restoredHash": "9ebb0f0019ed68e2d8a6973d143673fefe0e55f2d9a10405ddc26d853b148e1e"
+    },
+    ".sources/cross-window-surface-repair-20261001-a/face-native-coverage": {
+      "fields": {
+        "model": true,
+        "optimizers": true,
+        "bindings": true,
+        "samplers": true,
+        "rng": true,
+        "strategy": true,
+        "trainable": true
+      },
+      "initialHash": "0e3df6eb8a2d3d3afa0917425fc03557106364d91a6c0b685b865d8d193b957b",
+      "candidateHash": "6861fe8ba01f6d1bfce5d7299e0b58508d9e79c293792405edf4592eaea3d180",
+      "restoredHash": "92f764ef15ffa4b9d67cefff831612746988f344bf7946a200398b617051654b"
+    }
+  },
+  "published": false,
+  "geometryQualityCertified": false
+}
