@@ -22,7 +22,7 @@ class SurfaceContinuityTests(unittest.TestCase):
         torch.testing.assert_close(r.sh[:,1:].square().sum(1),s.sh[:,1:].square().sum(1),rtol=2e-5,atol=1e-7)
     def test_field_is_shared_bounded_and_has_consistent_derivative(self):
         torch.manual_seed(2);p=torch.randn(20,3);m=SharedDisplacementField(p,.01,6);m.delta.data.normal_()
-        x,J=m(p);self.assertLessEqual(float((x-p).abs().max()),.010001)
+        x,J=m(p);self.assertLessEqual(float((x-p).abs().max().detach()),.010001)
         v=p[:1].clone().requires_grad_();actual=torch.autograd.functional.jacobian(lambda a:m(a)[0],v)[0,:,0,:]
         torch.testing.assert_close(actual,m(v)[1][0],rtol=1e-5,atol=1e-6)
         x.sum().backward();self.assertTrue(torch.isfinite(m.delta.grad).all());self.assertGreater(float(m.delta.grad.abs().sum()),0)
@@ -37,6 +37,18 @@ class SurfaceContinuityTests(unittest.TestCase):
         neck=np.array([[0.,0.,2.],[1.,0.,2.]]);head=np.array([[0.,.01,2.]])
         a,b,r=select_skin_contacts(neck,head,np.diag([100.,100.,1.]),np.eye(4))
         self.assertEqual(a.tolist(),[0]);self.assertEqual(b.tolist(),[0]);self.assertFalse(r['skinClothWeld'])
+    def test_material_weight_chain_matches_actual_deformation(self):
+        s=self.state();A=torch.tensor([[1.05,.04,0],[0,.97,.02],[0,0,1.]])
+        H=torch.eye(4);H[0,3]=.2;B=torch.eye(4);g=torch.tensor([0.,-.1,.03]);p=s.means
+        field=p@A.T;w=.6+p@g;local=GaussianState(field,s.quats,s.scales,s.opacity,s.sh,s.parts)
+        r,J=continuous_motion(local,H,B,w,g[None].repeat(len(p),1),field_jacobian=A[None].repeat(len(p),1,1))
+        def actual(x):
+            y=x@A.T;weight=.6+x@g;head=y@H[:3,:3].T+H[:3,3];body=y@B[:3,:3].T+B[:3,3]
+            return weight[:,None]*head+(1-weight[:,None])*body
+        for i in range(len(p)):
+            jac=torch.autograd.functional.jacobian(actual,p[i:i+1])[0,:,0,:]
+            torch.testing.assert_close(J[i],jac,rtol=1e-6,atol=1e-7)
+        torch.testing.assert_close(r.means,actual(p))
     def test_full_surface_gradients_are_finite(self):
         s=self.state();m=SharedDisplacementField(s.means,.01,3);x,J=m(s.means)
         moved=GaussianState(x,s.quats,s.scales,s.opacity,s.sh,s.parts)

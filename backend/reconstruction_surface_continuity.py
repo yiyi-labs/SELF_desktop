@@ -62,8 +62,10 @@ def continuous_motion(state,H,B,weight,gradient,*,field_jacobian=None):
     eye=torch.eye(3,device=state.means.device,dtype=state.means.dtype)
     head=state.means@H[:3,:3].T+H[:3,3];body=state.means@B[:3,:3].T+B[:3,3]
     J=weight[:,None,None]*H[:3,:3]+(1-weight[:,None,None])*B[:3,:3]
-    J=J+(head-body)[:,:,None]*gradient[:,None,:]
     if field_jacobian is not None:J=J@field_jacobian
+    # The weights and their derivative are tied to canonical material points.
+    # Their outer-product term is NOT differentiated through the field again.
+    J=J+(head-body)[:,:,None]*gradient[:,None,:]
     # Polar frame is evaluated without colour fitting or an unstable SVD
     # gradient at repeated singular values. This stage fixes H/B.
     U,_,V=torch.linalg.svd(J.detach());fix=eye[None].repeat(len(J),1,1)
