@@ -1,0 +1,12 @@
+{
+  "torch": "2.8.0+cu128",
+  "cuda": "12.8",
+  "gsplat": "1.5.3",
+  "cudaAvailable": true,
+  "gpu": "NVIDIA GeForce RTX 5070 Laptop GPU",
+  "totalMemoryMiB": 8123.4375,
+  "rasterizerSource": "/opt/self-reconstruction/venv/lib/python3.10/site-packages/gsplat/rendering.py",
+  "rasterizerSourceHash": "6b5e4101035031afbb26bed7e496382c7502f9d8bc7cc9a432f290674a4d9133",
+  "dependenciesModified": false,
+  "noDriverOrModeChanges": true
+}

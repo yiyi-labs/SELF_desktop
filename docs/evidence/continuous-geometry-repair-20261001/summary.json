@@ -1,0 +1,6041 @@
+{
+  "branches": {
+    "neck/rigid-control": {
+      "assetHash": "c71e84fe388a2fbf9ce0f9b204c17bc5d9c0af04ede125866b5493df3ce0fb25",
+      "sidecarHash": "3146b93f02e6402446528d3ee82adf5dc1b72781824daf9283c5baddaf7964d7",
+      "sourceHash": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+      "reference": "frame_0010.png",
+      "pointCount": 50095,
+      "steps": 200,
+      "failures": [],
+      "frozenBaselineExact": true,
+      "transactionAccepted": false,
+      "releaseQualityPassed": false,
+      "trainEvalSeconds": 99.41111135899999,
+      "allocatedMiB": 761.0693359375,
+      "reservedMiB": 1286.0,
+      "parameterChanges": {
+        "weight": 0.0,
+        "gradient": 0.0,
+        "contact_target": 0.0,
+        "patch.offset": 0.0,
+        "patch.log_scales": 0.03820141777396202,
+        "patch.quats": 0.012754354625940323,
+        "patch.opacity": 0.23340217769145966,
+        "patch.sh": 0.03618616610765457,
+        "patch.base": 0.0,
+        "patch.support": 0.0,
+        "patch.initial_scales": 0.0,
+        "patch.max_offset": 0.0,
+        "field.delta": 0.20720712840557098,
+        "field.nodes": 0.0,
+        "field.radius": 0.0,
+        "field.maximum": 0.0
+      },
+      "referenceRegions": {
+        "face": {
+          "before": {
+            "rgb": 0.09610452502965927,
+            "q": 0.6924801468849182,
+            "qRoom": 0.2727258801460266,
+            "alpha": 0.9997367262840271,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.09607730060815811,
+            "q": 0.6923586130142212,
+            "qRoom": 0.27272480726242065,
+            "alpha": 0.9997367858886719,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "hair": {
+          "before": {
+            "rgb": 0.22479060292243958,
+            "q": 0.5462954640388489,
+            "qRoom": 0.4221923351287842,
+            "alpha": 0.9995884895324707,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.22479060292243958,
+            "q": 0.5462954640388489,
+            "qRoom": 0.4221923351287842,
+            "alpha": 0.9995884895324707,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "neck": {
+          "before": {
+            "rgb": 0.04973683878779411,
+            "q": 0.8416954874992371,
+            "qRoom": 0.15602411329746246,
+            "alpha": 0.9997295141220093,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.044467583298683167,
+            "q": 0.8423635959625244,
+            "qRoom": 0.1554635465145111,
+            "alpha": 0.9997800588607788,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0010260166600346565
+          }
+        },
+        "cloth": {
+          "before": {
+            "rgb": 0.05012831091880798,
+            "q": 0.8841910362243652,
+            "qRoom": 0.10703472048044205,
+            "alpha": 0.9912578463554382,
+            "holes": 0.0011602259253120498
+          },
+          "after": {
+            "rgb": 0.05017101764678955,
+            "q": 0.8842220902442932,
+            "qRoom": 0.10700755566358566,
+            "alpha": 0.9912627935409546,
+            "holes": 0.0011602259253120498,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "room": {
+          "before": {
+            "rgb": 0.025701003149151802,
+            "q": 0.9202390909194946,
+            "qRoom": 0.9202390909194946,
+            "alpha": 0.9584492444992065,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.02569754235446453,
+            "q": 0.9202303886413574,
+            "qRoom": 0.9202303886413574,
+            "alpha": 0.95844966173172,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        }
+      },
+      "checkpoints": {
+        "initial": {
+          "exists": true,
+          "sha256": "1fb378ecdc0607e50e1070c14407401317abd7496ea7996b8634a5300939e2b9"
+        },
+        "mid": {
+          "exists": true,
+          "sha256": "829c2c1a48a63665eb7c4033f7c0045831a600884d09d8338b8b8ab62ce48f71"
+        },
+        "candidate-final": {
+          "exists": true,
+          "sha256": "81715cfdfb1ad0872b14333dc75cf7973553204b99ac41f13cdf752e78e61439"
+        },
+        "restored": {
+          "exists": true,
+          "sha256": "b6f3db7936b501b2ab090ff4ac3e45d408dcadb4a5b8415b8786c3a71b010c2d"
+        }
+      }
+    },
+    "neck/strain-candidate": {
+      "assetHash": "d82c752008b19b24943eb5f8fff257c1d794f02ad2c332294c6f1612f0c629de",
+      "sidecarHash": "0e78bd7b3d03389af6055b3dd22c37c80eacbb89e86e16dc2d57ae0bd953336f",
+      "sourceHash": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+      "reference": "frame_0010.png",
+      "pointCount": 50095,
+      "steps": 200,
+      "failures": [],
+      "frozenBaselineExact": true,
+      "transactionAccepted": false,
+      "releaseQualityPassed": false,
+      "trainEvalSeconds": 81.23824607900002,
+      "allocatedMiB": 1304.7138671875,
+      "reservedMiB": 1958.0,
+      "parameterChanges": {
+        "weight": 0.0,
+        "gradient": 0.0,
+        "contact_target": 0.0,
+        "patch.offset": 0.0,
+        "patch.log_scales": 0.040628932416439056,
+        "patch.quats": 0.013950683176517487,
+        "patch.opacity": 0.243751659989357,
+        "patch.sh": 0.039409343153238297,
+        "patch.base": 0.0,
+        "patch.support": 0.0,
+        "patch.initial_scales": 0.0,
+        "patch.max_offset": 0.0,
+        "field.delta": 0.21164600551128387,
+        "field.nodes": 0.0,
+        "field.radius": 0.0,
+        "field.maximum": 0.0
+      },
+      "referenceRegions": {
+        "face": {
+          "before": {
+            "rgb": 0.09610452502965927,
+            "q": 0.6924801468849182,
+            "qRoom": 0.2727258801460266,
+            "alpha": 0.9997367262840271,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.09608720242977142,
+            "q": 0.69240403175354,
+            "qRoom": 0.27272525429725647,
+            "alpha": 0.9997367858886719,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "hair": {
+          "before": {
+            "rgb": 0.22479060292243958,
+            "q": 0.5462954640388489,
+            "qRoom": 0.4221923351287842,
+            "alpha": 0.9995884895324707,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.22479060292243958,
+            "q": 0.5462954640388489,
+            "qRoom": 0.4221923351287842,
+            "alpha": 0.9995884895324707,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "neck": {
+          "before": {
+            "rgb": 0.04973683878779411,
+            "q": 0.8416954874992371,
+            "qRoom": 0.15602411329746246,
+            "alpha": 0.9997295141220093,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.04471524804830551,
+            "q": 0.8422931432723999,
+            "qRoom": 0.1555248647928238,
+            "alpha": 0.9997819662094116,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0012942526955157518
+          }
+        },
+        "cloth": {
+          "before": {
+            "rgb": 0.05012831091880798,
+            "q": 0.8841910362243652,
+            "qRoom": 0.10703472048044205,
+            "alpha": 0.9912578463554382,
+            "holes": 0.0011602259253120498
+          },
+          "after": {
+            "rgb": 0.05016705021262169,
+            "q": 0.8842194676399231,
+            "qRoom": 0.10701089352369308,
+            "alpha": 0.9912621378898621,
+            "holes": 0.0011602259253120498,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "room": {
+          "before": {
+            "rgb": 0.025701003149151802,
+            "q": 0.9202390909194946,
+            "qRoom": 0.9202390909194946,
+            "alpha": 0.9584492444992065,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.025697296485304832,
+            "q": 0.9202245473861694,
+            "qRoom": 0.9202245473861694,
+            "alpha": 0.9584500193595886,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        }
+      },
+      "checkpoints": {
+        "initial": {
+          "exists": true,
+          "sha256": "32b35221da43fa74555e228aab8ff92f7548dec010ec26a486f938c3de02e64e"
+        },
+        "mid": {
+          "exists": true,
+          "sha256": "607c62b391b2d755e0039a969922e7cd94b6f69f1cfd041540c89297dff10a44"
+        },
+        "candidate-final": {
+          "exists": true,
+          "sha256": "2f4a85a8dd959751e8717b18d46d301c45a95a693e605cdcc28989349324420d"
+        },
+        "restored": {
+          "exists": true,
+          "sha256": "26b071f14c11961fc69ad0382881f9b3a3d416604412269d60f3bb0a084e406d"
+        }
+      }
+    },
+    "neck-material-jacobian/rigid-control": {
+      "assetHash": "7aeb3c7a329b9bc0cae08e91e0aafec3e77f843bceab1c1bf936624ac9d7c848",
+      "sidecarHash": "fb320eff5af7c5d460c7efcab5767075c7a6135b0fe3b19b2a819db22e961aaa",
+      "sourceHash": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+      "reference": "frame_0010.png",
+      "pointCount": 50095,
+      "steps": 200,
+      "failures": [],
+      "frozenBaselineExact": true,
+      "transactionAccepted": false,
+      "releaseQualityPassed": false,
+      "trainEvalSeconds": 112.52694844199999,
+      "allocatedMiB": 761.0693359375,
+      "reservedMiB": 1286.0,
+      "parameterChanges": {
+        "weight": 0.0,
+        "gradient": 0.0,
+        "contact_target": 0.0,
+        "patch.offset": 0.0,
+        "patch.log_scales": 0.03820135071873665,
+        "patch.quats": 0.012754330411553383,
+        "patch.opacity": 0.23340195417404175,
+        "patch.sh": 0.0361860953271389,
+        "patch.base": 0.0,
+        "patch.support": 0.0,
+        "patch.initial_scales": 0.0,
+        "patch.max_offset": 0.0,
+        "field.delta": 0.20720715820789337,
+        "field.nodes": 0.0,
+        "field.radius": 0.0,
+        "field.maximum": 0.0
+      },
+      "referenceRegions": {
+        "face": {
+          "before": {
+            "rgb": 0.09610452502965927,
+            "q": 0.6924801468849182,
+            "qRoom": 0.2727258801460266,
+            "alpha": 0.9997367262840271,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.09607730060815811,
+            "q": 0.6923586130142212,
+            "qRoom": 0.27272480726242065,
+            "alpha": 0.9997367858886719,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "hair": {
+          "before": {
+            "rgb": 0.22479060292243958,
+            "q": 0.5462954640388489,
+            "qRoom": 0.4221923351287842,
+            "alpha": 0.9995884895324707,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.22479060292243958,
+            "q": 0.5462954640388489,
+            "qRoom": 0.4221923351287842,
+            "alpha": 0.9995884895324707,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "neck": {
+          "before": {
+            "rgb": 0.04973683878779411,
+            "q": 0.8416954874992371,
+            "qRoom": 0.15602411329746246,
+            "alpha": 0.9997295141220093,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.04446759074926376,
+            "q": 0.8423635959625244,
+            "qRoom": 0.1554635614156723,
+            "alpha": 0.9997800588607788,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0010259606642648578
+          }
+        },
+        "cloth": {
+          "before": {
+            "rgb": 0.05012831091880798,
+            "q": 0.8841910362243652,
+            "qRoom": 0.10703472048044205,
+            "alpha": 0.9912578463554382,
+            "holes": 0.0011602259253120498
+          },
+          "after": {
+            "rgb": 0.05017101764678955,
+            "q": 0.8842220902442932,
+            "qRoom": 0.10700755566358566,
+            "alpha": 0.9912627935409546,
+            "holes": 0.0011602259253120498,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "room": {
+          "before": {
+            "rgb": 0.025701003149151802,
+            "q": 0.9202390909194946,
+            "qRoom": 0.9202390909194946,
+            "alpha": 0.9584492444992065,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.02569754235446453,
+            "q": 0.9202303886413574,
+            "qRoom": 0.9202303886413574,
+            "alpha": 0.95844966173172,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        }
+      },
+      "checkpoints": {
+        "initial": {
+          "exists": true,
+          "sha256": "72eb71e7362c45b167812fd541ce0fd6add22f438fa04555dc27b7fb8a02e4a3"
+        },
+        "mid": {
+          "exists": true,
+          "sha256": "b0ba07719e826f78f2db06cc082da8ee612bc89d8b9fea7c62609c7929adb067"
+        },
+        "candidate-final": {
+          "exists": true,
+          "sha256": "0059955e18cddaa4d53c08088844d7bfc1d320021eab9ac3a056d14924ee83aa"
+        },
+        "restored": {
+          "exists": true,
+          "sha256": "42d0be8b7633d69a6b0d6d2348f01b6e4d8f8ef81550a1f1e37569b962bf5926"
+        }
+      }
+    },
+    "neck-material-jacobian/strain-candidate": {
+      "assetHash": "5536b97e07b165cacf4b55eba264748f600936adf44030fe60523aa2e7fbdd6a",
+      "sidecarHash": "6624ea0e7328c22bee9748f3b8099bf09e829cb141fbd87cb305ef1d84cb72b0",
+      "sourceHash": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+      "reference": "frame_0010.png",
+      "pointCount": 50095,
+      "steps": 200,
+      "failures": [],
+      "frozenBaselineExact": true,
+      "transactionAccepted": false,
+      "releaseQualityPassed": false,
+      "trainEvalSeconds": 74.221517989,
+      "allocatedMiB": 1305.662109375,
+      "reservedMiB": 1958.0,
+      "parameterChanges": {
+        "weight": 0.0,
+        "gradient": 0.0,
+        "contact_target": 0.0,
+        "patch.offset": 0.0,
+        "patch.log_scales": 0.04062299802899361,
+        "patch.quats": 0.013958432711660862,
+        "patch.opacity": 0.2437514215707779,
+        "patch.sh": 0.0393967442214489,
+        "patch.base": 0.0,
+        "patch.support": 0.0,
+        "patch.initial_scales": 0.0,
+        "patch.max_offset": 0.0,
+        "field.delta": 0.2114020138978958,
+        "field.nodes": 0.0,
+        "field.radius": 0.0,
+        "field.maximum": 0.0
+      },
+      "referenceRegions": {
+        "face": {
+          "before": {
+            "rgb": 0.09610452502965927,
+            "q": 0.6924801468849182,
+            "qRoom": 0.2727258801460266,
+            "alpha": 0.9997367262840271,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.09608722478151321,
+            "q": 0.6924041509628296,
+            "qRoom": 0.27272525429725647,
+            "alpha": 0.9997367858886719,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "hair": {
+          "before": {
+            "rgb": 0.22479060292243958,
+            "q": 0.5462954640388489,
+            "qRoom": 0.4221923351287842,
+            "alpha": 0.9995884895324707,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.22479060292243958,
+            "q": 0.5462954640388489,
+            "qRoom": 0.4221923351287842,
+            "alpha": 0.9995884895324707,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "neck": {
+          "before": {
+            "rgb": 0.04973683878779411,
+            "q": 0.8416954874992371,
+            "qRoom": 0.15602411329746246,
+            "alpha": 0.9997295141220093,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.0447135791182518,
+            "q": 0.8422931432723999,
+            "qRoom": 0.1555248349905014,
+            "alpha": 0.9997819662094116,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.001292492961511016
+          }
+        },
+        "cloth": {
+          "before": {
+            "rgb": 0.05012831091880798,
+            "q": 0.8841910362243652,
+            "qRoom": 0.10703472048044205,
+            "alpha": 0.9912578463554382,
+            "holes": 0.0011602259253120498
+          },
+          "after": {
+            "rgb": 0.050167057663202286,
+            "q": 0.8842194676399231,
+            "qRoom": 0.10701089352369308,
+            "alpha": 0.9912621378898621,
+            "holes": 0.0011602259253120498,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "room": {
+          "before": {
+            "rgb": 0.025701003149151802,
+            "q": 0.9202390909194946,
+            "qRoom": 0.9202390909194946,
+            "alpha": 0.9584492444992065,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.025697283446788788,
+            "q": 0.9202245473861694,
+            "qRoom": 0.9202245473861694,
+            "alpha": 0.9584500193595886,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        }
+      },
+      "checkpoints": {
+        "initial": {
+          "exists": true,
+          "sha256": "743608e5903de7786ce6389a15f17706f4384c2570630ff4e1f89694520af5c6"
+        },
+        "mid": {
+          "exists": true,
+          "sha256": "09d8f8a9e00df3ac71d373c0378531ac571694f79583a23e256dbe3ca3b1593f"
+        },
+        "candidate-final": {
+          "exists": true,
+          "sha256": "4745ea1a9e30acbee6b9f999c2cb309721b7d76bffb064b100a57c583f4131c6"
+        },
+        "restored": {
+          "exists": true,
+          "sha256": "8161bff404ba95dc648746ae499752d92553c717d86ce4820ddc58cd9efd0aba"
+        }
+      }
+    },
+    "face-measured-recorded/appearance-control": {
+      "assetHash": "bbd2cb052e5e0b3a0259e484a5b2304c04e6ba672cbc97c0b529f0d0df9e3a03",
+      "sidecarHash": "95c6284336b5aa3db7447b3dae3016cb251a90b4b307d68e08b332b59371d6c7",
+      "sourceHash": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+      "reference": "frame_0010.png",
+      "pointCount": 50095,
+      "steps": 180,
+      "failures": [],
+      "frozenBaselineExact": true,
+      "transactionAccepted": false,
+      "releaseQualityPassed": false,
+      "trainEvalSeconds": 97.41187001200001,
+      "allocatedMiB": 729.275390625,
+      "reservedMiB": 1658.0,
+      "parameterChanges": {
+        "patch.offset": 0.0,
+        "patch.log_scales": 0.02961650677025318,
+        "patch.quats": 0.0,
+        "patch.opacity": 0.11804153025150299,
+        "patch.sh": 0.037243787199258804,
+        "patch.base": 0.0,
+        "patch.support": 0.0,
+        "patch.initial_scales": 0.0,
+        "patch.max_offset": 0.0
+      },
+      "referenceRegions": {
+        "face": {
+          "before": {
+            "rgb": 0.09610452502965927,
+            "q": 0.6924801468849182,
+            "qRoom": 0.2727258801460266,
+            "alpha": 0.9997367262840271,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.09701758623123169,
+            "q": 0.6928642988204956,
+            "qRoom": 0.27246683835983276,
+            "alpha": 0.9997420907020569,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.003873762208968401
+          }
+        },
+        "hair": {
+          "before": {
+            "rgb": 0.22479060292243958,
+            "q": 0.5462954640388489,
+            "qRoom": 0.4221923351287842,
+            "alpha": 0.9995884895324707,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.2247885763645172,
+            "q": 0.5463964343070984,
+            "qRoom": 0.4221925139427185,
+            "alpha": 0.9995884895324707,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "neck": {
+          "before": {
+            "rgb": 0.04973683878779411,
+            "q": 0.8416954874992371,
+            "qRoom": 0.15602411329746246,
+            "alpha": 0.9997295141220093,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.04973683878779411,
+            "q": 0.8416954874992371,
+            "qRoom": 0.15602411329746246,
+            "alpha": 0.9997295141220093,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "cloth": {
+          "before": {
+            "rgb": 0.05012831091880798,
+            "q": 0.8841910362243652,
+            "qRoom": 0.10703472048044205,
+            "alpha": 0.9912578463554382,
+            "holes": 0.0011602259253120498
+          },
+          "after": {
+            "rgb": 0.05012831091880798,
+            "q": 0.8841910362243652,
+            "qRoom": 0.10703472048044205,
+            "alpha": 0.9912578463554382,
+            "holes": 0.0011602259253120498,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "room": {
+          "before": {
+            "rgb": 0.025701003149151802,
+            "q": 0.9202390909194946,
+            "qRoom": 0.9202390909194946,
+            "alpha": 0.9584492444992065,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.025700923055410385,
+            "q": 0.9202386140823364,
+            "qRoom": 0.9202386140823364,
+            "alpha": 0.9584492444992065,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        }
+      },
+      "checkpoints": {
+        "initial": {
+          "exists": true,
+          "sha256": "3f3014c46f8472a67331572c05776e2cabfd9d61bbfad8725319e026fd41f271"
+        },
+        "mid": {
+          "exists": true,
+          "sha256": "b8dfcfb28d2b7ed9286ec9f261ac0ea978c89d250c7a15e44197b5e0107f33c2"
+        },
+        "candidate-final": {
+          "exists": true,
+          "sha256": "4576043b703873e4ca2331cbb2f5ad5c9e38d26142b842c28046901e60dd8807"
+        },
+        "restored": {
+          "exists": true,
+          "sha256": "f35f195cf0426647a7dab60caee45f731886b1f2d1629e2a149f67d817865d42"
+        }
+      }
+    },
+    "face-measured-recorded/measured-candidate": {
+      "assetHash": "0069615cc3e3242dfdd1cebfe9aa9179ecc41b9f99f3bb656bfe1fd4abb21b30",
+      "sidecarHash": "3f6e73ec2ec85a6bf9d54a40d5264ee43c770557cca646116711fb5cb8b703e8",
+      "sourceHash": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+      "reference": "frame_0010.png",
+      "pointCount": 50095,
+      "steps": 180,
+      "failures": [],
+      "frozenBaselineExact": true,
+      "transactionAccepted": false,
+      "releaseQualityPassed": false,
+      "trainEvalSeconds": 98.91698421299998,
+      "allocatedMiB": 909.5,
+      "reservedMiB": 1246.0,
+      "parameterChanges": {
+        "patch.offset": 0.0,
+        "patch.log_scales": 0.03059377521276474,
+        "patch.quats": 0.0,
+        "patch.opacity": 0.12681829929351807,
+        "patch.sh": 0.04166559875011444,
+        "patch.base": 0.0,
+        "patch.support": 0.0,
+        "patch.initial_scales": 0.0,
+        "patch.max_offset": 0.0
+      },
+      "referenceRegions": {
+        "face": {
+          "before": {
+            "rgb": 0.09610452502965927,
+            "q": 0.6924801468849182,
+            "qRoom": 0.2727258801460266,
+            "alpha": 0.9997367262840271,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.09672067314386368,
+            "q": 0.6936815977096558,
+            "qRoom": 0.27212607860565186,
+            "alpha": 0.9997425675392151,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.00433831661939621
+          }
+        },
+        "hair": {
+          "before": {
+            "rgb": 0.22479060292243958,
+            "q": 0.5462954640388489,
+            "qRoom": 0.4221923351287842,
+            "alpha": 0.9995884895324707,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.22479207813739777,
+            "q": 0.546302318572998,
+            "qRoom": 0.4221924841403961,
+            "alpha": 0.9995884895324707,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "neck": {
+          "before": {
+            "rgb": 0.04973683878779411,
+            "q": 0.8416954874992371,
+            "qRoom": 0.15602411329746246,
+            "alpha": 0.9997295141220093,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.04973683878779411,
+            "q": 0.8416954874992371,
+            "qRoom": 0.15602411329746246,
+            "alpha": 0.9997295141220093,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "cloth": {
+          "before": {
+            "rgb": 0.05012831091880798,
+            "q": 0.8841910362243652,
+            "qRoom": 0.10703472048044205,
+            "alpha": 0.9912578463554382,
+            "holes": 0.0011602259253120498
+          },
+          "after": {
+            "rgb": 0.05012831091880798,
+            "q": 0.8841910362243652,
+            "qRoom": 0.10703472048044205,
+            "alpha": 0.9912578463554382,
+            "holes": 0.0011602259253120498,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "room": {
+          "before": {
+            "rgb": 0.025701003149151802,
+            "q": 0.9202390909194946,
+            "qRoom": 0.9202390909194946,
+            "alpha": 0.9584492444992065,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.025700919330120087,
+            "q": 0.9202386140823364,
+            "qRoom": 0.9202386140823364,
+            "alpha": 0.9584492444992065,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        }
+      },
+      "checkpoints": {
+        "initial": {
+          "exists": true,
+          "sha256": "a9e6ff227c6a120452fd196ca8fc974ae229ba05ae58332c5883b34a35020457"
+        },
+        "mid": {
+          "exists": true,
+          "sha256": "059f616a7c594c44e89a7b055493f2f197a637860556bdecfe389c574cadd9be"
+        },
+        "candidate-final": {
+          "exists": true,
+          "sha256": "1aa4abbb209f6aa9cf16c0baff6bfb92e91d11fe66e72fb3098c7cddf5832149"
+        },
+        "restored": {
+          "exists": true,
+          "sha256": "e1b17b1ae5487cb5d01171f4279498f00011ce559687c387ab46336af0182a33"
+        }
+      }
+    },
+    "hair-measured/appearance-control": {
+      "assetHash": "87fbd3b15ae261bde21006766db1288e3dea44c98b274d31c3a98029ec66a7e8",
+      "sidecarHash": "45103a6cf18be95356a7773f9b69232904aedb7eaabd60cb4ecc55bbdaa34e0e",
+      "sourceHash": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+      "reference": "frame_0010.png",
+      "pointCount": 50095,
+      "steps": 180,
+      "failures": [],
+      "frozenBaselineExact": true,
+      "transactionAccepted": false,
+      "releaseQualityPassed": false,
+      "trainEvalSeconds": 70.381578338,
+      "allocatedMiB": 725.86767578125,
+      "reservedMiB": 1276.0,
+      "parameterChanges": {
+        "patch.offset": 0.0,
+        "patch.log_scales": 0.02803608775138855,
+        "patch.quats": 0.0,
+        "patch.opacity": 0.11970789730548859,
+        "patch.sh": 0.016828693449497223,
+        "patch.base": 0.0,
+        "patch.support": 0.0,
+        "patch.initial_scales": 0.0,
+        "patch.max_offset": 0.0
+      },
+      "referenceRegions": {
+        "face": {
+          "before": {
+            "rgb": 0.09610452502965927,
+            "q": 0.6924801468849182,
+            "qRoom": 0.2727258801460266,
+            "alpha": 0.9997367262840271,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.0961044579744339,
+            "q": 0.6924801468849182,
+            "qRoom": 0.2727258801460266,
+            "alpha": 0.9997367262840271,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "hair": {
+          "before": {
+            "rgb": 0.22479060292243958,
+            "q": 0.5462954640388489,
+            "qRoom": 0.4221923351287842,
+            "alpha": 0.9995884895324707,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.22507984936237335,
+            "q": 0.5461804866790771,
+            "qRoom": 0.4222913086414337,
+            "alpha": 0.9995880722999573,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.001018167706206441
+          }
+        },
+        "neck": {
+          "before": {
+            "rgb": 0.04973683878779411,
+            "q": 0.8416954874992371,
+            "qRoom": 0.15602411329746246,
+            "alpha": 0.9997295141220093,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.04973683878779411,
+            "q": 0.8416954874992371,
+            "qRoom": 0.15602411329746246,
+            "alpha": 0.9997295141220093,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "cloth": {
+          "before": {
+            "rgb": 0.05012831091880798,
+            "q": 0.8841910362243652,
+            "qRoom": 0.10703472048044205,
+            "alpha": 0.9912578463554382,
+            "holes": 0.0011602259253120498
+          },
+          "after": {
+            "rgb": 0.05012831091880798,
+            "q": 0.8841910362243652,
+            "qRoom": 0.10703472048044205,
+            "alpha": 0.9912578463554382,
+            "holes": 0.0011602259253120498,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "room": {
+          "before": {
+            "rgb": 0.025701003149151802,
+            "q": 0.9202390909194946,
+            "qRoom": 0.9202390909194946,
+            "alpha": 0.9584492444992065,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.025701003149151802,
+            "q": 0.9202390909194946,
+            "qRoom": 0.9202390909194946,
+            "alpha": 0.9584492444992065,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        }
+      },
+      "checkpoints": {
+        "initial": {
+          "exists": true,
+          "sha256": "a4c67e65b9379a48c956d80221b8e451af7956832e14bbfd140385112ffe894e"
+        },
+        "mid": {
+          "exists": true,
+          "sha256": "9ddc23e39181cfd26374af8f193c1f1feccb4e9ac90cc62644ed04b72f3442d0"
+        },
+        "candidate-final": {
+          "exists": true,
+          "sha256": "4b89e32a98c6f714b3d36a7602bc348f46bf3d7fdb3e706637b1cfe1ab07329d"
+        },
+        "restored": {
+          "exists": true,
+          "sha256": "e8a4b4f2668f8b9e2de403ea77779a42c8a55b987143f969f1103e606166546e"
+        }
+      }
+    },
+    "hair-measured/measured-candidate": {
+      "assetHash": "ab0e2d252b252cde048f74012d4e370f7dbb7def81de9b73d5d9f8d109e8f3a1",
+      "sidecarHash": "7d2149347b6de9140e65c4d3b3a863698bf24c493150bf0dfe5a9815f00e269b",
+      "sourceHash": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+      "reference": "frame_0010.png",
+      "pointCount": 50095,
+      "steps": 180,
+      "failures": [],
+      "frozenBaselineExact": true,
+      "transactionAccepted": false,
+      "releaseQualityPassed": false,
+      "trainEvalSeconds": 69.83612224699999,
+      "allocatedMiB": 720.60888671875,
+      "reservedMiB": 988.0,
+      "parameterChanges": {
+        "patch.offset": 0.0,
+        "patch.log_scales": 0.038636401295661926,
+        "patch.quats": 0.0,
+        "patch.opacity": 0.10242334753274918,
+        "patch.sh": 0.05080760270357132,
+        "patch.base": 0.0,
+        "patch.support": 0.0,
+        "patch.initial_scales": 0.0,
+        "patch.max_offset": 0.0
+      },
+      "referenceRegions": {
+        "face": {
+          "before": {
+            "rgb": 0.09610452502965927,
+            "q": 0.6924801468849182,
+            "qRoom": 0.2727258801460266,
+            "alpha": 0.9997367262840271,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.09610386937856674,
+            "q": 0.6924788355827332,
+            "qRoom": 0.2727258801460266,
+            "alpha": 0.9997367262840271,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "hair": {
+          "before": {
+            "rgb": 0.22479060292243958,
+            "q": 0.5462954640388489,
+            "qRoom": 0.4221923351287842,
+            "alpha": 0.9995884895324707,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.22513186931610107,
+            "q": 0.546255350112915,
+            "qRoom": 0.42222505807876587,
+            "alpha": 0.9995895028114319,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0010259777773171663
+          }
+        },
+        "neck": {
+          "before": {
+            "rgb": 0.04973683878779411,
+            "q": 0.8416954874992371,
+            "qRoom": 0.15602411329746246,
+            "alpha": 0.9997295141220093,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.04973683878779411,
+            "q": 0.8416954874992371,
+            "qRoom": 0.15602411329746246,
+            "alpha": 0.9997295141220093,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "cloth": {
+          "before": {
+            "rgb": 0.05012831091880798,
+            "q": 0.8841910362243652,
+            "qRoom": 0.10703472048044205,
+            "alpha": 0.9912578463554382,
+            "holes": 0.0011602259253120498
+          },
+          "after": {
+            "rgb": 0.05012831091880798,
+            "q": 0.8841910362243652,
+            "qRoom": 0.10703472048044205,
+            "alpha": 0.9912578463554382,
+            "holes": 0.0011602259253120498,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "room": {
+          "before": {
+            "rgb": 0.025701003149151802,
+            "q": 0.9202390909194946,
+            "qRoom": 0.9202390909194946,
+            "alpha": 0.9584492444992065,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.025701003149151802,
+            "q": 0.9202390909194946,
+            "qRoom": 0.9202390909194946,
+            "alpha": 0.9584492444992065,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        }
+      },
+      "checkpoints": {
+        "initial": {
+          "exists": true,
+          "sha256": "46fc645a12ff7b552dabaf128360dde74e8350a27fbaac8bef4f1db84e173349"
+        },
+        "mid": {
+          "exists": true,
+          "sha256": "44fe5b1812e68002790aa2fcfc07ca9f2dd7ecd38096faabb4b801b8d08b9dec"
+        },
+        "candidate-final": {
+          "exists": true,
+          "sha256": "0877f64b4b6ad289d4e462fab2f2db7305be53788910d305d710fb4acfa22b72"
+        },
+        "restored": {
+          "exists": true,
+          "sha256": "07e6f2a73cfcbc08cba8b0ae95496200c77ca34196335650ec237c1d6ea8f770"
+        }
+      }
+    },
+    "room-projected-surface/old-kernel-control": {
+      "assetHash": "ee9d1b1f07ff59e6a051695e330c97f3254e917f47de4f4f8db0ee76e6cd9c55",
+      "sidecarHash": "99abb23b756079546b4e2b428c88f09f786e6f679604d42a030914aa5e8c305f",
+      "sourceHash": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+      "reference": "frame_0010.png",
+      "pointCount": 50095,
+      "steps": 240,
+      "failures": [
+        "room_rgb:frame_0005.png",
+        "room_rgb:frame_0006.png",
+        "neck_rgb:frame_0008.png",
+        "room_rgb:frame_0008.png",
+        "cloth_rgb:frame_0010.png",
+        "room_rgb:frame_0010.png",
+        "neck_rgb:frame_0012.png",
+        "neck_rgb:frame_0013.png",
+        "neck_rgb:frame_0014.png",
+        "room_rgb:frame_0037.png",
+        "room_rgb:frame_0038.png",
+        "room_rgb:frame_0039.png",
+        "neck_rgb:frame_0042.png",
+        "room_rgb:frame_0042.png",
+        "room_rgb:frame_0051.png",
+        "room_rgb:frame_0052.png",
+        "neck_rgb:frame_0119.png",
+        "cloth_rgb:frame_0119.png",
+        "room_rgb:frame_0119.png",
+        "neck_rgb:frame_0122.png",
+        "room_rgb:frame_0122.png",
+        "room_rgb:frame_0147.png",
+        "neck_rgb:frame_0015.png",
+        "neck_rgb:frame_0115.png",
+        "room_rgb:frame_0115.png"
+      ],
+      "frozenBaselineExact": true,
+      "transactionAccepted": false,
+      "releaseQualityPassed": false,
+      "trainEvalSeconds": 144.26215178300004,
+      "allocatedMiB": 1815.7705078125,
+      "reservedMiB": 2100.0,
+      "parameterChanges": {
+        "patch.offset": 0.0,
+        "patch.log_scales": 0.0972536951303482,
+        "patch.quats": 0.02517353743314743,
+        "patch.opacity": 0.46793144941329956,
+        "patch.sh": 0.08763258904218674,
+        "patch.base": 0.0,
+        "patch.support": 0.0,
+        "patch.initial_scales": 0.0,
+        "patch.max_offset": 0.0
+      },
+      "referenceRegions": {
+        "face": {
+          "before": {
+            "rgb": 0.09610452502965927,
+            "q": 0.6924801468849182,
+            "qRoom": 0.2727258801460266,
+            "alpha": 0.9997367262840271,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.035506028681993484,
+            "q": 0.8523982763290405,
+            "qRoom": 0.10558407008647919,
+            "alpha": 0.9997340440750122,
+            "holes": 0.0,
+            "pixelRegressionP90": -0.03934396803379059
+          }
+        },
+        "hair": {
+          "before": {
+            "rgb": 0.22479060292243958,
+            "q": 0.5462954640388489,
+            "qRoom": 0.4221923351287842,
+            "alpha": 0.9995884895324707,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.11087653040885925,
+            "q": 0.7331050634384155,
+            "qRoom": 0.2251647263765335,
+            "alpha": 0.9995459914207458,
+            "holes": 0.0,
+            "pixelRegressionP90": -0.09783487766981125
+          }
+        },
+        "neck": {
+          "before": {
+            "rgb": 0.04973683878779411,
+            "q": 0.8416954874992371,
+            "qRoom": 0.15602411329746246,
+            "alpha": 0.9997295141220093,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.05206207558512688,
+            "q": 0.9119937419891357,
+            "qRoom": 0.08548163622617722,
+            "alpha": 0.9997277855873108,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.047928858548402786
+          }
+        },
+        "cloth": {
+          "before": {
+            "rgb": 0.05012831091880798,
+            "q": 0.8841910362243652,
+            "qRoom": 0.10703472048044205,
+            "alpha": 0.9912578463554382,
+            "holes": 0.0011602259253120498
+          },
+          "after": {
+            "rgb": 0.053491558879613876,
+            "q": 0.9081756472587585,
+            "qRoom": 0.08270588517189026,
+            "alpha": 0.9909199476242065,
+            "holes": 0.0013259724860709141,
+            "pixelRegressionP90": 0.012280069291591644
+          }
+        },
+        "room": {
+          "before": {
+            "rgb": 0.025701003149151802,
+            "q": 0.9202390909194946,
+            "qRoom": 0.9202390909194946,
+            "alpha": 0.9584492444992065,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.0287631768733263,
+            "q": 0.912584662437439,
+            "qRoom": 0.912584662437439,
+            "alpha": 0.9537381529808044,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.018135305494070053
+          }
+        }
+      },
+      "checkpoints": {
+        "initial": {
+          "exists": true,
+          "sha256": "c67d3a00deef55384dc0c0f76f81126f884f28f1b30922b34ba4d20fb510eeaa"
+        },
+        "mid": {
+          "exists": true,
+          "sha256": "0af62b35ec4398e44d24601455369f1bb2122db8162158f4f5c9e41889fbc98e"
+        },
+        "candidate-final": {
+          "exists": true,
+          "sha256": "f4091f6488379998383c96a2bd4bfb754d1abc3bd654aca67bd3c18bebc22b10"
+        },
+        "restored": {
+          "exists": true,
+          "sha256": "3df66400921e48b31dcbbc7cbd6310a6851e078d98b4558e5a7c99067e10ef8a"
+        }
+      }
+    },
+    "room-projected-surface/surface-candidate": {
+      "assetHash": "5cd831353fddecfc9f5b63068f95a45717b748c315662eec394bb42321af7156",
+      "sidecarHash": "18af80d992a1746be5568bd10e7838d0e35447666924006aeaec31f3dbad09fe",
+      "sourceHash": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+      "reference": "frame_0010.png",
+      "pointCount": 58091,
+      "steps": 240,
+      "failures": [
+        "room_rgb:frame_0133.png",
+        "room_rgb:frame_0134.png",
+        "room_rgb:frame_0135.png",
+        "room_coverage:frame_0135.png",
+        "room_rgb:frame_0136.png",
+        "room_rgb:frame_0137.png",
+        "room_coverage:frame_0137.png",
+        "room_rgb:frame_0138.png",
+        "room_coverage:frame_0138.png",
+        "room_rgb:frame_0139.png",
+        "room_coverage:frame_0139.png",
+        "cloth_rgb:frame_0005.png",
+        "cloth_coverage:frame_0005.png",
+        "cloth_holes:frame_0005.png",
+        "room_rgb:frame_0005.png",
+        "room_coverage:frame_0005.png",
+        "room_holes:frame_0005.png",
+        "neck_rgb:frame_0006.png",
+        "cloth_rgb:frame_0006.png",
+        "room_rgb:frame_0006.png",
+        "room_coverage:frame_0006.png",
+        "room_holes:frame_0006.png",
+        "neck_rgb:frame_0008.png",
+        "room_rgb:frame_0008.png",
+        "room_coverage:frame_0008.png",
+        "room_holes:frame_0008.png",
+        "neck_rgb:frame_0010.png",
+        "room_rgb:frame_0010.png",
+        "room_coverage:frame_0010.png",
+        "room_holes:frame_0010.png",
+        "neck_rgb:frame_0012.png",
+        "room_rgb:frame_0012.png",
+        "room_coverage:frame_0012.png",
+        "room_holes:frame_0012.png",
+        "neck_rgb:frame_0013.png",
+        "room_rgb:frame_0013.png",
+        "room_coverage:frame_0013.png",
+        "room_holes:frame_0013.png",
+        "neck_rgb:frame_0014.png",
+        "room_rgb:frame_0014.png",
+        "room_coverage:frame_0014.png",
+        "room_holes:frame_0014.png",
+        "room_rgb:frame_0025.png",
+        "room_coverage:frame_0025.png",
+        "room_holes:frame_0025.png",
+        "room_rgb:frame_0027.png",
+        "room_coverage:frame_0027.png",
+        "room_holes:frame_0027.png",
+        "room_rgb:frame_0028.png",
+        "room_coverage:frame_0028.png",
+        "room_holes:frame_0028.png",
+        "room_rgb:frame_0037.png",
+        "room_coverage:frame_0037.png",
+        "room_holes:frame_0037.png",
+        "room_rgb:frame_0038.png",
+        "room_coverage:frame_0038.png",
+        "room_holes:frame_0038.png",
+        "room_rgb:frame_0039.png",
+        "room_coverage:frame_0039.png",
+        "room_holes:frame_0039.png",
+        "neck_rgb:frame_0042.png",
+        "room_rgb:frame_0042.png",
+        "room_coverage:frame_0042.png",
+        "room_holes:frame_0042.png",
+        "room_rgb:frame_0051.png",
+        "room_coverage:frame_0051.png",
+        "room_holes:frame_0051.png",
+        "cloth_rgb:frame_0052.png",
+        "room_rgb:frame_0052.png",
+        "room_coverage:frame_0052.png",
+        "room_holes:frame_0052.png",
+        "room_rgb:frame_0111.png",
+        "room_coverage:frame_0111.png",
+        "room_holes:frame_0111.png",
+        "neck_rgb:frame_0119.png",
+        "cloth_rgb:frame_0119.png",
+        "room_rgb:frame_0119.png",
+        "room_coverage:frame_0119.png",
+        "room_holes:frame_0119.png",
+        "neck_rgb:frame_0122.png",
+        "room_rgb:frame_0122.png",
+        "room_coverage:frame_0122.png",
+        "room_holes:frame_0122.png",
+        "room_rgb:frame_0147.png",
+        "room_coverage:frame_0147.png",
+        "room_holes:frame_0147.png",
+        "neck_rgb:frame_0015.png",
+        "room_rgb:frame_0015.png",
+        "room_coverage:frame_0015.png",
+        "room_holes:frame_0015.png",
+        "room_rgb:frame_0035.png",
+        "room_coverage:frame_0035.png",
+        "room_holes:frame_0035.png",
+        "neck_rgb:frame_0115.png",
+        "cloth_rgb:frame_0115.png",
+        "room_rgb:frame_0115.png",
+        "room_coverage:frame_0115.png",
+        "room_holes:frame_0115.png",
+        "room_rgb:frame_0130.png",
+        "room_holes:frame_0130.png",
+        "room_rgb:frame_0145.png",
+        "room_holes:frame_0145.png"
+      ],
+      "frozenBaselineExact": true,
+      "transactionAccepted": false,
+      "releaseQualityPassed": false,
+      "trainEvalSeconds": 138.52988611699993,
+      "allocatedMiB": 1819.189453125,
+      "reservedMiB": 2056.0,
+      "parameterChanges": {
+        "patch.offset": 0.0,
+        "patch.log_scales": 0.07966624200344086,
+        "patch.quats": 0.02443452551960945,
+        "patch.opacity": 0.595820963382721,
+        "patch.sh": 0.17291812598705292,
+        "patch.base": 0.0,
+        "patch.support": 0.0,
+        "patch.initial_scales": 0.0,
+        "patch.max_offset": 0.0
+      },
+      "referenceRegions": {
+        "face": {
+          "before": {
+            "rgb": 0.09610452502965927,
+            "q": 0.6924801468849182,
+            "qRoom": 0.2727258801460266,
+            "alpha": 0.9997367262840271,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.022937186062335968,
+            "q": 0.9475772976875305,
+            "qRoom": 0.002849005162715912,
+            "alpha": 0.9996352791786194,
+            "holes": 0.0,
+            "pixelRegressionP90": -0.03970017284154892
+          }
+        },
+        "hair": {
+          "before": {
+            "rgb": 0.22479060292243958,
+            "q": 0.5462954640388489,
+            "qRoom": 0.4221923351287842,
+            "alpha": 0.9995884895324707,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.036388982087373734,
+            "q": 0.9300851225852966,
+            "qRoom": 0.019803103059530258,
+            "alpha": 0.9988227486610413,
+            "holes": 0.0,
+            "pixelRegressionP90": -0.09586004912853241
+          }
+        },
+        "neck": {
+          "before": {
+            "rgb": 0.04973683878779411,
+            "q": 0.8416954874992371,
+            "qRoom": 0.15602411329746246,
+            "alpha": 0.9997295141220093,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.061999786645174026,
+            "q": 0.9934056997299194,
+            "qRoom": 0.003803697880357504,
+            "alpha": 0.9997056722640991,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.07692667096853256
+          }
+        },
+        "cloth": {
+          "before": {
+            "rgb": 0.05012831091880798,
+            "q": 0.8841910362243652,
+            "qRoom": 0.10703472048044205,
+            "alpha": 0.9912578463554382,
+            "holes": 0.0011602259253120498
+          },
+          "after": {
+            "rgb": 0.05303440988063812,
+            "q": 0.9483246803283691,
+            "qRoom": 0.04165124148130417,
+            "alpha": 0.9900197386741638,
+            "holes": 0.00158309215083787,
+            "pixelRegressionP90": 0.013952463865280151
+          }
+        },
+        "room": {
+          "before": {
+            "rgb": 0.025701003149151802,
+            "q": 0.9202390909194946,
+            "qRoom": 0.9202390909194946,
+            "alpha": 0.9584492444992065,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.1530172973871231,
+            "q": 0.8492938876152039,
+            "qRoom": 0.8492938876152039,
+            "alpha": 0.8943634629249573,
+            "holes": 0.18473740528900479,
+            "pixelRegressionP90": 0.3847106099128723
+          }
+        }
+      },
+      "checkpoints": {
+        "initial": {
+          "exists": true,
+          "sha256": "5541f6a300551ed594305dcd809c7260e590e2be3b58ec8423bd8c051e556251"
+        },
+        "mid": {
+          "exists": true,
+          "sha256": "c8d3fbae2a0f0ce1345e528d40de328a34e63c5ad2192492e83f0412b37ca704"
+        },
+        "candidate-final": {
+          "exists": true,
+          "sha256": "df1d276bee1cf01922630fc5f510a66ce84244f2ce3c9c89e9e33d27f624309e"
+        },
+        "restored": {
+          "exists": true,
+          "sha256": "44e2de9133181868ec22239630ff525af4ea19e66c343c1a581cd26723cdbe69"
+        }
+      }
+    },
+    "hair-native-surface/old-patch-control": {
+      "assetHash": "6203967821697d30e65a083d56decd544110d10c9b7235699178c698d2d9a9e9",
+      "sidecarHash": "090117bc2b5f67758331f44afef4575bedc747190aad8f83b8699c4890380cae",
+      "sourceHash": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+      "reference": "frame_0010.png",
+      "pointCount": 50095,
+      "steps": 180,
+      "failures": [],
+      "frozenBaselineExact": true,
+      "transactionAccepted": false,
+      "releaseQualityPassed": false,
+      "trainEvalSeconds": 96.126320862,
+      "allocatedMiB": 869.34033203125,
+      "reservedMiB": 1116.0,
+      "parameterChanges": {
+        "patch.offset": 0.0,
+        "patch.log_scales": 0.05352598428726196,
+        "patch.quats": 0.015175335109233856,
+        "patch.opacity": 0.2594480812549591,
+        "patch.sh": 0.0785299688577652,
+        "patch.base": 0.0,
+        "patch.support": 0.0,
+        "patch.initial_scales": 0.0,
+        "patch.max_offset": 0.0
+      },
+      "referenceRegions": {
+        "face": {
+          "before": {
+            "rgb": 0.09610452502965927,
+            "q": 0.6924801468849182,
+            "qRoom": 0.2727258801460266,
+            "alpha": 0.9997367262840271,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.09609440714120865,
+            "q": 0.6924457550048828,
+            "qRoom": 0.2727256119251251,
+            "alpha": 0.9997367262840271,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "hair": {
+          "before": {
+            "rgb": 0.22479060292243958,
+            "q": 0.5462954640388489,
+            "qRoom": 0.4221923351287842,
+            "alpha": 0.9995884895324707,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.22327952086925507,
+            "q": 0.5481869578361511,
+            "qRoom": 0.4206696152687073,
+            "alpha": 0.999619722366333,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.007035544607788324
+          }
+        },
+        "neck": {
+          "before": {
+            "rgb": 0.04973683878779411,
+            "q": 0.8416954874992371,
+            "qRoom": 0.15602411329746246,
+            "alpha": 0.9997295141220093,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.04973683878779411,
+            "q": 0.8416954874992371,
+            "qRoom": 0.15602411329746246,
+            "alpha": 0.9997295141220093,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "cloth": {
+          "before": {
+            "rgb": 0.05012831091880798,
+            "q": 0.8841910362243652,
+            "qRoom": 0.10703472048044205,
+            "alpha": 0.9912578463554382,
+            "holes": 0.0011602259253120498
+          },
+          "after": {
+            "rgb": 0.05012831091880798,
+            "q": 0.8841910362243652,
+            "qRoom": 0.10703472048044205,
+            "alpha": 0.9912578463554382,
+            "holes": 0.0011602259253120498,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "room": {
+          "before": {
+            "rgb": 0.025701003149151802,
+            "q": 0.9202390909194946,
+            "qRoom": 0.9202390909194946,
+            "alpha": 0.9584492444992065,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.02577047608792782,
+            "q": 0.9201371669769287,
+            "qRoom": 0.9201371669769287,
+            "alpha": 0.9584511518478394,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        }
+      },
+      "checkpoints": {
+        "initial": {
+          "exists": true,
+          "sha256": "fcb13dd0f7a59d3c605196ebc53a5249be6d9d4c98601587799e11717f3f3960"
+        },
+        "mid": {
+          "exists": true,
+          "sha256": "258445145461c051a426cf74b8a5e9fc3d2dcb868ee7d17447504ea538fd789f"
+        },
+        "candidate-final": {
+          "exists": true,
+          "sha256": "ae0801c254654368d03571b12f69e33e4e25d6b21fb457951c26c10ed8d646f6"
+        },
+        "restored": {
+          "exists": true,
+          "sha256": "e556386a90e5bdd16e8d7432a0f6a566116df83bad04f03e515a49f1ac9009fd"
+        }
+      },
+      "localMetrics": {
+        "frame_0037.png": {
+          "hair": {
+            "beforeL1": 0.027893900871276855,
+            "afterL1": 0.02736659161746502,
+            "beforeContribution": 0.9354985952377319,
+            "afterContribution": 0.938494086265564
+          },
+          "face": {
+            "beforeL1": 0.018358318135142326,
+            "afterL1": 0.018350059166550636,
+            "beforeContribution": 0.9807015657424927,
+            "afterContribution": 0.9806686639785767
+          }
+        },
+        "frame_0038.png": {
+          "hair": {
+            "beforeL1": 0.025668110698461533,
+            "afterL1": 0.023140301927924156,
+            "beforeContribution": 0.9387261867523193,
+            "afterContribution": 0.9419605135917664
+          },
+          "face": {
+            "beforeL1": 0.0190432146191597,
+            "afterL1": 0.019039632752537727,
+            "beforeContribution": 0.9793385863304138,
+            "afterContribution": 0.9793267846107483
+          }
+        },
+        "frame_0039.png": {
+          "hair": {
+            "beforeL1": 0.028243467211723328,
+            "afterL1": 0.024570992216467857,
+            "beforeContribution": 0.9374570250511169,
+            "afterContribution": 0.9409013986587524
+          },
+          "face": {
+            "beforeL1": 0.02115524187684059,
+            "afterL1": 0.021144753322005272,
+            "beforeContribution": 0.9797674417495728,
+            "afterContribution": 0.979753315448761
+          }
+        },
+        "frame_0040.png": {
+          "hair": {
+            "beforeL1": 0.028283370658755302,
+            "afterL1": 0.025410732254385948,
+            "beforeContribution": 0.887692928314209,
+            "afterContribution": 0.8912053108215332
+          },
+          "face": {
+            "beforeL1": 0.01910047046840191,
+            "afterL1": 0.01909390278160572,
+            "beforeContribution": 0.9827067255973816,
+            "afterContribution": 0.9826854467391968
+          }
+        },
+        "frame_0041.png": {
+          "hair": {
+            "beforeL1": 0.028553536161780357,
+            "afterL1": 0.023502333089709282,
+            "beforeContribution": 0.9407231211662292,
+            "afterContribution": 0.9447050094604492
+          },
+          "face": {
+            "beforeL1": 0.01862373948097229,
+            "afterL1": 0.01861785352230072,
+            "beforeContribution": 0.981876015663147,
+            "afterContribution": 0.9818528890609741
+          }
+        },
+        "frame_0042.png": {
+          "hair": {
+            "beforeL1": 0.028006790205836296,
+            "afterL1": 0.024317538365721703,
+            "beforeContribution": 0.9365949034690857,
+            "afterContribution": 0.9403322339057922
+          },
+          "face": {
+            "beforeL1": 0.018051303923130035,
+            "afterL1": 0.018041586503386497,
+            "beforeContribution": 0.9805043935775757,
+            "afterContribution": 0.9804881811141968
+          }
+        },
+        "frame_0043.png": {
+          "hair": {
+            "beforeL1": 0.03114400990307331,
+            "afterL1": 0.026749875396490097,
+            "beforeContribution": 0.9358862042427063,
+            "afterContribution": 0.93952876329422
+          },
+          "face": {
+            "beforeL1": 0.02163039892911911,
+            "afterL1": 0.021621059626340866,
+            "beforeContribution": 0.9822646975517273,
+            "afterContribution": 0.9822322130203247
+          }
+        },
+        "frame_0010.png": {
+          "hair": {
+            "beforeL1": 0.03398430719971657,
+            "afterL1": 0.03342089802026749,
+            "beforeContribution": 0.932701587677002,
+            "afterContribution": 0.9354589581489563
+          },
+          "face": {
+            "beforeL1": 0.022889211773872375,
+            "afterL1": 0.022881396114826202,
+            "beforeContribution": 0.9793803095817566,
+            "afterContribution": 0.979331374168396
+          }
+        },
+        "frame_0015.png": {
+          "hair": {
+            "beforeL1": 0.026700617745518684,
+            "afterL1": 0.02543521113693714,
+            "beforeContribution": 0.9421240091323853,
+            "afterContribution": 0.9459074139595032
+          },
+          "face": {
+            "beforeL1": 0.02460290864109993,
+            "afterL1": 0.02459757961332798,
+            "beforeContribution": 0.9859046936035156,
+            "afterContribution": 0.9858658313751221
+          }
+        },
+        "frame_0035.png": {
+          "hair": {
+            "beforeL1": 0.030617237091064453,
+            "afterL1": 0.03316080570220947,
+            "beforeContribution": 0.9129148125648499,
+            "afterContribution": 0.9157887697219849
+          },
+          "face": {
+            "beforeL1": 0.023075200617313385,
+            "afterL1": 0.023084761574864388,
+            "beforeContribution": 0.9795244336128235,
+            "afterContribution": 0.9795116782188416
+          }
+        },
+        "frame_0055.png": {
+          "hair": {
+            "beforeL1": 0.06062948331236839,
+            "afterL1": 0.062604159116745,
+            "beforeContribution": 0.920752763748169,
+            "afterContribution": 0.922638475894928
+          },
+          "face": {
+            "beforeL1": 0.05683710426092148,
+            "afterL1": 0.056845393031835556,
+            "beforeContribution": 0.9812219738960266,
+            "afterContribution": 0.9811568260192871
+          }
+        },
+        "frame_0075.png": {
+          "hair": {
+            "beforeL1": 0.03599810227751732,
+            "afterL1": 0.036476001143455505,
+            "beforeContribution": 0.871175229549408,
+            "afterContribution": 0.8752356171607971
+          },
+          "face": {
+            "beforeL1": 0.021850701421499252,
+            "afterL1": 0.021829281002283096,
+            "beforeContribution": 0.9717569351196289,
+            "afterContribution": 0.9717034101486206
+          }
+        },
+        "frame_0095.png": {
+          "hair": {
+            "beforeL1": 0.03466371074318886,
+            "afterL1": 0.03598438948392868,
+            "beforeContribution": 0.9193342328071594,
+            "afterContribution": 0.9242163896560669
+          },
+          "face": {
+            "beforeL1": 0.030380479991436005,
+            "afterL1": 0.030394719913601875,
+            "beforeContribution": 0.9744722247123718,
+            "afterContribution": 0.9744575619697571
+          }
+        },
+        "frame_0115.png": {
+          "hair": {
+            "beforeL1": 0.047987572848796844,
+            "afterL1": 0.048216938972473145,
+            "beforeContribution": 0.912110447883606,
+            "afterContribution": 0.9138209223747253
+          },
+          "face": {
+            "beforeL1": 0.031855806708335876,
+            "afterL1": 0.03185998275876045,
+            "beforeContribution": 0.9781975746154785,
+            "afterContribution": 0.9780994057655334
+          }
+        },
+        "frame_0130.png": {
+          "hair": {
+            "beforeL1": 0.03616252541542053,
+            "afterL1": 0.036391567438840866,
+            "beforeContribution": 0.8912583589553833,
+            "afterContribution": 0.893982470035553
+          },
+          "face": {
+            "beforeL1": 0.029888980090618134,
+            "afterL1": 0.029885655269026756,
+            "beforeContribution": 0.9825571179389954,
+            "afterContribution": 0.9825306534767151
+          }
+        },
+        "frame_0145.png": {
+          "hair": {
+            "beforeL1": 0.04392462223768234,
+            "afterL1": 0.04909249022603035,
+            "beforeContribution": 0.9078829288482666,
+            "afterContribution": 0.9121205806732178
+          },
+          "face": {
+            "beforeL1": 0.02444114163517952,
+            "afterL1": 0.024441592395305634,
+            "beforeContribution": 0.9832845330238342,
+            "afterContribution": 0.9832652807235718
+          }
+        },
+        "frame_0058.png": {
+          "hair": {
+            "beforeL1": 0.0650918260216713,
+            "afterL1": 0.06724438816308975,
+            "beforeContribution": 0.9037394523620605,
+            "afterContribution": 0.9066187143325806
+          },
+          "face": {
+            "beforeL1": 0.05867689102888107,
+            "afterL1": 0.058684058487415314,
+            "beforeContribution": 0.9781191349029541,
+            "afterContribution": 0.9780573844909668
+          }
+        },
+        "frame_0059.png": {
+          "hair": {
+            "beforeL1": 0.04808399826288223,
+            "afterL1": 0.05082900449633598,
+            "beforeContribution": 0.911862850189209,
+            "afterContribution": 0.9146071672439575
+          },
+          "face": {
+            "beforeL1": 0.05204339325428009,
+            "afterL1": 0.0520562008023262,
+            "beforeContribution": 0.9783816933631897,
+            "afterContribution": 0.9782745838165283
+          }
+        },
+        "frame_0061.png": {
+          "hair": {
+            "beforeL1": 0.03890908136963844,
+            "afterL1": 0.04116778075695038,
+            "beforeContribution": 0.9040444493293762,
+            "afterContribution": 0.9068671464920044
+          },
+          "face": {
+            "beforeL1": 0.03846604377031326,
+            "afterL1": 0.03847135230898857,
+            "beforeContribution": 0.9757271409034729,
+            "afterContribution": 0.9756031632423401
+          }
+        },
+        "frame_0098.png": {
+          "hair": {
+            "beforeL1": 0.03856951370835304,
+            "afterL1": 0.04022720456123352,
+            "beforeContribution": 0.9262241125106812,
+            "afterContribution": 0.9295830130577087
+          },
+          "face": {
+            "beforeL1": 0.030413135886192322,
+            "afterL1": 0.03044445626437664,
+            "beforeContribution": 0.9696856141090393,
+            "afterContribution": 0.9695596098899841
+          }
+        },
+        "frame_0099.png": {
+          "hair": {
+            "beforeL1": 0.03757502883672714,
+            "afterL1": 0.03942606598138809,
+            "beforeContribution": 0.9205300807952881,
+            "afterContribution": 0.923863410949707
+          },
+          "face": {
+            "beforeL1": 0.031791262328624725,
+            "afterL1": 0.03181524947285652,
+            "beforeContribution": 0.9713427424430847,
+            "afterContribution": 0.9712380170822144
+          }
+        },
+        "frame_0101.png": {
+          "hair": {
+            "beforeL1": 0.03436397761106491,
+            "afterL1": 0.03570341318845749,
+            "beforeContribution": 0.9096970558166504,
+            "afterContribution": 0.9127277731895447
+          },
+          "face": {
+            "beforeL1": 0.033339645713567734,
+            "afterL1": 0.03332843258976936,
+            "beforeContribution": 0.9732757806777954,
+            "afterContribution": 0.9732040762901306
+          }
+        }
+      }
+    },
+    "hair-native-surface/actual-surface-candidate": {
+      "assetHash": "a5a2923dfb69f08e34d2945e8424e066dca83d66d02f73d4287006f7427f65ee",
+      "sidecarHash": "d73fbbd9a074cce3b44e755d8aeb3087f2730ea8124d1f1a66ccd8f2cdbe0aec",
+      "sourceHash": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+      "reference": "frame_0010.png",
+      "pointCount": 53400,
+      "steps": 180,
+      "failures": [
+        "hair_rgb:frame_0037.png",
+        "hair_rgb:frame_0038.png",
+        "hair_rgb:frame_0035.png",
+        "hair_rgb:frame_0130.png",
+        "hair_rgb:frame_0145.png"
+      ],
+      "frozenBaselineExact": true,
+      "transactionAccepted": false,
+      "releaseQualityPassed": false,
+      "trainEvalSeconds": 89.00140231199998,
+      "allocatedMiB": 870.544921875,
+      "reservedMiB": 944.0,
+      "parameterChanges": {
+        "patch.offset": 0.0,
+        "patch.log_scales": 0.06644012778997421,
+        "patch.quats": 0.02072441764175892,
+        "patch.opacity": 0.271616131067276,
+        "patch.sh": 0.0369761697947979,
+        "patch.base": 0.0,
+        "patch.support": 0.0,
+        "patch.initial_scales": 0.0,
+        "patch.max_offset": 0.0
+      },
+      "referenceRegions": {
+        "face": {
+          "before": {
+            "rgb": 0.09610452502965927,
+            "q": 0.6924801468849182,
+            "qRoom": 0.2727258801460266,
+            "alpha": 0.9997367262840271,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.09625563770532608,
+            "q": 0.6928032636642456,
+            "qRoom": 0.2727302014827728,
+            "alpha": 0.999736487865448,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "hair": {
+          "before": {
+            "rgb": 0.22479060292243958,
+            "q": 0.5462954640388489,
+            "qRoom": 0.4221923351287842,
+            "alpha": 0.9995884895324707,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.21648065745830536,
+            "q": 0.5529902577400208,
+            "qRoom": 0.41247907280921936,
+            "alpha": 0.9992819428443909,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.029757890850305557
+          }
+        },
+        "neck": {
+          "before": {
+            "rgb": 0.04973683878779411,
+            "q": 0.8416954874992371,
+            "qRoom": 0.15602411329746246,
+            "alpha": 0.9997295141220093,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.04973683878779411,
+            "q": 0.8416954874992371,
+            "qRoom": 0.15602411329746246,
+            "alpha": 0.9997295141220093,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "cloth": {
+          "before": {
+            "rgb": 0.05012831091880798,
+            "q": 0.8841910362243652,
+            "qRoom": 0.10703472048044205,
+            "alpha": 0.9912578463554382,
+            "holes": 0.0011602259253120498
+          },
+          "after": {
+            "rgb": 0.05012831091880798,
+            "q": 0.8841910362243652,
+            "qRoom": 0.10703472048044205,
+            "alpha": 0.9912578463554382,
+            "holes": 0.0011602259253120498,
+            "pixelRegressionP90": 0.0
+          }
+        },
+        "room": {
+          "before": {
+            "rgb": 0.025701003149151802,
+            "q": 0.9202390909194946,
+            "qRoom": 0.9202390909194946,
+            "alpha": 0.9584492444992065,
+            "holes": 0.0
+          },
+          "after": {
+            "rgb": 0.02568383514881134,
+            "q": 0.9203656911849976,
+            "qRoom": 0.9203656911849976,
+            "alpha": 0.958444356918335,
+            "holes": 0.0,
+            "pixelRegressionP90": 0.0
+          }
+        }
+      },
+      "checkpoints": {
+        "initial": {
+          "exists": true,
+          "sha256": "e95bd9ad483b6ebb2bbd7ac8f60f5074b9f4cc37a18d0300fd4a93320350da3b"
+        },
+        "mid": {
+          "exists": true,
+          "sha256": "f051f14e61e360a78f35927e2b63e103df7babbf701ee709767b2c2eba3b3761"
+        },
+        "candidate-final": {
+          "exists": true,
+          "sha256": "cd075fcf076673b2f168e6d41184f9a72559d5002a03ea902e13048f87800de8"
+        },
+        "restored": {
+          "exists": true,
+          "sha256": "4be744c9e4399980d1e30aa519670b2c20eef87d805bcd8dcb86679e635bccb0"
+        }
+      },
+      "localMetrics": {
+        "frame_0037.png": {
+          "hair": {
+            "beforeL1": 0.027893900871276855,
+            "afterL1": 0.031003279611468315,
+            "beforeContribution": 0.9354985952377319,
+            "afterContribution": 0.9052023887634277
+          },
+          "face": {
+            "beforeL1": 0.018358318135142326,
+            "afterL1": 0.018368417397141457,
+            "beforeContribution": 0.9807015657424927,
+            "afterContribution": 0.980780839920044
+          }
+        },
+        "frame_0038.png": {
+          "hair": {
+            "beforeL1": 0.025668110698461533,
+            "afterL1": 0.025268008932471275,
+            "beforeContribution": 0.9387261867523193,
+            "afterContribution": 0.9008800387382507
+          },
+          "face": {
+            "beforeL1": 0.0190432146191597,
+            "afterL1": 0.019035452976822853,
+            "beforeContribution": 0.9793385863304138,
+            "afterContribution": 0.9794688820838928
+          }
+        },
+        "frame_0039.png": {
+          "hair": {
+            "beforeL1": 0.028243467211723328,
+            "afterL1": 0.03016713075339794,
+            "beforeContribution": 0.9374570250511169,
+            "afterContribution": 0.8969905376434326
+          },
+          "face": {
+            "beforeL1": 0.02115524187684059,
+            "afterL1": 0.02114558219909668,
+            "beforeContribution": 0.9797674417495728,
+            "afterContribution": 0.9799524545669556
+          }
+        },
+        "frame_0040.png": {
+          "hair": {
+            "beforeL1": 0.028283370658755302,
+            "afterL1": 0.02556367591023445,
+            "beforeContribution": 0.887692928314209,
+            "afterContribution": 0.8574113249778748
+          },
+          "face": {
+            "beforeL1": 0.01910047046840191,
+            "afterL1": 0.019143227487802505,
+            "beforeContribution": 0.9827067255973816,
+            "afterContribution": 0.9831284880638123
+          }
+        },
+        "frame_0041.png": {
+          "hair": {
+            "beforeL1": 0.028553536161780357,
+            "afterL1": 0.023601768538355827,
+            "beforeContribution": 0.9407231211662292,
+            "afterContribution": 0.9133553504943848
+          },
+          "face": {
+            "beforeL1": 0.01862373948097229,
+            "afterL1": 0.018713073804974556,
+            "beforeContribution": 0.981876015663147,
+            "afterContribution": 0.9823215007781982
+          }
+        },
+        "frame_0042.png": {
+          "hair": {
+            "beforeL1": 0.028006790205836296,
+            "afterL1": 0.024964962154626846,
+            "beforeContribution": 0.9365949034690857,
+            "afterContribution": 0.9120221734046936
+          },
+          "face": {
+            "beforeL1": 0.018051303923130035,
+            "afterL1": 0.01816292479634285,
+            "beforeContribution": 0.9805043935775757,
+            "afterContribution": 0.9808515310287476
+          }
+        },
+        "frame_0043.png": {
+          "hair": {
+            "beforeL1": 0.03114400990307331,
+            "afterL1": 0.027582725510001183,
+            "beforeContribution": 0.9358862042427063,
+            "afterContribution": 0.9102657437324524
+          },
+          "face": {
+            "beforeL1": 0.02163039892911911,
+            "afterL1": 0.021733758971095085,
+            "beforeContribution": 0.9822646975517273,
+            "afterContribution": 0.9827509522438049
+          }
+        },
+        "frame_0010.png": {
+          "hair": {
+            "beforeL1": 0.03398430719971657,
+            "afterL1": 0.038536157459020615,
+            "beforeContribution": 0.932701587677002,
+            "afterContribution": 0.909110426902771
+          },
+          "face": {
+            "beforeL1": 0.022889211773872375,
+            "afterL1": 0.022911686450242996,
+            "beforeContribution": 0.9793803095817566,
+            "afterContribution": 0.9798892140388489
+          }
+        },
+        "frame_0015.png": {
+          "hair": {
+            "beforeL1": 0.026700617745518684,
+            "afterL1": 0.02951103262603283,
+            "beforeContribution": 0.9421240091323853,
+            "afterContribution": 0.9126780033111572
+          },
+          "face": {
+            "beforeL1": 0.02460290864109993,
+            "afterL1": 0.024679969996213913,
+            "beforeContribution": 0.9859046936035156,
+            "afterContribution": 0.986251711845398
+          }
+        },
+        "frame_0035.png": {
+          "hair": {
+            "beforeL1": 0.030617237091064453,
+            "afterL1": 0.0398259162902832,
+            "beforeContribution": 0.9129148125648499,
+            "afterContribution": 0.8874019384384155
+          },
+          "face": {
+            "beforeL1": 0.023075200617313385,
+            "afterL1": 0.02309701405465603,
+            "beforeContribution": 0.9795244336128235,
+            "afterContribution": 0.9797747731208801
+          }
+        },
+        "frame_0055.png": {
+          "hair": {
+            "beforeL1": 0.06062948331236839,
+            "afterL1": 0.06701935082674026,
+            "beforeContribution": 0.920752763748169,
+            "afterContribution": 0.9009420871734619
+          },
+          "face": {
+            "beforeL1": 0.05683710426092148,
+            "afterL1": 0.05676836892962456,
+            "beforeContribution": 0.9812219738960266,
+            "afterContribution": 0.9814539551734924
+          }
+        },
+        "frame_0075.png": {
+          "hair": {
+            "beforeL1": 0.03599810227751732,
+            "afterL1": 0.0391840860247612,
+            "beforeContribution": 0.871175229549408,
+            "afterContribution": 0.8399012684822083
+          },
+          "face": {
+            "beforeL1": 0.021850701421499252,
+            "afterL1": 0.02186090499162674,
+            "beforeContribution": 0.9717569351196289,
+            "afterContribution": 0.9721353054046631
+          }
+        },
+        "frame_0095.png": {
+          "hair": {
+            "beforeL1": 0.03466371074318886,
+            "afterL1": 0.038846731185913086,
+            "beforeContribution": 0.9193342328071594,
+            "afterContribution": 0.8936669826507568
+          },
+          "face": {
+            "beforeL1": 0.030380479991436005,
+            "afterL1": 0.030318228527903557,
+            "beforeContribution": 0.9744722247123718,
+            "afterContribution": 0.9745693206787109
+          }
+        },
+        "frame_0115.png": {
+          "hair": {
+            "beforeL1": 0.047987572848796844,
+            "afterL1": 0.05860370025038719,
+            "beforeContribution": 0.912110447883606,
+            "afterContribution": 0.8906377553939819
+          },
+          "face": {
+            "beforeL1": 0.031855806708335876,
+            "afterL1": 0.031799059361219406,
+            "beforeContribution": 0.9781975746154785,
+            "afterContribution": 0.9787585139274597
+          }
+        },
+        "frame_0130.png": {
+          "hair": {
+            "beforeL1": 0.03616252541542053,
+            "afterL1": 0.049436964094638824,
+            "beforeContribution": 0.8912583589553833,
+            "afterContribution": 0.8525918126106262
+          },
+          "face": {
+            "beforeL1": 0.029888980090618134,
+            "afterL1": 0.029916783794760704,
+            "beforeContribution": 0.9825571179389954,
+            "afterContribution": 0.9826859831809998
+          }
+        },
+        "frame_0145.png": {
+          "hair": {
+            "beforeL1": 0.04392462223768234,
+            "afterL1": 0.0538824163377285,
+            "beforeContribution": 0.9078829288482666,
+            "afterContribution": 0.8550532460212708
+          },
+          "face": {
+            "beforeL1": 0.02444114163517952,
+            "afterL1": 0.024467578157782555,
+            "beforeContribution": 0.9832845330238342,
+            "afterContribution": 0.9834256768226624
+          }
+        },
+        "frame_0058.png": {
+          "hair": {
+            "beforeL1": 0.0650918260216713,
+            "afterL1": 0.06894312798976898,
+            "beforeContribution": 0.9037394523620605,
+            "afterContribution": 0.8872130513191223
+          },
+          "face": {
+            "beforeL1": 0.05867689102888107,
+            "afterL1": 0.05866234749555588,
+            "beforeContribution": 0.9781191349029541,
+            "afterContribution": 0.9782571792602539
+          }
+        },
+        "frame_0059.png": {
+          "hair": {
+            "beforeL1": 0.04808399826288223,
+            "afterL1": 0.05255182832479477,
+            "beforeContribution": 0.911862850189209,
+            "afterContribution": 0.895796537399292
+          },
+          "face": {
+            "beforeL1": 0.05204339325428009,
+            "afterL1": 0.052000608295202255,
+            "beforeContribution": 0.9783816933631897,
+            "afterContribution": 0.9787279367446899
+          }
+        },
+        "frame_0061.png": {
+          "hair": {
+            "beforeL1": 0.03890908136963844,
+            "afterL1": 0.042755402624607086,
+            "beforeContribution": 0.9040444493293762,
+            "afterContribution": 0.8861323595046997
+          },
+          "face": {
+            "beforeL1": 0.03846604377031326,
+            "afterL1": 0.038471292704343796,
+            "beforeContribution": 0.9757271409034729,
+            "afterContribution": 0.9761195778846741
+          }
+        },
+        "frame_0098.png": {
+          "hair": {
+            "beforeL1": 0.03856951370835304,
+            "afterL1": 0.042391613125801086,
+            "beforeContribution": 0.9262241125106812,
+            "afterContribution": 0.9018818736076355
+          },
+          "face": {
+            "beforeL1": 0.030413135886192322,
+            "afterL1": 0.0304475799202919,
+            "beforeContribution": 0.9696856141090393,
+            "afterContribution": 0.9704579710960388
+          }
+        },
+        "frame_0099.png": {
+          "hair": {
+            "beforeL1": 0.03757502883672714,
+            "afterL1": 0.04040767252445221,
+            "beforeContribution": 0.9205300807952881,
+            "afterContribution": 0.8956851959228516
+          },
+          "face": {
+            "beforeL1": 0.031791262328624725,
+            "afterL1": 0.03183683380484581,
+            "beforeContribution": 0.9713427424430847,
+            "afterContribution": 0.9720053672790527
+          }
+        },
+        "frame_0101.png": {
+          "hair": {
+            "beforeL1": 0.03436397761106491,
+            "afterL1": 0.036893580108881,
+            "beforeContribution": 0.9096970558166504,
+            "afterContribution": 0.8846321105957031
+          },
+          "face": {
+            "beforeL1": 0.033339645713567734,
+            "afterL1": 0.0333884134888649,
+            "beforeContribution": 0.9732757806777954,
+            "afterContribution": 0.9736164808273315
+          }
+        }
+      }
+    }
+  },
+  "sourceHash": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+  "GPUTrainingBranches": 12,
+  "AdamSteps": 2360,
+  "measurement": {
+    "sourceHash": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+    "summaries": [
+      {
+        "window": 0,
+        "role": "face",
+        "uniqueTracks": 170,
+        "geometryAccepted": 51,
+        "duplicates": 12,
+        "rejections": {
+          "local_F_geometry_or_third_rejected": 49,
+          "fewer_than_four_observations": 70
+        },
+        "measurement": [
+          {
+            "source": "frame_0002.png",
+            "names": [
+              "frame_0002.png",
+              "frame_0003.png",
+              "frame_0004.png",
+              "frame_0005.png",
+              "frame_0006.png",
+              "frame_0007.png",
+              "frame_0008.png",
+              "frame_0009.png",
+              "frame_0010.png",
+              "frame_0011.png"
+            ],
+            "seeds": 116,
+            "tracks": 53,
+            "rejections": {
+              "boundary": 5,
+              "flow": 12,
+              "cycle": 20,
+              "patch": 75
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0007.png",
+            "names": [
+              "frame_0007.png",
+              "frame_0008.png",
+              "frame_0009.png",
+              "frame_0010.png",
+              "frame_0011.png"
+            ],
+            "seeds": 160,
+            "tracks": 65,
+            "rejections": {
+              "boundary": 6,
+              "flow": 19,
+              "cycle": 18,
+              "patch": 107
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0007.png",
+            "names": [
+              "frame_0007.png",
+              "frame_0006.png",
+              "frame_0005.png",
+              "frame_0004.png",
+              "frame_0003.png",
+              "frame_0002.png"
+            ],
+            "seeds": 160,
+            "tracks": 46,
+            "rejections": {
+              "boundary": 9,
+              "flow": 15,
+              "cycle": 8,
+              "patch": 100
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0011.png",
+            "names": [
+              "frame_0011.png",
+              "frame_0010.png",
+              "frame_0009.png",
+              "frame_0008.png",
+              "frame_0007.png",
+              "frame_0006.png",
+              "frame_0005.png",
+              "frame_0004.png",
+              "frame_0003.png",
+              "frame_0002.png"
+            ],
+            "seeds": 84,
+            "tracks": 18,
+            "rejections": {
+              "boundary": 3,
+              "flow": 6,
+              "cycle": 12,
+              "patch": 63
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          }
+        ]
+      },
+      {
+        "window": 0,
+        "role": "hair",
+        "uniqueTracks": 319,
+        "geometryAccepted": 6,
+        "duplicates": 4,
+        "rejections": {
+          "local_F_geometry_or_third_rejected": 109,
+          "fewer_than_four_observations": 204
+        },
+        "measurement": [
+          {
+            "source": "frame_0002.png",
+            "names": [
+              "frame_0002.png",
+              "frame_0003.png",
+              "frame_0004.png",
+              "frame_0005.png",
+              "frame_0006.png",
+              "frame_0007.png",
+              "frame_0008.png",
+              "frame_0009.png",
+              "frame_0010.png",
+              "frame_0011.png"
+            ],
+            "seeds": 112,
+            "tracks": 109,
+            "rejections": {
+              "boundary": 0,
+              "flow": 0,
+              "cycle": 30,
+              "patch": 82
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0007.png",
+            "names": [
+              "frame_0007.png",
+              "frame_0008.png",
+              "frame_0009.png",
+              "frame_0010.png",
+              "frame_0011.png"
+            ],
+            "seeds": 148,
+            "tracks": 139,
+            "rejections": {
+              "boundary": 0,
+              "flow": 12,
+              "cycle": 93,
+              "patch": 43
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0007.png",
+            "names": [
+              "frame_0007.png",
+              "frame_0006.png",
+              "frame_0005.png",
+              "frame_0004.png",
+              "frame_0003.png",
+              "frame_0002.png"
+            ],
+            "seeds": 148,
+            "tracks": 62,
+            "rejections": {
+              "boundary": 0,
+              "flow": 0,
+              "cycle": 36,
+              "patch": 110
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0011.png",
+            "names": [
+              "frame_0011.png",
+              "frame_0010.png",
+              "frame_0009.png",
+              "frame_0008.png",
+              "frame_0007.png",
+              "frame_0006.png",
+              "frame_0005.png",
+              "frame_0004.png",
+              "frame_0003.png",
+              "frame_0002.png"
+            ],
+            "seeds": 173,
+            "tracks": 13,
+            "rejections": {
+              "boundary": 0,
+              "flow": 16,
+              "cycle": 85,
+              "patch": 72
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          }
+        ]
+      },
+      {
+        "window": 0,
+        "role": "neck",
+        "uniqueTracks": 0,
+        "geometryAccepted": 0,
+        "duplicates": 0,
+        "rejections": {},
+        "measurement": [
+          {
+            "source": "frame_0002.png",
+            "names": [
+              "frame_0002.png",
+              "frame_0003.png",
+              "frame_0004.png",
+              "frame_0005.png",
+              "frame_0006.png",
+              "frame_0007.png",
+              "frame_0008.png",
+              "frame_0009.png",
+              "frame_0010.png",
+              "frame_0011.png"
+            ],
+            "seeds": 128,
+            "tracks": 0,
+            "rejections": {
+              "boundary": 4,
+              "flow": 29,
+              "cycle": 0,
+              "patch": 95
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0007.png",
+            "names": [
+              "frame_0007.png",
+              "frame_0008.png",
+              "frame_0009.png",
+              "frame_0010.png",
+              "frame_0011.png"
+            ],
+            "seeds": 128,
+            "tracks": 0,
+            "rejections": {
+              "boundary": 1,
+              "flow": 39,
+              "cycle": 0,
+              "patch": 88
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0007.png",
+            "names": [
+              "frame_0007.png",
+              "frame_0006.png",
+              "frame_0005.png",
+              "frame_0004.png",
+              "frame_0003.png",
+              "frame_0002.png"
+            ],
+            "seeds": 128,
+            "tracks": 0,
+            "rejections": {
+              "boundary": 0,
+              "flow": 59,
+              "cycle": 0,
+              "patch": 69
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0011.png",
+            "names": [
+              "frame_0011.png",
+              "frame_0010.png",
+              "frame_0009.png",
+              "frame_0008.png",
+              "frame_0007.png",
+              "frame_0006.png",
+              "frame_0005.png",
+              "frame_0004.png",
+              "frame_0003.png",
+              "frame_0002.png"
+            ],
+            "seeds": 128,
+            "tracks": 0,
+            "rejections": {
+              "boundary": 42,
+              "flow": 62,
+              "cycle": 0,
+              "patch": 24
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          }
+        ]
+      },
+      {
+        "window": 0,
+        "role": "cloth",
+        "uniqueTracks": 450,
+        "geometryAccepted": 450,
+        "duplicates": 208,
+        "rejections": {},
+        "measurement": [
+          {
+            "source": "frame_0002.png",
+            "names": [
+              "frame_0002.png",
+              "frame_0003.png",
+              "frame_0004.png",
+              "frame_0005.png",
+              "frame_0006.png",
+              "frame_0007.png",
+              "frame_0008.png",
+              "frame_0009.png",
+              "frame_0010.png",
+              "frame_0011.png"
+            ],
+            "seeds": 296,
+            "tracks": 184,
+            "rejections": {
+              "boundary": 1,
+              "flow": 66,
+              "cycle": 38,
+              "patch": 135
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0007.png",
+            "names": [
+              "frame_0007.png",
+              "frame_0008.png",
+              "frame_0009.png",
+              "frame_0010.png",
+              "frame_0011.png"
+            ],
+            "seeds": 300,
+            "tracks": 176,
+            "rejections": {
+              "boundary": 5,
+              "flow": 52,
+              "cycle": 13,
+              "patch": 105
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0007.png",
+            "names": [
+              "frame_0007.png",
+              "frame_0006.png",
+              "frame_0005.png",
+              "frame_0004.png",
+              "frame_0003.png",
+              "frame_0002.png"
+            ],
+            "seeds": 300,
+            "tracks": 168,
+            "rejections": {
+              "boundary": 11,
+              "flow": 38,
+              "cycle": 9,
+              "patch": 104
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0011.png",
+            "names": [
+              "frame_0011.png",
+              "frame_0010.png",
+              "frame_0009.png",
+              "frame_0008.png",
+              "frame_0007.png",
+              "frame_0006.png",
+              "frame_0005.png",
+              "frame_0004.png",
+              "frame_0003.png",
+              "frame_0002.png"
+            ],
+            "seeds": 300,
+            "tracks": 130,
+            "rejections": {
+              "boundary": 6,
+              "flow": 58,
+              "cycle": 106,
+              "patch": 98
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          }
+        ]
+      },
+      {
+        "window": 1,
+        "role": "face",
+        "uniqueTracks": 140,
+        "geometryAccepted": 17,
+        "duplicates": 41,
+        "rejections": {
+          "local_F_geometry_or_third_rejected": 102,
+          "fewer_than_four_observations": 21
+        },
+        "measurement": [
+          {
+            "source": "frame_0022.png",
+            "names": [
+              "frame_0022.png",
+              "frame_0023.png",
+              "frame_0024.png",
+              "frame_0025.png",
+              "frame_0026.png",
+              "frame_0027.png",
+              "frame_0028.png"
+            ],
+            "seeds": 79,
+            "tracks": 45,
+            "rejections": {
+              "boundary": 1,
+              "flow": 6,
+              "cycle": 4,
+              "patch": 38
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0025.png",
+            "names": [
+              "frame_0025.png",
+              "frame_0026.png",
+              "frame_0027.png",
+              "frame_0028.png"
+            ],
+            "seeds": 76,
+            "tracks": 46,
+            "rejections": {
+              "boundary": 0,
+              "flow": 4,
+              "cycle": 0,
+              "patch": 28
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0025.png",
+            "names": [
+              "frame_0025.png",
+              "frame_0024.png",
+              "frame_0023.png",
+              "frame_0022.png"
+            ],
+            "seeds": 76,
+            "tracks": 48,
+            "rejections": {
+              "boundary": 0,
+              "flow": 1,
+              "cycle": 0,
+              "patch": 33
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0028.png",
+            "names": [
+              "frame_0028.png",
+              "frame_0027.png",
+              "frame_0026.png",
+              "frame_0025.png",
+              "frame_0024.png",
+              "frame_0023.png",
+              "frame_0022.png"
+            ],
+            "seeds": 58,
+            "tracks": 42,
+            "rejections": {
+              "boundary": 4,
+              "flow": 2,
+              "cycle": 4,
+              "patch": 29
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          }
+        ]
+      },
+      {
+        "window": 1,
+        "role": "hair",
+        "uniqueTracks": 477,
+        "geometryAccepted": 22,
+        "duplicates": 132,
+        "rejections": {
+          "local_F_geometry_or_third_rejected": 374,
+          "fewer_than_four_observations": 81
+        },
+        "measurement": [
+          {
+            "source": "frame_0022.png",
+            "names": [
+              "frame_0022.png",
+              "frame_0023.png",
+              "frame_0024.png",
+              "frame_0025.png",
+              "frame_0026.png",
+              "frame_0027.png",
+              "frame_0028.png"
+            ],
+            "seeds": 307,
+            "tracks": 138,
+            "rejections": {
+              "boundary": 0,
+              "flow": 25,
+              "cycle": 40,
+              "patch": 191
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0025.png",
+            "names": [
+              "frame_0025.png",
+              "frame_0026.png",
+              "frame_0027.png",
+              "frame_0028.png"
+            ],
+            "seeds": 241,
+            "tracks": 142,
+            "rejections": {
+              "boundary": 0,
+              "flow": 5,
+              "cycle": 4,
+              "patch": 102
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0025.png",
+            "names": [
+              "frame_0025.png",
+              "frame_0024.png",
+              "frame_0023.png",
+              "frame_0022.png"
+            ],
+            "seeds": 241,
+            "tracks": 145,
+            "rejections": {
+              "boundary": 0,
+              "flow": 18,
+              "cycle": 8,
+              "patch": 96
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0028.png",
+            "names": [
+              "frame_0028.png",
+              "frame_0027.png",
+              "frame_0026.png",
+              "frame_0025.png",
+              "frame_0024.png",
+              "frame_0023.png",
+              "frame_0022.png"
+            ],
+            "seeds": 338,
+            "tracks": 184,
+            "rejections": {
+              "boundary": 0,
+              "flow": 13,
+              "cycle": 51,
+              "patch": 226
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          }
+        ]
+      },
+      {
+        "window": 1,
+        "role": "neck",
+        "uniqueTracks": 0,
+        "geometryAccepted": 0,
+        "duplicates": 0,
+        "rejections": {},
+        "measurement": [
+          {
+            "source": "frame_0022.png",
+            "names": [
+              "frame_0022.png",
+              "frame_0023.png",
+              "frame_0024.png",
+              "frame_0025.png",
+              "frame_0026.png",
+              "frame_0027.png",
+              "frame_0028.png"
+            ],
+            "seeds": 128,
+            "tracks": 0,
+            "rejections": {
+              "boundary": 0,
+              "flow": 8,
+              "cycle": 0,
+              "patch": 120
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0025.png",
+            "names": [
+              "frame_0025.png",
+              "frame_0026.png",
+              "frame_0027.png",
+              "frame_0028.png"
+            ],
+            "seeds": 128,
+            "tracks": 0,
+            "rejections": {
+              "boundary": 0,
+              "flow": 0,
+              "cycle": 0,
+              "patch": 128
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0025.png",
+            "names": [
+              "frame_0025.png",
+              "frame_0024.png",
+              "frame_0023.png",
+              "frame_0022.png"
+            ],
+            "seeds": 128,
+            "tracks": 0,
+            "rejections": {
+              "boundary": 0,
+              "flow": 0,
+              "cycle": 0,
+              "patch": 128
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0028.png",
+            "names": [
+              "frame_0028.png",
+              "frame_0027.png",
+              "frame_0026.png",
+              "frame_0025.png",
+              "frame_0024.png",
+              "frame_0023.png",
+              "frame_0022.png"
+            ],
+            "seeds": 128,
+            "tracks": 0,
+            "rejections": {
+              "boundary": 0,
+              "flow": 0,
+              "cycle": 0,
+              "patch": 128
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          }
+        ]
+      },
+      {
+        "window": 1,
+        "role": "cloth",
+        "uniqueTracks": 463,
+        "geometryAccepted": 463,
+        "duplicates": 326,
+        "rejections": {},
+        "measurement": [
+          {
+            "source": "frame_0022.png",
+            "names": [
+              "frame_0022.png",
+              "frame_0023.png",
+              "frame_0024.png",
+              "frame_0025.png",
+              "frame_0026.png",
+              "frame_0027.png",
+              "frame_0028.png"
+            ],
+            "seeds": 300,
+            "tracks": 199,
+            "rejections": {
+              "boundary": 0,
+              "flow": 16,
+              "cycle": 13,
+              "patch": 111
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0025.png",
+            "names": [
+              "frame_0025.png",
+              "frame_0026.png",
+              "frame_0027.png",
+              "frame_0028.png"
+            ],
+            "seeds": 300,
+            "tracks": 183,
+            "rejections": {
+              "boundary": 0,
+              "flow": 16,
+              "cycle": 8,
+              "patch": 111
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0025.png",
+            "names": [
+              "frame_0025.png",
+              "frame_0024.png",
+              "frame_0023.png",
+              "frame_0022.png"
+            ],
+            "seeds": 300,
+            "tracks": 190,
+            "rejections": {
+              "boundary": 0,
+              "flow": 8,
+              "cycle": 11,
+              "patch": 104
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0028.png",
+            "names": [
+              "frame_0028.png",
+              "frame_0027.png",
+              "frame_0026.png",
+              "frame_0025.png",
+              "frame_0024.png",
+              "frame_0023.png",
+              "frame_0022.png"
+            ],
+            "seeds": 300,
+            "tracks": 217,
+            "rejections": {
+              "boundary": 0,
+              "flow": 13,
+              "cycle": 11,
+              "patch": 111
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          }
+        ]
+      },
+      {
+        "window": 2,
+        "role": "face",
+        "uniqueTracks": 151,
+        "geometryAccepted": 59,
+        "duplicates": 10,
+        "rejections": {
+          "local_F_geometry_or_third_rejected": 18,
+          "fewer_than_four_observations": 74
+        },
+        "measurement": [
+          {
+            "source": "frame_0037.png",
+            "names": [
+              "frame_0037.png",
+              "frame_0038.png",
+              "frame_0039.png",
+              "frame_0040.png",
+              "frame_0041.png",
+              "frame_0042.png",
+              "frame_0043.png"
+            ],
+            "seeds": 112,
+            "tracks": 48,
+            "rejections": {
+              "boundary": 5,
+              "flow": 9,
+              "cycle": 22,
+              "patch": 71
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0040.png",
+            "names": [
+              "frame_0040.png",
+              "frame_0041.png",
+              "frame_0042.png",
+              "frame_0043.png"
+            ],
+            "seeds": 122,
+            "tracks": 41,
+            "rejections": {
+              "boundary": 2,
+              "flow": 10,
+              "cycle": 2,
+              "patch": 84
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0040.png",
+            "names": [
+              "frame_0040.png",
+              "frame_0039.png",
+              "frame_0038.png",
+              "frame_0037.png"
+            ],
+            "seeds": 122,
+            "tracks": 34,
+            "rejections": {
+              "boundary": 2,
+              "flow": 18,
+              "cycle": 9,
+              "patch": 78
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0043.png",
+            "names": [
+              "frame_0043.png",
+              "frame_0042.png",
+              "frame_0041.png",
+              "frame_0040.png",
+              "frame_0039.png",
+              "frame_0038.png",
+              "frame_0037.png"
+            ],
+            "seeds": 82,
+            "tracks": 38,
+            "rejections": {
+              "boundary": 4,
+              "flow": 6,
+              "cycle": 8,
+              "patch": 60
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          }
+        ]
+      },
+      {
+        "window": 2,
+        "role": "hair",
+        "uniqueTracks": 327,
+        "geometryAccepted": 44,
+        "duplicates": 7,
+        "rejections": {
+          "local_F_geometry_or_third_rejected": 10,
+          "fewer_than_four_observations": 273
+        },
+        "measurement": [
+          {
+            "source": "frame_0037.png",
+            "names": [
+              "frame_0037.png",
+              "frame_0038.png",
+              "frame_0039.png",
+              "frame_0040.png",
+              "frame_0041.png",
+              "frame_0042.png",
+              "frame_0043.png"
+            ],
+            "seeds": 220,
+            "tracks": 53,
+            "rejections": {
+              "boundary": 6,
+              "flow": 41,
+              "cycle": 68,
+              "patch": 105
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0040.png",
+            "names": [
+              "frame_0040.png",
+              "frame_0041.png",
+              "frame_0042.png",
+              "frame_0043.png"
+            ],
+            "seeds": 226,
+            "tracks": 80,
+            "rejections": {
+              "boundary": 1,
+              "flow": 27,
+              "cycle": 63,
+              "patch": 110
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0040.png",
+            "names": [
+              "frame_0040.png",
+              "frame_0039.png",
+              "frame_0038.png",
+              "frame_0037.png"
+            ],
+            "seeds": 226,
+            "tracks": 80,
+            "rejections": {
+              "boundary": 11,
+              "flow": 37,
+              "cycle": 92,
+              "patch": 84
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0043.png",
+            "names": [
+              "frame_0043.png",
+              "frame_0042.png",
+              "frame_0041.png",
+              "frame_0040.png",
+              "frame_0039.png",
+              "frame_0038.png",
+              "frame_0037.png"
+            ],
+            "seeds": 194,
+            "tracks": 121,
+            "rejections": {
+              "boundary": 0,
+              "flow": 6,
+              "cycle": 99,
+              "patch": 89
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          }
+        ]
+      },
+      {
+        "window": 2,
+        "role": "neck",
+        "uniqueTracks": 0,
+        "geometryAccepted": 0,
+        "duplicates": 0,
+        "rejections": {},
+        "measurement": [
+          {
+            "source": "frame_0037.png",
+            "names": [
+              "frame_0037.png",
+              "frame_0038.png",
+              "frame_0039.png",
+              "frame_0040.png",
+              "frame_0041.png",
+              "frame_0042.png",
+              "frame_0043.png"
+            ],
+            "seeds": 128,
+            "tracks": 0,
+            "rejections": {
+              "boundary": 5,
+              "flow": 5,
+              "cycle": 0,
+              "patch": 118
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0040.png",
+            "names": [
+              "frame_0040.png",
+              "frame_0041.png",
+              "frame_0042.png",
+              "frame_0043.png"
+            ],
+            "seeds": 128,
+            "tracks": 0,
+            "rejections": {
+              "boundary": 10,
+              "flow": 57,
+              "cycle": 0,
+              "patch": 61
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0040.png",
+            "names": [
+              "frame_0040.png",
+              "frame_0039.png",
+              "frame_0038.png",
+              "frame_0037.png"
+            ],
+            "seeds": 128,
+            "tracks": 0,
+            "rejections": {
+              "boundary": 2,
+              "flow": 18,
+              "cycle": 0,
+              "patch": 108
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0043.png",
+            "names": [
+              "frame_0043.png",
+              "frame_0042.png",
+              "frame_0041.png",
+              "frame_0040.png",
+              "frame_0039.png",
+              "frame_0038.png",
+              "frame_0037.png"
+            ],
+            "seeds": 128,
+            "tracks": 0,
+            "rejections": {
+              "boundary": 12,
+              "flow": 91,
+              "cycle": 0,
+              "patch": 25
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          }
+        ]
+      },
+      {
+        "window": 2,
+        "role": "cloth",
+        "uniqueTracks": 387,
+        "geometryAccepted": 387,
+        "duplicates": 142,
+        "rejections": {},
+        "measurement": [
+          {
+            "source": "frame_0037.png",
+            "names": [
+              "frame_0037.png",
+              "frame_0038.png",
+              "frame_0039.png",
+              "frame_0040.png",
+              "frame_0041.png",
+              "frame_0042.png",
+              "frame_0043.png"
+            ],
+            "seeds": 300,
+            "tracks": 132,
+            "rejections": {
+              "boundary": 1,
+              "flow": 73,
+              "cycle": 42,
+              "patch": 135
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0040.png",
+            "names": [
+              "frame_0040.png",
+              "frame_0041.png",
+              "frame_0042.png",
+              "frame_0043.png"
+            ],
+            "seeds": 300,
+            "tracks": 107,
+            "rejections": {
+              "boundary": 4,
+              "flow": 63,
+              "cycle": 8,
+              "patch": 128
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0040.png",
+            "names": [
+              "frame_0040.png",
+              "frame_0039.png",
+              "frame_0038.png",
+              "frame_0037.png"
+            ],
+            "seeds": 300,
+            "tracks": 138,
+            "rejections": {
+              "boundary": 1,
+              "flow": 31,
+              "cycle": 23,
+              "patch": 138
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          },
+          {
+            "source": "frame_0043.png",
+            "names": [
+              "frame_0043.png",
+              "frame_0042.png",
+              "frame_0041.png",
+              "frame_0040.png",
+              "frame_0039.png",
+              "frame_0038.png",
+              "frame_0037.png"
+            ],
+            "seeds": 300,
+            "tracks": 152,
+            "rejections": {
+              "boundary": 0,
+              "flow": 45,
+              "cycle": 49,
+              "patch": 158
+            },
+            "measurement": "SubPix + serial/direct cycle + symmetric patch ECC"
+          }
+        ]
+      }
+    ],
+    "seconds": 46.945380961,
+    "published": false
+  },
+  "bodyMotion": {
+    "windows": [
+      {
+        "window": 0,
+        "names": [
+          "frame_0002.png",
+          "frame_0003.png",
+          "frame_0004.png",
+          "frame_0005.png",
+          "frame_0006.png",
+          "frame_0007.png",
+          "frame_0008.png",
+          "frame_0009.png",
+          "frame_0010.png",
+          "frame_0011.png"
+        ],
+        "tracks": 51,
+        "accepted": 0,
+        "motionAccepted": false,
+        "withheldThirdP90": 14.789592820579498,
+        "withheldBeforeP90": 19.93108664807198,
+        "regions": [
+          "lower_left",
+          "lower_middle",
+          "lower_right",
+          "upper_right"
+        ]
+      },
+      {
+        "window": 1,
+        "names": [
+          "frame_0022.png",
+          "frame_0023.png",
+          "frame_0024.png",
+          "frame_0025.png",
+          "frame_0026.png",
+          "frame_0027.png",
+          "frame_0028.png"
+        ],
+        "tracks": 37,
+        "accepted": 2,
+        "motionAccepted": false,
+        "withheldThirdP90": 3.739223518361688,
+        "withheldBeforeP90": 3.8060984348019153,
+        "regions": [
+          "lower_left",
+          "lower_middle",
+          "upper_middle"
+        ]
+      },
+      {
+        "window": 2,
+        "names": [
+          "frame_0037.png",
+          "frame_0038.png",
+          "frame_0039.png",
+          "frame_0040.png",
+          "frame_0041.png",
+          "frame_0042.png",
+          "frame_0043.png"
+        ],
+        "tracks": 34,
+        "accepted": 5,
+        "motionAccepted": false,
+        "withheldThirdP90": 5.295897795468341,
+        "withheldBeforeP90": 5.103117787135363,
+        "regions": [
+          "lower_left",
+          "lower_middle",
+          "upper_middle"
+        ]
+      }
+    ],
+    "trackHash": "6f951a8b247ab2316fcef009953e5453140e8362e33aa84ad082ea99b4c3097f",
+    "sourceHash": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+    "seconds": 32.720055678,
+    "published": false
+  },
+  "faceGeometry": {
+    "initial": {
+      "fitMedian": 1.0325423265583589,
+      "fitP90": 2.7291237494942244,
+      "thirdMedian": 1.5048268587664422,
+      "thirdP90": 3.7182004415061867,
+      "sourceP90": 6.86944315531347e-05
+    },
+    "final": {
+      "fitMedian": 0.8890225874192585,
+      "fitP90": 1.9907136687107494,
+      "thirdMedian": 1.5562749285903077,
+      "thirdP90": 2.971194646033623,
+      "sourceP90": 1.3848696324628933
+    },
+    "sourceAndTargetsIncluded": true,
+    "thirdExcludedFromFit": true,
+    "nfev": 15,
+    "anchorCount": 110,
+    "rejections": {
+      "old_surface_too_far_for_bounded_field": 15,
+      "grazing_old_surface": 2
+    },
+    "maximumPixels": 6,
+    "controls": 24,
+    "geometryResearchGatePassed": true,
+    "conditionalOnExistingF": true,
+    "finalGeometryValidated": false
+  },
+  "hairGeometry": {
+    "initial": {
+      "fitMedian": 1.4141357366922733,
+      "fitP90": 2.2080703216441555,
+      "thirdMedian": 3.6948786111350067,
+      "thirdP90": 4.425913645140968,
+      "sourceP90": 5.707995388658115e-05
+    },
+    "final": {
+      "fitMedian": 0.6838098823800463,
+      "fitP90": 1.2204760072350316,
+      "thirdMedian": 2.1911960779669784,
+      "thirdP90": 3.0920458126493844,
+      "sourceP90": 1.4345434593299675
+    },
+    "sourceAndTargetsIncluded": true,
+    "thirdExcludedFromFit": true,
+    "nfev": 14,
+    "anchorCount": 20,
+    "rejections": {
+      "old_surface_too_far_for_bounded_field": 52
+    },
+    "maximumPixels": 6,
+    "controls": 20,
+    "geometryResearchGatePassed": true,
+    "conditionalOnExistingF": true,
+    "finalGeometryValidated": false
+  },
+  "nativeHairProposal": {
+    "names": [
+      "frame_0037.png",
+      "frame_0038.png",
+      "frame_0039.png",
+      "frame_0040.png",
+      "frame_0041.png",
+      "frame_0042.png",
+      "frame_0043.png"
+    ],
+    "rawPoints": 18115,
+    "hairSupported": 4759,
+    "selected": 4000,
+    "minViews": 3,
+    "retiredHead": [
+      9267,
+      9347,
+      9349,
+      9369,
+      9427,
+      9434,
+      9586,
+      9599,
+      9639,
+      9679,
+      9680,
+      9684,
+      9704,
+      9705,
+      9716,
+      9763,
+      9787,
+      9793,
+      9872,
+      9878,
+      9886,
+      9890,
+      9891,
+      9893,
+      9894,
+      9895,
+      9921,
+      9953,
+      9954,
+      9968,
+      9969,
+      9970,
+      9972,
+      9973,
+      9974,
+      9975,
+      9976,
+      9977,
+      9978,
+      9979,
+      9985,
+      9993,
+      9996,
+      9997,
+      10027,
+      10034,
+      10042,
+      10043,
+      10055,
+      10059,
+      10060,
+      10061,
+      10062,
+      10064,
+      10065,
+      10066,
+      10067,
+      10068,
+      10069,
+      10070,
+      10071,
+      10072,
+      10073,
+      10074,
+      10075,
+      10080,
+      10087,
+      10131,
+      10132,
+      10134,
+      10135,
+      10155,
+      10156,
+      10159,
+      10160,
+      10161,
+      10162,
+      10163,
+      10164,
+      10165,
+      10166,
+      10167,
+      10168,
+      10169,
+      10194,
+      10228,
+      10230,
+      10232,
+      10236,
+      10242,
+      10251,
+      10252,
+      10253,
+      10254,
+      10255,
+      10256,
+      10257,
+      10258,
+      10259,
+      10260,
+      10263,
+      10264,
+      10265,
+      10266,
+      10267,
+      10268,
+      10269,
+      10270,
+      10271,
+      10272,
+      10286,
+      10319,
+      10320,
+      10329,
+      10336,
+      10350,
+      10351,
+      10352,
+      10353,
+      10354,
+      10355,
+      10356,
+      10357,
+      10358,
+      10359,
+      10360,
+      10361,
+      10363,
+      10364,
+      10365,
+      10366,
+      10367,
+      10368,
+      10369,
+      10370,
+      10371,
+      10373,
+      10374,
+      10392,
+      10415,
+      10429,
+      10448,
+      10450,
+      10451,
+      10452,
+      10453,
+      10454,
+      10455,
+      10457,
+      10458,
+      10459,
+      10461,
+      10462,
+      10463,
+      10465,
+      10466,
+      10467,
+      10470,
+      10471,
+      10472,
+      10473,
+      10475,
+      10476,
+      10486,
+      10512,
+      10533,
+      10534,
+      10548,
+      10551,
+      10552,
+      10553,
+      10554,
+      10555,
+      10557,
+      10558,
+      10559,
+      10561,
+      10562,
+      10563,
+      10564,
+      10565,
+      10566,
+      10567,
+      10568,
+      10569,
+      10571,
+      10572,
+      10575,
+      10576,
+      10605,
+      10613,
+      10636,
+      10637,
+      10649,
+      10650,
+      10651,
+      10652,
+      10653,
+      10654,
+      10655,
+      10656,
+      10657,
+      10658,
+      10659,
+      10660,
+      10661,
+      10664,
+      10665,
+      10666,
+      10667,
+      10668,
+      10669,
+      10673,
+      10681,
+      10703,
+      10730,
+      10731,
+      10737,
+      10741,
+      10744,
+      10745,
+      10746,
+      10747,
+      10748,
+      10750,
+      10751,
+      10752,
+      10753,
+      10754,
+      10755,
+      10756,
+      10758,
+      10759,
+      10760,
+      10762,
+      10763,
+      10764,
+      10765,
+      10803,
+      10805,
+      10807,
+      10808,
+      10815,
+      10817,
+      10828,
+      10834,
+      10836,
+      10837,
+      10838,
+      10839,
+      10841,
+      10842,
+      10843,
+      10844,
+      10845,
+      10846,
+      10847,
+      10848,
+      10849,
+      10850,
+      10851,
+      10853,
+      10854,
+      10855,
+      10856,
+      10859,
+      10861,
+      10862,
+      10863,
+      10864,
+      10870,
+      10871,
+      10872,
+      10919,
+      10920,
+      10922,
+      10928,
+      10929,
+      10940,
+      10941,
+      10944,
+      10945,
+      10946,
+      10947,
+      10948,
+      10949,
+      10950,
+      10951,
+      10952,
+      10953,
+      10954,
+      10955,
+      10956,
+      10957,
+      10958,
+      10959,
+      10960,
+      10962,
+      10963,
+      10964,
+      10965,
+      10966,
+      10969,
+      10970,
+      10971,
+      10977,
+      10979,
+      10980,
+      10981,
+      10982,
+      11021,
+      11028,
+      11032,
+      11033,
+      11042,
+      11049,
+      11057,
+      11058,
+      11059,
+      11060,
+      11061,
+      11062,
+      11063,
+      11064,
+      11065,
+      11066,
+      11067,
+      11068,
+      11069,
+      11070,
+      11071,
+      11072,
+      11073,
+      11074,
+      11076,
+      11077,
+      11078,
+      11079,
+      11083,
+      11091,
+      11092,
+      11093,
+      11094,
+      11098,
+      11120,
+      11127,
+      11128,
+      11134,
+      11135,
+      11139,
+      11140,
+      11141,
+      11147,
+      11148,
+      11149,
+      11150,
+      11158,
+      11159,
+      11160,
+      11168,
+      11169,
+      11170,
+      11171,
+      11172,
+      11173,
+      11174,
+      11175,
+      11176,
+      11177,
+      11178,
+      11180,
+      11181,
+      11182,
+      11183,
+      11184,
+      11186,
+      11188,
+      11189,
+      11200,
+      11207,
+      11220,
+      11223,
+      11224,
+      11229,
+      11230,
+      11234,
+      11235,
+      11243,
+      11249,
+      11250,
+      11258,
+      11259,
+      11260,
+      11269,
+      11270,
+      11271,
+      11272,
+      11281,
+      11282,
+      11283,
+      11284,
+      11285,
+      11286,
+      11287,
+      11288,
+      11289,
+      11291,
+      11292,
+      11294,
+      11308,
+      11309,
+      11331,
+      11335,
+      11336,
+      11342,
+      11343,
+      11348,
+      11355,
+      11356,
+      11361,
+      11362,
+      11363,
+      11368,
+      11376,
+      11377,
+      11383,
+      11384,
+      11386,
+      11388,
+      11389,
+      11390,
+      11391,
+      11392,
+      11393,
+      11394,
+      11395,
+      11396,
+      11397,
+      11398,
+      11399,
+      11400,
+      11401,
+      11402,
+      11413,
+      11440,
+      11444,
+      11448,
+      11454,
+      11455,
+      11459,
+      11465,
+      11472,
+      11473,
+      11474,
+      11475,
+      11479,
+      11480,
+      11481,
+      11483,
+      11486,
+      11488,
+      11489,
+      11490,
+      11492,
+      11498,
+      11500,
+      11505,
+      11531,
+      11532,
+      11535,
+      11539,
+      11540,
+      11545,
+      11546,
+      11547,
+      11549,
+      11550,
+      11554,
+      11555,
+      11559,
+      11560,
+      11561,
+      11562,
+      11563,
+      11564,
+      11565,
+      11566,
+      11567,
+      11568,
+      11569,
+      11571,
+      11572,
+      11573,
+      11574,
+      11575,
+      11577,
+      11578,
+      11582,
+      11583,
+      11586,
+      11587,
+      11596,
+      11597,
+      11602,
+      11619,
+      11627,
+      11632,
+      11633,
+      11634,
+      11637,
+      11638,
+      11640,
+      11641,
+      11642,
+      11643,
+      11644,
+      11645,
+      11646,
+      11647,
+      11648,
+      11649,
+      11650,
+      11651,
+      11652,
+      11653,
+      11654,
+      11655,
+      11656,
+      11657,
+      11662,
+      11664,
+      11665,
+      11668,
+      11673,
+      11681,
+      11695,
+      11701,
+      11704,
+      11705,
+      11706,
+      11707,
+      11709,
+      11710,
+      11711,
+      11712,
+      11713,
+      11714,
+      11716,
+      11717,
+      11718,
+      11719,
+      11720,
+      11721,
+      11724,
+      11725,
+      11727,
+      11728,
+      11733,
+      11734,
+      11740,
+      11741,
+      11766,
+      11767,
+      11768,
+      11769,
+      11779,
+      11780,
+      11781,
+      11782,
+      11784,
+      11786,
+      11788,
+      11790,
+      11792,
+      11793,
+      11794,
+      11795,
+      11797,
+      11798,
+      11799,
+      11800,
+      11802,
+      11803,
+      11804,
+      11805,
+      11806,
+      11807,
+      11808,
+      11809,
+      11811,
+      11812,
+      11814,
+      11815,
+      11820,
+      11821,
+      11823,
+      11824,
+      11825,
+      11826,
+      11827,
+      11828,
+      11829,
+      11832,
+      11833,
+      11834,
+      11836,
+      11837,
+      11838,
+      11841,
+      11845,
+      11848,
+      11850,
+      11853,
+      11860,
+      11862,
+      11863,
+      11864,
+      11865,
+      11871,
+      11874,
+      11875,
+      11878,
+      11879,
+      11880,
+      11882,
+      11883,
+      11884,
+      11885,
+      11886,
+      11887,
+      11888,
+      11889,
+      11891,
+      11892,
+      11893,
+      11894,
+      11895,
+      11896,
+      11897,
+      11898,
+      11899,
+      11901,
+      11902,
+      11903,
+      11904,
+      11905,
+      11906,
+      11907,
+      11908,
+      11909,
+      11911,
+      11912,
+      11913,
+      11914,
+      11915,
+      11916,
+      11917,
+      11918,
+      11919,
+      11920,
+      11922,
+      11923,
+      11924,
+      11925,
+      11926,
+      11927,
+      11928,
+      11929,
+      11930,
+      11932,
+      11933,
+      11937,
+      11938,
+      11939,
+      11940,
+      11942,
+      11943,
+      11944,
+      11945,
+      11946,
+      11948,
+      11949,
+      11950,
+      11953,
+      11954,
+      11955,
+      11956,
+      11959,
+      11960,
+      11961,
+      11964,
+      11965,
+      11967,
+      11968,
+      11969
+    ],
+    "retiredUID": [
+      9012,
+      9092,
+      9094,
+      9114,
+      9172,
+      9179,
+      9331,
+      9344,
+      9384,
+      9424,
+      9425,
+      9429,
+      9449,
+      9450,
+      9461,
+      9508,
+      9532,
+      9538,
+      9617,
+      9623,
+      9631,
+      9635,
+      9636,
+      9638,
+      9639,
+      9640,
+      9666,
+      9698,
+      9699,
+      9713,
+      9714,
+      9715,
+      9717,
+      9718,
+      9719,
+      9720,
+      9721,
+      9722,
+      9723,
+      9724,
+      9730,
+      9738,
+      9741,
+      9742,
+      9772,
+      9779,
+      9787,
+      9788,
+      9800,
+      9804,
+      9805,
+      9806,
+      9807,
+      9809,
+      9810,
+      9811,
+      9812,
+      9813,
+      9814,
+      9815,
+      9816,
+      9817,
+      9818,
+      9819,
+      9820,
+      9825,
+      9832,
+      9876,
+      9877,
+      9879,
+      9880,
+      9900,
+      9901,
+      9904,
+      9905,
+      9906,
+      9907,
+      9908,
+      9909,
+      9910,
+      9911,
+      9912,
+      9913,
+      9914,
+      9939,
+      9973,
+      9975,
+      9977,
+      9981,
+      9987,
+      9996,
+      9997,
+      9998,
+      9999,
+      10000,
+      10001,
+      10002,
+      10003,
+      10004,
+      10005,
+      10008,
+      10009,
+      10010,
+      10011,
+      10012,
+      10013,
+      10014,
+      10015,
+      10016,
+      10017,
+      10031,
+      10064,
+      10065,
+      10074,
+      10081,
+      10095,
+      10096,
+      10097,
+      10098,
+      10099,
+      10100,
+      10101,
+      10102,
+      10103,
+      10104,
+      10105,
+      10106,
+      10108,
+      10109,
+      10110,
+      10111,
+      10112,
+      10113,
+      10114,
+      10115,
+      10116,
+      10118,
+      10119,
+      10137,
+      10160,
+      10174,
+      10193,
+      10195,
+      10196,
+      10197,
+      10198,
+      10199,
+      10200,
+      10202,
+      10203,
+      10204,
+      10206,
+      10207,
+      10208,
+      10210,
+      10211,
+      10212,
+      10215,
+      10216,
+      10217,
+      10218,
+      10220,
+      10221,
+      10231,
+      10257,
+      10278,
+      10279,
+      10293,
+      10296,
+      10297,
+      10298,
+      10299,
+      10300,
+      10302,
+      10303,
+      10304,
+      10306,
+      10307,
+      10308,
+      10309,
+      10310,
+      10311,
+      10312,
+      10313,
+      10314,
+      10316,
+      10317,
+      10320,
+      10321,
+      10350,
+      10358,
+      10381,
+      10382,
+      10394,
+      10395,
+      10396,
+      10397,
+      10398,
+      10399,
+      10400,
+      10401,
+      10402,
+      10403,
+      10404,
+      10405,
+      10406,
+      10409,
+      10410,
+      10411,
+      10412,
+      10413,
+      10414,
+      10418,
+      10426,
+      10448,
+      10475,
+      10476,
+      10482,
+      10486,
+      10489,
+      10490,
+      10491,
+      10492,
+      10493,
+      10495,
+      10496,
+      10497,
+      10498,
+      10499,
+      10500,
+      10501,
+      10503,
+      10504,
+      10505,
+      10507,
+      10508,
+      10509,
+      10510,
+      10548,
+      10550,
+      10552,
+      10553,
+      10560,
+      10562,
+      10573,
+      10579,
+      10581,
+      10582,
+      10583,
+      10584,
+      10586,
+      10587,
+      10588,
+      10589,
+      10590,
+      10591,
+      10592,
+      10593,
+      10594,
+      10595,
+      10596,
+      10598,
+      10599,
+      10600,
+      10601,
+      10604,
+      10606,
+      10607,
+      10608,
+      10609,
+      10615,
+      10616,
+      10617,
+      10664,
+      10665,
+      10667,
+      10673,
+      10674,
+      10685,
+      10686,
+      10689,
+      10690,
+      10691,
+      10692,
+      10693,
+      10694,
+      10695,
+      10696,
+      10697,
+      10698,
+      10699,
+      10700,
+      10701,
+      10702,
+      10703,
+      10704,
+      10705,
+      10707,
+      10708,
+      10709,
+      10710,
+      10711,
+      10714,
+      10715,
+      10716,
+      10722,
+      10724,
+      10725,
+      10726,
+      10727,
+      10766,
+      10773,
+      10777,
+      10778,
+      10787,
+      10794,
+      10802,
+      10803,
+      10804,
+      10805,
+      10806,
+      10807,
+      10808,
+      10809,
+      10810,
+      10811,
+      10812,
+      10813,
+      10814,
+      10815,
+      10816,
+      10817,
+      10818,
+      10819,
+      10821,
+      10822,
+      10823,
+      10824,
+      10828,
+      10836,
+      10837,
+      10838,
+      10839,
+      10843,
+      10865,
+      10872,
+      10873,
+      10879,
+      10880,
+      10884,
+      10885,
+      10886,
+      10892,
+      10893,
+      10894,
+      10895,
+      10903,
+      10904,
+      10905,
+      10913,
+      10914,
+      10915,
+      10916,
+      10917,
+      10918,
+      10919,
+      10920,
+      10921,
+      10922,
+      10923,
+      10925,
+      10926,
+      10927,
+      10928,
+      10929,
+      10931,
+      10933,
+      10934,
+      10945,
+      10952,
+      10965,
+      10968,
+      10969,
+      10974,
+      10975,
+      10979,
+      10980,
+      10988,
+      10994,
+      10995,
+      11003,
+      11004,
+      11005,
+      11014,
+      11015,
+      11016,
+      11017,
+      11026,
+      11027,
+      11028,
+      11029,
+      11030,
+      11031,
+      11032,
+      11033,
+      11034,
+      11036,
+      11037,
+      11039,
+      11053,
+      11054,
+      11076,
+      11080,
+      11081,
+      11087,
+      11088,
+      11093,
+      11100,
+      11101,
+      11106,
+      11107,
+      11108,
+      11113,
+      11121,
+      11122,
+      11128,
+      11129,
+      11131,
+      11133,
+      11134,
+      11135,
+      11136,
+      11137,
+      11138,
+      11139,
+      11140,
+      11141,
+      11142,
+      11143,
+      11144,
+      11145,
+      11146,
+      11147,
+      11158,
+      11185,
+      11189,
+      11193,
+      11199,
+      11200,
+      11204,
+      11210,
+      11217,
+      11218,
+      11219,
+      11220,
+      11224,
+      11225,
+      11226,
+      11228,
+      11231,
+      11233,
+      11234,
+      11235,
+      11237,
+      11243,
+      11245,
+      11250,
+      11276,
+      11277,
+      11280,
+      11284,
+      11285,
+      11290,
+      11291,
+      11292,
+      11294,
+      11295,
+      11299,
+      11300,
+      11304,
+      11305,
+      11306,
+      11307,
+      11308,
+      11309,
+      11310,
+      11311,
+      11312,
+      11313,
+      11314,
+      11316,
+      11317,
+      11318,
+      11319,
+      11320,
+      11322,
+      11323,
+      11327,
+      11328,
+      11331,
+      11332,
+      11341,
+      11342,
+      11347,
+      11364,
+      11372,
+      11377,
+      11378,
+      11379,
+      11382,
+      11383,
+      11385,
+      11386,
+      11387,
+      11388,
+      11389,
+      11390,
+      11391,
+      11392,
+      11393,
+      11394,
+      11395,
+      11396,
+      11397,
+      11398,
+      11399,
+      11400,
+      11401,
+      11402,
+      11407,
+      11409,
+      11410,
+      11413,
+      11418,
+      11426,
+      11440,
+      11446,
+      11449,
+      11450,
+      11451,
+      11452,
+      11454,
+      11455,
+      11456,
+      11457,
+      11458,
+      11459,
+      11461,
+      11462,
+      11463,
+      11464,
+      11465,
+      11466,
+      11469,
+      11470,
+      11472,
+      11473,
+      11478,
+      11479,
+      11485,
+      11486,
+      11511,
+      11512,
+      11513,
+      11514,
+      11524,
+      11525,
+      11526,
+      11527,
+      11529,
+      11531,
+      11533,
+      11535,
+      11537,
+      11538,
+      11539,
+      11540,
+      11542,
+      11543,
+      11544,
+      11545,
+      11547,
+      11548,
+      11549,
+      11550,
+      11551,
+      11552,
+      11553,
+      11554,
+      11556,
+      11557,
+      11559,
+      11560,
+      11565,
+      11566,
+      11568,
+      11569,
+      11570,
+      11571,
+      11572,
+      11573,
+      11574,
+      11577,
+      11578,
+      11579,
+      11581,
+      11582,
+      11583,
+      11586,
+      11590,
+      11593,
+      11595,
+      11598,
+      11605,
+      11607,
+      11608,
+      11609,
+      11610,
+      11616,
+      11619,
+      11620,
+      11623,
+      11624,
+      11625,
+      11627,
+      11628,
+      11629,
+      11630,
+      11631,
+      11632,
+      11633,
+      11634,
+      11636,
+      11637,
+      11638,
+      11639,
+      11640,
+      11641,
+      11642,
+      11643,
+      11644,
+      11646,
+      11647,
+      11648,
+      11649,
+      11650,
+      11651,
+      11652,
+      11653,
+      11654,
+      11656,
+      11657,
+      11658,
+      11659,
+      11660,
+      11661,
+      11662,
+      11663,
+      11664,
+      11665,
+      11667,
+      11668,
+      11669,
+      11670,
+      11671,
+      11672,
+      11673,
+      11674,
+      11675,
+      11677,
+      11678,
+      11682,
+      11683,
+      11684,
+      11685,
+      11687,
+      11688,
+      11689,
+      11690,
+      11691,
+      11693,
+      11694,
+      11695,
+      11698,
+      11699,
+      11700,
+      11701,
+      11704,
+      11705,
+      11706,
+      11709,
+      11710,
+      11712,
+      11713,
+      11714
+    ],
+    "remainingHair": 2222,
+    "cloudHash": "a8862cd40288eb474a54b494c68551bbf2f58a9ce02f2593f06f93f968592ed0",
+    "cameraFrame": "head-local",
+    "nativePixelContractChecked": true,
+    "colour": "native original hair-valid 3x3 median over actual fused views",
+    "unknownHairKept": true,
+    "oldPointProposal": "centre within 4 native pixels of measured hair in at least 3 actual fused supporting observations; not visibility truth",
+    "geometryConditionalOnF": true,
+    "completeHairValidated": false,
+    "published": false
+  },
+  "nativeHairMVS": {
+    "records": [
+      {
+        "tool": "InterfaceCOLMAP.exe",
+        "arguments": [
+          "--working-folder",
+          "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\continuous-geometry-repair-20261001-a\\head-restored-native-mvs",
+          "--input-file",
+          "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\continuous-geometry-repair-20261001-a\\head-restored-native-mvs\\colmap",
+          "--image-folder",
+          "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\continuous-geometry-repair-20261001-a\\head-restored-native-mvs\\colmap\\images",
+          "--output-file",
+          "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\continuous-geometry-repair-20261001-a\\head-restored-native-mvs\\scene.mvs",
+          "--max-threads",
+          "4",
+          "--normalize",
+          "0"
+        ],
+        "exitCode": 0,
+        "timedOut": false,
+        "seconds": 0.1237756,
+        "exeHash": "785311ce935b49a5c993570e5daf77b5616fe7fce871b7ddee3b5e5c10c30cc4"
+      },
+      {
+        "tool": "DensifyPointCloud.exe",
+        "arguments": [
+          "--working-folder",
+          "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\continuous-geometry-repair-20261001-a\\head-restored-native-mvs",
+          "--input-file",
+          "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\continuous-geometry-repair-20261001-a\\head-restored-native-mvs\\scene.mvs",
+          "--output-file",
+          "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\continuous-geometry-repair-20261001-a\\head-restored-native-mvs\\dense.mvs",
+          "--max-threads",
+          "4",
+          "--resolution-level",
+          "1",
+          "--max-resolution",
+          "1920",
+          "--min-resolution",
+          "640",
+          "--number-views",
+          "3",
+          "--number-views-fuse",
+          "3",
+          "--ignore-mask-label",
+          "0",
+          "--iters",
+          "3",
+          "--geometric-iters",
+          "2",
+          "--estimate-normals",
+          "2",
+          "--estimate-colors",
+          "2",
+          "--estimate-roi",
+          "0",
+          "--crop-to-roi",
+          "0",
+          "--tower-mode",
+          "0",
+          "--normalize-coordinates",
+          "0",
+          "--remove-dmaps",
+          "0"
+        ],
+        "exitCode": 0,
+        "timedOut": false,
+        "seconds": 4.0315668,
+        "exeHash": "baa34151aa66ca5b909645330fdb79c271087f08759872dd2d474717dc901d77"
+      }
+    ],
+    "denseExists": true,
+    "published": false,
+    "installationChanged": false
+  },
+  "display": {
+    "assets": {
+      "baseline": {
+        "assetHash": "a343ccf05292ce1e174c7fd63795122347a8d03bd0202a19395a9a414b691f41",
+        "identityHash": "4d790a3694bd89b91932497cd891b53306ff318fd6c94842bd4a9cf12eb2164a",
+        "pointCount": 50095,
+        "fullRGBMean": 0.09077023714780807,
+        "fullRGBMax": 0.5750417113304138,
+        "fullAlphaMean": 0.09277346730232239,
+        "cameraMatrixMax": 5.446398299024935e-08,
+        "regions": {
+          "face": {
+            "rgb": 0.08969626575708389,
+            "alpha": 0.000535580504219979,
+            "gsplatToSource": 0.09632270038127899,
+            "playcanvasToSource": 0.02521171048283577
+          },
+          "hair": {
+            "rgb": 0.20348873734474182,
+            "alpha": 0.004713559057563543,
+            "gsplatToSource": 0.224790558218956,
+            "playcanvasToSource": 0.04477532580494881
+          },
+          "cloth": {
+            "rgb": 0.02026870846748352,
+            "alpha": 0.014413747936487198,
+            "gsplatToSource": 0.0505625382065773,
+            "playcanvasToSource": 0.05599498376250267
+          },
+          "room": {
+            "rgb": 0.12157674878835678,
+            "alpha": 0.14705951511859894,
+            "gsplatToSource": 0.0257010105997324,
+            "playcanvasToSource": 0.13003243505954742
+          }
+        },
+        "settings": {
+          "version": "2.22.4",
+          "canvas": [
+            1080,
+            1920
+          ],
+          "css": [
+            1080,
+            1920
+          ],
+          "maxPixelRatio": 1,
+          "gamma": 1,
+          "toneMapping": 0,
+          "exposure": 1,
+          "fog": {
+            "type": "none",
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 0,
+              "a": 1
+            },
+            "density": 0,
+            "start": 1,
+            "end": 1000
+          },
+          "postEffects": 0,
+          "context": {
+            "alpha": true,
+            "antialias": false,
+            "depth": true,
+            "desynchronized": false,
+            "failIfMajorPerformanceCaveat": false,
+            "powerPreference": "high-performance",
+            "premultipliedAlpha": true,
+            "preserveDrawingBuffer": true,
+            "stencil": true,
+            "xrCompatible": false
+          },
+          "projection": [
+            2.2019925117492676,
+            0,
+            0,
+            0,
+            0,
+            1.2386207580566406,
+            0,
+            0,
+            0,
+            0,
+            -1,
+            -1,
+            0,
+            0,
+            -0.2670884132385254,
+            0
+          ],
+          "world": [
+            0.8291066884994507,
+            -0.06702034920454025,
+            -0.5550588369369507,
+            0,
+            -0.07346988469362259,
+            -0.9972403645515442,
+            0.010667387396097183,
+            0,
+            -0.5542420148849487,
+            0.03193570673465729,
+            -0.8317427039146423,
+            0,
+            -0.20307843387126923,
+            0.2206445336341858,
+            -1.6191157102584839,
+            1
+          ],
+          "count": 50095,
+          "resourceType": "GSplatResource",
+          "gsplatSettings": {
+            "antiAlias": false,
+            "dataFormat": "compact",
+            "currentRenderer": 1,
+            "minPixelSize": 2,
+            "radialSorting": false,
+            "splatBudget": 1000000
+          },
+          "unified": true,
+          "assetHasLod": false,
+          "renderer": "WebKit WebGL"
+        }
+      },
+      "neck": {
+        "assetHash": "d82c752008b19b24943eb5f8fff257c1d794f02ad2c332294c6f1612f0c629de",
+        "identityHash": "b624bf32a174ae56123591930a711bf3563a588fd4dd8c030b242bc50e16e006",
+        "pointCount": 50095,
+        "fullRGBMean": 0.09084128588438034,
+        "fullRGBMax": 0.5750417113304138,
+        "fullAlphaMean": 0.09273907542228699,
+        "cameraMatrixMax": 5.446398299024935e-08,
+        "regions": {
+          "face": {
+            "rgb": 0.08969077467918396,
+            "alpha": 0.0005355767789296806,
+            "gsplatToSource": 0.0963054820895195,
+            "playcanvasToSource": 0.0252032820135355
+          },
+          "hair": {
+            "rgb": 0.20348873734474182,
+            "alpha": 0.004713559057563543,
+            "gsplatToSource": 0.224790558218956,
+            "playcanvasToSource": 0.04477532580494881
+          },
+          "cloth": {
+            "rgb": 0.020480863749980927,
+            "alpha": 0.01430775597691536,
+            "gsplatToSource": 0.049779556691646576,
+            "playcanvasToSource": 0.05621623620390892
+          },
+          "room": {
+            "rgb": 0.12157667428255081,
+            "alpha": 0.14705747365951538,
+            "gsplatToSource": 0.02569730579853058,
+            "playcanvasToSource": 0.13002829253673553
+          }
+        },
+        "settings": {
+          "version": "2.22.4",
+          "canvas": [
+            1080,
+            1920
+          ],
+          "css": [
+            1080,
+            1920
+          ],
+          "maxPixelRatio": 1,
+          "gamma": 1,
+          "toneMapping": 0,
+          "exposure": 1,
+          "fog": {
+            "type": "none",
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 0,
+              "a": 1
+            },
+            "density": 0,
+            "start": 1,
+            "end": 1000
+          },
+          "postEffects": 0,
+          "context": {
+            "alpha": true,
+            "antialias": false,
+            "depth": true,
+            "desynchronized": false,
+            "failIfMajorPerformanceCaveat": false,
+            "powerPreference": "high-performance",
+            "premultipliedAlpha": true,
+            "preserveDrawingBuffer": true,
+            "stencil": true,
+            "xrCompatible": false
+          },
+          "projection": [
+            2.2019925117492676,
+            0,
+            0,
+            0,
+            0,
+            1.2386207580566406,
+            0,
+            0,
+            0,
+            0,
+            -1,
+            -1,
+            0,
+            0,
+            -0.2670884132385254,
+            0
+          ],
+          "world": [
+            0.8291066884994507,
+            -0.06702034920454025,
+            -0.5550588369369507,
+            0,
+            -0.07346988469362259,
+            -0.9972403645515442,
+            0.010667387396097183,
+            0,
+            -0.5542420148849487,
+            0.03193570673465729,
+            -0.8317427039146423,
+            0,
+            -0.20307843387126923,
+            0.2206445336341858,
+            -1.6191157102584839,
+            1
+          ],
+          "count": 50095,
+          "resourceType": "GSplatResource",
+          "gsplatSettings": {
+            "antiAlias": false,
+            "dataFormat": "compact",
+            "currentRenderer": 1,
+            "minPixelSize": 2,
+            "radialSorting": false,
+            "splatBudget": 1000000
+          },
+          "unified": true,
+          "assetHasLod": false,
+          "renderer": "WebKit WebGL"
+        }
+      },
+      "face": {
+        "assetHash": "0069615cc3e3242dfdd1cebfe9aa9179ecc41b9f99f3bb656bfe1fd4abb21b30",
+        "identityHash": "224b828d5573814fb4b0d0692d8eda8dfb5bb7ed965f2dfe23967345fd08bbbb",
+        "pointCount": 50095,
+        "fullRGBMean": 0.09073258936405182,
+        "fullRGBMax": 0.5750417113304138,
+        "fullAlphaMean": 0.09277307242155075,
+        "cameraMatrixMax": 5.446398299024935e-08,
+        "regions": {
+          "face": {
+            "rgb": 0.08919154852628708,
+            "alpha": 0.0005302423378452659,
+            "gsplatToSource": 0.09694135189056396,
+            "playcanvasToSource": 0.02584952861070633
+          },
+          "hair": {
+            "rgb": 0.20348060131072998,
+            "alpha": 0.004713561851531267,
+            "gsplatToSource": 0.224792018532753,
+            "playcanvasToSource": 0.04479370638728142
+          },
+          "cloth": {
+            "rgb": 0.02026870846748352,
+            "alpha": 0.014413747936487198,
+            "gsplatToSource": 0.0505625382065773,
+            "playcanvasToSource": 0.05599498376250267
+          },
+          "room": {
+            "rgb": 0.12157672643661499,
+            "alpha": 0.14705951511859894,
+            "gsplatToSource": 0.025700924918055534,
+            "playcanvasToSource": 0.13003239035606384
+          }
+        },
+        "settings": {
+          "version": "2.22.4",
+          "canvas": [
+            1080,
+            1920
+          ],
+          "css": [
+            1080,
+            1920
+          ],
+          "maxPixelRatio": 1,
+          "gamma": 1,
+          "toneMapping": 0,
+          "exposure": 1,
+          "fog": {
+            "type": "none",
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 0,
+              "a": 1
+            },
+            "density": 0,
+            "start": 1,
+            "end": 1000
+          },
+          "postEffects": 0,
+          "context": {
+            "alpha": true,
+            "antialias": false,
+            "depth": true,
+            "desynchronized": false,
+            "failIfMajorPerformanceCaveat": false,
+            "powerPreference": "high-performance",
+            "premultipliedAlpha": true,
+            "preserveDrawingBuffer": true,
+            "stencil": true,
+            "xrCompatible": false
+          },
+          "projection": [
+            2.2019925117492676,
+            0,
+            0,
+            0,
+            0,
+            1.2386207580566406,
+            0,
+            0,
+            0,
+            0,
+            -1,
+            -1,
+            0,
+            0,
+            -0.2670884132385254,
+            0
+          ],
+          "world": [
+            0.8291066884994507,
+            -0.06702034920454025,
+            -0.5550588369369507,
+            0,
+            -0.07346988469362259,
+            -0.9972403645515442,
+            0.010667387396097183,
+            0,
+            -0.5542420148849487,
+            0.03193570673465729,
+            -0.8317427039146423,
+            0,
+            -0.20307843387126923,
+            0.2206445336341858,
+            -1.6191157102584839,
+            1
+          ],
+          "count": 50095,
+          "resourceType": "GSplatResource",
+          "gsplatSettings": {
+            "antiAlias": false,
+            "dataFormat": "compact",
+            "currentRenderer": 1,
+            "minPixelSize": 2,
+            "radialSorting": false,
+            "splatBudget": 1000000
+          },
+          "unified": true,
+          "assetHasLod": false,
+          "renderer": "WebKit WebGL"
+        }
+      },
+      "hair": {
+        "assetHash": "ab0e2d252b252cde048f74012d4e370f7dbb7def81de9b73d5d9f8d109e8f3a1",
+        "identityHash": "f2dac80d296dd4fd873609a8587ca6121a2b471a8260f18d7a49bd6fa4afbd2d",
+        "pointCount": 50095,
+        "fullRGBMean": 0.09076729416847229,
+        "fullRGBMax": 0.5750417113304138,
+        "fullAlphaMean": 0.09277354925870895,
+        "cameraMatrixMax": 5.446398299024935e-08,
+        "regions": {
+          "face": {
+            "rgb": 0.0896964892745018,
+            "alpha": 0.0005355813191272318,
+            "gsplatToSource": 0.09632204473018646,
+            "playcanvasToSource": 0.025212587788701057
+          },
+          "hair": {
+            "rgb": 0.20333443582057953,
+            "alpha": 0.004716146737337112,
+            "gsplatToSource": 0.2251318246126175,
+            "playcanvasToSource": 0.04500340670347214
+          },
+          "cloth": {
+            "rgb": 0.02026870846748352,
+            "alpha": 0.014413747936487198,
+            "gsplatToSource": 0.0505625382065773,
+            "playcanvasToSource": 0.05599498376250267
+          },
+          "room": {
+            "rgb": 0.12157674878835678,
+            "alpha": 0.14705951511859894,
+            "gsplatToSource": 0.0257010105997324,
+            "playcanvasToSource": 0.13003243505954742
+          }
+        },
+        "settings": {
+          "version": "2.22.4",
+          "canvas": [
+            1080,
+            1920
+          ],
+          "css": [
+            1080,
+            1920
+          ],
+          "maxPixelRatio": 1,
+          "gamma": 1,
+          "toneMapping": 0,
+          "exposure": 1,
+          "fog": {
+            "type": "none",
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 0,
+              "a": 1
+            },
+            "density": 0,
+            "start": 1,
+            "end": 1000
+          },
+          "postEffects": 0,
+          "context": {
+            "alpha": true,
+            "antialias": false,
+            "depth": true,
+            "desynchronized": false,
+            "failIfMajorPerformanceCaveat": false,
+            "powerPreference": "high-performance",
+            "premultipliedAlpha": true,
+            "preserveDrawingBuffer": true,
+            "stencil": true,
+            "xrCompatible": false
+          },
+          "projection": [
+            2.2019925117492676,
+            0,
+            0,
+            0,
+            0,
+            1.2386207580566406,
+            0,
+            0,
+            0,
+            0,
+            -1,
+            -1,
+            0,
+            0,
+            -0.2670884132385254,
+            0
+          ],
+          "world": [
+            0.8291066884994507,
+            -0.06702034920454025,
+            -0.5550588369369507,
+            0,
+            -0.07346988469362259,
+            -0.9972403645515442,
+            0.010667387396097183,
+            0,
+            -0.5542420148849487,
+            0.03193570673465729,
+            -0.8317427039146423,
+            0,
+            -0.20307843387126923,
+            0.2206445336341858,
+            -1.6191157102584839,
+            1
+          ],
+          "count": 50095,
+          "resourceType": "GSplatResource",
+          "gsplatSettings": {
+            "antiAlias": false,
+            "dataFormat": "compact",
+            "currentRenderer": 1,
+            "minPixelSize": 2,
+            "radialSorting": false,
+            "splatBudget": 1000000
+          },
+          "unified": true,
+          "assetHasLod": false,
+          "renderer": "WebKit WebGL"
+        }
+      },
+      "room": {
+        "assetHash": "5cd831353fddecfc9f5b63068f95a45717b748c315662eec394bb42321af7156",
+        "identityHash": "1781962a81dfe0172ad6f3da22dcd9210da3c9e06dba9708a8d010617e6699ba",
+        "pointCount": 58091,
+        "fullRGBMean": 0.04200151562690735,
+        "fullRGBMax": 0.705079972743988,
+        "fullAlphaMean": 0.06855209171772003,
+        "cameraMatrixMax": 5.446398299024935e-08,
+        "regions": {
+          "face": {
+            "rgb": 0.0064579881727695465,
+            "alpha": 0.0006966394139453769,
+            "gsplatToSource": 0.023298140615224838,
+            "playcanvasToSource": 0.024566998705267906
+          },
+          "hair": {
+            "rgb": 0.0063562230207026005,
+            "alpha": 0.005816086661070585,
+            "gsplatToSource": 0.03638897463679314,
+            "playcanvasToSource": 0.03582001104950905
+          },
+          "cloth": {
+            "rgb": 0.005949743557721376,
+            "alpha": 0.013410312123596668,
+            "gsplatToSource": 0.05481575429439545,
+            "playcanvasToSource": 0.05602765828371048
+          },
+          "room": {
+            "rgb": 0.06430783867835999,
+            "alpha": 0.10702570527791977,
+            "gsplatToSource": 0.1530173420906067,
+            "playcanvasToSource": 0.16323164105415344
+          }
+        },
+        "settings": {
+          "version": "2.22.4",
+          "canvas": [
+            1080,
+            1920
+          ],
+          "css": [
+            1080,
+            1920
+          ],
+          "maxPixelRatio": 1,
+          "gamma": 1,
+          "toneMapping": 0,
+          "exposure": 1,
+          "fog": {
+            "type": "none",
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 0,
+              "a": 1
+            },
+            "density": 0,
+            "start": 1,
+            "end": 1000
+          },
+          "postEffects": 0,
+          "context": {
+            "alpha": true,
+            "antialias": false,
+            "depth": true,
+            "desynchronized": false,
+            "failIfMajorPerformanceCaveat": false,
+            "powerPreference": "high-performance",
+            "premultipliedAlpha": true,
+            "preserveDrawingBuffer": true,
+            "stencil": true,
+            "xrCompatible": false
+          },
+          "projection": [
+            2.2019925117492676,
+            0,
+            0,
+            0,
+            0,
+            1.2386207580566406,
+            0,
+            0,
+            0,
+            0,
+            -1,
+            -1,
+            0,
+            0,
+            -0.2670884132385254,
+            0
+          ],
+          "world": [
+            0.8291066884994507,
+            -0.06702034920454025,
+            -0.5550588369369507,
+            0,
+            -0.07346988469362259,
+            -0.9972403645515442,
+            0.010667387396097183,
+            0,
+            -0.5542420148849487,
+            0.03193570673465729,
+            -0.8317427039146423,
+            0,
+            -0.20307843387126923,
+            0.2206445336341858,
+            -1.6191157102584839,
+            1
+          ],
+          "count": 58091,
+          "resourceType": "GSplatResource",
+          "gsplatSettings": {
+            "antiAlias": false,
+            "dataFormat": "compact",
+            "currentRenderer": 1,
+            "minPixelSize": 2,
+            "radialSorting": false,
+            "splatBudget": 1000000
+          },
+          "unified": true,
+          "assetHasLod": false,
+          "renderer": "WebKit WebGL"
+        }
+      }
+    },
+    "reference": "frame_0010.png",
+    "sourceHash": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+    "browserReportHash": "9292424d8d516880a765a72d7beec591f2857020f81e7b30568b91d172cd8964",
+    "colour": "raw GL premultiplied RGBA8; vertical flip only; no second alpha, gamma or exposure transform",
+    "sameNativeCanvas": true,
+    "renderer": "gsplat1.5.3 and actual PlayCanvas2.22.4 Chrome SwiftShader",
+    "productionViewerChanged": false,
+    "HarmonyOSTested": false,
+    "published": false,
+    "releaseQualityPassed": false
+  },
+  "hairDisplay": {
+    "assets": {
+      "baseline": {
+        "assetHash": "a343ccf05292ce1e174c7fd63795122347a8d03bd0202a19395a9a414b691f41",
+        "identityHash": "4d790a3694bd89b91932497cd891b53306ff318fd6c94842bd4a9cf12eb2164a",
+        "pointCount": 50095,
+        "fullRGBMean": 0.09077023714780807,
+        "fullRGBMax": 0.5750417113304138,
+        "fullAlphaMean": 0.09277346730232239,
+        "cameraMatrixMax": 5.446398299024935e-08,
+        "regions": {
+          "face": {
+            "rgb": 0.08969626575708389,
+            "alpha": 0.000535580504219979,
+            "gsplatToSource": 0.09632270038127899,
+            "playcanvasToSource": 0.02521171048283577
+          },
+          "hair": {
+            "rgb": 0.20348873734474182,
+            "alpha": 0.004713559057563543,
+            "gsplatToSource": 0.224790558218956,
+            "playcanvasToSource": 0.04477532580494881
+          },
+          "cloth": {
+            "rgb": 0.02026870846748352,
+            "alpha": 0.014413747936487198,
+            "gsplatToSource": 0.0505625382065773,
+            "playcanvasToSource": 0.05599498376250267
+          },
+          "room": {
+            "rgb": 0.12157674878835678,
+            "alpha": 0.14705951511859894,
+            "gsplatToSource": 0.0257010105997324,
+            "playcanvasToSource": 0.13003243505954742
+          }
+        },
+        "settings": {
+          "version": "2.22.4",
+          "canvas": [
+            1080,
+            1920
+          ],
+          "css": [
+            1080,
+            1920
+          ],
+          "maxPixelRatio": 1,
+          "gamma": 1,
+          "toneMapping": 0,
+          "exposure": 1,
+          "fog": {
+            "type": "none",
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 0,
+              "a": 1
+            },
+            "density": 0,
+            "start": 1,
+            "end": 1000
+          },
+          "postEffects": 0,
+          "context": {
+            "alpha": true,
+            "antialias": false,
+            "depth": true,
+            "desynchronized": false,
+            "failIfMajorPerformanceCaveat": false,
+            "powerPreference": "high-performance",
+            "premultipliedAlpha": true,
+            "preserveDrawingBuffer": true,
+            "stencil": true,
+            "xrCompatible": false
+          },
+          "projection": [
+            2.2019925117492676,
+            0,
+            0,
+            0,
+            0,
+            1.2386207580566406,
+            0,
+            0,
+            0,
+            0,
+            -1,
+            -1,
+            0,
+            0,
+            -0.2670884132385254,
+            0
+          ],
+          "world": [
+            0.8291066884994507,
+            -0.06702034920454025,
+            -0.5550588369369507,
+            0,
+            -0.07346988469362259,
+            -0.9972403645515442,
+            0.010667387396097183,
+            0,
+            -0.5542420148849487,
+            0.03193570673465729,
+            -0.8317427039146423,
+            0,
+            -0.20307843387126923,
+            0.2206445336341858,
+            -1.6191157102584839,
+            1
+          ],
+          "count": 50095,
+          "resourceType": "GSplatResource",
+          "gsplatSettings": {
+            "antiAlias": false,
+            "dataFormat": "compact",
+            "currentRenderer": 1,
+            "minPixelSize": 2,
+            "radialSorting": false,
+            "splatBudget": 1000000
+          },
+          "unified": true,
+          "assetHasLod": false,
+          "renderer": "WebKit WebGL"
+        }
+      },
+      "hair-surface": {
+        "assetHash": "a5a2923dfb69f08e34d2945e8424e066dca83d66d02f73d4287006f7427f65ee",
+        "identityHash": "71ed16d06d1be72521b73fac9c7c3849efe3feb8f526ecf7711dbc8b9ce561ef",
+        "pointCount": 53400,
+        "fullRGBMean": 0.09036794304847717,
+        "fullRGBMax": 0.5750417113304138,
+        "fullAlphaMean": 0.09284866601228714,
+        "cameraMatrixMax": 5.446398299024935e-08,
+        "regions": {
+          "face": {
+            "rgb": 0.08958548307418823,
+            "alpha": 0.0005409640725702047,
+            "gsplatToSource": 0.09647306054830551,
+            "playcanvasToSource": 0.02530144713819027
+          },
+          "hair": {
+            "rgb": 0.1863568276166916,
+            "alpha": 0.006465032231062651,
+            "gsplatToSource": 0.21648062765598297,
+            "playcanvasToSource": 0.055674534291028976
+          },
+          "cloth": {
+            "rgb": 0.02026870846748352,
+            "alpha": 0.014413747936487198,
+            "gsplatToSource": 0.0505625382065773,
+            "playcanvasToSource": 0.05599498376250267
+          },
+          "room": {
+            "rgb": 0.121604323387146,
+            "alpha": 0.1470758467912674,
+            "gsplatToSource": 0.02568383887410164,
+            "playcanvasToSource": 0.1300228089094162
+          }
+        },
+        "settings": {
+          "version": "2.22.4",
+          "canvas": [
+            1080,
+            1920
+          ],
+          "css": [
+            1080,
+            1920
+          ],
+          "maxPixelRatio": 1,
+          "gamma": 1,
+          "toneMapping": 0,
+          "exposure": 1,
+          "fog": {
+            "type": "none",
+            "color": {
+              "r": 0,
+              "g": 0,
+              "b": 0,
+              "a": 1
+            },
+            "density": 0,
+            "start": 1,
+            "end": 1000
+          },
+          "postEffects": 0,
+          "context": {
+            "alpha": true,
+            "antialias": false,
+            "depth": true,
+            "desynchronized": false,
+            "failIfMajorPerformanceCaveat": false,
+            "powerPreference": "high-performance",
+            "premultipliedAlpha": true,
+            "preserveDrawingBuffer": true,
+            "stencil": true,
+            "xrCompatible": false
+          },
+          "projection": [
+            2.2019925117492676,
+            0,
+            0,
+            0,
+            0,
+            1.2386207580566406,
+            0,
+            0,
+            0,
+            0,
+            -1,
+            -1,
+            0,
+            0,
+            -0.2670884132385254,
+            0
+          ],
+          "world": [
+            0.8291066884994507,
+            -0.06702034920454025,
+            -0.5550588369369507,
+            0,
+            -0.07346988469362259,
+            -0.9972403645515442,
+            0.010667387396097183,
+            0,
+            -0.5542420148849487,
+            0.03193570673465729,
+            -0.8317427039146423,
+            0,
+            -0.20307843387126923,
+            0.2206445336341858,
+            -1.6191157102584839,
+            1
+          ],
+          "count": 53400,
+          "resourceType": "GSplatResource",
+          "gsplatSettings": {
+            "antiAlias": false,
+            "dataFormat": "compact",
+            "currentRenderer": 1,
+            "minPixelSize": 2,
+            "radialSorting": false,
+            "splatBudget": 1000000
+          },
+          "unified": true,
+          "assetHasLod": false,
+          "renderer": "WebKit WebGL"
+        }
+      }
+    },
+    "reference": "frame_0010.png",
+    "sourceHash": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+    "browserReportHash": "d6b80f60f799715ccf15d7be072dd964228346477698593351dab5213726dba2",
+    "colour": "raw GL premultiplied RGBA8; vertical flip only; no second alpha, gamma or exposure transform",
+    "sameNativeCanvas": true,
+    "renderer": "gsplat1.5.3 and actual PlayCanvas2.22.4 Chrome SwiftShader",
+    "productionViewerChanged": false,
+    "HarmonyOSTested": false,
+    "published": false,
+    "releaseQualityPassed": false
+  },
+  "neckOrbit": {
+    "assetHash": "d82c752008b19b24943eb5f8fff257c1d794f02ad2c332294c6f1612f0c629de",
+    "pointCount": 50095,
+    "UIDNamespaceUnique": true,
+    "componentCounts": {
+      "0": 26054,
+      "1": 8286,
+      "2": 2917,
+      "3": 5,
+      "4": 12833
+    },
+    "qConservationMax": 7.748603820800781e-07,
+    "orbitSeconds": 2.7596770090000007,
+    "releaseQualityPassed": false,
+    "published": false,
+    "sourceHash": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf"
+  },
+  "hairOrbit": {
+    "assetHash": "a5a2923dfb69f08e34d2945e8424e066dca83d66d02f73d4287006f7427f65ee",
+    "pointCount": 53400,
+    "UIDNamespaceUnique": true,
+    "componentCounts": {
+      "0": 26054,
+      "1": 8286,
+      "2": 6222,
+      "3": 5,
+      "4": 12833
+    },
+    "qConservationMax": 7.748603820800781e-07,
+    "orbitSeconds": 3.020975820000004,
+    "releaseQualityPassed": false,
+    "published": false,
+    "sourceHash": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf"
+  },
+  "published": false,
+  "HarmonyOSTested": false,
+  "originalE1E5Unchanged": true
+}
