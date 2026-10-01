@@ -1,0 +1,10 @@
+Actual command in Ubuntu-22.04:
+/opt/self-reconstruction/venv/bin/python -B -m unittest test_ray_surface test_asset_order test_observation_protection test_reconstruction_continuity_surface test_reconstruction_motion_surface
+Actual tool output:
+----------------------------------------------------------------------
+Ran 37 tests in 3.039s
+
+OK
+
+The observed scalar-conversion warning is from a numeric assertion only.
+GPU forward and gradient tests were executed (not skipped).

@@ -1,0 +1,29 @@
+{
+  "branches": {
+    "control": {
+      "assetHash": "e07b92e1dced68a2aadc0f22671617cc327ce092e27e2fac2864d307cbd77797",
+      "steps": 300,
+      "trainSeconds": 48.09212662800002,
+      "failures": [
+        "cloth_rgb:frame_0115.png"
+      ],
+      "allocatedMiB": 1930.70263671875,
+      "reservedMiB": 2050.0
+    },
+    "surface": {
+      "assetHash": "4916a369ee769d86422d6eb8228f8e6884a3652cc1d43b35b53ffa18111f4f9c",
+      "steps": 300,
+      "trainSeconds": 54.08090345599999,
+      "failures": [
+        "cloth_rgb:frame_0115.png"
+      ],
+      "allocatedMiB": 2081.89453125,
+      "reservedMiB": 2370.0
+    }
+  },
+  "sourceHash": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+  "sameSampleOrder": true,
+  "seconds": 270.499704276,
+  "published": false,
+  "releaseQualityPassed": false
+}

@@ -1,0 +1,95 @@
+{
+  "baselineAsset": "a343ccf05292ce1e174c7fd63795122347a8d03bd0202a19395a9a414b691f41",
+  "baselineCheckpoint": "c3425ba01892940353909dbf3f95d5058ef507e023357ef864d4cb1460cac344",
+  "originalImagesVerified": [
+    {
+      "name": "frame_0005.png",
+      "match": true
+    },
+    {
+      "name": "frame_0006.png",
+      "match": true
+    },
+    {
+      "name": "frame_0010.png",
+      "match": true
+    },
+    {
+      "name": "frame_0012.png",
+      "match": true
+    },
+    {
+      "name": "frame_0013.png",
+      "match": true
+    },
+    {
+      "name": "frame_0025.png",
+      "match": true
+    },
+    {
+      "name": "frame_0027.png",
+      "match": true
+    },
+    {
+      "name": "frame_0028.png",
+      "match": true
+    },
+    {
+      "name": "frame_0027.png",
+      "match": true
+    },
+    {
+      "name": "frame_0028.png",
+      "match": true
+    },
+    {
+      "name": "frame_0038.png",
+      "match": true
+    },
+    {
+      "name": "frame_0039.png",
+      "match": true
+    },
+    {
+      "name": "frame_0042.png",
+      "match": true
+    },
+    {
+      "name": "frame_0052.png",
+      "match": true
+    },
+    {
+      "name": "frame_0119.png",
+      "match": true
+    },
+    {
+      "name": "frame_0122.png",
+      "match": true
+    },
+    {
+      "name": "frame_0119.png",
+      "match": true
+    },
+    {
+      "name": "frame_0122.png",
+      "match": true
+    },
+    {
+      "name": "frame_0134.png",
+      "match": true
+    },
+    {
+      "name": "frame_0139.png",
+      "match": true
+    },
+    {
+      "name": "frame_0147.png",
+      "match": true
+    }
+  ],
+  "PHead": "3dad0cd5651824cc06d9e88d61aabdd2642c0b30",
+  "WStart": "5108b9d2eba12c9b3087b4193377763dba58f282",
+  "productionWritten": false,
+  "deployed": false,
+  "published": false
+}

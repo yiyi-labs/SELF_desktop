@@ -1,0 +1,34 @@
+{
+  "records": {
+    ".sources/observed-ray-surface-20261001-b/control": {
+      "fields": {
+        "model": true,
+        "optimizers": true,
+        "bindings": true,
+        "samplers": true,
+        "rng": true,
+        "strategy": true,
+        "trainable": true
+      },
+      "initialHash": "09f09a33bf7525b7b824bd67711fadb1108b2f07ce9dd5a2b5e17861ee9ff334",
+      "candidateHash": "d38b184742274fa0c028f8c8d77338fe8555c020f70d3fe813c8a74618f75b99",
+      "restoredHash": "f34eb8745cb5666d22eca6d0dc4858e7e9311517bd044ea1b4110b00d3f42d81"
+    },
+    ".sources/observed-ray-surface-20261001-b/surface": {
+      "fields": {
+        "model": true,
+        "optimizers": true,
+        "bindings": true,
+        "samplers": true,
+        "rng": true,
+        "strategy": true,
+        "trainable": true
+      },
+      "initialHash": "a24279356b5418b7718d279d2b32b429ad072ba5ad65c947de10b223d70a6d92",
+      "candidateHash": "67da652b8482c82017d91c103c465b4b37dc0c10110388cf30b9fae39662f088",
+      "restoredHash": "afa43b904e3851368b2308764579be33b3dd3d65fd0e6b032af2aacf2fba055a"
+    }
+  },
+  "published": false,
+  "geometryQualityCertified": false
+}

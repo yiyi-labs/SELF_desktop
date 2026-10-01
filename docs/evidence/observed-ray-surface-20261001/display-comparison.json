@@ -1,0 +1,386 @@
+{
+  "assets": {
+    "baseline": {
+      "assetHash": "a343ccf05292ce1e174c7fd63795122347a8d03bd0202a19395a9a414b691f41",
+      "identityHash": "4d790a3694bd89b91932497cd891b53306ff318fd6c94842bd4a9cf12eb2164a",
+      "pointCount": 50095,
+      "fullRGBMean": 0.09077023714780807,
+      "fullRGBMax": 0.5750417113304138,
+      "fullAlphaMean": 0.09277346730232239,
+      "cameraMatrixMax": 5.446398299024935e-08,
+      "regions": {
+        "face": {
+          "rgb": 0.08969626575708389,
+          "alpha": 0.000535580504219979,
+          "gsplatToSource": 0.09632270038127899,
+          "playcanvasToSource": 0.02521171048283577
+        },
+        "hair": {
+          "rgb": 0.20348873734474182,
+          "alpha": 0.004713559057563543,
+          "gsplatToSource": 0.224790558218956,
+          "playcanvasToSource": 0.04477532580494881
+        },
+        "cloth": {
+          "rgb": 0.02026870846748352,
+          "alpha": 0.014413747936487198,
+          "gsplatToSource": 0.0505625382065773,
+          "playcanvasToSource": 0.05599498376250267
+        },
+        "room": {
+          "rgb": 0.12157674878835678,
+          "alpha": 0.14705951511859894,
+          "gsplatToSource": 0.0257010105997324,
+          "playcanvasToSource": 0.13003243505954742
+        }
+      },
+      "settings": {
+        "version": "2.22.4",
+        "canvas": [
+          1080,
+          1920
+        ],
+        "css": [
+          1080,
+          1920
+        ],
+        "maxPixelRatio": 1,
+        "gamma": 1,
+        "toneMapping": 0,
+        "exposure": 1,
+        "fog": {
+          "type": "none",
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 1
+          },
+          "density": 0,
+          "start": 1,
+          "end": 1000
+        },
+        "postEffects": 0,
+        "context": {
+          "alpha": true,
+          "antialias": false,
+          "depth": true,
+          "desynchronized": false,
+          "failIfMajorPerformanceCaveat": false,
+          "powerPreference": "high-performance",
+          "premultipliedAlpha": true,
+          "preserveDrawingBuffer": true,
+          "stencil": true,
+          "xrCompatible": false
+        },
+        "projection": [
+          2.2019925117492676,
+          0,
+          0,
+          0,
+          0,
+          1.2386207580566406,
+          0,
+          0,
+          0,
+          0,
+          -1,
+          -1,
+          0,
+          0,
+          -0.2670884132385254,
+          0
+        ],
+        "world": [
+          0.8291066884994507,
+          -0.06702034920454025,
+          -0.5550588369369507,
+          0,
+          -0.07346988469362259,
+          -0.9972403645515442,
+          0.010667387396097183,
+          0,
+          -0.5542420148849487,
+          0.03193570673465729,
+          -0.8317427039146423,
+          0,
+          -0.20307843387126923,
+          0.2206445336341858,
+          -1.6191157102584839,
+          1
+        ],
+        "count": 50095,
+        "resourceType": "GSplatResource",
+        "gsplatSettings": {
+          "antiAlias": false,
+          "dataFormat": "compact",
+          "currentRenderer": 1,
+          "minPixelSize": 2,
+          "radialSorting": false,
+          "splatBudget": 1000000
+        },
+        "unified": true,
+        "assetHasLod": false,
+        "renderer": "WebKit WebGL"
+      }
+    },
+    "control": {
+      "assetHash": "e07b92e1dced68a2aadc0f22671617cc327ce092e27e2fac2864d307cbd77797",
+      "identityHash": "6a6db76097e8eeb174db266fff2743146cc7c14d90c637f47c385f64cfe117ef",
+      "pointCount": 50095,
+      "fullRGBMean": 0.09074278920888901,
+      "fullRGBMax": 0.57649165391922,
+      "fullAlphaMean": 0.09941408038139343,
+      "cameraMatrixMax": 5.446398299024935e-08,
+      "regions": {
+        "face": {
+          "rgb": 0.08435345441102982,
+          "alpha": 0.0005663142073899508,
+          "gsplatToSource": 0.09112140536308289,
+          "playcanvasToSource": 0.025346664711833
+        },
+        "hair": {
+          "rgb": 0.20109014213085175,
+          "alpha": 0.004820878151804209,
+          "gsplatToSource": 0.2215157151222229,
+          "playcanvasToSource": 0.04411426931619644
+        },
+        "cloth": {
+          "rgb": 0.02296050637960434,
+          "alpha": 0.016494208946824074,
+          "gsplatToSource": 0.04721919447183609,
+          "playcanvasToSource": 0.05358678102493286
+        },
+        "room": {
+          "rgb": 0.1210961863398552,
+          "alpha": 0.1568240374326706,
+          "gsplatToSource": 0.0226578488945961,
+          "playcanvasToSource": 0.12959830462932587
+        }
+      },
+      "settings": {
+        "version": "2.22.4",
+        "canvas": [
+          1080,
+          1920
+        ],
+        "css": [
+          1080,
+          1920
+        ],
+        "maxPixelRatio": 1,
+        "gamma": 1,
+        "toneMapping": 0,
+        "exposure": 1,
+        "fog": {
+          "type": "none",
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 1
+          },
+          "density": 0,
+          "start": 1,
+          "end": 1000
+        },
+        "postEffects": 0,
+        "context": {
+          "alpha": true,
+          "antialias": false,
+          "depth": true,
+          "desynchronized": false,
+          "failIfMajorPerformanceCaveat": false,
+          "powerPreference": "high-performance",
+          "premultipliedAlpha": true,
+          "preserveDrawingBuffer": true,
+          "stencil": true,
+          "xrCompatible": false
+        },
+        "projection": [
+          2.2019925117492676,
+          0,
+          0,
+          0,
+          0,
+          1.2386207580566406,
+          0,
+          0,
+          0,
+          0,
+          -1,
+          -1,
+          0,
+          0,
+          -0.2670884132385254,
+          0
+        ],
+        "world": [
+          0.8291066884994507,
+          -0.06702034920454025,
+          -0.5550588369369507,
+          0,
+          -0.07346988469362259,
+          -0.9972403645515442,
+          0.010667387396097183,
+          0,
+          -0.5542420148849487,
+          0.03193570673465729,
+          -0.8317427039146423,
+          0,
+          -0.20307843387126923,
+          0.2206445336341858,
+          -1.6191157102584839,
+          1
+        ],
+        "count": 50095,
+        "resourceType": "GSplatResource",
+        "gsplatSettings": {
+          "antiAlias": false,
+          "dataFormat": "compact",
+          "currentRenderer": 1,
+          "minPixelSize": 2,
+          "radialSorting": false,
+          "splatBudget": 1000000
+        },
+        "unified": true,
+        "assetHasLod": false,
+        "renderer": "WebKit WebGL"
+      }
+    },
+    "surface": {
+      "assetHash": "4916a369ee769d86422d6eb8228f8e6884a3652cc1d43b35b53ffa18111f4f9c",
+      "identityHash": "7da6fe0b45bcd41d867c073401bb62541dd3b6cf6ab88af81d040c01d4476389",
+      "pointCount": 50095,
+      "fullRGBMean": 0.08728315681219101,
+      "fullRGBMax": 0.5706958770751953,
+      "fullAlphaMean": 0.08184496313333511,
+      "cameraMatrixMax": 5.446398299024935e-08,
+      "regions": {
+        "face": {
+          "rgb": 0.07747577130794525,
+          "alpha": 0.0005745318485423923,
+          "gsplatToSource": 0.08435166627168655,
+          "playcanvasToSource": 0.025204116478562355
+        },
+        "hair": {
+          "rgb": 0.18955545127391815,
+          "alpha": 0.0047140647657215595,
+          "gsplatToSource": 0.20935115218162537,
+          "playcanvasToSource": 0.04351487010717392
+        },
+        "cloth": {
+          "rgb": 0.02098645456135273,
+          "alpha": 0.012495886534452438,
+          "gsplatToSource": 0.047338876873254776,
+          "playcanvasToSource": 0.05360504612326622
+        },
+        "room": {
+          "rgb": 0.11766435950994492,
+          "alpha": 0.1301133632659912,
+          "gsplatToSource": 0.023531412705779076,
+          "playcanvasToSource": 0.12760233879089355
+        }
+      },
+      "settings": {
+        "version": "2.22.4",
+        "canvas": [
+          1080,
+          1920
+        ],
+        "css": [
+          1080,
+          1920
+        ],
+        "maxPixelRatio": 1,
+        "gamma": 1,
+        "toneMapping": 0,
+        "exposure": 1,
+        "fog": {
+          "type": "none",
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 1
+          },
+          "density": 0,
+          "start": 1,
+          "end": 1000
+        },
+        "postEffects": 0,
+        "context": {
+          "alpha": true,
+          "antialias": false,
+          "depth": true,
+          "desynchronized": false,
+          "failIfMajorPerformanceCaveat": false,
+          "powerPreference": "high-performance",
+          "premultipliedAlpha": true,
+          "preserveDrawingBuffer": true,
+          "stencil": true,
+          "xrCompatible": false
+        },
+        "projection": [
+          2.2019925117492676,
+          0,
+          0,
+          0,
+          0,
+          1.2386207580566406,
+          0,
+          0,
+          0,
+          0,
+          -1,
+          -1,
+          0,
+          0,
+          -0.2670884132385254,
+          0
+        ],
+        "world": [
+          0.8291066884994507,
+          -0.06702034920454025,
+          -0.5550588369369507,
+          0,
+          -0.07346988469362259,
+          -0.9972403645515442,
+          0.010667387396097183,
+          0,
+          -0.5542420148849487,
+          0.03193570673465729,
+          -0.8317427039146423,
+          0,
+          -0.20307843387126923,
+          0.2206445336341858,
+          -1.6191157102584839,
+          1
+        ],
+        "count": 50095,
+        "resourceType": "GSplatResource",
+        "gsplatSettings": {
+          "antiAlias": false,
+          "dataFormat": "compact",
+          "currentRenderer": 1,
+          "minPixelSize": 2,
+          "radialSorting": false,
+          "splatBudget": 1000000
+        },
+        "unified": true,
+        "assetHasLod": false,
+        "renderer": "WebKit WebGL"
+      }
+    }
+  },
+  "reference": "frame_0010.png",
+  "sourceHash": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+  "browserReportHash": "17b5b9a027ddc0b08c8a179c2019ed5246c05bee100acc90039933ada3e71072",
+  "colour": "raw GL premultiplied RGBA8; vertical flip only; no second alpha, gamma or exposure transform",
+  "sameNativeCanvas": true,
+  "renderer": "gsplat1.5.3 and actual PlayCanvas2.22.4 Chrome SwiftShader",
+  "productionViewerChanged": false,
+  "HarmonyOSTested": false,
+  "published": false,
+  "releaseQualityPassed": false
+}

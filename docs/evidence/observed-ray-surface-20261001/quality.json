@@ -1,0 +1,1997 @@
+{
+  "rows": {
+    "frame_0010.png": {
+      "neck": {
+        "baseline": {
+          "rgb": 0.04973683878779411,
+          "positiveLuminanceBias": 0.043607044292199214,
+          "brightOvershoot015": 0.03266442229410082,
+          "holes": 0.0,
+          "roomContribution": 0.15602411329746246,
+          "pixels": 90894
+        },
+        "control": {
+          "rgb": 0.03640028089284897,
+          "positiveLuminanceBias": 0.03361596880666042,
+          "brightOvershoot015": 0.011298875613351817,
+          "holes": 0.0,
+          "roomContribution": 0.1625259816646576,
+          "pixels": 90894
+        },
+        "surface": {
+          "rgb": 0.03623711317777634,
+          "positiveLuminanceBias": 0.033529509166772505,
+          "brightOvershoot015": 0.010979822650559993,
+          "holes": 0.0,
+          "roomContribution": 0.14808233082294464,
+          "pixels": 90894
+        }
+      },
+      "other_body_skin": {
+        "baseline": {
+          "rgb": 0.09773827344179153,
+          "positiveLuminanceBias": 0.0288475743003765,
+          "brightOvershoot015": 0.04806918744971842,
+          "holes": 0.0,
+          "roomContribution": 0.3272990882396698,
+          "pixels": 4972
+        },
+        "control": {
+          "rgb": 0.0969480350613594,
+          "positiveLuminanceBias": 0.027706812650287165,
+          "brightOvershoot015": 0.028761061946902654,
+          "holes": 0.0,
+          "roomContribution": 0.33260786533355713,
+          "pixels": 4972
+        },
+        "surface": {
+          "rgb": 0.09762707352638245,
+          "positiveLuminanceBias": 0.02765912130988073,
+          "brightOvershoot015": 0.02775543041029767,
+          "holes": 0.0,
+          "roomContribution": 0.29183611273765564,
+          "pixels": 4972
+        }
+      },
+      "cloth": {
+        "baseline": {
+          "rgb": 0.05012831091880798,
+          "positiveLuminanceBias": 0.01266166206865391,
+          "brightOvershoot015": 0.02275402785392203,
+          "holes": 0.0011602259253120498,
+          "roomContribution": 0.10703472048044205,
+          "pixels": 470598
+        },
+        "control": {
+          "rgb": 0.04867628589272499,
+          "positiveLuminanceBias": 0.012505966132019944,
+          "brightOvershoot015": 0.021034938525025606,
+          "holes": 4.88739858647933e-05,
+          "roomContribution": 0.1262216717004776,
+          "pixels": 470598
+        },
+        "surface": {
+          "rgb": 0.04884523153305054,
+          "positiveLuminanceBias": 0.012352037680879994,
+          "brightOvershoot015": 0.020809693198866122,
+          "holes": 0.0006884857139214361,
+          "roomContribution": 0.0988028347492218,
+          "pixels": 470598
+        }
+      },
+      "hair": {
+        "baseline": {
+          "rgb": 0.22479060292243958,
+          "positiveLuminanceBias": 0.2224153595964377,
+          "brightOvershoot015": 0.888496318624302,
+          "holes": 0.0,
+          "roomContribution": 0.4221923351287842,
+          "pixels": 40474
+        },
+        "control": {
+          "rgb": 0.2215156853199005,
+          "positiveLuminanceBias": 0.21938342613782355,
+          "brightOvershoot015": 0.8818994910312793,
+          "holes": 0.0,
+          "roomContribution": 0.41939714550971985,
+          "pixels": 40474
+        },
+        "surface": {
+          "rgb": 0.20935112237930298,
+          "positiveLuminanceBias": 0.20702071416598825,
+          "brightOvershoot015": 0.8453822206848841,
+          "holes": 0.0,
+          "roomContribution": 0.38754600286483765,
+          "pixels": 40474
+        }
+      },
+      "room": {
+        "baseline": {
+          "rgb": 0.025701003149151802,
+          "positiveLuminanceBias": 0.013225418155422169,
+          "brightOvershoot015": 0.011996864739468836,
+          "holes": 0.0,
+          "roomContribution": 0.9202390909194946,
+          "pixels": 1201814
+        },
+        "control": {
+          "rgb": 0.0226578488945961,
+          "positiveLuminanceBias": 0.010313714472952394,
+          "brightOvershoot015": 0.01081032505861972,
+          "holes": 0.0,
+          "roomContribution": 0.9313747882843018,
+          "pixels": 1201814
+        },
+        "surface": {
+          "rgb": 0.023531412705779076,
+          "positiveLuminanceBias": 0.010402840753095496,
+          "brightOvershoot015": 0.01130041753549218,
+          "holes": 0.0037010718796752244,
+          "roomContribution": 0.9159035086631775,
+          "pixels": 1201814
+        }
+      },
+      "face": {
+        "baseline": {
+          "rgb": 0.09610452502965927,
+          "positiveLuminanceBias": 0.09193529518328822,
+          "brightOvershoot015": 0.08154954716731672,
+          "holes": 0.0,
+          "roomContribution": 0.2727258801460266,
+          "pixels": 151270
+        },
+        "control": {
+          "rgb": 0.09089700877666473,
+          "positiveLuminanceBias": 0.0869574286414948,
+          "brightOvershoot015": 0.07374892576188273,
+          "holes": 0.0,
+          "roomContribution": 0.26026806235313416,
+          "pixels": 151270
+        },
+        "surface": {
+          "rgb": 0.08411470800638199,
+          "positiveLuminanceBias": 0.08007627778490577,
+          "brightOvershoot015": 0.06197527599656244,
+          "holes": 0.0,
+          "roomContribution": 0.22799167037010193,
+          "pixels": 151270
+        }
+      },
+      "low_texture_room": {
+        "baseline": {
+          "rgb": 0.023462634533643723,
+          "positiveLuminanceBias": 0.011296284329564723,
+          "brightOvershoot015": 0.006202486211949613,
+          "holes": 0.0,
+          "roomContribution": 0.9170729517936707,
+          "pixels": 1111651
+        },
+        "control": {
+          "rgb": 0.02039698138833046,
+          "positiveLuminanceBias": 0.00836290741930071,
+          "brightOvershoot015": 0.005494530207772044,
+          "holes": 0.0,
+          "roomContribution": 0.9284637570381165,
+          "pixels": 1111651
+        },
+        "surface": {
+          "rgb": 0.021326804533600807,
+          "positiveLuminanceBias": 0.008388272155911602,
+          "brightOvershoot015": 0.005940713407355366,
+          "holes": 0.003819544083529813,
+          "roomContribution": 0.912196695804596,
+          "pixels": 1111651
+        }
+      }
+    },
+    "frame_0005.png": {
+      "neck": {
+        "baseline": {
+          "rgb": 0.08083483576774597,
+          "positiveLuminanceBias": 0.07708696446020934,
+          "brightOvershoot015": 0.1574755822689707,
+          "holes": 0.0,
+          "roomContribution": 0.2326829433441162,
+          "pixels": 93170
+        },
+        "control": {
+          "rgb": 0.061113543808460236,
+          "positiveLuminanceBias": 0.059918880036162296,
+          "brightOvershoot015": 0.06240206074916819,
+          "holes": 0.0,
+          "roomContribution": 0.22616936266422272,
+          "pixels": 93170
+        },
+        "surface": {
+          "rgb": 0.05901379510760307,
+          "positiveLuminanceBias": 0.05756603196242237,
+          "brightOvershoot015": 0.059783192014596975,
+          "holes": 0.0,
+          "roomContribution": 0.20331938564777374,
+          "pixels": 93170
+        }
+      },
+      "other_body_skin": {
+        "baseline": {
+          "rgb": 0.14612577855587006,
+          "positiveLuminanceBias": 0.14822109355137156,
+          "brightOvershoot015": 0.5135135135135135,
+          "holes": 0.0,
+          "roomContribution": 0.37730076909065247,
+          "pixels": 37
+        },
+        "control": {
+          "rgb": 0.11694757640361786,
+          "positiveLuminanceBias": 0.11960835424387774,
+          "brightOvershoot015": 0.0,
+          "holes": 0.0,
+          "roomContribution": 0.34033671021461487,
+          "pixels": 37
+        },
+        "surface": {
+          "rgb": 0.11397287249565125,
+          "positiveLuminanceBias": 0.11665544283035638,
+          "brightOvershoot015": 0.0,
+          "holes": 0.0,
+          "roomContribution": 0.3179360330104828,
+          "pixels": 37
+        }
+      },
+      "cloth": {
+        "baseline": {
+          "rgb": 0.09598083794116974,
+          "positiveLuminanceBias": 0.08159179264592677,
+          "brightOvershoot015": 0.15328689192074352,
+          "holes": 0.049950025412408436,
+          "roomContribution": 0.2547934949398041,
+          "pixels": 529269
+        },
+        "control": {
+          "rgb": 0.0902930200099945,
+          "positiveLuminanceBias": 0.07724349849950027,
+          "brightOvershoot015": 0.14404206556590315,
+          "holes": 0.035777648039087874,
+          "roomContribution": 0.2681305706501007,
+          "pixels": 529269
+        },
+        "surface": {
+          "rgb": 0.0911293551325798,
+          "positiveLuminanceBias": 0.07734995759811737,
+          "brightOvershoot015": 0.1446617882400065,
+          "holes": 0.055663566163897754,
+          "roomContribution": 0.21553568542003632,
+          "pixels": 529269
+        }
+      },
+      "hair": {
+        "baseline": {
+          "rgb": 0.21305182576179504,
+          "positiveLuminanceBias": 0.21135434374913448,
+          "brightOvershoot015": 0.852325381843144,
+          "holes": 0.0,
+          "roomContribution": 0.4132872223854065,
+          "pixels": 34962
+        },
+        "control": {
+          "rgb": 0.21014751493930817,
+          "positiveLuminanceBias": 0.20880540107404208,
+          "brightOvershoot015": 0.8501801956409817,
+          "holes": 0.0,
+          "roomContribution": 0.4109360873699188,
+          "pixels": 34962
+        },
+        "surface": {
+          "rgb": 0.1948941946029663,
+          "positiveLuminanceBias": 0.19315530092196628,
+          "brightOvershoot015": 0.8284995137577942,
+          "holes": 0.0,
+          "roomContribution": 0.37092292308807373,
+          "pixels": 34962
+        }
+      },
+      "room": {
+        "baseline": {
+          "rgb": 0.03704860433936119,
+          "positiveLuminanceBias": 0.019718095699636676,
+          "brightOvershoot015": 0.042681776254180896,
+          "holes": 0.008937089315601334,
+          "roomContribution": 0.9200582504272461,
+          "pixels": 1139409
+        },
+        "control": {
+          "rgb": 0.03417593240737915,
+          "positiveLuminanceBias": 0.01664017611470496,
+          "brightOvershoot015": 0.04086241200482004,
+          "holes": 7.898831762782284e-06,
+          "roomContribution": 0.9303553700447083,
+          "pixels": 1139409
+        },
+        "surface": {
+          "rgb": 0.03436374291777611,
+          "positiveLuminanceBias": 0.01613620300785223,
+          "brightOvershoot015": 0.0396073754025113,
+          "holes": 0.02209654303239662,
+          "roomContribution": 0.912074863910675,
+          "pixels": 1139409
+        }
+      },
+      "face": {
+        "baseline": {
+          "rgb": 0.11497875303030014,
+          "positiveLuminanceBias": 0.11283695722500345,
+          "brightOvershoot015": 0.1082502682686284,
+          "holes": 0.0,
+          "roomContribution": 0.3248485028743744,
+          "pixels": 161219
+        },
+        "control": {
+          "rgb": 0.11056723445653915,
+          "positiveLuminanceBias": 0.10878748740294131,
+          "brightOvershoot015": 0.09665113913372493,
+          "holes": 0.0,
+          "roomContribution": 0.31682834029197693,
+          "pixels": 161219
+        },
+        "surface": {
+          "rgb": 0.1051771491765976,
+          "positiveLuminanceBias": 0.10335830262317273,
+          "brightOvershoot015": 0.07950055514548533,
+          "holes": 0.0,
+          "roomContribution": 0.2885379493236542,
+          "pixels": 161219
+        }
+      },
+      "low_texture_room": {
+        "baseline": {
+          "rgb": 0.034517377614974976,
+          "positiveLuminanceBias": 0.017077829918660345,
+          "brightOvershoot015": 0.03463280933588268,
+          "holes": 0.009081575948234452,
+          "roomContribution": 0.9177576899528503,
+          "pixels": 1061710
+        },
+        "control": {
+          "rgb": 0.031703852117061615,
+          "positiveLuminanceBias": 0.014069345064702306,
+          "brightOvershoot015": 0.03326614612276422,
+          "holes": 0.0,
+          "roomContribution": 0.9281923174858093,
+          "pixels": 1061710
+        },
+        "surface": {
+          "rgb": 0.03197126463055611,
+          "positiveLuminanceBias": 0.013515169820328344,
+          "brightOvershoot015": 0.032290361774872614,
+          "holes": 0.022330014787465505,
+          "roomContribution": 0.9091196060180664,
+          "pixels": 1061710
+        }
+      }
+    },
+    "frame_0006.png": {
+      "neck": {
+        "baseline": {
+          "rgb": 0.0734824612736702,
+          "positiveLuminanceBias": 0.06959552711162685,
+          "brightOvershoot015": 0.12683977119352144,
+          "holes": 0.0,
+          "roomContribution": 0.21806630492210388,
+          "pixels": 93354
+        },
+        "control": {
+          "rgb": 0.05480910837650299,
+          "positiveLuminanceBias": 0.05323914032264821,
+          "brightOvershoot015": 0.04283694324828074,
+          "holes": 0.0,
+          "roomContribution": 0.21412856876850128,
+          "pixels": 93354
+        },
+        "surface": {
+          "rgb": 0.05334029719233513,
+          "positiveLuminanceBias": 0.051473208806746516,
+          "brightOvershoot015": 0.04104805364526426,
+          "holes": 0.0,
+          "roomContribution": 0.19370371103286743,
+          "pixels": 93354
+        }
+      },
+      "other_body_skin": {
+        "baseline": {
+          "rgb": 0.16454100608825684,
+          "positiveLuminanceBias": 0.1629694594640967,
+          "brightOvershoot015": 0.8591549295774648,
+          "holes": 0.0,
+          "roomContribution": 0.3765060007572174,
+          "pixels": 71
+        },
+        "control": {
+          "rgb": 0.13633780181407928,
+          "positiveLuminanceBias": 0.1351041646222833,
+          "brightOvershoot015": 0.22535211267605634,
+          "holes": 0.0,
+          "roomContribution": 0.34145355224609375,
+          "pixels": 71
+        },
+        "surface": {
+          "rgb": 0.1277279555797577,
+          "positiveLuminanceBias": 0.12662079471450455,
+          "brightOvershoot015": 0.028169014084507043,
+          "holes": 0.0,
+          "roomContribution": 0.3086996078491211,
+          "pixels": 71
+        }
+      },
+      "cloth": {
+        "baseline": {
+          "rgb": 0.08075778186321259,
+          "positiveLuminanceBias": 0.06954764515772933,
+          "brightOvershoot015": 0.10673570528079758,
+          "holes": 0.02910008475377965,
+          "roomContribution": 0.23132772743701935,
+          "pixels": 517971
+        },
+        "control": {
+          "rgb": 0.07585921883583069,
+          "positiveLuminanceBias": 0.06586373029469716,
+          "brightOvershoot015": 0.10484949929629266,
+          "holes": 0.019848601562635747,
+          "roomContribution": 0.24508213996887207,
+          "pixels": 517971
+        },
+        "surface": {
+          "rgb": 0.07651934027671814,
+          "positiveLuminanceBias": 0.06610685981759659,
+          "brightOvershoot015": 0.10514488262856415,
+          "holes": 0.031901399885321764,
+          "roomContribution": 0.19216156005859375,
+          "pixels": 517971
+        }
+      },
+      "hair": {
+        "baseline": {
+          "rgb": 0.21185457706451416,
+          "positiveLuminanceBias": 0.20965228510284836,
+          "brightOvershoot015": 0.8403572117637331,
+          "holes": 0.0,
+          "roomContribution": 0.41553807258605957,
+          "pixels": 36281
+        },
+        "control": {
+          "rgb": 0.20877744257450104,
+          "positiveLuminanceBias": 0.20691784381208372,
+          "brightOvershoot015": 0.838427827237397,
+          "holes": 0.0,
+          "roomContribution": 0.4128967821598053,
+          "pixels": 36281
+        },
+        "surface": {
+          "rgb": 0.19334985315799713,
+          "positiveLuminanceBias": 0.1910864902792199,
+          "brightOvershoot015": 0.8136214547559328,
+          "holes": 0.0,
+          "roomContribution": 0.37346887588500977,
+          "pixels": 36281
+        }
+      },
+      "room": {
+        "baseline": {
+          "rgb": 0.03429090604186058,
+          "positiveLuminanceBias": 0.016914800469409203,
+          "brightOvershoot015": 0.035206249345202376,
+          "holes": 0.001439905380120301,
+          "roomContribution": 0.9206944704055786,
+          "pixels": 1154937
+        },
+        "control": {
+          "rgb": 0.031609050929546356,
+          "positiveLuminanceBias": 0.013889373829777986,
+          "brightOvershoot015": 0.03319921346359152,
+          "holes": 0.0,
+          "roomContribution": 0.9308969974517822,
+          "pixels": 1154937
+        },
+        "surface": {
+          "rgb": 0.03209277614951134,
+          "positiveLuminanceBias": 0.013452120091411208,
+          "brightOvershoot015": 0.03212902521955743,
+          "holes": 0.009071490479567283,
+          "roomContribution": 0.9132068753242493,
+          "pixels": 1154937
+        }
+      },
+      "face": {
+        "baseline": {
+          "rgb": 0.11223343759775162,
+          "positiveLuminanceBias": 0.1106696542529575,
+          "brightOvershoot015": 0.09606403851337375,
+          "holes": 0.0,
+          "roomContribution": 0.3152654767036438,
+          "pixels": 159529
+        },
+        "control": {
+          "rgb": 0.10750733315944672,
+          "positiveLuminanceBias": 0.10631423112116023,
+          "brightOvershoot015": 0.08574616527402541,
+          "holes": 0.0,
+          "roomContribution": 0.30620479583740234,
+          "pixels": 159529
+        },
+        "surface": {
+          "rgb": 0.10230905562639236,
+          "positiveLuminanceBias": 0.10108209067562414,
+          "brightOvershoot015": 0.07267644127400034,
+          "holes": 0.0,
+          "roomContribution": 0.27889782190322876,
+          "pixels": 159529
+        }
+      },
+      "low_texture_room": {
+        "baseline": {
+          "rgb": 0.03158505633473396,
+          "positiveLuminanceBias": 0.014210673786738813,
+          "brightOvershoot015": 0.0268255819055452,
+          "holes": 0.0013247085687826217,
+          "roomContribution": 0.9181671738624573,
+          "pixels": 1071179
+        },
+        "control": {
+          "rgb": 0.028972318395972252,
+          "positiveLuminanceBias": 0.011274718846167604,
+          "brightOvershoot015": 0.025413119562650126,
+          "holes": 0.0,
+          "roomContribution": 0.9285182952880859,
+          "pixels": 1071179
+        },
+        "surface": {
+          "rgb": 0.02956206724047661,
+          "positiveLuminanceBias": 0.010805046008941952,
+          "brightOvershoot015": 0.024594395521196737,
+          "holes": 0.009248687660979164,
+          "roomContribution": 0.9099872708320618,
+          "pixels": 1071179
+        }
+      }
+    },
+    "frame_0012.png": {
+      "neck": {
+        "baseline": {
+          "rgb": 0.04629050940275192,
+          "positiveLuminanceBias": 0.013454100855396644,
+          "brightOvershoot015": 0.004929061480050623,
+          "holes": 0.0,
+          "roomContribution": 0.12230328470468521,
+          "pixels": 90078
+        },
+        "control": {
+          "rgb": 0.03717869892716408,
+          "positiveLuminanceBias": 0.007816109654646488,
+          "brightOvershoot015": 0.0014431936765913985,
+          "holes": 0.0,
+          "roomContribution": 0.13504008948802948,
+          "pixels": 90078
+        },
+        "surface": {
+          "rgb": 0.03695271164178848,
+          "positiveLuminanceBias": 0.007669315344735624,
+          "brightOvershoot015": 0.0013765847376717955,
+          "holes": 0.0,
+          "roomContribution": 0.11639253795146942,
+          "pixels": 90078
+        }
+      },
+      "other_body_skin": {
+        "baseline": {
+          "rgb": 0.1056164801120758,
+          "positiveLuminanceBias": 0.04744985134549156,
+          "brightOvershoot015": 0.1115918514512349,
+          "holes": 0.14025599423111593,
+          "roomContribution": 0.2800087034702301,
+          "pixels": 11094
+        },
+        "control": {
+          "rgb": 0.10690760612487793,
+          "positiveLuminanceBias": 0.04864193422588648,
+          "brightOvershoot015": 0.10897782585181179,
+          "holes": 0.041463854335676946,
+          "roomContribution": 0.29419413208961487,
+          "pixels": 11094
+        },
+        "surface": {
+          "rgb": 0.1070052906870842,
+          "positiveLuminanceBias": 0.048187008084034956,
+          "brightOvershoot015": 0.1074454660176672,
+          "holes": 0.167658193618172,
+          "roomContribution": 0.2648090124130249,
+          "pixels": 11094
+        }
+      },
+      "cloth": {
+        "baseline": {
+          "rgb": 0.0698682889342308,
+          "positiveLuminanceBias": 0.008774949306360764,
+          "brightOvershoot015": 0.015057908143850366,
+          "holes": 0.0001835511324209499,
+          "roomContribution": 0.05940297245979309,
+          "pixels": 446742
+        },
+        "control": {
+          "rgb": 0.06668320298194885,
+          "positiveLuminanceBias": 0.008256156226814285,
+          "brightOvershoot015": 0.014294604044392513,
+          "holes": 0.0,
+          "roomContribution": 0.07356219738721848,
+          "pixels": 446742
+        },
+        "surface": {
+          "rgb": 0.06763028353452682,
+          "positiveLuminanceBias": 0.008199896913030311,
+          "brightOvershoot015": 0.014245358618621038,
+          "holes": 3.581485510652681e-05,
+          "roomContribution": 0.05704646185040474,
+          "pixels": 446742
+        }
+      },
+      "hair": {
+        "baseline": {
+          "rgb": 0.21382644772529602,
+          "positiveLuminanceBias": 0.21157859863862205,
+          "brightOvershoot015": 0.8969025058919725,
+          "holes": 0.0,
+          "roomContribution": 0.3944765627384186,
+          "pixels": 41582
+        },
+        "control": {
+          "rgb": 0.20909905433654785,
+          "positiveLuminanceBias": 0.20710109931324688,
+          "brightOvershoot015": 0.8876196431148093,
+          "holes": 0.0,
+          "roomContribution": 0.38918420672416687,
+          "pixels": 41582
+        },
+        "surface": {
+          "rgb": 0.19614045321941376,
+          "positiveLuminanceBias": 0.19396497573922097,
+          "brightOvershoot015": 0.8438026068972151,
+          "holes": 0.0,
+          "roomContribution": 0.35671940445899963,
+          "pixels": 41582
+        }
+      },
+      "room": {
+        "baseline": {
+          "rgb": 0.032425105571746826,
+          "positiveLuminanceBias": 0.026398123292261613,
+          "brightOvershoot015": 0.010170210108751737,
+          "holes": 0.0006055457141824229,
+          "roomContribution": 0.9139927625656128,
+          "pixels": 1217084
+        },
+        "control": {
+          "rgb": 0.02807203307747841,
+          "positiveLuminanceBias": 0.02235973596001475,
+          "brightOvershoot015": 0.008913107065740737,
+          "holes": 0.0003491952897252778,
+          "roomContribution": 0.9255980849266052,
+          "pixels": 1217084
+        },
+        "surface": {
+          "rgb": 0.028771929442882538,
+          "positiveLuminanceBias": 0.0226227955060445,
+          "brightOvershoot015": 0.009240118184118762,
+          "holes": 0.0005702153672219831,
+          "roomContribution": 0.9141559600830078,
+          "pixels": 1217084
+        }
+      },
+      "face": {
+        "baseline": {
+          "rgb": 0.08337271213531494,
+          "positiveLuminanceBias": 0.07923084749605272,
+          "brightOvershoot015": 0.06725472350151576,
+          "holes": 0.0,
+          "roomContribution": 0.22468481957912445,
+          "pixels": 146131
+        },
+        "control": {
+          "rgb": 0.07901489734649658,
+          "positiveLuminanceBias": 0.07511624682435408,
+          "brightOvershoot015": 0.059870937720264694,
+          "holes": 0.0,
+          "roomContribution": 0.2143128514289856,
+          "pixels": 146131
+        },
+        "surface": {
+          "rgb": 0.0707678273320198,
+          "positiveLuminanceBias": 0.0667279459309999,
+          "brightOvershoot015": 0.042940922870575035,
+          "holes": 0.0,
+          "roomContribution": 0.17871929705142975,
+          "pixels": 146131
+        }
+      },
+      "low_texture_room": {
+        "baseline": {
+          "rgb": 0.030710289254784584,
+          "positiveLuminanceBias": 0.024944021995344675,
+          "brightOvershoot015": 0.00496387329391808,
+          "holes": 0.000594422717949082,
+          "roomContribution": 0.910284161567688,
+          "pixels": 1127144
+        },
+        "control": {
+          "rgb": 0.02630266733467579,
+          "positiveLuminanceBias": 0.020834769438698757,
+          "brightOvershoot015": 0.004235483664908832,
+          "holes": 0.0003282632920017318,
+          "roomContribution": 0.9221226572990417,
+          "pixels": 1127144
+        },
+        "surface": {
+          "rgb": 0.026982011273503304,
+          "positiveLuminanceBias": 0.021006401391089415,
+          "brightOvershoot015": 0.004459057582704606,
+          "holes": 0.0005580475964029441,
+          "roomContribution": 0.9101375341415405,
+          "pixels": 1127144
+        }
+      }
+    },
+    "frame_0013.png": {
+      "neck": {
+        "baseline": {
+          "rgb": 0.06265098601579666,
+          "positiveLuminanceBias": 0.006052660467211001,
+          "brightOvershoot015": 0.002241385021364926,
+          "holes": 0.0,
+          "roomContribution": 0.08892486989498138,
+          "pixels": 90569
+        },
+        "control": {
+          "rgb": 0.05586947128176689,
+          "positiveLuminanceBias": 0.002684897909939001,
+          "brightOvershoot015": 0.0008391392198213517,
+          "holes": 0.0,
+          "roomContribution": 0.10134702175855637,
+          "pixels": 90569
+        },
+        "surface": {
+          "rgb": 0.055338405072689056,
+          "positiveLuminanceBias": 0.0026253387731665924,
+          "brightOvershoot015": 0.0008060153032494562,
+          "holes": 0.0,
+          "roomContribution": 0.0907389372587204,
+          "pixels": 90569
+        }
+      },
+      "other_body_skin": {
+        "baseline": {
+          "rgb": 0.11326650530099869,
+          "positiveLuminanceBias": 0.06144889242495563,
+          "brightOvershoot015": 0.15062507585872073,
+          "holes": 0.3465226362422624,
+          "roomContribution": 0.2797180116176605,
+          "pixels": 16478
+        },
+        "control": {
+          "rgb": 0.11567987501621246,
+          "positiveLuminanceBias": 0.06253091743927724,
+          "brightOvershoot015": 0.15062507585872073,
+          "holes": 0.22757616215560142,
+          "roomContribution": 0.2955058813095093,
+          "pixels": 16478
+        },
+        "surface": {
+          "rgb": 0.11543120443820953,
+          "positiveLuminanceBias": 0.06202278725851369,
+          "brightOvershoot015": 0.1454059958732856,
+          "holes": 0.3545940041267144,
+          "roomContribution": 0.27089089155197144,
+          "pixels": 16478
+        }
+      },
+      "cloth": {
+        "baseline": {
+          "rgb": 0.09329450130462646,
+          "positiveLuminanceBias": 0.008381975902735914,
+          "brightOvershoot015": 0.01708026429558937,
+          "holes": 5.548542813943488e-05,
+          "roomContribution": 0.03691714257001877,
+          "pixels": 432546
+        },
+        "control": {
+          "rgb": 0.08962876349687576,
+          "positiveLuminanceBias": 0.00774545507311257,
+          "brightOvershoot015": 0.015861896769360947,
+          "holes": 0.0,
+          "roomContribution": 0.04830378293991089,
+          "pixels": 432546
+        },
+        "surface": {
+          "rgb": 0.0903496965765953,
+          "positiveLuminanceBias": 0.007559121072627504,
+          "brightOvershoot015": 0.015804099448382368,
+          "holes": 0.00027049146217974503,
+          "roomContribution": 0.037980638444423676,
+          "pixels": 432546
+        }
+      },
+      "hair": {
+        "baseline": {
+          "rgb": 0.20484499633312225,
+          "positiveLuminanceBias": 0.20296175865833913,
+          "brightOvershoot015": 0.8910098522167488,
+          "holes": 0.0,
+          "roomContribution": 0.37589436769485474,
+          "pixels": 42224
+        },
+        "control": {
+          "rgb": 0.20103347301483154,
+          "positiveLuminanceBias": 0.1993538519923532,
+          "brightOvershoot015": 0.879784009094354,
+          "holes": 0.0,
+          "roomContribution": 0.3719845116138458,
+          "pixels": 42224
+        },
+        "surface": {
+          "rgb": 0.17432136833667755,
+          "positiveLuminanceBias": 0.17247867144695805,
+          "brightOvershoot015": 0.6695007578628268,
+          "holes": 0.0,
+          "roomContribution": 0.31541040539741516,
+          "pixels": 42224
+        }
+      },
+      "room": {
+        "baseline": {
+          "rgb": 0.038729071617126465,
+          "positiveLuminanceBias": 0.03463926391280243,
+          "brightOvershoot015": 0.01136980248044787,
+          "holes": 0.002912105586368909,
+          "roomContribution": 0.9100012183189392,
+          "pixels": 1231068
+        },
+        "control": {
+          "rgb": 0.033815447241067886,
+          "positiveLuminanceBias": 0.030130966997425148,
+          "brightOvershoot015": 0.00922694765845591,
+          "holes": 0.002163974695142754,
+          "roomContribution": 0.921866238117218,
+          "pixels": 1231068
+        },
+        "surface": {
+          "rgb": 0.034466229379177094,
+          "positiveLuminanceBias": 0.03060304574530191,
+          "brightOvershoot015": 0.009601419255475733,
+          "holes": 0.0025636276793808304,
+          "roomContribution": 0.912763774394989,
+          "pixels": 1231068
+        }
+      },
+      "face": {
+        "baseline": {
+          "rgb": 0.07056743651628494,
+          "positiveLuminanceBias": 0.06640083872438964,
+          "brightOvershoot015": 0.03765061314066252,
+          "holes": 0.0,
+          "roomContribution": 0.17402298748493195,
+          "pixels": 140343
+        },
+        "control": {
+          "rgb": 0.06631233543157578,
+          "positiveLuminanceBias": 0.062328795907234676,
+          "brightOvershoot015": 0.03290509679855782,
+          "holes": 0.0,
+          "roomContribution": 0.16301563382148743,
+          "pixels": 140343
+        },
+        "surface": {
+          "rgb": 0.05787176266312599,
+          "positiveLuminanceBias": 0.05382406113700429,
+          "brightOvershoot015": 0.02292953692025965,
+          "holes": 0.0,
+          "roomContribution": 0.13000084459781647,
+          "pixels": 140343
+        }
+      },
+      "low_texture_room": {
+        "baseline": {
+          "rgb": 0.037174735218286514,
+          "positiveLuminanceBias": 0.0334352354697833,
+          "brightOvershoot015": 0.005999720449474781,
+          "holes": 0.0028671621906145336,
+          "roomContribution": 0.9064224362373352,
+          "pixels": 1130386
+        },
+        "control": {
+          "rgb": 0.03223566710948944,
+          "positiveLuminanceBias": 0.028858735541431965,
+          "brightOvershoot015": 0.0046001985162590475,
+          "holes": 0.002096628939141143,
+          "roomContribution": 0.9185689091682434,
+          "pixels": 1130386
+        },
+        "surface": {
+          "rgb": 0.032852139323949814,
+          "positiveLuminanceBias": 0.029252921246846923,
+          "brightOvershoot015": 0.0048195925993421715,
+          "holes": 0.0025009156164354476,
+          "roomContribution": 0.9089922904968262,
+          "pixels": 1130386
+        }
+      }
+    },
+    "frame_0015.png": {
+      "neck": {
+        "baseline": {
+          "rgb": 0.06745441257953644,
+          "positiveLuminanceBias": 0.0062392732908587035,
+          "brightOvershoot015": 0.002875805336959672,
+          "holes": 0.0,
+          "roomContribution": 0.06624738872051239,
+          "pixels": 89714
+        },
+        "control": {
+          "rgb": 0.06054016947746277,
+          "positiveLuminanceBias": 0.0031733315505008473,
+          "brightOvershoot015": 0.0011703858929487036,
+          "holes": 0.0,
+          "roomContribution": 0.07854954153299332,
+          "pixels": 89714
+        },
+        "surface": {
+          "rgb": 0.059395335614681244,
+          "positiveLuminanceBias": 0.0031562311173266664,
+          "brightOvershoot015": 0.0011592393606349065,
+          "holes": 0.0,
+          "roomContribution": 0.06859702616930008,
+          "pixels": 89714
+        }
+      },
+      "other_body_skin": {
+        "baseline": {
+          "rgb": 0.11808066815137863,
+          "positiveLuminanceBias": 0.07163869878280808,
+          "brightOvershoot015": 0.18296327924850556,
+          "holes": 0.4759607173356106,
+          "roomContribution": 0.3000360131263733,
+          "pixels": 23420
+        },
+        "control": {
+          "rgb": 0.12185797840356827,
+          "positiveLuminanceBias": 0.07190980513865117,
+          "brightOvershoot015": 0.1775405636208369,
+          "holes": 0.3960717335610589,
+          "roomContribution": 0.31917497515678406,
+          "pixels": 23420
+        },
+        "surface": {
+          "rgb": 0.12090803682804108,
+          "positiveLuminanceBias": 0.07101072043945221,
+          "brightOvershoot015": 0.17348420153714775,
+          "holes": 0.47147736976942783,
+          "roomContribution": 0.2952290177345276,
+          "pixels": 23420
+        }
+      },
+      "cloth": {
+        "baseline": {
+          "rgb": 0.11803819984197617,
+          "positiveLuminanceBias": 0.010879463756051387,
+          "brightOvershoot015": 0.02358959716372808,
+          "holes": 0.0007019297118519047,
+          "roomContribution": 0.02803846448659897,
+          "pixels": 420270
+        },
+        "control": {
+          "rgb": 0.11487115174531937,
+          "positiveLuminanceBias": 0.010632972245347169,
+          "brightOvershoot015": 0.02279011111904252,
+          "holes": 0.00016655959264282486,
+          "roomContribution": 0.03607955574989319,
+          "pixels": 420270
+        },
+        "surface": {
+          "rgb": 0.11521762609481812,
+          "positiveLuminanceBias": 0.010389797452977334,
+          "brightOvershoot015": 0.0227948699645466,
+          "holes": 0.0013277178956385182,
+          "roomContribution": 0.02886057086288929,
+          "pixels": 420270
+        }
+      },
+      "hair": {
+        "baseline": {
+          "rgb": 0.19683708250522614,
+          "positiveLuminanceBias": 0.19550454758785013,
+          "brightOvershoot015": 0.8098581284617627,
+          "holes": 0.0,
+          "roomContribution": 0.3528250455856323,
+          "pixels": 41164
+        },
+        "control": {
+          "rgb": 0.19188185036182404,
+          "positiveLuminanceBias": 0.1907326254602583,
+          "brightOvershoot015": 0.7879700709357691,
+          "holes": 0.0,
+          "roomContribution": 0.34726274013519287,
+          "pixels": 41164
+        },
+        "surface": {
+          "rgb": 0.1657828390598297,
+          "positiveLuminanceBias": 0.1644659834299934,
+          "brightOvershoot015": 0.6262268001166067,
+          "holes": 0.0,
+          "roomContribution": 0.29134130477905273,
+          "pixels": 41164
+        }
+      },
+      "room": {
+        "baseline": {
+          "rgb": 0.04552663490176201,
+          "positiveLuminanceBias": 0.04318002272385013,
+          "brightOvershoot015": 0.011329883853115253,
+          "holes": 0.006365221472002977,
+          "roomContribution": 0.9103410840034485,
+          "pixels": 1235935
+        },
+        "control": {
+          "rgb": 0.04085320606827736,
+          "positiveLuminanceBias": 0.03908829187438227,
+          "brightOvershoot015": 0.008502874342097278,
+          "holes": 0.004690376112012363,
+          "roomContribution": 0.9220278859138489,
+          "pixels": 1235935
+        },
+        "surface": {
+          "rgb": 0.04149094223976135,
+          "positiveLuminanceBias": 0.03959470550453494,
+          "brightOvershoot015": 0.008760978530424334,
+          "holes": 0.005308531597535469,
+          "roomContribution": 0.915109395980835,
+          "pixels": 1235935
+        }
+      },
+      "face": {
+        "baseline": {
+          "rgb": 0.06424795836210251,
+          "positiveLuminanceBias": 0.06147800799212797,
+          "brightOvershoot015": 0.039805701329609526,
+          "holes": 0.0,
+          "roomContribution": 0.14428146183490753,
+          "pixels": 133197
+        },
+        "control": {
+          "rgb": 0.06071258336305618,
+          "positiveLuminanceBias": 0.05810472298773184,
+          "brightOvershoot015": 0.03385962146294586,
+          "holes": 0.0,
+          "roomContribution": 0.1348075568675995,
+          "pixels": 133197
+        },
+        "surface": {
+          "rgb": 0.055144164711236954,
+          "positiveLuminanceBias": 0.05240637190826856,
+          "brightOvershoot015": 0.027132743229952627,
+          "holes": 0.0,
+          "roomContribution": 0.11197062581777573,
+          "pixels": 133197
+        }
+      },
+      "low_texture_room": {
+        "baseline": {
+          "rgb": 0.04430072382092476,
+          "positiveLuminanceBias": 0.04225270257411578,
+          "brightOvershoot015": 0.006464477563500484,
+          "holes": 0.006734345248961759,
+          "roomContribution": 0.9063266515731812,
+          "pixels": 1133889
+        },
+        "control": {
+          "rgb": 0.039576027542352676,
+          "positiveLuminanceBias": 0.03808522291217661,
+          "brightOvershoot015": 0.00410181243490324,
+          "holes": 0.004939636948590206,
+          "roomContribution": 0.9183608293533325,
+          "pixels": 1133889
+        },
+        "surface": {
+          "rgb": 0.04015934094786644,
+          "positiveLuminanceBias": 0.03850789783825426,
+          "brightOvershoot015": 0.0041767756808647055,
+          "holes": 0.005607250797917609,
+          "roomContribution": 0.9110774993896484,
+          "pixels": 1133889
+        }
+      }
+    },
+    "frame_0035.png": {
+      "neck": {
+        "baseline": {
+          "rgb": 0.0969872921705246,
+          "positiveLuminanceBias": 0.004178869592761259,
+          "brightOvershoot015": 0.0024879013018880786,
+          "holes": 0.0,
+          "roomContribution": 0.0038280831649899483,
+          "pixels": 88026
+        },
+        "control": {
+          "rgb": 0.09359491616487503,
+          "positiveLuminanceBias": 0.0027677505578373187,
+          "brightOvershoot015": 0.002317497103128621,
+          "holes": 0.0,
+          "roomContribution": 0.003845013678073883,
+          "pixels": 88026
+        },
+        "surface": {
+          "rgb": 0.0905606746673584,
+          "positiveLuminanceBias": 0.0029369654878911664,
+          "brightOvershoot015": 0.002465180742053484,
+          "holes": 0.0,
+          "roomContribution": 0.0038893152959644794,
+          "pixels": 88026
+        }
+      },
+      "other_body_skin": {
+        "baseline": {
+          "rgb": 0.18677090108394623,
+          "positiveLuminanceBias": 0.18372500176897819,
+          "brightOvershoot015": 0.5384800722818994,
+          "holes": 0.019335408091557073,
+          "roomContribution": 0.3138347268104553,
+          "pixels": 49805
+        },
+        "control": {
+          "rgb": 0.17954035103321075,
+          "positiveLuminanceBias": 0.17575745587836145,
+          "brightOvershoot015": 0.5384599939765083,
+          "holes": 0.004537697018371649,
+          "roomContribution": 0.31921491026878357,
+          "pixels": 49805
+        },
+        "surface": {
+          "rgb": 0.17694100737571716,
+          "positiveLuminanceBias": 0.17279591296140828,
+          "brightOvershoot015": 0.5239433791787973,
+          "holes": 0.023993574942274873,
+          "roomContribution": 0.31457456946372986,
+          "pixels": 49805
+        }
+      },
+      "cloth": {
+        "baseline": {
+          "rgb": 0.1646910458803177,
+          "positiveLuminanceBias": 0.011675926224872754,
+          "brightOvershoot015": 0.026879071868942297,
+          "holes": 0.000457652563000102,
+          "roomContribution": 0.015530780889093876,
+          "pixels": 343055
+        },
+        "control": {
+          "rgb": 0.161979079246521,
+          "positiveLuminanceBias": 0.012373579850463863,
+          "brightOvershoot015": 0.029552112635000218,
+          "holes": 3.789479821019953e-05,
+          "roomContribution": 0.017808565869927406,
+          "pixels": 343055
+        },
+        "surface": {
+          "rgb": 0.16205516457557678,
+          "positiveLuminanceBias": 0.012295198876523273,
+          "brightOvershoot015": 0.029627902231420616,
+          "holes": 0.000754980979726283,
+          "roomContribution": 0.015965934842824936,
+          "pixels": 343055
+        }
+      },
+      "hair": {
+        "baseline": {
+          "rgb": 0.044940657913684845,
+          "positiveLuminanceBias": 0.030633968981165556,
+          "brightOvershoot015": 0.019373667940323726,
+          "holes": 0.0,
+          "roomContribution": 0.05273924395442009,
+          "pixels": 52081
+        },
+        "control": {
+          "rgb": 0.044254936277866364,
+          "positiveLuminanceBias": 0.029966134781865807,
+          "brightOvershoot015": 0.017703193103051018,
+          "holes": 0.0,
+          "roomContribution": 0.05211194232106209,
+          "pixels": 52081
+        },
+        "surface": {
+          "rgb": 0.04348653182387352,
+          "positiveLuminanceBias": 0.028872952222435307,
+          "brightOvershoot015": 0.016992761275705152,
+          "holes": 0.0,
+          "roomContribution": 0.0485856756567955,
+          "pixels": 52081
+        }
+      },
+      "room": {
+        "baseline": {
+          "rgb": 0.03675270825624466,
+          "positiveLuminanceBias": 0.014788749047363464,
+          "brightOvershoot015": 0.019904596169036334,
+          "holes": 0.002787754245655608,
+          "roomContribution": 0.9156011343002319,
+          "pixels": 1296384
+        },
+        "control": {
+          "rgb": 0.03129218518733978,
+          "positiveLuminanceBias": 0.012596417726549845,
+          "brightOvershoot015": 0.018050207345971563,
+          "holes": 0.0005006232721169036,
+          "roomContribution": 0.9255226254463196,
+          "pixels": 1296384
+        },
+        "surface": {
+          "rgb": 0.030768176540732384,
+          "positiveLuminanceBias": 0.011809016473165644,
+          "brightOvershoot015": 0.0153033360485782,
+          "holes": 0.0013776782187993682,
+          "roomContribution": 0.9240062236785889,
+          "pixels": 1296384
+        }
+      },
+      "face": {
+        "baseline": {
+          "rgb": 0.02507810853421688,
+          "positiveLuminanceBias": 0.009391338138044844,
+          "brightOvershoot015": 0.012066715243135904,
+          "holes": 0.0,
+          "roomContribution": 0.007149673067033291,
+          "pixels": 124889
+        },
+        "control": {
+          "rgb": 0.02477458491921425,
+          "positiveLuminanceBias": 0.009252610846144501,
+          "brightOvershoot015": 0.011778459271833387,
+          "holes": 0.0,
+          "roomContribution": 0.006839631590992212,
+          "pixels": 124889
+        },
+        "surface": {
+          "rgb": 0.024609176442027092,
+          "positiveLuminanceBias": 0.00927055491899175,
+          "brightOvershoot015": 0.011778459271833387,
+          "holes": 0.0,
+          "roomContribution": 0.006549272686243057,
+          "pixels": 124889
+        }
+      },
+      "low_texture_room": {
+        "baseline": {
+          "rgb": 0.03406109660863876,
+          "positiveLuminanceBias": 0.01249628990238601,
+          "brightOvershoot015": 0.01519016567722104,
+          "holes": 0.003010120172198861,
+          "roomContribution": 0.9125286936759949,
+          "pixels": 1160751
+        },
+        "control": {
+          "rgb": 0.028322642669081688,
+          "positiveLuminanceBias": 0.010271252311154801,
+          "brightOvershoot015": 0.01379279449253113,
+          "holes": 0.00055912077611822,
+          "roomContribution": 0.9228379726409912,
+          "pixels": 1160751
+        },
+        "surface": {
+          "rgb": 0.02801491692662239,
+          "positiveLuminanceBias": 0.009649949987714799,
+          "brightOvershoot015": 0.01169243015943988,
+          "holes": 0.0014981679964092213,
+          "roomContribution": 0.92128986120224,
+          "pixels": 1160751
+        }
+      }
+    },
+    "frame_0115.png": {
+      "neck": {
+        "baseline": {
+          "rgb": 0.062347132712602615,
+          "positiveLuminanceBias": 0.048604795987545406,
+          "brightOvershoot015": 0.08474594582914681,
+          "holes": 0.0,
+          "roomContribution": 0.2716054320335388,
+          "pixels": 92559
+        },
+        "control": {
+          "rgb": 0.05350499972701073,
+          "positiveLuminanceBias": 0.04066401327585658,
+          "brightOvershoot015": 0.055099990276472305,
+          "holes": 0.0,
+          "roomContribution": 0.27687710523605347,
+          "pixels": 92559
+        },
+        "surface": {
+          "rgb": 0.053095780313014984,
+          "positiveLuminanceBias": 0.03933338966013391,
+          "brightOvershoot015": 0.052463833878931276,
+          "holes": 0.0,
+          "roomContribution": 0.25689896941185,
+          "pixels": 92559
+        }
+      },
+      "other_body_skin": {
+        "baseline": {
+          "rgb": 0.0957900658249855,
+          "positiveLuminanceBias": 0.07020960407632545,
+          "brightOvershoot015": 0.027010245265445515,
+          "holes": 0.11440546414157093,
+          "roomContribution": 0.5080804228782654,
+          "pixels": 6442
+        },
+        "control": {
+          "rgb": 0.09113674610853195,
+          "positiveLuminanceBias": 0.049408694339546116,
+          "brightOvershoot015": 0.019248680533995654,
+          "holes": 0.035703197764669355,
+          "roomContribution": 0.5243380665779114,
+          "pixels": 6442
+        },
+        "surface": {
+          "rgb": 0.08983148634433746,
+          "positiveLuminanceBias": 0.048558816810562455,
+          "brightOvershoot015": 0.01769636758770568,
+          "holes": 0.21452964917727413,
+          "roomContribution": 0.4427476227283478,
+          "pixels": 6442
+        }
+      },
+      "cloth": {
+        "baseline": {
+          "rgb": 0.06485766917467117,
+          "positiveLuminanceBias": 0.047014978747539356,
+          "brightOvershoot015": 0.06000948975019111,
+          "holes": 0.00019550642754839333,
+          "roomContribution": 0.2536250948905945,
+          "pixels": 455228
+        },
+        "control": {
+          "rgb": 0.06835192441940308,
+          "positiveLuminanceBias": 0.04625905572471558,
+          "brightOvershoot015": 0.059829360232674614,
+          "holes": 0.0,
+          "roomContribution": 0.2700968384742737,
+          "pixels": 455228
+        },
+        "surface": {
+          "rgb": 0.06856833398342133,
+          "positiveLuminanceBias": 0.04633979759195435,
+          "brightOvershoot015": 0.05987988436563656,
+          "holes": 8.567135589199258e-05,
+          "roomContribution": 0.21057437360286713,
+          "pixels": 455228
+        }
+      },
+      "hair": {
+        "baseline": {
+          "rgb": 0.28427478671073914,
+          "positiveLuminanceBias": 0.2824834228085848,
+          "brightOvershoot015": 0.94729088639201,
+          "holes": 0.0,
+          "roomContribution": 0.5101341009140015,
+          "pixels": 40050
+        },
+        "control": {
+          "rgb": 0.28151410818099976,
+          "positiveLuminanceBias": 0.27998488842663477,
+          "brightOvershoot015": 0.9454431960049937,
+          "holes": 0.0,
+          "roomContribution": 0.5082887411117554,
+          "pixels": 40050
+        },
+        "surface": {
+          "rgb": 0.27309781312942505,
+          "positiveLuminanceBias": 0.27141827737766483,
+          "brightOvershoot015": 0.9386516853932584,
+          "holes": 0.0,
+          "roomContribution": 0.4814929962158203,
+          "pixels": 40050
+        }
+      },
+      "room": {
+        "baseline": {
+          "rgb": 0.0451367124915123,
+          "positiveLuminanceBias": 0.007865292866790637,
+          "brightOvershoot015": 0.024481239072372863,
+          "holes": 0.00010901421796973598,
+          "roomContribution": 0.9310385584831238,
+          "pixels": 1192505
+        },
+        "control": {
+          "rgb": 0.04561898857355118,
+          "positiveLuminanceBias": 0.00700055307542007,
+          "brightOvershoot015": 0.02271269302854076,
+          "holes": 0.0,
+          "roomContribution": 0.9417117834091187,
+          "pixels": 1192505
+        },
+        "surface": {
+          "rgb": 0.047122709453105927,
+          "positiveLuminanceBias": 0.006888991786294622,
+          "brightOvershoot015": 0.022248963316715654,
+          "holes": 0.008058666420685867,
+          "roomContribution": 0.9239896535873413,
+          "pixels": 1192505
+        }
+      },
+      "face": {
+        "baseline": {
+          "rgb": 0.14562013745307922,
+          "positiveLuminanceBias": 0.1425038978279161,
+          "brightOvershoot015": 0.4393362459417211,
+          "holes": 0.0,
+          "roomContribution": 0.3923260569572449,
+          "pixels": 174643
+        },
+        "control": {
+          "rgb": 0.14095327258110046,
+          "positiveLuminanceBias": 0.138123128284507,
+          "brightOvershoot015": 0.39536082179073884,
+          "holes": 0.0,
+          "roomContribution": 0.3836636543273926,
+          "pixels": 174643
+        },
+        "surface": {
+          "rgb": 0.13460789620876312,
+          "positiveLuminanceBias": 0.1317745368953016,
+          "brightOvershoot015": 0.3452643392520742,
+          "holes": 0.0,
+          "roomContribution": 0.35600966215133667,
+          "pixels": 174643
+        }
+      },
+      "low_texture_room": {
+        "baseline": {
+          "rgb": 0.04341723397374153,
+          "positiveLuminanceBias": 0.006016690547882556,
+          "brightOvershoot015": 0.01890024769196127,
+          "holes": 9.367259626210313e-05,
+          "roomContribution": 0.9289681315422058,
+          "pixels": 1110250
+        },
+        "control": {
+          "rgb": 0.04406837746500969,
+          "positiveLuminanceBias": 0.005303827486242969,
+          "brightOvershoot015": 0.01783111911731592,
+          "holes": 0.0,
+          "roomContribution": 0.9398752450942993,
+          "pixels": 1110250
+        },
+        "surface": {
+          "rgb": 0.045716721564531326,
+          "positiveLuminanceBias": 0.005162690487710603,
+          "brightOvershoot015": 0.017357351947759513,
+          "holes": 0.008428732267507318,
+          "roomContribution": 0.9213864803314209,
+          "pixels": 1110250
+        }
+      }
+    },
+    "frame_0130.png": {
+      "neck": {
+        "baseline": {
+          "rgb": 0.13858850300312042,
+          "positiveLuminanceBias": 0.009827551973812708,
+          "brightOvershoot015": 0.01650561992970076,
+          "holes": 0.0,
+          "roomContribution": 0.0015829909825697541,
+          "pixels": 74823
+        },
+        "control": {
+          "rgb": 0.13462749123573303,
+          "positiveLuminanceBias": 0.009747823382961643,
+          "brightOvershoot015": 0.01839006722531842,
+          "holes": 0.0,
+          "roomContribution": 0.0018530607922002673,
+          "pixels": 74823
+        },
+        "surface": {
+          "rgb": 0.13203926384449005,
+          "positiveLuminanceBias": 0.009955809621125319,
+          "brightOvershoot015": 0.018617270090747498,
+          "holes": 0.0,
+          "roomContribution": 0.001812977367080748,
+          "pixels": 74823
+        }
+      },
+      "other_body_skin": {
+        "baseline": {
+          "rgb": 0.14612889289855957,
+          "positiveLuminanceBias": 0.06884183677046439,
+          "brightOvershoot015": 0.18413594227651334,
+          "holes": 0.34884095100186885,
+          "roomContribution": 0.2675732672214508,
+          "pixels": 80799
+        },
+        "control": {
+          "rgb": 0.14525140821933746,
+          "positiveLuminanceBias": 0.0669561386102297,
+          "brightOvershoot015": 0.18197007388705305,
+          "holes": 0.339558657904182,
+          "roomContribution": 0.28372475504875183,
+          "pixels": 80799
+        },
+        "surface": {
+          "rgb": 0.14427657425403595,
+          "positiveLuminanceBias": 0.06713168725776751,
+          "brightOvershoot015": 0.18189581554227155,
+          "holes": 0.3503756234606864,
+          "roomContribution": 0.2622683048248291,
+          "pixels": 80799
+        }
+      },
+      "cloth": {
+        "baseline": {
+          "rgb": 0.1555628627538681,
+          "positiveLuminanceBias": 0.020365757539723618,
+          "brightOvershoot015": 0.04769632020394112,
+          "holes": 0.031835086165635615,
+          "roomContribution": 0.04429633170366287,
+          "pixels": 390701
+        },
+        "control": {
+          "rgb": 0.15281730890274048,
+          "positiveLuminanceBias": 0.02148106389680781,
+          "brightOvershoot015": 0.050286536251506905,
+          "holes": 0.02686709273843681,
+          "roomContribution": 0.0484008714556694,
+          "pixels": 390701
+        },
+        "surface": {
+          "rgb": 0.15289805829524994,
+          "positiveLuminanceBias": 0.021308659480570192,
+          "brightOvershoot015": 0.049999872024898834,
+          "holes": 0.03221901146912857,
+          "roomContribution": 0.044087208807468414,
+          "pixels": 390701
+        }
+      },
+      "hair": {
+        "baseline": {
+          "rgb": 0.06838671118021011,
+          "positiveLuminanceBias": 0.061833708987612104,
+          "brightOvershoot015": 0.0789836024533734,
+          "holes": 0.0,
+          "roomContribution": 0.08460073918104172,
+          "pixels": 63912
+        },
+        "control": {
+          "rgb": 0.06744661182165146,
+          "positiveLuminanceBias": 0.060824503951789045,
+          "brightOvershoot015": 0.07316309926148454,
+          "holes": 0.0,
+          "roomContribution": 0.08426419645547867,
+          "pixels": 63912
+        },
+        "surface": {
+          "rgb": 0.06644357740879059,
+          "positiveLuminanceBias": 0.05961839254538125,
+          "brightOvershoot015": 0.07123857804481161,
+          "holes": 0.0,
+          "roomContribution": 0.08062086254358292,
+          "pixels": 63912
+        }
+      },
+      "room": {
+        "baseline": {
+          "rgb": 0.04297630861401558,
+          "positiveLuminanceBias": 0.025244613167759097,
+          "brightOvershoot015": 0.034558077061899894,
+          "holes": 0.01068871864705927,
+          "roomContribution": 0.9421645998954773,
+          "pixels": 1183023
+        },
+        "control": {
+          "rgb": 0.04096435382962227,
+          "positiveLuminanceBias": 0.02561445019392989,
+          "brightOvershoot015": 0.03568062497516954,
+          "holes": 0.008777513201349424,
+          "roomContribution": 0.9468088150024414,
+          "pixels": 1183023
+        },
+        "surface": {
+          "rgb": 0.039593279361724854,
+          "positiveLuminanceBias": 0.023467290406914827,
+          "brightOvershoot015": 0.02948970561011916,
+          "holes": 0.009550110183825674,
+          "roomContribution": 0.945990800857544,
+          "pixels": 1183023
+        }
+      },
+      "face": {
+        "baseline": {
+          "rgb": 0.032330673187971115,
+          "positiveLuminanceBias": 0.027328742414971074,
+          "brightOvershoot015": 0.01122904411184885,
+          "holes": 0.0,
+          "roomContribution": 0.010534142144024372,
+          "pixels": 126814
+        },
+        "control": {
+          "rgb": 0.03218122571706772,
+          "positiveLuminanceBias": 0.02717173096358573,
+          "brightOvershoot015": 0.011024019430031385,
+          "holes": 0.0,
+          "roomContribution": 0.010214571841061115,
+          "pixels": 126814
+        },
+        "surface": {
+          "rgb": 0.03211906924843788,
+          "positiveLuminanceBias": 0.027095117978670195,
+          "brightOvershoot015": 0.010992477171290236,
+          "holes": 0.0,
+          "roomContribution": 0.009715638123452663,
+          "pixels": 126814
+        }
+      },
+      "low_texture_room": {
+        "baseline": {
+          "rgb": 0.038333144038915634,
+          "positiveLuminanceBias": 0.020959949852429008,
+          "brightOvershoot015": 0.02253808530476145,
+          "holes": 0.009989490984370802,
+          "roomContribution": 0.9394450783729553,
+          "pixels": 1012464
+        },
+        "control": {
+          "rgb": 0.03625813126564026,
+          "positiveLuminanceBias": 0.021364128688980032,
+          "brightOvershoot015": 0.023937641239589753,
+          "holes": 0.008033865895478753,
+          "roomContribution": 0.9440351128578186,
+          "pixels": 1012464
+        },
+        "surface": {
+          "rgb": 0.035177454352378845,
+          "positiveLuminanceBias": 0.019611225843211857,
+          "brightOvershoot015": 0.019396245199829326,
+          "holes": 0.008854635819150114,
+          "roomContribution": 0.9432677030563354,
+          "pixels": 1012464
+        }
+      }
+    },
+    "frame_0145.png": {
+      "neck": {
+        "baseline": {
+          "rgb": 0.1288730800151825,
+          "positiveLuminanceBias": 0.0073871233505902745,
+          "brightOvershoot015": 0.004959163032484693,
+          "holes": 0.0,
+          "roomContribution": 0.0021607298403978348,
+          "pixels": 91951
+        },
+        "control": {
+          "rgb": 0.1279476284980774,
+          "positiveLuminanceBias": 0.007485175358919007,
+          "brightOvershoot015": 0.0058400669922023685,
+          "holes": 0.0,
+          "roomContribution": 0.0024777434300631285,
+          "pixels": 91951
+        },
+        "surface": {
+          "rgb": 0.1246655061841011,
+          "positiveLuminanceBias": 0.007707981618364563,
+          "brightOvershoot015": 0.006285956650824896,
+          "holes": 0.0,
+          "roomContribution": 0.0023898358922451735,
+          "pixels": 91951
+        }
+      },
+      "other_body_skin": {
+        "baseline": {
+          "rgb": 0.14091791212558746,
+          "positiveLuminanceBias": 0.11952239993284773,
+          "brightOvershoot015": 0.30416086141355764,
+          "holes": 0.1358515231264083,
+          "roomContribution": 0.4292021095752716,
+          "pixels": 58137
+        },
+        "control": {
+          "rgb": 0.13925078511238098,
+          "positiveLuminanceBias": 0.11564460535136917,
+          "brightOvershoot015": 0.2853432409653061,
+          "holes": 0.13062249514078814,
+          "roomContribution": 0.43480250239372253,
+          "pixels": 58137
+        },
+        "surface": {
+          "rgb": 0.13977505266666412,
+          "positiveLuminanceBias": 0.11729114619534446,
+          "brightOvershoot015": 0.2905034659511155,
+          "holes": 0.1359031253762664,
+          "roomContribution": 0.43140339851379395,
+          "pixels": 58137
+        }
+      },
+      "cloth": {
+        "baseline": {
+          "rgb": 0.14544685184955597,
+          "positiveLuminanceBias": 0.022046974535355642,
+          "brightOvershoot015": 0.05123558569769371,
+          "holes": 0.0,
+          "roomContribution": 0.034855060279369354,
+          "pixels": 385728
+        },
+        "control": {
+          "rgb": 0.14374248683452606,
+          "positiveLuminanceBias": 0.022406272583665423,
+          "brightOvershoot015": 0.05389030612244898,
+          "holes": 0.0,
+          "roomContribution": 0.03858588635921478,
+          "pixels": 385728
+        },
+        "surface": {
+          "rgb": 0.14341402053833008,
+          "positiveLuminanceBias": 0.022025103472205727,
+          "brightOvershoot015": 0.05286886095901775,
+          "holes": 0.0,
+          "roomContribution": 0.03758813813328743,
+          "pixels": 385728
+        }
+      },
+      "hair": {
+        "baseline": {
+          "rgb": 0.10007811337709427,
+          "positiveLuminanceBias": 0.09498229408889987,
+          "brightOvershoot015": 0.17087127285565085,
+          "holes": 0.0,
+          "roomContribution": 0.1457127034664154,
+          "pixels": 67981
+        },
+        "control": {
+          "rgb": 0.09889820218086243,
+          "positiveLuminanceBias": 0.09378371840585062,
+          "brightOvershoot015": 0.1660316853238405,
+          "holes": 0.0,
+          "roomContribution": 0.14481230080127716,
+          "pixels": 67981
+        },
+        "surface": {
+          "rgb": 0.09680464118719101,
+          "positiveLuminanceBias": 0.09141576571901007,
+          "brightOvershoot015": 0.15942689869228166,
+          "holes": 0.0,
+          "roomContribution": 0.1365862637758255,
+          "pixels": 67981
+        }
+      },
+      "room": {
+        "baseline": {
+          "rgb": 0.03753966465592384,
+          "positiveLuminanceBias": 0.013801974436974512,
+          "brightOvershoot015": 0.012975353817779107,
+          "holes": 0.007868418947199987,
+          "roomContribution": 0.9419022798538208,
+          "pixels": 1187405
+        },
+        "control": {
+          "rgb": 0.033649593591690063,
+          "positiveLuminanceBias": 0.013687108654974143,
+          "brightOvershoot015": 0.012295720499745243,
+          "holes": 0.005472437795023602,
+          "roomContribution": 0.9486487507820129,
+          "pixels": 1187405
+        },
+        "surface": {
+          "rgb": 0.03289785608649254,
+          "positiveLuminanceBias": 0.013078623851109944,
+          "brightOvershoot015": 0.009974692712259085,
+          "holes": 0.006000480038403072,
+          "roomContribution": 0.9483810067176819,
+          "pixels": 1187405
+        }
+      },
+      "face": {
+        "baseline": {
+          "rgb": 0.024834606796503067,
+          "positiveLuminanceBias": 0.016199766995192523,
+          "brightOvershoot015": 0.016371900648413432,
+          "holes": 0.0,
+          "roomContribution": 0.011097575537860394,
+          "pixels": 139263
+        },
+        "control": {
+          "rgb": 0.024765653535723686,
+          "positiveLuminanceBias": 0.016169329146541078,
+          "brightOvershoot015": 0.01609903563760654,
+          "holes": 0.0,
+          "roomContribution": 0.010873562656342983,
+          "pixels": 139263
+        },
+        "surface": {
+          "rgb": 0.024758944287896156,
+          "positiveLuminanceBias": 0.016135736031139478,
+          "brightOvershoot015": 0.016034409713994384,
+          "holes": 0.0,
+          "roomContribution": 0.010173989459872246,
+          "pixels": 139263
+        }
+      },
+      "low_texture_room": {
+        "baseline": {
+          "rgb": 0.0345948189496994,
+          "positiveLuminanceBias": 0.01088255473856992,
+          "brightOvershoot015": 0.00656913568082438,
+          "holes": 0.007387049035579709,
+          "roomContribution": 0.9393187165260315,
+          "pixels": 1045343
+        },
+        "control": {
+          "rgb": 0.030686382204294205,
+          "positiveLuminanceBias": 0.010976452124738773,
+          "brightOvershoot015": 0.006417989119360822,
+          "holes": 0.004984966656877216,
+          "roomContribution": 0.946256160736084,
+          "pixels": 1045343
+        },
+        "surface": {
+          "rgb": 0.030073974281549454,
+          "positiveLuminanceBias": 0.0105299753981612,
+          "brightOvershoot015": 0.004947658328414693,
+          "holes": 0.005535981969554491,
+          "roomContribution": 0.9460738897323608,
+          "pixels": 1045343
+        }
+      }
+    }
+  },
+  "summary": {
+    "face": {
+      "baseline": {
+        "rgb": 0.07693683486431838,
+        "positiveLuminanceBias": 0.07179753462499441,
+        "brightOvershoot015": 0.09095787978662259,
+        "holes": 0.0,
+        "roomContribution": 0.18769365763291718
+      },
+      "control": {
+        "rgb": 0.07376861292868853,
+        "positiveLuminanceBias": 0.06883257121256953,
+        "brightOvershoot015": 0.08170442222816116,
+        "holes": 0.0,
+        "roomContribution": 0.1807028661016375
+      },
+      "surface": {
+        "rgb": 0.0691479753702879,
+        "positiveLuminanceBias": 0.06417509958840784,
+        "brightOvershoot015": 0.06912251608460276,
+        "holes": 0.0,
+        "roomContribution": 0.15985667714849114
+      }
+    },
+    "hair": {
+      "baseline": {
+        "rgb": 0.17628858014941215,
+        "positiveLuminanceBias": 0.17234002881994942,
+        "brightOvershoot015": 0.6395468828443021,
+        "holes": 0.0,
+        "roomContribution": 0.3167400393635035
+      },
+      "control": {
+        "rgb": 0.1734568879008293,
+        "positiveLuminanceBias": 0.1696853493355948,
+        "brightOvershoot015": 0.632822241074796,
+        "holes": 0.0,
+        "roomContribution": 0.3141138654202223
+      },
+      "surface": {
+        "rgb": 0.16136723943054676,
+        "positiveLuminanceBias": 0.15734975238478383,
+        "brightOvershoot015": 0.5813343277481315,
+        "holes": 0.0,
+        "roomContribution": 0.2842694714665413
+      }
+    },
+    "neck": {
+      "baseline": {
+        "rgb": 0.08072460517287254,
+        "positiveLuminanceBias": 0.028603391138221135,
+        "brightOvershoot015": 0.04357246576881886,
+        "holes": 0.0,
+        "roomContribution": 0.11634261409053578
+      },
+      "control": {
+        "rgb": 0.07155863083899021,
+        "positiveLuminanceBias": 0.022111309085613186,
+        "brightOvershoot015": 0.020163821999728392,
+        "holes": 0.0,
+        "roomContribution": 0.12028134890133516
+      },
+      "surface": {
+        "rgb": 0.07006388828158379,
+        "positiveLuminanceBias": 0.021595378155868525,
+        "brightOvershoot015": 0.019498514907453454,
+        "holes": 0.0,
+        "roomContribution": 0.1085825026850216
+      }
+    },
+    "cloth": {
+      "baseline": {
+        "rgb": 0.10386263504624367,
+        "positiveLuminanceBias": 0.02929411258849494,
+        "brightOvershoot015": 0.05243248621793992,
+        "holes": 0.011363954752009655,
+        "roomContribution": 0.10658217901363969
+      },
+      "control": {
+        "rgb": 0.10129024423658847,
+        "positiveLuminanceBias": 0.028476775052714405,
+        "brightOvershoot015": 0.05164314305616481,
+        "holes": 0.008274667071687825,
+        "roomContribution": 0.11722720805555582
+      },
+      "surface": {
+        "rgb": 0.10166271105408668,
+        "positiveLuminanceBias": 0.028392642995648264,
+        "brightOvershoot015": 0.051583721167996054,
+        "holes": 0.012294713978081259,
+        "roomContribution": 0.09386034067720175
+      }
+    },
+    "room": {
+      "baseline": {
+        "rgb": 0.037612671963870525,
+        "positiveLuminanceBias": 0.02157763537722699,
+        "brightOvershoot015": 0.02146740529022552,
+        "holes": 0.004171377352616054,
+        "roomContribution": 0.9226033449172973
+      },
+      "control": {
+        "rgb": 0.034270863980054855,
+        "positiveLuminanceBias": 0.019132078890013143,
+        "brightOvershoot015": 0.020025412544275235,
+        "holes": 0.0021962019197133108,
+        "roomContribution": 0.9324811339378357
+      },
+      "surface": {
+        "rgb": 0.03450990542769432,
+        "positiveLuminanceBias": 0.018805563312572535,
+        "brightOvershoot015": 0.018765603181525183,
+        "holes": 0.0068298414897491385,
+        "roomContribution": 0.922558206319809
+      }
+    },
+    "low_texture_room": {
+      "baseline": {
+        "rgb": 0.03521571103483438,
+        "positiveLuminanceBias": 0.01935722331154751,
+        "brightOvershoot015": 0.014828658311503897,
+        "holes": 0.004108254746295392,
+        "roomContribution": 0.919629168510437
+      },
+      "control": {
+        "rgb": 0.031852304749190805,
+        "positiveLuminanceBias": 0.01694013598335945,
+        "brightOvershoot015": 0.013909083447805512,
+        "holes": 0.002094248250820727,
+        "roomContribution": 0.9297231256961822
+      },
+      "surface": {
+        "rgb": 0.03218366950750351,
+        "positiveLuminanceBias": 0.016642955017817096,
+        "brightOvershoot015": 0.012967458220177964,
+        "holes": 0.0068381978595351625,
+        "roomContribution": 0.9193528831005097
+      }
+    }
+  },
+  "columns": [
+    "source",
+    "baseline",
+    "control",
+    "surface"
+  ],
+  "limits": "Positive brightness bias is only a haze proxy, not proof of geometry correctness. Low texture selected from source gradients, never SIFT or candidate coverage.",
+  "sourceHash": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+  "assets": {
+    "control": "e07b92e1dced68a2aadc0f22671617cc327ce092e27e2fac2864d307cbd77797",
+    "surface": "4916a369ee769d86422d6eb8228f8e6884a3652cc1d43b35b53ffa18111f4f9c"
+  },
+  "published": false
+}
