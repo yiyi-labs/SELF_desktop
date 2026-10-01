@@ -1,0 +1,591 @@
+{
+  "date": "2026-10-02",
+  "worktree": "C:/Users/30243/.codex/worktrees/reconstruction-bottom-up-20260928/olay",
+  "preTaskAndPreCommitHEAD": "cf774520a14745433166933b50ffc7a1e29697d4",
+  "originalHEAD": "3dad0cd5651824cc06d9e88d61aabdd2642c0b30",
+  "originalTrackedDirtyCount": 18,
+  "originalWritten": false,
+  "originalFileNames": [
+    "README-native.md",
+    "backend/recon_transfer.py",
+    "backend/reconstruction_train.py",
+    "backend/reconstruction_view.py",
+    "backend/reconstruction_worker.py",
+    "backend/setup_reconstruction_wsl.sh",
+    "backend/test_recon_transfer.py",
+    "backend/test_reconstruction_cancel.py",
+    "build-profile.json5",
+    "docs/evidence/hap-build.log",
+    "entry/src/main/ets/pages/SelfMirrorPage.ets",
+    "entry/src/main/ets/services/ReconstructionTransportClient.ets",
+    "entry/src/main/resources/rawfile/gs-viewer.html",
+    "entry/src/main/resources/rawfile/gs-viewer.js",
+    "viewer-gs/gs-edit.js",
+    "viewer-gs/index.html",
+    "viewer-gs/main.js",
+    "viewer-gs/tests/gs-edit.test.mjs"
+  ],
+  "baselinePLY": "a343ccf05292ce1e174c7fd63795122347a8d03bd0202a19395a9a414b691f41",
+  "baselineCheckpoint": "c3425ba01892940353909dbf3f95d5058ef507e023357ef864d4cb1460cac344",
+  "sourceHash": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+  "finalImplementationSHA256": {
+    "backend/reconstruction_ray_surface.py": "76966b4e2af1c3c8e16c470cf391260da2976b85db9cafde1d1113f1f29f15c7",
+    "backend/reconstruction_surface_handoff.py": "814c1a86e20695189cf0c2e7bb4ff8ade20c4c546b05824ab08f0d03e2203feb",
+    "backend/run_surface_handoff_repair.py": "0a8d95922ecfa3195f8e0ca6331fca13b6d485366c098021f8beb96920dd31a3",
+    "backend/test_surface_handoff.py": "f0b30a984b1a39689e446d4add92c253e25b115d7edd972b5499f069c7df58d0",
+    "backend/audit_surface_handoff_contribution.py": "9cda6d246ec9519aadae972390d25f5e5f157f666215e8c52c2b7d44ffc95526",
+    "backend/audit_surface_handoff_motion.py": "f6d223aaa160cf1afee748c1e88068329db268b65ee342eea2f8c44c37735625",
+    "backend/audit_surface_handoff_transactions.py": "1927e8ff2ba1c7f9d1fc0143e30e57f0c06421b3d6a3568804c81d4dcf019ca5",
+    "backend/audit_surface_handoff_results.py": "c7341de4fc4da120394698b356a41df2bff227f763a72dbadcc978e5412260e4",
+    "backend/audit_surface_handoff_quality.py": "b32a967a666794667555de452e4559b62470d4b27ead0122db88334da1057439"
+  },
+  "experiments": [
+    {
+      "folder": "/mnt/c/Users/30243/.codex/worktrees/reconstruction-bottom-up-20260928/olay/backend/.sources/surface-handoff-20261002-b",
+      "branches": [
+        {
+          "label": "original-control",
+          "failures": [],
+          "developmentRGB": {
+            "face": {
+              "baseline": 0.05842229686677456,
+              "initial": 0.05842229686677456,
+              "final": 0.05842309407889843
+            },
+            "hair": {
+              "baseline": 0.1389034703373909,
+              "initial": 0.1389034703373909,
+              "final": 0.13892227560281753
+            },
+            "neck": {
+              "baseline": 0.09885008409619331,
+              "initial": 0.09885008409619331,
+              "final": 0.09884610250592232
+            },
+            "cloth": {
+              "baseline": 0.12971932590007781,
+              "initial": 0.12971932590007781,
+              "final": 0.1297384485602379
+            },
+            "room": {
+              "baseline": 0.04158640578389168,
+              "initial": 0.04158640578389168,
+              "final": 0.041244343668222425
+            }
+          },
+          "restore": {
+            "model": true,
+            "optimizers": true,
+            "samplers": true,
+            "rng": true,
+            "strategy": true,
+            "trainable": true,
+            "bindings": true
+          },
+          "frozenMaxChange": 0.0,
+          "initialDifference": {
+            "rgb": 2.980232238769531E-07,
+            "alpha": 1.1920928955078125E-07,
+            "q": 4.172325134277344E-07
+          },
+          "count": 50095,
+          "assetHash": "78789f8857a3168e41ef05367a8a21be30884c4c3b40455f8f3b758534d336a5",
+          "steps": 320,
+          "trainSeconds": 60.008518201000015,
+          "allocatedMiB": 768.9970703125,
+          "reservedMiB": 1044.0,
+          "fileHashes": {
+            "initial.pt": "013ea0e6cce44da208f4878024a386f7994a52f95edbc93914256cdbcf8487dc",
+            "restored.pt": "3ff98a96058e855a77978f8f1ef828bd03928f0e325d1d129782424f800597cf",
+            "mid.pt": "b6a369ee6f148531991e8c3bd1004a4023f040a66a4d55eeccc78cc20e5ae9e2",
+            "candidate-final.pt": "50b9b37853fbc6a9e78ae2704dbbbf11af1689d853fb9e1a2c0e15a4acd7f427"
+          },
+          "transactionAccepted": false,
+          "published": false
+        },
+        {
+          "label": "surface-replacement",
+          "failures": [
+            "room_rgb:frame_0010.png",
+            "room_rgb:frame_0005.png",
+            "room_rgb:frame_0006.png",
+            "room_rgb:frame_0035.png",
+            "room_holes:frame_0035.png",
+            "room_rgb:frame_0115.png",
+            "room_rgb:frame_0130.png",
+            "room_rgb:frame_0145.png"
+          ],
+          "developmentRGB": {
+            "face": {
+              "baseline": 0.05842229686677456,
+              "initial": 0.05841106474399567,
+              "final": 0.058410828560590745
+            },
+            "hair": {
+              "baseline": 0.1389034703373909,
+              "initial": 0.13775262162089347,
+              "final": 0.1377531558275223
+            },
+            "neck": {
+              "baseline": 0.09885008409619331,
+              "initial": 0.09882652908563613,
+              "final": 0.09882652908563613
+            },
+            "cloth": {
+              "baseline": 0.12971932590007781,
+              "initial": 0.12987854778766633,
+              "final": 0.12987854778766633
+            },
+            "room": {
+              "baseline": 0.04158640578389168,
+              "initial": 0.05225638002157211,
+              "final": 0.049822095036506656
+            }
+          },
+          "restore": {
+            "model": true,
+            "optimizers": true,
+            "samplers": true,
+            "rng": true,
+            "strategy": true,
+            "trainable": true,
+            "bindings": true
+          },
+          "frozenMaxChange": 0.0,
+          "initialDifference": {
+            "rgb": 0.2545972764492035,
+            "alpha": 0.11817747354507446,
+            "q": 0.11817747354507446
+          },
+          "count": 54062,
+          "assetHash": "2216f23430d5528cce3785692cd2fcf68d57652fbe33c23489f7e68849e89150",
+          "steps": 320,
+          "trainSeconds": 52.161718104000045,
+          "allocatedMiB": 775.48583984375,
+          "reservedMiB": 1018.0,
+          "fileHashes": {
+            "initial.pt": "f40f4afc8b224e54938e7f5007309b0a67e1607c239bc256342524c446707d75",
+            "restored.pt": "6ddb8829f22524c115d526ff8353951a5f3631159ad703ddecb371df01667124",
+            "mid.pt": "f5184d9ec932d94e3073b995f898777e9d0a72c1ad040bdaf1e0c389c5948e50",
+            "candidate-final.pt": "b2e93037096a46d1d0f75a8604f71600b1c6bed87c81444680422cdd5fe2d0e3"
+          },
+          "transactionAccepted": false,
+          "published": false
+        }
+      ],
+      "totalSeconds": 413.376472746
+    },
+    {
+      "folder": "/mnt/c/Users/30243/.codex/worktrees/reconstruction-bottom-up-20260928/olay/backend/.sources/surface-handoff-20261002-c",
+      "branches": [
+        {
+          "label": "original-control",
+          "failures": [],
+          "developmentRGB": {
+            "face": {
+              "baseline": 0.05842229686677456,
+              "initial": 0.05842229723930359,
+              "final": 0.05848931297659874
+            },
+            "hair": {
+              "baseline": 0.1389034703373909,
+              "initial": 0.13890346363186837,
+              "final": 0.1386013299226761
+            },
+            "neck": {
+              "baseline": 0.09885008409619331,
+              "initial": 0.09885008409619331,
+              "final": 0.09881144613027573
+            },
+            "cloth": {
+              "baseline": 0.12971932590007781,
+              "initial": 0.12971932590007781,
+              "final": 0.1296542391180992
+            },
+            "room": {
+              "baseline": 0.04158640578389168,
+              "initial": 0.04158640503883362,
+              "final": 0.04142279401421547
+            }
+          },
+          "restore": {
+            "model": true,
+            "optimizers": true,
+            "samplers": true,
+            "rng": true,
+            "strategy": true,
+            "trainable": true,
+            "bindings": true
+          },
+          "frozenMaxChange": 0.0,
+          "initialDifference": {
+            "rgb": 5.364418029785156E-07,
+            "alpha": 1.1920928955078125E-07,
+            "q": 5.364418029785156E-07
+          },
+          "count": 50095,
+          "assetHash": "59a8c222b0e9b135de3559b793eca6937847f5cb23cc60a00f22bbf96dda41ab",
+          "steps": 320,
+          "trainSeconds": 36.246186927,
+          "allocatedMiB": 768.8828125,
+          "reservedMiB": 1044.0,
+          "fileHashes": {
+            "initial.pt": "2af1387017099778fa50f511863cff6a2d3029db7000a65d234435f948dc6bd5",
+            "restored.pt": "7865258c9e83a27f8e9ce72aac268ae8520f8102911693f31e3d3ca43f812bd0",
+            "mid.pt": "f657c876117d2a9a5d7b7b3e4560fff57da8e9dd16009e92d45f1e62dae01c76",
+            "candidate-final.pt": "53b70802ec7c39a4ca518ca520ed7c9b47084a9236c274f4d7082144171f733f"
+          },
+          "transactionAccepted": false,
+          "published": false
+        },
+        {
+          "label": "surface-replacement",
+          "failures": [
+            "neck_rgb:frame_0010.png",
+            "cloth_rgb:frame_0010.png",
+            "cloth_coverage:frame_0010.png",
+            "room_rgb:frame_0010.png",
+            "room_coverage:frame_0010.png",
+            "room_holes:frame_0010.png",
+            "cloth_rgb:frame_0005.png",
+            "cloth_coverage:frame_0005.png",
+            "cloth_holes:frame_0005.png",
+            "room_rgb:frame_0005.png",
+            "room_coverage:frame_0005.png",
+            "room_holes:frame_0005.png",
+            "neck_rgb:frame_0006.png",
+            "cloth_rgb:frame_0006.png",
+            "cloth_coverage:frame_0006.png",
+            "cloth_holes:frame_0006.png",
+            "room_rgb:frame_0006.png",
+            "room_coverage:frame_0006.png",
+            "room_holes:frame_0006.png",
+            "neck_rgb:frame_0012.png",
+            "cloth_rgb:frame_0012.png",
+            "room_rgb:frame_0012.png",
+            "room_coverage:frame_0012.png",
+            "room_holes:frame_0012.png",
+            "neck_rgb:frame_0013.png",
+            "cloth_rgb:frame_0013.png",
+            "room_rgb:frame_0013.png",
+            "room_coverage:frame_0013.png",
+            "room_holes:frame_0013.png",
+            "neck_rgb:frame_0015.png",
+            "cloth_rgb:frame_0015.png",
+            "room_rgb:frame_0015.png",
+            "room_coverage:frame_0015.png",
+            "room_holes:frame_0015.png",
+            "cloth_rgb:frame_0035.png",
+            "room_rgb:frame_0035.png",
+            "room_coverage:frame_0035.png",
+            "room_holes:frame_0035.png",
+            "neck_rgb:frame_0115.png",
+            "cloth_rgb:frame_0115.png",
+            "cloth_coverage:frame_0115.png",
+            "room_rgb:frame_0115.png",
+            "room_coverage:frame_0115.png",
+            "room_holes:frame_0115.png",
+            "cloth_rgb:frame_0130.png",
+            "cloth_coverage:frame_0130.png",
+            "room_rgb:frame_0130.png",
+            "room_holes:frame_0130.png",
+            "cloth_rgb:frame_0145.png",
+            "room_rgb:frame_0145.png",
+            "room_coverage:frame_0145.png",
+            "room_holes:frame_0145.png"
+          ],
+          "developmentRGB": {
+            "face": {
+              "baseline": 0.05842229686677456,
+              "initial": 0.027900063991546632,
+              "final": 0.027894997969269753
+            },
+            "hair": {
+              "baseline": 0.1389034703373909,
+              "initial": 0.05720265209674835,
+              "final": 0.0570261649787426
+            },
+            "neck": {
+              "baseline": 0.09885008409619331,
+              "initial": 0.1142800509929657,
+              "final": 0.11427985578775406
+            },
+            "cloth": {
+              "baseline": 0.12971932590007781,
+              "initial": 0.13651689738035203,
+              "final": 0.13651690781116485
+            },
+            "room": {
+              "baseline": 0.04158640578389168,
+              "initial": 0.08544301241636276,
+              "final": 0.07538710907101631
+            }
+          },
+          "restore": {
+            "model": true,
+            "optimizers": true,
+            "samplers": true,
+            "rng": true,
+            "strategy": true,
+            "trainable": true,
+            "bindings": true
+          },
+          "frozenMaxChange": 0.0,
+          "initialDifference": {
+            "rgb": 0.7423895597457886,
+            "alpha": 0.7424479126930237,
+            "q": 0.7424478530883789
+          },
+          "count": 83909,
+          "assetHash": "3d3ebeb7966440a7912bc4cdb9ac82f782b49fdba9e24f47a17710f7c23815b1",
+          "steps": 320,
+          "trainSeconds": 38.464406094000026,
+          "allocatedMiB": 809.27978515625,
+          "reservedMiB": 1100.0,
+          "fileHashes": {
+            "initial.pt": "0dc312fc70e246675b88c7a393219d33e33299c2abb11682cf7fb04c0ff6d3ad",
+            "restored.pt": "835e219b16b94fd8cfadaaf6d0c9833e7bbc0f8cf6f6d4e3ecf84001303d59ce",
+            "mid.pt": "3057311784849f24459903485c1fb2ff9583f0b3b1ed25fdc83da1d5be9c4ebe",
+            "candidate-final.pt": "7050977b2fbda2a6ebcd616b24fb127a6cc3bf4320e2d63db7b6b9a197b2fa10"
+          },
+          "transactionAccepted": false,
+          "published": false
+        }
+      ],
+      "totalSeconds": 277.375007022
+    },
+    {
+      "folder": "/mnt/c/Users/30243/.codex/worktrees/reconstruction-bottom-up-20260928/olay/backend/.sources/surface-handoff-20261002-d",
+      "branches": [
+        {
+          "label": "original-control",
+          "failures": [],
+          "developmentRGB": {
+            "face": {
+              "baseline": 0.05842229686677456,
+              "initial": 0.05842229723930359,
+              "final": 0.058535417541861534
+            },
+            "hair": {
+              "baseline": 0.1389034703373909,
+              "initial": 0.13890346363186837,
+              "final": 0.13869852051138878
+            },
+            "neck": {
+              "baseline": 0.09885008409619331,
+              "initial": 0.09885008409619331,
+              "final": 0.09880988299846649
+            },
+            "cloth": {
+              "baseline": 0.12971932590007781,
+              "initial": 0.12971932590007781,
+              "final": 0.12971884310245513
+            },
+            "room": {
+              "baseline": 0.04158640578389168,
+              "initial": 0.04158640503883362,
+              "final": 0.04147450774908066
+            }
+          },
+          "restore": {
+            "model": true,
+            "optimizers": true,
+            "samplers": true,
+            "rng": true,
+            "strategy": true,
+            "trainable": true,
+            "bindings": true
+          },
+          "frozenMaxChange": 0.0,
+          "initialDifference": {
+            "rgb": 5.364418029785156E-07,
+            "alpha": 1.1920928955078125E-07,
+            "q": 5.364418029785156E-07
+          },
+          "count": 50095,
+          "assetHash": "a74be01d94909fb49967e0531d2bc87dc47a5dba5ff5a66f96c7ac0b71bd2166",
+          "steps": 320,
+          "trainSeconds": 37.12259286,
+          "allocatedMiB": 768.7451171875,
+          "reservedMiB": 1044.0,
+          "fileHashes": {
+            "initial.pt": "1951a37f9a18cf87ef961d155e7f2161acd638b6b84f292890c4fa56a06bb999",
+            "restored.pt": "f44dbbf7d99ba168487531f2c50fb2cb1114d110384643725e854009566e2ce8",
+            "mid.pt": "2299e4ca55b788c930b9b51b79243ea9a14198d0ec408d387dc206183ce1fdbe",
+            "candidate-final.pt": "35505a8bcc92bcd20a2770c5af5ad43ea53fccf0d631166c613ff5552bd7fb18"
+          },
+          "transactionAccepted": false,
+          "published": false
+        },
+        {
+          "label": "surface-replacement",
+          "failures": [
+            "neck_rgb:frame_0010.png",
+            "room_rgb:frame_0010.png",
+            "room_coverage:frame_0010.png",
+            "room_holes:frame_0010.png",
+            "cloth_rgb:frame_0005.png",
+            "cloth_coverage:frame_0005.png",
+            "cloth_holes:frame_0005.png",
+            "room_rgb:frame_0005.png",
+            "room_coverage:frame_0005.png",
+            "room_holes:frame_0005.png",
+            "neck_rgb:frame_0006.png",
+            "room_rgb:frame_0006.png",
+            "room_coverage:frame_0006.png",
+            "room_holes:frame_0006.png",
+            "neck_rgb:frame_0012.png",
+            "room_rgb:frame_0012.png",
+            "room_holes:frame_0012.png",
+            "neck_rgb:frame_0013.png",
+            "room_rgb:frame_0013.png",
+            "room_holes:frame_0013.png",
+            "neck_rgb:frame_0015.png",
+            "room_rgb:frame_0015.png",
+            "room_holes:frame_0015.png",
+            "room_rgb:frame_0035.png",
+            "neck_rgb:frame_0115.png",
+            "cloth_rgb:frame_0115.png",
+            "room_rgb:frame_0115.png",
+            "room_coverage:frame_0115.png",
+            "room_holes:frame_0115.png",
+            "room_rgb:frame_0130.png",
+            "room_rgb:frame_0145.png"
+          ],
+          "developmentRGB": {
+            "face": {
+              "baseline": 0.05842229686677456,
+              "initial": 0.027901217713952063,
+              "final": 0.02789402790367603
+            },
+            "hair": {
+              "baseline": 0.1389034703373909,
+              "initial": 0.057193473726511,
+              "final": 0.05698626488447189
+            },
+            "neck": {
+              "baseline": 0.09885008409619331,
+              "initial": 0.11411016285419465,
+              "final": 0.11411462128162383
+            },
+            "cloth": {
+              "baseline": 0.12971932590007781,
+              "initial": 0.13064776062965394,
+              "final": 0.13062045127153396
+            },
+            "room": {
+              "baseline": 0.04158640578389168,
+              "initial": 0.08707644045352936,
+              "final": 0.06416651755571365
+            }
+          },
+          "restore": {
+            "model": true,
+            "optimizers": true,
+            "samplers": true,
+            "rng": true,
+            "strategy": true,
+            "trainable": true,
+            "bindings": true
+          },
+          "frozenMaxChange": 0.0,
+          "initialDifference": {
+            "rgb": 0.7423895597457886,
+            "alpha": 0.41804981231689453,
+            "q": 0.5236313939094543
+          },
+          "count": 220780,
+          "assetHash": "5d22f9370a0b94661a5e04441e9304c37842e51c44c38915e561866323b1b3ae",
+          "steps": 320,
+          "trainSeconds": 41.664653027000014,
+          "allocatedMiB": 959.6552734375,
+          "reservedMiB": 1246.0,
+          "fileHashes": {
+            "initial.pt": "f0999056fcb65e1ebc566ba1c6df54da8f3d7638dbc6091b0fd02ae9f0706c41",
+            "restored.pt": "66213b0262624febbbb48decf4fa22e26a98e0de4e7304825ec242ee579d71dc",
+            "mid.pt": "b002ca738880d6bd3e759c97464974815fd826a1687da3a50610ecea1cd03980",
+            "candidate-final.pt": "eef0745faf3f869f053aa9c351b5ffaeeb2983ac8bcab3297e42dffc5bc61b70"
+          },
+          "transactionAccepted": false,
+          "published": false
+        }
+      ],
+      "totalSeconds": 289.528108143
+    }
+  ],
+  "contracts": {
+    "tests": 23,
+    "passed": true,
+    "seconds": 4.918,
+    "rawLogSHA256": "c5c7398ca17bac81812ee9a2b978e969cb8d47e661035546d8ae8cf975188821",
+    "rawLogPath": "C:\\Users\\30243\\.codex\\worktrees\\reconstruction-bottom-up-20260928\\olay\\backend\\.sources\\surface-handoff-summary-20261002-d\\tests-raw.log",
+    "committedLogNormalization": "trim trailing whitespace only; all entries and results retained"
+  },
+  "desktop": [
+    {
+      "label": "baseline",
+      "assetHash": "a343ccf05292ce1e174c7fd63795122347a8d03bd0202a19395a9a414b691f41",
+      "pointCount": 50095,
+      "errors": [],
+      "version": "2.22.4",
+      "canvas": [
+        1080,
+        1920
+      ],
+      "gamma": 1,
+      "exposure": 1,
+      "fog": "none",
+      "postEffects": 0,
+      "dataFormat": "compact",
+      "minPixelSize": 2,
+      "engineSha256": "84cbb598171c711e29df9802ea1dffa61ff54fc8f811b0f69270eaf3000aa74d"
+    },
+    {
+      "label": "control",
+      "assetHash": "a74be01d94909fb49967e0531d2bc87dc47a5dba5ff5a66f96c7ac0b71bd2166",
+      "pointCount": 50095,
+      "errors": [],
+      "version": "2.22.4",
+      "canvas": [
+        1080,
+        1920
+      ],
+      "gamma": 1,
+      "exposure": 1,
+      "fog": "none",
+      "postEffects": 0,
+      "dataFormat": "compact",
+      "minPixelSize": 2,
+      "engineSha256": "84cbb598171c711e29df9802ea1dffa61ff54fc8f811b0f69270eaf3000aa74d"
+    },
+    {
+      "label": "candidate",
+      "assetHash": "5d22f9370a0b94661a5e04441e9304c37842e51c44c38915e561866323b1b3ae",
+      "pointCount": 220780,
+      "errors": [],
+      "version": "2.22.4",
+      "canvas": [
+        1080,
+        1920
+      ],
+      "gamma": 1,
+      "exposure": 1,
+      "fog": "none",
+      "postEffects": 0,
+      "dataFormat": "compact",
+      "minPixelSize": 2,
+      "engineSha256": "84cbb598171c711e29df9802ea1dffa61ff54fc8f811b0f69270eaf3000aa74d"
+    }
+  ],
+  "published": false,
+  "deployed": false,
+  "assetTransferred": false,
+  "defaultChanged": false,
+  "HarmonyOSTested": false,
+  "newVideoTested": false,
+  "overallQualityPassed": false,
+  "faceTrainingSteps": 0,
+  "bodyTrainingSteps": 0,
+  "roomAdamSteps": 1920,
+  "limits": "Snapshots preserve historical execution; final code adds observation identity and unverified-cloth-depth guards. Git does not back up private .sources assets."
+}

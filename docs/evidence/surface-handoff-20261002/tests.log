@@ -1,0 +1,33 @@
+test_body_motion_matches_camera_projection (test_surface_handoff.SurfaceHandoffTest) ... ok
+test_finite_planar_domain_preserves_samples (test_surface_handoff.SurfaceHandoffTest) ... ok
+test_missing_motion_is_unknown (test_surface_handoff.SurfaceHandoffTest) ... ok
+test_motion_world_unit_invariance (test_surface_handoff.SurfaceHandoffTest) ... ok
+test_nonplanar_and_line_support_rejected (test_surface_handoff.SurfaceHandoffTest) ... ok
+test_plane_is_3d_surface_not_screen_paste (test_surface_handoff.SurfaceHandoffTest) ... ok
+test_projection_support_can_replace_wrong_depth_not_human (test_surface_handoff.SurfaceHandoffTest) ... ok
+test_unknown_motion_omits_depth_without_omitting_rgb (test_surface_handoff.SurfaceHandoffTest) ... ok
+test_boundary_never_clamps_into_valid_pixel (test_ray_surface.SurfaceContracts) ... ok
+test_depth_error_is_invariant_to_scene_units (test_ray_surface.SurfaceContracts) ... ok
+test_flat_background_all_pixels_have_rgb_supervision (test_ray_surface.SurfaceContracts) ... ok
+test_motion_transport_keeps_ids_and_rotates_offset (test_ray_surface.SurfaceContracts) ... ok
+test_opacity_scaling_does_not_reduce_normalized_error (test_ray_surface.SurfaceContracts) ... ok
+test_same_forward_and_parameter_gradients (test_ray_surface.SurfaceContracts) ... W1002 01:17:45.350000 671 torch/utils/cpp_extension.py:2425] TORCH_CUDA_ARCH_LIST is not set, all archs for visible cards are included for compilation.
+W1002 01:17:45.350000 671 torch/utils/cpp_extension.py:2425] If this is not desired, please set os.environ['TORCH_CUDA_ARCH_LIST'] to specific architectures.
+/mnt/c/Users/30243/.codex/worktrees/reconstruction-bottom-up-20260928/olay/backend/test_ray_surface.py:31: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  self.assertLess(float((b['q'].sum(-1)-b['alpha']).abs().max()),1e-5)
+ok
+test_two_surfaces_not_just_average_depth (test_ray_surface.SurfaceContracts) ... ok
+test_endpoints_and_continuity (test_reconstruction_continuity_surface.ContinuityTests) ... ok
+test_intermediate_sh_transport_is_a_rotation_not_colour_averaging (test_reconstruction_continuity_surface.ContinuityTests) ... ok
+test_invalid_transition (test_reconstruction_continuity_surface.ContinuityTests) ... ok
+test_neck_association_excludes_arms_and_preserves_observed_gaps (test_reconstruction_continuity_surface.ContinuityTests) ... ok
+test_physical_layers_no_cross_edges (test_reconstruction_continuity_surface.ContinuityTests) ... ok
+test_reference_identity_all_fields (test_reconstruction_continuity_surface.ContinuityTests) ... ok
+test_shared_motion_reference_and_gradient (test_reconstruction_continuity_surface.ContinuityTests) ... ok
+test_transition_keeps_motion_orientation_and_sh_gradients (test_reconstruction_continuity_surface.ContinuityTests) ... ok
+
+----------------------------------------------------------------------
+Ran 23 tests in 4.918s
+
+OK

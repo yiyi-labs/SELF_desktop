@@ -72,11 +72,13 @@ def transport_patch(original,reference,patch):
         original.opacity+(delta.opacity-reference.opacity),sh,original.parts)
 
 
-def collect_observed_depth(depth_folder,data,train_names,masks,body_names,out):
+def collect_observed_depth(depth_folder,data,train_names,masks,body_names,out,*,body_motion=None,body_motion_verified=False):
     """Dense pixel support, not SIFT/Delaunay coverage. Distinct train views.
     Keep unknown/unconfirmed pixels out of depth loss, never out of RGB loss.
     Fixed 3% depth consistency; no per-frame depth rescaling. Each window's
     scale was previously verified by its saved camera contract.
+    Clothing requires explicitly verified same-unit motion; missing or merely
+    photometric motion omits depth supervision, never the RGB observations.
     """
     folder=Path(depth_folder);spec=json.loads((folder/'manifest.json').read_text())
     if spec['sourceHash']!=data['sourceHash'] or spec['depthMeaning']!='camera_z' or spec['matrixMeaning']!='W2C':
@@ -93,7 +95,8 @@ def collect_observed_depth(depth_folder,data,train_names,masks,body_names,out):
         n=r['imageName'];a=cache[r['file']];h,w=a['depth'].shape
         yy,xx=np.mgrid[:h,:w];uv=np.c_[xx.ravel(),yy.ravel()].astype(float)
         dep=a['depth'].ravel();xyz=unproject(uv,dep,a['K'],a['W2C']);nuv=native_uv(uv,a['nativeToProcessed'])
-        layers=['room']+(['cloth'] if n in body_names else [])
+        from reconstruction_surface_handoff import observation_layers
+        layers=observation_layers(n,body_names,body_motion,body_motion_verified)
         result={}
         for layer in layers:
             own=sample_mask(masks[n][layer],nuv)&np.isfinite(dep)&(dep>0)
@@ -102,7 +105,13 @@ def collect_observed_depth(depth_folder,data,train_names,masks,body_names,out):
             for t in rows:
                 tn=t['imageName']
                 if t['window']!=r['window'] or tn in seen or (layer=='cloth' and tn not in body_names):continue
-                seen.add(tn);b=cache[t['file']];puv,z=project(xyz,b['K'],b['W2C'])
+                seen.add(tn);b=cache[t['file']]
+                projected=xyz
+                if layer=='cloth':
+                    if tn not in body_motion:continue
+                    from reconstruction_surface_handoff import move_observation_points
+                    projected=move_observation_points(xyz,n,tn,body_motion)
+                puv,z=project(projected,b['K'],b['W2C'])
                 d=bilinear(b['depth'],puv);cf=bilinear(b['confidence'],puv)
                 valid=np.isfinite(d)&(d>0)&(z>0)&sample_mask(masks[tn][layer],native_uv(puv,b['nativeToProcessed']))
                 valid &= cf>=np.quantile(b['confidence'],.2)
@@ -127,5 +136,5 @@ def collect_observed_depth(depth_folder,data,train_names,masks,body_names,out):
     out=Path(out);out.mkdir(exist_ok=False)
     for n,layers in priors.items():np.savez_compressed(out/(n+'.npz'),**{k+suffix:value for k,pair in layers.items() for suffix,value in zip(('_depth','_valid'),pair)})
     (out/'manifest.json').write_text(json.dumps(dict(sourceHash=data['sourceHash'],inputManifestHash=digest(folder/'manifest.json'),modelLock=spec['modelLock'],records=records,
-        supervision='camera-conditioned multiview depth; not independent truth',rgbUsesAllValidObservedPixels=True),indent=2),encoding='utf-8')
+        supervision='camera-conditioned multiview depth; not independent truth',bodyDepthMotion='verified explicit same-unit B transport' if body_motion is not None and body_motion_verified else 'unknown; omitted from depth, retained in RGB',rgbUsesAllValidObservedPixels=True),indent=2),encoding='utf-8')
     return priors,records
