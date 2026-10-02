@@ -1,0 +1,38 @@
+test_hash_change_is_rejected_before_loading (test_reconstruction_checkpoint.CheckpointTests) ... ok
+test_numpy_sampler_scalar_is_data (test_reconstruction_checkpoint.CheckpointTests) ... ok
+test_restore_requires_every_declared_field (test_reconstruction_checkpoint.CheckpointTests) ... ok
+test_restore_topology_preserves_parameter_and_buffer_roles (test_reconstruction_checkpoint.CheckpointTests) ... ok
+test_safe_numpy_and_tensor_schema (test_reconstruction_checkpoint.CheckpointTests) ... ok
+test_unapproved_global_is_not_executed (test_reconstruction_checkpoint.CheckpointTests) ... ok
+test_all_components_kept_and_patch_geometry_frozen (test_reconstruction_complete_room.CompleteTransactionTests) ... ok
+test_consolidated_draw_preserves_pixels_and_source_gradients (test_reconstruction_complete_room.CompleteTransactionTests) ... W1002 18:50:19.157000 6362 torch/utils/cpp_extension.py:2425] TORCH_CUDA_ARCH_LIST is not set, all archs for visible cards are included for compilation.
+W1002 18:50:19.157000 6362 torch/utils/cpp_extension.py:2425] If this is not desired, please set os.environ['TORCH_CUDA_ARCH_LIST'] to specific architectures.
+ok
+test_edge_structure_does_not_cross_invalid_mask (test_reconstruction_complete_room.PhysicalSupportTests) ... ok
+test_finite_plane_from_distributed_real_tracks (test_reconstruction_complete_room.PhysicalSupportTests) ... ok
+test_low_texture_room_not_limited_to_feature_mask (test_reconstruction_complete_room.PhysicalSupportTests) ... ok
+test_old_seed_outside_plane_needs_multiple_finite_projection_supports (test_reconstruction_complete_room.PhysicalSupportTests) ... ok
+test_sampled_descendants_need_all_measured_parents_on_plane (test_reconstruction_complete_room.PhysicalSupportTests) ... ok
+test_true_color_conflicts_not_turned_into_unknown (test_reconstruction_complete_room.PhysicalSupportTests) ... ok
+test_unknown_and_outside_not_supervised (test_reconstruction_complete_room.PhysicalSupportTests) ... ok
+test_full_canvas_covariance_matches_reference_pixels_and_gradients (test_reconstruction_live_fullframe.LiveCudaContractTest) ... /mnt/d/STUDY/College/mine/olay/backend/test_reconstruction_live_fullframe.py:68: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  self.assertLess(float((candidate["q"].sum(-1)-candidate["alpha"]).abs().max()),1e-6)
+ok
+test_scene_keeps_person_and_room_in_common_composition (test_reconstruction_live_fullframe.LiveCudaContractTest) ... ok
+test_adapter_requires_exact_local_source_set (test_reconstruction_live_fullframe.LiveEntryContractTest) ... ok
+test_frame_retains_native_pixels_and_recorded_crop_k (test_reconstruction_live_fullframe.LiveEntryContractTest) ... ok
+test_accepted_children_retire_parent_and_keep_lineage (test_reconstruction_portrait_model.PortraitModelTest) ... ok
+test_connected_walk_and_semantic_barrier (test_reconstruction_portrait_model.PortraitModelTest) ... ok
+test_import_does_not_filter_or_recolor (test_reconstruction_portrait_model.PortraitModelTest) ... ok
+test_invalid_parent_index_and_incomplete_child_evidence (test_reconstruction_portrait_model.PortraitModelTest) ... ok
+test_one_invalid_child_keeps_its_parent (test_reconstruction_portrait_model.PortraitModelTest) ... ok
+test_parent_replacement_and_complete_adam_rollback (test_reconstruction_portrait_model.PortraitModelTest) ... ok
+test_shared_surface_receives_multiview_geometry_gradient (test_reconstruction_portrait_model.PortraitModelTest) ... ok
+test_soft_band_has_scale_gradient_but_no_hair_pressure (test_reconstruction_portrait_model.PortraitModelTest) ... ok
+test_world_projection_covariance_and_direction_preserved (test_reconstruction_portrait_model.PortraitModelTest) ... ok
+
+----------------------------------------------------------------------
+Ran 28 tests in 2.870s
+
+OK

@@ -5,7 +5,7 @@ import cv2,numpy as np,torch
 from gsplat import export_splats
 from reconstruction_complete_model import load_complete
 from reconstruction_checkpoint import file_sha256
-from reconstruction_portrait_pipeline import make_frame,draw
+from reconstruction_render_contract import make_frame,draw
 
 
 def export_state(state,path):

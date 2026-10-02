@@ -6,6 +6,10 @@ import torch
 from reconstruction_checkpoint import load_checkpoint,restore_tensors,file_sha256
 
 
+class UnknownGlobal:
+    def __reduce__(self):return len,('untrusted schema',)
+
+
 class CheckpointTests(unittest.TestCase):
     def test_safe_numpy_and_tensor_schema(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -14,6 +18,22 @@ class CheckpointTests(unittest.TestCase):
             actual=load_checkpoint(path,expected_hash=file_sha256(path))
             self.assertTrue(torch.equal(actual['model']['a'],torch.tensor([1.,2.])))
             np.testing.assert_array_equal(actual['extra']['parts'],[1,4])
+
+    def test_numpy_sampler_scalar_is_data(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path=Path(directory)/'sampler.pt'
+            torch.save({'model':{},'sampler':{'remaining':[np.str_('frame_1')],
+                'value':np.float32(.25)}},path)
+            actual=load_checkpoint(path,expected_hash=file_sha256(path))
+            self.assertEqual(actual['sampler']['remaining'][0],'frame_1')
+            self.assertEqual(float(actual['sampler']['value']),.25)
+
+    def test_unapproved_global_is_not_executed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path=Path(directory)/'unknown.pt'
+            torch.save({'model':{},'extra':UnknownGlobal()},path)
+            with self.assertRaisesRegex(ValueError,'unsupported_checkpoint_globals'):
+                load_checkpoint(path,expected_hash=file_sha256(path))
 
     def test_hash_change_is_rejected_before_loading(self):
         with tempfile.TemporaryDirectory() as directory:

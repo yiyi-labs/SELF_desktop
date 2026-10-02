@@ -16,7 +16,7 @@ from reconstruction_checkpoint import load_checkpoint, file_sha256, restore_tens
 from reconstruction_portrait_model import (LocalPortraitModel, GaussianState,
     joined_state, scaled_head_transform, quaternion_matrix, quat_product,
     rotate_sh1, rotation_quaternion)
-from reconstruction_portrait_pipeline import make_frame, full_frame_draw, draw
+from reconstruction_render_contract import make_frame, full_frame_draw, draw
 
 
 def pick(state, index):

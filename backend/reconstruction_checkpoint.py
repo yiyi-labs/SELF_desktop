@@ -18,14 +18,14 @@ def load_checkpoint(path, *, expected_hash=None, device='cpu'):
     if expected_hash is not None and file_sha256(path) != expected_hash:
         raise ValueError('checkpoint_hash_changed')
     allowed_names = {'numpy.ndarray', 'numpy.dtype',
-                     'numpy._core.multiarray._reconstruct'}
+                     'numpy._core.multiarray._reconstruct', 'numpy._core.multiarray.scalar'}
     unexpected = set(torch.serialization.get_unsafe_globals_in_checkpoint(path)) - allowed_names
     if unexpected:
         raise ValueError('unsupported_checkpoint_globals:' + ','.join(sorted(unexpected)))
     types = ('int8', 'int16', 'int32', 'int64', 'uint8', 'uint16', 'uint32',
              'uint64', 'float16', 'float32', 'float64', 'bool', 'str', 'bytes',
              'object', 'complex64', 'complex128')
-    allowed = [np._core.multiarray._reconstruct, np.ndarray, np.dtype]
+    allowed = [np._core.multiarray._reconstruct, np._core.multiarray.scalar, np.ndarray, np.dtype]
     allowed += [type(np.dtype(t)) for t in types]
     with torch.serialization.safe_globals(allowed):
         result = torch.load(path, map_location=device, weights_only=True)
