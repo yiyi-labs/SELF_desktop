@@ -1,0 +1,17 @@
+{
+  "time": 1790950731,
+  "device": "6DP0226117002287",
+  "health": {
+    "status": "ready",
+    "protocol": 1,
+    "chunkBytes": 1048576,
+    "maxCaptureBytes": 1073741824,
+    "engine": "ready",
+    "algorithm": "portrait-first-soft-surface-test",
+    "algorithmVersion": "portrait-native-fullframe-20261002-research"
+  },
+  "echoBytes": 2048,
+  "echoSha256": "707f1f1442fead5a44537b9eb701cadfea8a43485bbd87d5d9234a005a35b993",
+  "echoVerified": true,
+  "probe": "actual device toybox nc over HDC reverse; no capture submission"
+}

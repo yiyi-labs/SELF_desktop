@@ -1,0 +1,15 @@
+{
+  "engine": "portrait-first-soft-surface-test",
+  "userTestingAuthorized": true,
+  "algorithmVersion": "portrait-native-fullframe-20261002-research",
+  "preparedCache": ".sources/integrated-components-v2-20260928-e",
+  "releaseApproved": false,
+  "executionAdapter": "native-fullframe",
+  "entrySourceHashes": {
+    "reconstruction_portrait_pipeline.py": "35733bcb0d4c039ca5827e081e54adcc4a919a2ed7695d06d200f20d8d5a6886",
+    "appearance_direction_contract.py": "ca446dd11de3c2c89fc0a10680d1d792efda827b8d2da54adf80bfb05048a0fa",
+    "reconstruction_live_fullframe.py": "6f87c2e1d6aa42084195a43ae035bc0e2e2d307e859dc0ac841108a27afd6006",
+    "reconstruction_portrait_model.py": "626f0efeef69be398323ee3979dc19384284c88943d87fd87d7341e91b8c084d"
+  },
+  "implementationSha256": "f12f8677f485404aa313904e8040241066a5442f47ab0e4ad98fea1d997e5798"
+}

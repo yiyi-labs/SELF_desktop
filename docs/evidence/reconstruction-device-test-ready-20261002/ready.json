@@ -1,0 +1,12 @@
+{
+  "ready": true,
+  "workerPid": 6777,
+  "freshHeartbeat": true,
+  "algorithm": "portrait-native-fullframe-20261002-research",
+  "implementationSha256": "f12f8677f485404aa313904e8040241066a5442f47ab0e4ad98fea1d997e5798",
+  "localSteps": 900,
+  "roomSteps": 300,
+  "surfaceRefine": false,
+  "cuda": "12.8",
+  "vramMiB": 8123
+}
