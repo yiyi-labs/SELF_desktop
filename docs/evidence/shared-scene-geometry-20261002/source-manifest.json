@@ -1,0 +1,26 @@
+{
+  "sourceFiles": {
+    "reconstruction_shared_scene_geometry.py": "1dd3a4428ff02ecc6b744b17d2fbc0367c5e061d4c90ead585ddb3fcba258130",
+    "run_shared_scene_geometry.py": "337c27a5c5b6498bd5ce41e4b57b80ed2767e07921215dd08dedb465db0462d7",
+    "test_shared_scene_geometry.py": "da796dbe9b32176d638a6e6865cc0813e90c3130f6566db2946b07e0c1b5fb3e",
+    "audit_shared_scene_preflight.py": "371bb5dbb33d0020c999c2c167fe4a934b4bffd72e51a0bd37537e0453548a0b",
+    "audit_shared_scene_geometry_results.py": "1c0b1da1d9ed30a6f511464738743f2867c319c8e3a6913a8a6494f72fd27131",
+    "audit_shared_scene_state.py": "0b7a2b6c1338e37b3d46c395af7e2ca82ed494842ae82faaf1ca50520185aec0",
+    "run_static_depth_calibration.py": "a82c7c6636e13594d9babcedb4654173a33d11617387813ebe7875d98078d894",
+    "run_measured_body_handoff.py": "1985d6bb49869820aea2bf1f67a4b3fd435598caf711314e0369ed45b88b617b",
+    "run_locked_body_tracks.py": "aff9c99caaad40562bf546db3a5c008e9bf8d88816bd8561cfcb88ceca4421d5",
+    "test_measured_scene_geometry.py": "0aad84887d8987a92a991ae7129f0e1cfdc515df6df8ec06d6d5069ea8ae125d",
+    "audit_measured_body_fit.py": "ac4cf21827f3e126dbd7e98e78a0b6da429ada26183fb5e4a7d3acd954fab4cd",
+    "audit_body_static_context.py": "d533a9f12af3a90ef5ae86a549ac113304327e48911b8a86fdc020514770ced2"
+  },
+  "execution": "Each private run has its own executed source snapshot; this manifest identifies final submitted files, not retroactive execution.",
+  "headAtStart": "1455dd3761234b5491b3ad117819f811d36e34b6",
+  "existingModifiedFileNotIncluded": "backend/build_continuity_candidates.py",
+  "checks": {
+    "finalTests33": "final-tests.log",
+    "extendedTests35": "extended-tests.log"
+  },
+  "qualityPassed": false,
+  "productionChanged": false,
+  "assetsTransferred": false
+}
