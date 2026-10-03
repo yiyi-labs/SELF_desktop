@@ -44,22 +44,24 @@ def split_surface_parameters(scene, optimizer, selected):
     # state keys still address the pre-split parameter objects, so snapshot
     # those once and drop stale keys when replacing.
     originals={group["name"]:p[group["name"]] for current in _optimizers(optimizer) for group in current.param_groups}
+    saved={id(current):dict(current.state) for current in _optimizers(optimizer)}
     for current in _optimizers(optimizer):
+        # Drop every stale state key once (retired params must never surface
+        # in state_dict), then re-register each remapped parameter state.
+        current.state.clear()
         for group in current.param_groups:
             name=group["name"]
-            old=originals[name]
-            old_state=current.state.pop(old,{})
-            new=torch.nn.Parameter(updates[name],requires_grad=old.requires_grad)
+            old_state=saved[id(current)].pop(originals[name],{})
+            new=torch.nn.Parameter(updates[name],requires_grad=originals[name].requires_grad)
             p[name]=new
             group["params"]=[new]
             state={}
             for key,value in old_state.items():
-                if torch.is_tensor(value) and value.shape==old.shape:
+                if torch.is_tensor(value) and value.shape==originals[name].shape:
                     state[key]=value[mapping].clone()
                     state[key][child_start:]=0
                 else:
                     state[key]=copy.deepcopy(value)
-            current.state.clear()
             current.state[new]=state
     scene.environment_parts=scene.environment_parts[mapping].clone()
     old_initial_means=scene.environment_initial_means
@@ -140,21 +142,21 @@ def prune_environment(scene, optimizer, opacity_threshold=.01, minimum_keep=.7):
     keep_idx=torch.flatnonzero(keep)
     updates={k:v.detach()[keep_idx].clone() for k,v in p.items()}
     originals={group["name"]:p[group["name"]] for current in _optimizers(optimizer) for group in current.param_groups}
+    saved={id(current):dict(current.state) for current in _optimizers(optimizer)}
     for current in _optimizers(optimizer):
+        current.state.clear()
         for group in current.param_groups:
             name=group["name"]
-            old=originals[name]
-            old_state=current.state.pop(old,{})
-            new=torch.nn.Parameter(updates[name],requires_grad=old.requires_grad)
+            old_state=saved[id(current)].pop(originals[name],{})
+            new=torch.nn.Parameter(updates[name],requires_grad=originals[name].requires_grad)
             p[name]=new
             group["params"]=[new]
             state={}
             for key,value in old_state.items():
-                if torch.is_tensor(value) and value.shape==old.shape:
+                if torch.is_tensor(value) and value.shape==originals[name].shape:
                     state[key]=value[keep_idx].clone()
                 else:
                     state[key]=copy.deepcopy(value)
-            current.state.clear()
             current.state[new]=state
     scene.environment_parts=scene.environment_parts[keep_idx].clone()
     scene.environment_initial_means=scene.environment_initial_means[keep_idx].clone()

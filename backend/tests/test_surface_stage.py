@@ -95,7 +95,7 @@ class DualClockSplitTest(unittest.TestCase):
             environment_layers=np.array(["room","cloth"]))
         report=split_surface_parameters(scene,(envopt,bodyopt),[0])
         self.assertEqual(report["after"],3)
-        torch.save({"e":envopt.state_dict(),"b":bodyopt.state_dict()},bytes())
+        import io;torch.save({"e":envopt.state_dict(),"b":bodyopt.state_dict()},io.BytesIO())
         # prune path with two clocks as well
         with torch.no_grad():
             p["opacities"].fill_(20.)
