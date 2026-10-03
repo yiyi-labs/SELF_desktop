@@ -42,20 +42,20 @@ HTTP 服务把上传的采集写成
 | 算法闭包 | `capture_registration.py` | 近时窗口的有界静态 2D-3D 定位：地图哈希、物理点折分、掩码 SIFT 投票与留出集验收 |
 | 算法闭包 | `checkpoint.py` | 安全 checkpoint 读取/恢复：哈希预检、numpy 白名单反序列化、逐张量 torch.equal 复核 |
 | 算法闭包 | `code_identity.py` | 实现确定性指纹：AST 递归展开 52 文件闭包并逐个 SHA-256，合成 `implementationSha256` |
-| 算法闭包 | `components_v2.py` | 研究用组件观测+支撑几何准备：掩码/矫正观测、局部拟合、尺度对齐、三角化种子与 `load_prepared` |
+| 算法闭包 | `components_v2.py` | 研究用组件观测+支撑几何准备：掩码/矫正观测、局部拟合、尺度对齐、三角化种子与 `load_prepared`（挂载 scene-valid 观测帧） |
 | 算法闭包 | `face.py` | 保守头部掩码与面部观测：mediapipe 模型哈希校验、头包络/皮肤掩码、7 类部件标签与数值 QA |
 | 算法闭包 | `flame_open_model.py` | 最小隔离的 FLAME 2023 Open 前向模型：pkl 哈希校验、LBS+姿态修正前向、105 点嵌入 |
 | 算法闭包 | `joint_visibility.py` | 人物+环境 GS 共享可见性诊断：`posed_points`、一次光栅化双贡献通道、守恒误差检查 |
 | 算法闭包 | `live_dense.py` | DA3 深度推理总控：工具源码锁、depth-only 推理、room/hair/body 高斯种子生成与算法快照 |
 | 算法闭包 | `live_dense_contract.py` | 深度研究互操作纯工具库：哈希/刚体与相机工具/参数别名补全（部分函数无调用点） |
 | 算法闭包 | `live_face_domain.py` | 语义观测 → 观测面部域：连通皮肤成分与空域认定、激活重建训练面/肤掩码、恢复重放 |
-| 算法闭包 | `live_fullframe.py` | native-fullframe 兼容转发入口：重导出别名与版本、拒绝 joint_steps≠0、原样转调 `pipeline.run` |
+| 算法闭包 | `live_fullframe.py` | native-fullframe 兼容转发入口：重导出别名与版本、透传 joint_steps（T4 联合阶段由 profile 配置）、原样转调 `pipeline.run` |
 | 算法闭包 | `live_hair_composite.py` | 冻结场景的观测头发外观标定：只训头发 sh/opacity、掩码梯度限制、其余参数位级不变断言 |
 | 算法闭包 | `live_hair_motion.py` | 参考系相对的关节 1 头发输运：颅骨刚体近似、参考帧单位阵、协方差/SH 完整输运与收据 |
 | 算法闭包 | `live_neck_appearance.py` | 可继承颈部 SH 挑选：全画布光栅化贡献、保护区互斥、≥3 支持视角阈值与选择收据 |
 | 算法闭包 | `live_neck_motion.py` | 头与准静态身体间的颈部皮肤输运：平滑权重与雅可比、完整协方差、极分解 SH 旋转 |
 | 算法闭包 | `live_opaque_person.py` | 不透明人物训练合同：三区互斥腐蚀掩码、条件颜色与结构误差、有界不透明损失 |
-| 算法闭包 | `live_prepare.py` | 逐次拍摄观测准备：真实帧选择、静态相机恢复、FLAME 局部拟合、外观先验与三角化种子 |
+| 算法闭包 | `live_prepare.py` | 逐次拍摄观测准备：真实帧选择、静态相机恢复、FLAME 局部拟合、外观先验与三角化种子；PnP 拒帧降级为 scene-valid 观测（`scene_observations.npz`，最近拟合帧代理头姿态），初始外观接受颈/颌 body-skin 颜色支持 |
 | 算法闭包 | `live_room_completion.py` | 已观测房间有界补全：最多 2 参考贪心选择、共享表面求解、增量导出与验证重放 |
 | 算法闭包 | `live_room_reference.py` | 房间参考资格评估与排序：fit/held 折分、哈希与相机一致性核验、最多取 2 个参考 |
 | 算法闭包 | `live_room_retry.py` | 已失败房间窗口的第二参考重试：严格预算合同、只发起一次求解、收尾不覆盖首轮结果 |
@@ -70,8 +70,8 @@ HTTP 服务把上传的采集写成
 | 算法闭包 | `observations.py` | 每作业帧/脸/世界证据打包：frame_selection 校验、逐帧哈希与相机标注、observation_bundle.json |
 | 算法闭包 | `observed_surface.py` | 观测域+有限表面支撑（--surface-refine）：Delaunay 加密、静态平面候选、去重并入假设 |
 | 算法闭包 | `person_supervision_state.py` | 非 Parameter 训练契约恢复：三方哈希一致、先验证后变异、证据文件逐字节复制 |
-| 算法闭包 | `portrait_model.py` | 可复用照片驱动人像模型：四元数/SH 数学、网格行走、LocalPortraitModel 与候选交易回滚 |
-| 算法闭包 | `portrait_pipeline.py` | 人像优先重建主引擎：场景装配、三档渲染、训练与审计、候选导出与算法源码快照 |
+| 算法闭包 | `portrait_model.py` | 可复用照片驱动人像模型：四元数/SH 数学、网格行走、LocalPortraitModel（分裂事务同步 neck_sh_editable）与候选交易回滚 |
+| 算法闭包 | `portrait_pipeline.py` | 人像优先重建主引擎：场景装配、三档渲染、local/T3/T4 训练（T4 为统一主体联合阶段）、环境与脸部受控增密、审计、候选导出与算法源码快照 |
 | 算法闭包 | `portrait_preview.py` | 从 PLY 生成静态预览：256×256 PNG、3D/全场景 LOD 采样、大小上限与原子替换 |
 | 算法闭包 | `pose.py` | 人脸姿态测量：canonical 顶点校验、PnP RANSAC+LM、medoid 参考系与姿态质量报告 |
 | 算法闭包 | `probe_flame_observations.py` | 研究探针：FLAME 局部/世界观测严格分离，"根旋转只应用一次"契约校验 |
@@ -84,7 +84,7 @@ HTTP 服务把上传的采集写成
 | 算法闭包 | `scene.py` | 世界坐标房间/衣物观测恢复：环境掩膜、前景净空、实测深度种子与静态表面三角化 |
 | 算法闭包 | `shared_v2.py` | 五部件共享前向试验原型：initialize/boxes/mesh_depth、ComponentStrategy 训练与审计 |
 | 算法闭包 | `static_planes.py` | 测量 track 支撑的静态平面假设：SVD 平面分组、凸包内采样、多视图颜色认同 |
-| 算法闭包 | `surface_density.py` | 有界切向表面分裂（--surface-refine）：父点选择、双子点复制、Adam 状态整体搬移 |
+| 算法闭包 | `surface_density.py` | 有界切向表面分裂与修剪：父点选择（room+body）、双子点复制、多优化器 Adam 状态整体搬移、低透明度受控 prune |
 | 算法闭包 | `surface_recovery.py` | 表面初始化证据留存与迁移：哈希校验复制、证明闭包保留、跨平台路径、checkpoint 反查 |
 | 算法闭包 | `train.py` | 早期单场景 gsplat 训练器：smoke 自检、`load_scene`、`observed_head_splats`、头部掩膜训练与导出 |
 | 算法闭包 | `view.py` | 开场机位推导与覆盖证明：注视中心/fov 反推、前 1/5 帧挑帧、broadSideCoverage 统计 |
@@ -156,7 +156,7 @@ backend\.venv\Scripts\python.exe -c "import sys;sys.path.insert(0,r'D:\STUDY\Col
 wsl -d Ubuntu-22.04 -- bash -lc 'cd /mnt/d/STUDY/College/mine/olay/backend && /opt/self-reconstruction/venv/bin/python -m unittest discover -s . -p "test_*.py"'
 ```
 
-基线（2026-10-03 改名后）：Windows 139 用例 / 34 错误；WSL 295 用例 / 13 错误。
+基线（2026-10-03 改名后）：Windows 139 用例 / 34 错误；WSL 295 用例 / 13 错误。统一主体重构（同日 f4f04fe 起）：Windows 139/34 不变；WSL 296/13（+1 jointSteps 契约用例，另含双优化器分裂回归用例）。
 全部错误都是环境缺包（Windows 缺 torch/cv2/scipy；WSL venv 缺 fastapi/httpx/PIL），
 没有项目模块缺失。
 
