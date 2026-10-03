@@ -165,7 +165,7 @@ def export_addition(fresh,solved,parent_path,out,budget,data,report,fit_ids,held
         originalCountUnchanged=len(old['means']),newCandidatesBeforeDedup=before,duplicateCandidates=int((~unique).sum()),
         budget=int(budget),actualAdded=len(chosen),sourceReceiptIndex=index,
         supportBoundary='Strict depth votes unchanged. Conditional surface has >=3 static-mask/real-colour observations; this is not measured visibility.',
-        selectionBoundary='Only source-observed room behind the primary person-depth hypothesis; no unobserved pixels filled',
+        selectionBoundary='All source-observed room with validated surface support may be sampled; no unobserved pixels filled',
         inference=False,training=False)
     proof_path=Path(out)/'surface-correction-receipt.json';write_json(proof_path,proof)
     result=dict(index=index,path=str(proof_path.resolve()),sha256=digest(proof_path),assetPath=str(asset.resolve()),
@@ -173,9 +173,83 @@ def export_addition(fresh,solved,parent_path,out,budget,data,report,fit_ids,held
     write_json(Path(out)/'addition-result.json',result);return result
 
 
-def complete_observed_room(parent_bundle,output,*,max_references=2,max_evaluations=40,extra_budget=8000):
+def _recorded_file(value,owner,expected,label):
+    path=Path(value)
+    if not path.is_absolute():path=Path(owner).parent/path
+    path=path.resolve()
+    if not isinstance(expected,str) or digest(path)!=expected:
+        raise ValueError('room_completion_replay_changed:'+label)
+    return path
+
+
+def verified_completion_replay(replay_manifest,parent_path,parent,*,max_references=2):
+    """Reuse only explicitly recorded, qualified solves from this exact parent.
+
+    Selection and geometry are frozen inputs. No new view selection, solver,
+    camera, support threshold or old output is modified by budget replay.
+    """
+    path=Path(replay_manifest).resolve();old=json.loads(path.read_text())
+    old_parent=_recorded_file(old['parentManifestPath'],path,old['parentManifestHash'],'parent')
+    if old_parent!=Path(parent_path).resolve() or digest(parent_path)!=old['parentManifestHash']:
+        raise ValueError('room_completion_replay_parent_identity')
+    for key in ('sourceSha256','preparedSha256','localGeometrySha256','depthManifestHash'):
+        if key not in parent or old.get(key)!=parent[key]:
+            raise ValueError('room_completion_replay_identity:'+key)
+    request_path=Path(parent['depthManifestPath']).parent/'request.json'
+    request=json.loads(request_path.read_text());prepared=Path(request['prepared'])
+    if not prepared.is_absolute():prepared=request_path.parent/prepared
+    for name,key in (('preparation.json','preparedSha256'),('local_geometry.npz','localGeometrySha256')):
+        if digest(prepared/name)!=parent[key]:raise ValueError('room_completion_replay_prepared_changed:'+name)
+    if request.get('sourceHash')!=parent['sourceSha256']:
+        raise ValueError('room_completion_replay_request_source')
+    rc=old['roomCompletion']
+    selected_path=_recorded_file(rc['selectionPath'],path,rc['selectionSha256'],'selection')
+    selection=json.loads(selected_path.read_text())
+    if (selection.get('sourceSha256')!=parent['sourceSha256'] or
+        selection.get('primaryReference')!=parent['reference'] or
+        selection.get('selectionUsesOnlyOriginalTrain') is not True):
+        raise ValueError('room_completion_replay_selection_identity')
+    selected=selection['selected'];keys=[(r['reference'],r['window']) for r in selected]
+    if len(keys)>max_references or len(set(keys))!=len(keys):
+        raise ValueError('room_completion_replay_selection_count')
+    outcomes={(r['reference'],r['window']):r for r in rc['outcomes']}
+    if len(outcomes)!=len(rc['outcomes']) or not set(outcomes)<=set(keys):
+        raise ValueError('room_completion_replay_outcome_identity')
+    solves={};receipts=[]
+    for addition in old['components']['room'].get('additionalSurfaceReceipts',[]):
+        proof_path=_recorded_file(addition['path'],path,addition['sha256'],'auxiliary_receipt')
+        proof=json.loads(proof_path.read_text())
+        asset=_recorded_file(addition['assetPath'],path,addition['assetSha256'],'auxiliary_asset')
+        if (proof.get('kind')!='shared-static-track-surface-correction' or proof.get('qualified') is not True
+            or proof.get('roomAssetHash')!=digest(asset)):
+            raise ValueError('room_completion_replay_auxiliary_unqualified')
+        for key in ('sourceSha256','preparedSha256','localGeometrySha256'):
+            if proof.get(key)!=parent[key]:raise ValueError('room_completion_replay_proof_identity:'+key)
+        report_path=_recorded_file(proof['solverReportPath'],proof_path,proof['solverReportSha256'],'solver_report')
+        surface_path=_recorded_file(proof['surfacePath'],proof_path,proof['surfaceSha256'],'surface')
+        report=json.loads(report_path.read_text());key=(report['reference'],report['window'])
+        if (key not in keys or key in solves or report.get('accepted') is not True or
+            report.get('sourceHash')!=parent['sourceSha256'] or proof['referenceName']!=key[0] or
+            outcomes.get(key,{}).get('status')!='conditional_surface_added'):
+            raise ValueError('room_completion_replay_solve_not_selected_and_accepted')
+        with np.load(surface_path,allow_pickle=False) as surface:
+            if str(surface['sourceHash'])!=parent['sourceSha256']:
+                raise ValueError('room_completion_replay_surface_source')
+        solves[key]=dict(reportPath=report_path,surfacePath=surface_path,report=report)
+        receipts.append(dict(reference=key[0],window=key[1],proofSha256=addition['sha256'],
+            solverReportSha256=proof['solverReportSha256'],surfaceSha256=proof['surfaceSha256']))
+    expected={key for key,row in outcomes.items() if row['status']=='conditional_surface_added'}
+    if set(solves)!=expected or not solves:raise ValueError('room_completion_replay_qualified_solve_missing')
+    receipt=dict(manifestPath=str(path),manifestSha256=digest(path),parentManifestSha256=digest(parent_path),
+        sourceSha256=parent['sourceSha256'],preparedSha256=parent['preparedSha256'],
+        localGeometrySha256=parent['localGeometrySha256'],selectionPath=str(selected_path),
+        selectionSha256=rc['selectionSha256'],solves=receipts,selectionInvoked=False,solverInvoked=False)
+    return selection,solves,receipt,outcomes
+
+
+def complete_observed_room(parent_bundle,output,*,max_references=2,max_evaluations=40,extra_budget=30000,replay_manifest=None):
     from reconstruction_live_shared_room_surface import run_shared_surface,export_shared_room_initialization,SharedRoomEvidenceUnavailable
-    if not(0<extra_budget<=8000) or not(0<max_references<=2) or not(0<max_evaluations<=40):raise ValueError('room_completion_budget_contract')
+    if any(isinstance(v,bool) or not isinstance(v,int) for v in (extra_budget,max_references,max_evaluations)) or not(0<extra_budget<=30000) or not(0<max_references<=2) or not(0<max_evaluations<=40):raise ValueError('room_completion_budget_contract')
     parent_path=Path(parent_bundle).resolve();parent=json.loads(parent_path.read_text());out=Path(output).resolve();out.mkdir(parents=True,exist_ok=False)
     if parent['components']['room'].get('additionalSurfaceReceipts'):raise ValueError('room_completion_already_applied')
     for component in parent['components'].values():
@@ -190,7 +264,13 @@ def complete_observed_room(parent_bundle,output,*,max_references=2,max_evaluatio
     for name in ('reconstruction_live_room_completion.py','reconstruction_live_shared_room_surface.py','reconstruction_live_dense.py','reconstruction_live_dense_contract.py'):
         shutil.copyfile(Path(__file__).with_name(name),snapshot/name)
     root=Path(parent['depthManifestPath']).parent;request=json.loads((root/'request.json').read_text())
-    selection=select_completion_references(parent_path,max_references=max_references);write_json(out/'selection.json',selection)
+    replay=None;solves={};old_outcomes={}
+    if replay_manifest is None:
+        selection=select_completion_references(parent_path,max_references=max_references);write_json(out/'selection.json',selection)
+    else:
+        selection,solves,replay,old_outcomes=verified_completion_replay(replay_manifest,parent_path,parent,max_references=max_references)
+        shutil.copyfile(replay['selectionPath'],out/'selection.json')
+        write_json(out/'replay-receipt.json',replay)
     additions=[];outcomes=[]
     for number,candidate in enumerate(selection['selected']):
         folder=out/f'auxiliary-{number+1}';folder.mkdir();remaining=extra_budget-sum(a['count'] for a in additions)
@@ -199,8 +279,18 @@ def complete_observed_room(parent_bundle,output,*,max_references=2,max_evaluatio
         # one never consumes the entire additional budget before the other.
         budget=max(1,remaining//(len(selection['selected'])-number))
         try:
-            report=run_shared_surface(request['prepared'],root,folder/'solve',reference=candidate['reference'],
-                window=candidate['window'],max_evaluations=max_evaluations)
+            if replay is None:
+                report=run_shared_surface(request['prepared'],root,folder/'solve',reference=candidate['reference'],
+                    window=candidate['window'],max_evaluations=max_evaluations)
+            else:
+                key=(candidate['reference'],candidate['window'])
+                if key not in solves:
+                    outcomes.append({**candidate,'status':'replay_skipped_no_qualified_solve',
+                        'originalOutcome':old_outcomes.get(key)});continue
+                saved=solves[key];(folder/'solve').mkdir()
+                shutil.copyfile(saved['reportPath'],folder/'solve/report.json')
+                shutil.copyfile(saved['surfacePath'],folder/'solve/shared-surface.npz')
+                report=saved['report']
             if not report['accepted']:
                 outcomes.append({**candidate,'status':'validation_failed','reportPath':str(folder/'solve/report.json')});continue
             addition=export_shared_room_initialization(folder/'solve',parent_path,folder/'addition',budget=budget,
@@ -226,8 +316,21 @@ def complete_observed_room(parent_bundle,output,*,max_references=2,max_evaluatio
             'originalPrefixBitwiseUnchanged':True}
         final['components']={**parent['components'],'room':newrow}
     final['roomCompletion']=dict(status='conditional_observed_surfaces_added' if additions else 'original_bundle_retained',
+        additionalPointBudget=extra_budget,maxReferences=max_references,
         reason=None if additions else ('no_auxiliary_reference_with_new_observed_area_and_track_support' if not selection['selected'] else 'no_auxiliary_surface_passed_validation_and_support'),
         outcomes=outcomes,selectionPath=str(out/'selection.json'),selectionSha256=digest(out/'selection.json'),
         originalCount=n,addedCount=sum(a['count'] for a in additions),originalPrefixBitwiseUnchanged=True,
         visualQualityPassed=False,geometryIsConditional=True,unobservedBackgroundFilled=False)
+    if replay is not None:final['roomCompletion']['replay']=replay
     write_json(out/'result.json',final);return final
+
+
+if __name__=='__main__':
+    import argparse
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('parent_bundle',type=Path);parser.add_argument('output',type=Path)
+    parser.add_argument('--extra-budget',type=int,default=30000)
+    parser.add_argument('--replay-manifest',type=Path)
+    args=parser.parse_args()
+    result=complete_observed_room(args.parent_bundle,args.output,extra_budget=args.extra_budget,replay_manifest=args.replay_manifest)
+    print(json.dumps(dict(manifestPath=result['manifestPath'],roomCompletion=result['roomCompletion']),indent=2))

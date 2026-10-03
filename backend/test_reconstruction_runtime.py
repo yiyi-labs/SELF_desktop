@@ -15,6 +15,31 @@ from reconstruction_live_prepare import selected_names
 
 
 class RuntimeTest(unittest.TestCase):
+    def test_skin_compositing_requires_dense_observed_skin_and_bounded_budget(self):
+        self.assertEqual(training_profile_options({})['skinCompositingSteps'],0)
+        for value in (-1,241,True,2.5,'180'):
+            with self.subTest(value=value),self.assertRaisesRegex(ValueError,'skin_compositing_budget'):
+                training_profile_options({'skinCompositingSteps':value})
+        with self.assertRaisesRegex(ValueError,'requires_observed_dense_face'):
+            training_profile_options({'skinCompositingSteps':180})
+        profile={'executionAdapter':'native-fullframe','observedFaceDomain':True,'denseSurfaces':True,'skinCompositingSteps':180}
+        self.assertEqual(training_profile_options(profile)['skinCompositingSteps'],180)
+
+    def test_skin_compositing_cli_and_progress_are_explicit(self):
+        class Stop(Exception):pass
+        called=[];updates=[]
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            def command(argv,*args,**kwargs):
+                called.extend(argv)
+                for step in (0,90,180,181,-1,True):kwargs['progress']({'stage':'skin-compositing','step':step})
+                raise Stop
+            with patch('reconstruction_runtime.verified_preparation',return_value=root/'prepared'),patch('reconstruction_runtime.pipeline_entry',return_value=(root/'pipeline.py',0)):
+                with self.assertRaises(Stop):
+                    reconstruct_test(root,{'sha256':'capture'},{'executionAdapter':'native-fullframe','observedFaceDomain':True,'denseSurfaces':True,'skinCompositingSteps':180},lambda *a,**kw:updates.append((a,kw)),None,None,command,None)
+        self.assertEqual(called[called.index('--skin-steps')+1],'180')
+        self.assertEqual([a[2] for a,k in updates if k.get('stage',{}).get('name')=='skin-compositing'],[92,93,94])
+
     def test_preparation_cache_release_keeps_live_tensors_and_separates_parent_peak(self):
         with patch('torch.cuda.is_initialized',return_value=True), \
              patch('torch.cuda.max_memory_allocated',return_value=10*2**20), \

@@ -110,7 +110,7 @@ def head_loss(rendered, frame):
     face_rgb = masked_mean(error, face)
     hair_rgb = masked_mean(error, hair)
     coverage = masked_mean((1-rendered["alpha"]).square(), face | hair)
-    safe_empty = masks["room_visible"] & ~masks["unknown_or_occluded"]
+    safe_empty = masks.get('training_empty',masks["room_visible"] & ~masks["unknown_or_occluded"])
     outside = masked_mean(rendered["alpha"].square(), safe_empty)
     value = 1.5*face_rgb+hair_rgb+.06*coverage+.03*outside
     return value, {"faceRgb": float(face_rgb.detach()), "hairRgb": float(hair_rgb.detach()),
@@ -623,6 +623,8 @@ def warm_start_portrait(scene,data,state_path,manifest_path):
 
 
 def run(args):
+    if getattr(args,'observed_empty_space',False) and not getattr(args,'observed_face_domain',False):
+        raise ValueError('observed_empty_space_requires_observed_face_domain')
     if args.output.exists(): raise FileExistsError("each_experiment_requires_new_run_directory")
     args.output.mkdir(parents=True)
     started=time.perf_counter();torch.manual_seed(280928)
@@ -636,7 +638,7 @@ def run(args):
         if args.resume_state is not None or getattr(args,'portrait_state',None):
             raise ValueError('changed_initial_colour_domain_requires_explicit_new_initialization')
         from reconstruction_live_face_domain import activate
-        activate(data,args.output)
+        activate(data,args.output,observed_empty_space=bool(getattr(args,'observed_empty_space',False)))
     data["reference"]=max(data["train"],key=lambda n:np.linalg.norm(data["local"][n]["marks"][234]-data["local"][n]["marks"][454])/
         max(np.linalg.norm(data["local"][n]["marks"][10]-data["local"][n]["marks"][152]),1))
     if getattr(args,'dense_surfaces',False) or getattr(args,'dense_manifest',None):
@@ -689,7 +691,9 @@ def run(args):
             "implementation":identity,"surfaceStage":surface_report,"surfaceRefine":scene.surface_refine,
             "portraitWarmStart":portrait_start,
             "observedFaceDomain":data.get('face_domain_receipt'),
+            "observedEmptySpace":bool(getattr(args,'observed_empty_space',False)),
             "hairCompositeSteps":int(getattr(args,'hair_steps',0)),
+            "skinCompositingSteps":int(getattr(args,'skin_steps',0)),
             "denseSurfaces":getattr(scene,"dense_metadata",None)}
     write_json(args.output/"config.json",config)
     initial=audit_stages(scene,data,args.output/"initial",antialiased=args.antialiased)
@@ -707,6 +711,9 @@ def run(args):
     if getattr(args,'hair_steps',0):
         from reconstruction_live_hair_composite import restore_hair_in_scene
         trainings.append(restore_hair_in_scene(scene,data,args.output,args.hair_steps))
+    if getattr(args,'skin_steps',0):
+        from reconstruction_live_skin_compositing import restore_skin_compositing
+        trainings.append(restore_skin_compositing(scene,data,args.output,args.skin_steps))
     final=audit_stages(scene,data,args.output/"final",antialiased=args.antialiased)
     full_final=audit_full_scene(scene,data,args.output/"full-final")
     asset=export_candidate(scene,data,args.output)
@@ -732,4 +739,6 @@ if __name__=="__main__":
     p.add_argument("--dense-surfaces",action="store_true");p.add_argument("--dense-manifest",type=Path)
     p.add_argument('--portrait-state',type=Path);p.add_argument('--portrait-manifest',type=Path)
     p.add_argument('--shared-room-surface',action='store_true');p.add_argument('--hair-steps',type=int,default=0)
+    p.add_argument('--observed-face-domain',action='store_true');p.add_argument('--observed-empty-space',action='store_true')
+    p.add_argument('--skin-steps',type=int,default=0)
     run(p.parse_args())

@@ -14,6 +14,7 @@ NATIVE_VERSION="portrait-native-fullframe-20261002-research"
 def training_profile_options(profile):
     local_steps=int(profile.get('localSteps',900));room_steps=int(profile.get('roomSteps',300))
     hair_steps=profile.get('hairCompositeSteps',0)
+    skin_steps=profile.get('skinCompositingSteps',0)
     observed_face=profile.get('observedFaceDomain',False)
     if not isinstance(observed_face,bool):
         raise ValueError('test_observed_face_domain_requires_boolean')
@@ -23,11 +24,15 @@ def training_profile_options(profile):
         raise ValueError('test_live_training_budget_outside_contract')
     if isinstance(hair_steps,bool) or not isinstance(hair_steps,int) or not 0<=hair_steps<=240:
         raise ValueError('test_hair_composite_budget_outside_contract')
+    if isinstance(skin_steps,bool) or not isinstance(skin_steps,int) or not 0<=skin_steps<=240:
+        raise ValueError('test_skin_compositing_budget_outside_contract')
     dense=profile.get('denseSurfaces') is True
     shared=profile.get('sharedRoomSurface') is True
     if hair_steps and not dense:raise ValueError('test_hair_composite_requires_dense_surfaces')
     if shared and not dense:raise ValueError('test_shared_room_requires_dense_surfaces')
+    if skin_steps and not (dense and observed_face):raise ValueError('test_skin_compositing_requires_observed_dense_face')
     return {'localSteps':local_steps,'roomSteps':room_steps,'hairCompositeSteps':hair_steps,
+            'skinCompositingSteps':skin_steps,
             'denseSurfaces':dense,'sharedRoomSurface':shared,'surfaceRefine':profile.get('surfaceRefine') is True,
             'observedFaceDomain':observed_face}
 
@@ -253,12 +258,14 @@ def reconstruct_test(path,job,profile,update,extract_frames,prepare_faces,comman
     output=path/"portrait-training"
     entry,joint_steps=pipeline_entry(profile,backend)
     local_steps=options['localSteps'];room_steps=options['roomSteps'];hair_steps=options['hairCompositeSteps']
+    skin_steps=options['skinCompositingSteps']
     argv=[sys.executable,str(entry),str(prepared),str(output),"--soft","--local-steps",str(local_steps),
           "--room-steps",str(room_steps),"--joint-steps",str(joint_steps)]
     if profile.get("surfaceRefine") is True:argv.append("--surface-refine")
     if profile.get("denseSurfaces") is True:argv.append("--dense-surfaces")
     if options['sharedRoomSurface']:argv.append('--shared-room-surface')
     if hair_steps:argv.extend(('--hair-steps',str(hair_steps)))
+    if skin_steps:argv.extend(('--skin-steps',str(skin_steps)))
     if options['observedFaceDomain']:argv.append('--observed-face-domain')
     def progress(row):
         stage=row.get("stage");step=row.get("step")
@@ -273,6 +280,11 @@ def reconstruct_test(path,job,profile,update,extract_frames,prepare_faces,comman
                 update(path,'running',90+round(2*step/hair_steps),'正在汇聚这颗星辰',algorithm=PORTRAIT_TEST,
                     stage={'name':stage,'completedSteps':step,'totalSteps':hair_steps})
             return
+        if stage=='skin-compositing':
+            if skin_steps and isinstance(step,int) and not isinstance(step,bool) and 0<=step<=skin_steps:
+                update(path,'running',92+round(2*step/skin_steps),'正在汇聚这颗星辰',algorithm=PORTRAIT_TEST,
+                    stage={'name':stage,'completedSteps':step,'totalSteps':skin_steps})
+            return
         if stage not in ("local","T3") or not isinstance(step,int):return
         percent=66+round(12*step/local_steps) if stage=="local" else 78+round(12*step/room_steps)
         update(path,"running",min(90,percent),"正在汇聚这颗星辰",algorithm=PORTRAIT_TEST,
@@ -284,6 +296,15 @@ def reconstruct_test(path,job,profile,update,extract_frames,prepare_faces,comman
         raise ValueError("test_result_algorithm_mismatch")
     if options['observedFaceDomain'] != (report.get('observedFaceDomain') is not None):
         raise ValueError('test_observed_face_requested_actual_mismatch')
+    if options['skinCompositingSteps']!=report.get('skinCompositingSteps',0):
+        raise ValueError('test_skin_compositing_requested_actual_mismatch')
+    if options['skinCompositingSteps']:
+        receipts=[s for s in report['trainings'] if s['stage']=='skin-compositing']
+        if len(receipts)!=1 or receipts[0]['steps'] not in (0,options['skinCompositingSteps']):
+            raise ValueError('test_skin_compositing_receipt_missing')
+        saved=output/'skin-compositing-training.json'
+        if not saved.is_file() or json.loads(saved.read_text())!=receipts[0]:
+            raise ValueError('test_skin_compositing_receipt_changed')
     # Validate before copying any candidate to the transport's asset paths.
     observed_face_execution_receipt(output,report)
     manifests={}
@@ -311,7 +332,7 @@ def reconstruct_test(path,job,profile,update,extract_frames,prepare_faces,comman
     state_dir=path/"portrait-state";state_dir.mkdir()
     for file in output.glob("*.pt"):shutil.copyfile(file,state_dir/file.name)
     for filename in ("config.json","report.json","portrait-import.json",
-                     "observed-face-domain.json","observed-face-initial-appearance.npz"):
+                       "observed-face-domain.json","observed-face-initial-appearance.npz","skin-compositing-training.json"):
         if (output/filename).is_file():shutil.copyfile(output/filename,state_dir/filename)
     audit['localFitRecovery']=retain_local_fit_state(prepared,state_dir)
     if report.get('denseSurfaces'):

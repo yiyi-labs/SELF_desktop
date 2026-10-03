@@ -33,4 +33,6 @@ if __name__=="__main__":
     p.add_argument('--portrait-state',type=Path);p.add_argument('--portrait-manifest',type=Path)
     p.add_argument('--shared-room-surface',action='store_true');p.add_argument('--hair-steps',type=int,default=0)
     p.add_argument('--observed-face-domain',action='store_true')
+    p.add_argument('--observed-empty-space',action='store_true')
+    p.add_argument('--skin-steps',type=int,default=0)
     run(p.parse_args())
