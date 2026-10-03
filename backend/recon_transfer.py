@@ -92,15 +92,20 @@ def _discard_job_payload(path: Path) -> None:
 def health(request: Request):
     _authorize(request)
     engine = "not-verified"
+    algorithm = "unknown"
+    algorithm_version = "unknown"
     heartbeat = ROOT / "worker_status.json"
     try:
         state = json.loads(heartbeat.read_text(encoding="utf-8"))
         if state.get("ready") is True and time.time() - state.get("updatedAt", 0) < 30:
             engine = "ready"
+            algorithm = state.get("engine", "unknown")
+            algorithm_version = state.get("algorithmVersion", "unknown")
     except (OSError, ValueError, TypeError):
         pass
     return {"status": "ready", "protocol": 1, "chunkBytes": CHUNK_BYTES,
-            "maxCaptureBytes": MAX_CAPTURE_BYTES, "engine": engine}
+            "maxCaptureBytes": MAX_CAPTURE_BYTES, "engine": engine, "algorithm": algorithm,
+            "algorithmVersion": algorithm_version}
 
 
 @router.post("/echo")
@@ -230,6 +235,8 @@ def job_status(job_id: str, request: Request):
     result = {key: job[key] for key in ("jobId", "state", "progress", "message", "assets")}
     if "viewpointQuality" in job:
         result["viewpointQuality"] = job["viewpointQuality"]
+    if "algorithm" in job:
+        result["algorithm"] = job["algorithm"]
     return result
 
 
@@ -272,7 +279,10 @@ def cancel_job(job_id: str, request: Request):
     with _job_lock(job_id):
         job = _read_job(path)
         if job["state"] in {"complete", "gaussian_ready"}:
-            raise HTTPException(409, "job_already_finished")
+            # A completed result can race the user's cancel tap. Stop waiting
+            # locally without deleting a valid retained asset or lying about
+            # having cancelled computation that already finished.
+            return {"jobId": job_id, "state": job["state"]}
         if job["state"] == "cancelled":
             return {"jobId": job_id, "state": "cancelled"}
         (path / "cancel.requested").touch(exist_ok=True)
@@ -292,13 +302,13 @@ def cancel_job(job_id: str, request: Request):
 def asset(job_id: str, kind: str, request: Request):
     _authorize(request)
     path, manifest = _verified_asset(job_id, kind)
-    return FileResponse(path, media_type="image/png" if kind == "preview" else "model/gltf-binary" if kind == "mesh" else "application/octet-stream",
+    return FileResponse(path, media_type="image/jpeg" if kind == "environment" else "image/png" if kind == "preview" else "model/gltf-binary" if kind == "mesh" else "application/octet-stream",
                         headers={"X-Content-SHA256": manifest["sha256"]})
 
 
 def _verified_asset(job_id: str, kind: str, verify_digest: bool = True) -> tuple[Path, dict]:
     job = _read_job(_job_dir(job_id))
-    if kind not in {"mesh", "gaussian", "view", "preview", "preview3d", "scene3d"} or (job["state"] != "complete" and not (job["state"] == "gaussian_ready" and kind in {"gaussian", "view", "preview", "preview3d", "scene3d"})):
+    if kind not in {"mesh", "gaussian", "view", "preview", "preview3d", "scene3d", "environment"} or (job["state"] != "complete" and not (job["state"] == "gaussian_ready" and kind in {"gaussian", "view", "preview", "preview3d", "scene3d", "environment"})):
         raise HTTPException(404, "asset_not_ready")
     manifest = job["assets"].get(kind)
     if not manifest:
@@ -309,7 +319,7 @@ def _verified_asset(job_id: str, kind: str, verify_digest: bool = True) -> tuple
             or not SHA_RE.fullmatch(manifest["sha256"])
             or type(manifest.get("bytes")) is not int
             or not (128 if kind == "view" else 256 if kind == "preview" else 1024) <= manifest["bytes"] <=
-            (4096 if kind == "view" else 512 * 1024 if kind == "preview" else 12 * 1024 * 1024 if kind in {"preview3d", "scene3d"} else 32 * 1024 * 1024 if kind == "mesh" else 256 * 1024 * 1024)):
+            (4096 if kind == "view" else 512 * 1024 if kind == "preview" else 2 * 1024 * 1024 if kind == "environment" else 12 * 1024 * 1024 if kind in {"preview3d", "scene3d"} else 32 * 1024 * 1024 if kind == "mesh" else 256 * 1024 * 1024)):
         raise HTTPException(409, "asset_manifest_invalid")
     path = _job_dir(job_id) / manifest["file"]
     if not path.is_file() or path.stat().st_size != manifest["bytes"]:
