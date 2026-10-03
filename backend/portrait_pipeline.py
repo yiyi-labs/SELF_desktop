@@ -378,17 +378,18 @@ def configure_stage(scene, stage, step, soft):
             scene.portrait.sh.requires_grad_(True)
     elif stage == "T4":
         # Unified joint refinement: the complete subject (skin, hair, neck) and
-        # the scene optimize together under one loss. Portrait appearance and
-        # geometry alternate as in the local stage; environment parameters stay
-        # continuously trainable so seams, occlusion and room error can be
-        # corrected by whichever side causes them.
+        # the scene share one loss and one clock. Portrait appearance and
+        # geometry alternate as in the local stage. Environment positions stay
+        # fixed so room/garment points cannot drift to cover person error
+        # (cross-object compensation); their extent, orientation, opacity and
+        # colour remain trainable so seams and occlusion still converge.
         geometry = step >= 60 and step % 4 == 3
         for name,p in scene.portrait.named_parameters():
             p.requires_grad_((name in (("embedding","normal_offset","surface_residual") if soft else ("embedding","normal_offset"))) if geometry else name in ("sh","opacity_logits","log_scales","quats"))
         if getattr(scene,"dense_hair",False) and geometry:
             scene.portrait.hair_delta.requires_grad_(True)
-        for p in scene.environment.parameters():
-            p.requires_grad_(True)
+        for n,p in scene.environment.items():
+            p.requires_grad_(n in ("sh","opacities","scales","quats"))
     else:
         # Alternate appearance and shared geometry. No per-frame scale/K and
         # no free simultaneous pose/shape/appearance compensation.
@@ -652,7 +653,7 @@ def train_stage(scene, data, out, stage, steps, soft, antialiased=False):
             if len(selected):
                 density_events.append({"step":step+1,"scope":"environment",**split_surface_parameters(scene,envopt,selected)})
         if (scene.dense_surface and stage=="T3" and step>=100 and (step+1)%150==0
-                and len(scene.environment_parts)<140000):
+                and step+150<steps and len(scene.environment_parts)<140000):
             from surface_density import select_surface_parents,split_surface_parameters
             selected=select_surface_parents(scene,world_render["info"])
             if len(selected):
