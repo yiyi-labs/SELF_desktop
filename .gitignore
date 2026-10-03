@@ -18,6 +18,7 @@ backend/.venv-recon/
 backend/.sources/
 backend/.data/
 backend/recon-jobs/
+backend/archive/
 __pycache__/
 .pytest_cache/
 .idea/
