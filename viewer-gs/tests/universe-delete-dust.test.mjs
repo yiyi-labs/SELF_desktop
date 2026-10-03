@@ -167,7 +167,8 @@ test('only the deletion pauses the galaxy renderer, and it resumes without advan
   const configure=source.slice(source.indexOf('function configure('),source.indexOf('function sync('));
   const update=source.slice(source.indexOf('function update('),source.indexOf('async function start('));
   const document={body:{classList:{toggle(){}}},documentElement:{},getElementById:()=>({})};
-  const context=vm.createContext({document,hint:{},app:{autoRender:true},paused:false,language:'zh',motion:true});
+  const context=vm.createContext({document,hint:{},app:{autoRender:true},paused:false,language:'zh',motion:true,
+    t:()=>'',LANG_TAG:{zh:'zh-CN',en:'en',ja:'ja',ko:'ko'},canvas:{setAttribute(){}},names:{setAttribute(){}}});
   vm.runInContext(configure+update,context);context.configure({paused:true});assert.equal(context.app.autoRender,false);
   assert.doesNotThrow(()=>context.update(.016),'paused update must not move or redraw the scene');
   context.configure({paused:false});assert.equal(context.app.autoRender,true);

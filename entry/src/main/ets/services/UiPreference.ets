@@ -6,7 +6,7 @@ export class UiPreference {
  static load(context:common.UIAbilityContext):UiSettings{
   const defaults:UiSettings={language:'zh',accent:'#7C698F',palette:'quiet',motion:true,followChat:true,stylusHints:true};
   try{const value=JSON.parse(fs.readTextSync(context.filesDir+'/ui-settings.json')) as UiSettings;
-   if(['zh','en'].includes(value.language))defaults.language=value.language;
+   if(['zh','en','ja','ko'].includes(value.language))defaults.language=value.language;
    if(['#7C698F','#A5697C','#487F80','#947347'].includes(value.accent))defaults.accent=value.accent;
    if(['quiet','warm','clear'].includes(value.palette))defaults.palette=value.palette;
    if(typeof value.motion==='boolean')defaults.motion=value.motion;

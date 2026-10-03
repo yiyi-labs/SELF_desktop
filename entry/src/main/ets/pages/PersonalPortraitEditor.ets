@@ -13,6 +13,7 @@ import { OlayLibrary } from './OlayLibrary';
 import { OlayDiscoveryRepository,OlayDiscoveryItem } from '../services/OlayDiscoveryRepository';
 import { OlayPhotoRepository } from '../services/OlayPhotoRepository';
 import { StarCloseButton } from './StarCloseButton';
+import { UiText } from '../services/UiText';
 
 interface SavedGsEdit {
   schemaVersion:number;
@@ -148,7 +149,7 @@ export struct PersonalPortraitEditor {
   @State keyboardTopVp:number=0;
   private composerDustToken:number=0;
 
-  private label(zh:string,en:string):string{return this.language==='en'?en:zh;}
+  private tr(value:string):string{return UiText.get(value,this.language);}
   private cloudAccessChanged():void{
     if(this.cloudEnabled)return;
     this.storyGeneration++;this.storyClient.cancel();this.storyWaiting=false;
@@ -176,17 +177,13 @@ export struct PersonalPortraitEditor {
     }).catch((error:Error)=>console.warn('SELF_STORY_KEYBOARD_OBSERVER '+String(error)));
   }
   private storyHint():string{
-    if(this.storyPhase==='discover')return this.label('刚才那句话，想留在这颗星辰里吗？',
-      'Would you like to keep those words with this star?');
-    if(this.storyPhase==='return')return this.label('今天停在这里，也很好。',
-      'You can stop here for today.');
+    if(this.storyPhase==='discover')return this.tr('刚才那句话，想留在这颗星辰里吗？');
+    if(this.storyPhase==='return')return this.tr('今天停在这里，也很好。');
     if(this.storyPhase==='act')return this.selected?
-      this.label('这一处已经圈好，说说想试怎样的变化。','This area is selected. What would you like to try?'):
-      this.label('想试一点变化，可以先轻轻圈选。','To try a change, gently circle an area first.');
-    if(this.storyPhase==='care')return this.label('可以慢慢说，从你在意的一件事开始。',
-      'Take your time. Start with what matters to you.');
-    return this.label('先转动看看，哪一面让你想停一会儿？',
-      'Turn gently. Where would you like to pause?');
+      this.tr('这一处已经圈好，说说想试怎样的变化。'):
+      this.tr('想试一点变化，可以先轻轻圈选。');
+    if(this.storyPhase==='care')return this.tr('可以慢慢说，从你在意的一件事开始。');
+    return this.tr('先转动看看，哪一面让你想停一会儿？');
   }
   private revealStoryHint():void{
     this.storyHintVisible=0;const token=++this.storyHintToken,length=this.storyHint().length;
@@ -196,8 +193,7 @@ export struct PersonalPortraitEditor {
   }
   private openStory():void{
     this.bubble=false;this.historyOpen=false;this.libraryOpen=false;this.storyOpen=true;
-    if(!this.storyReply)this.storyReply=this.label('想从哪里开始看？也可以只说说此刻的想法。',
-      'Where would you like to begin? You can simply tell me what is on your mind.');
+    if(!this.storyReply)this.storyReply=this.tr('想从哪里开始看？也可以只说说此刻的想法。');
   }
   private closeStory():void{
     this.storyInputController.stopEditing();
@@ -208,7 +204,7 @@ export struct PersonalPortraitEditor {
   }
   private sendStory(value:string):void{
     const text=value.trim();if(!text||this.storyWaiting)return;
-    if(text.length>500){this.storyReply=this.label('这一段稍长，分成两次说也可以。','Please split this into two shorter messages.');return;}
+    if(text.length>500){this.storyReply=this.tr('这一段稍长，分成两次说也可以。');return;}
     if(/(?:不要|不用|不想|别).{0,8}(?:推荐|产品|商品|买)|no products|don.t recommend/i.test(text))this.productsDismissed=true;
     else if(/推荐|哪款|想买|recommend/i.test(text))this.productsDismissed=false;
     if(this.selected&&/这里|圈|保养|养护|护理|护肤|怎么用|眼|脸|痘|olay|玉兰油|care|routine|this area/i.test(text)){
@@ -216,8 +212,7 @@ export struct PersonalPortraitEditor {
     }
     if(!this.cloudEnabled){
       if(this.cloudConsentDecision==='denied'){
-        this.storyReply=this.label('云端对话已关闭。想再继续时，可以在设置里开启。',
-          'Cloud conversations are off. You can turn them on in Settings.');return;
+        this.storyReply=this.tr('云端对话已关闭。想再继续时，可以在设置里开启。');return;
       }
       this.pendingStoryText=text;this.consentIntent='story';this.consentOffer=true;return;
     }
@@ -226,7 +221,7 @@ export struct PersonalPortraitEditor {
   private acceptCloudIntroduction():void{
     const intent=this.consentIntent,text=this.pendingStoryText;
     if(!this.onEnableCloud()){
-      this.storyReply=this.label('这次没能保存选择，稍后再试。','Could not save your choice. Please try again.');
+      this.storyReply=this.tr('这次没能保存选择，稍后再试。');
       this.responseText=this.storyReply;return;
     }
     this.consentOffer=false;this.consentIntent='';
@@ -235,8 +230,8 @@ export struct PersonalPortraitEditor {
   }
   private declineCloudIntroduction():void{
     this.onDeclineCloud();this.consentOffer=false;this.consentIntent='';this.pendingStoryText='';
-    if(this.storyOpen)this.storyReply=this.label('好，我们先留在这里。','We can stay here for now.');
-    else this.responseText=this.label('好，画面留在这里。','Okay. The portrait stays here.');
+    if(this.storyOpen)this.storyReply=this.tr('好，我们先留在这里。');
+    else this.responseText=this.tr('好，画面留在这里。');
   }
   private async askStory(text:string):Promise<void>{
     this.consentOffer=false;this.consentIntent='';this.pendingStoryText='';
@@ -263,16 +258,14 @@ export struct PersonalPortraitEditor {
     }catch(error){
       if(generation===this.storyGeneration&&this.storyOpen){
         console.warn('SELF_STORY_REQUEST_FAILED '+String(error));
-        this.storyReply=this.label('这次没有接上对话。你仍可以转动、观察，稍后再说。',
-          'This conversation is unavailable right now. You can keep looking and try again later.');
+        this.storyReply=this.tr('这次没有接上对话。你仍可以转动、观察，稍后再说。');
       }
     }finally{if(generation===this.storyGeneration)this.storyWaiting=false;}
   }
   private enterExistingEdit(text:string):void{
     this.closeStory();this.input=text;this.bubble=true;
-    this.responseText=this.selected?this.label('圈选还在。说出想试的变化，再由你确认是否留下。',
-      'Your selection is here. Describe a change, then decide whether to keep it.'):
-      this.label('先圈出你想试的地方，再说说想法。','Circle an area first, then tell me what you would like to try.');
+    this.responseText=this.selected?this.tr('圈选还在。说出想试的变化，再由你确认是否留下。'):
+      this.tr('先圈出你想试的地方，再说说想法。');
     if(this.tool!=='lasso'){this.animateComposerDust(true);this.tool='lasso';this.command('TOOL','lasso');}
   }
   private animateComposerDust(out:boolean):void{
@@ -296,12 +289,10 @@ export struct PersonalPortraitEditor {
         recallAllowed:false};
       if(view)record.view=view;
       this.storyObservations=this.observationStore.save(this.assetId,record);
-      this.storyReply=this.label('这句话已留在这颗星辰里。以后是否重新提起，仍由你决定。',
-        'Your words are saved with this star. You decide if they come up again.');
+      this.storyReply=this.tr('这句话已留在这颗星辰里。以后是否重新提起，仍由你决定。');
       this.storyLastQuote='';this.storyLastMessageId='';this.storyPhase='return';
       this.revealStoryHint();
-    }catch(error){this.storyReply=this.label('这句话暂时没能保存，原话还在这里。',
-      'Your words could not be saved yet; they remain here.');console.warn('SELF_STORY_SAVE_FAILED '+String(error));}
+    }catch(error){this.storyReply=this.tr('这句话暂时没能保存，原话还在这里。');console.warn('SELF_STORY_SAVE_FAILED '+String(error));}
   }
   private receivedView(view:GsViewSnapshot):void{
     if(!this.pendingObservationQuote||!this.storyOpen)return;
@@ -314,7 +305,7 @@ export struct PersonalPortraitEditor {
   }
   private deleteObservation(id:string):void{
     try{this.storyObservations=this.observationStore.remove(this.assetId,id);}
-    catch(error){this.storyReply=this.label('这条记录暂时没能移除。','This note could not be removed.');}
+    catch(error){this.storyReply=this.tr('这条记录暂时没能移除。');}
   }
   private setCareWeek(week:number):void{
     if(week===this.careWeek)return;
@@ -400,7 +391,7 @@ export struct PersonalPortraitEditor {
       const layer:GsLayer={layerId:'legacy-1',regionId:'gs-selected-1',preset:saved.preset,strength:saved.strength,
         maskChecksum:saved.maskChecksum,maskBase64:new util.Base64Helper().encodeToStringSync(bytes)};
       this.history={schemaVersion:2,assetId:this.assetId,assetBytes:saved.assetBytes,splatCount:saved.splatCount,
-        groups:[{groupId:'legacy',label:this.label('原有试色','Previous tint'),createdAt:0,layers:[layer]}]};
+        groups:[{groupId:'legacy',label:this.tr('原有试色'),createdAt:0,layers:[layer]}]};
       this.applied=true;this.refreshHistoryDisplay();this.renderHistory(this.history);
       console.info('SELF_GS_EDIT_RESTORE accepted '+bytes.length);
     }catch(error){console.warn('SELF_GS_EDIT_RESTORE_FAILED '+String(error));}
@@ -461,12 +452,10 @@ export struct PersonalPortraitEditor {
     const firstPrompts=['这一处已留下。再画可重选，也可以说说想法。',
       '光落在这里了。想换一处，直接再画一圈。','这处会跟着你的面容；想微调，还可以重画。'];
     this.bubble=true;this.responseText=existing>=0?
-      this.label('这一处已经换成刚画的范围。','This area now follows your new selection.'):
+      this.tr('这一处已经换成刚画的范围。'):
       this.selections.length===1?
-        this.label(firstPrompts[(this.history?.groups.length||0)%firstPrompts.length],
-          'This area follows your portrait. Draw again to replace it, or tell me what you think.'):
-      this.label('已经圈出'+this.selections.length+'处。可以一起告诉我每处想试的变化。',
-        this.selections.length+' areas selected. Tell me what you would like for each.');
+        this.tr(firstPrompts[(this.history?.groups.length||0)%firstPrompts.length]):
+      this.tr('已经圈出{count}处。可以一起告诉我每处想试的变化。').replace('{count}',String(this.selections.length));
     this.question='';this.choices=[];this.revision++;this.onInteraction();
   }
   private appendSelection():void{
@@ -490,13 +479,13 @@ export struct PersonalPortraitEditor {
       this.bubble=toLasso&&this.selected;
     });
     this.command('TOOL',this.tool);
-    if(toLasso&&!this.selected)this.responseText=this.label('顺着想看的地方画一圈。','Circle an area you want to explore.');
+    if(toLasso&&!this.selected)this.responseText=this.tr('顺着想看的地方画一圈。');
     this.onInteraction();
   }
   private submit(value:string):void{
     const text=value.trim();
     if(!text||this.waiting)return;
-    if(!this.selected){this.responseText=this.label('先轻轻圈出面容上的一处吧。','First, circle an area on your portrait.');return;}
+    if(!this.selected){this.responseText=this.tr('先轻轻圈出面容上的一处吧。');return;}
     this.requestChoice=/^[1-3]$/.test(text)?this.choices[Number(text)-1]||'':this.choices.includes(text)?text:'';
     if(/(?:不要|不用|不想|别).{0,8}(?:推荐|产品|商品|买)|no products|don.t recommend/i.test(text))this.productsDismissed=true;
     else if(/推荐|哪款|想买|recommend/i.test(text))this.productsDismissed=false;
@@ -506,8 +495,7 @@ export struct PersonalPortraitEditor {
     this.careWeek=0;this.careProductId='';this.careWhy='';this.careHow='';
     if(!this.cloudEnabled){
       if(this.cloudConsentDecision==='denied'){
-        this.responseText=this.label('云端对话已关闭。想再继续时，可以在设置里开启。',
-          'Cloud conversations are off. You can turn them on in Settings.');return;
+        this.responseText=this.tr('云端对话已关闭。想再继续时，可以在设置里开启。');return;
       }
       this.consentIntent='edit';this.consentOffer=true;return;
     }
@@ -517,14 +505,13 @@ export struct PersonalPortraitEditor {
     this.consentOffer=false;this.consentIntent='';
     if(!CloudConsentStore.allowed(this.context))return;
     this.waiting=true;
-    this.responseText=this.label('我陪你看看这些地方…','Let me look at these areas with you…');
+    this.responseText=this.tr('我陪你看看这些地方…');
     this.command('CAPTURE');
   }
   private async captured(clean:ArrayBuffer,annotated:ArrayBuffer,width:number,height:number,gsView?:GsViewSnapshot):Promise<void>{
     if(!this.waiting||this.selections.length===0||!CloudConsentStore.allowed(this.context))return;
     if(!gsView||gsView.assetId!==this.assetId||gsView.frame<1){
-      this.waiting=false;this.responseText=this.label('当前画面的视角还未就绪，请停一瞬再试。',
-        'The current view is not ready. Pause a moment and try again.');return;
+      this.waiting=false;this.responseText=this.tr('当前画面的视角还未就绪，请停一瞬再试。');return;
     }
     const rev=this.revision;
     const id='gs-'+Date.now()+'-'+Math.floor(Math.random()*1000000);
@@ -566,8 +553,7 @@ export struct PersonalPortraitEditor {
       if(reply.plan.decision==='edit'){this.pending=reply;this.pendingSnapshot=snapshot;this.candidateReady=true;}
     }catch(error){
       console.warn('SELF_GS_PLAN_FAILED '+String(error));
-      this.responseText=this.label('这次护理建议没有接上，请再试一次。产品资料仍可在护理星图查看。',
-        'This suggestion could not connect. Please try again; product information is available in Care stars.');
+      this.responseText=this.tr('这次护理建议没有接上，请再试一次。产品资料仍可在护理星图查看。');
     }finally{this.waiting=false;}
   }
   private confirm():void{
@@ -578,7 +564,7 @@ export struct PersonalPortraitEditor {
       !this.selections.some((item:SelectedGsRegion)=>item.info.regionId===op.regionId)))return;
     const old=this.history||this.emptyHistory();
     if(old.groups.length>=12||old.groups.reduce((n:number,group:GsGroup)=>n+group.layers.length,0)+operations.length>16){
-      this.responseText=this.label('这颗星辰的变化记录已满；可以先整理旧记录。','This portrait has reached its edit history limit.');return;
+      this.responseText=this.tr('这颗星辰的变化记录已满；可以先整理旧记录。');return;
     }
     const groupId='group-'+Date.now();
     const layers:GsLayer[]=operations.map((op,index:number)=>{
@@ -607,19 +593,18 @@ export struct PersonalPortraitEditor {
         this.selections=[];this.selectionCount=0;this.selected=false;
         this.command('CLEAR_SELECTION');this.revision++;
         this.storyPhase='act';this.revealStoryHint();
-        this.responseText=this.label('这组变化已留在你的星辰里。转动看看，也可以逐项对比。',
-          'These changes are saved with your portrait. Turn and compare each one.');
+        this.responseText=this.tr('这组变化已留在你的星辰里。转动看看，也可以逐项对比。');
       }else if(this.pendingComparison!==undefined){
         this.comparisonTarget=this.pendingComparison;this.comparing=!!this.comparisonTarget;
         this.pendingComparison=undefined;
       }
       console.info('SELF_GS_HISTORY_APPLIED '+this.history?.groups.length);
-    }catch(error){this.pendingHistory=undefined;this.responseText=this.label('变化未能稳妥保存，已回到上一次记录。','Could not save this change; the previous history is restored.');console.warn('SELF_GS_EDIT_SAVE_FAILED '+String(error));}
+    }catch(error){this.pendingHistory=undefined;this.responseText=this.tr('变化未能稳妥保存，已回到上一次记录。');console.warn('SELF_GS_EDIT_SAVE_FAILED '+String(error));}
   }
   private undo():void{
     this.planner.cancel();this.waiting=false;this.candidateReady=false;this.pending=undefined;
     if(this.history&&this.history.groups.length){this.deleteGroup(this.history.groups[this.history.groups.length-1].groupId);}
-    else this.responseText=this.label('现在仍是原来的模样。','Your portrait is still unchanged.');
+    else this.responseText=this.tr('现在仍是原来的模样。');
   }
   private compare():void{
     if(!this.applied||this.waiting)return;
@@ -661,7 +646,7 @@ export struct PersonalPortraitEditor {
 
   build(){
     Stack(){
-      GaussianPortraitSurface({gaussianPath:this.gaussianPath,viewPath:this.viewPath,editCommand:this.editCommand,
+      GaussianPortraitSurface({gaussianPath:this.gaussianPath,viewPath:this.viewPath,editCommand:this.editCommand,language:this.language,
         onReady:()=>this.viewerReady(),onFailure:(message:string)=>{this.waiting=false;this.onFailure(message);},
         onEditFailure:(message:string)=>{if(this.pendingObservationQuote){
           const quote=this.pendingObservationQuote,messageId=this.pendingObservationMessageId;
@@ -677,7 +662,7 @@ export struct PersonalPortraitEditor {
       if(this.bubble){
         Column({space:8}){
           Row(){Text('✦ SELF').fontSize(12).letterSpacing(2).fontColor('#BFD8F3').layoutWeight(1);
-            StarCloseButton({diameter:30,label:this.label('关闭','Close'),onClose:()=>this.clearSelection()})}
+            StarCloseButton({diameter:30,label:this.tr('关闭'),onClose:()=>this.clearSelection()})}
           Column({space:1}){
             ForEach(this.replyLines.slice(0,this.visibleReplyLines),(line:string,index:number)=>{
               Text(line).fontSize(15).lineHeight(22).fontColor('#F1F5FF')
@@ -693,26 +678,25 @@ export struct PersonalPortraitEditor {
                 Column({space:2}){
                   Text((this.careProduct(this.careProductId) as OlayDiscoveryItem).name).fontSize(12)
                     .fontColor('#F0F5FF').maxLines(1)
-                  Text(this.label('日常一小步','A small care step')).fontSize(10).fontColor('#B8D2EC')
+                  Text(this.tr('日常一小步')).fontSize(10).fontColor('#B8D2EC')
                 }.alignItems(HorizontalAlign.Start).layoutWeight(1)
                 Text(this.careExpanded?'⌃':'⌄').fontSize(17).fontColor('#E1EBFF')
               }.width('100%').onClick(()=>this.getUIContext().animateTo({duration:240,curve:Curve.EaseOut},()=>{
                 this.careExpanded=!this.careExpanded;}))
               Text(this.careWhy).fontSize(11).lineHeight(16).fontColor('#D9E7F7')
               if(this.careExpanded){Text(this.careHow).fontSize(11).lineHeight(16).fontColor('#E5EEFA')}
-              Button(this.label('查看这款资料','View product details')).fontSize(11).fontColor('#E5EEFA')
+              Button(this.tr('查看这款资料')).fontSize(11).fontColor('#E5EEFA')
                 .backgroundColor('#344E6B').borderRadius(14)
                 .onClick(()=>{this.libraryProductId=this.careProductId;this.libraryOpen=true;})
             }.padding(9).width('100%').backgroundColor('#263C58D9')
               .border({width:1,color:'#7896BA'}).borderRadius(16)
           }
           if(!this.careProductId&&this.replyProductIds.length&&OlayDiscoveryRepository.allRecords().some((p:OlayDiscoveryItem)=>p.id===this.replyProductIds[0])){
-            Button(this.label('查看这款资料','View product details')).fontSize(11).fontColor('#E5EEFA')
+            Button(this.tr('查看这款资料')).fontSize(11).fontColor('#E5EEFA')
               .backgroundColor('#344E6B').borderRadius(14)
               .onClick(()=>{this.libraryProductId=this.replyProductIds[0];this.libraryOpen=true;})
           }
-          if(this.candidateReady){Text(this.label('✧ 数字预览 · '+this.selectionCount+' 处 · 非产品实测效果',
-            '✧ Digital preview · '+this.selectionCount+' areas · not a product effect'))
+          if(this.candidateReady){Text(this.tr('✧ 数字预览 · {count} 处 · 非产品实测效果').replace('{count}',String(this.selectionCount)))
             .fontSize(11).fontColor('#B9CDE4')}
           if(this.question){Text(this.question).fontSize(14).fontColor('#DDEAFF').maxLines(2)}
           if(this.choices.length>0){Row({space:7}){ForEach(this.choices,(choice:string)=>{
@@ -722,27 +706,26 @@ export struct PersonalPortraitEditor {
             Text(CloudConsentStore.introduction(this.language))
               .fontSize(12).fontColor('#BED0E6').maxLines(8)
             Row({space:8}){
-              Button(this.label('开启对话','Start conversations')).fontSize(13).fontColor('#F5F8FF').backgroundColor('#496581').borderRadius(17)
+              Button(this.tr('开启对话')).fontSize(13).fontColor('#F5F8FF').backgroundColor('#496581').borderRadius(17)
                 .onClick(()=>this.acceptCloudIntroduction())
-              Button(this.label('现在先不用','Not now')).fontSize(13).fontColor('#D2E1F1').backgroundColor('#253B54').borderRadius(17)
+              Button(this.tr('现在先不用')).fontSize(13).fontColor('#D2E1F1').backgroundColor('#253B54').borderRadius(17)
                 .onClick(()=>this.declineCloudIntroduction())
             }
           }else{
-            TextInput({text:this.input,placeholder:this.label(this.selectionCount>1?'例如：第一处淡一些，第二处暖一点':'想对这里说些什么？',
-              this.selectionCount>1?'For example: softer on one, warmer on two':'What would you like to try?')})
+            TextInput({text:this.input,placeholder:this.tr(this.selectionCount>1?'例如：第一处淡一些，第二处暖一点':'想对这里说些什么？')})
               .fontSize(14).fontColor('#F4F7FF').placeholderColor('#AFC2D7').backgroundColor('#233A55DD')
               .borderRadius(17).height(42).onChange((value:string)=>this.input=value)
               .onFocus(()=>this.keyboardOpen=true).onBlur(()=>this.keyboardOpen=false)
             Row({space:8}){
-              Button(this.waiting?this.label('在想…','Thinking…'):this.label('发送','Send')).enabled(!this.waiting)
+              Button(this.waiting?this.tr('在想…'):this.tr('发送')).enabled(!this.waiting)
                 .fontSize(13).fontColor('#F5F8FF').backgroundColor('#496581').borderRadius(17).onClick(()=>this.submit(this.input))
-              if(this.candidateReady){Button(this.label('试在面容上','Preview on portrait')).fontSize(13).fontColor('#F5F8FF')
+              if(this.candidateReady){Button(this.tr('试在面容上')).fontSize(13).fontColor('#F5F8FF')
                 .backgroundColor('#6879A0').borderRadius(17).onClick(()=>this.confirm())}
             }
             if(this.selectionCount>0){Row({space:8}){
-              if(this.selectionCount<4){Button(this.label('另圈一处','Add another')).fontSize(12).fontColor('#DCEAFF')
+              if(this.selectionCount<4){Button(this.tr('另圈一处')).fontSize(12).fontColor('#DCEAFF')
                 .backgroundColor('#243D59').borderRadius(15).onClick(()=>this.appendSelection())}
-              Button(this.label('清空圈选','Clear selections')).fontSize(12).fontColor('#DCEAFF')
+              Button(this.tr('清空圈选')).fontSize(12).fontColor('#DCEAFF')
                 .backgroundColor('#243D59').borderRadius(15).onClick(()=>this.clearSelection())
             }}
           }
@@ -760,51 +743,49 @@ export struct PersonalPortraitEditor {
             Column({space:8}){
             Row({space:9}){
               Text('✦').fontSize(17).fontColor('#D3DCFF')
-              Text(this.label('这一刻的 SELF','A moment with SELF')).fontSize(14)
+              Text(this.tr('这一刻的 SELF')).fontSize(14)
                 .fontWeight(FontWeight.Medium).fontColor('#F2F6FF').layoutWeight(1)
-              Button(this.storyNotesOpen?this.label('对话','Words'):this.label('记录','Notes'))
+              Button(this.storyNotesOpen?this.tr('对话'):this.tr('记录'))
                 .fontSize(11).fontColor('#C9DBF1').backgroundColor('#263C59').borderRadius(14)
                 .onClick(()=>this.storyNotesOpen=!this.storyNotesOpen)
-              StarCloseButton({diameter:30,label:this.label('收起对话','Collapse conversation'),onClose:()=>this.closeStory()})
+              StarCloseButton({diameter:30,label:this.tr('收起对话'),onClose:()=>this.closeStory()})
             }.width('100%')
             Scroll(){
               Column({space:10}){
                 if(this.storyNotesOpen){
-                  if(this.storyObservations.length===0){Text(this.label('还没有留下文字。','No words saved yet.'))
+                  if(this.storyObservations.length===0){Text(this.tr('还没有留下文字。'))
                     .fontSize(13).fontColor('#C5D4EA')}
                   ForEach(this.storyObservations,(record:StoryObservation)=>{
                     Row({space:8}){
                       Text(record.userQuote).fontSize(13).lineHeight(19).fontColor('#E9F1FF').layoutWeight(1)
-                      StarCloseButton({diameter:27,label:this.label('删除这句话','Delete note'),
+                      StarCloseButton({diameter:27,label:this.tr('删除这句话'),
                         onClose:()=>this.deleteObservation(record.recordId)})
                     }.padding(10).width('100%').backgroundColor('#344861B8').borderRadius(15)
                   },(record:StoryObservation)=>record.recordId)
                 }else{
                   Text(this.storyReply).fontSize(14).lineHeight(21).fontColor('#EDF3FF').width('100%')
                   if(this.storyProductIds.length&&OlayDiscoveryRepository.allRecords().some((p:OlayDiscoveryItem)=>p.id===this.storyProductIds[0])){
-                    Button(this.label('看看这款资料','View product details')).fontSize(12).fontColor('#EAF2FF')
+                    Button(this.tr('看看这款资料')).fontSize(12).fontColor('#EAF2FF')
                       .backgroundColor('#304B68').borderRadius(16)
                       .onClick(()=>{this.libraryProductId=this.storyProductIds[0];this.libraryOpen=true;})
                   }
                   if(this.storyKind==='edit_entry'){
-                    Button(this.label('去圈选、再确认','Select and decide')).fontSize(12).fontColor('#F3F2FF')
+                    Button(this.tr('去圈选、再确认')).fontSize(12).fontColor('#F3F2FF')
                       .backgroundColor('#665A8E').borderRadius(17)
                       .onClick(()=>this.enterExistingEdit(this.storyLastQuote))
                   }
                   if(this.storyKind==='real_effect_boundary'){
                     Row({space:7}){
-                      Button(this.label('说说具体产品','Specify the product')).fontSize(12).fontColor('#EAF2FF')
+                      Button(this.tr('说说具体产品')).fontSize(12).fontColor('#EAF2FF')
                         .backgroundColor('#304B68').borderRadius(16)
-                        .onClick(()=>this.storyInput=this.label('想了解这款 OLAY 的哪一代、哪种规格？',
-                          'Which exact OLAY product and version?'))
-                      Button(this.label('另试数字预览','Separate digital preview')).fontSize(12).fontColor('#F2EEFF')
+                        .onClick(()=>this.storyInput=this.tr('想了解这款 OLAY 的哪一代、哪种规格？'))
+                      Button(this.tr('另试数字预览')).fontSize(12).fontColor('#F2EEFF')
                         .backgroundColor('#665A8E').borderRadius(16)
-                        .onClick(()=>this.enterExistingEdit(this.label('我想试一份独立的通用数字试色，不按产品真实效果。',
-                          'I want a separate digital colour preview, not a product effect.')))
+                        .onClick(()=>this.enterExistingEdit(this.tr('我想试一份独立的通用数字试色，不按产品真实效果。')))
                     }
                   }
                   if(this.storyLastQuote&&this.storyKind!=='closing'){
-                    Button(this.label('留下这一刻','Keep this moment')).fontSize(11).fontColor('#DDEBFF')
+                    Button(this.tr('留下这一刻')).fontSize(11).fontColor('#DDEBFF')
                       .backgroundColor('#344E6B').borderRadius(16).onClick(()=>this.saveStoryQuote())
                   }
                 }
@@ -814,18 +795,18 @@ export struct PersonalPortraitEditor {
               Text(CloudConsentStore.introduction(this.language))
                 .fontSize(11).lineHeight(16).fontColor('#C8D9EF')
               Row({space:8}){
-                Button(this.label('开启对话','Start conversations')).fontSize(12).fontColor('#F4F7FF')
+                Button(this.tr('开启对话')).fontSize(12).fontColor('#F4F7FF')
                   .backgroundColor('#4B6283').borderRadius(16)
                   .onClick(()=>this.acceptCloudIntroduction())
-                Button(this.label('现在先不用','Not now')).fontSize(12).fontColor('#C9D8EB')
+                Button(this.tr('现在先不用')).fontSize(12).fontColor('#C9D8EB')
                   .backgroundColor('#2A4059').borderRadius(16)
                   .onClick(()=>this.declineCloudIntroduction())
               }
             }
-            if(this.storyWaiting){Button(this.label('停下这次回应','Cancel this reply')).fontSize(12)
+            if(this.storyWaiting){Button(this.tr('停下这次回应')).fontSize(12)
               .fontColor('#D9E8F5').backgroundColor('#30465E').borderRadius(16)
               .onClick(()=>{this.storyGeneration++;this.storyClient.cancel();this.storyWaiting=false;
-                this.storyReply=this.label('好，这次先停在这里。','Okay, we can pause here.');})}
+                this.storyReply=this.tr('好，这次先停在这里。');})}
             }.padding(12).width('100%').height(this.replyPanelHeight())
               .backgroundColor('#B3182D47')
               .border({width:1,color:'#708BAD'}).borderRadius(22)
@@ -863,7 +844,7 @@ export struct PersonalPortraitEditor {
               .stateStyles({pressed:{.scale({x:.91,y:.91})},normal:{.scale({x:1,y:1})}})
               .animation({duration:170,curve:Curve.EaseOut})
               .onClick(()=>{this.storyInputController.stopEditing();this.openStory();this.sendStory(this.storyInput);})
-              .accessibilityText(this.label('发送此刻的话','Send message'))
+              .accessibilityText(this.tr('发送此刻的话'))
           }.padding({left:10,right:7,top:5,bottom:5}).width('100%')
             .backgroundColor('#DC1A2B45')
             .border({width:1,color:'#708BAD'}).borderRadius(27)
@@ -888,38 +869,38 @@ export struct PersonalPortraitEditor {
         Stack(){
           List({space:9}){
             ListItem(){Column({space:4}){
-              Text(this.label('这颗星辰的变化','Changes on this portrait')).fontSize(18).fontWeight(FontWeight.Medium).fontColor('#F1F6FF')
-              Text(this.label('轻轻展开，看看每一步','Open a moment to see more')).fontSize(11).fontColor('#A9C2DF')
+              Text(this.tr('这颗星辰的变化')).fontSize(18).fontWeight(FontWeight.Medium).fontColor('#F1F6FF')
+              Text(this.tr('轻轻展开，看看每一步')).fontSize(11).fontColor('#A9C2DF')
             }.alignItems(HorizontalAlign.Start).padding({right:45})}
             if(this.applied){ListItem(){Row({space:9}){
-              Button(this.comparing?this.label('看变化','Show changes'):this.label('看原样','Show original'))
+              Button(this.comparing?this.tr('看变化'):this.tr('看原样'))
                 .id('personal-gs-compare').fontSize(12).fontColor('#EAF2FF')
                 .backgroundColor('#385675B8').border({width:1,color:'#7697B7'}).borderRadius(17)
                 .onClick(()=>this.compare())
-              Button(this.label('撤回上一步','Undo last')).id('personal-gs-undo')
+              Button(this.tr('撤回上一步')).id('personal-gs-undo')
                 .fontSize(12).fontColor('#EAF2FF').backgroundColor('#385675B8')
                 .border({width:1,color:'#7697B7'}).borderRadius(17).onClick(()=>this.undo())
             }.width('100%')}}
             if(this.historyDisplay.length===0){
-              ListItem(){Text(this.label('这里还没有新的变化','No changes yet')).fontSize(13).fontColor('#BBD0E6').padding(12)}
+              ListItem(){Text(this.tr('这里还没有新的变化')).fontSize(13).fontColor('#BBD0E6').padding(12)}
             }
             ForEach(this.historyDisplay,(group:GsHistoryDisplay)=>{
               ListItem(){Column({space:9}){
-                Text(group.label||this.label('一次尝试','One exploration')).fontSize(14).fontWeight(FontWeight.Medium)
+                Text(group.label||this.tr('一次尝试')).fontSize(14).fontWeight(FontWeight.Medium)
                   .fontColor('#F1F6FF').maxLines(2).width('100%')
                 Row({space:8}){
-                  Button(this.label('看这组','View group')).fontSize(12).fontColor('#EEF6FF')
+                  Button(this.tr('看这组')).fontSize(12).fontColor('#EEF6FF')
                     .backgroundColor('#365574').borderRadius(16).onClick(()=>this.previewHistory(group.groupId))
-                  Button(this.label('移除整组','Remove group')).fontSize(12).fontColor('#D8E9FA')
+                  Button(this.tr('移除整组')).fontSize(12).fontColor('#D8E9FA')
                     .backgroundColor('#29425D').borderRadius(16).onClick(()=>this.deleteGroup(group.groupId))
                 }.width('100%')
                 ForEach(group.items,(item:GsHistoryItem,index:number)=>{
                   Row({space:7}){
-                    Text((index+1)+' · '+(item.preset==='rose'?this.label('柔玫瑰','Muted pink'):this.label('暖陶棕','Warm clay')))
+                    Text((index+1)+' · '+(item.preset==='rose'?this.tr('柔玫瑰'):this.tr('暖陶棕')))
                       .fontSize(12).fontColor('#C8D9ED').layoutWeight(1)
-                    Button(this.label('对比','Compare')).fontSize(11).fontColor('#EAF3FF').backgroundColor('#365574')
+                    Button(this.tr('对比')).fontSize(11).fontColor('#EAF3FF').backgroundColor('#365574')
                       .borderRadius(15).onClick(()=>this.previewHistory(item.layerId))
-                    StarCloseButton({diameter:27,label:this.label('移除这一项','Remove layer'),onClose:()=>this.deleteLayer(item.layerId)})
+                    StarCloseButton({diameter:27,label:this.tr('移除这一项'),onClose:()=>this.deleteLayer(item.layerId)})
                   }.width('100%')
                 },(item:GsHistoryItem)=>item.layerId)
                 if(group.careGuide&&this.careProduct(group.careGuide.productId)){
@@ -927,7 +908,7 @@ export struct PersonalPortraitEditor {
                     Image(OlayPhotoRepository.thumbnail(group.careGuide.productId)).width(42).height(42).objectFit(ImageFit.Contain)
                     Column({space:3}){
                       Text((this.careProduct(group.careGuide.productId) as OlayDiscoveryItem).name).fontSize(12).fontColor('#EBF3FF').maxLines(1)
-                      Text(this.label('✧ 养护小记','✧ Care notes')).fontSize(10).fontColor('#AFC9E3')
+                      Text(this.tr('✧ 养护小记')).fontSize(10).fontColor('#AFC9E3')
                     }.alignItems(HorizontalAlign.Start).layoutWeight(1)
                     Text(this.expandedCareGroup===group.groupId?'⌃':'⌄').fontSize(16).fontColor('#C6DDF4')
                   }.padding({left:4,right:6,top:6,bottom:6}).width('100%')
@@ -936,20 +917,19 @@ export struct PersonalPortraitEditor {
                   if(this.expandedCareGroup===group.groupId){
                     Text(group.careGuide.whyHere).fontSize(12).lineHeight(18).fontColor('#DCEAF8')
                     Text(group.careGuide.howToUse).fontSize(12).lineHeight(18).fontColor('#DCEAF8')
-                    Text(this.label('日常护理与屏幕里的数字色彩是两件事。','Daily care and the digital colour are separate.'))
+                    Text(this.tr('日常护理与屏幕里的数字色彩是两件事。'))
                       .fontSize(10).fontColor('#AFC6DE')
                   }
                 }else{
-                  Text(this.label('这一步先留住光色；护理小记，等遇见合适的一款再写。',
-                    'This step keeps the colour; a care note can wait for the right match.'))
+                  Text(this.tr('这一步先留住光色；护理小记，等遇见合适的一款再写。'))
                     .fontSize(11).fontColor('#AFC5DB')
                 }
               }.padding(12).width('100%').backgroundColor('#29435CC9').border({width:1,color:'#7091B0'}).borderRadius(20)}
             },(group:GsHistoryDisplay)=>group.groupId)
-            if(this.applied){ListItem(){Button(this.label('看全部变化','Show all')).fontSize(12).fontColor('#EAF3FF')
+            if(this.applied){ListItem(){Button(this.tr('看全部变化')).fontSize(12).fontColor('#EAF3FF')
               .backgroundColor('#365574').borderRadius(18).onClick(()=>this.previewHistory(''))}}
           }.padding(16).width('100%').height('100%').scrollBar(BarState.Off).edgeEffect(EdgeEffect.Spring)
-          StarCloseButton({diameter:36,label:this.label('关闭','Close'),onClose:()=>{this.historyOpen=false;this.previewHistory('');}})
+          StarCloseButton({diameter:36,label:this.tr('关闭'),onClose:()=>{this.historyOpen=false;this.previewHistory('');}})
             .position({x:this.historyPanelWidth()-52,y:16})
         }.width(this.historyPanelWidth()).height(this.historyPanelHeight()).backgroundColor('#E912253D')
           .border({width:1,color:'#5D7998'}).borderRadius(28).shadow({radius:26,color:'#66030813',offsetY:8})
@@ -967,7 +947,7 @@ export struct PersonalPortraitEditor {
             .shadow({radius:this.historyPressed?13:5,color:this.historyPressed?'#7EB8DC':'#243D5B'})
             .scale({x:this.historyPressed?.93:1,y:this.historyPressed?.93:1})
             .animation({duration:170,curve:Curve.EaseOut})
-            .accessibilityText(this.label('变化记录','Changes'))
+            .accessibilityText(this.tr('变化记录'))
             .onTouch((event:TouchEvent)=>{this.historyPressed=event.type===TouchType.Down;})
             .onClick(()=>{this.getUIContext().animateTo({duration:210,curve:Curve.EaseOut},()=>{
               this.historyOpen=true;this.bubble=false;});})
@@ -978,7 +958,7 @@ export struct PersonalPortraitEditor {
           Button({type:ButtonType.Capsule,stateEffect:false}){
             Row({space:8}){
               Image($rawfile('ui/portrait_care.svg')).width(24).height(24)
-              Text(this.label('护理星图','Care atlas')).fontSize(13).fontColor('#E8F2FF')
+              Text(this.tr('护理星图')).fontSize(13).fontColor('#E8F2FF')
                 .fontWeight(FontWeight.Medium)
             }
           }.id('personal-olay-library').height(52).padding({left:14,right:17})
@@ -995,12 +975,12 @@ export struct PersonalPortraitEditor {
             Stack({alignContent:Alignment.Center}){
               Row({space:10}){
                 Image($rawfile('ui/portrait_move.svg')).width(30).height(30)
-                Text(this.label('移动','Move')).fontSize(15).fontWeight(FontWeight.Medium).fontColor('#F6F3FF')
+                Text(this.tr('移动')).fontSize(15).fontWeight(FontWeight.Medium).fontColor('#F6F3FF')
               }.opacity(this.tool==='move'?1:0).scale({x:this.tool==='move'?1:.88,y:this.tool==='move'?1:.88})
                 .animation({duration:220,curve:Curve.EaseOut})
               Row({space:10}){
                 Image($rawfile('ui/portrait_lasso.svg')).width(30).height(30)
-                Text(this.label('圈选','Select')).fontSize(15).fontWeight(FontWeight.Medium).fontColor('#FAF5FF')
+                Text(this.tr('圈选')).fontSize(15).fontWeight(FontWeight.Medium).fontColor('#FAF5FF')
               }.opacity(this.tool==='lasso'?1:0).scale({x:this.tool==='lasso'?1:.88,y:this.tool==='lasso'?1:.88})
                 .animation({duration:220,curve:Curve.EaseOut})
             }.width(136).height(56)
@@ -1016,8 +996,8 @@ export struct PersonalPortraitEditor {
             .animation({duration:190,curve:Curve.EaseOut})
             .onTouch((event:TouchEvent)=>{this.toolPressed=event.type===TouchType.Down;})
             .onClick(()=>this.toggleTool())
-            .accessibilityText(this.tool==='lasso'?this.label('当前圈选，点按切换移动','Selection mode, tap to move'):
-              this.label('当前移动，点按切换圈选','Move mode, tap to select'))
+            .accessibilityText(this.tool==='lasso'?this.tr('当前圈选，点按切换移动'):
+              this.tr('当前移动，点按切换圈选'))
             .position({x:Math.max(18,this.viewportWidth-154),
               y:Math.max(150,this.viewportHeight-(this.viewportWidth>=840?164:230))}).zIndex(7)
         }

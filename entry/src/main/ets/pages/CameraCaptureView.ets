@@ -10,6 +10,7 @@ import { previewGeometry,previewPoint } from '../services/CameraPreviewTransform
 import { ViewCoverageGuide } from '../services/ViewCoverageGuide';
 import { CaptureViewCoverage } from './CaptureViewCoverage';
 import { faceParticle } from '../services/FaceParticleField';
+import { UiText } from '../services/UiText';
 
 @Component
 export struct CameraCaptureView {
@@ -70,7 +71,7 @@ export struct CameraCaptureView {
  private epoch:number=0;
  private surfaceReady:boolean=false;
  private expired:boolean=false;
- private tr(zh:string,en:string):string{return this.language==='en'?en:zh;}
+ private tr(zh:string,en:string):string{return this.language==='en'?en:UiText.get(zh,this.language);}
  private previewWidth():number{return Math.max(this.viewportWidth,this.viewportHeight*this.streamRatio);}
  private previewHeight():number{return Math.max(this.viewportHeight,this.viewportWidth/this.streamRatio);}
  private ring():number{return Math.min(this.viewportWidth*.82,this.viewportHeight*.72,560);}

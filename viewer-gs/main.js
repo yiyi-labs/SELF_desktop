@@ -5,6 +5,38 @@ import { upperLeftLuma, createToneTracker } from './tone.js';
 const canvas=document.getElementById('portrait'), outline=document.getElementById('lasso'), status=document.getElementById('status');
 const preview=document.body.dataset.preview==='true';
 const report=(kind,message)=>{status.textContent=message;console.log(`SELF_GS_VIEWER_${kind} ${message}`);};
+const TEXT={
+  loading:{zh:'循着光，慢慢看见你…',en:'Following the light, slowly seeing you…',ja:'光をたどって、ゆっくりあなたに会いに…',ko:'빛을 따라, 천천히 당신을 만나요…'},
+  aria:{zh:'个人立体面容',en:'Your 3D portrait',ja:'あなたの立体フェース',ko:'나의 입체 얼굴'},
+  ariaPreview:{zh:'星辰立体预览',en:'Starlight 3D preview',ja:'星辰の立体プレビュー',ko:'별빛 입체 미리보기'},
+  webgl:{zh:'这台设备没有提供 WebGL2 绘制能力',en:'This device does not offer WebGL2 rendering',ja:'この端末は WebGL2 描画に対応していません',ko:'이 기기는 WebGL2 렌더링을 지원하지 않습니다'},
+  viewMissing:{zh:'个人模型视角尚未就绪',en:'The portrait view is not ready yet',ja:'モデル視点の準備がまだです',ko:'모델 시점이 아직 준비되지 않았습니다'},
+  viewInvalid:{zh:'个人模型视角内容不正确',en:'The portrait view content is invalid',ja:'モデル視点の内容が正しくありません',ko:'모델 시점 내용이 올바르지 않습니다'},
+  openFail:{zh:'立体面容暂时无法打开：',en:'The portrait cannot open right now: ',ja:'立体フェースを開けません：',ko:'입체 얼굴을 열 수 없습니다: '},
+  cameraParams:{zh:'个人模型相机参数不完整',en:'The portrait camera parameters are incomplete',ja:'モデルのカメラパラメータが不完全です',ko:'모델 카메라 파라미터가 불완전합니다'},
+  selectMismatch:{zh:'圈选和个人模型不匹配',en:'The selection does not match the portrait',ja:'選択範囲がモデルと一致しません',ko:'선택 영역이 모델과 일치하지 않습니다'},
+  selected:{zh:'已圈出 {count} 处；再画可替换当前范围',en:'{count} area(s) circled; draw again to replace',ja:'{count}か所を選択しました。もう一度描くと範囲を変更できます',ko:'{count}군데를 선택했어요. 다시 그리면 범위를 바꿀 수 있습니다'},
+  viewNotDrawn:{zh:'当前视角尚未绘制完成',en:'The current view has not finished rendering',ja:'現在の視点の描画がまだ完了していません',ko:'현재 시점이 아직 렌더링되지 않았습니다'},
+  weekInvalid:{zh:'观察时段不正确',en:'Invalid observation week',ja:'観察期間が正しくありません',ko:'관찰 기간이 올바르지 않습니다'},
+  needSelection:{zh:'请先圈选一处',en:'Please circle an area first',ja:'先に一か所を囲んでください',ko:'먼저 한 곳을 선택해 주세요'},
+  tooManyLayers:{zh:'编辑记录过多',en:'Too many edit records',ja:'編集記録が多すぎます',ko:'편집 기록이 너무 많습니다'},
+  layerMismatch:{zh:'已存编辑与模型不匹配',en:'Saved edits do not match the model',ja:'保存済みの編集がモデルと一致しません',ko:'저장된 편집이 모델과 일치하지 않습니다'},
+  layerIncomplete:{zh:'已存圈选范围不完整',en:'The saved selection is incomplete',ja:'保存済みの選択範囲が不完全です',ko:'저장된 선택 범위가 불완전합니다'},
+  colorInvalid:{zh:'已存颜色参数不正确',en:'Saved colour parameters are invalid',ja:'保存済みの色パラメータが正しくありません',ko:'저장된 색상 파라미터가 올바르지 않습니다'},
+  noCompare:{zh:'还没有可对比的变化',en:'Nothing to compare yet',ja:'比較できる変化がまだありません',ko:'비교할 변화가 아직 없습니다'},
+  needCircle:{zh:'请先圈出想试的地方',en:'Circle the spot you want to try first',ja:'試したい場所を先に囲んでください',ko:'먼저 시도할 곳을 선택해 주세요'},
+  colorUnavailable:{zh:'这次的颜色建议还不能使用',en:'This colour suggestion cannot be used yet',ja:'この色の提案はまだ使えません',ko:'이 색상 제안은 아직 사용할 수 없습니다'},
+  ready:{zh:'已载入 {count} 个立体细节点，可拖动观察',en:'{count} detail points loaded; drag to look around',ja:'{count}個の立体ポイントを読み込みました。ドラッグで観察できます',ko:'입체 포인트 {count}개를 불러왔어요. 드래그해서 살펴보세요'},
+  drawFail:{zh:'立体面容绘制失败：',en:'Portrait rendering failed: ',ja:'立体フェースの描画に失敗しました：',ko:'입체 얼굴 렌더링 실패: '},
+  drawUnavailable:{zh:'立体面容绘制不可用：',en:'Portrait rendering unavailable: ',ja:'立体フェースの描画を利用できません：',ko:'입체 얼굴 렌더링 불가: '}
+};
+let language='zh';
+const LANG_TAG={zh:'zh-CN',en:'en',ja:'ja',ko:'ko'};
+const t=(key,count)=>{const row=TEXT[key]||{};const s=row[language]||row.en||row.zh||key;return count===undefined?s:s.replace('{count}',count);};
+window.selfViewerLanguage=lang=>{if(!LANG_TAG[lang])return;language=lang;
+  document.documentElement.lang=LANG_TAG[lang];
+  canvas.setAttribute('aria-label',preview?t('ariaPreview'):t('aria'));
+  if(!status.classList.contains('quiet'))status.textContent=t('loading');};
 const finite3=v=>Array.isArray(v)&&v.length===3&&v.every(Number.isFinite);
 const normal=v=>{const n=Math.hypot(...v);return v.map(x=>x/n);};
 const rotate=(v,a,t)=>{const c=Math.cos(t),s=Math.sin(t),d=v[0]*a[0]+v[1]*a[1]+v[2]*a[2];
@@ -34,33 +66,76 @@ window.addEventListener('message',event=>{
 const pngBytes=dataUrl=>Uint8Array.from(atob(dataUrl.split(',')[1]),c=>c.charCodeAt(0));
 
 async function start(){
-  if(!canvas.getContext('webgl2',{antialias:false,alpha:true,preserveDrawingBuffer:true}))throw Error('这台设备没有提供 WebGL2 绘制能力');
+  if(!canvas.getContext('webgl2',{antialias:false,alpha:true,preserveDrawingBuffer:true}))throw Error(t('webgl'));
   const response=await fetch('https://self.local/portrait.view.json');
-  if(!response.ok)throw Error('个人模型视角尚未就绪');
+  if(!response.ok)throw Error(t('viewMissing'));
   const view=await response.json();
   if(view.schemaVersion!==1||!finite3(view.target)||!finite3(view.camera)||!finite3(view.up)||
-    !Number.isFinite(view.fovDegrees)||view.fovDegrees<10||view.fovDegrees>90)throw Error('个人模型视角内容不正确');
+    !Number.isFinite(view.fovDegrees)||view.fovDegrees<10||view.fovDegrees>90)throw Error(t('viewInvalid'));
   const app=new Application(canvas,{graphicsDeviceOptions:{antialias:false,alpha:true,preserveDrawingBuffer:true}});
   app.setCanvasFillMode(FILLMODE_FILL_WINDOW);app.setCanvasResolution(RESOLUTION_AUTO);app.scene.ambientLight=new Color(1,1,1);app.start();
   const camera=new Entity('Portrait camera');
   camera.addComponent('camera',{clearColor:new Color(.04,.06,.11,0),fov:view.fovDegrees,nearClip:.01,farClip:10000});
   app.root.addChild(camera);
   const asset=new Asset('Personal 3DGS','gsplat',{url:'https://self.local/portrait.gaussian.ply'});
-  app.assets.add(asset);asset.on('error',error=>report('ERROR','立体面容暂时无法打开：'+String(error)));
+  app.assets.add(asset);asset.on('error',error=>report('ERROR',t('openFail')+String(error)));
   asset.on('load',()=>{
     try{
       const model=new Entity('Personal 3DGS');model.addComponent('gsplat',{asset});app.root.addChild(model);
       const resource=asset.resource,data=resource.gsplatData,originalColors=makeOriginalColors(data);
       const target=view.target,up=normal(view.up),original=view.camera.map((x,i)=>x-target[i]);
-      const radius=Math.hypot(...original);if(!Number.isFinite(radius)||radius<.01)throw Error('个人模型相机参数不完整');
-      const openingZoom=preview?.9:view.targetFaceFraction===.5?1:1.36;
+      const radius=Math.hypot(...original);if(!Number.isFinite(radius)||radius<.01)throw Error(t('cameraParams'));
+      const recordedFov=Number.isFinite(view.captureHorizontalFovDegrees)&&view.captureHorizontalFovDegrees>=20&&view.captureHorizontalFovDegrees<=120;
+      const hasYawBounds=Array.isArray(view.safeYawDegrees)&&view.safeYawDegrees.length===2&&view.safeYawDegrees.every(Number.isFinite)&&view.safeYawDegrees[0]<=0&&view.safeYawDegrees[1]>=0;
+      const hasPitchBounds=Array.isArray(view.safePitchDegrees)&&view.safePitchDegrees.length===2&&view.safePitchDegrees.every(Number.isFinite)&&view.safePitchDegrees[0]<=0&&view.safePitchDegrees[1]>=0;
+      const yawBounds=hasYawBounds?view.safeYawDegrees.map(value=>value*Math.PI/180):[-Math.PI,Math.PI];
+      // Pitch is a viewing control, not a claim that unrecorded surfaces were reconstructed.
+      // Keep the source coverage as metadata, but allow looking above and below the face.
+      const pitchBounds=hasPitchBounds?
+        [Math.min(-30,view.safePitchDegrees[0])*Math.PI/180,
+          Math.max(30,view.safePitchDegrees[1])*Math.PI/180]:[-Math.PI/6,Math.PI/6];
+      let openingZoom=preview?.9:view.targetFaceFraction===.5?1:1.36;
       let yaw=0,pitch=0,zoom=openingZoom,targetYaw=0,targetPitch=0,targetZoom=openingZoom;
+      // Keep the face sharp when still; reduce fill rate only during camera motion.
+      // On high-resolution tablets the transparent splats overdraw millions of pixels.
+      const movingPixelRatio=()=>{
+        const r=canvas.getBoundingClientRect();
+        return Math.min(1,Math.max(.55,Math.sqrt(2200000/Math.max(1,r.width*r.height))));
+      };
+      let reducedResolution=false;
+      const setMotionResolution=moving=>{
+        if(reducedResolution===moving)return;
+        reducedResolution=moving;
+        app.graphicsDevice.maxPixelRatio=moving?movingPixelRatio():1;
+        app.resizeCanvas();app.renderNextFrame=true;
+      };
+      let motionFrames=0,motionStarted=0;
+      app.on('frameend',()=>{
+        if(!reducedResolution){motionFrames=0;motionStarted=0;return;}
+        const now=performance.now();if(!motionStarted)motionStarted=now;
+        motionFrames++;
+        if(now-motionStarted>=3000){
+          console.info(`SELF_GS_VIEWER_MOTION_FPS ${Math.round(motionFrames*1000/(now-motionStarted))} ${canvas.width}x${canvas.height}`);
+          motionFrames=0;motionStarted=now;
+        }
+      });
+      const clampZoom=value=>Math.max(.35,Math.min(recordedFov?openingZoom*1.2:4,value));
+      const adjustRecordedFraming=()=>{if(!recordedFov)return;
+        const rect=canvas.getBoundingClientRect(),aspect=rect.width/Math.max(1,rect.height);
+        const horizontal=Math.min(58,view.captureHorizontalFovDegrees*1.12);
+        const vertical=2*Math.atan(Math.tan(horizontal*Math.PI/360)/aspect)*180/Math.PI;
+        const nextFov=Math.min(view.fovDegrees,vertical);
+        const nextOpening=preview?.9:nextFov<view.fovDegrees-1?1.3:1;
+        const ratio=nextOpening/openingZoom;openingZoom=nextOpening;
+        zoom=clampZoom(zoom*ratio);targetZoom=clampZoom(targetZoom*ratio);
+        camera.camera.fov=nextFov;app.renderNextFrame=true;};
+      adjustRecordedFraming();
       let mode='move',touching=false,lastX=0,lastY=0,polygon=[],selectedPolygon=[],selectionYaw=0,selectionPitch=0,
         selectionWidth=0,selectionHeight=0,mask=null,selected=0,appendNext=false;
       let appliedRecipe=null,historyLayers=[],selections=[],carePreviewActive=false;
       const decodeMask=value=>{
         const decoded=atob(value||'');
-        if(decoded.length!==data.numSplats)throw Error('圈选和个人模型不匹配');
+        if(decoded.length!==data.numSplats)throw Error(t('selectMismatch'));
         return Uint8Array.from(decoded,c=>c.charCodeAt(0));
       };
       let editRevision=0,cameraRevision=0,renderFrame=0,lastRenderedView=null;
@@ -151,15 +226,24 @@ async function start(){
           entry.polygon:projectedContour(entry,r.width,r.height);
         for(let i=0;i<points.length;i+=Math.max(1,Math.floor(points.length/8)))addSparks(points[i]);
       }};
-      let firstCamera=true,lastOverlay=0;
-      const update=()=>{if(preview&&!touching)targetYaw=Math.sin(performance.now()*.00027)*.23;
-        if(!firstCamera&&Math.abs(targetYaw-yaw)<.0002&&Math.abs(targetPitch-pitch)<.0002&&Math.abs(targetZoom-zoom)<.0002)return;
+      let firstCamera=true,lastOverlay=0,aimPoint=target;
+      const update=(dt=1/60)=>{if(preview&&!touching)targetYaw=Math.max(yawBounds[0],Math.min(yawBounds[1],Math.sin(performance.now()*.00027)*.23));
+        const settling=Math.abs(targetYaw-yaw)>.002||Math.abs(targetPitch-pitch)>.002||Math.abs(targetZoom-zoom)>.002;
+        setMotionResolution(touching||settling);
+        if(!firstCamera&&!settling)return;
         firstCamera=false;
-        yaw+=(targetYaw-yaw)*.2;pitch+=(targetPitch-pitch)*.2;zoom+=(targetZoom-zoom)*.2;
+        // Preserve the 60 Hz response without letting a slow or resumed frame snap the camera.
+        const elapsed=Number.isFinite(dt)?Math.max(0,Math.min(dt,.05)):1/60;
+        const blend=1-Math.pow(.8,elapsed*60);
+        yaw+=(targetYaw-yaw)*blend;pitch+=(targetPitch-pitch)*blend;zoom+=(targetZoom-zoom)*blend;
         const afterYaw=rotate(original,up,yaw),forward=normal(afterYaw.map(x=>-x));
         const right=normal([forward[1]*up[2]-forward[2]*up[1],forward[2]*up[0]-forward[0]*up[2],forward[0]*up[1]-forward[1]*up[0]]);
         const offset=rotate(afterYaw,right,pitch);
-        camera.setPosition(...offset.map((x,i)=>target[i]+x*zoom));camera.lookAt(...target,...up);cameraRevision++;app.renderNextFrame=true;
+        camera.setPosition(...offset.map((x,i)=>target[i]+x*zoom));
+        // The triangulated target sits near the upper face. Aim a little
+        // lower so the chin, neck and recorded room stay in one frame.
+        aimPoint=recordedFov?target.map((value,i)=>value-up[i]*radius*zoom*.075):target;
+        camera.lookAt(...aimPoint,...up);cameraRevision++;app.renderNextFrame=true;
         if(selections.length&&performance.now()-lastOverlay>32){lastOverlay=performance.now();drawOutline();}};
       app.on('update',update);update();resizeOutline();drawOutline();
       app.systems.gsplat.on('frame:request',()=>{app.renderNextFrame=true;});
@@ -167,20 +251,43 @@ async function start(){
       let lastInteraction=-2000;
       const interaction=()=>{if(performance.now()-lastInteraction>1800){lastInteraction=performance.now();console.log('SELF_GS_VIEWER_INTERACTION');}};
       const pointer=event=>{const r=canvas.getBoundingClientRect();return {x:event.clientX-r.left,y:event.clientY-r.top};};
+      const movePointers=new Map();let pinchDistance=0;
+      const pointerGap=()=>{const points=[...movePointers.values()];return Math.hypot(points[0].x-points[1].x,points[0].y-points[1].y);};
       canvas.addEventListener('pointerdown',event=>{interaction();touching=true;lastX=event.clientX;lastY=event.clientY;canvas.setPointerCapture(event.pointerId);
+        if(mode==='move'){
+          movePointers.set(event.pointerId,{x:event.clientX,y:event.clientY});
+          if(movePointers.size===2)pinchDistance=pointerGap();
+          return;
+        }
         if(mode==='lasso'){polygon=[pointer(event)];drawOutline();}});
       canvas.addEventListener('pointermove',event=>{if(!touching)return;interaction();
         if(mode==='lasso'){const point=pointer(event),previous=polygon[polygon.length-1];
           if(polygon.length<512&&shouldRecordLassoPoint(previous,point)){
             polygon.push(point);if(polygon.length%3===0)addSparks(point);drawOutline();}}
-        else{targetYaw+=(event.clientX-lastX)*.008;targetPitch=Math.max(-.9,Math.min(.9,targetPitch+(event.clientY-lastY)*.008));}
+        else{
+          if(!movePointers.has(event.pointerId))return;
+          movePointers.set(event.pointerId,{x:event.clientX,y:event.clientY});
+          if(movePointers.size>=2){
+            const distance=pointerGap();
+            if(pinchDistance>4&&distance>4)targetZoom=clampZoom(targetZoom*pinchDistance/distance);
+            pinchDistance=distance;
+          }else{
+            targetYaw=Math.max(yawBounds[0],Math.min(yawBounds[1],targetYaw+(event.clientX-lastX)*.008));
+            targetPitch=Math.max(pitchBounds[0],Math.min(pitchBounds[1],targetPitch+(event.clientY-lastY)*.008));
+          }
+        }
         lastX=event.clientX;lastY=event.clientY;});
-      canvas.addEventListener('pointerup',()=>{if(!touching)return;touching=false;if(mode!=='lasso')return;
+      canvas.addEventListener('pointerup',event=>{if(mode==='move'){
+        movePointers.delete(event.pointerId);touching=movePointers.size>0;pinchDistance=0;
+        if(touching){const remaining=movePointers.values().next().value;lastX=remaining.x;lastY=remaining.y;}
+        return;
+      }if(!touching)return;touching=false;if(mode!=='lasso')return;
         try{const first=polygon[0],last=polygon[polygon.length-1];
           if(first&&last&&Math.hypot(first.x-last.x,first.y-last.y)>5)polygon.push(first);
           polygon=normalizeLasso(polygon);
           const r=canvas.getBoundingClientRect();
           const result=selectVisibleSplats({data,polygon,target,cameraPosition:camera.getPosition().toArray(),
+            editableCount:Number.isInteger(view.editableSplats)?view.editableSplats:data.numSplats,
             project:(x,y,z)=>camera.camera.worldToScreen(new Vec3(x,y,z)),width:r.width,height:r.height});
           const slot=selectionSlot(selections.length,appendNext);
           const regionId=selections[slot]?.regionId||`gs-selected-${slot+1}`;
@@ -193,14 +300,16 @@ async function start(){
           send('GS_SELECTION',{regionId,count:selected,total:data.numSplats,x:polygon.reduce((s,p)=>s+p.x,0)/polygon.length/r.width,
             y:polygon.reduce((s,p)=>s+p.y,0)/polygon.length/r.height});
           sendBytes('gs-mask',mask);if(last)addSparks(last,true);
-          report('SELECTED',`已圈出 ${selections.length} 处；再画可替换当前范围`);
+          report('SELECTED',t('selected',selections.length));
         }catch(error){send('GS_FAILED',{message:String(error)});report('SELECTION_FAILED',String(error));}
         polygon=[];drawOutline();});
-      canvas.addEventListener('pointercancel',()=>{touching=false;polygon=[];drawOutline();});
-      canvas.addEventListener('wheel',event=>{targetZoom=Math.max(.35,Math.min(4,targetZoom*Math.exp(event.deltaY*.001)));event.preventDefault();},{passive:false});
+      canvas.addEventListener('pointercancel',event=>{movePointers.delete(event.pointerId);touching=movePointers.size>0;pinchDistance=0;
+        if(touching){const remaining=movePointers.values().next().value;lastX=remaining.x;lastY=remaining.y;}
+        polygon=[];drawOutline();});
+      canvas.addEventListener('wheel',event=>{targetZoom=clampZoom(targetZoom*Math.exp(event.deltaY*.001));event.preventDefault();},{passive:false});
       command=payload=>{
         if(payload.action==='VIEW_SNAPSHOT'){
-          if(!lastRenderedView){send('GS_FAILED',{message:'当前视角尚未绘制完成'});return;}
+          if(!lastRenderedView){send('GS_FAILED',{message:t('viewNotDrawn')});return;}
           send('GS_VIEW',{gsView:lastRenderedView});return;
         }
         if(payload.action==='TOOL'){mode=payload.tool==='lasso'?'lasso':'move';appendNext=false;return;}
@@ -211,24 +320,24 @@ async function start(){
           drawOutline();return;}
         if(payload.action==='CARE_PREVIEW'){
           const week=payload.strength;
-          if(!Number.isInteger(week)||week<0||week>8)throw Error('观察时段不正确');
-          if(selections.length<1)throw Error('请先圈选一处');
+          if(!Number.isInteger(week)||week<0||week>8)throw Error(t('weekInvalid'));
+          if(selections.length<1)throw Error(t('needSelection'));
           applyCareScenario(resource,originalColors,historyLayers,selections.map(item=>item.mask),week/8);editRevision++;
           carePreviewActive=week>0;model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;app.renderNextFrame=true;return;
         }
         if(payload.action==='SET_HISTORY'){
           const incoming=payload.layers;
-          if(!Array.isArray(incoming)||incoming.length>16)throw Error('编辑记录过多');
+          if(!Array.isArray(incoming)||incoming.length>16)throw Error(t('tooManyLayers'));
           const next=incoming.map(layer=>({mask:decodeMask(layer.maskBase64),preset:layer.preset,strength:layer.strength}));
           drawHistory(next);historyLayers=next;appliedRecipe=null;carePreviewActive=false;
           send('GS_APPLIED',{action:'SET_HISTORY',count:next.length});return;
         }
         if(payload.action==='RESTORE'){
           const decoded=atob(payload.maskBase64||'');
-          if(decoded.length!==data.numSplats)throw Error('已存编辑与模型不匹配');
+          if(decoded.length!==data.numSplats)throw Error(t('layerMismatch'));
           mask=Uint8Array.from(decoded,c=>c.charCodeAt(0));selected=mask.reduce((n,v)=>n+(v>0?1:0),0);
-          if(selected<80)throw Error('已存圈选范围不完整');
-          if(!Object.hasOwn(DIGITAL_PRESETS,payload.preset)||![.18,.32,.5].includes(payload.strength))throw Error('已存颜色参数不正确');
+          if(selected<80)throw Error(t('layerIncomplete'));
+          if(!Object.hasOwn(DIGITAL_PRESETS,payload.preset)||![.18,.32,.5].includes(payload.strength))throw Error(t('colorInvalid'));
           applyDigitalTint(resource,originalColors,mask,DIGITAL_PRESETS[payload.preset],payload.strength);editRevision++;
           model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;app.renderNextFrame=true;
           appliedRecipe={mask:mask.slice(),preset:payload.preset,strength:payload.strength};
@@ -236,15 +345,15 @@ async function start(){
         if(payload.action==='RESET'){applyDigitalTint(resource,originalColors,new Uint8Array(data.numSplats),[.5,.5,.5],0);editRevision++;
           model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;app.renderNextFrame=true;appliedRecipe=null;send('GS_APPLIED',{action:'RESET'});return;}
         if(payload.action==='COMPARE_ORIGINAL'||payload.action==='COMPARE_EDIT'){
-          if(!appliedRecipe)throw Error('还没有可对比的变化');
+          if(!appliedRecipe)throw Error(t('noCompare'));
           if(payload.action==='COMPARE_ORIGINAL')applyDigitalTint(resource,originalColors,new Uint8Array(data.numSplats),[.5,.5,.5],0);
           else applyDigitalTint(resource,originalColors,appliedRecipe.mask,DIGITAL_PRESETS[appliedRecipe.preset],appliedRecipe.strength);
           editRevision++;
           model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;app.renderNextFrame=true;
           send('GS_APPLIED',{action:payload.action});return;}
         if(payload.action==='APPLY'){
-          if(!mask||selected<28)throw Error('请先圈出想试的地方');
-          if(!Object.hasOwn(DIGITAL_PRESETS,payload.preset)||![.18,.32,.5].includes(payload.strength))throw Error('这次的颜色建议还不能使用');
+          if(!mask||selected<28)throw Error(t('needCircle'));
+          if(!Object.hasOwn(DIGITAL_PRESETS,payload.preset)||![.18,.32,.5].includes(payload.strength))throw Error(t('colorUnavailable'));
           applyDigitalTint(resource,originalColors,mask,DIGITAL_PRESETS[payload.preset],payload.strength);editRevision++;
           model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;app.renderNextFrame=true;
           appliedRecipe={mask:mask.slice(),preset:payload.preset,strength:payload.strength};
@@ -258,7 +367,7 @@ async function start(){
           // stays aligned after orbiting, unlike reusing the old screen lasso.
           if(selections.length){
             const xs=data.getProp('x'),ys=data.getProp('y'),zs=data.getProp('z'),eye=camera.getPosition().toArray();
-            const forward=normal(target.map((v,i)=>v-eye[i])),distance=Math.hypot(...target.map((v,i)=>v-eye[i]));
+            const forward=normal(aimPoint.map((v,i)=>v-eye[i])),distance=Math.hypot(...target.map((v,i)=>v-eye[i]));
             const front=new Map();
             for(let i=0;i<data.numSplats;i++){
               const p=camera.camera.worldToScreen(new Vec3(xs[i],ys[i],zs[i]));
@@ -293,11 +402,11 @@ async function start(){
       };
       modelReady=true;if(port)port.postMessage(JSON.stringify({schemaVersion:1,type:'READY',payload:{webgl2:true}}));
       if(!preview){setTimeout(sampleTone,450);setInterval(sampleTone,3200);}
-      report('READY',`已载入 ${data.numSplats} 个立体细节点，可拖动观察`);
+      report('READY',t('ready',data.numSplats));
       setTimeout(()=>status.classList.add('quiet'),2200);
       console.log(`SELF_GS_VIEWER_VIEW ${view.sourceFrame} ${view.faceTrackCount} ${view.fovDegrees}`);
-      window.addEventListener('resize',()=>{app.resizeCanvas();resizeOutline();drawOutline();app.renderNextFrame=true;});
-    }catch(error){report('ERROR','立体面容绘制失败：'+String(error));}
+      window.addEventListener('resize',()=>{app.resizeCanvas();adjustRecordedFraming();resizeOutline();drawOutline();app.renderNextFrame=true;});
+    }catch(error){report('ERROR',t('drawFail')+String(error));}
   });app.assets.load(asset);
 }
-start().catch(error=>report('ERROR','立体面容绘制不可用：'+String(error)));
+start().catch(error=>report('ERROR',t('drawUnavailable')+String(error)));

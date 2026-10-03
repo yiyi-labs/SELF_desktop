@@ -1,3 +1,5 @@
+import { UiText } from '../services/UiText';
+
 /** Wide downward-opening view arc; the pointer travels beneath it. */
 @ComponentV2
 export struct CaptureViewCoverage {
@@ -9,7 +11,7 @@ export struct CaptureViewCoverage {
  @Param language:string='zh';
  @Param expanded:boolean=false;
  @Param availableWidth:number=800;
- private tr(zh:string,en:string):string{return this.language==='en'?en:zh;}
+ private tr(zh:string,en:string):string{return this.language==='en'?en:UiText.get(zh,this.language);}
  private cue():string{
   if(this.hint<0)return this.tr('视角已点亮','Views illuminated');
   if(this.hint<=2)return this.tr('慢慢看看左侧，脸留在画面里','Move toward the left; keep your face in view');

@@ -43,6 +43,7 @@ function fixture({motion=true,names=['外婆','新的我','海边的夏天']}={}
       removed.push(jobId);const index=records.findIndex(record=>record.jobId===jobId);if(index>=0)records.splice(index,1);
     }},
     markInteraction:()=>{},cueStory:()=>{},revealStory:()=>{},requestGalaxyScene:()=>{},
+    tr:value=>value,
     audio:{setScene:()=>{}},
     getUIContext:()=>({animateTo:(options,action)=>{animations.push({at:now,...options});action();}})
   });

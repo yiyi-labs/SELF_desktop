@@ -11,6 +11,17 @@ const items=[],textures=[];
 let app,camera,planet,selectedId='',track=0,wantTrack=0,clock=0,drawClock=0,loadClock=1;
 let dragging=false,lastX=0,lastY=0,downX=0,downY=0,moved=false,lastNotify=0;
 let motion=!matchMedia('(prefers-reduced-motion: reduce)').matches,language='zh',travel=null,booted=false,paused=false;
+const TEXT={
+  travel:{zh:'循着星光，回到那一刻',en:'Following your light, back to this moment',ja:'星の光をたどって、あの瞬間へ',ko:'별빛을 따라, 그 순간으로'},
+  hint:{zh:'轻轻滑动 · 循光寻回一段记忆',en:'Drift gently · follow a memory',ja:'そっとスワイプ · 光をたどって記憶へ',ko:'살며시 밀어 보세요 · 빛을 따라 기억으로'},
+  far:{zh:'更远的回忆',en:'DISTANT MEMORIES',ja:'遠い記憶',ko:'더 먼 기억'},
+  near:{zh:'此刻，近一些',en:'CLOSER TO YOU',ja:'今、もっと近く',ko:'지금, 더 가까이'},
+  ariaUniverse:{zh:'我的星辰，左下近，右上远。滑动或用方向键寻回记忆。',en:'My stars: nearer at lower left, farther at upper right. Swipe or use arrow keys to revisit a memory.',ja:'私の星々。左下が近く、右上が遠い。スワイプか矢印キーで記憶をたどれます。',ko:'나의 별들. 왼쪽 아래가 가깝고 오른쪽 위가 멉니다. 밀거나 방향키로 기억을 찾아보세요.'},
+  ariaNames:{zh:'历史记忆',en:'Past memories',ja:'過去の記憶',ko:'지난 기억'},
+  contextLost:{zh:'星光暂时中断，请返回后重试',en:'The starlight paused; please go back and retry',ja:'星の光が一時中断しました。戻ってもう一度お試しください',ko:'별빛이 일시 중단되었습니다. 돌아가서 다시 시도해 주세요'}
+};
+const t=key=>TEXT[key][language]||TEXT[key].en||TEXT[key].zh;
+const LANG_TAG={zh:'zh-CN',en:'en',ja:'ja',ko:'ko'};
 let currentCamera={x:0,y:0,z:12},visible=[],pendingManifest=null,pendingTravel='';
 const aspect=()=>canvas.clientWidth/Math.max(1,canvas.clientHeight);
 const center=index=>{const p=position(index,aspect());return new Vec3(p.x,p.y,p.z);};
@@ -78,7 +89,7 @@ function travelTo(id){
   selectedId=id;wantTrack=item.index;
   travel={id,start:clock,from:{...currentCamera},sent:false};
   document.body.classList.add('travelling');
-  travelText.textContent=language==='en'?'Following your light, back to this moment':'循着星光，回到那一刻';
+  travelText.textContent=t('travel');
   report('INTERACTION');
 }
 function cancelTravel(){
@@ -88,12 +99,14 @@ function cancelTravel(){
 function configure(options={}){
   if(typeof options.paused==='boolean'){paused=options.paused;if(app)app.autoRender=!paused;}
   if(typeof options.motion==='boolean')motion=options.motion;
-  if(options.language==='en'||options.language==='zh')language=options.language;
+  if(LANG_TAG[options.language])language=options.language;
   if(typeof options.embedded==='boolean')document.body.classList.toggle('embedded',options.embedded);
-  document.documentElement.lang=language==='en'?'en':'zh-CN';
-  hint.textContent=language==='en'?'Drift gently · follow a memory':'轻轻滑动 · 循光寻回一段记忆';
-  document.getElementById('depth-far').textContent=language==='en'?'DISTANT MEMORIES':'更远的回忆';
-  document.getElementById('depth-near').textContent=language==='en'?'CLOSER TO YOU':'此刻，近一些';
+  document.documentElement.lang=LANG_TAG[language];
+  hint.textContent=t('hint');
+  document.getElementById('depth-far').textContent=t('far');
+  document.getElementById('depth-near').textContent=t('near');
+  canvas.setAttribute('aria-label',t('ariaUniverse'));
+  names.setAttribute('aria-label',t('ariaNames'));
 }
 function sync(manifest){
   if(!manifest||!Array.isArray(manifest.items))return;
@@ -286,7 +299,7 @@ async function start(){
   window.addEventListener('resize',()=>{
     app.resizeCanvas();for(const item of items)item.pivot?.setPosition(center(item.index));
   });
-  canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();report('ERROR','星光暂时中断，请返回后重试');});
+  canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();report('ERROR',t('contextLost'));});
   window.addEventListener('pagehide',()=>{for(const item of items)remove(item);app.destroy();});
 }
 start().catch(error=>report('ERROR',String(error)));

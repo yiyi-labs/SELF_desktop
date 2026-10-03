@@ -1,2 +1,2 @@
-[Info]App install path:D:\STUDY\College\mine\olay\entry\build\default\outputs\default\entry-default-unsigned.hap msg:install bundle successfully. 
+﻿[Info]App install path:D:\STUDY\College\mine\olay\entry\build\default\outputs\default\entry-default-unsigned.hap msg:error: failed to install bundle. code:9568320 error: no signature file. 
 AppMod finish

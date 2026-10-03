@@ -11,6 +11,7 @@ export struct GaussianPortraitSurface {
   @Prop gaussianPath:string='';
   @Prop viewPath:string='';
   @Prop previewMode:boolean=false;
+  @Prop @Watch('languageChanged') language:string='zh';
   @Prop @Watch('commandChanged') editCommand:string='';
   onReady:()=>void=()=>{};
   onFailure:(message:string)=>void=()=>{};
@@ -34,6 +35,10 @@ export struct GaussianPortraitSurface {
     try{this.bridge.send('GS_COMMAND',JSON.parse(this.editCommand) as MessagePayload);this.lastCommand=this.editCommand;}
     catch(error){this.onFailure('这次操作暂时无法继续：'+String(error));}
   }
+  private pushLanguage():void{
+    try{this.controller.runJavaScript('window.selfViewerLanguage&&selfViewerLanguage('+JSON.stringify(this.language)+')');}catch(_){}
+  }
+  private languageChanged():void{this.pushLanguage();}
   private connected():void {
     const match=/\/models\/([a-f0-9]{32})\//.exec(this.gaussianPath.replace(/\\/g,'/'));
     if(!match){this.onFailure('个人模型路径不正确');return;}
@@ -64,6 +69,7 @@ export struct GaussianPortraitSurface {
       }
     };
     this.bridge.attach(this.controller);
+    this.pushLanguage();
   }
 
   private intercept(event:OnInterceptRequestEvent):WebResourceResponse|null {
@@ -99,7 +105,7 @@ export struct GaussianPortraitSurface {
     Web({src:this.previewMode?$rawfile('gs-preview.html'):$rawfile('gs-viewer.html'),controller:this.controller})
       .width('100%').height('100%')
       .onInterceptRequest((event:OnInterceptRequestEvent)=>this.intercept(event))
-      .onPageEnd(()=>{if(!this.previewMode)this.connected();})
+      .onPageEnd(()=>{this.pushLanguage();if(!this.previewMode)this.connected();})
       .onConsole((event:OnConsoleEvent)=>{
         const message=event.message.getMessage();
         if(this.previewMode&&message.startsWith('SELF_GS_VIEWER_READY'))this.onReady();

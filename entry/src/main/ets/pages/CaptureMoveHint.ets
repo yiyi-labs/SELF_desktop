@@ -1,3 +1,5 @@
+import { UiText } from '../services/UiText';
+
 /** Original line artwork based on the interaction seen in the supplied Remy demo. */
 @ComponentV2
 export struct CaptureMoveHint {
@@ -6,6 +8,7 @@ export struct CaptureMoveHint {
  @Param hintSize:number=320;
  @Local travel:number=-1;
  private startTimer:number=-1;
+ private tr(value:string):string{return UiText.get(value,this.language);}
  aboutToAppear():void{
   this.travel=this.motion?-1:0;
   // Wait for the initial layout so the first visible position is an animation start value.
@@ -26,8 +29,8 @@ export struct CaptureMoveHint {
      Line().startPoint([0,0]).endPoint([19,0]).stroke(Color.White).strokeWidth(2.4).width(19).height(2).translate({y:48})
     }.width(74).height(122).rotate({angle:this.travel*18}).translate({x:this.travel*64,y:20+Math.abs(this.travel)*7})
    }.width(260).height(242).scale({x:this.hintSize/320,y:this.hintSize/320})
-   Text(this.language==='en'?'Slowly move the camera to one side':'让镜头慢慢移向一侧').fontSize(this.hintSize>300?21:18).fontWeight(FontWeight.Medium).fontColor(Color.White).textAlign(TextAlign.Center).textShadow({radius:2,color:'#90000000',offsetY:1})
-   Text(this.language==='en'?'Keep a relaxed, steady expression':'面容保持自然、稳定就好').fontSize(13).fontColor('#EFFFFFFF').textShadow({radius:2,color:'#90000000',offsetY:1})
+   Text(this.tr('让镜头慢慢移向一侧')).fontSize(this.hintSize>300?21:18).fontWeight(FontWeight.Medium).fontColor(Color.White).textAlign(TextAlign.Center).textShadow({radius:2,color:'#90000000',offsetY:1})
+   Text(this.tr('面容保持自然、稳定就好')).fontSize(13).fontColor('#EFFFFFFF').textShadow({radius:2,color:'#90000000',offsetY:1})
   }.id('camera-motion-hint').width(this.hintSize).padding({top:12,bottom:22,left:16,right:16}).hitTestBehavior(HitTestMode.None)
  }
 }

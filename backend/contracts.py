@@ -8,6 +8,11 @@ from pydantic import BaseModel, ConfigDict, Field
 class StrictModel(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True, allow_inf_nan=False)
 
+
+def catalog_language(language: str) -> str:
+    """Reviewed catalog wording exists in zh/en; ja/ko presentations read the English source."""
+    return language if language in ("zh", "en") else "en"
+
 class Region(StrictModel):
     regionId: str = Field(min_length=1, max_length=100)
     description: str = Field(max_length=160)
@@ -40,7 +45,7 @@ class Snapshot(StrictModel):
     productContextIds: list[str] = Field(default_factory=list, max_length=3)
     dialogue: list[DialogueTurn] = Field(default_factory=list, max_length=3)
     resolvedChoice: str = Field(default="", max_length=60)
-    responseLanguage: Literal["zh", "en"] = "zh"
+    responseLanguage: Literal["zh", "en", "ja", "ko"] = "zh"
     careAdviceRequested: bool = False
     dismissedProducts: bool = False
     regions: list[Region] = Field(max_length=32)
@@ -101,7 +106,7 @@ def validate_plan(plan: Plan, snapshot: Snapshot) -> Plan:
     # Display labels are a deterministic presentation mapping, never an edit rewrite.
     def display(text):
         for key, preset in PRESETS.items():
-            text = re.sub(r"\b"+key+r"\b", (EN_PRESETS[key] if snapshot.responseLanguage=="en" else preset["displayName"]), text, flags=re.I)
+            text = re.sub(r"\b"+key+r"\b", (preset["displayName"] if snapshot.responseLanguage=="zh" else EN_PRESETS[key]), text, flags=re.I)
         if re.search(r"regionId|presetId|layerId|set_digital_tint|region-[\w-]+", text):
             raise ValueError("internal_identifier_in_reply")
         return text
@@ -142,10 +147,10 @@ def validate_plan(plan: Plan, snapshot: Snapshot) -> Plan:
     if (offer and snapshot.careAdviceRequested and care_intent(snapshot.userText) and
             not listening_only(snapshot.userText) and plan.decision in ('explain', 'clarify') and
             plan.careGuide is None):
-        options = care_options(snapshot.userText, True, snapshot.responseLanguage, area, concern)
+        options = care_options(snapshot.userText, True, catalog_language(snapshot.responseLanguage), area, concern)
         if options:
             plan.careGuide = CareGuide(productId=options[0]['productId'],
-                whyHere=care_reason(options[0]['productId'], snapshot.responseLanguage, snapshot.userText + (' 痘' if concern == 'blemish' else '')),
+                whyHere=care_reason(options[0]['productId'], catalog_language(snapshot.responseLanguage), snapshot.userText + (' 痘' if concern == 'blemish' else '')),
                 howToUse=options[0]['ordinaryUse'])
     if plan.careGuide:
         if plan.decision == 'support' or not snapshot.careAdviceRequested or plan.careGuide.productId not in allowed_care_ids(snapshot.userText, True, area, concern):
@@ -153,11 +158,11 @@ def validate_plan(plan: Plan, snapshot: Snapshot) -> Plan:
         # The model selects a matching identity in the same tool call. Wording
         # comes from reviewed category guidance: the listing does not support
         # invented makeup performance, quantities or efficacy claims.
-        plan.careGuide.whyHere = care_reason(plan.careGuide.productId, snapshot.responseLanguage, snapshot.userText + (' 痘' if concern == 'blemish' else ''))
-        plan.careGuide.howToUse = care_usage(snapshot.userText, True, plan.careGuide.productId, snapshot.responseLanguage)
+        plan.careGuide.whyHere = care_reason(plan.careGuide.productId, catalog_language(snapshot.responseLanguage), snapshot.userText + (' 痘' if concern == 'blemish' else ''))
+        plan.careGuide.howToUse = care_usage(snapshot.userText, True, plan.careGuide.productId, catalog_language(snapshot.responseLanguage))
         if plan.decision in ('explain', 'clarify') and re.search(r'做不到|不能.*(?:做|改)|工具.*(?:不行|不支持)', plan.shortMessage):
-            plan.shortMessage = ('Begin with a gentle routine for this area; the care card below gives one practical step.'
-                if snapshot.responseLanguage == 'en' else '先把这处的日常护理放轻一些，下面是可以直接做的一步。')
+            plan.shortMessage = ('先把这处的日常护理放轻一些，下面是可以直接做的一步。'
+                if snapshot.responseLanguage == 'zh' else 'Begin with a gentle routine for this area; the care card below gives one practical step.')
         if re.search(r'保证|必然|立刻|立即|永久|复刻|还原.*(?:试色|数字)|与.*(?:试色|数字).*相同',
                      plan.careGuide.whyHere + plan.careGuide.howToUse):
             raise ValueError('uncalibrated_care_claim')
