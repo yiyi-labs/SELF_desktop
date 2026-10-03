@@ -441,7 +441,7 @@ def child_observation_validator(scene, data, names, min_support=2):
             uv=camera@data["K"].T
             z=np.maximum(uv[:,2:],.05)
             u=np.rint(uv[:,0]/z[:,0]).astype(int)
-            v=np.rint(uv[:,1]/z[:,1]).astype(int)
+            v=np.rint(uv[:,1]/z[:,0]).astype(int)
             h,w=data["rgb"][name].shape[:2]
             inside=(camera[:,2]>.05)&(u>=0)&(u<w)&(v>=0)&(v<h)
             labels=data["labels"][name]
