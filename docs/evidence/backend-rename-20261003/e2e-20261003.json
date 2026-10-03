@@ -1,0 +1,56 @@
+{
+ "date": "2026-10-03",
+ "jobId": "07483aca583bd94566a4c115eb87636d",
+ "state": "gaussian_ready",
+ "capture": {
+  "file": "self-quality-temporary-20260926.mp4",
+  "bytes": 65453964,
+  "sha256": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+  "sha256Source": "computed from file; matches job record"
+ },
+ "assets": {
+  "gaussian": {
+   "bytes": 18746720,
+   "sha256": "44f7f814ee61231843e2c500b76d35e42fd01157cbdb562d234c794eebe95540",
+   "file": "portrait.gaussian.ply"
+  },
+  "view": {
+   "bytes": 751,
+   "sha256": "05b9f098f70cfdfce9eb3d5318baad99208ab6796056b79d16ea8a5daef7c2b3",
+   "file": "portrait.view.json"
+  },
+  "preview": {
+   "bytes": 15477,
+   "sha256": "288aa8c08fe5a09213ad86cac0bdb283cd6c6db51dfbc142ec266ecc5e94cdca",
+   "file": "portrait.preview.png"
+  },
+  "preview3d": {
+   "bytes": 4061148,
+   "sha256": "8291f1f5e7df9569dc8a960c32bab3c7d23f52b2216a10eaea3733ae1aa121d0",
+   "file": "portrait.preview.gaussian.ply"
+  },
+  "scene3d": {
+   "bytes": 6609476,
+   "sha256": "442c71f98b377e61a903448098a2f2239c5a9c4e73eacfd0bccea962d9fd70f4",
+   "file": "portrait.scene-v3.gaussian.ply"
+  }
+ },
+ "recordedImplementationSha256Files": [
+  "job.json",
+  "portrait.algorithm.json",
+  "portrait-state/config.json",
+  "portrait-state/report.json"
+ ],
+ "oldImplementationSha256Present": false,
+ "workerHeartbeat": {
+  "ready": true,
+  "sourceIdentityVerified": true,
+  "loadedImplementationSha256": "e7040005a447ed672a43a6f1dd1d51619b3845c6e8d2e08a4c2def76ad65fcab",
+  "currentImplementationSha256": "e7040005a447ed672a43a6f1dd1d51619b3845c6e8d2e08a4c2def76ad65fcab",
+  "profileImplementationSha256": "e7040005a447ed672a43a6f1dd1d51619b3845c6e8d2e08a4c2def76ad65fcab",
+  "engine": "portrait-first-soft-surface-test",
+  "algorithmVersion": "portrait-native-fullframe-20261002-research",
+  "executionAdapter": "native-fullframe",
+  "executionProfileSha256": "9f6a75293fdbcd8ca47a7211db8bd6bab5ac68bda8a07c21d2f1f37c04819db3"
+ }
+}

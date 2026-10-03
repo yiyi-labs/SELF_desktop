@@ -1,0 +1,210 @@
+EE/mnt/d/STUDY/College/mine/olay/backend/flame_open_model.py:65: DeprecationWarning: numpy.core.numeric is deprecated and has been renamed to numpy._core.numeric. The numpy._core namespace contains private NumPy internals and its use is discouraged, as NumPy internals can change without warning in any release. In practice, most real-world usage of numpy.core is to access functionality in the public NumPy API. If that is the case, use the public NumPy API. If not, you are using NumPy internals. If you would still like to access an internal attribute, use numpy._core.numeric._frombuffer.
+  if model_path == STANDARD_MODEL else pickle.load(source, encoding="latin1"))
+../mnt/d/STUDY/College/mine/olay/backend/flame_open_model.py:37: DeprecationWarning: Please import `csc_matrix` from the `scipy.sparse` namespace; the `scipy.sparse.csc` namespace is deprecated and will be removed in SciPy 2.0.0.
+  return super().find_class(module, name)
+....EEEEEE...................................E..EE........................W1003 18:06:21.058000 4691 torch/utils/cpp_extension.py:2425] TORCH_CUDA_ARCH_LIST is not set, all archs for visible cards are included for compilation. 
+W1003 18:06:21.058000 4691 torch/utils/cpp_extension.py:2425] If this is not desired, please set os.environ['TORCH_CUDA_ARCH_LIST'] to specific architectures.
+/mnt/d/STUDY/College/mine/olay/backend/tests/test_reconstruction_components_v2.py:31: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  self.assertLess(float((output["component_accumulated_depth"].sum(-1)-output["accumulated_depth"]).abs().max()),3e-6)
+.............................................................................................................................................{"status": "research_not_release_approved", "plySha256": "asset", "seconds": 0.005439272000330675, "allocatedPeakMiB": 0.0, "reservedPeakMiB": 0.0}
+..{"status": "research_not_release_approved", "plySha256": "asset", "seconds": 0.006373387000166986, "allocatedPeakMiB": 0.0, "reservedPeakMiB": 0.0}
+...................................................................EE.....
+======================================================================
+ERROR: tests.test_care_conversation (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: tests.test_care_conversation
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/unittest/loader.py", line 436, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/usr/lib/python3.10/unittest/loader.py", line 377, in _get_module_from_name
+    __import__(name)
+  File "/mnt/d/STUDY/College/mine/olay/backend/tests/test_care_conversation.py", line 8, in <module>
+    import httpx
+ModuleNotFoundError: No module named 'httpx'
+
+
+======================================================================
+ERROR: tests.test_contracts (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: tests.test_contracts
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/unittest/loader.py", line 436, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/usr/lib/python3.10/unittest/loader.py", line 377, in _get_module_from_name
+    __import__(name)
+  File "/mnt/d/STUDY/College/mine/olay/backend/tests/test_contracts.py", line 6, in <module>
+    from pydantic import ValidationError
+ModuleNotFoundError: No module named 'pydantic'
+
+
+======================================================================
+ERROR: tests.test_http (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: tests.test_http
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/unittest/loader.py", line 436, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/usr/lib/python3.10/unittest/loader.py", line 377, in _get_module_from_name
+    __import__(name)
+  File "/mnt/d/STUDY/College/mine/olay/backend/tests/test_http.py", line 6, in <module>
+    import httpx
+ModuleNotFoundError: No module named 'httpx'
+
+
+======================================================================
+ERROR: tests.test_live (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: tests.test_live
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/unittest/loader.py", line 436, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/usr/lib/python3.10/unittest/loader.py", line 377, in _get_module_from_name
+    __import__(name)
+  File "/mnt/d/STUDY/College/mine/olay/backend/tests/test_live.py", line 8, in <module>
+    from deepseek_client import propose, ModelFailure
+  File "/mnt/d/STUDY/College/mine/olay/backend/deepseek_client.py", line 10, in <module>
+    import httpx
+ModuleNotFoundError: No module named 'httpx'
+
+
+======================================================================
+ERROR: tests.test_live_care (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: tests.test_live_care
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/unittest/loader.py", line 436, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/usr/lib/python3.10/unittest/loader.py", line 377, in _get_module_from_name
+    __import__(name)
+  File "/mnt/d/STUDY/College/mine/olay/backend/tests/test_live_care.py", line 8, in <module>
+    from deepseek_client import propose, ModelFailure
+  File "/mnt/d/STUDY/College/mine/olay/backend/deepseek_client.py", line 10, in <module>
+    import httpx
+ModuleNotFoundError: No module named 'httpx'
+
+
+======================================================================
+ERROR: tests.test_live_dialogue (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: tests.test_live_dialogue
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/unittest/loader.py", line 436, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/usr/lib/python3.10/unittest/loader.py", line 377, in _get_module_from_name
+    __import__(name)
+  File "/mnt/d/STUDY/College/mine/olay/backend/tests/test_live_dialogue.py", line 4, in <module>
+    from contracts import Snapshot,DialogueTurn
+  File "/mnt/d/STUDY/College/mine/olay/backend/contracts.py", line 6, in <module>
+    from pydantic import BaseModel, ConfigDict, Field
+ModuleNotFoundError: No module named 'pydantic'
+
+
+======================================================================
+ERROR: tests.test_live_http (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: tests.test_live_http
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/unittest/loader.py", line 436, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/usr/lib/python3.10/unittest/loader.py", line 377, in _get_module_from_name
+    __import__(name)
+  File "/mnt/d/STUDY/College/mine/olay/backend/tests/test_live_http.py", line 9, in <module>
+    import httpx
+ModuleNotFoundError: No module named 'httpx'
+
+
+======================================================================
+ERROR: tests.test_live_language (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: tests.test_live_language
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/unittest/loader.py", line 436, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/usr/lib/python3.10/unittest/loader.py", line 377, in _get_module_from_name
+    __import__(name)
+  File "/mnt/d/STUDY/College/mine/olay/backend/tests/test_live_language.py", line 4, in <module>
+    from deepseek_client import propose
+  File "/mnt/d/STUDY/College/mine/olay/backend/deepseek_client.py", line 10, in <module>
+    import httpx
+ModuleNotFoundError: No module named 'httpx'
+
+
+======================================================================
+ERROR: tests.test_live_voice (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: tests.test_live_voice
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/unittest/loader.py", line 436, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/usr/lib/python3.10/unittest/loader.py", line 377, in _get_module_from_name
+    __import__(name)
+  File "/mnt/d/STUDY/College/mine/olay/backend/tests/test_live_voice.py", line 4, in <module>
+    from deepseek_client import propose,ModelFailure
+  File "/mnt/d/STUDY/College/mine/olay/backend/deepseek_client.py", line 10, in <module>
+    import httpx
+ModuleNotFoundError: No module named 'httpx'
+
+
+======================================================================
+ERROR: tests.test_product_catalog (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: tests.test_product_catalog
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/unittest/loader.py", line 436, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/usr/lib/python3.10/unittest/loader.py", line 377, in _get_module_from_name
+    __import__(name)
+  File "/mnt/d/STUDY/College/mine/olay/backend/tests/test_product_catalog.py", line 6, in <module>
+    from contracts import Plan, Region, validate_plan
+  File "/mnt/d/STUDY/College/mine/olay/backend/contracts.py", line 6, in <module>
+    from pydantic import BaseModel, ConfigDict, Field
+ModuleNotFoundError: No module named 'pydantic'
+
+
+======================================================================
+ERROR: tests.test_recon_transfer (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: tests.test_recon_transfer
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/unittest/loader.py", line 436, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/usr/lib/python3.10/unittest/loader.py", line 377, in _get_module_from_name
+    __import__(name)
+  File "/mnt/d/STUDY/College/mine/olay/backend/tests/test_recon_transfer.py", line 10, in <module>
+    from fastapi.testclient import TestClient
+ModuleNotFoundError: No module named 'fastapi'
+
+
+======================================================================
+ERROR: tests.test_scene_preview (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: tests.test_scene_preview
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/unittest/loader.py", line 436, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/usr/lib/python3.10/unittest/loader.py", line 377, in _get_module_from_name
+    __import__(name)
+  File "/mnt/d/STUDY/College/mine/olay/backend/tests/test_scene_preview.py", line 11, in <module>
+    from fastapi.testclient import TestClient
+ModuleNotFoundError: No module named 'fastapi'
+
+
+======================================================================
+ERROR: tests.test_story_conversation (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: tests.test_story_conversation
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/unittest/loader.py", line 436, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/usr/lib/python3.10/unittest/loader.py", line 377, in _get_module_from_name
+    __import__(name)
+  File "/mnt/d/STUDY/College/mine/olay/backend/tests/test_story_conversation.py", line 7, in <module>
+    import httpx
+ModuleNotFoundError: No module named 'httpx'
+
+
+----------------------------------------------------------------------
+Ran 295 tests in 10.675s
+
+FAILED (errors=13)

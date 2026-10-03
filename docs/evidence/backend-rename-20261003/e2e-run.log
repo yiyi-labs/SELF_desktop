@@ -1,0 +1,35 @@
+18:31:18 health: {"status": "ready", "protocol": 1, "chunkBytes": 1048576, "maxCaptureBytes": 1073741824, "engine": "ready", "algorithm": "portrait-first-soft-surface-test", "algorithmVersion": "portrait-native-fullframe-20261002-research"}
+18:31:18 capture self-quality-temporary-20260926.mp4 bytes=65453964 sha256=7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf
+18:31:18 job created 07483aca583bd94566a4c115eb87636d state=receiving
+18:31:20 uploaded 63 chunks in 1.5s
+18:31:20 sealed: {"jobId": "07483aca583bd94566a4c115eb87636d", "state": "queued", "sha256": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf"}
+18:31:20 state=queued progress=25 assets=[]
+18:31:35 state=running progress=29 assets=[] message=正在读懂这次拍摄
+18:33:05 state=running progress=40 assets=[] message=正在寻找你的立体轮廓
+18:34:50 state=running progress=61 assets=[] message=正在汇聚这颗星辰
+18:36:05 state=running progress=64 assets=[] message=正在描绘这片光影
+18:37:20 state=running progress=66 assets=[] message=正在描绘这片光影
+18:42:36 state=running progress=67 assets=[] message=正在汇聚这颗星辰
+18:42:51 state=running progress=70 assets=[] message=正在汇聚这颗星辰
+18:43:06 state=running progress=72 assets=[] message=正在汇聚这颗星辰
+18:43:21 state=running progress=75 assets=[] message=正在汇聚这颗星辰
+18:43:36 state=running progress=77 assets=[] message=正在汇聚这颗星辰
+18:43:51 state=running progress=78 assets=[] message=正在汇聚这颗星辰
+18:44:06 state=running progress=80 assets=[] message=正在汇聚这颗星辰
+18:44:21 state=running progress=83 assets=[] message=正在汇聚这颗星辰
+18:44:36 state=running progress=85 assets=[] message=正在汇聚这颗星辰
+18:44:51 state=running progress=88 assets=[] message=正在汇聚这颗星辰
+18:45:06 state=running progress=90 assets=[] message=正在汇聚这颗星辰
+18:45:21 state=running progress=91 assets=[] message=正在汇聚这颗星辰
+18:45:36 state=running progress=92 assets=[] message=正在汇聚这颗星辰
+18:46:21 state=gaussian_ready progress=85 assets=['gaussian', 'preview', 'preview3d', 'scene3d', 'view'] message=这颗星辰已为你留好
+18:46:21 final: {"jobId": "07483aca583bd94566a4c115eb87636d", "state": "gaussian_ready", "progress": 85, "message": "这颗星辰已为你留好", "algorithm": "portrait-first-soft-surface-test"}
+18:46:21 assets: {"gaussian": ["bytes", "file", "sha256"], "view": ["bytes", "file", "sha256"], "preview": ["bytes", "file", "sha256"], "preview3d": ["bytes", "file", "sha256"], "scene3d": ["bytes", "file", "sha256"]}
+18:46:21 downloaded gaussian: 18746720 bytes
+18:46:21 downloaded preview: 15477 bytes
+18:46:21 downloaded preview3d: 4061148 bytes
+18:46:21 downloaded scene3d: 6609476 bytes
+18:46:21 downloaded view: 751 bytes
+18:46:21 SAVED {"gaussian": {"bytes": 18746720, "sha256": "44f7f814ee612318", "magic": "706c790a"}, "preview": {"bytes": 15477, "sha256": "288aa8c08fe5a092", "magic": "89504e47"}, "preview3d": {"bytes": 4061148, "sha256": "8291f1f5e7df9569", "magic": "706c790a"}, "scene3d": {"bytes": 6609476, "sha256": "442c71f98b377e61", "magic": "706c790a"}, "view": {"bytes": 751, "sha256": "05b9f098f70cfdfc", "magic": "7b0a2020"}}
+18:46:21 JOB_ID 07483aca583bd94566a4c115eb87636d
+18:46:21 DONE
