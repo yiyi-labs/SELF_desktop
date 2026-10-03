@@ -16,6 +16,12 @@
 
 ## 运行
 
+电脑服务已改为手动启动：双击项目根目录的 `Start-SELF.cmd`，终端会检查本机服务和 GPU 工作器，并显示是否就绪。Windows 开机或登录不会启动 SELF。重复点击不会创建重复工作器；关闭这个提示窗口后服务继续运行，重启电脑后需要再次手动开启。平板可以稍后接入 USB，既有重连机制保留。
+
+本轮启动实测与算法文件核对见 [电脑端手动启动验收](docs/evidence/manual-desktop-startup-20260929.md)。
+
+首次配置或迁移到其他电脑时，运行 `scripts/Set-ReconstructionManualStartup.ps1`（可传 `-Serial` 指定平板）；此脚本创建没有开机/登录触发器的手动任务，不会开启服务。不要运行旧的 `Enable-ReconstructionAutostart.ps1`，该历史脚本会重新启用登录自启动。算法、模型参数和任务数据不因启动方式改变。
+
 DevEco 打开本项目根目录，使用已装 SDK26.0.0。Device Manager 启动已有 Pura 90 Pro Max 或 MatePad Pro 13，选择 entry / EntryAbility，运行到对应模拟器；Previewer 不作为原生 Surface/文件/网络/音频验收环境。
 
 ```powershell

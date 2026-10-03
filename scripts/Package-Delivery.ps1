@@ -40,7 +40,7 @@ $included=[System.Collections.Generic.List[string]]::new()
 function Add-SourceDirectory([string]$directory){
   foreach($item in Get-ChildItem -LiteralPath $directory -Force){
     if($item.PSIsContainer){
-      if($item.Name -in @('node_modules','oh_modules','.hvigor','.npm-cache','.git','.idea','.preview','.cxx','.browser-profile','artifacts','build','dist','.test','signing','.codex','.agents','.venv','__pycache__','.pytest_cache')){continue}
+      if($item.Name -in @('node_modules','oh_modules','.hvigor','.npm-cache','.git','.idea','.preview','.cxx','.browser-profile','artifacts','build','dist','.test','signing','.codex','.agents','.venv','__pycache__','.pytest_cache','archive')){continue}
       Add-SourceDirectory $item.FullName
     }else{
       if(($item.Name.StartsWith('.env') -and $item.Name -ne '.env.example') -or $item.Name -in @('local.properties','.clangd','.clang-tidy') -or $item.Extension -in @('.tmp','.p12','.pfx','.jks','.keystore','.cer','.csr','.p7b') -or $item.Name -eq 'huawei-download-page.html'){continue}
