@@ -5,8 +5,8 @@ import unittest
 from pathlib import Path
 import numpy as np
 
-from reconstruction_surface_recovery import digest,retain_surface_initialization,verify_recovery_manifest,resolve_recovery_identity
-import test_reconstruction_surface_recovery as fixtures
+from surface_recovery import digest,retain_surface_initialization,verify_recovery_manifest,resolve_recovery_identity
+import test_surface_recovery as fixtures
 
 
 def save(path,value):

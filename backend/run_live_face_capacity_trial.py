@@ -9,15 +9,15 @@ import time
 
 import numpy as np
 import torch
-from reconstruction_person_supervision_state import restore_person_supervision,copy_person_supervision_files
+from person_supervision_state import restore_person_supervision,copy_person_supervision_files
 
 
 def run(parent, output, steps=180, max_parents=384, rounds=2):
-    from reconstruction_portrait_pipeline import (load_prepared, initialize_scene, surface_contract,
+    from portrait_pipeline import (load_prepared, initialize_scene, surface_contract,
         surface_contract_matches, audit_stages, audit_full_scene, export_candidate, digest, write_json)
-    from reconstruction_live_face_domain import restore_recorded
+    from live_face_domain import restore_recorded
     from reconstruction_live_face_capacity import select_patch, prepare_targets, train_capacity
-    from reconstruction_code_identity import source_identity
+    from code_identity import source_identity
     parent = Path(parent).resolve(); output = Path(output).resolve()
     if output.exists(): raise FileExistsError('new_run_id_required:'+str(output))
     if not torch.cuda.is_available(): raise RuntimeError('GPU_unavailable_no_training_claim')
@@ -50,7 +50,7 @@ def run(parent, output, steps=180, max_parents=384, rounds=2):
     person_restore=restore_person_supervision(scene,data,parent,config,checkpoint)
     identity = source_identity(); files = dict(identity['sourceFiles'])
     for name in ('reconstruction_live_face_capacity.py', 'run_live_face_capacity_trial.py',
-                 'reconstruction_person_supervision_state.py'):
+                 'person_supervision_state.py'):
         files[name] = digest(Path(__file__).with_name(name))
     files = dict(sorted(files.items()))
     identity = {**identity, 'sourceFiles':files,

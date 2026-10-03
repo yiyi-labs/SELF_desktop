@@ -4,8 +4,8 @@ import json
 from pathlib import Path
 from unittest.mock import patch
 import numpy as np
-from reconstruction_live_room_window_recovery import depth_agreement,surface_pair_overlap,recover_static_window_surfaces,make_window_proposal,verify_window_proposal,projected_room_footprints,original_candidate_support
-from reconstruction_live_dense_contract import digest,write_json
+from live_room_window_recovery import depth_agreement,surface_pair_overlap,recover_static_window_surfaces,make_window_proposal,verify_window_proposal,projected_room_footprints,original_candidate_support
+from live_dense_contract import digest,write_json
 
 
 def surface(depth,translation=0):
@@ -34,10 +34,10 @@ class RecoveryContract(unittest.TestCase):
                 old=json.loads(Path(parent).read_text());self.assertEqual(old['roomWindowRecovery']['outcomes'][0]['status'],'independent_validation_failed')
                 Path(out).mkdir();value={**old,'manifestPath':str(Path(out)/'result.json'),'roomWindowSecondReference':{'status':'original_bundle_retained'}}
                 write_json(Path(out)/'result.json',value);return value
-            with patch('reconstruction_live_dense.read_prepared',return_value=data), \
-                 patch('reconstruction_live_room_completion.select_completion_references',return_value=selection), \
-                 patch('reconstruction_live_shared_room_surface.run_shared_surface',return_value={'accepted':False}), \
-                 patch('reconstruction_live_room_retry.retry_room_reference',side_effect=second) as retry:
+            with patch('live_dense.read_prepared',return_value=data), \
+                 patch('live_room_completion.select_completion_references',return_value=selection), \
+                 patch('live_shared_room_surface.run_shared_surface',return_value={'accepted':False}), \
+                 patch('live_room_retry.retry_room_reference',side_effect=second) as retry:
                 final=recover_static_window_surfaces(parent_path,output,allow_typed_conditional=True)
                 retry.assert_called_once()
             self.assertEqual(Path(final['manifestPath']),output/'second-reference/result.json')
@@ -55,9 +55,9 @@ class RecoveryContract(unittest.TestCase):
                 parent=root/'result.json';write_json(parent,dict(sourceSha256='source',components={'room':row},
                     depthManifestPath=str(depth),depthManifestHash=digest(depth),acceptedWindows=[['world',1]]))
                 before=asset.read_bytes();parent_bytes=parent.read_bytes()
-                with patch('reconstruction_live_dense.read_prepared',side_effect=AssertionError('must not read capture')), \
-                     patch('reconstruction_live_room_completion.select_completion_references',side_effect=AssertionError('must not select')), \
-                     patch('reconstruction_live_shared_room_surface.run_shared_surface',side_effect=AssertionError('must not solve')):
+                with patch('live_dense.read_prepared',side_effect=AssertionError('must not read capture')), \
+                     patch('live_room_completion.select_completion_references',side_effect=AssertionError('must not select')), \
+                     patch('live_shared_room_surface.run_shared_surface',side_effect=AssertionError('must not solve')):
                     result=recover_static_window_surfaces(parent,root/'fallback')
                 self.assertEqual(result['roomWindowRecovery']['reason'],'no_qualified_base_surface')
                 self.assertEqual(result['components'],{'room':row})
@@ -106,7 +106,7 @@ class RecoveryContract(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder);data,dense,parent=self.fixture(root);out=root/'proposal.json'
             original=(dense/'result.json').read_bytes();make_window_proposal(parent,'a.png',0,out)
-            with patch('reconstruction_live_dense.training_name_scopes',return_value={'geometryTrain':['a.png']}):
+            with patch('live_dense.training_name_scopes',return_value={'geometryTrain':['a.png']}):
                 result=verify_window_proposal(out,data,dense,'a.png',0)
                 self.assertTrue(result['permitsSolveOnly']);self.assertEqual((dense/'result.json').read_bytes(),original)
                 data['world']['a.png'][0,3]=1
@@ -116,10 +116,10 @@ class RecoveryContract(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder);data,dense,parent=self.fixture(root);out=root/'proposal.json'
             make_window_proposal(parent,'a.png',0,out)
-            with patch('reconstruction_live_dense.training_name_scopes',return_value={'geometryTrain':[]}):
+            with patch('live_dense.training_name_scopes',return_value={'geometryTrain':[]}):
                 with self.assertRaisesRegex(ValueError,'fixed_train'):verify_window_proposal(out,data,dense,'a.png',0)
             (data['prepared']/'rectified_observations/a.png').write_bytes(b'changed')
-            with patch('reconstruction_live_dense.training_name_scopes',return_value={'geometryTrain':['a.png']}):
+            with patch('live_dense.training_name_scopes',return_value={'geometryTrain':['a.png']}):
                 with self.assertRaisesRegex(ValueError,'source_image_changed'):verify_window_proposal(out,data,dense,'a.png',0)
 
     def test_failed_scale_does_not_gain_solver_permission(self):

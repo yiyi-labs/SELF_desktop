@@ -6,11 +6,11 @@ from pathlib import Path
 import shutil
 import time
 import torch
-from reconstruction_portrait_pipeline import (load_prepared,initialize_scene,
+from portrait_pipeline import (load_prepared,initialize_scene,
     surface_contract,surface_contract_matches,audit_stages,audit_full_scene,export_candidate,digest,write_json)
-from reconstruction_live_skin_compositing import restore_skin_compositing
-from reconstruction_code_identity import source_identity
-from reconstruction_person_supervision_state import restore_person_supervision,copy_person_supervision_files
+from live_skin_compositing import restore_skin_compositing
+from code_identity import source_identity
+from person_supervision_state import restore_person_supervision,copy_person_supervision_files
 
 
 def run(parent, output, steps=180):
@@ -20,7 +20,7 @@ def run(parent, output, steps=180):
     if config.get('soft') is not True or config.get('antialiased') is not False:
         raise ValueError('face_trial_requires_explicit_soft_classic_parent')
     data=load_prepared(prepared);checkpoint=torch.load(parent/'trained-state.pt',map_location='cuda',weights_only=True)
-    from reconstruction_live_face_domain import restore_recorded
+    from live_face_domain import restore_recorded
     restore_recorded(data,parent,config)
     copy_person_supervision_files(parent,output,config)
     data['reference']=checkpoint['surfaceContract']['reference']
@@ -35,8 +35,8 @@ def run(parent, output, steps=180):
     scene.portrait.constraint_mode='soft'
     person_restore=restore_person_supervision(scene,data,parent,config,checkpoint)
     identity=source_identity();files=identity['sourceFiles']
-    for name in ('reconstruction_live_skin_compositing.py','run_live_skin_compositing_trial.py',
-                 'reconstruction_person_supervision_state.py'):
+    for name in ('live_skin_compositing.py','run_live_skin_compositing_trial.py',
+                 'person_supervision_state.py'):
         files[name]=digest(Path(__file__).with_name(name))
     identity={**identity,'sourceFiles':dict(sorted(files.items())),
         'implementationSha256':hashlib.sha256(json.dumps(files,sort_keys=True).encode()).hexdigest()}

@@ -3,7 +3,7 @@ import unittest
 from unittest.mock import patch
 from pathlib import Path
 import numpy as np
-from reconstruction_live_surface_binding import load_component,environment_from_components,replace_hair_prior,verify_room_completion,file_hash
+from live_surface_binding import load_component,environment_from_components,replace_hair_prior,verify_room_completion,file_hash
 
 
 def component(n=3):
@@ -27,7 +27,7 @@ class BindingContract(unittest.TestCase):
             row={'sha256':'combined','surfaceBaseComponent':{'path':'0.npz','sha256':file_hash(folder/'0.npz'),'count':3},
                  'additionalSurfaceReceipts':[{'index':1,'path':'proof1.json','sha256':'proof1','assetPath':'1.npz',
                     'assetSha256':file_hash(folder/'1.npz'),'count':2}]}
-            with patch('reconstruction_live_surface_binding.verify_room_correction') as verify:
+            with patch('live_surface_binding.verify_room_correction') as verify:
                 verify_room_completion(row,{}, {'sourceHash':'source'},folder/'result.json',final)
                 self.assertEqual(verify.call_count,2)
                 self.assertEqual(verify.call_args_list[0].kwargs['expected_asset_hash'],file_hash(folder/'0.npz'))

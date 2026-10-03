@@ -10,12 +10,12 @@ import cv2
 import numpy as np
 import torch
 
-from reconstruction_portrait_pipeline import (load_prepared,initialize_scene,surface_contract,
+from portrait_pipeline import (load_prepared,initialize_scene,surface_contract,
     surface_contract_matches,audit_stages,audit_full_scene,export_candidate,digest,write_json,make_frame,metrics)
 from reconstruction_live_body_appearance import restore_opaque_body_appearance
-from reconstruction_live_face_domain import restore_recorded
-from reconstruction_code_identity import source_identity
-from reconstruction_person_supervision_state import restore_person_supervision,copy_person_supervision_files
+from live_face_domain import restore_recorded
+from code_identity import source_identity
+from person_supervision_state import restore_person_supervision,copy_person_supervision_files
 
 
 def body_audit(scene,data,out):
@@ -60,7 +60,7 @@ def run(parent,output):
     person_restore=restore_person_supervision(scene,data,parent,config,checkpoint)
     identity=source_identity();files=dict(identity['sourceFiles'])
     for name in ('reconstruction_live_body_appearance.py','run_live_body_appearance_trial.py','compare_live_opaque_person_runs.py',
-                 'reconstruction_person_supervision_state.py'):
+                 'person_supervision_state.py'):
         files[name]=digest(Path(__file__).with_name(name))
     files=dict(sorted(files.items()));identity={**identity,'sourceFiles':files,
         'implementationSha256':hashlib.sha256(json.dumps(files,sort_keys=True).encode()).hexdigest()}

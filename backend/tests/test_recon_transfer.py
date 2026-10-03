@@ -100,7 +100,7 @@ class ReconstructionTransportTest(unittest.TestCase):
             self.assertEqual(cancelled.status_code, 200)
             self.assertEqual(cancelled.json()["state"], "cancel_requested" if seal else "cancelled")
             if seal:
-                from reconstruction_worker import finish_cancel
+                from worker import finish_cancel
                 finish_cancel(Path(self.root.name) / job_id)
             self.assertEqual(self.client.post(url + "/cancel", headers=self.headers).status_code, 200)
             self.assertEqual(self.client.get(url, headers=self.headers).json()["state"], "cancelled")

@@ -1,8 +1,8 @@
 import json,tempfile,unittest
 from pathlib import Path
 from unittest.mock import patch
-from reconstruction_live_dense_contract import digest,write_json
-from reconstruction_live_room_retry import select_second_reference,retry_room_reference,complete_room_recovery
+from live_dense_contract import digest,write_json
+from live_room_retry import select_second_reference,retry_room_reference,complete_room_recovery
 
 
 class SecondReferenceContract(unittest.TestCase):
@@ -47,7 +47,7 @@ class SecondReferenceContract(unittest.TestCase):
                 self.assertEqual(kwargs,{'max_evaluations':27,'max_surfaces':1,'extra_budget':5000,'allow_typed_conditional':False})
                 Path(output).mkdir();result={**first,'manifestPath':str(Path(output)/'result.json'),'roomWindowSecondReference':{'status':'conditional_surface_added'}}
                 write_json(Path(output)/'result.json',result);return result
-            with patch('reconstruction_live_room_retry.retry_room_reference',side_effect=second) as solver:
+            with patch('live_room_retry.retry_room_reference',side_effect=second) as solver:
                 result=complete_room_recovery(first,root,max_evaluations=27,max_surfaces=1,extra_budget=5000,allow_typed_conditional=False)
                 solver.assert_called_once()
             self.assertEqual((root/'result.json').read_bytes(),raw)
@@ -57,20 +57,20 @@ class SecondReferenceContract(unittest.TestCase):
     def test_no_eligible_reference_or_full_budget_preserves_first_result(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp);first=self.entry_fixture(root,eligible=False)
-            with patch('reconstruction_live_room_retry.retry_room_reference',side_effect=AssertionError('no solve')):
+            with patch('live_room_retry.retry_room_reference',side_effect=AssertionError('no solve')):
                 self.assertIs(complete_room_recovery(first,root),first)
             first=self.entry_fixture(root)
             proof=root/'proof.json';write_json(proof,{'windowRecovery':{'verified':True},'actualAdded':5000})
             first['components']['room']['additionalSurfaceReceipts']=[{'path':str(proof)}]
             write_json(root/'result.json',first)
-            with patch('reconstruction_live_room_retry.retry_room_reference',side_effect=AssertionError('budget full')):
+            with patch('live_room_retry.retry_room_reference',side_effect=AssertionError('budget full')):
                 self.assertIs(complete_room_recovery(first,root,extra_budget=5000),first)
 
     def test_automatic_stage_does_not_swallow_program_errors_or_retry_twice(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp);first=self.entry_fixture(root)
-            with patch('reconstruction_live_room_retry.retry_room_reference',side_effect=RuntimeError('unexpected program error')):
+            with patch('live_room_retry.retry_room_reference',side_effect=RuntimeError('unexpected program error')):
                 with self.assertRaisesRegex(RuntimeError,'program error'):complete_room_recovery(first,root)
             first['roomWindowSecondReference']={'status':'original_bundle_retained'}
-            with patch('reconstruction_live_room_retry.retry_room_reference',side_effect=AssertionError('second repeat')):
+            with patch('live_room_retry.retry_room_reference',side_effect=AssertionError('second repeat')):
                 self.assertIs(complete_room_recovery(first,root),first)

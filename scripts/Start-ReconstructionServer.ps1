@@ -41,7 +41,7 @@ $worker = Start-Process -FilePath 'wsl.exe' -ArgumentList @(
   '-d', 'Ubuntu-22.04', '--', 'env', "SELF_RECON_JOBS_DIR=$wslRoot",
   'CUDA_HOME=/usr/local/cuda-12.8', 'TORCH_CUDA_ARCH_LIST=12.0', 'MAX_JOBS=2',
   'PATH=/opt/self-reconstruction/venv/bin:/usr/local/cuda-12.8/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-  $wslPython, "$wslBackend/reconstruction_worker.py"
+  $wslPython, "$wslBackend/worker.py"
 ) -PassThru -WindowStyle Hidden -RedirectStandardOutput $workerOut -RedirectStandardError $workerErr
 try {
   $env:SELF_RECON_JOBS_DIR = $dataRoot

@@ -7,9 +7,9 @@ from unittest.mock import patch
 from pathlib import Path
 import numpy as np
 
-from reconstruction_live_room_self_reference import eligible_self_correction,KIND,apply_self_reference_correction,AUTHORIZED_POLICY
-from reconstruction_live_dense_contract import digest
-from reconstruction_live_surface_binding import load_component
+from live_room_self_reference import eligible_self_correction,KIND,apply_self_reference_correction,AUTHORIZED_POLICY
+from live_dense_contract import digest
+from live_surface_binding import load_component
 
 
 class SelfReferenceContractTests(unittest.TestCase):
@@ -54,7 +54,7 @@ class SelfReferenceAdapterTests(unittest.TestCase):
     def test_disabled_and_attempted_are_idempotent(self):
         with tempfile.TemporaryDirectory() as td:
             path,m=self.fixture(td);output=Path(td)/'new'
-            with patch('reconstruction_live_room_self_reference.build_self_reference_candidate') as build:
+            with patch('live_room_self_reference.build_self_reference_candidate') as build:
                 self.assertEqual(apply_self_reference_correction(path,output)['manifestPath'],str(path))
                 m['roomSelfReferenceCorrection']={'status':'original_bundle_retained'};path.write_text(json.dumps(m))
                 self.assertEqual(apply_self_reference_correction(path,output,authorized_policy=AUTHORIZED_POLICY)['manifestPath'],str(path))
@@ -86,7 +86,7 @@ class SelfReferenceAdapterTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             path,m=self.fixture(td);output=Path(td)/'new'
             actual=Path(td)/'actual-result.json'
-            with patch('reconstruction_live_room_self_reference.build_self_reference_candidate',return_value={'manifestPath':str(actual),'roomSelfReferenceCorrection':{}}) as build:
+            with patch('live_room_self_reference.build_self_reference_candidate',return_value={'manifestPath':str(actual),'roomSelfReferenceCorrection':{}}) as build:
                 got=apply_self_reference_correction(path,output,authorized_policy=AUTHORIZED_POLICY,budget=6000)
                 self.assertEqual(got['manifestPath'],str(actual));build.assert_called_once_with(path.resolve(),output,budget=6000)
                 self.assertTrue(json.loads(actual.read_text())['roomSelfReferenceCorrection']['invokedByLivePolicy'])
@@ -98,7 +98,7 @@ class SelfReferenceAdapterTests(unittest.TestCase):
                 with self.assertRaises(ValueError):apply_self_reference_correction(path,Path(td)/'new',**args)
 
     def test_pipeline_dispatches_existing_recovery_and_skips_resume(self):
-        source=(Path(__file__).resolve().parents[1]/'reconstruction_portrait_pipeline.py').read_text()
+        source=(Path(__file__).resolve().parents[1]/'portrait_pipeline.py').read_text()
         tree=ast.parse(source)
         block=next(n for n in ast.walk(tree) if isinstance(n,ast.If) and
             "room_window_recovery" in ast.unparse(n.test) and 'resume_state is None' in ast.unparse(n.test))
@@ -109,8 +109,8 @@ class SelfReferenceAdapterTests(unittest.TestCase):
                 final={**saved,'manifestPath':str(p),'roomSelfReferenceCorrection':{'status':'conditional_candidates_added'}}
                 env=dict(args=SimpleNamespace(room_window_recovery=True,resume_state='state' if resumed else None,output=Path(td)),
                     data={'dense_manifest':p},json=json,Path=Path,digest=digest,write_json=lambda *a:None)
-                with patch('reconstruction_live_room_window_recovery.recover_static_window_surfaces') as recover, \
-                     patch('reconstruction_live_room_self_reference.apply_self_reference_correction',return_value=final) as apply:
+                with patch('live_room_window_recovery.recover_static_window_surfaces') as recover, \
+                     patch('live_room_self_reference.apply_self_reference_correction',return_value=final) as apply:
                     exec(code,env);recover.assert_not_called()
                     if resumed:apply.assert_not_called()
                     else:
