@@ -67,3 +67,37 @@ class SurfaceStageTest(unittest.TestCase):
 
 
 if __name__=="__main__":unittest.main()
+
+
+class DualClockSplitTest(unittest.TestCase):
+    def test_split_keeps_both_optimizers_state_dict_consistent(self):
+        import torch
+        from types import SimpleNamespace
+        import numpy as np
+        from surface_density import split_surface_parameters, prune_environment
+        p={"means":torch.nn.Parameter(torch.tensor([[0.,0.,1.],[.2,0.,1.]])),
+           "scales":torch.nn.Parameter(torch.zeros(2,3)),
+           "quats":torch.nn.Parameter(torch.tensor([[1.,0,0,0]]*2)),
+           "opacities":torch.nn.Parameter(torch.tensor([1.,1.])),
+           "sh":torch.nn.Parameter(torch.zeros(2,4,3))}
+        rates={"means":.0001,"scales":.0006,"quats":.0002,"opacities":.003,"sh":.002}
+        envopt=torch.optim.Adam([{"params":[p[n]],"name":n,"lr":r} for n,r in rates.items()],eps=1e-8)
+        bodyopt=torch.optim.Adam([{"params":[p[n]],"name":n,"lr":r} for n,r in rates.items()],eps=1e-8)
+        loss=sum(v.square().sum() for v in p.values());loss.backward()
+        envopt.step();bodyopt.step()
+        scene=SimpleNamespace(environment=p,environment_parts=torch.tensor([0,4]),
+            environment_initial_means=p["means"].detach().clone(),
+            environment_initial_scales=p["scales"].detach().clone(),
+            environment_initial_quats=p["quats"].detach().clone(),
+            environment_uid=torch.tensor([0,1]),environment_parent_uid=torch.tensor([-1,-1]),
+            environment_generation=torch.zeros(2,dtype=torch.long),
+            environment_sources={"id":np.array([10,20]),"kind":np.array([1,1])},
+            environment_layers=np.array(["room","cloth"]))
+        report=split_surface_parameters(scene,(envopt,bodyopt),[0])
+        self.assertEqual(report["after"],3)
+        torch.save({"e":envopt.state_dict(),"b":bodyopt.state_dict()},bytes())
+        # prune path with two clocks as well
+        with torch.no_grad():
+            p["opacities"].fill_(20.)
+        pruned=prune_environment(scene,(envopt,bodyopt))
+        self.assertEqual(pruned["removed"],0)

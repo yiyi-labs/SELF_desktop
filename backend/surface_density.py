@@ -40,11 +40,14 @@ def split_surface_parameters(scene, optimizer, selected):
     alpha=p["opacities"][selected].sigmoid()
     updates["opacities"][child_start:]=torch.logit((1-torch.sqrt(1-alpha)).repeat(2).clamp(1e-6,1-1e-6))
     # Every optimizer that aliases these environment parameters (the shared
-    # room clock and the body clock) must follow the mutation together.
+    # room clock and the body clock) must follow the mutation together. Their
+    # state keys still address the pre-split parameter objects, so snapshot
+    # those once and drop stale keys when replacing.
+    originals={group["name"]:p[group["name"]] for current in _optimizers(optimizer) for group in current.param_groups}
     for current in _optimizers(optimizer):
         for group in current.param_groups:
             name=group["name"]
-            old=p[name]
+            old=originals[name]
             old_state=current.state.pop(old,{})
             new=torch.nn.Parameter(updates[name],requires_grad=old.requires_grad)
             p[name]=new
@@ -56,6 +59,7 @@ def split_surface_parameters(scene, optimizer, selected):
                     state[key][child_start:]=0
                 else:
                     state[key]=copy.deepcopy(value)
+            current.state.clear()
             current.state[new]=state
     scene.environment_parts=scene.environment_parts[mapping].clone()
     old_initial_means=scene.environment_initial_means
@@ -135,10 +139,11 @@ def prune_environment(scene, optimizer, opacity_threshold=.01, minimum_keep=.7):
                 "skipped":"prune_would_remove_too_much"}
     keep_idx=torch.flatnonzero(keep)
     updates={k:v.detach()[keep_idx].clone() for k,v in p.items()}
+    originals={group["name"]:p[group["name"]] for current in _optimizers(optimizer) for group in current.param_groups}
     for current in _optimizers(optimizer):
         for group in current.param_groups:
             name=group["name"]
-            old=p[name]
+            old=originals[name]
             old_state=current.state.pop(old,{})
             new=torch.nn.Parameter(updates[name],requires_grad=old.requires_grad)
             p[name]=new
@@ -149,6 +154,7 @@ def prune_environment(scene, optimizer, opacity_threshold=.01, minimum_keep=.7):
                     state[key]=value[keep_idx].clone()
                 else:
                     state[key]=copy.deepcopy(value)
+            current.state.clear()
             current.state[new]=state
     scene.environment_parts=scene.environment_parts[keep_idx].clone()
     scene.environment_initial_means=scene.environment_initial_means[keep_idx].clone()
