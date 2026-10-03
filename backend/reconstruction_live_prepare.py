@@ -5,6 +5,9 @@ camera recovery excludes the full person; local FLAME observations do not
 need a world camera. Results remain explicitly unaccepted research assets.
 """
 from pathlib import Path
+import json
+import random
+import shutil
 import time
 
 import cv2
@@ -28,6 +31,23 @@ def selected_names(names, limit=32):
     return [names[i] for i in np.unique(np.linspace(0,len(names)-1,min(limit,len(names))).round().astype(int))]
 
 
+def capture_observation_names(names, landmarks, limit=32, neighbours=4):
+    """Global viewing coverage plus a short contiguous frontal body window.
+
+    The old uniform-only sample can leave two seconds between neighbours and
+    thus no usable near-rigid clothing window. These are real named source
+    observations, not interpolated cameras. SfM/PnP may still reject any one.
+    """
+    names=sorted(names);chosen=set(selected_names(names,limit))
+    def score(name):
+        m=np.asarray(landmarks[name])
+        if m.ndim!=2 or len(m)<=454 or not np.isfinite(m).all():return -np.inf
+        return float(np.linalg.norm(m[234]-m[454])/max(np.linalg.norm(m[10]-m[152]),1.))
+    reference=max(names,key=score);at=names.index(reference)
+    chosen.update(names[max(0,at-neighbours):min(len(names),at+neighbours+1)])
+    return [n for n in names if n in chosen],reference
+
+
 def recover_static(source,names,out):
     database=out/"static.db";sparse=out/"sparse";sparse.mkdir()
     reader=pycolmap.ImageReaderOptions(mask_path=source/"static_feature_masks")
@@ -47,7 +67,7 @@ def recover_static(source,names,out):
     return model
 
 
-def fit_local(rgb,labels,marks,K,steps=260):
+def fit_local(rgb,labels,marks,K,steps=260,checkpoint_path=None,source_hash=None,development_names=None):
     model=FlameOpen(24,12,model_path=MODEL).cuda()
     zeros=torch.zeros(1,5,3,device="cuda")
     with torch.no_grad():_,neutral=model(torch.zeros(1,24,device="cuda"),torch.zeros(1,12,device="cuda"),zeros)
@@ -65,7 +85,8 @@ def fit_local(rgb,labels,marks,K,steps=260):
         records[name]=(observed,r[:,0],translation)
     names=list(records)
     if len(names)<8:raise ValueError("portrait_test_local_views_insufficient")
-    development=set(names[3::5]);train=[n for n in names if n not in development]
+    development=set(names[3::5] if development_names is None else development_names)&set(names)
+    train=[n for n in names if n not in development]
     # Shared shape uses training observations only. All local poses are
     # independently solved; missing frames are omitted with a reason.
     shape=torch.nn.Parameter(torch.zeros(1,24,device="cuda"))
@@ -80,6 +101,29 @@ def fit_local(rgb,labels,marks,K,steps=260):
     opt=torch.optim.Adam([{"params":[shape],"lr":.012},{"params":[expression],"lr":.018},
         {"params":[pose],"lr":.0012},{"params":[translation],"lr":.0007}])
     history=[]
+    def save_fit_state(path,completed):
+        if path is None:return
+        def cpu(value):
+            if isinstance(value,torch.Tensor):return value.detach().cpu().clone()
+            if isinstance(value,dict):return {key:cpu(item) for key,item in value.items()}
+            if isinstance(value,list):return [cpu(item) for item in value]
+            if isinstance(value,tuple):return tuple(cpu(item) for item in value)
+            return value
+        torch.save(cpu({"schemaVersion":1,"kind":"capture-local-landmark-fit-state",
+            "sourceHash":source_hash,"modelPath":str(MODEL),"modelSha256":model.model_sha256,
+            "stepsCompleted":completed,"stepsPlanned":steps,"names":names,
+            "roles":["development" if n in development else "train" for n in names],
+            "shape":shape,"expression":expression,"pose":pose,"translation":translation,
+            "initPose":init_pose,"initTranslation":init_t,"K":intrinsic,
+            "targetLandmarks":target,"fitLandmarkMask":subset,"sourceLandmarkIndices":indices,
+            "optimizer":opt.state_dict(),"history":history,
+            "rng":{"python":random.getstate(),"numpy":np.random.get_state(),
+                "torch":torch.get_rng_state(),"cuda":torch.cuda.get_rng_state_all()},
+            "resumeBoundary":"landmark_fit_after_recorded_pnp_not_original_ransac_replay",
+            "colourTraining":False}),Path(path))
+    if checkpoint_path is not None:
+        checkpoint_path=Path(checkpoint_path)
+        save_fit_state(checkpoint_path.with_name("local-fit-init.pt"),0)
     for step in range(steps):
         # Development shape is detached, while its own pose/expression may
         # use landmarks. Its colour is never used for appearance training.
@@ -94,6 +138,9 @@ def fit_local(rgb,labels,marks,K,steps=260):
         loss+=.04*(pose[:,0]-init_pose[:,0]).square().mean()+10*(translation-init_t).square().mean()
         opt.zero_grad();loss.backward();opt.step()
         if step%50==0:history.append({"step":step+1,"medianPx":float(error.detach().median())})
+        if checkpoint_path is not None and step+1==steps//2:
+            save_fit_state(checkpoint_path.with_name("local-fit-mid.pt"),step+1)
+    save_fit_state(checkpoint_path,steps)
     local={};audit=[]
     for i,n in enumerate(names):
         mesh,F,root_error=root_neutral_contract(model,shape.detach(),expression[i:i+1].detach(),
@@ -120,7 +167,8 @@ def initial_appearance(data,count=20000):
         np.minimum.at(depth,(y[valid]//2,x[valid]//2),camera[valid,2])
         valid&=camera[:,2]<=depth[y//2,x//2]+.0035
         labels=data["labels"][name]
-        valid&=(labels["face_core"][y,x]|labels["face_boundary"][y,x])&~labels["hair_visible"][y,x]
+        colour_mask=labels.get('training_face',labels["face_core"]|labels["face_boundary"])
+        valid&=colour_mask[y,x]&~labels["hair_visible"][y,x]
         colors[valid]+=data["rgb"][name][y[valid],x[valid]];support[valid]+=1
         # Generic edge details remain details, never called eyewear geometry.
         detail+=(valid&labels["glasses_visible"][y,x]).astype(int)
@@ -143,26 +191,61 @@ def initial_appearance(data,count=20000):
         "opacity_logits":np.zeros(len(rgb),np.float32)}
 
 
-def prepare_capture(source,out,frames,faces):
+def prepare_capture(source,out,frames,faces,*,base_prepared=None):
     started=time.perf_counter();out.mkdir()
-    names=selected_names(faces)
-    static=recover_static(source,names,out)
+    development_names=None
+    with np.load(source/'face_landmarks.npz') as available:
+        names,capture_reference=capture_observation_names(faces,available)
+    if base_prepared is None:
+        static=recover_static(source,names,out)
+    else:
+        base_prepared=Path(base_prepared)
+        original=json.loads((base_prepared/'preparation.json').read_text())
+        if original['sourceHash']!=sha256_file(source/'capture.mp4'):
+            raise ValueError('registration_prepared_source_hash_mismatch')
+        prior=json.loads((base_prepared/'automatic-prepare-audit.json').read_text())
+        names=prior['observationSelection']['actualNames']
+        capture_reference=prior['observationSelection']['referenceProposal']
+        development_names={row['name'] for row in prior['localFit']['views'] if row['role']=='development'}
+        shutil.copyfile(base_prepared/'static.db',out/'static.db')
+        shutil.copytree(base_prepared/'sparse',out/'sparse')
+        static=pycolmap.Reconstruction(out/'sparse/0')
+    if development_names is None:development_names=set(names[3::5])
+    from reconstruction_capture_registration import extend_static_short_windows
+    added_worlds,registration_audit=extend_static_short_windows(source,out/'static.db',static,names,
+        out/'short-window-registration',development_names=development_names)
+    names=sorted(set(names)|set(added_worlds))
     camera=next(iter(static.cameras.values()));K,distortion=source_camera(camera)
     if any(not np.allclose(source_camera(c)[0],K) for c in static.cameras.values()):
         raise ValueError("portrait_test_multiple_intrinsics_need_adapter")
     masks=make_masks(source,out,names);rgb,labels=rectified_data(source,masks,names,K,distortion)
     with np.load(source/"face_landmarks.npz") as detected:
         marks={n:cv2.undistortPoints(detected[n].reshape(-1,1,2),K,distortion,P=K).reshape(-1,2) for n in names}
-    geometry,local,fit_audit=fit_local(rgb,labels,marks,K)
+    source_hash=sha256_file(source/"capture.mp4")
+    geometry,local,fit_audit=fit_local(rgb,labels,marks,K,
+        checkpoint_path=out/"local-fit-state.pt",source_hash=source_hash,development_names=development_names)
+    fit_audit["stateCheckpoint"]={"file":"local-fit-state.pt",
+        "sha256":sha256_file(out/"local-fit-state.pt"),"optimizerRetained":True,
+        "sourceHash":source_hash,"stepsCompleted":260}
     rgb={n:rgb[n] for n in local};labels={n:labels[n] for n in local}
     images={im.name:im for im in static.images.values() if im.has_pose}
     worlds={n:camera_matrix(images[n]) for n in local if n in images}
+    worlds.update({n:C for n,C in added_worlds.items() if n in local})
     train=[n for n in worlds if local[n]["role"]=="train"]
     if len(train)<4:raise ValueError("portrait_test_world_local_overlap_insufficient")
     scale,gauge=shared_scene_scale(local,worlds,train)
-    data={"sourceHash":sha256_file(source/"capture.mp4"),"geometry":geometry,"local":local,
+    data={"sourceHash":source_hash,"geometry":geometry,"local":local,
           "worlds":worlds,"rgb":rgb,"labels":labels,"K":K,"scale":scale,"train":train,
-          "development":[n for n in worlds if local[n]["role"]=="development"]}
+          "development":[n for n in worlds if local[n]["role"]=="development"],"source":str(source.resolve())}
+    from reconstruction_capture_reference import choose_capture_reference,CaptureReferenceUnavailable
+    try:
+        _,reference_receipt=choose_capture_reference(data)
+        registration_audit['postFitReferenceStatus']='eligible'
+        registration_audit['postFitReference']=reference_receipt
+    except CaptureReferenceUnavailable as error:
+        registration_audit['postFitReferenceStatus']='blocked'
+        registration_audit['postFitReferenceFailure']=str(error)
+        registration_audit['postFitReference']=error.receipt
     room,room_audit=supported_static_surfaces(static,{n:(worlds[n],K) for n in train},
         {n:labels[n]["room_visible"] for n in train},{n:rgb[n] for n in train},out/"static_surface_seeds.npz")
     components={}
@@ -193,9 +276,13 @@ def prepare_capture(source,out,frames,faces):
         "appearance":str(appearance.resolve()),"appearanceHash":sha256_file(appearance),
         "staticMap":str((out/"sparse/0").resolve()),"train":train,"development":data["development"],
         "modelPath":str(MODEL),"modelHash":geometry.model_sha256,"masks":str(masks.resolve()),
-        "poseAudit":gauge,"status":"automatic_test_preparation_not_quality_approved"})
+        "poseAudit":gauge,"sourceDistortion":distortion.tolist(),
+        "observationSchema":2,"status":"automatic_test_preparation_not_quality_approved"})
     write_json(out/"automatic-prepare-audit.json",{"sourceHash":data["sourceHash"],"seconds":time.perf_counter()-started,
+        "observationSelection":{"globalBudget":32,"referenceProposal":capture_reference,
+            "actualNames":names,"contiguousBodyNeighbours":4,"cameraInterpolation":False},
         "localFit":fit_audit,"room":room_audit,"cloth":cloth_audit,"worldCameraStatus":"estimated_static_research_not_release_trusted",
+        "shortWindowRegistration":registration_audit,
         "fullPersonExcludedFromStaticFeatures":True,"unknownEyewearNotInstantiated":True,
         "hair":"actual_multiview_seeds_no_generated_shell","geometryApproved":False})
     return out

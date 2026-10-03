@@ -26,7 +26,9 @@ from reconstruction_portrait_model import (LocalPortraitModel, GaussianState,
     CandidateTransaction, joined_state, evaluate_sh1)
 from reconstruction_shared_v2 import initialize, boxes
 
-ENGINE_VERSION = "portrait-first-soft-surface-0.1-research"
+# Stable asset contract; actual implementation changes are identified by Git
+# and the complete imported-source hash, not another dated engine fork.
+ENGINE_VERSION = "portrait-native-fullframe-20261002-research"
 
 
 def digest(path):
@@ -64,27 +66,43 @@ def make_frame(data, name, *, crop=True, half=False, device="cuda"):
     K = data["K"].copy(); h, w = rgb.shape[:2]; rectangle = (0, 0, w, h)
     if crop:
         observed = labels["face_core"] | labels["face_boundary"] | labels["hair_visible"] | labels["glasses_visible"]
+        if 'training_face' in labels:observed=observed|labels['training_face']
         y, x = np.where(observed)
         if not len(x): raise ValueError(f"missing_head_observation:{name}")
         rectangle = (max(0, int(x.min())-24), max(0, int(y.min())-24), min(w, int(x.max())+25), min(h, int(y.max())+25))
         x0, y0, x1, y1 = rectangle
         rgb = rgb[y0:y1, x0:x1]; labels = {k:v[y0:y1, x0:x1] for k,v in labels.items()}
         K[0, 2] -= x0; K[1, 2] -= y0
-    if half:
-        h, w = rgb.shape[:2]; size = (w//2, h//2)
-        rgb = cv2.resize(rgb, size, interpolation=cv2.INTER_AREA)
-        labels = {k:cv2.resize(v.astype(np.uint8), size, interpolation=cv2.INTER_NEAREST)>0 for k,v in labels.items()}
-        K[:2] *= .5
     return {"rgb": tensor(rgb, device), "masks": {k:tensor(v, device).bool() for k,v in labels.items()},
             "K": tensor(K, device), "F": tensor(data["local"][name]["F"], device),
             "C": tensor(data["worlds"][name], device) if name in data["worlds"] else None,
             "mesh": tensor(data["local"][name]["mesh"], device), "rectangle": rectangle,
-            "name": name, "nativeScale": 2 if half else 1}
+            "name": name, "nativeScale": 1, "fullSize":(w,h),
+            "fullK":tensor(data["K"],device), "requestedHalfIgnored":bool(half)}
+
+
+def full_frame_draw(state, C, frame, *, unit_scale=1., antialiased=False, absgrad=False):
+    w,h=frame["fullSize"];x0,y0,x1,y1=frame["rectangle"]
+    K=frame["fullK"];cropK=K.clone();cropK[0,2]-=x0;cropK[1,2]-=y0
+    if not torch.allclose(cropK,frame["K"],atol=1e-5,rtol=0):raise ValueError("native_crop_intrinsics_changed")
+    if frame["nativeScale"]!=1 or frame["rgb"].shape[:2]!=(y1-y0,x1-x0):raise ValueError("native_canvas_contract")
+    center=torch.linalg.inv(C)[:3,3];rgb=evaluate_sh1(state.sh,state.means-center)
+    groups=functional.one_hot(state.parts.long(),5).to(rgb.dtype)
+    depth=(state.means@C[:3,:3].T+C[:3,3])[:,2]
+    features=torch.cat((rgb,groups,groups*depth[:,None]),1)
+    image,alpha,info=rasterization(state.means,None,None,state.opacity,features,C[None],K[None],w,h,
+        covars=state.covariance(),packed=True,sh_degree=None,render_mode="RGB+D",absgrad=absgrad,
+        rasterize_mode="antialiased" if antialiased else "classic",near_plane=.01*unit_scale,far_plane=1e10*unit_scale)
+    info["width"]=w;info["height"]=h
+    if info["means2d"].requires_grad:info["means2d"].retain_grad()
+    full={"rgb":image[0,:,:,:3],"alpha":alpha[0,:,:,0],"q":image[0,:,:,3:8],
+          "q_depth":image[0,:,:,8:13]/unit_scale,"depth":image[0,:,:,-1]/unit_scale}
+    return {**{k:v[y0:y1,x0:x1] for k,v in full.items()},"info":info}
 
 
 def head_loss(rendered, frame):
     masks = frame["masks"]
-    face = masks["face_core"] | masks["face_boundary"] | masks["glasses_visible"]
+    face = masks.get('training_face',masks["face_core"] | masks["face_boundary"] | masks["glasses_visible"])
     hair = masks["hair_visible"]
     error = (rendered["rgb"]-frame["rgb"]).abs().mean(-1)
     # Fixed observed regions count missing pixels. No black paint outside
@@ -104,6 +122,9 @@ def metrics(rendered, frame):
     regions = {"face": masks["face_core"] | masks["face_boundary"] | masks["glasses_visible"],
                "hair": masks["hair_visible"], "glasses": masks["glasses_visible"],
                "room": masks["room_visible"], "neckCloth": masks["neck_cloth_visible"]}
+    for label,key in (("roomObserved","observed_room"),("clothObserved","observed_cloth"),
+                      ("skinNeckObserved","observed_body_skin")):
+        if key in masks:regions[label]=masks[key]
     result = {}
     for name, mask in regions.items():
         result[name] = {"pixels": int(mask.sum()), "fixedRgbL1": float(masked_mean(err, mask)),
@@ -127,32 +148,72 @@ class SceneAssembly(torch.nn.Module):
         self.register_buffer("environment_parts", environment["part"][:, 0].long())
         self.register_buffer("environment_initial_means", environment["means"].detach().clone())
         self.register_buffer("environment_initial_scales", environment["scales"].detach().clone())
+        count=len(environment["means"])
+        self.register_buffer("environment_uid",torch.arange(count,device=environment["means"].device))
+        self.register_buffer("environment_parent_uid",torch.full((count,),-1,device=environment["means"].device,dtype=torch.long))
+        self.register_buffer("environment_generation",torch.zeros(count,device=environment["means"].device,dtype=torch.long))
+        self.register_buffer("environment_initial_quats",environment["quats"].detach().clone())
+        self.dense_surface=False
+        self.body_train_names=set()
 
-    def environment_state(self):
+    def environment_state(self, frame=None):
         p = self.environment
-        return GaussianState(p["means"], functional.normalize(p["quats"], dim=-1), p["scales"].exp(),
-                             p["opacities"].sigmoid(), p["sh"], self.environment_parts)
+        state=GaussianState(p["means"], functional.normalize(p["quats"], dim=-1), p["scales"].exp(),
+                            p["opacities"].sigmoid(), p["sh"], self.environment_parts)
+        if frame is not None and hasattr(self,'neck_binding') and frame['name'] in self.body_train_names:
+            state=self.neck_binding.deform(state,frame['C'],frame['F'])
+        return state
 
     def render(self, frame, stage, *, antialiased=False, absgrad=False):
-        state = self.portrait.local_state(frame["mesh"])
-        h, w = frame["rgb"].shape[:2]
+        state = self.portrait_state(frame)
         if stage == "T0":
-            return draw(state, frame["F"], frame["K"], w, h, antialiased=antialiased, absgrad=absgrad)
+            return full_frame_draw(state,frame["F"],frame,antialiased=antialiased,absgrad=absgrad)
         if frame["C"] is None: raise ValueError("world_render_requires_real_world_observation")
         state = state.to_world(frame["C"], frame["F"], self.scale)
-        if stage != "T1": state = joined_state(state, self.environment_state())
-        return draw(state, frame["C"], frame["K"], w, h, unit_scale=self.scale,
+        if stage != "T1":
+            if getattr(self,'dense_surface',False):
+                from reconstruction_live_neck_motion import joined_covariant
+                state=joined_covariant(state,self.environment_state(frame))
+            else:state = joined_state(state, self.environment_state())
+        return full_frame_draw(state, frame["C"], frame, unit_scale=self.scale,
                     antialiased=antialiased, absgrad=absgrad)
+
+    def portrait_state(self,frame):
+        state=self.portrait.local_state(frame['mesh'])
+        if hasattr(self,'hair_motion'):
+            state=self.hair_motion.deform(frame['name'],state,self.portrait.surface_count)
+        return state
 
 
 def initialize_scene(data, out, device="cuda"):
     # Reuse measured room/cloth preparation, but NEVER reuse its selected
     # skin set or its replacement hair as the input portrait.
+    if "cloth_stage_seeds" in data:
+        np.savez_compressed(out/"cloth_supported_seeds.npz",**data["cloth_stage_seeds"])
     old, sources = initialize(data, out, device)
     select = (old["part"][:, 0] == 0) | ((old["part"][:, 0] == 4) & (old["tri_id"][:, 0] < 0))
     environment = {k:v[select].detach() for k,v in old.items()}
     environment_sources = {k:v[select.cpu().numpy()] for k,v in sources.items()}
     ref = data["reference"]; prior = data["prior"]
+    from reconstruction_live_hair_motion import prepared_hair_motion,write_motion_contract,legacy_hair_motion
+    hair_motion=prepared_hair_motion(data['prepared'],data,data['prepared_geometry_contract'],
+        ref,model=data['geometry'],fit=data.get('hair_fit'))
+    if not data.get('dense_manifest'):
+        hair_motion=legacy_hair_motion(list(data['local']),ref)
+        hair_motion.metadata['reason']='sparse_initial_hair_seed_was_triangulated_in_legacy_root_local_frame'
+    data['hair_motion']=hair_motion
+    dense_meta=None; dense_components={}
+    if data.get("dense_manifest"):
+        from reconstruction_live_surface_binding import (load_surface_bundle,
+            environment_from_components,replace_hair_prior)
+        dense_meta,dense_components=load_surface_bundle(data["dense_manifest"],data)
+        if "room" not in dense_components or "body" not in dense_components:
+            raise ValueError("dense_scene_missing_supported_room_or_body")
+        environment,environment_sources,layers=environment_from_components(
+            {k:dense_components[k] for k in ("room","body")},device)
+        if "hair" in dense_components:prior=replace_hair_prior(prior,dense_components["hair"])
+        elif hair_motion.receipt()['status']!='explicit_legacy_root_local':
+            raise ValueError('motion_corrected_hair_requires_matching_dense_surface')
     # Native image scale from actual positive head depths. A conservative
     # per-point median is computed across training observations only.
     z = []
@@ -161,22 +222,41 @@ def initialize_scene(data, out, device="cuda"):
         if row["role"] != "train": continue
         tri = row["mesh"][faces[prior["surface_ids"]]]
         xyz = np.concatenate(((tri*prior["surface_bary"][:, :, None]).sum(1), prior["hair_local_points"]))
+        D=hair_motion.transforms[hair_motion.names.index(name)].numpy()
+        surface_count=len(prior['surface_ids'])
+        xyz[surface_count:]=xyz[surface_count:]@D[:3,:3].T+D[:3,3]
         camera = xyz@row["F"][:3, :3].T+row["F"][:3, 3]
         z.append(np.where(camera[:, 2]>.05, camera[:, 2]/data["K"][0, 0], np.nan))
     metric_px = np.nanmedian(np.stack(z), axis=0)
     model = LocalPortraitModel(prior, faces, data["local"][ref]["mesh"],
                                native_metric_per_pixel=metric_px, device=device)
     scene = SceneAssembly(model, environment, data["scale"])
+    scene.hair_motion=hair_motion
+    scene.hair_motion_receipt=write_motion_contract(hair_motion,out)
     scene.environment_sources = environment_sources
+    if dense_meta:
+        scene.dense_surface=True;scene.dense_metadata=dense_meta
+        scene.body_train_names=set(dense_meta["components"]["body"]["trainNames"])
+        scene.environment_layers=layers
+        scene.dense_hair="hair" in dense_components
+        model.observed_hair_surface=scene.dense_hair
+        scene.register_buffer("hair_initial",model.hair_base+model.hair_delta.detach())
+        scene.register_buffer("hair_support_scale",model.metric_per_pixel[model.surface_count:].clone())
+        from reconstruction_live_neck_motion import build_neck_binding
+        scene.neck_binding=build_neck_binding(environment['means'],layers,
+            data['worlds'][ref],data['local'][ref]['F'],data['scale'])
     write_json(out/"portrait-import.json", {"sourceSha256": data["sourceHash"],
         "pointCount": len(model.role), "surfaceCount": model.surface_count,
         "hairCount": int((model.role==2).sum()), "discarded": 0,
-        "environmentCount": int(select.sum()), "newNeckDuplicate": 0,
-        "legacyHairShellRetainedForControlledTransfer": True,
+        "environmentCount": len(scene.environment_parts), "newNeckDuplicate": 0,
+        "denseSurfaceManifest":dense_meta,
+        "neckMotion":scene.neck_binding.receipt() if hasattr(scene,'neck_binding') else None,
+        "hairMotion":scene.hair_motion_receipt,
+        "legacyHairShellRetainedForControlledTransfer": bool(data.get("observationSchema",1)<2),
         "metricPerNativePixelQuantiles": np.quantile(metric_px, [.1,.5,.9]).tolist(),
         "localTrainingFrames": [n for n,r in data["local"].items() if r["role"]=="train"],
         "worldTrainingFrames": data["train"],
-        "bodyMotion": "measured_reference_garment_quasistatic_not_accepted_as_dynamic_body"})
+        "bodyMotion": "short_window_reference_surface_not_verified_dynamic_body" if dense_meta else "measured_reference_garment_quasistatic_not_accepted_as_dynamic_body"})
     return scene
 
 
@@ -195,7 +275,7 @@ def audit_stages(scene, data, out, stages=("T0", "T1", "T2"), antialiased=False)
             row["T0_T1"] = {key:{"mean": float((outputs["T0"][key]-outputs["T1"][key]).abs().mean()),
                                        "max": float((outputs["T0"][key]-outputs["T1"][key]).abs().max())}
                             for key in ("rgb", "alpha", "q", "depth")}
-            state = scene.portrait.local_state(frame["mesh"])
+            state = scene.portrait_state(frame)
             world = state.to_world(frame["C"], frame["F"], data["scale"])
             camera0 = state.means@frame["F"][:3,:3].T+frame["F"][:3,3]
             camera1 = (world.means@frame["C"][:3,:3].T+frame["C"][:3,3])/data["scale"]
@@ -219,16 +299,36 @@ def audit_stages(scene, data, out, stages=("T0", "T1", "T2"), antialiased=False)
     return report
 
 
+@torch.no_grad()
+def audit_full_scene(scene,data,out):
+    out.mkdir(exist_ok=True);report={}
+    names=[n for n in data["development"] if n in data["worlds"]]+[data["reference"]]
+    for name in dict.fromkeys(names):
+        frame=make_frame(data,name,crop=False);r=scene.render(frame,"T2")
+        report[name]=metrics(r,frame)
+        # These float tensors are the audit data; preview PNGs do not replace
+        # linear/native pixel comparisons or manufacture camera truth.
+        np.savez_compressed(out/(name+".npz"),rgb=r["rgb"].cpu().numpy(),alpha=r["alpha"].cpu().numpy(),
+            q=r["q"].cpu().numpy(),K=data["K"],C=data["worlds"][name],F=data["local"][name]["F"])
+        pair=np.concatenate((frame["rgb"].cpu().numpy(),r["rgb"].cpu().numpy()),1)
+        cv2.imwrite(str(out/(name+".png")),cv2.cvtColor((pair*255).round().clip(0,255).astype(np.uint8),cv2.COLOR_RGB2BGR))
+    write_json(out/"metrics.json",report)
+    return report
+
+
 def configure_stage(scene, stage, step, soft):
     for p in scene.parameters(): p.requires_grad_(False)
     if stage == "T3":
-        for p in scene.environment.parameters(): p.requires_grad_(True)
+        for n,p in scene.environment.items():
+            p.requires_grad_(not scene.dense_surface or step>=80 or n in ("sh","opacities"))
+        if hasattr(scene,'neck_sh_editable') and scene.neck_sh_editable.any():scene.portrait.sh.requires_grad_(True)
     else:
         # Alternate appearance and shared geometry. No per-frame scale/K and
         # no free simultaneous pose/shape/appearance compensation.
         geometry = step >= 80 and step % 4 == 3
         for name,p in scene.portrait.named_parameters():
             p.requires_grad_((name in (("embedding","normal_offset","surface_residual") if soft else ("embedding","normal_offset"))) if geometry else name in ("sh","opacity_logits","log_scales","quats"))
+        if getattr(scene,"dense_hair",False) and geometry:scene.portrait.hair_delta.requires_grad_(True)
         if stage == "T4" and step % 4 == 0:
             for p in scene.environment.parameters(): p.requires_grad_(True)
 
@@ -236,30 +336,77 @@ def configure_stage(scene, stage, step, soft):
 def train_stage(scene, data, out, stage, steps, soft, antialiased=False):
     if stage not in ("local", "T3", "T4"): raise ValueError("invalid_training_stage")
     rates = {"sh":.002, "opacity_logits":.003, "log_scales":.0006, "quats":.0002,
-             "embedding":.002, "normal_offset":.000015, "surface_residual":.000006, "hair_delta":0.}
+             "embedding":.002, "normal_offset":.000015, "surface_residual":.000006,
+             "hair_delta":.000015 if getattr(scene,"dense_hair",False) else 0.}
     optim = torch.optim.Adam([{"params":[p],"lr":rates.get(n,0.),"name":n} for n,p in scene.portrait.named_parameters()], eps=1e-8)
-    envopt = torch.optim.Adam([{"params":[p],"lr": {"means":.00005*scene.scale,"scales":.0006,"quats":.0002,"opacities":.003,"sh":.002}[n]} for n,p in scene.environment.items()], eps=1e-8)
+    envopt = torch.optim.Adam([{"params":[p],"name":n,"lr": {"means":.00005*scene.scale,"scales":.0006,"quats":.0002,"opacities":.003,"sh":.002}[n]} for n,p in scene.environment.items()], eps=1e-8)
+    bodyopt=torch.optim.Adam([{"params":[p],"name":n,"lr": {"means":.00005*scene.scale,"scales":.0006,"quats":.0002,"opacities":.003,"sh":.002}[n]} for n,p in scene.environment.items()],eps=1e-8) if scene.dense_surface else None
+    neckopt=torch.optim.Adam([scene.portrait.sh],lr=.002,eps=1e-8) if stage=='T3' and hasattr(scene,'neck_sh_editable') and scene.neck_sh_editable.any() else None
     local_names = [n for n,r in data["local"].items() if r["role"]=="train"]
     world_names = data["train"]
-    curve=[]; gradient_audit=[]; initial={n:p.detach().clone() for n,p in scene.portrait.named_parameters()}
+    curve=[]; gradient_audit=[]; density_events=[]; initial={n:p.detach().clone() for n,p in scene.portrait.named_parameters()}
+    protected={}
+    if stage=="T3" and (getattr(scene,"surface_refine",False) or scene.dense_surface):
+        with torch.no_grad():
+            for n in world_names:
+                f=make_frame(data,n,crop=False);r=scene.render(f,"T2")
+                mask=f['masks']['face_core']|f['masks']['face_boundary']|f['masks']['hair_visible']|f['masks']['glasses_visible']
+                protected[n]=(r['q'][...,0][mask].cpu(),r['q'][...,1:4].sum(-1)[mask].cpu())
+    def checkpoint(label,completed):
+        torch.save({"engineVersion":ENGINE_VERSION,"sourceSha256":data["sourceHash"],
+            "stage":stage,"step":completed,"soft":soft,"model":scene.state_dict(),
+            "optimizer":optim.state_dict(),"environmentOptimizer":envopt.state_dict(),
+            "bodyOptimizer":bodyopt.state_dict() if bodyopt else None,
+            "neckAppearanceOptimizer":neckopt.state_dict() if neckopt else None,
+            "surfaceContract":surface_contract(scene,data),
+            "environmentSources":{k:torch.as_tensor(v) for k,v in scene.environment_sources.items()},
+            "rng":torch.get_rng_state(),"cudaRng":torch.cuda.get_rng_state(),
+            "sampler":{"localNames":local_names,"worldNames":world_names,"nextStep":completed},
+            "density":{"events":density_events,"finalRecoverySteps":max(0,steps-100)}},out/(stage+"-"+label+".pt"))
+    checkpoint("init",0)
     start=time.perf_counter()
     for step in range(steps):
         configure_stage(scene,stage,step,soft)
         optim.zero_grad(set_to_none=True);envopt.zero_grad(set_to_none=True)
         name=local_names[step%len(local_names)];frame=make_frame(data,name)
-        local_render=scene.render(frame,"T0",antialiased=antialiased)
-        local_loss,local_values=head_loss(local_render,frame)
-        if stage=="T3": local_loss=local_loss.detach()*0
+        if stage=='T3':
+            local_loss=scene.portrait.sh.new_zeros(())
+            local_values={'frozenHeadLocalForwardSkipped':True}
+        else:
+            local_render=scene.render(frame,"T0",antialiased=antialiased)
+            local_loss,local_values=head_loss(local_render,frame)
         image_loss=local_loss
         world_loss=local_loss*0
         if stage!="local":
-            name_w=world_names[step%len(world_names)];world_frame=make_frame(data,name_w,crop=False,half=True)
+            if scene.dense_surface and step%2:
+                body_names=sorted(scene.body_train_names);name_w=body_names[(step//2)%len(body_names)]
+            else:name_w=world_names[(step//2 if scene.dense_surface else step)%len(world_names)]
+            world_frame=make_frame(data,name_w,crop=False,half=True)
             world_render=scene.render(world_frame,stage,antialiased=antialiased)
             error=(world_render["rgb"]-world_frame["rgb"]).abs().mean(-1)
-            room=world_frame["masks"]["room_visible"];cloth=world_frame["masks"]["neck_cloth_visible"]
+            room=world_frame["masks"].get("observed_room",world_frame["masks"]["room_visible"])
+            cloth=world_frame["masks"].get("observed_neck_cloth",world_frame["masks"]["neck_cloth_visible"])
             # T3 only observed room/garment pixels. It cannot paint face
             # colors onto a room point to reduce a whole-image loss.
-            world_loss=masked_mean(error,room)+.4*masked_mean(error,cloth)
+            body_observed=not scene.dense_surface or name_w in scene.body_train_names
+            if not body_observed:cloth=torch.zeros_like(cloth)
+            world_loss=masked_mean(error,room)+.7*masked_mean(error,cloth)
+            if scene.dense_surface:
+                # Real static/garment pixels include low-texture surfaces.
+                # Adjacent-pixel structure never crosses invalid/mask edges.
+                observed=room|cloth
+                world_loss+=.04*masked_mean((1-world_render["alpha"]).square(),observed)
+                for axis in (0,1):
+                    pred=world_render["rgb"].diff(dim=axis);truth=world_frame["rgb"].diff(dim=axis)
+                    valid=(observed[1:]&observed[:-1]) if axis==0 else (observed[:,1:]&observed[:,:-1])
+                    world_loss+=.08*masked_mean((pred-truth).abs().mean(-1),valid)
+            if name_w in protected:
+                room_before,person_before=protected[name_w]
+                mask=world_frame["masks"]["face_core"]|world_frame["masks"]["face_boundary"]|world_frame["masks"]["hair_visible"]|world_frame["masks"]["glasses_visible"]
+                # Retained person stays in the same alpha composition. This
+                # guards against reducing room RGB by letting it cover skin.
+                world_loss+=4*(world_render['q'][...,0][mask]-room_before.to(error.device)-.005).clamp_min(0).square().mean()
+                world_loss+=4*(person_before.to(error.device)-world_render['q'][...,1:4].sum(-1)[mask]-.005).clamp_min(0).square().mean()
             if stage=="T4":
                 face=world_frame["masks"]["face_core"]|world_frame["masks"]["face_boundary"]
                 world_loss=world_loss+.5*masked_mean(error,face)
@@ -272,8 +419,17 @@ def train_stage(scene, data, out, stage, steps, soft, antialiased=False):
         if stage=="T3": regularizer=regularizer.detach()*0
         if stage!="local":
             env=scene.environment
-            regularizer+=.002*((env["means"]-scene.environment_initial_means)/(.02*scene.scale)).square().mean()
-            regularizer+=.005*(env["scales"]-scene.environment_initial_scales-math.log(2)).clamp_min(0).square().mean()
+            if scene.dense_surface:
+                from reconstruction_portrait_model import quaternion_matrix
+                basis=quaternion_matrix(scene.environment_initial_quats)
+                delta=torch.einsum("ni,nij->nj",env["means"]-scene.environment_initial_means,basis)
+                extent=scene.environment_initial_scales.exp()
+                regularizer+=.004*(delta/(extent*2).clamp_min(1e-7)).square().mean()
+                regularizer+=.008*(env["scales"]-scene.environment_initial_scales-math.log(1.8)).clamp_min(0).square().mean()
+                regularizer+=.0005*env["sh"][:,1:].square().mean()
+            else:
+                regularizer+=.002*((env["means"]-scene.environment_initial_means)/(.02*scene.scale)).square().mean()
+                regularizer+=.005*(env["scales"]-scene.environment_initial_scales-math.log(2)).clamp_min(0).square().mean()
         loss=image_loss+regularizer
         if not torch.isfinite(loss): raise RuntimeError(f"nonfinite_portrait_loss:{stage}:{step}")
         if stage!="T3" and soft and step>=80 and step%100==83:
@@ -285,31 +441,76 @@ def train_stage(scene, data, out, stage, steps, soft, antialiased=False):
                 "priorGradNorm":float(y.norm()) if y is not None else 0.,
                 "cosine":float(functional.cosine_similarity(x.flatten(),y.flatten(),dim=0)) if x is not None and y is not None else None} for n,x,y in zip(labels,a,b)}})
         loss.backward()
+        body_grad={}
+        if stage!="local" and scene.dense_surface:
+            # Separate Adam clocks. Zeroing a gradient alone would still move
+            # unsupported body rows via stale optimizer momentum.
+            body_rows=scene.environment_parts==4
+            for key,value in scene.environment.items():
+                if value.grad is not None:
+                    if body_observed:
+                        body_grad[key]=value.grad.clone();body_grad[key][~body_rows]=0
+                    value.grad[body_rows]=0
+        if torch.cuda.max_memory_allocated()/1048576>6656:raise RuntimeError("complete_backward_resource_budget_exceeded")
+        if stage=='T3' and neckopt and scene.portrait.sh.grad is not None:
+            scene.portrait.sh.grad[~scene.neck_sh_editable]=0
         torch.nn.utils.clip_grad_norm_(scene.portrait.parameters(),10.)
-        optim.step();envopt.step()
+        if stage!='T3':optim.step()
+        elif neckopt and body_observed and scene.portrait.sh.grad is not None:
+            scene.portrait.sh.grad[~scene.neck_sh_editable]=0
+            neckopt.step()
+            with torch.no_grad():scene.portrait.sh[~scene.neck_sh_editable]=initial['sh'][~scene.neck_sh_editable]
+        envopt.step()
+        if body_grad:
+            for key,value in scene.environment.items():value.grad=body_grad.get(key)
+            bodyopt.step()
+        if scene.dense_surface:
+            with torch.no_grad():
+                if getattr(scene,"dense_hair",False):
+                    limit=scene.hair_support_scale[:,None]*3
+                    scene.portrait.hair_delta.copy_(scene.portrait.hair_delta.clamp(-limit,limit))
+                    s=scene.portrait.surface_count
+                    scene.portrait.log_scales[s:].clamp_(min=scene.portrait.initial_log_scales[s:]+math.log(.4),max=scene.portrait.initial_log_scales[s:]+math.log(1.8))
+                if stage!="local":
+                    # Surface footprint caps are per-seed evidence, never a
+                    # global world scale or viewer-radius workaround.
+                    scene.environment["scales"].clamp_(min=scene.environment_initial_scales+math.log(.4),
+                        max=scene.environment_initial_scales+math.log(1.8))
+        if stage=="T3" and getattr(scene,"surface_refine",False) and step==99 and steps>=200:
+            from reconstruction_surface_density import select_surface_parents,split_surface_parameters
+            selected=select_surface_parents(scene,world_render["info"])
+            if len(selected):density_events.append({"step":step+1,**split_surface_parameters(scene,envopt,selected)})
         walk=scene.portrait.walk(optim) if stage!="T3" and soft and step>=80 and step%4==3 else {}
         if step%100==0 or step==steps-1:
             row={"step":step+1,"localFrame":name,"localOnly":name not in data["worlds"],"local":local_values,
                  "loss":float(loss.detach()),"worldLoss":float(world_loss.detach()),"walk":walk}
             curve.append(row); print(json.dumps({"stage":stage,**row}),flush=True)
+        elif (step+1)%20==0:
+            print(json.dumps({'stage':stage,'step':step+1,'loss':float(loss.detach())}),flush=True)
+        if (step+1)%100==0:checkpoint('latest',step+1)
+        if step+1==max(1,steps//2):checkpoint("mid",step+1)
     torch.cuda.synchronize()
     result={"stage":stage,"steps":steps,"soft":soft,"seconds":time.perf_counter()-start,
-            "curve":curve,"gradientAttribution":gradient_audit,
+            "curve":curve,"gradientAttribution":gradient_audit,"densityEvents":density_events,
             "portraitParameterChange":{n:float((p.detach()-initial[n]).abs().mean()) for n,p in scene.portrait.named_parameters()},
             "localTrainCount":len(local_names),"worldTrainCount":len(world_names),"allGroupsEveryWorldForward":True}
-    if stage=="T3" and any(not torch.equal(p.detach(),initial[n]) for n,p in scene.portrait.named_parameters()):
-        raise RuntimeError("frozen_portrait_changed_during_environment_fit")
+    if bodyopt:result['bodyOptimizerSteps']=int(max((float(v['step']) for v in bodyopt.state.values() if 'step' in v),default=0))
+    if neckopt:result['neckAppearanceSteps']=int(neckopt.state.get(scene.portrait.sh,{}).get('step',0))
+    if stage=="T3":
+        for n,p in scene.portrait.named_parameters():
+            if n=='sh' and neckopt:
+                if not torch.equal(p.detach()[~scene.neck_sh_editable],initial[n][~scene.neck_sh_editable]):raise RuntimeError('protected_face_SH_changed')
+            elif not torch.equal(p.detach(),initial[n]):raise RuntimeError("frozen_portrait_changed_during_environment_fit:"+n)
     write_json(out/(stage+"-training.json"),result)
-    torch.save({"engineVersion":ENGINE_VERSION,"sourceSha256":data["sourceHash"],
-                "stage":stage,"soft":soft,"model":scene.state_dict(),"optimizer":optim.state_dict()},out/(stage+"-state.pt"))
+    checkpoint("state",steps)
     return result,optim
 
 
 def export_candidate(scene,data,out):
     reference=data["reference"];frame=make_frame(data,reference)
     with torch.no_grad():
-        local=scene.portrait.local_state(frame["mesh"])
-        state=joined_state(local.to_world(frame["C"],frame["F"],data["scale"]),scene.environment_state())
+        local=scene.portrait_state(frame)
+        state=joined_state(local.to_world(frame["C"],frame["F"],data["scale"]),scene.environment_state(frame))
         # The entire retained head is first. Export/source mappings are
         # explicit; no claim that the current Morton loader preserves them.
         n=len(state.means);pad=torch.zeros((n,15,3),device=state.means.device);pad[:,:3]=state.sh[:,1:]
@@ -325,7 +526,10 @@ def export_candidate(scene,data,out):
             surface_bary=scene.portrait.embedding.detach().cpu().numpy(),
             normal_offset=scene.portrait.normal_offset.detach().cpu().numpy(),
             origin_index=scene.portrait.origin_index.cpu().numpy(),generation=scene.portrait.generation.cpu().numpy(),
-            confidence=scene.portrait.confidence.cpu().numpy())
+            confidence=scene.portrait.confidence.cpu().numpy(),
+            environment_uid=scene.environment_uid.cpu().numpy(),
+            environment_parent_uid=scene.environment_parent_uid.cpu().numpy(),
+            environment_generation=scene.environment_generation.cpu().numpy())
         C=data["worlds"][reference];camera=np.linalg.inv(C)[:3,3]
         target=state.means[:scene.portrait.surface_count].mean(0).cpu().tolist()
         view={"schemaVersion":1,"sourceFrame":reference,"target":target,"camera":camera.tolist(),"up":(-C[:3,:3].T[:,1]).tolist(),
@@ -334,53 +538,184 @@ def export_candidate(scene,data,out):
               "reconstructionMethod":ENGINE_VERSION,"surfacePointCount":scene.portrait.surface_count,
               "researchOnly":True,"sourceSha256":data["sourceHash"],"assetSha256":asset_hash}
         write_json(out/"portrait.view.json",view)
-        torch.save({"engineVersion":ENGINE_VERSION,"sourceSha256":data["sourceHash"],"model":scene.state_dict()},out/"trained-state.pt")
+        torch.save({"engineVersion":ENGINE_VERSION,"sourceSha256":data["sourceHash"],"model":scene.state_dict(),
+                    "surfaceContract":surface_contract(scene,data)},out/"trained-state.pt")
     return asset_hash
+
+
+def surface_contract(scene,data):
+    return {"reference":data['reference'],"scale":float(data['scale']),
+        "manifestSha256":digest(data['dense_manifest']) if data.get('dense_manifest') else None,
+        "bodyTrainNames":sorted(scene.body_train_names),"denseHair":bool(getattr(scene,'dense_hair',False)),
+        "layers":scene.environment_layers.tolist() if hasattr(scene,'environment_layers') else None,
+        "hairMotion":scene.hair_motion.receipt() if hasattr(scene,'hair_motion') else None,
+        "hairReferenceTransforms":scene.hair_motion.transforms.tolist() if hasattr(scene,'hair_motion') else None}
+
+
+def surface_contract_matches(actual,expected):
+    # The immutable transport matrices/digest and input identities remain exact.
+    # A diagnostic joint-regression pivot can differ by a few float64 ULPs
+    # between CPU reduction thread counts; it is not another learned state.
+    a,b=copy.deepcopy(actual),copy.deepcopy(expected)
+    for value in (a,b):
+        if not isinstance(value,dict):return False
+    am,bm=a.get('hairMotion'),b.get('hairMotion')
+    if isinstance(am,dict) and isinstance(bm,dict) and 'pivotRootLocal' in am and 'pivotRootLocal' in bm:
+        av,bv=np.asarray(am.pop('pivotRootLocal')),np.asarray(bm.pop('pivotRootLocal'))
+        if av.shape!=(3,) or bv.shape!=(3,) or not np.allclose(av,bv,atol=1e-12,rtol=0):return False
+    return a==b
+
+
+def prepare_neck_appearance(scene,data,out):
+    from reconstruction_live_neck_appearance import select_neck_sh_points
+    from reconstruction_live_neck_motion import joined_covariant
+    def observations():
+        for name,row in data['local'].items():
+            if row['role']!='train':continue
+            frame=make_frame(data,name,crop=False)
+            with torch.no_grad():
+                local=scene.portrait_state(frame)
+                if name in scene.body_train_names:
+                    state=joined_covariant(local.to_world(frame['C'],frame['F'],scene.scale),scene.environment_state(frame))
+                    yield dict(frame=frame,state=state,unit_scale=scene.scale,support=True,full_scene=True)
+                else:
+                    yield dict(frame={**frame,'C':frame['F']},state=local,unit_scale=1.,support=False,full_scene=False)
+    selected,receipt=select_neck_sh_points(observations(),len(scene.portrait.role),scene.portrait.surface_count)
+    scene.register_buffer('neck_sh_editable',selected.to(scene.portrait.sh.device))
+    write_json(out/'neck-appearance-selection.json',receipt)
+    return receipt
+
+
+def warm_start_portrait(scene,data,state_path,manifest_path):
+    """Reuse a trained head when only its measured environment is replaced.
+
+    This is a model warm-start, never an exact optimizer resume. Source,
+    geometry, the complete hair input and every head state field must agree.
+    """
+    checkpoint=torch.load(state_path,map_location=scene.portrait.sh.device,weights_only=True)
+    if checkpoint.get('sourceSha256')!=data['sourceHash'] or checkpoint.get('engineVersion')!=ENGINE_VERSION:
+        raise ValueError('portrait_warm_start_source_or_engine_mismatch')
+    contract=checkpoint.get('surfaceContract',{})
+    if contract.get('hairMotion')!=surface_contract(scene,data).get('hairMotion'):
+        raise ValueError('portrait_warm_start_hair_motion_mismatch')
+    if contract.get('manifestSha256')!=digest(manifest_path):raise ValueError('portrait_warm_start_manifest_mismatch')
+    old=json.loads(Path(manifest_path).read_text());new=scene.dense_metadata
+    for key in ('sourceSha256','preparedSha256','localGeometrySha256','K','headToWorldScale'):
+        if old.get(key)!=new.get(key):raise ValueError('portrait_warm_start_geometry_mismatch:'+key)
+    if old['components']['hair']['sha256']!=new['components']['hair']['sha256']:
+        raise ValueError('portrait_warm_start_hair_mismatch')
+    state={k[len('portrait.'):]:v for k,v in checkpoint['model'].items() if k.startswith('portrait.')}
+    current=scene.portrait.state_dict()
+    if set(state)!=set(current):raise ValueError('portrait_warm_start_incomplete_state')
+    for key in ('role','source_index','origin_index','generation','hair_base','faces'):
+        if not torch.equal(state[key],current[key]):raise ValueError('portrait_warm_start_binding_mismatch:'+key)
+    # A trained movable embedding may legitimately walk to an adjacent
+    # triangle. Restore the COMPLETE learned chart rather than forcing its
+    # initialization IDs back onto the optimized barycentric coordinates.
+    ids=state['triangle_ids'];bary=state['embedding']
+    if ids.shape!=current['triangle_ids'].shape or ((ids<0)|(ids>=len(state['faces']))).any():
+        raise ValueError('portrait_warm_start_invalid_learned_chart')
+    if bary.shape!=current['embedding'].shape or not torch.isfinite(bary).all():
+        raise ValueError('portrait_warm_start_invalid_embedding')
+    scene.portrait.load_state_dict(state,strict=True)
+    return {'kind':'complete_head_model_warm_start_new_Adam','sha256':digest(state_path),
+            'sourceManifestSha256':digest(manifest_path),'step':checkpoint.get('step')}
 
 
 def run(args):
     if args.output.exists(): raise FileExistsError("each_experiment_requires_new_run_directory")
     args.output.mkdir(parents=True)
     started=time.perf_counter();torch.manual_seed(280928)
+    torch.set_num_threads(min(6,torch.get_num_threads()))
     if not torch.cuda.is_available():
         write_json(args.output/"status.json",{"status":"GPU_unavailable_not_tested"})
         raise RuntimeError("GPU_unavailable")
     torch.cuda.reset_peak_memory_stats()
     data=load_prepared(args.prepared)
+    if getattr(args,'observed_face_domain',False):
+        if args.resume_state is not None or getattr(args,'portrait_state',None):
+            raise ValueError('changed_initial_colour_domain_requires_explicit_new_initialization')
+        from reconstruction_live_face_domain import activate
+        activate(data,args.output)
+    data["reference"]=max(data["train"],key=lambda n:np.linalg.norm(data["local"][n]["marks"][234]-data["local"][n]["marks"][454])/
+        max(np.linalg.norm(data["local"][n]["marks"][10]-data["local"][n]["marks"][152]),1))
+    if getattr(args,'dense_surfaces',False) or getattr(args,'dense_manifest',None):
+        from reconstruction_capture_reference import choose_capture_reference
+        data['reference'],reference_receipt=choose_capture_reference(data)
+        write_json(args.output/'capture-reference.json',reference_receipt)
+    if getattr(args,"dense_manifest",None):data["dense_manifest"]=args.dense_manifest
+    elif getattr(args,"dense_surfaces",False):
+        from reconstruction_live_dense import augment_prepared
+        dense_result=augment_prepared(args.prepared,args.output/"dense-surfaces",reference=data["reference"],
+            shared_room_surface=bool(getattr(args,'shared_room_surface',False)))
+        data["dense_manifest"]=Path(dense_result["manifestPath"])
+    if getattr(args,"surface_refine",False):
+        from reconstruction_observed_surface import prepare_surface_stage
+        surface_report=prepare_surface_stage(data,args.output/"surface-support")
+    else:surface_report={"status":"control_same_observation_contract"}
     # Existing initializer reads only cloth seeds from its output argument.
     import shutil
     shutil.copyfile(args.prepared/"cloth_supported_seeds.npz",args.output/"cloth_supported_seeds.npz")
     scene=initialize_scene(data,args.output)
+    scene.surface_refine=bool(getattr(args,"surface_refine",False))
+    if scene.surface_refine and scene.dense_surface:raise ValueError('independent_dense_and_legacy_split_transactions_required')
     scene.portrait.constraint_mode="soft" if args.soft else "strong"
+    portrait_start=None
+    if getattr(args,'portrait_state',None):
+        if not getattr(args,'portrait_manifest',None) or args.resume_state is not None:
+            raise ValueError('portrait_warm_start_requires_manifest_and_no_scene_resume')
+        portrait_start=warm_start_portrait(scene,data,args.portrait_state,args.portrait_manifest)
     if args.resume_state is not None:
         checkpoint=torch.load(args.resume_state,map_location="cuda",weights_only=True)
         if checkpoint["sourceSha256"]!=data["sourceHash"] or checkpoint["engineVersion"]!=ENGINE_VERSION:
             raise ValueError("resume_source_or_engine_mismatch")
+        if scene.dense_surface and not surface_contract_matches(surface_contract(scene,data),checkpoint.get('surfaceContract')):
+            raise ValueError('resume_dense_surface_contract_mismatch')
+        if 'neck_sh_editable' in checkpoint['model']:
+            mask=checkpoint['model']['neck_sh_editable']
+            if mask.dtype!=torch.bool or mask.shape!=(len(scene.portrait.role),):raise ValueError('resume_neck_selection_contract')
+            scene.register_buffer('neck_sh_editable',mask.clone())
         scene.load_state_dict(checkpoint["model"],strict=True)
-    freeze={str(path):digest(path) for path in (Path(__file__),Path(__file__).with_name("reconstruction_portrait_model.py"))}
+    from reconstruction_code_identity import source_identity
+    identity=source_identity();freeze=identity["sourceFiles"]
+    snapshot=args.output/"algorithm-source";snapshot.mkdir()
+    for name in freeze:shutil.copyfile(Path(__file__).parent/name,snapshot/name)
     config={"engineVersion":ENGINE_VERSION,"sourceSha256":data["sourceHash"],"appearanceHash":data["appearanceHash"],
             "prepared":str(args.prepared),"soft":args.soft,"localSteps":args.local_steps,"roomSteps":args.room_steps,"jointSteps":args.joint_steps,
             "antialiased":args.antialiased,"sourceFiles":freeze,"finalAudit":"current_development_not_blind; cross_video_unverified",
             "resumeState":str(args.resume_state) if args.resume_state else None,
-            "resumeSha256":digest(args.resume_state) if args.resume_state else None}
+            "resumeSha256":digest(args.resume_state) if args.resume_state else None,
+            "resumeKind":"model_only_warm_start" if args.resume_state else "new_optimizer",
+            "implementation":identity,"surfaceStage":surface_report,"surfaceRefine":scene.surface_refine,
+            "portraitWarmStart":portrait_start,
+            "observedFaceDomain":data.get('face_domain_receipt'),
+            "hairCompositeSteps":int(getattr(args,'hair_steps',0)),
+            "denseSurfaces":getattr(scene,"dense_metadata",None)}
     write_json(args.output/"config.json",config)
     initial=audit_stages(scene,data,args.output/"initial",antialiased=args.antialiased)
+    full_initial=audit_full_scene(scene,data,args.output/"full-initial")
     trainings=[]
     if args.local_steps:
         result,_=train_stage(scene,data,args.output,"local",args.local_steps,args.soft,args.antialiased);trainings.append(result)
         audit_stages(scene,data,args.output/"after-local",antialiased=args.antialiased)
     if args.room_steps:
+        if scene.dense_surface:prepare_neck_appearance(scene,data,args.output)
         result,_=train_stage(scene,data,args.output,"T3",args.room_steps,args.soft,args.antialiased);trainings.append(result)
         audit_stages(scene,data,args.output/"after-T3",antialiased=args.antialiased)
     if args.joint_steps:
         result,_=train_stage(scene,data,args.output,"T4",args.joint_steps,args.soft,args.antialiased);trainings.append(result)
+    if getattr(args,'hair_steps',0):
+        from reconstruction_live_hair_composite import restore_hair_in_scene
+        trainings.append(restore_hair_in_scene(scene,data,args.output,args.hair_steps))
     final=audit_stages(scene,data,args.output/"final",antialiased=args.antialiased)
+    full_final=audit_full_scene(scene,data,args.output/"full-final")
     asset=export_candidate(scene,data,args.output)
     torch.cuda.synchronize()
     report={**config,"status":"research_not_release_approved","plySha256":asset,"initial":initial,"final":final,
+            "fullInitial":full_initial,"fullFinal":full_final,
             "trainings":trainings,"seconds":time.perf_counter()-started,"allocatedPeakMiB":torch.cuda.max_memory_allocated()/1024**2,
             "reservedPeakMiB":torch.cuda.max_memory_reserved()/1024**2,"pointCount":len(scene.portrait.role)+len(scene.environment_parts),
-            "limitations":["Legacy hair is retained for same-point attribution, not declared repaired",
+            "limitations":["Observed hair surface remains subject to multiview quality checks" if getattr(scene,'dense_hair',False) else "Legacy hair shell remains unaccepted",
                 "Garment motion and complete neck/shoulder continuity remain unaccepted",
                 "Temporary research C and global scale are not independent calibration",
                 "Research candidate; full portrait and scene release quality remains unaccepted"]}
@@ -393,4 +728,8 @@ if __name__=="__main__":
     p.add_argument("--soft",action="store_true");p.add_argument("--antialiased",action="store_true")
     p.add_argument("--local-steps",type=int,default=0);p.add_argument("--room-steps",type=int,default=0);p.add_argument("--joint-steps",type=int,default=0)
     p.add_argument("--resume-state",type=Path)
+    p.add_argument("--surface-refine",action="store_true")
+    p.add_argument("--dense-surfaces",action="store_true");p.add_argument("--dense-manifest",type=Path)
+    p.add_argument('--portrait-state',type=Path);p.add_argument('--portrait-manifest',type=Path)
+    p.add_argument('--shared-room-surface',action='store_true');p.add_argument('--hair-steps',type=int,default=0)
     run(p.parse_args())

@@ -83,6 +83,8 @@ def rectified_data(source,masks,names,K,distortion):
         outside=(mx<0)|(my<0)|(mx>=width)|(my>=height)
         for label in COMPONENT_MASK_NAMES[:-1]:labels[name][label][outside]=False
         labels[name]["unknown_or_occluded"] |= outside
+        from reconstruction_observed_surface import rectified_domains
+        labels[name]=rectified_domains(masks,name,K,distortion,labels[name])
     return rgb,labels
 
 
@@ -217,7 +219,7 @@ def triangulated_component(rgb,labels,local,K,part):
             pair_rows.append({"a":a,"b":b,"relativeRotationDegrees":angle,"geometricPairs":accepted})
     tracks={}
     for key in list(parent):tracks.setdefault(find(key),[]).append(key)
-    xyz_all=[];colors=[];support=[];source_views=[];reproj=[]
+    xyz_all=[];colors=[];support=[];source_views=[];reproj=[];measurements=[]
     rejected={"shortOrCycleConflict":0,"reprojection":0,"occlusion":0}
     for keys in tracks.values():
         if len(keys)<3 or len(set(k[0] for k in keys))!=len(keys):
@@ -251,11 +253,15 @@ def triangulated_component(rgb,labels,local,K,part):
             rejected["occlusion"]+=1;continue
         xyz_all.append(xyz);colors.append(np.median(samples,axis=0));support.append(len(keys))
         source_views.append([names.index(name) for name,_ in keys]);reproj.append(max(errors))
+        observed=np.full((len(names),2),np.nan,np.float32)
+        for name,index in keys:observed[names.index(name)]=features[name][0][index]
+        measurements.append(observed)
     n=len(xyz_all);padded=np.full((n,len(names)),-1,np.int16)
     for i,row in enumerate(source_views):padded[i,:len(row)]=row
     result={"xyz":np.asarray(xyz_all,np.float32).reshape(-1,3),
         "rgb":np.asarray(colors,np.float32).reshape(-1,3),"support":np.asarray(support,np.int16),
-        "views":padded,"names":np.asarray(names),"reprojection":np.asarray(reproj,np.float32)}
+        "views":padded,"names":np.asarray(names),"reprojection":np.asarray(reproj,np.float32),
+        "observed_pixels":np.asarray(measurements,np.float32).reshape(n,len(names),2)}
     report={"component":part,"method":"new_rectified_RootSIFT_three_view_cycle_DLT",
         "featureCounts":{name:len(features[name][0]) for name in names},"pairs":pair_rows,
         "acceptedSeeds":n,"rejected":rejected,"lineCandidatesByView":line_support,
@@ -354,10 +360,16 @@ def load_prepared(out):
     worlds={str(n):data["C"][i] for i,n in enumerate(data["world_names"])}
     rgb={n:cv2.cvtColor(cv2.imread(str(out/"rectified_observations"/n)),cv2.COLOR_BGR2RGB).astype(np.float32)/255 for n in names}
     labels={n:dict(np.load(out/"rectified_observations"/(n+".npz"))) for n in names}
-    return {**metadata,"source":source,"geometry":FlameOpen(24,12,model_path=MODEL),
+    result={**metadata,"source":source,"prepared":out,"geometry":FlameOpen(24,12,model_path=MODEL),
         "prior":dict(np.load(appearance)),"local":local,"worlds":worlds,"rgb":rgb,"labels":labels,
         "K":data["K"],"scale":float(data["scale"]),"room":dict(np.load(out/"static_surface_seeds.npz")),
         "components":{part:dict(np.load(out/(part+"_multiview_seeds.npz"))) for part in ("hair","glasses")}}
+    from reconstruction_observed_surface import attach_observation_domains
+    attach_observation_domains(result,out)
+    from reconstruction_live_hair_motion import load_prepared_fit
+    result['hair_fit']=load_prepared_fit(out,metadata,data,result['geometry'])
+    result['prepared_geometry_contract']=data
+    return result
 
 
 def supported_cloth(source,static_map,data):

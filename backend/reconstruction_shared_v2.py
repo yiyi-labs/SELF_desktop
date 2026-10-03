@@ -58,6 +58,19 @@ def mesh_depth(mesh,F,K,width,height):
     return depth
 
 
+def initialization_reference(data):
+    """Preserve a validated capture-wide reference chosen by the caller."""
+    eligible=[n for n in data['train'] if n in data['local'] and n in data['worlds']
+              and data['local'][n].get('role')=='train']
+    if 'reference' in data:
+        if data['reference'] not in eligible:
+            raise ValueError('initialization_reference_not_actual_world_local_training')
+        return data['reference']
+    if not eligible:raise ValueError('initialization_no_world_local_training_reference')
+    return max(eligible,key=lambda n:np.linalg.norm(data['local'][n]['marks'][234]-data['local'][n]['marks'][454]) /
+        max(np.linalg.norm(data['local'][n]['marks'][10]-data['local'][n]['marks'][152]),1))
+
+
 def initialize(data,out,device):
     p=data["prior"];faces=data["geometry"].faces.numpy()
     surface=len(p["surface_ids"])
@@ -80,11 +93,9 @@ def initialize(data,out,device):
     neck=(votes["cloth"]>=3)&~skin&(votes["hair"]==0)&(votes["glasses"]==0)
     chosen=np.flatnonzero(skin|neck)
     if skin.sum()<1000:raise ValueError("conservative_supported_skin_missing")
-    ref=data["train"][0]
-    # Prefer the fitted training observation with the most near-frontal
-    # rotation relative to the local head axes. No video frame hard-coding.
-    ref=max(data["train"],key=lambda n:np.linalg.norm(data["local"][n]["marks"][234]-data["local"][n]["marks"][454]) /
-            max(np.linalg.norm(data["local"][n]["marks"][10]-data["local"][n]["marks"][152]),1))
+    # A capture-wide body/neck/dense reference must not be replaced by a
+    # second independent max-width choice during legacy seed initialization.
+    ref=initialization_reference(data)
     data["reference"]=ref
     s=data["scale"];ref_mesh=data["local"][ref]["mesh"]
     base,normals=bound_points(ref_mesh,faces,p["surface_ids"][chosen],p["surface_bary"][chosen])
@@ -124,6 +135,10 @@ def initialize(data,out,device):
                 covariance=near.T@near
                 eigen,vectors=np.linalg.eigh(covariance)
                 if eigen[0]<.15*max(eigen[1],1e-8):normal_list[j]=vectors[:,0]
+            if "surface_normal" in seed:
+                observed=seed["surface_normal"]
+                good=np.linalg.norm(observed,axis=1)>.5
+                normal_list[good]=observed[good]
             for j in np.flatnonzero(np.linalg.norm(normal_list,axis=1)>.5):
                 normal=normal_list[j]
                 axis=np.array([1.,0.,0.]) if abs(normal[0])<.8 else np.array([0.,1.,0.])

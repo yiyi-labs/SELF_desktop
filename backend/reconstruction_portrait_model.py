@@ -240,8 +240,12 @@ class LocalPortraitModel(torch.nn.Module):
             offset = self.initial_normal_offset+.0035*torch.tanh((offset-self.initial_normal_offset)/.0035)
         means = torch.cat((surface+normals*offset[:, None], self.hair_base+self.hair_delta))
         # Preserve the imported trainer's actual scale activation exactly.
+        scales=self.log_scales.exp()
+        if getattr(self,"observed_hair_surface",False):
+            scales=torch.cat((scales[:self.surface_count].clamp(.00045,.018),scales[self.surface_count:]))
+        else:scales=scales.clamp(.00045,.018)
         return GaussianState(means, functional.normalize(self.quats, dim=-1),
-                             self.log_scales.exp().clamp(.00045, .018), self.opacity_logits.sigmoid(),
+                             scales, self.opacity_logits.sigmoid(),
                              self.sh, torch.where(self.role == 2, 2, 1))
 
     def soft_regularization(self, observed_mesh):

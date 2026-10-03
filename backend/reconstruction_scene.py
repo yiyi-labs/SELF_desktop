@@ -187,6 +187,25 @@ def seed_recorded_scene(path: Path, model_path: Path | None = None) -> dict:
     return report
 
 
+def surface_barycentrics(divisions):
+    """One true 3-D centroid for d=2; retain the original d>=3 lattice."""
+    import numpy as np
+    if divisions < 2:
+        raise ValueError("surface_divisions_below_two")
+    if divisions == 2:
+        return np.array([[1/3, 1/3, 1/3]], np.float64)
+    return np.array([(a/divisions, b/divisions, 1-(a+b)/divisions)
+        for a in range(1, divisions) for b in range(1, divisions-a)], np.float64)
+
+
+def surface_sample_identity(point_ids, bary):
+    # Winding does not change a physical sample. IDs belong to the one
+    # supplied map, never to an unrelated SIFT database or frame sequence.
+    from fractions import Fraction
+    return tuple(sorted((int(i), str(Fraction(float(b)).limit_denominator(120)))
+                        for i, b in zip(point_ids, bary)))
+
+
 def supported_static_surfaces(model, views, masks, rgb_images, output,
                               max_points=22000, max_edge_pixels=80):
     """Observed local triangles, not four-neighbour volume extrapolation.
@@ -236,6 +255,8 @@ def supported_static_surfaces(model, views, masks, rgb_images, output,
     source_ids=list(candidates)
     source_kind=[0]*len(positions)
     lineage=[(index,index,index) for index in source_ids]
+    sample_bary=[(1.,0.,0.)]*len(positions)
+    accepted_samples=set()
     rejected={"edge":0,"depthSpread":0,"normal":0,"multiView":0}
     names=list(views)
     blurred={name:cv2.GaussianBlur(rgb_images[name],(3,3),0) for name in names}
@@ -266,8 +287,7 @@ def supported_static_surfaces(model, views, masks, rgb_images, output,
             # Barycentric samples remain on measured triangles. No fallback
             # to nearest depth across a wall, person, collar or opening.
             divisions=min(10,max(2,int(edge/9)))
-            bary=np.array([(a/divisions,b/divisions,1-(a+b)/divisions)
-                for a in range(1,divisions) for b in range(1,divisions-a)],np.float64)
+            bary=surface_barycentrics(divisions)
             if not len(bary):
                 continue
             pts=bary@world
@@ -293,16 +313,21 @@ def supported_static_surfaces(model, views, masks, rgb_images, output,
             keep=(votes>=3)&(conflict<=1)
             rejected["multiView"]+=int((~keep).sum())
             for idx in np.flatnonzero(keep):
+                identity=surface_sample_identity([keys[i] for i in tri],bary[idx])
+                if identity in accepted_samples:continue
+                accepted_samples.add(identity)
                 positions.append(pts[idx]);colors.append(color_sum[idx]/votes[idx]);support.append(int(votes[idx]))
                 source_ids.append(len(source_ids));source_kind.append(1)
                 lineage.append(tuple(keys[i] for i in tri))
+                sample_bary.append(tuple(bary[idx]))
             if len(positions)>=max_points:
                 break
         if len(positions)>=max_points:
             break
     data={"xyz":np.asarray(positions,np.float32),"rgb":np.asarray(colors,np.float32),
           "support":np.asarray(support,np.int16),"source_id":np.asarray(source_ids,np.int64),
-          "source_kind":np.asarray(source_kind,np.uint8),"triangle_sources":np.asarray(lineage,np.int64)}
+          "source_kind":np.asarray(source_kind,np.uint8),"triangle_sources":np.asarray(lineage,np.int64),
+          "sample_bary":np.asarray(sample_bary,np.float64)}
     np.savez_compressed(output,**data)
     report={"method":"bounded_static_triangle_surface_and_multiview_photometric_support",
             "measuredStaticPoints":len(candidates),"surfaceSamples":len(positions)-len(candidates),
