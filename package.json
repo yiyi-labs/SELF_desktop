@@ -10,6 +10,8 @@
     "build": "node scripts/build.mjs",
     "test": "node --experimental-strip-types --test renderer-web/tests/*.test.ts",
     "test:camera-guidance": "node scripts/test-camera-guidance.mjs",
+    "test:star-naming": "node scripts/test-star-naming.mjs",
+    "test:reconstruction-progress": "node scripts/test-reconstruction-progress.mjs",
     "test:browser": "node scripts/browser-test.mjs",
     "test:advanced": "node scripts/browser-advanced-test.mjs",
     "test:design": "node scripts/browser-design-test.mjs",

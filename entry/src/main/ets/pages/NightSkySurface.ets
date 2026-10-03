@@ -8,6 +8,8 @@ export struct NightSkySurface {
   @Prop motion:boolean=true;
   @Prop active:boolean=true;
   @Prop phaseMode:string='origin';
+  @Prop nameKept:boolean=false;
+  @Prop nameLightY:number=.555;
   onSceneChange:(index:number)=>void=()=>{};
   private readonly skyCount:number=180;
   private skyX:Float32Array=new Float32Array(180);
@@ -32,6 +34,8 @@ export struct NightSkySurface {
   private orbImpactAt:number=-1;
   private orbImpactIndex:number=0;
   private orbImpactStrength:number=0;
+  private nameGather:number=0;
+  private nameLastStepAt:number=0;
   private memoryPhaseOffset:number=0;
   private clock:number=0;
   private elapsed:number=0;
@@ -144,6 +148,16 @@ export struct NightSkySurface {
     }
   }
   private formationAge():number{return this.wasForming?(this.motion?this.orbTime:3):0;}
+  private advanceNameFormation():void {
+    const now=Date.now(),target=this.nameKept?1:0;
+    const step=this.nameLastStepAt===0?0:Math.max(0,Math.min(.06,(now-this.nameLastStepAt)/1000));
+    this.nameLastStepAt=now;
+    if(!this.motion){this.nameGather=target;return;}
+    if(!this.active)return;
+    // Reversible gathering has its own clock; renaming never restarts the bouncing ring.
+    this.nameGather=target>this.nameGather?Math.min(target,this.nameGather+step/.95):
+      Math.max(target,this.nameGather-step/.48);
+  }
   private advanceOrbPhysics():void {
     const now=Date.now();
     if(this.orbLastStepAt===0){this.orbLastStepAt=now;return;}
@@ -188,6 +202,7 @@ export struct NightSkySurface {
     const waveEnergy=waveActive?(1-Math.exp(-rippleAge*18))*
       Math.exp(-rippleAge*2.8)*this.orbImpactStrength:0;
     const colors=['#B9D1EB','#90B1D3','#D2E4F5','#A1C7D1'];
+    const gathering=this.nameGather*this.nameGather*(3-2*this.nameGather);
     for(let band=0;band<4;band++){
       ctx.beginPath();ctx.fillStyle=colors[band];ctx.globalAlpha=[.27,.19,.33,.22][band];
       for(let i=band*1050;i<(band+1)*1050;i+=this.stride){
@@ -227,7 +242,20 @@ export struct NightSkySurface {
             y+=planeY/(distance+1)*push*.39;
           }
         }
-        const radius=(band===2?1.9:1.55)*depth*(1+shimmer*.88);
+        let gatheredSize=1;
+        if(gathering>0&&i%7===0&&this.scatterY[i]>.51){
+          // Two loose, asymmetric wisps lead inward below the impact plane.
+          // The fading endpoints keep each dust mote's wraparound invisible.
+          const flow=(this.unit(i*19+71)+(this.motion?this.elapsed*.085:0))%1;
+          const remaining=1-flow,side=this.unit(i*23+17)<.5?-1:1;
+          const reach=extent*(.09+this.unit(i*23+43)*.23);
+          const gatheredX=w*.5+side*reach*remaining;
+          const gatheredY=h*this.nameLightY+extent*(.018+this.unit(i*23+59)*.09)*remaining+
+            Math.sin(flow*Math.PI)*extent*.024;
+          x+=(gatheredX-x)*gathering;y+=(gatheredY-y)*gathering;
+          gatheredSize=1-gathering+gathering*Math.sin(flow*Math.PI)*.85;
+        }
+        const radius=(band===2?1.9:1.55)*depth*(1+shimmer*.88)*gatheredSize;
         if(shimmer>.30&&i%17===0&&this.glow!==null)
           ctx.drawImage(this.glow,x-8,y-8,16,16);
         ctx.moveTo(x+radius,y);ctx.arc(x,y,radius,0,Math.PI*2);
@@ -259,6 +287,29 @@ export struct NightSkySurface {
     ctx.globalAlpha=.48;ctx.strokeStyle='#F7FBFF';ctx.lineWidth=Math.max(1,radius*.028);
     ctx.beginPath();ctx.ellipse(cx,cy,horizontal,vertical,0,-2.45,-1.48);ctx.stroke();
     ctx.globalAlpha=1;
+  }
+  private drawNamedStar(ctx:CanvasRenderingContext2D,w:number,h:number):void {
+    if(this.nameGather<=0)return;
+    const reveal=this.nameGather*this.nameGather*(3-2*this.nameGather);
+    const x=w*.5,y=h*this.nameLightY,extent=Math.min(w,h);
+    const radius=Math.max(4,Math.min(7,extent*.010));
+    const haloRadius=radius*7;
+    const halo=ctx.createRadialGradient(x,y,0,x,y,haloRadius);
+    halo.addColorStop(0,'rgba(234,243,255,0.58)');
+    halo.addColorStop(.18,'rgba(189,218,255,0.20)');
+    halo.addColorStop(.55,'rgba(151,190,244,0.055)');
+    halo.addColorStop(1,'rgba(151,190,244,0)');
+    ctx.globalAlpha=reveal;ctx.fillStyle=halo;
+    ctx.fillRect(x-haloRadius,y-haloRadius,haloRadius*2,haloRadius*2);
+    // A steady filled star with a slow glint, without a ring, bounce or radial wave.
+    ctx.globalAlpha=reveal*(this.motion?.91+.09*Math.sin(this.elapsed*.8):1);
+    ctx.fillStyle='#F3F7FF';ctx.beginPath();
+    ctx.moveTo(x,y-radius*1.65);
+    ctx.quadraticCurveTo(x+radius*.18,y-radius*.18,x+radius,y);
+    ctx.quadraticCurveTo(x+radius*.18,y+radius*.18,x,y+radius*1.65);
+    ctx.quadraticCurveTo(x-radius*.18,y+radius*.18,x-radius,y);
+    ctx.quadraticCurveTo(x-radius*.18,y-radius*.18,x,y-radius*1.65);
+    ctx.closePath();ctx.fill();ctx.globalAlpha=1;
   }
   private drawMemory(ctx:CanvasRenderingContext2D,w:number,h:number,t:number):void {
     if(this.phaseMode==='forming'){this.drawFormationParticles(ctx,w,h);return;}
@@ -369,14 +420,20 @@ export struct NightSkySurface {
     else if(this.phaseMode!=='forming'&&this.wasForming){
       this.memoryPhaseOffset=(29-this.elapsed%220+220)%220;this.wasForming=false;
     }
-    if(this.phaseMode==='forming'&&this.active)this.advanceOrbPhysics();
+    if(this.phaseMode==='forming'){
+      if(this.active)this.advanceOrbPhysics();
+      this.advanceNameFormation();
+    }else{this.nameGather=0;this.nameLastStepAt=0;}
     const started=Date.now();
     ctx.clearRect(0,0,w,h);
     const t=this.motion?this.elapsed:0;
     this.ambient(ctx,w,h,t);
     this.drawSky(ctx,w,h,t);
     this.drawMemory(ctx,w,h,t);
-    if(this.phaseMode==='forming')this.drawFormationOrb(ctx,w,h);
+    if(this.phaseMode==='forming'){
+      this.drawFormationOrb(ctx,w,h);
+      this.drawNamedStar(ctx,w,h);
+    }
     ctx.globalAlpha=1;
     const spent=Date.now()-started;
     if(this.clock%120===0)console.info(`SELF_PARTICLES_FRAME mode=${this.phaseMode} phase=${Math.floor(t%220)} scene=${Math.floor((t%220)/44)} count=${Math.ceil(this.pointCount/this.stride)} ms=${spent}`);
