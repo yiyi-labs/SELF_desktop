@@ -23,6 +23,10 @@ class LiveEntryContractTest(unittest.TestCase):
             profile=dict(executionAdapter="native-fullframe",algorithmVersion=NATIVE_VERSION,entrySourceHashes=hashes)
             script,joint=pipeline_entry(profile,root)
             self.assertEqual(script,root/names[0]);self.assertEqual(joint,0)
+            script,joint=pipeline_entry({**profile,"jointSteps":300},root)
+            self.assertEqual(joint,300)
+            for bad in (True,-1,601,"300"):
+                with self.assertRaisesRegex(ValueError,"joint"):pipeline_entry({**profile,"jointSteps":bad},root)
             (root/names[1]).write_bytes(b"changed")
             with self.assertRaisesRegex(ValueError,"hash_changed"):pipeline_entry(profile,root)
             with self.assertRaisesRegex(ValueError,"unknown_test"):pipeline_entry(dict(executionAdapter="../outside"),root)

@@ -177,6 +177,20 @@ class RuntimeTest(unittest.TestCase):
             training_profile_options({'sharedRoomSurface':True})
         self.assertEqual(training_profile_options({'denseSurfaces':True,'hairCompositeSteps':240})['hairCompositeSteps'],240)
 
+    def test_joint_budget_and_raised_stage_budgets(self):
+        # The unified-subject route runs an explicit joint stage; its budget is
+        # an integer contract like the other stages, defaulting to zero.
+        self.assertEqual(training_profile_options({})['jointSteps'],0)
+        self.assertEqual(training_profile_options({'jointSteps':300})['jointSteps'],300)
+        for value in (-1,601,True,2.5,'300'):
+            with self.subTest(value=value),self.assertRaisesRegex(ValueError,'joint_budget'):
+                training_profile_options({'jointSteps':value})
+        self.assertEqual(training_profile_options({'localSteps':1200,'roomSteps':600})['localSteps'],1200)
+        with self.assertRaisesRegex(ValueError,'training_budget'):
+            training_profile_options({'localSteps':1601})
+        with self.assertRaisesRegex(ValueError,'training_budget'):
+            training_profile_options({'roomSteps':901})
+
     def test_observed_face_option_is_explicit_and_native_adapter_only(self):
         self.assertFalse(training_profile_options({})['observedFaceDomain'])
         for value in (1,0,'true','false',None):

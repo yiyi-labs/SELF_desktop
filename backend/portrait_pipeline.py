@@ -81,11 +81,14 @@ def make_frame(data, name, *, crop=True, half=False, device="cuda"):
         labels = {k:v[y0:y1, x0:x1] for k,v in labels.items()}
         K[0, 2] -= x0
         K[1, 2] -= y0
+    row=data["local"][name]
     return {"rgb": tensor(rgb, device), "masks": {k:tensor(v, device).bool() for k,v in labels.items()},
-            "K": tensor(K, device), "F": tensor(data["local"][name]["F"], device),
+            "K": tensor(K, device), "F": tensor(row["F"], device),
             "C": tensor(data["worlds"][name], device) if name in data["worlds"] else None,
-            "mesh": tensor(data["local"][name]["mesh"], device), "rectangle": rectangle,
-            "name": name, "nativeScale": 1, "fullSize":(w,h),
+            "mesh": tensor(row["mesh"], device), "rectangle": rectangle,
+            "name": name, "headProxy": row.get("headProxy", name),
+            "faceValid": row.get("role", "train") != "scene",
+            "nativeScale": 1, "fullSize":(w,h),
             "fullK":tensor(data["K"],device), "requestedHalfIgnored":bool(half)}
 
 
@@ -213,7 +216,9 @@ class SceneAssembly(torch.nn.Module):
     def portrait_state(self,frame):
         state=self.portrait.local_state(frame['mesh'])
         if hasattr(self,'hair_motion'):
-            state=self.hair_motion.deform(frame['name'],state,self.portrait.surface_count)
+            # A scene-valid frame borrows its proxy's per-frame head transport;
+            # its own name never had a fitted local pose.
+            state=self.hair_motion.deform(frame.get('headProxy',frame['name']),state,self.portrait.surface_count)
         return state
 
 
@@ -371,6 +376,19 @@ def configure_stage(scene, stage, step, soft):
             p.requires_grad_(not scene.dense_surface or step>=80 or n in ("sh","opacities"))
         if hasattr(scene,'neck_sh_editable') and scene.neck_sh_editable.any():
             scene.portrait.sh.requires_grad_(True)
+    elif stage == "T4":
+        # Unified joint refinement: the complete subject (skin, hair, neck) and
+        # the scene optimize together under one loss. Portrait appearance and
+        # geometry alternate as in the local stage; environment parameters stay
+        # continuously trainable so seams, occlusion and room error can be
+        # corrected by whichever side causes them.
+        geometry = step >= 60 and step % 4 == 3
+        for name,p in scene.portrait.named_parameters():
+            p.requires_grad_((name in (("embedding","normal_offset","surface_residual") if soft else ("embedding","normal_offset"))) if geometry else name in ("sh","opacity_logits","log_scales","quats"))
+        if getattr(scene,"dense_hair",False) and geometry:
+            scene.portrait.hair_delta.requires_grad_(True)
+        for p in scene.environment.parameters():
+            p.requires_grad_(True)
     else:
         # Alternate appearance and shared geometry. No per-frame scale/K and
         # no free simultaneous pose/shape/appearance compensation.
@@ -379,9 +397,60 @@ def configure_stage(scene, stage, step, soft):
             p.requires_grad_((name in (("embedding","normal_offset","surface_residual") if soft else ("embedding","normal_offset"))) if geometry else name in ("sh","opacity_logits","log_scales","quats"))
         if getattr(scene,"dense_hair",False) and geometry:
             scene.portrait.hair_delta.requires_grad_(True)
-        if stage == "T4" and step % 4 == 0:
-            for p in scene.environment.parameters():
-                p.requires_grad_(True)
+
+
+def select_skin_parents(scene, info, limit=256):
+    """Highest-attention supported skin rows eligible for the split transaction."""
+    ids=info.get("gaussian_ids")
+    radius=info.get("radii")
+    means2d=info.get("means2d")
+    device=scene.portrait.sh.device
+    if ids is None or means2d is None or means2d.grad is None:
+        return torch.empty(0,dtype=torch.long,device=device)
+    portrait_end=len(scene.portrait.role)
+    valid=ids<portrait_end
+    local=ids[valid]
+    if not len(local):
+        return local
+    radius=radius[valid].reshape(len(local),-1).amax(-1)
+    grad=means2d.grad[valid].norm(dim=-1)
+    eligible=((scene.portrait.role[local]==0)&(radius>3)&(grad>0)
+              &(scene.portrait.generation[local]<2))
+    selected=local[eligible]
+    scores=grad[eligible]*radius[eligible]
+    if not len(selected):
+        return selected
+    order=torch.argsort(scores,descending=True)[:limit]
+    return selected[order].unique()
+
+
+def child_observation_validator(scene, data, names, min_support=2):
+    """Per-child evidence from actual face/body-skin observations."""
+    import numpy as np
+    faces=scene.portrait.faces.cpu().numpy()
+    def validate(ids, bary):
+        mesh=(scene.portrait.reference_mesh+scene.portrait.surface_residual.detach()).cpu().numpy()
+        ids=ids.detach().cpu().numpy() if torch.is_tensor(ids) else np.asarray(ids)
+        bary=bary.detach().cpu().numpy() if torch.is_tensor(bary) else np.asarray(bary)
+        points=(mesh[faces[ids]]*bary[...,None]).sum(1)
+        votes=np.zeros(len(ids),np.int64)
+        for name in names:
+            row=data["local"][name]
+            F=row["F"]
+            camera=points@F[:3,:3].T+F[:3,3]
+            uv=camera@data["K"].T
+            z=np.maximum(uv[:,2:],.05)
+            u=np.rint(uv[:,0]/z[:,0]).astype(int)
+            v=np.rint(uv[:,1]/z[:,1]).astype(int)
+            h,w=data["rgb"][name].shape[:2]
+            inside=(camera[:,2]>.05)&(u>=0)&(u<w)&(v>=0)&(v<h)
+            labels=data["labels"][name]
+            skin=labels["face_core"]|labels["face_boundary"]
+            if "observed_body_skin" in labels:
+                skin=skin|labels["observed_body_skin"]
+            votes+=(inside&skin[v.clip(0,h-1),u.clip(0,w-1)]).astype(np.int64)
+        return torch.as_tensor(votes>=min_support,dtype=torch.bool,device=scene.portrait.sh.device)
+    return validate
 
 
 def train_stage(scene, data, out, stage, steps, soft, antialiased=False):
@@ -397,7 +466,12 @@ def train_stage(scene, data, out, stage, steps, soft, antialiased=False):
     local_names = [n for n,r in data["local"].items() if r["role"]=="train"]
     from local_sampling import scheduled_local_name,schedule_receipt
     sampling=schedule_receipt(local_names,steps) if stage!='T3' else None
-    world_names = data["train"]
+    world_names = list(data["train"])
+    if stage != "local":
+        # Scene-valid frames (face PnP failed) still supervise the room and
+        # protect person alpha; body/cloth supervision stays on fitted views.
+        world_names += [n for n,r in data["local"].items()
+                        if r.get("role")=="scene" and n in data["worlds"]]
     curve=[]
     gradient_audit=[]
     density_events=[]
@@ -487,7 +561,17 @@ def train_stage(scene, data, out, stage, steps, soft, antialiased=False):
                 world_loss+=4*(person_before.to(error.device)-world_render['q'][...,1:4].sum(-1)[mask]-.005).clamp_min(0).square().mean()
             if stage=="T4":
                 face=world_frame["masks"]["face_core"]|world_frame["masks"]["face_boundary"]
-                world_loss=world_loss+.5*masked_mean(error,face)
+                hair=world_frame["masks"]["hair_visible"]
+                world_loss=world_loss+.5*masked_mean(error,face)+.3*masked_mean(error,hair)
+                if "observed_body_skin" in world_frame["masks"]:
+                    neck_skin=world_frame["masks"]["observed_body_skin"]&~face&~hair
+                    if bool(neck_skin.any()):
+                        world_loss=world_loss+.3*masked_mean(error,neck_skin)
+                if getattr(scene,'opaque_person',False):
+                    from live_opaque_person import opaque_person_loss
+                    person_loss,person_values=opaque_person_loss(world_render,world_frame,scope='head')
+                    world_loss=world_loss+person_loss
+                    local_values['opaquePersonJoint']=person_values
             image_loss=image_loss+world_loss
         regs=scene.portrait.soft_regularization(frame["mesh"])
         regularizer=.0005*scene.portrait.sh[:,1:].square().mean()
@@ -522,9 +606,10 @@ def train_stage(scene, data, out, stage, steps, soft, antialiased=False):
                 "cosine":float(functional.cosine_similarity(x.flatten(),y.flatten(),dim=0)) if x is not None and y is not None else None} for n,x,y in zip(labels,a,b)}})
         loss.backward()
         body_grad={}
-        if stage!="local" and scene.dense_surface:
-            # Separate Adam clocks. Zeroing a gradient alone would still move
-            # unsupported body rows via stale optimizer momentum.
+        if stage=="T3" and scene.dense_surface:
+            # Separate Adam clocks during the environment fit only. Zeroing a
+            # gradient alone would still move unsupported body rows via stale
+            # optimizer momentum. The T4 joint stage runs one shared clock.
             body_rows=scene.environment_parts==4
             for key,value in scene.environment.items():
                 if value.grad is not None:
@@ -563,9 +648,26 @@ def train_stage(scene, data, out, stage, steps, soft, antialiased=False):
                         max=scene.environment_initial_scales+math.log(1.8))
         if stage=="T3" and getattr(scene,"surface_refine",False) and step==99 and steps>=200:
             from surface_density import select_surface_parents,split_surface_parameters
+            selected=select_surface_parents(scene,world_render["info"],parts=(0,))
+            if len(selected):
+                density_events.append({"step":step+1,"scope":"environment",**split_surface_parameters(scene,envopt,selected)})
+        if (scene.dense_surface and stage=="T3" and step>=100 and (step+1)%150==0
+                and len(scene.environment_parts)<140000):
+            from surface_density import select_surface_parents,split_surface_parameters
             selected=select_surface_parents(scene,world_render["info"])
             if len(selected):
-                density_events.append({"step":step+1,**split_surface_parameters(scene,envopt,selected)})
+                event=split_surface_parameters(scene,(envopt,bodyopt),selected)
+                density_events.append({"step":step+1,"scope":"environment",**event})
+        if stage=="T4" and step==120 and steps>=200:
+            parents=select_skin_parents(scene,world_render["info"])
+            if len(parents):
+                validator=child_observation_validator(scene,data,local_names[:3])
+                try:
+                    event=scene.portrait.replace_skin_parents(parents,optim,validator)
+                    density_events.append({"step":step+1,"scope":"portraitSkin",**event})
+                except ValueError as error:
+                    density_events.append({"step":step+1,"scope":"portraitSkin",
+                        "skipped":str(error)})
         walk=scene.portrait.walk(optim) if stage!="T3" and soft and step>=80 and step%4==3 else {}
         if step%100==0 or step==steps-1:
             row={"step":step+1,"localFrame":name,"localOnly":name not in data["worlds"],"local":local_values,
@@ -578,10 +680,15 @@ def train_stage(scene, data, out, stage, steps, soft, antialiased=False):
             checkpoint('latest',step+1)
         if step+1==max(1,steps//2):
             checkpoint("mid",step+1)
+    if scene.dense_surface and stage in ("T3","T4") and density_events is not None:
+        from surface_density import prune_environment
+        density_events.append({"step":steps,"scope":"environmentPrune",
+            **prune_environment(scene,(envopt,bodyopt))})
     torch.cuda.synchronize()
     result={"stage":stage,"steps":steps,"soft":soft,"seconds":time.perf_counter()-start,
             "curve":curve,"gradientAttribution":gradient_audit,"densityEvents":density_events,
-            "portraitParameterChange":{n:float((p.detach()-initial[n]).abs().mean()) for n,p in scene.portrait.named_parameters()},
+            "portraitParameterChange":{n:float((p.detach()-initial[n]).abs().mean())
+                for n,p in scene.portrait.named_parameters() if p.shape==initial[n].shape},
             "localTrainCount":len(local_names),"worldTrainCount":len(world_names),"allGroupsEveryWorldForward":True,
             "localPhaseSchedule":sampling}
     if bodyopt:
@@ -972,6 +1079,7 @@ def run(args):
     if args.joint_steps:
         result,_=train_stage(scene,data,args.output,"T4",args.joint_steps,args.soft,args.antialiased)
         trainings.append(result)
+        audit_stages(scene,data,args.output/"after-T4",antialiased=args.antialiased)
     if getattr(args,'hair_steps',0):
         from live_hair_composite import restore_hair_in_scene
         trainings.append(restore_hair_in_scene(scene,data,args.output,args.hair_steps))

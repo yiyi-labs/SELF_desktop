@@ -14,6 +14,7 @@ NATIVE_VERSION="portrait-native-fullframe-20261002-research"
 def training_profile_options(profile):
     local_steps=int(profile.get('localSteps',900))
     room_steps=int(profile.get('roomSteps',300))
+    joint_steps=profile.get('jointSteps',0)
     hair_steps=profile.get('hairCompositeSteps',0)
     skin_steps=profile.get('skinCompositingSteps',0)
     observed_face=profile.get('observedFaceDomain',False)
@@ -21,8 +22,10 @@ def training_profile_options(profile):
         raise ValueError('test_observed_face_domain_requires_boolean')
     if observed_face and profile.get('executionAdapter')!='native-fullframe':
         raise ValueError('test_observed_face_domain_requires_native_adapter')
-    if not 1<=local_steps<=900 or not 1<=room_steps<=600:
+    if not 1<=local_steps<=1600 or not 1<=room_steps<=900:
         raise ValueError('test_live_training_budget_outside_contract')
+    if isinstance(joint_steps,bool) or not isinstance(joint_steps,int) or not 0<=joint_steps<=600:
+        raise ValueError('test_joint_budget_outside_contract')
     if isinstance(hair_steps,bool) or not isinstance(hair_steps,int) or not 0<=hair_steps<=240:
         raise ValueError('test_hair_composite_budget_outside_contract')
     if isinstance(skin_steps,bool) or not isinstance(skin_steps,int) or not 0<=skin_steps<=240:
@@ -53,7 +56,8 @@ def training_profile_options(profile):
         raise ValueError('test_surface_footprint_requires_observed_face')
     if additions['roomWindowRecovery'] and not (dense and shared):
         raise ValueError('test_room_window_recovery_requires_shared_dense_surfaces')
-    return {'localSteps':local_steps,'roomSteps':room_steps,'hairCompositeSteps':hair_steps,
+    return {'localSteps':local_steps,'roomSteps':room_steps,'jointSteps':joint_steps,
+            'hairCompositeSteps':hair_steps,
             'skinCompositingSteps':skin_steps,
             'denseSurfaces':dense,'sharedRoomSurface':shared,'surfaceRefine':profile.get('surfaceRefine') is True,
             'observedFaceDomain':observed_face,**additions}
@@ -70,7 +74,12 @@ def pipeline_entry(profile,backend):
         from code_identity import source_identity
         if source_identity(backend)["implementationSha256"]!=profile["implementationSha256"]:
             raise ValueError("test_source_hash_changed:dependency_closure")
-        return backend/"live_fullframe.py",0
+        # The joint stage is part of the unified subject route: its budget is
+        # an explicit profile choice, not a hidden default.
+        joint=profile.get("jointSteps",0)
+        if isinstance(joint,bool) or not isinstance(joint,int) or not 0<=joint<=600:
+            raise ValueError("test_joint_budget_outside_contract")
+        return backend/"live_fullframe.py",joint
     required=("live_fullframe.py","portrait_pipeline.py",
               "portrait_model.py","appearance_direction_contract.py")
     hashes=profile.get("entrySourceHashes",{})
@@ -79,7 +88,10 @@ def pipeline_entry(profile,backend):
     for name in required:
         if hashlib.sha256((backend/name).read_bytes()).hexdigest()!=hashes[name]:
             raise ValueError("test_source_hash_changed:"+name)
-    return backend/required[0],0
+    joint=profile.get("jointSteps",0)
+    if isinstance(joint,bool) or not isinstance(joint,int) or not 0<=joint<=600:
+        raise ValueError("test_joint_budget_outside_contract")
+    return backend/required[0],joint
 
 
 def engine_profile(root,backend=None):
@@ -417,9 +429,14 @@ def reconstruct_test(path,job,profile,update,extract_frames,prepare_faces,comman
                 update(path,'running',92+round(2*step/skin_steps),'正在汇聚这颗星辰',algorithm=PORTRAIT_TEST,
                     stage={'name':stage,'completedSteps':step,'totalSteps':skin_steps})
             return
+        if stage=='T4':
+            if joint_steps and isinstance(step,int) and not isinstance(step,bool) and 0<=step<=joint_steps:
+                update(path,"running",86+round(4*step/joint_steps),'正在汇聚这颗星辰',algorithm=PORTRAIT_TEST,
+                    stage={'name':stage,'completedSteps':step,'totalSteps':joint_steps})
+            return
         if stage not in ("local","T3") or not isinstance(step,int):
             return
-        percent=66+round(12*step/local_steps) if stage=="local" else 78+round(12*step/room_steps)
+        percent=66+round(12*step/local_steps) if stage=="local" else 78+round(8*step/room_steps)
         update(path,"running",min(90,percent),"正在汇聚这颗星辰",algorithm=PORTRAIT_TEST,
                stage={"name":stage,"completedSteps":step,"totalSteps":local_steps if stage=="local" else room_steps})
     command(argv,7200,cwd=backend,diagnostic_file=path/"portrait-test-training.log",progress=progress)

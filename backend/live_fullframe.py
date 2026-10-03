@@ -18,8 +18,6 @@ NativeScene=pipeline.SceneAssembly
 
 
 def run(args):
-    if args.joint_steps != 0:
-        raise ValueError("rejected_T2_cannot_enable_new_face_joint_updates")
     pipeline.run(args)
 
 

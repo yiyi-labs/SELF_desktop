@@ -98,6 +98,8 @@ def fit_local(rgb,labels,marks,K,steps=260,checkpoint_path=None,source_hash=None
     names=list(records)
     if len(names)<8:
         raise ValueError("portrait_test_local_views_insufficient")
+    # Landmark-PnP failure removes FACE validity only. The frame keeps its
+    # scene/body validity downstream via its nearest fitted head proxy.
     development=set(names[3::5] if development_names is None else development_names)&set(names)
     train=[n for n in names if n not in development]
     # Shared shape uses training observations only. All local poses are
@@ -203,7 +205,11 @@ def initial_appearance(data,count=20000):
         np.minimum.at(depth,(y[valid]//2,x[valid]//2),camera[valid,2])
         valid&=camera[:,2]<=depth[y//2,x//2]+.0035
         labels=data["labels"][name]
-        colour_mask=labels.get('training_face',labels["face_core"]|labels["face_boundary"])
+        # Face skin and observed body skin are both real skin on the FLAME
+        # substrate (jaw/neck). Cloth and hair stay excluded so the unified
+        # portrait never borrows clothing colour as skin geometry support.
+        face_labels=labels.get('training_face',labels["face_core"]|labels["face_boundary"])
+        colour_mask=face_labels|labels.get("observed_body_skin",face_labels&False)
         valid&=colour_mask[y,x]&~labels["hair_visible"][y,x]
         colors[valid]+=data["rgb"][name][y[valid],x[valid]]
         support[valid]+=1
@@ -272,6 +278,21 @@ def prepare_capture(source,out,frames,faces,*,base_prepared=None):
     fit_audit["stateCheckpoint"]={"file":"local-fit-state.pt",
         "sha256":sha256_file(out/"local-fit-state.pt"),"optimizerRetained":True,
         "sourceHash":source_hash,"stepsCompleted":260}
+    # Observation validity is layered, never face-gated: frames whose landmark
+    # PnP failed keep scene/body validity with a nearest fitted head proxy, so
+    # environment and garment supervision can still see through/past them.
+    fitted=sorted(local)
+    scene_frames={}
+    for name in fit_audit.get("rejected",{}):
+        if name not in rgb or name not in labels:
+            continue
+        number=lambda n:int(n.rsplit("_",1)[-1].split(".")[0])
+        proxy=min(fitted,key=lambda n:abs(number(n)-number(name)))
+        local[name]={"mesh":local[proxy]["mesh"],"F":local[proxy]["F"],
+                     "marks":marks[name],"role":"scene","headProxy":proxy}
+        scene_frames[name]={"headProxy":proxy,
+            "pnpRejection":fit_audit["rejected"][name]}
+    fit_audit["sceneValidFrames"]=scene_frames
     rgb={n:rgb[n] for n in local}
     labels={n:labels[n] for n in local}
     images={im.name:im for im in static.images.values() if im.has_pose}

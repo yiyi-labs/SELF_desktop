@@ -372,6 +372,11 @@ class LocalPortraitModel(torch.nn.Module):
         self.initial_normal_offset = self.initial_normal_offset[surface_map].clone()
         self.initial_embedding = self.embedding.detach().clone()
         self.skin_band = self.skin_band[surface_map].clone()
+        # A registered neck-appearance mask must follow the grown point set;
+        # children inherit their parent's editability.
+        neck_edit = getattr(self, "neck_sh_editable", None)
+        if neck_edit is not None and neck_edit.shape == (n,):
+            self.neck_sh_editable = neck_edit[mapping].clone()
         for key in ("role", "source_index", "origin_index", "confidence", "generation", "metric_per_pixel", "initial_log_scales"):
             setattr(self, key, getattr(self, key)[mapping].clone())
         self.generation[start:stop] += 1
