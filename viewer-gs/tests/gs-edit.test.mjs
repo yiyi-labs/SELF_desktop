@@ -24,6 +24,17 @@ test('lasso selects visible face splats, not occluded points at the same pixels'
   assert.ok(result.mask[Math.floor(faceCount/2)]>result.mask[0]);
 });
 
+test('a combined portrait and room PLY keeps every room splat outside the editable range',()=>{
+  const {faceCount,data}=scene();
+  const selection=selectVisibleSplats({data,editableCount:faceCount,
+    polygon:[{x:140,y:140},{x:260,y:140},{x:260,y:260},{x:140,y:260},{x:140,y:140}],
+    target:[0,0,0],cameraPosition:[0,0,1],project:(x,y)=>({x:200+x*700,y:200-y*700}),
+    width:400,height:400});
+  assert.ok(selection.selected>28);
+  assert.equal(selection.mask.length,data.numSplats);
+  assert.ok(selection.mask.slice(faceCount).every(value=>value===0));
+});
+
 test('digital edit changes only selected Gaussian DC; reset restores original, including unmodified SH',()=>{
   const {data,props}=scene();
   const original=makeOriginalColors(data),mask=new Uint8Array(data.numSplats);

@@ -1,0 +1,7 @@
+{
+  "generator": "Built-in image_gen",
+  "asset": "memory-galaxy.png",
+  "transparent_background": true,
+  "prompt": "Use case: stylized-concept. Asset type: high quality transparent astronomical galaxy sprite for a quiet 3D personal memory universe. Generate ONE isolated photorealistic spiral galaxy, like a detailed deep-space telescope photograph, on a genuinely transparent background. Square 1024x1024 composition. Galaxy is centered at 50%,50%, fully contained in central 84% of canvas, comfortably feathering to alpha zero before all edges. Slightly oblique view, broad ellipse with approximately 0.62 vertical to horizontal axis ratio, major axis tilted only 10 degrees counterclockwise. Organic asymmetric two broad winding spiral arms, very fine resolved starlight, richly textured blue and violet dust and luminous pink HII nebula knots, subtle dark interstellar dust lanes, softly glowing warm champagne central bulge. Vivid yet physically plausible astrophotography colors. IMPORTANT centre must be a soft low-contrast warm glow, not a blown-out white point or enormous flare, as a small real memory model will be composited over its centre. Outer arms have discernible volume and airy diffusion. No foreground stars outside the galaxy, no planets, no text, no frame, no grids, no lens flares, no hard outline, no symbols, no cartoon, no black rectangle. Preserve genuine transparent alpha and fine semi-transparent gaseous edges.",
+  "use": "Decorative memory-galaxy envelope; not a reconstruction or a scientific observation."
+}

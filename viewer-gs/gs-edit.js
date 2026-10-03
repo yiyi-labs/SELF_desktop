@@ -61,9 +61,11 @@ function edgeDistance(x, y, points) {
   return nearest;
 }
 
-export function selectVisibleSplats({data, polygon, target, cameraPosition, project, width, height}) {
+export function selectVisibleSplats({data, polygon, target, cameraPosition, project, width, height, editableCount=data.numSplats}) {
   if (polygon.length < 5 || polygon.length > 512 || !polygon.every(p => Number.isFinite(p.x) && Number.isFinite(p.y))) throw Error('圈选轨迹不完整');
   const count = data.numSplats;
+  if(!Number.isInteger(editableCount)||editableCount<1||editableCount>count)
+    throw Error('面容与场景范围不匹配');
   const x = data.getProp('x'), y = data.getProp('y'), z = data.getProp('z'), opacity = data.getProp('opacity');
   if (!x || !y || !z || !opacity || count > 2000000) throw Error('模型缺少可编辑的立体点');
   const direction = target.map((v, i) => v - cameraPosition[i]);
@@ -73,7 +75,7 @@ export function selectVisibleSplats({data, polygon, target, cameraPosition, proj
   const radius = distance * .32;
   const candidates = [];
   const bins = new Map();
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < editableCount; i++) {
     const dx = x[i] - target[0], dy = y[i] - target[1], dz = z[i] - target[2];
     if (dx * dx + dy * dy + dz * dz > radius * radius) continue;
     const a = data.activated ? opacity[i] : 1 / (1 + Math.exp(-opacity[i]));
@@ -101,7 +103,7 @@ export function selectVisibleSplats({data, polygon, target, cameraPosition, proj
     if (weight > 0) { mask[p.i] = weight; selected++; }
   }
   if (selected < 28) throw Error('这里的立体细节较少，稍稍圈大一点再试');
-  if (selected > count * .6) throw Error('范围太宽了，缩小一点再试');
+  if (selected > editableCount * .6) throw Error('范围太宽了，缩小一点再试');
   return {mask, selected};
 }
 

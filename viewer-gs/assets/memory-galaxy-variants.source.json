@@ -1,0 +1,15 @@
+{
+  "generator": "Built-in image_gen",
+  "transparent_background": true,
+  "assets": [
+    {
+      "file": "memory-galaxy-blue.png",
+      "prompt": "Asset type: one transparent photorealistic astronomical galaxy sprite for a quiet 3D personal memory universe. Square canvas 1024x1024, single galaxy centred at 50%,50%, entirely contained in the central 84% of the canvas. Truly transparent alpha background with fine semitransparent gaseous edges fading fully out before every canvas edge. Telescope photograph realism: resolved granular stars, irregular interstellar dust, airy diffuse volume. Slightly oblique broad elliptical view with vertical-to-horizontal ratio about .65. Soft subdued central bulge, no blown-out white core, since a small memory model overlays the centre. No foreground stars outside the galaxy, no planets, no words, no frame, no grid, no hard outline, no lens flares, no symbols, no black rectangle. Primary request: a vivid BLUE galaxy, luminous sapphire and ice-blue spiral arms with cyan stellar nurseries and silver-blue dust. Four loose uneven branching arms, photographic irregularity, slate blue dark dust lanes. Delicate pearl centre. Main axis roughly horizontal. Avoid magenta dominance, avoid green. This sprite must visibly read as blue, distinctly different from a warm violet galaxy."
+    },
+    {
+      "file": "memory-galaxy-violet.png",
+      "prompt": "Asset type: one transparent photorealistic astronomical galaxy sprite for a quiet 3D personal memory universe. Square canvas 1024x1024, single galaxy centred at 50%,50%, entirely contained in the central 84% of the canvas. Truly transparent alpha background with fine semitransparent gaseous edges fading fully out before every canvas edge. Telescope photograph realism: resolved granular stars, irregular interstellar dust, airy diffuse volume. Slightly oblique broad elliptical view with vertical-to-horizontal ratio about .65. Soft subdued central bulge, no blown-out white core, since a small memory model overlays the centre. No foreground stars outside the galaxy, no planets, no words, no frame, no grid, no hard outline, no lens flares, no symbols, no black rectangle. Primary request: a vivid VIOLET galaxy, luminous amethyst and lavender sweeping asymmetric spiral arms, rose nebula knots and deep indigo dark dust lanes. Two broad ragged arms, a subtle displaced inner bar, small warm champagne centre. Main axis tilted 15 degrees. The overall silhouette and arm topology should feel naturally different from a blue four-arm galaxy. Avoid green. Rich yet plausible long-exposure astronomical colours."
+    }
+  ],
+  "use": "Decorative galaxy envelopes, not reconstructed scene content."
+}
