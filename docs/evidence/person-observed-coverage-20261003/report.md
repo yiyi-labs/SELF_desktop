@@ -190,3 +190,15 @@ python -B reconstruction_live_fullframe.py \
 自参考修复已接入现有 `roomWindowRecovery` 阶段，不增加用户开关或另设引擎。非 resume 任务在完整参考恢复后调用；已有凭证幂等，未声明合格表面保留旧资产，声明过的证明丢失/改动则拒绝不可信交接。实际调用记录 `authorizedPolicy`、`invokedByLivePolicy=true`、`automaticDefault=true`；接收审计同时核对该收据，不只检查请求开关。
 
 自动CPU重放 `live-person-coverage-20261003-room-self-depth-live-replay/result.json` SHA `27724c2da9efba14313fa06d9fa794eb20006afd421849f373c40432ca90c872`。room/body/hair全部NPZ字段和资产SHA与本轮GPU候选完全一致。34项最终入口/恢复/显式授权合同通过。本轮不再扩展新实验，准备把唯一工作器加载哈希与配置匹配后供用户实测。
+
+### 最终实时激活与收尾（2026-10-03 14:18 +08:00）
+
+代码提交 `56145374702550dbc25e00290ed984cffe504513` 已加载到唯一实时工作器。52文件依赖闭包实际哈希 `fa53df8abce1d19d03417ac0e8c2b189f187a6713a2ff508c5b0e0195ca9daef` 与加载值、当前源码值、配置值三者一致。工作器本次启动先完成 gsplat CUDA 扩展编译，14:17:26 的新心跳报告 `ready=true`、`sourceIdentityVerified=true`，不是复用旧服务心跳。PyTorch 2.8.0+cu128、CUDA 12.8、gsplat 1.5.3，实际可见显存8123 MiB。
+
+HTTP `/health` 为 ready，鉴权后的 `/v1/reconstruction/health` 同时报告 status=ready、engine=ready。平板已连接，8787的USB反向转发存在。前述签名HAP已经覆盖安装保留数据；本轮未发送研究模型替换用户作品。
+
+实际配置为900 local / 400 room / 180 hair，denseSurfaces、sharedRoomSurface、observedFaceDomain、opaquePerson、roomWindowRecovery开启；包含两参考恢复及已验证自参考修正。不存在preparedCache，新视频仍走真实准备和完整训练。surfaceRefine、opaqueBody、surfaceFootprint的失败候选保持禁用。算法版本字符串沿用协议标识，最新身份由完整Git提交和实现哈希确定，没有另建旧算法服务。
+
+这是最新已验证改进的完整接入与用户测试就绪，不是整体画质发布验收：`userTestingAuthorized=true`、`releaseApproved=false`。尚未在此次激活后用新的平板视频完成端到端重建；新HAP安装成功也不替代设备画质/连续交互验收。背景缺口、头发细节、颈部接缝和部分面部模糊仍未彻底解决，保留报告中的全部失败与轻微退化。旧作品不会因算法更新自动改变，用户需提交新的建模任务。
+
+本轮到此停止，不继续参数搜索。私有初始化/训练资产与运行记录留在本机，Git不等于这些私有资产的独立备份。原有无关未提交文件仍保留，本轮提交没有混入或清空它们。
