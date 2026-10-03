@@ -1,0 +1,24 @@
+{
+  "pid": 668,
+  "command": [
+    "/opt/self-reconstruction/venv/bin/python",
+    "-u",
+    "-B",
+    "/mnt/d/STUDY/College/mine/olay/backend/reconstruction_live_fullframe.py",
+    "/mnt/d/STUDY/College/mine/olay/backend/.sources/integrated-components-v2-20260928-e",
+    "/mnt/d/STUDY/College/mine/olay/backend/.sources/live-complete-repair-20261003-hair-composite",
+    "--soft",
+    "--local-steps",
+    "0",
+    "--room-steps",
+    "0",
+    "--hair-steps",
+    "180",
+    "--dense-manifest",
+    "/mnt/d/STUDY/College/mine/olay/backend/.sources/live-complete-repair-20261003-shared-room-initialization-complete/result.json",
+    "--resume-state",
+    "/mnt/d/STUDY/College/mine/olay/backend/.sources/live-complete-repair-20261003-shared-room-trained/trained-state.pt"
+  ],
+  "started": 1790960379.3467205,
+  "log": "/mnt/d/STUDY/College/mine/olay/backend/.sources/live-complete-repair-20261003-hair-composite.log"
+}

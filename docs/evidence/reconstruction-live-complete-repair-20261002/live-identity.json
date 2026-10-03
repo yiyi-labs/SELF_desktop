@@ -1,0 +1,61 @@
+{
+  "auditDate": "2026-10-02",
+  "scope": "Read existing jobs and state; no training, deployment, user interaction or asset transfer",
+  "latestCompletedJob": {
+    "jobId": "f44e259d245820dd916ed3ad06d7ad88",
+    "state": "gaussian_ready",
+    "createdAt": 1790951753,
+    "sourceSha256": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+    "sourceBytes": 65453964,
+    "assetSha256": "bb91565493758294ab8d8647ed0c68c6221d194a56a4acd33f80cb37ebefd4f5",
+    "engineVersion": "portrait-native-fullframe-20261002-research",
+    "implementationSha256": "f12f8677f485404aa313904e8040241066a5442f47ab0e4ad98fea1d997e5798",
+    "gitCommit": "d1091d3d0bf34c746f5498f61f6e2262f0142803",
+    "observationsCacheReused": true,
+    "resumeState": null,
+    "resumeKind": "new_optimizer",
+    "surfaceRefine": false,
+    "pointCount": 34083,
+    "initialPointGroups": {
+      "room": 22020,
+      "body": 348,
+      "surface": 8798,
+      "hair": 2917
+    },
+    "stages": [
+      {"name": "local", "steps": 900, "seconds": 74.64751731399883, "densityEvents": []},
+      {"name": "T3", "steps": 300, "seconds": 45.448192571995605, "densityEvents": []}
+    ],
+    "jointSteps": 0,
+    "seconds": 185.62262999299855,
+    "pipelineSeconds": 189.86,
+    "allocatedPeakMiB": 730.47802734375,
+    "reservedPeakMiB": 898.0,
+    "fidelityGatePassed": false,
+    "releaseApproved": false,
+    "userPreviewAuthorized": true,
+    "roomObservedLowAlphaRange": [0.7817963361740112, 0.9137280583381653],
+    "roomObservedRgbL1Range": [0.26088669896125793, 0.44386357069015503],
+    "clothObservedLowAlphaRange": [0.09150318056344986, 0.2507324516773224]
+  },
+  "completeBaseline": {
+    "sourceSha256": "7ac189eb49e05c83220addf16c1fabe325ef35e32d8ffd7e4c5af4824777e4cf",
+    "assetSha256": "a343ccf05292ce1e174c7fd63795122347a8d03bd0202a19395a9a414b691f41",
+    "checkpointSha256": "c3425ba01892940353909dbf3f95d5058ef507e023357ef864d4cb1460cac344",
+    "pointCount": 50095,
+    "pointGroups": {"room": 26054, "body": 12833, "face": 8286, "hair": 2917, "classifiedAccessory": 5},
+    "loadedByLatestJob": false
+  },
+  "queueAtAudit": {"gaussian_ready": 20, "failed": 5, "cancelled": 8, "queued": 0, "running": 0},
+  "sourceRecordingStillAvailable": true,
+  "sourceRecordingHashReverified": true,
+  "deviceConnected": true,
+  "deviceForegroundAssetVerified": false,
+  "screenshotJobIdentityVerified": false,
+  "limitations": [
+    "Low alpha is a coverage diagnostic, not direct proof of absent geometry.",
+    "The screenshot alone does not uniquely identify the foreground job.",
+    "Classified accessory counts do not measure all physical eyeglass geometry.",
+    "No device image, camera frame or private original image is included."
+  ]
+}

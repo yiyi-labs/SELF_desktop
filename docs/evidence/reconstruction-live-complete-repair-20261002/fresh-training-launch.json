@@ -1,0 +1,24 @@
+{
+  "pid": 667,
+  "command": [
+    "/opt/self-reconstruction/venv/bin/python",
+    "-u",
+    "-B",
+    "/mnt/d/STUDY/College/mine/olay/backend/reconstruction_live_fullframe.py",
+    "/mnt/d/STUDY/College/mine/olay/backend/.sources/live-complete-repair-20261003-registration/portrait-preparation",
+    "/mnt/d/STUDY/College/mine/olay/backend/.sources/live-complete-repair-20261003-fresh-trained",
+    "--soft",
+    "--dense-surfaces",
+    "--shared-room-surface",
+    "--local-steps",
+    "900",
+    "--room-steps",
+    "400",
+    "--hair-steps",
+    "180"
+  ],
+  "started": 1790963751.2011385,
+  "log": "/mnt/d/STUDY/College/mine/olay/backend/.sources/live-complete-repair-20261003-fresh-trained.log",
+  "freshPrepared": true,
+  "oldPortraitReused": false
+}

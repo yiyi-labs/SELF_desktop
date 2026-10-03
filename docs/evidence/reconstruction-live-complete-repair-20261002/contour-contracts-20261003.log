@@ -1,0 +1,8 @@
+............................../mnt/d/STUDY/College/mine/olay/backend/test_reconstruction_live_fullframe.py:68: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  self.assertLess(float((candidate["q"].sum(-1)-candidate["alpha"]).abs().max()),1e-6)
+........
+----------------------------------------------------------------------
+Ran 38 tests in 1.986s
+
+OK

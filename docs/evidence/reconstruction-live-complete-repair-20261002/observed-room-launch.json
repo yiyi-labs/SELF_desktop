@@ -1,0 +1,26 @@
+{
+  "pid": 666,
+  "command": [
+    "/opt/self-reconstruction/venv/bin/python",
+    "-u",
+    "-B",
+    "/mnt/d/STUDY/College/mine/olay/backend/reconstruction_live_fullframe.py",
+    "/mnt/d/STUDY/College/mine/olay/backend/.sources/integrated-components-v2-20260928-e",
+    "/mnt/d/STUDY/College/mine/olay/backend/.sources/live-complete-repair-20261003-observed-room-trained",
+    "--soft",
+    "--local-steps",
+    "0",
+    "--room-steps",
+    "400",
+    "--hair-steps",
+    "180",
+    "--dense-manifest",
+    "/mnt/d/STUDY/College/mine/olay/backend/.sources/live-complete-repair-20261003-observed-room-completion/result.json",
+    "--portrait-state",
+    "/mnt/d/STUDY/College/mine/olay/backend/.sources/live-complete-repair-20261002-local/local-state.pt",
+    "--portrait-manifest",
+    "/mnt/d/STUDY/College/mine/olay/backend/.sources/live-complete-repair-20261002-dense/body-auxiliary/merged-result.json"
+  ],
+  "started": 1790962833.860419,
+  "log": "/mnt/d/STUDY/College/mine/olay/backend/.sources/live-complete-repair-20261003-observed-room-trained.log"
+}

@@ -1,0 +1,12 @@
+{
+  "algorithmVersion": "portrait-native-fullframe-20261002-research",
+  "httpServiceReady": true,
+  "workerReady": true,
+  "executionAdapter": "native-fullframe",
+  "workerUpdatedAt": 1790912872,
+  "echoBytes": 1024,
+  "echoSha256Matches": true,
+  "device": "6DP0226117002287",
+  "privateReconstructionSubmitted": false,
+  "applicationReinstalled": false
+}

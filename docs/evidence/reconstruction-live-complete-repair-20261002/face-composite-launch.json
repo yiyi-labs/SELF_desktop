@@ -1,0 +1,15 @@
+{
+  "pid": 747,
+  "command": [
+    "/opt/self-reconstruction/venv/bin/python",
+    "-u",
+    "-B",
+    "/mnt/d/STUDY/College/mine/olay/backend/run_live_face_composite_trial.py",
+    "/mnt/d/STUDY/College/mine/olay/backend/.sources/live-complete-repair-20261003-observed-room-trained",
+    "/mnt/d/STUDY/College/mine/olay/backend/.sources/live-complete-repair-20261003-face-composite",
+    "--steps",
+    "180"
+  ],
+  "started": 1790964452.1761723,
+  "log": "/mnt/d/STUDY/College/mine/olay/backend/.sources/live-complete-repair-20261003-face-composite.log"
+}

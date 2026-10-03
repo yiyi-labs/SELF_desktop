@@ -1,0 +1,65 @@
+{
+  "status": "research_implemented_quality_not_approved",
+  "gpu": "Windows and WSL CUDA restored; no driver replacement",
+  "tests": 23,
+  "sourceSnapshot": {
+    "reconstruction_portrait_model.py": "626f0efeef69be398323ee3979dc19384284c88943d87fd87d7341e91b8c084d",
+    "reconstruction_portrait_pipeline.py": "386f507d410fde14e6905a4008cd9a11f017db77eea29e68737a8d3908241829",
+    "reconstruction_portrait_capacity.py": "1dc2a696f7163fc855d307ae89729a2c2f25ca83e9cb2912bfb3effe984a1d4d",
+    "reconstruction_local_lines.py": "d77b11c307d7f66cab9332b2e4976602e2e052620903fed7389ba187725ef526",
+    "reconstruction_accessories.py": "6da683a49a31fb37b61a3a8890440575d56c3c459de52850ea476f4b826d0e95",
+    "audit_portrait_research_run.py": "3191fec67e02419900af57255c772bf5057571919b8f3f6a812cf8e25131f074",
+    "test_reconstruction_portrait_model.py": "93cdb316a745eadcf94318d1a87f197ba90089c2af79eb1babb04fd98d8cbf6f",
+    "test_reconstruction_accessories.py": "3bf04aede70ccebd1b486feb7c4a0e47b366ea0b45e84110c59660bfe2dd2b8e"
+  },
+  "protected": {
+    "viewer-gs\\gs-edit.js": {
+      "expected": "0332bccf9831e93a5dc345cc04e1df090aad9898c0c8c5b7b63789c6a48682b5",
+      "current": "0332bccf9831e93a5dc345cc04e1df090aad9898c0c8c5b7b63789c6a48682b5",
+      "unchanged": true
+    },
+    "backend\\reconstruction_worker.py": {
+      "expected": "7173bae2b9e5637995e9503000c3c6319c857fa1700bc9f635174253fca3cb15",
+      "current": "7173bae2b9e5637995e9503000c3c6319c857fa1700bc9f635174253fca3cb15",
+      "unchanged": true
+    },
+    "entry\\src\\main\\resources\\rawfile\\gs-viewer.js": {
+      "expected": "d633fb2718ef5ed5087aabbd27356058323d2c71e9dda69c95ee32f87718f5d3",
+      "current": "d633fb2718ef5ed5087aabbd27356058323d2c71e9dda69c95ee32f87718f5d3",
+      "unchanged": true
+    },
+    "package-lock.json": {
+      "expected": "39f45bee06bae03d273461783742507419d05dd1551ddb034a354ddaa9c0a5ba",
+      "current": "39f45bee06bae03d273461783742507419d05dd1551ddb034a354ddaa9c0a5ba",
+      "unchanged": true
+    },
+    "backend\\reconstruction_train_joint.py": {
+      "expected": "4af2934fd6199ae42cdf8ca14e2abdced2af9de2cd635b7cd644dd23cd7f8c6c",
+      "current": "4af2934fd6199ae42cdf8ca14e2abdced2af9de2cd635b7cd644dd23cd7f8c6c",
+      "unchanged": true
+    },
+    "build-profile.json5": {
+      "expected": "fd11bf65f7879a7bb08fa3ebaab69f4ce879bc94526ce55896971dacffe40865",
+      "current": "fd11bf65f7879a7bb08fa3ebaab69f4ce879bc94526ce55896971dacffe40865",
+      "unchanged": true
+    },
+    "viewer-gs\\main.js": {
+      "expected": "70c1f8fbe0ce1cbbc76370003a886cb42e2ee443b7a62370c670aedf208dff4e",
+      "current": "70c1f8fbe0ce1cbbc76370003a886cb42e2ee443b7a62370c670aedf208dff4e",
+      "unchanged": true
+    },
+    "backend\\recon_transfer.py": {
+      "expected": "9734394a7a7bbd85cee40f1db36616482fa8d33cc7728ca3930811ed48052e58",
+      "current": "9734394a7a7bbd85cee40f1db36616482fa8d33cc7728ca3930811ed48052e58",
+      "unchanged": true
+    },
+    "backend\\requirements.lock.txt": {
+      "expected": "c338d5a0733994caf101b7d641af2554c2ffa5937271fbe6d32fc01aede5da1c",
+      "current": "c338d5a0733994caf101b7d641af2554c2ffa5937271fbe6d32fc01aede5da1c",
+      "unchanged": true
+    }
+  },
+  "tabletTransferred": false,
+  "noGlassesRealVideoVerified": false,
+  "detailReport": "docs/evidence/portrait-first-soft-surface-20260928.md"
+}
