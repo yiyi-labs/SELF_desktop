@@ -1,9 +1,23 @@
 import unittest
 import numpy as np
 import torch
-from reconstruction_live_skin_compositing import opaque_observation_mask,backdrop_consistency,preservation_decision,protected_observation_mask
+from reconstruction_live_skin_compositing import opaque_observation_mask,backdrop_consistency,preservation_decision,protected_observation_mask,observed_update_masks,observation_parameter_step
 
 class SkinContract(unittest.TestCase):
+    def test_occluded_view_never_votes_skin_or_globally_relabels_it(self):
+        good=torch.tensor([True,True,True,True]);bad=~good
+        allowed,views=observed_update_masks({'a':good,'b':good,'c':good,'occluded':bad},torch.tensor([0,2,0,0]),torch.tensor([False,False,True,False]))
+        self.assertEqual(allowed.tolist(),[True,False,False,True])
+        self.assertFalse(views['occluded'].any());self.assertTrue(views['a'][0])
+        allowed,_=observed_update_masks({'a':good,'b':good,'occluded':bad},torch.zeros(4))
+        self.assertFalse(allowed.any())
+    def test_inactive_rows_keep_accumulated_values_and_adam_moments(self):
+        p=torch.nn.Parameter(torch.tensor([.2,.3]));opt=torch.optim.Adam([p],lr=.1)
+        p.grad=torch.ones_like(p);observation_parameter_step(opt,{'p':p},torch.tensor([True,False]))
+        saved=p.detach().clone();moment=opt.state[p]['exp_avg'].clone()
+        p.grad=torch.ones_like(p);observation_parameter_step(opt,{'p':p},torch.tensor([False,True]))
+        self.assertEqual(p[0],saved[0]);self.assertEqual(opt.state[p]['exp_avg'][0],moment[0])
+        self.assertNotEqual(p[1],saved[1])
     def test_backdrops_disambiguate_colour_opacity(self):
         target=torch.full((3,3,3),.4);mask=torch.ones((3,3),dtype=torch.bool)
         rgb=target.clone().requires_grad_();alpha=torch.full((3,3),.5,requires_grad=True)

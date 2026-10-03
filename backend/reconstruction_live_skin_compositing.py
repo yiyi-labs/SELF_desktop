@@ -53,9 +53,43 @@ def preservation_decision(before,after):
     return not failures,failures
 
 
+def observed_update_masks(per_view,role,excluded=None):
+    """Occluded in one view is not a permanent physical part classification.
+
+    Keep the original per-observation contribution thresholds. A parameter
+    needs at least three safe skin observations, and receives no update from
+    views where its actual footprint contributes to protected content.
+    All-view rendered preservation remains a separate mandatory exit gate.
+    """
+    support=torch.stack(list(per_view.values())).long().sum(0)
+    allowed=(support>=3)&(role.cpu()==0)
+    if excluded is not None:allowed&=~excluded.cpu()
+    return allowed,{name:safe&allowed for name,safe in per_view.items()}
+
+
+def observation_parameter_step(optimizer,parameters,allowed):
+    """Inactive rows retain values/moments; Adam still uses a global step.
+
+    This is a masked global schedule, not per-point bias-correction clocks.
+    """
+    saved={k:p.detach()[~allowed].clone() for k,p in parameters.items()}
+    moments={}
+    for key,p in parameters.items():
+        if p.grad is not None:p.grad[~allowed]=0
+        moments[key]={k:v[~allowed].clone() for k,v in optimizer.state.get(p,{}).items()
+                      if isinstance(v,torch.Tensor) and v.shape==p.shape}
+    torch.nn.utils.clip_grad_norm_(list(parameters.values()),10.)
+    optimizer.step()
+    with torch.no_grad():
+        for key,p in parameters.items():
+            p[~allowed]=saved[key]
+            for k,v in optimizer.state.get(p,{}).items():
+                if isinstance(v,torch.Tensor) and v.shape==p.shape:
+                    v[~allowed]=moments[key].get(k,torch.zeros_like(v[~allowed]))
+
+
 def restore_skin_compositing(scene,data,out,steps=180):
     from reconstruction_portrait_pipeline import make_frame,masked_mean,write_json,surface_contract,ENGINE_VERSION
-    from reconstruction_live_hair_composite import masked_parameter_step
     from reconstruction_live_neck_appearance import point_region_contributions
     from reconstruction_live_neck_motion import joined_covariant
     if not scene.dense_surface or not 1<=steps<=240:raise ValueError('skin_compositing_contract')
@@ -64,13 +98,12 @@ def restore_skin_compositing(scene,data,out,steps=180):
     parameters={'sh':scene.portrait.sh,'opacity':scene.portrait.opacity_logits}
     frozen={k:v.detach().clone() for k,v in parameters.items()}
     count=len(scene.portrait.role);support=torch.zeros(count,dtype=torch.long)
-    veto=torch.zeros(count,dtype=torch.bool);masks={};preserved={};records=[]
+    veto=torch.zeros(count,dtype=torch.bool);masks={};preserved={};records=[];safe_views={}
     def quality_audit():
         rows={}
         with torch.no_grad():
             for name in data['local']:
                 f=make_frame(data,name,crop=False);mask=torch.as_tensor(opaque_observation_mask(f['masks']),device=f['rgb'].device)
-                if int(mask.sum())<256:continue
                 for stage in ('T0','T2') if f['C'] is not None else ('T0',):
                     r=scene.render(f,stage)
                     regions={'opaque_skin':mask,'full_face':f['masks']['training_face'],
@@ -102,18 +135,24 @@ def restore_skin_compositing(scene,data,out,steps=180):
                 contribution_frame=f
             else:contribution_frame={**f,'C':f['F']}
             q=point_region_contributions(state,contribution_frame,m,protected,unit_scale=scene.scale if has_world else 1.)[:count].cpu()
-            support+=((q[:,0]>=.25)&(q[:,0]>=.9*q[:,2])).long()
-            veto|=(q[:,1]>.01*q[:,2])&(q[:,1]>.05)
+            qualifies=(q[:,0]>=.25)&(q[:,0]>=.9*q[:,2])
+            protected_here=(q[:,1]>.01*q[:,2])&(q[:,1]>.05)
+            support+=qualifies.long();veto|=protected_here
+            safe_views[name]=qualifies&~protected_here
             masks[name]=torch.as_tensor(m)
             preserved[name]=(torch.as_tensor(protected),full['rgb'][torch.as_tensor(protected,device=full['rgb'].device)].cpu())
             records.append(dict(imageName=name,pixels=int(m.sum()),worldObservation=has_world,
                 observedSkinPixelsAttenuatedByAddedEnvironment=front_count,
                 attenuationIsCurrentModelEvidenceNotMeasuredFirstSurface=True))
-    allowed=(support>=3)&~veto&(scene.portrait.role.cpu()==0)
-    if hasattr(scene,'neck_sh_editable'):allowed&=~scene.neck_sh_editable.cpu()
+    if safe_views:
+        allowed,view_updates=observed_update_masks(safe_views,scene.portrait.role,getattr(scene,'neck_sh_editable',None))
+    else:allowed=torch.zeros(count,dtype=torch.bool);view_updates={}
     allowed=allowed.to(scene.portrait.sh.device);names=list(masks)
     receipt=dict(stage='skin-compositing',steps=0,selectedCount=int(allowed.sum()),views=records,
         geometryChanged=False,artificialSceneBackground=False,unknownAndAccessoriesExcluded=True,
+        selectionMode='at_least_three_safe_observations_with_per_view_parameter_updates',
+        previousGlobalVetoSelectedCount=int(((support>=3)&~veto&(scene.portrait.role.cpu()==0)).sum()),
+        qualifiedUpdateCounts={name:int(rows.sum()) for name,rows in view_updates.items()},
         selectedIdsSha256=hashlib.sha256(torch.where(allowed)[0].cpu().numpy().tobytes()).hexdigest())
     if len(names)<3 or not allowed.any():
         receipt['status']='insufficient_observed_interior_skin';write_json(out/'skin-compositing-training.json',receipt);return receipt
@@ -125,7 +164,7 @@ def restore_skin_compositing(scene,data,out,steps=180):
             attemptedSteps=step,rollbackPerformed=rolled_back,optimizerResumeSupported=not rolled_back,
             resumeKind='restored_parent_model_new_optimizer_required' if rolled_back else 'exact_skin_stage_state',surfaceContract=surface_contract(scene,data),
             rng=torch.get_rng_state(),cudaRng=torch.cuda.get_rng_state(),sampler={'names':names,'nextStep':0 if rolled_back else step},
-            selection=receipt,allowedMask=allowed,topologyChanged=False),out/('skin-compositing-'+label+'.pt'))
+            selection=receipt,allowedMask=allowed,perViewUpdateMasks=view_updates,topologyChanged=False),out/('skin-compositing-'+label+'.pt'))
     checkpoint('init',0);start=time.perf_counter();curve=[]
     for step in range(steps):
         name=names[step%len(names)];f=make_frame(data,name,crop=False);mask=masks[name].to(f['rgb'].device)
@@ -139,8 +178,9 @@ def restore_skin_compositing(scene,data,out,steps=180):
         preservation=(full['rgb'][other]-target.to(mask.device)).abs().mean() if other.any() else rgb*0
         loss=rgb+2*preservation+.001*(parameters['sh'][allowed,1:]-frozen['sh'][allowed,1:]).square().mean()
         if not torch.isfinite(loss):raise ValueError('skin_compositing_nonfinite')
-        loss.backward();masked_parameter_step(optimizer,parameters,allowed,frozen)
-        with torch.no_grad():parameters['opacity'][allowed]=parameters['opacity'][allowed].clamp(frozen['opacity'][allowed]-2,frozen['opacity'][allowed]+3)
+        loss.backward();active=view_updates[name].to(allowed.device)
+        observation_parameter_step(optimizer,parameters,active)
+        with torch.no_grad():parameters['opacity'][active]=parameters['opacity'][active].clamp(frozen['opacity'][active]-2,frozen['opacity'][active]+3)
         if step%30==0 or step+1==steps:
             row=dict(stage='skin-compositing',step=step+1,frame=name,rgb=float(rgb.detach()),backdropConsistency=float(opaque.detach()),protected=float(preservation.detach()))
             curve.append(row);print(json.dumps(row),flush=True)
