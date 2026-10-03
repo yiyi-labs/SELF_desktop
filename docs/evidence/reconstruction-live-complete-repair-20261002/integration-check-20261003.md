@@ -111,3 +111,21 @@ $workerProcess = Start-Process -FilePath 'wsl.exe' -ArgumentList @(
 - 此轮仅后端算法改变通常无需重装 HAP；但是否当前设备确有兼容版本应以实际已安装版本/查看器合同记录为准，本检查没有替用户点按或安装。
 
 当前仍未完成“新视频经HDC实际到新版worker并在鸿蒙显示”的最终闭环；不能提前声明已经全量验证。
+
+## 后续实际激活记录（取代上文待办状态，保留历史读取口径）
+
+运行代码提交：`749fb6e94ca2c1d763d4674b30604e84d65cf419`、`f865b82bb24ee94f10b19b1a9f10123c81e3fe6d`、`9d2b8e000a1a5971db2655c8fe7f00f08b392ceb`；证据提交 `b47f545a7bef13373159bf53e35d9dcf6a1bd447`。
+
+实际45文件运行闭包：`35e300fd2d720862c3a597ebdaf3fb7bb2bcdc63c848131321f0154959ba92cf`。
+
+已实际保存旧profile到独立 `backend/.sources/live-complete-repair-20261003-service-activation/previous-profile.json`，并写入唯一现行profile：local900、room400、hair180、dense/sharedRoom/observedFace=true、surfaceRefine=false。自动room补充默认预算现在为30000，实际统一入口新增28459个合法样点；不是手工manifest覆盖。已经删除preparedCache及旧四文件entrySourceHashes，改用完整依赖闭包。
+
+skinCompositingSteps=0：180步实际研究出现局部/镜框退化并已完整回退，所以不默认启用。observedEmptySpace和face capacity同样不启用。不能把失败分支也启用叫“全量”。兼容协议的algorithmVersion字符串保留，实际实现由Git和完整字节哈希识别，不新增用户需要选择的服务版本。
+
+用户解锁重连后，HDC实际出现设备 `6DP0226117002287 tcp:8787 tcp:8787 [Reverse]`；此前连接建立失败的记录不当作成功。新工作器于2026-10-03 11:11启动，独立日志 `worker-20261003-111117.stdout.log/stderr.log`，原HTTP保持运行。启动前33历史任务为20已完成、8取消、5失败，无queued/running；未改写这些任务和旧作品。正式ready与哈希一致结果须以下方实际心跳记录为准。
+
+实际心跳 updatedAt=1790997251 已确认ready=true、sourceIdentityVerified=true、denseToolVerified=true；loaded/current/profileImplementationSha256三者均为上述 `35e300fd…`。执行配置哈希 `53bc524de092cde8a591c3cdb125fc3aa9de744c9852a9b3df152936b090059d`。Torch2.8.0+cu128、CUDA12.8、gsplat1.5.3，显存8123MiB；启动曾实际编译CUDA扩展，不能把这个CPU/JIT时段误报成新模型训练或GPU故障。没有手工设置ready。
+
+最新profile、完整源码身份、工作器启动及随后通过心跳保存在上述独立service-activation目录。所有45个运行依赖均已被Git跟踪，生产失败研究开关保持关闭。本轮无需重装HAP；未向平板发送研究PLY或覆盖旧作品。新视频的实际建模/接收/显示仍未由本轮替用户操作，不能把就绪或USB成功说成该端到端质量已通过。
+
+尝试从平板shell以curl读取健康接口时，设备报告没有curl；该请求未执行，不能记为平板HTTP实测通过。已通过的是HDC设备连接、实际Reverse映射和电脑工作器真实预检；用户端应用新任务仍待实测。
