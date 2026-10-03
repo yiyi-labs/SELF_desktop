@@ -262,10 +262,15 @@ def repair_execution_receipt(output,report,options=None):
         if (manifest_value.get('sourceSha256')!=report.get('sourceSha256') or
                 manifest_value.get('roomWindowRecovery')!=result_value):
             raise ValueError('test_room_window_recovery_manifest_identity')
+        self_reference=value.get('selfReferenceCorrection')
+        if (self_reference!=dense.get('roomSelfReferenceCorrection') or
+                self_reference!=manifest_value.get('roomSelfReferenceCorrection')):
+            raise ValueError('test_room_self_reference_receipt_mismatch')
         result['roomWindowRecovery'].update(receiptSha256=digest(file),
             manifestSha256=value['manifestSha256'],status=result_value.get('status'),
             addedCount=result_value.get('addedCount'),
-            originalPrefixBitwiseUnchanged=result_value.get('originalPrefixBitwiseUnchanged'),qualityPassed=False)
+            originalPrefixBitwiseUnchanged=result_value.get('originalPrefixBitwiseUnchanged'),
+            selfReferenceCorrection=self_reference,qualityPassed=False)
     return result
 
 

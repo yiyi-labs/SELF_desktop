@@ -15,7 +15,7 @@ def file_hash(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def load_component(path, source_hash, expected_frame, *, conditional_room=False):
+def load_component(path, source_hash, expected_frame, *, conditional_room=False, self_reference_room=False):
     with np.load(path, allow_pickle=False) as archive:
         values = {k: archive[k].copy() for k in archive.files}
     if str(values['source_hash']) != source_hash:
@@ -37,8 +37,17 @@ def load_component(path, source_hash, expected_frame, *, conditional_room=False)
         if any(k not in values or values[k].shape!=(n,) for k in required):raise ValueError('conditional_room_evidence_missing')
         kind=values['evidence_type']
         conditional=kind=='conditional_shared_surface'
+        corrected=kind=='conditional_corrected_reference'
         known=np.isin(kind,['conditional_shared_surface','depth_consistent_shared_surface','original_depth_consistent'])
         valid=np.where(conditional,(values['static_image_support']>=3)&(values['colour_support']>=3)&(values['depth_free']<=1),values['support']>=3)
+        if corrected.any():
+            if not self_reference_room:raise ValueError('self_depth_explicit_receipt_required')
+            if any(k not in values or values[k].shape!=(n,) for k in ('self_reference_free','other_depth_free')):
+                raise ValueError('self_depth_votes_missing')
+            from reconstruction_live_room_self_reference import eligible_self_correction
+            ok=eligible_self_correction(values['support'],values['depth_free'],values['self_reference_free'],values['static_image_support'],values['colour_support'])
+            ok &= values['other_depth_free']==values['depth_free']-values['self_reference_free']
+            valid[corrected]=ok[corrected];known|=corrected
         if not known.all() or not valid.all():raise ValueError('conditional_room_evidence_invalid')
     elif np.any(values['support'] < 3):
         raise ValueError('dense_component_insufficient_distinct_observations')
@@ -92,9 +101,10 @@ def verify_room_completion(row,meta,data,manifest_path,values):
     ids=values.get('source_receipt_index')
     if ids is None or ids.shape!=(len(values['means']),) or not np.issubdtype(ids.dtype,np.integer):
         raise ValueError('room_completion_point_proof_index')
-    recovery_items=[item for item in extra if 'recoveredWindow' in item]
-    ordinary_items=[item for item in extra if 'recoveredWindow' not in item]
-    if (len(ordinary_items)>2 or len(recovery_items)>2 or ordinary_items+recovery_items!=extra
+    self_items=[item for item in extra if item.get('selfReferenceCorrection')]
+    recovery_items=[item for item in extra if 'recoveredWindow' in item and item not in self_items]
+    ordinary_items=[item for item in extra if 'recoveredWindow' not in item and item not in self_items]
+    if (len(ordinary_items)>2 or len(recovery_items)>2 or len(self_items)>5 or ordinary_items+recovery_items+self_items!=extra
         or [item['index'] for item in extra]!=list(range(1,len(extra)+1))):
         raise ValueError('room_completion_proof_sequence')
     if not np.isin(ids,np.arange(len(extra)+1)).all():raise ValueError('room_completion_unknown_point_proof')
@@ -104,6 +114,11 @@ def verify_room_completion(row,meta,data,manifest_path,values):
         proof_row={'surfaceCorrectionReceipt':item['path'],
                    'surfaceCorrectionReceiptSha256':item['sha256'],'sha256':item['assetSha256']}
         proof=verify_room_correction(proof_row,meta,data,manifest_path)
+        if isinstance(proof,dict) and bool(proof.get('selfReferenceCorrection'))!=bool(item.get('selfReferenceCorrection')):
+            raise ValueError('self_depth_receipt_type_missing')
+        if item.get('selfReferenceCorrection'):
+            from reconstruction_live_room_self_reference import verify_self_reference
+            with np.load(resolve(item['assetPath']),allow_pickle=False) as asset:verify_self_reference(proof,meta,asset)
         if isinstance(proof,dict) and bool(proof.get('windowRecovery'))!=('recoveredWindow' in item):
             raise ValueError('room_window_recovery_type_missing')
         if 'recoveredWindow' in item:
@@ -121,7 +136,7 @@ def verify_room_completion(row,meta,data,manifest_path,values):
     for index,filename,expected,count in entries:
         path=resolve(filename)
         if file_hash(path)!=expected:raise ValueError('room_completion_source_asset_hash')
-        original=load_component(path,data['sourceHash'],'world',conditional_room=True)
+        original=load_component(path,data['sourceHash'],'world',conditional_room=True,self_reference_room=index in {i['index'] for i in self_items})
         selected=np.flatnonzero(ids==index)
         if len(selected)!=count or len(original['means'])!=count:
             raise ValueError('room_completion_source_count')
@@ -131,6 +146,10 @@ def verify_room_completion(row,meta,data,manifest_path,values):
                 if key not in values or not np.array_equal(values[key][selected],value):
                     raise ValueError('room_completion_source_parameters_changed:'+key)
     if len(np.unique(values['uid']))!=len(values['uid']):raise ValueError('room_completion_duplicate_uid')
+    if self_items:
+        if sum(item['count'] for item in self_items)>6000:raise ValueError('self_depth_total_budget')
+        references=[json.loads(resolve(item['path']).read_text())['referenceName'] for item in self_items]
+        if len(set(references))!=len(references):raise ValueError('self_depth_duplicate_source_surface')
 
 
 def replace_hair_prior(prior, hair):
@@ -199,7 +218,8 @@ def load_surface_bundle(path, data):
         conditional=bool(row.get('typedSupport'))
         if conditional:
             if name!='room':raise ValueError('conditional_evidence_only_room')
-        components[name]=load_component(file,data['sourceHash'],'head-local' if name=='hair' else 'world',conditional_room=conditional)
+        self_reference=conditional and any(r.get('selfReferenceCorrection') for r in row.get('additionalSurfaceReceipts',[]))
+        components[name]=load_component(file,data['sourceHash'],'head-local' if name=='hair' else 'world',conditional_room=conditional,self_reference_room=self_reference)
         if name=='hair' and data.get('hair_motion') is not None:
             from reconstruction_live_hair_motion import verify_motion_receipt
             verify_motion_receipt(row.get('hairMotion'),data['hair_motion'])

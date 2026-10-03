@@ -139,6 +139,10 @@ def _proof_dependencies(manifest,metadata):
                 return dependency,identity
             _window_proof_closure(proof,_historic_identity(os.path.abspath(path)),keep,
                 prefix=prefix,source_hash=metadata['sourceSha256'])
+            if proof.get('selfReferenceCorrection'):
+                from reconstruction_live_room_self_reference import retain_self_reference_dependencies
+                retain_self_reference_dependencies(proof,_historic_identity(os.path.abspath(path)),keep,
+                    prefix=prefix,source_hash=metadata['sourceSha256'])
     def keep_attempt(label,declared,wanted,parent):
         identity=_historic_identity(declared,parent);dependency=Path(identity)
         if digest(dependency)!=wanted:raise ValueError('surface_recovery_dependency_hash:'+label)
@@ -311,6 +315,9 @@ def verify_recovery_manifest(path,*,expected_manifest_hash):
             for key in ('solverReport','surface'):
                 check(prefix+key,proof[key+'Path'],proof[key+'Sha256'],proof_identity)
             _window_proof_closure(proof,proof_identity,check,prefix=prefix,source_hash=metadata['sourceSha256'])
+            if proof.get('selfReferenceCorrection'):
+                from reconstruction_live_room_self_reference import retain_self_reference_dependencies
+                retain_self_reference_dependencies(proof,proof_identity,check,prefix=prefix,source_hash=metadata['sourceSha256'])
     def check_attempt(label,declared,wanted,parent):
         expected_evidence.add(label);saved=evidence.get(label)
         if not saved:raise ValueError('surface_recovery_retry_evidence_missing:'+label)

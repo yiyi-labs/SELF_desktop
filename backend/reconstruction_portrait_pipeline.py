@@ -782,9 +782,14 @@ def run(args):
             recovered=recover_static_window_surfaces(data['dense_manifest'],
                 args.output/'room-window-recovery',allow_typed_conditional=True)
             data['dense_manifest']=Path(recovered['manifestPath'])
+        from reconstruction_live_room_self_reference import apply_self_reference_correction,AUTHORIZED_POLICY
+        recovered=apply_self_reference_correction(data['dense_manifest'],args.output/'room-self-reference',
+            authorized_policy=AUTHORIZED_POLICY)
+        data['dense_manifest']=Path(recovered['manifestPath'])
         recovery_receipt={'manifestPath':str(data['dense_manifest']),
                           'manifestSha256':digest(data['dense_manifest']),
-                          'result':recovered['roomWindowRecovery']}
+                          'result':recovered['roomWindowRecovery'],
+                          'selfReferenceCorrection':recovered.get('roomSelfReferenceCorrection')}
         write_json(args.output/'room-window-recovery.json',recovery_receipt)
     if args.resume_state is not None:
         surface_report=resume_config.get('surfaceStage',{'status':'recorded_model_only_warm_start'})
