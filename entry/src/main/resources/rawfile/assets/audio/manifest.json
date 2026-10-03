@@ -2,33 +2,97 @@
   "origin": "Original procedural composition made for SELF; no third-party recordings",
   "generator": "scripts/prepare-audio.mjs",
   "purpose": "Optional ambient music, no therapeutic or efficacy claims",
+  "design": "One seamless loop per interface of the journey: mirror-home moods (quiet/warm/clear), capture, forming, sky, travel, personal, care. A soft bell marks every four seconds so the particle field can breathe with the music; every loop crossfades its tail into its head.",
+  "scenes": {
+    "origin": "quiet/warm/clear by atmosphere",
+    "capture": "scene-capture",
+    "forming": "scene-forming",
+    "sky": "scene-sky",
+    "travel": "scene-travel",
+    "personal": "scene-personal",
+    "care": "scene-care"
+  },
   "files": [
     {
       "file": "quiet.wav",
       "sampleRate": 24000,
       "channels": 2,
       "durationSeconds": 32,
-      "peak": 0.09563388621396947,
-      "rms": 0.023376823823142677,
-      "sha256": "cb5196308838479cf6fd827f02141435d87e97c3bbcf2039e3b7b6fb22b228f2"
+      "peak": 0.096,
+      "rms": 0.025653302311367955,
+      "sha256": "46398e467162a9005d7ff0d7426df9fb48701cced619d81e188ff9de75f7e01e"
     },
     {
       "file": "warm.wav",
       "sampleRate": 24000,
       "channels": 2,
       "durationSeconds": 32,
-      "peak": 0.09684907626093484,
-      "rms": 0.023376914922928795,
-      "sha256": "4c2ef3cebfb763dcc3c8e249c2c47c36cdc1b5bc78a60d39fd4ab7081a9e13e2"
+      "peak": 0.09599999999999999,
+      "rms": 0.024492696373277858,
+      "sha256": "3d5ad59a000404a8b0d4e932ae92cf18c7341869875ae81fbf207258720f49c8"
     },
     {
       "file": "clear.wav",
       "sampleRate": 24000,
       "channels": 2,
       "durationSeconds": 32,
-      "peak": 0.09616936466441584,
-      "rms": 0.023376855432924396,
-      "sha256": "3e2e8ddc7727ac5eb203a924f47b57849281ccacca2b1a2bc4d61e1669d62d64"
+      "peak": 0.096,
+      "rms": 0.02589370494107473,
+      "sha256": "f5ddb8782f5f57345c696488a2c3eddfc55b4fa78dc22a47dd527d07fa609b34"
+    },
+    {
+      "file": "scene-capture.wav",
+      "sampleRate": 24000,
+      "channels": 2,
+      "durationSeconds": 32,
+      "peak": 0.08,
+      "rms": 0.017974021471613855,
+      "sha256": "dda5bfc0b2def6577d347d67b9b5be17002ee08cf1857da1e07e391139f81195"
+    },
+    {
+      "file": "scene-forming.wav",
+      "sampleRate": 24000,
+      "channels": 2,
+      "durationSeconds": 40,
+      "peak": 0.11,
+      "rms": 0.02585929215445965,
+      "sha256": "22dffb6ddf91bfbcb9ef5ca34923f6065a22ef7388869473986b7a72220f634b"
+    },
+    {
+      "file": "scene-sky.wav",
+      "sampleRate": 24000,
+      "channels": 2,
+      "durationSeconds": 48,
+      "peak": 0.12000000000000001,
+      "rms": 0.03000991965473459,
+      "sha256": "b4b2845cb23e0eb308c9f59336dae6db0029fc596e593eb0ac059353a7918395"
+    },
+    {
+      "file": "scene-travel.wav",
+      "sampleRate": 24000,
+      "channels": 2,
+      "durationSeconds": 32,
+      "peak": 0.14,
+      "rms": 0.023396737713040138,
+      "sha256": "08d15715b4afbb396262c7116981a0542562b33b4116782f9ce609d796414bfd"
+    },
+    {
+      "file": "scene-personal.wav",
+      "sampleRate": 24000,
+      "channels": 2,
+      "durationSeconds": 40,
+      "peak": 0.1,
+      "rms": 0.023756495946973485,
+      "sha256": "ceb07dd7fa23f2a5119cbb4ab7f43defc27e71d5833027adca789472e7e60165"
+    },
+    {
+      "file": "scene-care.wav",
+      "sampleRate": 24000,
+      "channels": 2,
+      "durationSeconds": 36,
+      "peak": 0.09,
+      "rms": 0.024194004093011555,
+      "sha256": "1d8ac0b3e6729219c5e7d2da95e55321a0cf56d5622b693bfa42858ed899bcf8"
     }
   ]
 }
