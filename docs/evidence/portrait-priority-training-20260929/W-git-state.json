@@ -1,0 +1,8 @@
+{
+  "head": "cef6c043ed7a4ad397de41c995b7787ec3db0ce5\n",
+  "headSha256": "2917155e7e8eeb5ce0168d810e511f85842664cb3537d42abcc8b44d1fb23d16",
+  "status": " M backend/run_reconstruction_v3.py\n?? backend/audit_portrait_priority_preflight.py\n?? backend/reconstruction_portrait_priority.py\n?? backend/reconstruction_reference_static.py\n?? backend/reconstruction_research_state.py\n?? backend/test_portrait_priority_training.py\n?? docs/evidence/portrait-priority-pause-20260929.md\n?? docs/evidence/portrait-priority-training-20260929/P-git-state.json\n?? docs/evidence/portrait-priority-training-20260929/cpu-tests.log\n?? docs/evidence/portrait-priority-training-20260929/finite-config.json\n?? docs/evidence/reconstruction-stage2a-20260928/replay-report.md\n?? docs/evidence/reconstruction-v3-targeted-audit-20260928/report.md\n",
+  "statusSha256": "9d836f102ebcb4b4aa079af01751511d2f5210db5978a75e03b813abe257263e",
+  "staged": "",
+  "stagedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

@@ -17,7 +17,7 @@ def inside_mask(mask,uv):
     xy=xy.clip([0,0],[w-1,h-1]);return valid&mask[xy[:,1],xy[:,0]]
 
 
-def collect(prepared,depth,out,component,budget):
+def collect(prepared,depth,out,component,budget,*,save_pool=False):
     start=time.perf_counter();out=Path(out);out.mkdir(parents=True,exist_ok=False)
     prep=Path(prepared);depth=Path(depth);spec=json.loads((depth/'manifest.json').read_text());data=load_v3_prepared(prep)
     if data['sourceHash']!=spec['sourceHash']:raise ValueError('depth_source_changed')
@@ -73,6 +73,10 @@ def collect(prepared,depth,out,component,budget):
     step=float(np.median(arrays['scales'][:,:2]));order=np.lexsort((arrays['uid'],-arrays['confidence'],-arrays['support']))
     _,layerids=np.unique(arrays['layer'],return_inverse=True);key=np.c_[layerids,np.floor(arrays['means']/step).astype(np.int64)]
     _,which=np.unique(key[order],axis=0,return_index=True);ids=order[which];after=len(ids)
+    if save_pool:
+        # Optional isolated research cache, before the existing quota sampler.
+        # No new geometry or colour is inferred and the default result is unchanged.
+        np.savez_compressed(out/'supported-pool.npz',**{k:v[ids] for k,v in arrays.items()},source_hash=np.array(data['sourceHash']))
     # Reserve separate physical layer coverage; no dense cloth can consume neck quota.
     selected=[]
     for layer in np.unique(arrays['layer']):
