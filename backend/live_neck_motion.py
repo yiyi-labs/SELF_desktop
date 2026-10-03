@@ -104,6 +104,23 @@ class NeckBinding(torch.nn.Module):
             return torch.eye(4,device=C.device,dtype=C.dtype)
         return scaled_head_transform(C,F,float(self.scene_scale)) @ self.inverse_head_reference
 
+    @torch.no_grad()
+    def remap_rows(self,mapping):
+        """Follow environment row growth/removal; a child inherits its parent row.
+
+        The binding is a per-row transport contract over the SAME environment
+        point set the trainer renders; controlled splits/prunes change that
+        set, so the binding follows the identical row mapping. A split maps
+        old rows to MORE new rows (expansion), a prune to fewer.
+        """
+        index=torch.as_tensor(mapping,dtype=torch.long,device=self.neck.device)
+        if len(index)==0 or int(index.min())<0 or int(index.max())>=len(self.neck):
+            raise ValueError('neck_remap_source_rows')
+        self.neck=self.neck[index].clone()
+        self.weight=self.weight[index].clone()
+        self.gradient=self.gradient[index].clone()
+        return {"rows":int(len(index))}
+
     def transforms(self,state,C,F):
         """Centres and full deformation Jacobian, with no alpha/colour loss."""
         if len(state.means)!=len(self.weight):

@@ -279,25 +279,39 @@ def prepare_capture(source,out,frames,faces,*,base_prepared=None):
         "sha256":sha256_file(out/"local-fit-state.pt"),"optimizerRetained":True,
         "sourceHash":source_hash,"stepsCompleted":260}
     # Observation validity is layered, never face-gated: frames whose landmark
-    # PnP failed keep scene/body validity with a nearest fitted head proxy, so
-    # environment and garment supervision can still see through/past them.
+    # PnP failed keep scene/body validity with a nearest fitted head proxy.
+    # They are recorded separately so the fitted identity chain
+    # (local_geometry.npz names/roles == fit checkpoint) stays byte-exact.
     fitted=sorted(local)
-    scene_frames={}
+    scene_rows=[]
     for name in fit_audit.get("rejected",{}):
         if name not in rgb or name not in labels:
             continue
         number=lambda n:int(n.rsplit("_",1)[-1].split(".")[0])
         proxy=min(fitted,key=lambda n:abs(number(n)-number(name)))
-        local[name]={"mesh":local[proxy]["mesh"],"F":local[proxy]["F"],
-                     "marks":marks[name],"role":"scene","headProxy":proxy}
-        scene_frames[name]={"headProxy":proxy,
-            "pnpRejection":fit_audit["rejected"][name]}
-    fit_audit["sceneValidFrames"]=scene_frames
+        scene_rows.append({"name":name,"proxy":proxy,
+            "mesh":local[proxy]["mesh"],"F":local[proxy]["F"],"marks":marks[name],
+            "reason":fit_audit["rejected"][name]})
+    fit_audit["sceneValidFrames"]={r["name"]:{r"headProxy":r["proxy"],
+        "pnpRejection":r["reason"]} for r in scene_rows}
     rgb={n:rgb[n] for n in local}
     labels={n:labels[n] for n in local}
     images={im.name:im for im in static.images.values() if im.has_pose}
     worlds={n:camera_matrix(images[n]) for n in local if n in images}
     worlds.update({n:C for n,C in added_worlds.items() if n in local})
+    if scene_rows:
+        scene_names={r["name"] for r in scene_rows}
+        scene_worlds={n:camera_matrix(images[n]) for n in scene_names if n in images}
+        scene_worlds.update({n:C for n,C in added_worlds.items() if n in scene_names})
+        np.savez_compressed(out/"scene_observations.npz",
+            names=np.asarray([r["name"] for r in scene_rows]),
+            proxies=np.asarray([r["proxy"] for r in scene_rows]),
+            meshes=np.stack([r["mesh"] for r in scene_rows]),
+            F=np.stack([r["F"] for r in scene_rows]),
+            marks=np.stack([r["marks"] for r in scene_rows]),
+            reasons=np.asarray([r["reason"] for r in scene_rows]),
+            worldNames=np.asarray(sorted(scene_worlds)),
+            worldC=np.stack([scene_worlds[n] for n in sorted(scene_worlds)]))
     train=[n for n in worlds if local[n]["role"]=="train"]
     if len(train)<4:
         raise ValueError("portrait_test_world_local_overlap_insufficient")

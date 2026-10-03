@@ -437,8 +437,25 @@ def load_prepared(out):
     names=[str(n) for n in data["names"]]
     local={n:{"mesh":data["meshes"][i],"F":data["F"][i],"role":str(data["roles"][i]),"marks":data["marks"][i]} for i,n in enumerate(names)}
     worlds={str(n):data["C"][i] for i,n in enumerate(data["world_names"])}
+    scene_path=out/"scene_observations.npz"
+    scene_names=[]
+    if scene_path.is_file():
+        # Layered observation validity: scene-valid frames (face PnP failed)
+        # ride along with a fitted head proxy. The fitted identity chain above
+        # (local_geometry names/roles == fit checkpoint) stays byte-exact.
+        with np.load(scene_path,allow_pickle=False) as scene:
+            scene_names=[str(n) for n in scene["names"]]
+            for i,name in enumerate(scene_names):
+                local[name]={"mesh":scene["meshes"][i],"F":scene["F"][i],
+                    "marks":scene["marks"][i],"role":"scene",
+                    "headProxy":str(scene["proxies"][i])}
+            for i,name in enumerate(map(str,scene["worldNames"])):
+                worlds[name]=scene["worldC"][i]
     rgb={n:cv2.cvtColor(cv2.imread(str(out/"rectified_observations"/n)),cv2.COLOR_BGR2RGB).astype(np.float32)/255 for n in names}
     labels={n:dict(np.load(out/"rectified_observations"/(n+".npz"))) for n in names}
+    if scene_names:
+        rgb.update({n:cv2.cvtColor(cv2.imread(str(out/"rectified_observations"/n)),cv2.COLOR_BGR2RGB).astype(np.float32)/255 for n in scene_names})
+        labels.update({n:dict(np.load(out/"rectified_observations"/(n+".npz"))) for n in scene_names})
     result={**metadata,"source":source,"prepared":out,"geometry":FlameOpen(24,12,model_path=MODEL),
         "prior":dict(np.load(appearance)),"local":local,"worlds":worlds,"rgb":rgb,"labels":labels,
         "K":data["K"],"scale":float(data["scale"]),"room":dict(np.load(out/"static_surface_seeds.npz")),

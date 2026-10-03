@@ -65,6 +65,10 @@ def split_surface_parameters(scene, optimizer, selected):
     old_initial_scales=scene.environment_initial_scales
     scene.environment_initial_scales=old_initial_scales[mapping].clone()
     scene.environment_initial_scales[child_start:]=updates["scales"][child_start:]
+    old_initial_quats=getattr(scene,'environment_initial_quats',None)
+    if old_initial_quats is not None and old_initial_quats.shape[0]==n:
+        # Children inherit their parent's orientation prior (dense regularizer).
+        scene.environment_initial_quats=old_initial_quats[mapping].clone()
     old_ids=scene.environment_uid
     max_uid=int(old_ids.max())+1
     scene.environment_uid=torch.cat((old_ids[rest],torch.arange(max_uid,max_uid+2*len(selected),device=selected.device)))
@@ -77,6 +81,9 @@ def split_surface_parameters(scene, optimizer, selected):
     if layers is not None:
         # Children inherit their parent's declared surface layer identity.
         scene.environment_layers=layers[host]
+    binding=getattr(scene,'neck_binding',None)
+    if binding is not None and hasattr(binding,'remap_rows'):
+        binding.remap_rows(mapping)
     return {"before":n,"after":len(mapping),"parentsRetired":len(selected),"children":2*len(selected),
             "sameEvidenceReused":True,"coverageIdentityNotAssumed":True}
 
@@ -146,6 +153,9 @@ def prune_environment(scene, optimizer, opacity_threshold=.01, minimum_keep=.7):
     scene.environment_parts=scene.environment_parts[keep_idx].clone()
     scene.environment_initial_means=scene.environment_initial_means[keep_idx].clone()
     scene.environment_initial_scales=scene.environment_initial_scales[keep_idx].clone()
+    old_initial_quats=getattr(scene,'environment_initial_quats',None)
+    if old_initial_quats is not None and old_initial_quats.shape[0]==n:
+        scene.environment_initial_quats=old_initial_quats[keep_idx].clone()
     scene.environment_uid=scene.environment_uid[keep_idx].clone()
     scene.environment_parent_uid=scene.environment_parent_uid[keep_idx].clone()
     scene.environment_generation=scene.environment_generation[keep_idx].clone()
@@ -153,5 +163,8 @@ def prune_environment(scene, optimizer, opacity_threshold=.01, minimum_keep=.7):
     layers=getattr(scene,'environment_layers',None)
     if layers is not None:
         scene.environment_layers=layers[keep_idx.cpu().numpy()]
+    binding=getattr(scene,'neck_binding',None)
+    if binding is not None and hasattr(binding,'remap_rows'):
+        binding.remap_rows(keep_idx)
     return {"before":n,"after":int(len(keep_idx)),"removed":removed,
             "threshold":opacity_threshold}
