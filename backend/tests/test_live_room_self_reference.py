@@ -98,7 +98,7 @@ class SelfReferenceAdapterTests(unittest.TestCase):
                 with self.assertRaises(ValueError):apply_self_reference_correction(path,Path(td)/'new',**args)
 
     def test_pipeline_dispatches_existing_recovery_and_skips_resume(self):
-        source=Path(__file__).with_name('reconstruction_portrait_pipeline.py').read_text()
+        source=(Path(__file__).resolve().parents[1]/'reconstruction_portrait_pipeline.py').read_text()
         tree=ast.parse(source)
         block=next(n for n in ast.walk(tree) if isinstance(n,ast.If) and
             "room_window_recovery" in ast.unparse(n.test) and 'resume_state is None' in ast.unparse(n.test))

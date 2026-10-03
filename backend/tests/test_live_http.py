@@ -12,7 +12,7 @@ from test_contracts import snapshot
 
 
 async def main():
-    folder = Path(__file__).resolve().parents[1] / "docs/evidence/deepseek"
+    folder = Path(__file__).resolve().parents[2] / "docs/evidence/deepseek"
     s = snapshot()
     s.requestId = "http-live-" + str(int(datetime.now().timestamp()))
     s.snapshotId = s.requestId

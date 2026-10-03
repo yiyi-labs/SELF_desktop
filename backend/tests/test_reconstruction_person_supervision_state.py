@@ -112,7 +112,7 @@ class PersonRestoreTest(unittest.TestCase):
     def test_all_three_diagnostic_runners_restore_flags_before_audit(self):
         for name in ('run_live_skin_compositing_trial.py','run_live_face_capacity_trial.py','run_live_body_appearance_trial.py'):
             with self.subTest(name=name):
-                tree=ast.parse(Path(__file__).with_name(name).read_text())
+                tree=ast.parse((Path(__file__).resolve().parents[1]/name).read_text())
                 calls=[node for node in ast.walk(tree) if isinstance(node,ast.Call) and
                        isinstance(node.func,ast.Name) and node.func.id=='restore_person_supervision']
                 self.assertEqual(len(calls),1)

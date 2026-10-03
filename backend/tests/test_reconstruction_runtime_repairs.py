@@ -53,7 +53,7 @@ class RuntimeRepairTest(unittest.TestCase):
                 self.assertNotIn('--opaque-body',called)
 
     def test_wrapper_has_one_of_each_explicit_flag(self):
-        tree=ast.parse(Path(__file__).with_name('reconstruction_live_fullframe.py').read_text())
+        tree=ast.parse((Path(__file__).resolve().parents[1]/'reconstruction_live_fullframe.py').read_text())
         flags=[arg.value for n in ast.walk(tree) if isinstance(n,ast.Call) and
                isinstance(n.func,ast.Attribute) and n.func.attr=='add_argument'
                for arg in n.args if isinstance(arg,ast.Constant) and isinstance(arg.value,str)]

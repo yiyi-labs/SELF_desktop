@@ -5,7 +5,7 @@ from deepseek_client import propose,ModelFailure
 from test_contracts import snapshot
 
 async def main():
-    root=Path(__file__).resolve().parents[1]
+    root=Path(__file__).resolve().parents[2]
     image=(root/'docs/evidence/overhaul/tablet-release-native/native-face.png').read_bytes()
     results=[]
     cases=[('nose-concern','我不太喜欢自己的鼻子，看起来很奇怪，但也不想被改成别人的样子。'),

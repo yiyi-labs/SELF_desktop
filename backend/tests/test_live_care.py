@@ -10,7 +10,7 @@ from test_contracts import snapshot
 
 
 async def main():
-    root = Path(__file__).resolve().parents[1]
+    root = Path(__file__).resolve().parents[2]
     image = Image.new('RGB', (320, 320), '#e4e0dc')
     draw = ImageDraw.Draw(image)
     draw.ellipse((70, 35, 250, 280), fill='#bc8d75')

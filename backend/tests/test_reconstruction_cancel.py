@@ -10,6 +10,10 @@ from pathlib import Path
 from unittest.mock import patch
 
 import reconstruction_worker
+import reconstruction_face
+import reconstruction_pose
+import reconstruction_scene
+import reconstruction_observations
 
 
 class ReconstructionInputRetentionTest(unittest.TestCase):
@@ -51,13 +55,19 @@ class ReconstructionInputRetentionTest(unittest.TestCase):
             (job / "portrait.view.json").write_text("{}", encoding="utf-8")
             (job / "viewpoint_quality.json").write_text(
                 json.dumps({"broadSideCoverage": True}), encoding="utf-8")
+            for filename in ("face_mask_quality.json", "geometry_quality.json",
+                             "training_metrics.json"):
+                (job / filename).write_text("{}", encoding="utf-8")
             assets = {"gaussian": {"file": "portrait.gaussian.ply"},
                       "view": {"file": "portrait.view.json"}}
             with patch.object(reconstruction_worker, "verify_capture"), \
                  patch.object(reconstruction_worker, "extract_frames", return_value=[]), \
-                 patch.object(reconstruction_worker, "face_regions", return_value={}), \
+                 patch.object(reconstruction_face, "prepare", return_value={}), \
                  patch.object(reconstruction_worker, "recover_cameras"), \
+                 patch.object(reconstruction_pose, "prepare_face_views", return_value={}), \
+                 patch.object(reconstruction_observations, "build_observation_bundle", return_value={}), \
                  patch.object(reconstruction_worker, "opening_view", return_value=assets["view"]), \
+                 patch.object(reconstruction_scene, "seed_recorded_scene", return_value={}), \
                  patch.object(reconstruction_worker, "train_gaussians", return_value=assets["gaussian"]), \
                  patch.object(reconstruction_worker, "portrait_preview", side_effect=ValueError):
                 reconstruction_worker.run_one(job)

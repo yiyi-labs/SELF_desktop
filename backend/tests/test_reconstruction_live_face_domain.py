@@ -41,7 +41,8 @@ class FaceDomainTest(unittest.TestCase):
         from reconstruction_portrait_pipeline import run
         with patch('torch.cuda.is_available') as gpu:
             with self.assertRaisesRegex(ValueError,'requires_observed_face_domain'):
-                run(SimpleNamespace(observed_empty_space=True,observed_face_domain=False))
+                # The runtime call contract always includes resume_state (None for a fresh run).
+                run(SimpleNamespace(observed_empty_space=True,observed_face_domain=False,resume_state=None))
         gpu.assert_not_called()
 
     def test_restore_replays_empty_flag_and_rejects_changed_hash_or_flag(self):

@@ -6,7 +6,7 @@ from deepseek_client import propose,ModelFailure
 from test_contracts import snapshot
 
 async def main():
-    root=Path(__file__).resolve().parents[1]
+    root=Path(__file__).resolve().parents[2]
     folder=root/'docs/evidence/interaction-camera';folder.mkdir(exist_ok=True,parents=True)
     image=(root/'docs/evidence/overhaul/tablet-release-native/native-face.png').read_bytes()
     s=snapshot();s.requestId='dialogue-'+str(int(time.time()));s.snapshotId=s.requestId
