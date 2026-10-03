@@ -2,10 +2,12 @@
 
 Writes nothing into the repository. Exit code 0 only if every file passes:
 identity when there is nothing to split, token/AST/compile equality otherwise.
+归档修正：暂存目录改为系统临时目录下自建（原为当时的固定临时路径），逻辑未变。
 """
 import json
 import pathlib
 import sys
+import tempfile
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 import reformat as R          # noqa: E402
@@ -13,7 +15,7 @@ import verify as V            # noqa: E402
 
 REPO = pathlib.Path(r"d:/STUDY/College/mine/olay")
 BACK = REPO / "backend"
-STAGE = pathlib.Path(r"C:/Users/30243/AppData/Local/Temp/self-format/staged")
+STAGE = pathlib.Path(tempfile.gettempdir()) / "self-format" / "staged"
 STAGE.mkdir(parents=True, exist_ok=True)
 
 report = []

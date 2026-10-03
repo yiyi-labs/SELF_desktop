@@ -2,11 +2,13 @@
 
 Same commands as scripts/Start-ReconstructionServer.ps1 (worker) and run-uvicorn.py (API),
 spawned with DETACHED_PROCESS so no Claude task limit reaps them.
+归档修正：原先指向临时目录的 run-uvicorn.py 改为与本脚本同目录，临时目录清理后仍可直接运行。
 """
 import pathlib
 import subprocess
 
 REPO = pathlib.Path(r"d:/STUDY/College/mine/olay")
+HERE = pathlib.Path(__file__).resolve().parent
 DATA = REPO / "backend/.data/reconstruction"
 DETACHED_PROCESS = 0x00000008
 CREATE_NEW_PROCESS_GROUP = 0x00000200
@@ -29,5 +31,5 @@ spawn(["wsl.exe", "-d", "Ubuntu-22.04", "--", "env",
       DATA / "worker.stdout.log", DATA / "worker.stderr.log")
 
 spawn([str(REPO / "backend/.venv/Scripts/python.exe"),
-       r"C:/Users/30243/AppData/Local/Temp/self-rename/run-uvicorn.py"],
+       str(HERE / "run-uvicorn.py")],
       DATA / "api.stdout.log", DATA / "api.stderr.log")

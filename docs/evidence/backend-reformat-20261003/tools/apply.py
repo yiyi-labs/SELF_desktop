@@ -9,6 +9,8 @@ For every staged file X.py:
   5. overwrite disk, then assert disk bytes == staged bytes.
 
 Writes apply-report.json (per-file splits/bytes/sha256 before+after, closure set).
+归档修正：暂存目录改为系统临时目录（与 run-all.py 一致），报告写回本目录的上级
+（证据根目录）；逻辑未变。
 """
 import hashlib
 import json
@@ -16,6 +18,7 @@ import pathlib
 import socket
 import subprocess
 import sys
+import tempfile
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 import reformat as R          # noqa: E402
@@ -23,8 +26,8 @@ import verify as V            # noqa: E402
 
 REPO = pathlib.Path(r"d:/STUDY/College/mine/olay")
 BACK = REPO / "backend"
-STAGE = pathlib.Path(r"C:/Users/30243/AppData/Local/Temp/self-format/staged")
-OUT = pathlib.Path(__file__).parent
+STAGE = pathlib.Path(tempfile.gettempdir()) / "self-format" / "staged"
+OUT = pathlib.Path(__file__).resolve().parent.parent
 
 
 def sha(b):

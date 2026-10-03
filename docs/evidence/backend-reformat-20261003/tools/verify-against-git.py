@@ -35,7 +35,7 @@ def norm(b):
 head = git("rev-parse", "--short", "HEAD").decode().strip()
 source_files = json.loads((EV / "identity-after.json").read_text(encoding="utf-8"))["sourceFiles"]
 apply_report = {e["file"]: e for e in json.loads(
-    (pathlib.Path(__file__).parent / "apply-report.json").read_text(encoding="utf-8"))}
+    (EV / "apply-report.json").read_text(encoding="utf-8"))}
 
 diff = git("diff", "--name-status", PRE, "--", "backend").decode().strip().splitlines()
 changed = {line.split("\t")[1] for line in diff if line}

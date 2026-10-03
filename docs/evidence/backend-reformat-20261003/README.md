@@ -10,7 +10,9 @@ codex 生成的 67 个根级 `backend/*.py` 大量把整段逻辑压进单行（
 - 块关键字（`if/elif/else/for/while/try/except/finally/with/def/class/async/match/case`）头部 `:` 后同行还有内容 → 冒号后换行，套件缩进 +4。
 - 其余一切（注释、字符串、括号内的换行、每行原有行尾符）原样保留；插入的换行取该逻辑行自己的行尾符——CRLF 文件保持 CRLF，混合行尾文件逐行保持（`contracts.py`、`product_catalog.py` 即为混合行尾样本）。
 
-工具归档在本目录 `tools/`：`reformat.py`（核心）、`verify.py`（等价性判定）、`run-all.py`（全量暂存+验证）、`apply.py`（应用+证明链）、`repin.py`（哈希重钉）、`verify-against-git.py`（独立复验）、`compare-tests.py`（测试比对）。归档副本内的路径为当时的临时工作目录。
+工具归档在本目录 `tools/`：`reformat.py`（核心）、`verify.py`（等价性判定）、`run-all.py`（全量暂存+验证）、`apply.py`（应用+证明链）、`repin.py`（哈希重钉）、`verify-against-git.py`（独立复验）、`compare-tests.py`（测试比对）、`make-line-map.py`（行号换算表）、`detach-service.py` + `run-uvicorn.py`（脱离进程启动服务）。
+
+归档后仅调整了当时的临时工作目录路径，逻辑未变：`detach-service.py` 改为拉起同目录 `run-uvicorn.py`；`apply.py` / `run-all.py` 的暂存目录改用系统临时目录；`verify-against-git.py` 改为读取本目录的 `apply-report.json`。归档工具已逐个语法检查通过，并以归档副本（非临时目录版本）重跑独立复验：`changed=45 expected=45 match=True`、`unchanged=23 reformatted=44 problems=0`，回归报告已按重跑结果更新（`git-equivalence.txt` 首行 HEAD 印记）。
 
 ## 等价性证明（逐文件，0 例外）
 
