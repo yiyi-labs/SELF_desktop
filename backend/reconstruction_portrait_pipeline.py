@@ -81,7 +81,7 @@ def make_frame(data, name, *, crop=True, half=False, device="cuda"):
             "fullK":tensor(data["K"],device), "requestedHalfIgnored":bool(half)}
 
 
-def full_frame_draw(state, C, frame, *, unit_scale=1., antialiased=False, absgrad=False):
+def full_frame_draw(state, C, frame, *, unit_scale=1., antialiased=False, absgrad=False, person_channels=False):
     w,h=frame["fullSize"];x0,y0,x1,y1=frame["rectangle"]
     K=frame["fullK"];cropK=K.clone();cropK[0,2]-=x0;cropK[1,2]-=y0
     if not torch.allclose(cropK,frame["K"],atol=1e-5,rtol=0):raise ValueError("native_crop_intrinsics_changed")
@@ -90,6 +90,11 @@ def full_frame_draw(state, C, frame, *, unit_scale=1., antialiased=False, absgra
     groups=functional.one_hot(state.parts.long(),5).to(rgb.dtype)
     depth=(state.means@C[:3,:3].T+C[:3,3])[:,2]
     features=torch.cat((rgb,groups,groups*depth[:,None]),1)
+    if person_channels:
+        # Same visibility, sorting and transmittance as the full scene. An
+        # independent person render cannot measure room leaking through it.
+        opaque_parts=(state.parts==1)|(state.parts==4)
+        features=torch.cat((features,rgb*opaque_parts[:,None]),1)
     image,alpha,info=rasterization(state.means,None,None,state.opacity,features,C[None],K[None],w,h,
         covars=state.covariance(),packed=True,sh_degree=None,render_mode="RGB+D",absgrad=absgrad,
         rasterize_mode="antialiased" if antialiased else "classic",near_plane=.01*unit_scale,far_plane=1e10*unit_scale)
@@ -97,6 +102,7 @@ def full_frame_draw(state, C, frame, *, unit_scale=1., antialiased=False, absgra
     if info["means2d"].requires_grad:info["means2d"].retain_grad()
     full={"rgb":image[0,:,:,:3],"alpha":alpha[0,:,:,0],"q":image[0,:,:,3:8],
           "q_depth":image[0,:,:,8:13]/unit_scale,"depth":image[0,:,:,-1]/unit_scale}
+    if person_channels:full['person_rgb']=image[0,:,:,13:16]
     return {**{k:v[y0:y1,x0:x1] for k,v in full.items()},"info":info}
 
 
@@ -167,7 +173,8 @@ class SceneAssembly(torch.nn.Module):
     def render(self, frame, stage, *, antialiased=False, absgrad=False):
         state = self.portrait_state(frame)
         if stage == "T0":
-            return full_frame_draw(state,frame["F"],frame,antialiased=antialiased,absgrad=absgrad)
+            return full_frame_draw(state,frame["F"],frame,antialiased=antialiased,absgrad=absgrad,
+                person_channels=getattr(self,'opaque_person',False))
         if frame["C"] is None: raise ValueError("world_render_requires_real_world_observation")
         state = state.to_world(frame["C"], frame["F"], self.scale)
         if stage != "T1":
@@ -176,7 +183,8 @@ class SceneAssembly(torch.nn.Module):
                 state=joined_covariant(state,self.environment_state(frame))
             else:state = joined_state(state, self.environment_state())
         return full_frame_draw(state, frame["C"], frame, unit_scale=self.scale,
-                    antialiased=antialiased, absgrad=absgrad)
+                    antialiased=antialiased, absgrad=absgrad,
+                    person_channels=getattr(self,'opaque_person',False))
 
     def portrait_state(self,frame):
         state=self.portrait.local_state(frame['mesh'])
@@ -343,6 +351,8 @@ def train_stage(scene, data, out, stage, steps, soft, antialiased=False):
     bodyopt=torch.optim.Adam([{"params":[p],"name":n,"lr": {"means":.00005*scene.scale,"scales":.0006,"quats":.0002,"opacities":.003,"sh":.002}[n]} for n,p in scene.environment.items()],eps=1e-8) if scene.dense_surface else None
     neckopt=torch.optim.Adam([scene.portrait.sh],lr=.002,eps=1e-8) if stage=='T3' and hasattr(scene,'neck_sh_editable') and scene.neck_sh_editable.any() else None
     local_names = [n for n,r in data["local"].items() if r["role"]=="train"]
+    from reconstruction_local_sampling import scheduled_local_name,schedule_receipt
+    sampling=schedule_receipt(local_names,steps) if stage!='T3' else None
     world_names = data["train"]
     curve=[]; gradient_audit=[]; density_events=[]; initial={n:p.detach().clone() for n,p in scene.portrait.named_parameters()}
     protected={}
@@ -359,22 +369,32 @@ def train_stage(scene, data, out, stage, steps, soft, antialiased=False):
             "bodyOptimizer":bodyopt.state_dict() if bodyopt else None,
             "neckAppearanceOptimizer":neckopt.state_dict() if neckopt else None,
             "surfaceContract":surface_contract(scene,data),
+            "personSupervision":{"opaqueHead":bool(getattr(scene,'opaque_person',False)),
+                                 "opaqueBody":bool(getattr(scene,'opaque_body',False)),
+                                 "appearanceSha256":data['appearanceHash']},
             "environmentSources":{k:torch.as_tensor(v) for k,v in scene.environment_sources.items()},
             "rng":torch.get_rng_state(),"cudaRng":torch.cuda.get_rng_state(),
-            "sampler":{"localNames":local_names,"worldNames":world_names,"nextStep":completed},
+            "sampler":{"localNames":local_names,"worldNames":world_names,"nextStep":completed,
+                       "localPhaseSchedule":sampling['method'] if sampling else 'frozen_head_no_local_update'},
             "density":{"events":density_events,"finalRecoverySteps":max(0,steps-100)}},out/(stage+"-"+label+".pt"))
     checkpoint("init",0)
     start=time.perf_counter()
     for step in range(steps):
         configure_stage(scene,stage,step,soft)
         optim.zero_grad(set_to_none=True);envopt.zero_grad(set_to_none=True)
-        name=local_names[step%len(local_names)];frame=make_frame(data,name)
+        name=scheduled_local_name(local_names,step) if stage!='T3' else local_names[step%len(local_names)]
+        frame=make_frame(data,name)
         if stage=='T3':
             local_loss=scene.portrait.sh.new_zeros(())
             local_values={'frozenHeadLocalForwardSkipped':True}
         else:
             local_render=scene.render(frame,"T0",antialiased=antialiased)
             local_loss,local_values=head_loss(local_render,frame)
+            if getattr(scene,'opaque_person',False):
+                from reconstruction_live_opaque_person import opaque_person_loss
+                person_loss,person_values=opaque_person_loss(local_render,frame,scope='head')
+                local_loss=local_loss+person_loss
+                local_values['opaquePerson']=person_values
         image_loss=local_loss
         world_loss=local_loss*0
         if stage!="local":
@@ -391,6 +411,11 @@ def train_stage(scene, data, out, stage, steps, soft, antialiased=False):
             body_observed=not scene.dense_surface or name_w in scene.body_train_names
             if not body_observed:cloth=torch.zeros_like(cloth)
             world_loss=masked_mean(error,room)+.7*masked_mean(error,cloth)
+            if getattr(scene,'opaque_person',False) and getattr(scene,'opaque_body',False) and body_observed:
+                from reconstruction_live_opaque_person import opaque_person_loss
+                person_loss,person_values=opaque_person_loss(world_render,world_frame,scope='body')
+                world_loss=world_loss+person_loss
+                local_values['opaqueBody']=person_values
             if scene.dense_surface:
                 # Real static/garment pixels include low-texture surfaces.
                 # Adjacent-pixel structure never crosses invalid/mask edges.
@@ -493,7 +518,8 @@ def train_stage(scene, data, out, stage, steps, soft, antialiased=False):
     result={"stage":stage,"steps":steps,"soft":soft,"seconds":time.perf_counter()-start,
             "curve":curve,"gradientAttribution":gradient_audit,"densityEvents":density_events,
             "portraitParameterChange":{n:float((p.detach()-initial[n]).abs().mean()) for n,p in scene.portrait.named_parameters()},
-            "localTrainCount":len(local_names),"worldTrainCount":len(world_names),"allGroupsEveryWorldForward":True}
+            "localTrainCount":len(local_names),"worldTrainCount":len(world_names),"allGroupsEveryWorldForward":True,
+            "localPhaseSchedule":sampling}
     if bodyopt:result['bodyOptimizerSteps']=int(max((float(v['step']) for v in bodyopt.state.values() if 'step' in v),default=0))
     if neckopt:result['neckAppearanceSteps']=int(neckopt.state.get(scene.portrait.sh,{}).get('step',0))
     if stage=="T3":
@@ -539,7 +565,10 @@ def export_candidate(scene,data,out):
               "researchOnly":True,"sourceSha256":data["sourceHash"],"assetSha256":asset_hash}
         write_json(out/"portrait.view.json",view)
         torch.save({"engineVersion":ENGINE_VERSION,"sourceSha256":data["sourceHash"],"model":scene.state_dict(),
-                    "surfaceContract":surface_contract(scene,data)},out/"trained-state.pt")
+                    "surfaceContract":surface_contract(scene,data),
+                    "personSupervision":{"opaqueHead":bool(getattr(scene,'opaque_person',False)),
+                                         "opaqueBody":bool(getattr(scene,'opaque_body',False)),
+                                         "appearanceSha256":data['appearanceHash']}},out/"trained-state.pt")
     return asset_hash
 
 
@@ -623,7 +652,8 @@ def warm_start_portrait(scene,data,state_path,manifest_path):
 
 
 def run(args):
-    if getattr(args,'observed_empty_space',False) and not getattr(args,'observed_face_domain',False):
+    if (getattr(args,'observed_empty_space',False) and not getattr(args,'observed_face_domain',False)
+            and args.resume_state is None and not getattr(args,'portrait_state',None)):
         raise ValueError('observed_empty_space_requires_observed_face_domain')
     if args.output.exists(): raise FileExistsError("each_experiment_requires_new_run_directory")
     args.output.mkdir(parents=True)
@@ -634,24 +664,131 @@ def run(args):
         raise RuntimeError("GPU_unavailable")
     torch.cuda.reset_peak_memory_stats()
     data=load_prepared(args.prepared)
-    if getattr(args,'observed_face_domain',False):
-        if args.resume_state is not None or getattr(args,'portrait_state',None):
+    resume_config=None;checkpoint=None;person_restore=None
+    if args.resume_state is not None and getattr(args,'portrait_state',None):
+        raise ValueError('resume_cannot_also_warm_start_portrait')
+    state_path=args.resume_state or getattr(args,'portrait_state',None)
+    if state_path is not None:
+        resume_parent=Path(state_path).resolve().parent
+        config_file=resume_parent/'config.json'
+        if not config_file.is_file():raise ValueError('resume_complete_config_required')
+        resume_config=json.loads(config_file.read_text())
+        checkpoint=torch.load(state_path,map_location='cpu',weights_only=True)
+        for source in (resume_config,checkpoint):
+            if source.get('sourceSha256')!=data['sourceHash'] or source.get('engineVersion')!=ENGINE_VERSION:
+                raise ValueError('resume_source_or_engine_mismatch')
+        # Store-true CLI defaults cannot turn an existing contract off. An
+        # explicit true cannot silently enable a new factor in a warm-start.
+        for attribute,key,recorded in (
+                ('opaque_person','opaquePerson',resume_config.get('opaquePerson',False)),
+                ('opaque_body','opaqueBody',resume_config.get('opaqueBody',False)),
+                ('observed_face_domain','observedFaceDomain',resume_config.get('observedFaceDomain') is not None),
+                ('observed_empty_space','observedEmptySpace',resume_config.get('observedEmptySpace',False)),
+                ('surface_footprint','surfaceFootprint',resume_config.get('surfaceFootprint') is not None),
+                ('room_window_recovery','roomWindowRecovery',resume_config.get('roomWindowRecovery',False)),
+                ('surface_refine','surfaceRefine',resume_config.get('surfaceRefine',False)),
+                ('soft','soft',resume_config.get('soft')),
+                ('antialiased','antialiased',resume_config.get('antialiased'))):
+            # Complete head warm-start may replace only the environment via
+            # its already strict geometry/hair contract. Environment stages
+            # are explicit new choices, not inherited from the old room.
+            if args.resume_state is None and attribute in ('room_window_recovery','surface_refine'):
+                continue
+            if not isinstance(recorded,bool):raise ValueError('resume_recorded_flag_invalid:'+key)
+            if getattr(args,attribute,False) and not recorded:
+                raise ValueError('resume_cannot_change_recorded_flag:'+key)
+            setattr(args,attribute,recorded)
+        from reconstruction_live_face_domain import restore_recorded
+        from reconstruction_person_supervision_state import copy_person_supervision_files
+        restore_recorded(data,resume_parent,resume_config)
+        if data['appearanceHash']!=resume_config.get('appearanceHash'):
+            raise ValueError('resume_recorded_appearance_mismatch')
+        copy_config=resume_config if args.resume_state is not None else {**resume_config,'roomWindowRecovery':False}
+        copy_person_supervision_files(resume_parent,args.output,copy_config)
+        original_dense=resume_config.get('denseSurfaces')
+        if original_dense:
+            manifest=Path(original_dense['manifestPath'])
+            if (not manifest.is_file() or digest(manifest)!=checkpoint.get('surfaceContract',{}).get('manifestSha256')
+                    or json.loads(manifest.read_text())!=original_dense):
+                raise ValueError('resume_original_dense_manifest_missing_or_changed')
+            if args.resume_state is not None:
+                if getattr(args,'dense_manifest',None) and digest(args.dense_manifest)!=digest(manifest):
+                    raise ValueError('resume_cannot_replace_dense_manifest')
+                args.dense_manifest=manifest
+            elif (not getattr(args,'portrait_manifest',None) or
+                  digest(args.portrait_manifest)!=digest(manifest)):
+                raise ValueError('portrait_warm_start_original_manifest_required')
+            elif not (getattr(args,'dense_manifest',None) or getattr(args,'dense_surfaces',False)):
+                raise ValueError('portrait_warm_start_new_environment_manifest_required')
+            if args.resume_state is not None and args.room_window_recovery:
+                recovery=resume_config.get('roomWindowRecoveryReceipt')
+                saved=resume_parent/'room-window-recovery.json'
+                if (not isinstance(recovery,dict) or not saved.is_file() or
+                        json.loads(saved.read_text())!=recovery or
+                        recovery.get('manifestSha256')!=digest(manifest) or
+                        recovery.get('result')!=original_dense.get('roomWindowRecovery')):
+                    raise ValueError('resume_room_window_recovery_receipt_changed')
+        elif args.resume_state is None:
+            raise ValueError('portrait_warm_start_original_dense_contract_required')
+        elif getattr(args,'dense_manifest',None) or getattr(args,'dense_surfaces',False):
+            raise ValueError('resume_cannot_add_dense_initialization')
+    elif getattr(args,'observed_face_domain',False):
+        if getattr(args,'portrait_state',None):
             raise ValueError('changed_initial_colour_domain_requires_explicit_new_initialization')
         from reconstruction_live_face_domain import activate
         activate(data,args.output,observed_empty_space=bool(getattr(args,'observed_empty_space',False)))
     data["reference"]=max(data["train"],key=lambda n:np.linalg.norm(data["local"][n]["marks"][234]-data["local"][n]["marks"][454])/
         max(np.linalg.norm(data["local"][n]["marks"][10]-data["local"][n]["marks"][152]),1))
-    if getattr(args,'dense_surfaces',False) or getattr(args,'dense_manifest',None):
+    if resume_config is not None:
+        reference=checkpoint.get('surfaceContract',{}).get('reference')
+        if reference not in data['local'] or reference not in data['worlds']:
+            raise ValueError('resume_reference_observation_missing')
+        data['reference']=reference
+    elif getattr(args,'dense_surfaces',False) or getattr(args,'dense_manifest',None):
         from reconstruction_capture_reference import choose_capture_reference
         data['reference'],reference_receipt=choose_capture_reference(data)
         write_json(args.output/'capture-reference.json',reference_receipt)
+    footprint_receipt=resume_config.get('surfaceFootprint') if resume_config is not None else None
+    if getattr(args,'surface_footprint',False) and resume_config is None:
+        if not getattr(args,'observed_face_domain',False) or args.resume_state or getattr(args,'portrait_state',None):
+            raise ValueError('surface_footprint_requires_fresh_observed_face_prior')
+        from reconstruction_live_surface_footprint import adapt_observed_surface_footprints
+        data['prior'],footprint_receipt,diagnostics=adapt_observed_surface_footprints(
+            data['prior'],data,data['geometry'].faces.numpy(),prior_stage='fresh_initialization')
+        np.savez_compressed(args.output/'surface-footprint-diagnostics.npz',**diagnostics)
+        write_json(args.output/'surface-footprint.json',footprint_receipt)
+        # This run's complete fresh prior is authoritative for exact replay;
+        # preserve old colour-mask/source identities in its existing receipt.
+        prior_path=args.output/'observed-face-initial-appearance.npz'
+        np.savez_compressed(prior_path,**data['prior']);data['appearanceHash']=digest(prior_path)
+        data['face_domain_receipt']['appearanceSha256']=data['appearanceHash']
+        data['face_domain_receipt']['surfaceFootprintSha256']=digest(args.output/'surface-footprint.json')
+        write_json(args.output/'observed-face-domain.json',data['face_domain_receipt'])
     if getattr(args,"dense_manifest",None):data["dense_manifest"]=args.dense_manifest
     elif getattr(args,"dense_surfaces",False):
         from reconstruction_live_dense import augment_prepared
         dense_result=augment_prepared(args.prepared,args.output/"dense-surfaces",reference=data["reference"],
             shared_room_surface=bool(getattr(args,'shared_room_surface',False)))
         data["dense_manifest"]=Path(dense_result["manifestPath"])
-    if getattr(args,"surface_refine",False):
+    recovery_receipt=resume_config.get('roomWindowRecoveryReceipt') if args.resume_state is not None else None
+    if getattr(args,'room_window_recovery',False) and args.resume_state is None:
+        if 'dense_manifest' not in data:
+            raise ValueError('room_window_recovery_requires_dense_surface_contract')
+        from reconstruction_live_room_window_recovery import recover_static_window_surfaces
+        parent=json.loads(Path(data['dense_manifest']).read_text())
+        if 'roomWindowRecovery' in parent:
+            recovered=parent
+        else:
+            recovered=recover_static_window_surfaces(data['dense_manifest'],
+                args.output/'room-window-recovery',allow_typed_conditional=True)
+            data['dense_manifest']=Path(recovered['manifestPath'])
+        recovery_receipt={'manifestPath':str(data['dense_manifest']),
+                          'manifestSha256':digest(data['dense_manifest']),
+                          'result':recovered['roomWindowRecovery']}
+        write_json(args.output/'room-window-recovery.json',recovery_receipt)
+    if args.resume_state is not None:
+        surface_report=resume_config.get('surfaceStage',{'status':'recorded_model_only_warm_start'})
+    elif getattr(args,"surface_refine",False):
         from reconstruction_observed_surface import prepare_surface_stage
         surface_report=prepare_surface_stage(data,args.output/"surface-support")
     else:surface_report={"status":"control_same_observation_contract"}
@@ -659,6 +796,19 @@ def run(args):
     import shutil
     shutil.copyfile(args.prepared/"cloth_supported_seeds.npz",args.output/"cloth_supported_seeds.npz")
     scene=initialize_scene(data,args.output)
+    scene.opaque_person=bool(getattr(args,'opaque_person',False))
+    # Head supervision passed the fixed-view trial; body supervision is a
+    # separate, opt-in experiment because its shared appearance regressed.
+    scene.opaque_body=bool(getattr(args,'opaque_body',False))
+    if scene.opaque_body and not scene.opaque_person:
+        raise ValueError('opaque_body_requires_person_channels')
+    opaque_receipts={}
+    if scene.opaque_person and resume_config is None:
+        from reconstruction_live_opaque_person import prepare_opaque_interiors
+        for name,labels in data['labels'].items():
+            masks,receipt=prepare_opaque_interiors(labels)
+            labels.update(masks);opaque_receipts[name]=receipt
+        write_json(args.output/'opaque-interiors.json',opaque_receipts)
     scene.surface_refine=bool(getattr(args,"surface_refine",False))
     if scene.surface_refine and scene.dense_surface:raise ValueError('independent_dense_and_legacy_split_transactions_required')
     scene.portrait.constraint_mode="soft" if args.soft else "strong"
@@ -668,16 +818,16 @@ def run(args):
             raise ValueError('portrait_warm_start_requires_manifest_and_no_scene_resume')
         portrait_start=warm_start_portrait(scene,data,args.portrait_state,args.portrait_manifest)
     if args.resume_state is not None:
-        checkpoint=torch.load(args.resume_state,map_location="cuda",weights_only=True)
-        if checkpoint["sourceSha256"]!=data["sourceHash"] or checkpoint["engineVersion"]!=ENGINE_VERSION:
-            raise ValueError("resume_source_or_engine_mismatch")
         if scene.dense_surface and not surface_contract_matches(surface_contract(scene,data),checkpoint.get('surfaceContract')):
             raise ValueError('resume_dense_surface_contract_mismatch')
         if 'neck_sh_editable' in checkpoint['model']:
             mask=checkpoint['model']['neck_sh_editable']
             if mask.dtype!=torch.bool or mask.shape!=(len(scene.portrait.role),):raise ValueError('resume_neck_selection_contract')
-            scene.register_buffer('neck_sh_editable',mask.clone())
+            scene.register_buffer('neck_sh_editable',mask.to(scene.portrait.sh.device).clone())
         scene.load_state_dict(checkpoint["model"],strict=True)
+    if state_path is not None:
+        from reconstruction_person_supervision_state import restore_person_supervision
+        person_restore=restore_person_supervision(scene,data,resume_parent,resume_config,checkpoint)
     from reconstruction_code_identity import source_identity
     identity=source_identity();freeze=identity["sourceFiles"]
     snapshot=args.output/"algorithm-source";snapshot.mkdir()
@@ -687,13 +837,21 @@ def run(args):
             "antialiased":args.antialiased,"sourceFiles":freeze,"finalAudit":"current_development_not_blind; cross_video_unverified",
             "resumeState":str(args.resume_state) if args.resume_state else None,
             "resumeSha256":digest(args.resume_state) if args.resume_state else None,
-            "resumeKind":"model_only_warm_start" if args.resume_state else "new_optimizer",
+            "resumeKind":("model_only_warm_start" if args.resume_state else
+                          "complete_head_model_warm_start_new_Adam" if getattr(args,'portrait_state',None) else "new_optimizer"),
             "implementation":identity,"surfaceStage":surface_report,"surfaceRefine":scene.surface_refine,
             "portraitWarmStart":portrait_start,
+            "personSupervisionRestore":person_restore,
             "observedFaceDomain":data.get('face_domain_receipt'),
             "observedEmptySpace":bool(getattr(args,'observed_empty_space',False)),
             "hairCompositeSteps":int(getattr(args,'hair_steps',0)),
             "skinCompositingSteps":int(getattr(args,'skin_steps',0)),
+            "opaquePerson":scene.opaque_person,
+            "opaqueBody":scene.opaque_body,
+            "surfaceFootprint":footprint_receipt,
+            "roomWindowRecovery":bool(getattr(args,'room_window_recovery',False)),
+            "roomWindowRecoveryReceipt":recovery_receipt,
+            "opaqueInteriorsReceiptSha256":digest(args.output/'opaque-interiors.json') if scene.opaque_person else None,
             "denseSurfaces":getattr(scene,"dense_metadata",None)}
     write_json(args.output/"config.json",config)
     initial=audit_stages(scene,data,args.output/"initial",antialiased=args.antialiased)
@@ -741,4 +899,8 @@ if __name__=="__main__":
     p.add_argument('--shared-room-surface',action='store_true');p.add_argument('--hair-steps',type=int,default=0)
     p.add_argument('--observed-face-domain',action='store_true');p.add_argument('--observed-empty-space',action='store_true')
     p.add_argument('--skin-steps',type=int,default=0)
+    p.add_argument('--opaque-person',action='store_true')
+    p.add_argument('--opaque-body',action='store_true')
+    p.add_argument('--surface-footprint',action='store_true')
+    p.add_argument('--room-window-recovery',action='store_true')
     run(p.parse_args())

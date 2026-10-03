@@ -92,7 +92,10 @@ def verify_room_completion(row,meta,data,manifest_path,values):
     ids=values.get('source_receipt_index')
     if ids is None or ids.shape!=(len(values['means']),) or not np.issubdtype(ids.dtype,np.integer):
         raise ValueError('room_completion_point_proof_index')
-    if len(extra)>2 or [item['index'] for item in extra]!=list(range(1,len(extra)+1)):
+    recovery_items=[item for item in extra if 'recoveredWindow' in item]
+    ordinary_items=[item for item in extra if 'recoveredWindow' not in item]
+    if (len(ordinary_items)>2 or len(recovery_items)>2 or ordinary_items+recovery_items!=extra
+        or [item['index'] for item in extra]!=list(range(1,len(extra)+1))):
         raise ValueError('room_completion_proof_sequence')
     if not np.isin(ids,np.arange(len(extra)+1)).all():raise ValueError('room_completion_unknown_point_proof')
     entries=[(0,base['path'],base['sha256'],base['count'])]
@@ -100,7 +103,20 @@ def verify_room_completion(row,meta,data,manifest_path,values):
     for item in extra:
         proof_row={'surfaceCorrectionReceipt':item['path'],
                    'surfaceCorrectionReceiptSha256':item['sha256'],'sha256':item['assetSha256']}
-        verify_room_correction(proof_row,meta,data,manifest_path)
+        proof=verify_room_correction(proof_row,meta,data,manifest_path)
+        if isinstance(proof,dict) and bool(proof.get('windowRecovery'))!=('recoveredWindow' in item):
+            raise ValueError('room_window_recovery_type_missing')
+        if 'recoveredWindow' in item:
+            from reconstruction_live_room_window_recovery import verify_recovery_proof
+            recovery=verify_recovery_proof(proof,meta)
+            proposal=json.loads(Path(recovery['proposalPath']).read_text())
+            if proposal['window']!=item['recoveredWindow']:raise ValueError('room_window_recovery_window_identity')
+            local=json.loads(Path(recovery['overlapPath']).read_text())
+            if local['kind']=='recovered-room-unrepresented-observation':
+                with np.load(local['pointEvidencePath'],allow_pickle=False) as evidence:
+                    allowed=set(map(int,evidence['uid'][evidence['kept']]))
+                with np.load(resolve(item['assetPath']),allow_pickle=False) as asset:
+                    if not set(map(int,asset['uid']))<=allowed:raise ValueError('room_window_recovery_asset_not_eligible')
         entries.append((item['index'],item['assetPath'],item['assetSha256'],item['count']))
     for index,filename,expected,count in entries:
         path=resolve(filename)

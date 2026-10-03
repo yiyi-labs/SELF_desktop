@@ -9,6 +9,7 @@ import time
 
 import numpy as np
 import torch
+from reconstruction_person_supervision_state import restore_person_supervision,copy_person_supervision_files
 
 
 def run(parent, output, steps=180, max_parents=384, rounds=2):
@@ -36,8 +37,7 @@ def run(parent, output, steps=180, max_parents=384, rounds=2):
     data['reference'] = checkpoint['surfaceContract']['reference']
     data['dense_manifest'] = Path(config['denseSurfaces']['manifestPath'])
     shutil.copyfile(prepared/'cloth_supported_seeds.npz', output/'cloth_supported_seeds.npz')
-    for filename in ('observed-face-initial-appearance.npz', 'observed-face-domain.json'):
-        shutil.copyfile(parent/filename, output/filename)
+    copy_person_supervision_files(parent,output,config)
     scene = initialize_scene(data, output)
     if not surface_contract_matches(surface_contract(scene, data), checkpoint['surfaceContract']):
         raise ValueError('capacity_parent_surface_contract_mismatch')
@@ -47,8 +47,10 @@ def run(parent, output, steps=180, max_parents=384, rounds=2):
         scene.register_buffer('neck_sh_editable', checkpoint['model']['neck_sh_editable'].clone())
     scene.load_state_dict(checkpoint['model'], strict=True)
     scene.portrait.constraint_mode = 'soft'
+    person_restore=restore_person_supervision(scene,data,parent,config,checkpoint)
     identity = source_identity(); files = dict(identity['sourceFiles'])
-    for name in ('reconstruction_live_face_capacity.py', 'run_live_face_capacity_trial.py'):
+    for name in ('reconstruction_live_face_capacity.py', 'run_live_face_capacity_trial.py',
+                 'reconstruction_person_supervision_state.py'):
         files[name] = digest(Path(__file__).with_name(name))
     files = dict(sorted(files.items()))
     identity = {**identity, 'sourceFiles':files,
@@ -60,7 +62,7 @@ def run(parent, output, steps=180, max_parents=384, rounds=2):
         'hairCompositeSteps':0, 'faceCapacityStepsPerArm':steps, 'maxParents':max_parents, 'rounds':rounds,
         'implementation':identity, 'sourceFiles':files,
         'resumeKind':'complete_trained_model_with_new_Adam_equal_short_budget',
-        'notProductionDefault':True, 'noPublishing':True}
+        'notProductionDefault':True, 'noPublishing':True,'personSupervisionRestore':person_restore}
     write_json(output/'config.json', cfg)
     try:
         plan = select_patch(scene, data, output/'selection', max_parents=max_parents)
@@ -79,8 +81,7 @@ def run(parent, output, steps=180, max_parents=384, rounds=2):
         report, rollback = train_capacity(scene, data, plan, targets, arm,
             steps=steps, capacity=capacity, rounds=rounds)
         write_json(arm/'config.json', {**cfg, 'variant':label})
-        for filename in ('observed-face-initial-appearance.npz', 'observed-face-domain.json'):
-            shutil.copyfile(parent/filename, arm/filename)
+        copy_person_supervision_files(parent,arm,config)
         candidate = arm/'candidate'; candidate.mkdir()
         # Persist the actual candidate before rollback, even if a numerical
         # guard failed. A restored parent must not masquerade as the candidate.

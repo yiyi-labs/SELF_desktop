@@ -35,4 +35,8 @@ if __name__=="__main__":
     p.add_argument('--observed-face-domain',action='store_true')
     p.add_argument('--observed-empty-space',action='store_true')
     p.add_argument('--skin-steps',type=int,default=0)
+    p.add_argument('--opaque-person',action='store_true')
+    p.add_argument('--opaque-body',action='store_true')
+    p.add_argument('--surface-footprint',action='store_true')
+    p.add_argument('--room-window-recovery',action='store_true')
     run(p.parse_args())

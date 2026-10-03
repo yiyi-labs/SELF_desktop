@@ -1,0 +1,33 @@
+diff --git a/viewer-gs/main.js b/viewer-gs/main.js
+index fa841bc..0db3215 100644
+--- a/viewer-gs/main.js
++++ b/viewer-gs/main.js
+@@ -195,12 +195,15 @@ async function start(){
+         for(let i=0;i<points.length;i+=Math.max(1,Math.floor(points.length/8)))addSparks(points[i]);
+       }};
+       let firstCamera=true,lastOverlay=0,aimPoint=target;
+-      const update=()=>{if(preview&&!touching)targetYaw=Math.max(yawBounds[0],Math.min(yawBounds[1],Math.sin(performance.now()*.00027)*.23));
++      const update=(dt=1/60)=>{if(preview&&!touching)targetYaw=Math.max(yawBounds[0],Math.min(yawBounds[1],Math.sin(performance.now()*.00027)*.23));
+         const settling=Math.abs(targetYaw-yaw)>.002||Math.abs(targetPitch-pitch)>.002||Math.abs(targetZoom-zoom)>.002;
+         setMotionResolution(touching||settling);
+         if(!firstCamera&&!settling)return;
+         firstCamera=false;
+-        yaw+=(targetYaw-yaw)*.2;pitch+=(targetPitch-pitch)*.2;zoom+=(targetZoom-zoom)*.2;
++        // Preserve the 60 Hz response without letting a slow or resumed frame snap the camera.
++        const elapsed=Number.isFinite(dt)?Math.max(0,Math.min(dt,.05)):1/60;
++        const blend=1-Math.pow(.8,elapsed*60);
++        yaw+=(targetYaw-yaw)*blend;pitch+=(targetPitch-pitch)*blend;zoom+=(targetZoom-zoom)*blend;
+         const afterYaw=rotate(original,up,yaw),forward=normal(afterYaw.map(x=>-x));
+         const right=normal([forward[1]*up[2]-forward[2]*up[1],forward[2]*up[0]-forward[0]*up[2],forward[0]*up[1]-forward[1]*up[0]]);
+         const offset=rotate(afterYaw,right,pitch);
+@@ -268,7 +271,9 @@ async function start(){
+           report('SELECTED',`已圈出 ${selections.length} 处；再画可替换当前范围`);
+         }catch(error){send('GS_FAILED',{message:String(error)});report('SELECTION_FAILED',String(error));}
+         polygon=[];drawOutline();});
+-      canvas.addEventListener('pointercancel',event=>{movePointers.delete(event.pointerId);touching=movePointers.size>0;pinchDistance=0;polygon=[];drawOutline();});
++      canvas.addEventListener('pointercancel',event=>{movePointers.delete(event.pointerId);touching=movePointers.size>0;pinchDistance=0;
++        if(touching){const remaining=movePointers.values().next().value;lastX=remaining.x;lastY=remaining.y;}
++        polygon=[];drawOutline();});
+       canvas.addEventListener('wheel',event=>{targetZoom=clampZoom(targetZoom*Math.exp(event.deltaY*.001));event.preventDefault();},{passive:false});
+       command=payload=>{
+         if(payload.action==='VIEW_SNAPSHOT'){

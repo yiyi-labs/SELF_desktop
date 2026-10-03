@@ -42,6 +42,30 @@ class LiveEntryContractTest(unittest.TestCase):
 
 @unittest.skipUnless(torch.cuda.is_available(),"real CUDA contract test")
 class LiveCudaContractTest(unittest.TestCase):
+    def test_person_colour_channel_preserves_scene_pixels_and_gradients(self):
+        device='cuda';w,h=72,80
+        C=torch.eye(4,device=device);K=torch.tensor([[70.,0,36.],[0,70.,40.],[0,0,1.]],device=device)
+        values=[torch.tensor([[0.,0.,1.],[0.,0.,2.]],device=device),
+            torch.tensor([[1.,0,0,0]]*2,device=device),
+            torch.tensor([[.15,.14,.02],[.3,.3,.03]],device=device),
+            torch.tensor([.55,.95],device=device),torch.zeros(2,4,3,device=device)]
+        parts=torch.tensor([4,0],device=device)
+        frame=dict(rgb=torch.zeros(h,w,3,device=device),K=K,fullK=K,fullSize=(w,h),
+            rectangle=(0,0,w,h),nativeScale=1)
+        outputs=[];gradients=[]
+        for enabled in (False,True):
+            p=[x.clone().requires_grad_() for x in values]
+            r=native_draw(GaussianState(*p,parts),C,frame,person_channels=enabled)
+            (r['rgb'].square().sum()+.1*r['alpha'].sum()).backward()
+            outputs.append(r);gradients.append([x.grad for x in p])
+        for key in ('rgb','alpha','q','q_depth','depth'):
+            torch.testing.assert_close(outputs[0][key],outputs[1][key],rtol=2e-5,atol=2e-5)
+        for a,b in zip(*gradients):torch.testing.assert_close(a,b,rtol=3e-4,atol=3e-4)
+        r=outputs[1]
+        torch.testing.assert_close(r['person_rgb'],.5*r['q'][...,4,None].expand(-1,-1,3),rtol=2e-5,atol=1e-6)
+        self.assertGreater(float(r['alpha'][40,36]),.9)
+        self.assertLess(float(r['q'][40,36,4]),.6)
+
     def test_full_canvas_covariance_matches_reference_pixels_and_gradients(self):
         torch.manual_seed(51);w,h=160,192;device="cuda"
         K=torch.tensor([[120.,0,69.],[0,123.,91.],[0,0,1.]],device=device);C=torch.eye(4,device=device)

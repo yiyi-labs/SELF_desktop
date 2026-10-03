@@ -81,15 +81,19 @@ def replacement_budget_indices(retained_count,fresh,budget):
     return np.r_[np.arange(retained_count,dtype=np.int64),retained_count+new_indices]
 
 
-def run_shared_surface(prepared,dense,output,*,window=None,reference=None,max_evaluations=40):
+def run_shared_surface(prepared,dense,output,*,window=None,reference=None,max_evaluations=40,proposed_window_receipt=None):
     import pycolmap
     start=time.perf_counter();data=read_prepared(prepared);dense=Path(dense);out=Path(output);out.mkdir(parents=True,exist_ok=False)
     manifest=json.loads((dense/'depth-manifest.json').read_text());reference=reference or manifest['reference']
     selected=json.loads((dense/'result.json').read_text())['acceptedWindows']
     possible=[w for group,w in selected if group=='world' and any(r['group']=='world' and r['window']==w and r['imageName']==reference for r in manifest['observations'])]
-    if not possible:raise SharedRoomEvidenceUnavailable('shared_surface_no_accepted_reference_world_window')
+    recovery=None
+    if proposed_window_receipt is not None:
+        from reconstruction_live_room_window_recovery import verify_window_proposal
+        recovery=verify_window_proposal(proposed_window_receipt,data,dense,reference,window)
+    if not possible and recovery is None:raise SharedRoomEvidenceUnavailable('shared_surface_no_accepted_reference_world_window')
     if window is None:window=min(possible)
-    if window not in possible:raise ValueError('shared_surface_window_not_accepted')
+    if window not in possible and recovery is None:raise ValueError('shared_surface_window_not_accepted')
     rows=[r for r in manifest['observations'] if r['group']=='world' and r['window']==window]
     if reference not in [r['imageName'] for r in rows]:raise SharedRoomEvidenceUnavailable('shared_surface_reference_missing')
     views={r['imageName']:dict(np.load(dense/r['file'],allow_pickle=False)) for r in rows};ref=views[reference]
@@ -216,10 +220,11 @@ def run_shared_surface(prepared,dense,output,*,window=None,reference=None,max_ev
         shapeIdentity='one reference-coordinate surface projected into all target cameras',
         evidenceBoundary='Track geometry constrains low-frequency corrections; unanchored weak-texture detail remains a conditional hypothesis.',
         photometricTraining=False,GPU=False,depthIsTruth=False,sourceCodeHash=digest(__file__))
+    if recovery is not None:report['windowRecoveryProposal']=recovery
     write_json(out/'report.json',report);print(json.dumps({k:v for k,v in report.items() if k!='tracks'},indent=2));return report
 
 
-def export_shared_room_initialization(solved,parent_bundle,output,budget=30000,*,completion_reference=None,existing_additions=()):
+def export_shared_room_initialization(solved,parent_bundle,output,budget=30000,*,completion_reference=None,existing_additions=(),candidate_filter=None):
     """Typed conditional surface transaction; no fake three-depth-vote labels."""
     from scipy.spatial import cKDTree
     from scipy.spatial.transform import Rotation
@@ -296,6 +301,9 @@ def export_shared_room_initialization(solved,parent_bundle,output,budget=30000,*
         static_image_support=image_support[keep],colour_support=colour_support[keep],depth_free=free[keep],depth_occluded=occluded[keep],
         evidence_type=kinds,anchor_distance_processed_px=distance,correction_type=np.full(len(keep),'shared_world_inverse_depth'),
         source_original_index=indices[keep].astype(np.int64))
+    if candidate_filter is not None:
+        fresh=candidate_filter(fresh)
+        if not len(fresh['means']):raise SharedRoomEvidenceUnavailable('shared_surface_no_candidates_after_local_compatibility')
     if completion_reference is not None:
         from reconstruction_live_room_completion import export_addition
         return export_addition(fresh,solved,parent_path,out,budget,data,report,fit_ids,held_ids,existing_additions)

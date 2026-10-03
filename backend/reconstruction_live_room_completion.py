@@ -79,7 +79,7 @@ def unrepresented_sample_mask(xyz,basis,scales,valid,existing):
     return result
 
 
-def select_completion_references(parent_bundle,*,max_references=2):
+def select_completion_references(parent_bundle,*,max_references=2,rejected_windows_only=False):
     """Greedy extra observed area, with real track eligibility; no audit RGB."""
     import pycolmap
     from reconstruction_live_shared_room_surface import point_fold,independent_track_observations
@@ -96,8 +96,11 @@ def select_completion_references(parent_bundle,*,max_references=2):
     proof_path=parent['components']['room'].get('surfaceCorrectionReceipt')
     if proof_path:
         proof=json.loads(Path(proof_path).read_text());covered_references.add(proof['referenceName'])
+    for item in parent['components']['room'].get('additionalSurfaceReceipts',[]):
+        covered_references.add(json.loads(Path(item['path']).read_text())['referenceName'])
     manifest=json.loads((root/'depth-manifest.json').read_text());accepted={tuple(k) for k in parent['acceptedWindows']}
-    rows=[r for r in manifest['observations'] if r['group']=='world' and ('world',r['window']) in accepted and r['imageName']!=primary
+    rows=[r for r in manifest['observations'] if r['group']=='world' and r.get('scaleGatePassed') is True
+          and ((('world',r['window']) not in accepted) if rejected_windows_only else (('world',r['window']) in accepted)) and r['imageName']!=primary
           and r['imageName'] not in covered_references and r['imageName'] in names]
     rec=pycolmap.Reconstruction(context['staticMap']);images={im.name:im for im in rec.images.values()};track_counts={};candidates=[]
     tracked=set(static_track_names(names,images,data['world']))
@@ -131,17 +134,19 @@ def select_completion_references(parent_bundle,*,max_references=2):
         candidates.append(dict(reference=n,window=row['window'],observedCandidates=int(valid.sum()),
             newAreaCells=len(cells),trackCounts=counts,eligible=eligible,
             mapTrackEvidence=n in tracked,_cells=cells))
-    selected=[];covered=set();used=set()
+    selected=[];covered=set();used=set();used_windows=set()
     for _ in range(min(int(max_references),2)):
-        choices=[c for c in candidates if c['eligible'] and c['reference'] not in used]
+        choices=[c for c in candidates if c['eligible'] and c['reference'] not in used
+                 and (not rejected_windows_only or c['window'] not in used_windows)]
         if not choices:break
         best=max(choices,key=lambda c:(len(c['_cells']-covered),-c['window']))
         gain=len(best['_cells']-covered)
         if gain<64:break
-        covered|=best['_cells'];used.add(best['reference']);selected.append({k:v for k,v in best.items() if k!='_cells'}|{'incrementalAreaCells':gain})
+        covered|=best['_cells'];used.add(best['reference']);used_windows.add(best['window']);selected.append({k:v for k,v in best.items() if k!='_cells'}|{'incrementalAreaCells':gain})
     return dict(primaryReference=primary,alreadyRepresentedSurfaceReferences=sorted(covered_references),selected=selected,candidates=[{k:v for k,v in c.items() if k!='_cells'} for c in candidates],
         sourceSha256=parent['sourceSha256'],selectionUsesOnlyOriginalTrain=True,
         coverageScope='all_observed_room_not_only_reference_person_silhouette',proposalCellPitch=cell_pitch,
+        rejectedWindowsOnly=bool(rejected_windows_only),
         selectionBoundary='Proposed world coverage is a hypothesis; each selected shared surface still requires held-out static-track validation.')
 
 
@@ -153,7 +158,8 @@ def export_addition(fresh,solved,parent_path,out,budget,data,report,fit_ids,held
     fresh={k:v[unique] for k,v in fresh.items()}
     if not len(fresh['means']):raise SharedRoomEvidenceUnavailable('room_completion_no_unique_observed_surface')
     chosen=select_budget(fresh,budget);fresh={k:v[chosen] for k,v in fresh.items()}
-    index=len(existing_additions)+1;fresh['source_receipt_index']=np.full(len(chosen),index,np.int16)
+    index=len(parent['components']['room'].get('additionalSurfaceReceipts',[]))+len(existing_additions)+1
+    fresh['source_receipt_index']=np.full(len(chosen),index,np.int16)
     asset=Path(out)/'addition.npz';np.savez_compressed(asset,**fresh,source_hash=np.asarray(parent['sourceSha256']),coordinate_frame=np.asarray('world'),referenceName=np.asarray(report['reference']))
     proof=dict(schemaVersion=1,kind='shared-static-track-surface-correction',qualified=True,
         sourceSha256=parent['sourceSha256'],preparedSha256=parent['preparedSha256'],localGeometrySha256=parent['localGeometrySha256'],

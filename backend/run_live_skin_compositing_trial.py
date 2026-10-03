@@ -10,6 +10,7 @@ from reconstruction_portrait_pipeline import (load_prepared,initialize_scene,
     surface_contract,surface_contract_matches,audit_stages,audit_full_scene,export_candidate,digest,write_json)
 from reconstruction_live_skin_compositing import restore_skin_compositing
 from reconstruction_code_identity import source_identity
+from reconstruction_person_supervision_state import restore_person_supervision,copy_person_supervision_files
 
 
 def run(parent, output, steps=180):
@@ -21,9 +22,7 @@ def run(parent, output, steps=180):
     data=load_prepared(prepared);checkpoint=torch.load(parent/'trained-state.pt',map_location='cuda',weights_only=True)
     from reconstruction_live_face_domain import restore_recorded
     restore_recorded(data,parent,config)
-    if config.get('observedFaceDomain'):
-        shutil.copyfile(parent/'observed-face-initial-appearance.npz',output/'observed-face-initial-appearance.npz')
-        shutil.copyfile(parent/'observed-face-domain.json',output/'observed-face-domain.json')
+    copy_person_supervision_files(parent,output,config)
     data['reference']=checkpoint['surfaceContract']['reference']
     data['dense_manifest']=Path(config['denseSurfaces']['manifestPath'])
     shutil.copyfile(prepared/'cloth_supported_seeds.npz',output/'cloth_supported_seeds.npz')
@@ -34,8 +33,10 @@ def run(parent, output, steps=180):
         scene.register_buffer('neck_sh_editable',checkpoint['model']['neck_sh_editable'].clone())
     scene.load_state_dict(checkpoint['model'],strict=True)
     scene.portrait.constraint_mode='soft'
+    person_restore=restore_person_supervision(scene,data,parent,config,checkpoint)
     identity=source_identity();files=identity['sourceFiles']
-    for name in ('reconstruction_live_skin_compositing.py','run_live_skin_compositing_trial.py'):
+    for name in ('reconstruction_live_skin_compositing.py','run_live_skin_compositing_trial.py',
+                 'reconstruction_person_supervision_state.py'):
         files[name]=digest(Path(__file__).with_name(name))
     identity={**identity,'sourceFiles':dict(sorted(files.items())),
         'implementationSha256':hashlib.sha256(json.dumps(files,sort_keys=True).encode()).hexdigest()}
@@ -44,7 +45,8 @@ def run(parent, output, steps=180):
     cfg={**config,'parentRun':str(parent),'parentCheckpointSha256':digest(parent/'trained-state.pt'),
          'parentAssetSha256':digest(parent/'portrait.gaussian.ply'),'skinCompositingSteps':steps,
          'localSteps':0,'roomSteps':0,'hairCompositeSteps':0,'sourceFiles':files,'implementation':identity,
-         'resumeKind':'same_full_model_new_Adam_only_skin_appearance','dualBackdropOnlyOnObservedInteriorSkin':True}
+         'resumeKind':'same_full_model_new_Adam_only_skin_appearance','dualBackdropOnlyOnObservedInteriorSkin':True,
+         'personSupervisionRestore':person_restore}
     write_json(output/'config.json',cfg)
     before=audit_full_scene(scene,data,output/'full-initial')
     trained=restore_skin_compositing(scene,data,output,steps)

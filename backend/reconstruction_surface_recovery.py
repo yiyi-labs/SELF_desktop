@@ -27,6 +27,79 @@ def _historic_identity(value,parent=None):
     return module.normpath(value)
 
 
+def _window_proof_closure(proof,proof_identity,keep,*,prefix,source_hash,active=None):
+    """Walk only the declared verification graph, never arbitrary JSON paths.
+
+    Manifest/depth summaries are retained byte-exact as provenance leaves.
+    Their RGB/video/inference-cache paths are intentionally not traversed:
+    image-supervised resume still requires original capture/preparation.
+    ``keep`` resolves either original files or the relocation index, so the
+    identical graph is verified after all old directories disappear.
+    """
+    recovery=proof.get('windowRecovery')
+    if not recovery:return
+    active=set() if active is None else active
+    if proof_identity in active:raise ValueError('surface_recovery_proof_cycle')
+    active.add(proof_identity)
+    def dependency(label,declared,wanted,parent,extension):
+        identity=_historic_identity(declared,parent)
+        if Path(identity).suffix.lower()!=extension:
+            raise ValueError('surface_recovery_window_dependency_type:'+label)
+        return keep(prefix+'windowRecovery.'+label,declared,wanted,parent)
+    try:
+        proposal_file,proposal_identity=dependency('proposal',recovery['proposalPath'],recovery['proposalSha256'],proof_identity,'.json')
+        proposal=json.loads(proposal_file.read_text())
+        if (proposal.get('kind')!='rejected-fixed-camera-window-proposal' or proposal.get('sourceSha256')!=source_hash
+            or proposal.get('permitsSolveOnly') is not True):raise ValueError('surface_recovery_window_proposal_identity')
+        for key in ('depthManifest','originalDecision','parentManifest'):
+            file,_=dependency('proposal.'+key,proposal[key+'Path'],proposal[key+'Sha256'],proposal_identity,'.json')
+            metadata=json.loads(file.read_text())
+            if metadata.get('sourceSha256',metadata.get('sourceHash'))!=source_hash:
+                raise ValueError('surface_recovery_window_metadata_source:'+key)
+        overlap_file,overlap_identity=dependency('overlap',recovery['overlapPath'],recovery['overlapSha256'],proof_identity,'.json')
+        overlap=json.loads(overlap_file.read_text())
+        if overlap.get('sourceSha256')!=source_hash or overlap.get('qualified') is not True:
+            raise ValueError('surface_recovery_window_overlap_identity')
+        dependency('overlap.surface',overlap['surfacePath'],overlap['surfaceSha256'],overlap_identity,'.npz')
+        if overlap['kind']=='recovered-room-unrepresented-observation':
+            dependency('overlap.pointEvidence',overlap['pointEvidencePath'],overlap['pointEvidenceSha256'],overlap_identity,'.npz')
+            file,_=dependency('overlap.parentRoom',overlap['parentRoomPath'],overlap['parentRoomSha256'],overlap_identity,'.npz')
+            with np.load(file,allow_pickle=False) as values:
+                if str(values['source_hash'])!=source_hash or str(values['coordinate_frame'])!='world':
+                    raise ValueError('surface_recovery_window_parent_room_identity')
+        elif overlap['kind']=='recovered-room-mutual-surface-overlap':
+            for i,pair in enumerate(overlap['pairs']):
+                label='overlap.link'+str(i)+'.'
+                linked_file,linked_identity=dependency(label+'receipt',pair['receiptPath'],pair['receiptSha256'],overlap_identity,'.json')
+                linked=json.loads(linked_file.read_text())
+                if (linked.get('kind')!='shared-static-track-surface-correction' or linked.get('qualified') is not True
+                    or linked.get('sourceSha256')!=source_hash):raise ValueError('surface_recovery_linked_proof_identity')
+                for key,extension in (('solverReport','.json'),('surface','.npz')):
+                    dependency(label+key,linked[key+'Path'],linked[key+'Sha256'],linked_identity,extension)
+                _window_proof_closure(linked,linked_identity,keep,prefix=prefix+'windowRecovery.'+label,
+                                      source_hash=source_hash,active=active)
+        else:raise ValueError('surface_recovery_window_overlap_kind')
+    finally:active.remove(proof_identity)
+
+
+def _second_reference_provenance(metadata,manifest_identity,keep):
+    """Keep the bounded retry decision, not just the successful surface proof."""
+    attempt=metadata.get('roomWindowSecondReference')
+    if not attempt:return
+    def dependency(label,declared,wanted,parent):
+        if Path(_historic_identity(declared,parent)).suffix.lower()!='.json':
+            raise ValueError('surface_recovery_retry_dependency_type')
+        return keep('roomSecondReference.'+label,declared,wanted,parent)
+    file,identity=dependency('decision',attempt['decisionPath'],attempt['decisionSha256'],manifest_identity)
+    decision=json.loads(file.read_text())
+    if (decision.get('kind')!='one-second-reference-research' or decision.get('maxAttemptsPerWindow')!=2
+        or not 0<decision['maxEvaluations']<=40):raise ValueError('surface_recovery_retry_decision_contract')
+    for key in ('priorAttempt','selection'):
+        file,_=dependency(key,decision[key+'Path'],decision[key+'Sha256'],identity)
+        source=json.loads(file.read_text())
+        if source.get('sourceSha256')!=metadata['sourceSha256']:raise ValueError('surface_recovery_retry_source')
+
+
 def _proof_dependencies(manifest,metadata):
     result={}
     for name,row in metadata['components'].items():
@@ -59,6 +132,18 @@ def _proof_dependencies(manifest,metadata):
                 wanted=proof[key+'Sha256']
                 if digest(dependency)!=wanted:raise ValueError('surface_recovery_dependency_hash:'+key)
                 result[name+'.'+prefix+key]=(dependency,wanted,str(proof[key+'Path']))
+            def keep(label,declared,wanted,parent):
+                identity=_historic_identity(declared,parent);dependency=Path(identity)
+                if digest(dependency)!=wanted:raise ValueError('surface_recovery_dependency_hash:'+label)
+                result[name+'.'+label]=(dependency,wanted,str(declared))
+                return dependency,identity
+            _window_proof_closure(proof,_historic_identity(os.path.abspath(path)),keep,
+                prefix=prefix,source_hash=metadata['sourceSha256'])
+    def keep_attempt(label,declared,wanted,parent):
+        identity=_historic_identity(declared,parent);dependency=Path(identity)
+        if digest(dependency)!=wanted:raise ValueError('surface_recovery_dependency_hash:'+label)
+        result[label]=(dependency,wanted,str(declared));return dependency,identity
+    _second_reference_provenance(metadata,_historic_identity(os.path.abspath(manifest)),keep_attempt)
     return result
 
 
@@ -225,6 +310,17 @@ def verify_recovery_manifest(path,*,expected_manifest_hash):
                 raise ValueError('surface_recovery_proof_identity')
             for key in ('solverReport','surface'):
                 check(prefix+key,proof[key+'Path'],proof[key+'Sha256'],proof_identity)
+            _window_proof_closure(proof,proof_identity,check,prefix=prefix,source_hash=metadata['sourceSha256'])
+    def check_attempt(label,declared,wanted,parent):
+        expected_evidence.add(label);saved=evidence.get(label)
+        if not saved:raise ValueError('surface_recovery_retry_evidence_missing:'+label)
+        identity=_historic_identity(declared,parent)
+        if saved.get('originalIdentity')!=identity or saved.get('originalDeclaredPath')!=str(declared):
+            raise ValueError('surface_recovery_retry_identity_changed:'+label)
+        file=within(saved['file'])
+        if saved['sha256']!=wanted or digest(file)!=wanted:raise ValueError('surface_recovery_retry_evidence_changed:'+label)
+        expected_relocations[identity]={'file':saved['file'],'sha256':wanted};return file,identity
+    _second_reference_provenance(metadata,old_manifest,check_attempt)
     hair=metadata['components'].get('hair',{});motion=hair.get('hairMotion')
     if motion and hair.get('count'):
         def check_hair(label,declared,wanted,parent):

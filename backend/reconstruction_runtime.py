@@ -31,10 +31,27 @@ def training_profile_options(profile):
     if hair_steps and not dense:raise ValueError('test_hair_composite_requires_dense_surfaces')
     if shared and not dense:raise ValueError('test_shared_room_requires_dense_surfaces')
     if skin_steps and not (dense and observed_face):raise ValueError('test_skin_compositing_requires_observed_dense_face')
+    # These stages alter the training contract, not the USB/asset schema.
+    # No truthy strings, implicit opt-ins, or research body experiment can
+    # silently enter the live profile.
+    additions={key:profile.get(key,False) for key in
+               ('opaquePerson','opaqueBody','surfaceFootprint','roomWindowRecovery')}
+    for key,value in additions.items():
+        if not isinstance(value,bool):raise ValueError('test_'+key+'_requires_boolean')
+        if value and profile.get('executionAdapter')!='native-fullframe':
+            raise ValueError('test_'+key+'_requires_native_adapter')
+    if additions['opaqueBody']:
+        raise ValueError('test_opaque_body_is_research_only')
+    if additions['opaquePerson'] and not observed_face:
+        raise ValueError('test_opaque_person_requires_observed_face')
+    if additions['surfaceFootprint'] and not observed_face:
+        raise ValueError('test_surface_footprint_requires_observed_face')
+    if additions['roomWindowRecovery'] and not (dense and shared):
+        raise ValueError('test_room_window_recovery_requires_shared_dense_surfaces')
     return {'localSteps':local_steps,'roomSteps':room_steps,'hairCompositeSteps':hair_steps,
             'skinCompositingSteps':skin_steps,
             'denseSurfaces':dense,'sharedRoomSurface':shared,'surfaceRefine':profile.get('surfaceRefine') is True,
-            'observedFaceDomain':observed_face}
+            'observedFaceDomain':observed_face,**additions}
 
 
 def pipeline_entry(profile,backend):
@@ -188,6 +205,70 @@ def training_execution_receipt(output,report):
             "jointSteps":report.get("jointSteps"),"resumeKind":report.get("resumeKind")}
 
 
+def repair_execution_receipt(output,report,options=None):
+    """Bind opt-in repair claims to the files that actually ran.
+
+    A zero-change or rejected candidate remains a recorded execution, never a
+    quality pass. Original JSON/NPZ files are retained with the checkpoint.
+    """
+    output=Path(output)
+    def digest(file):return hashlib.sha256(Path(file).read_bytes()).hexdigest()
+    actual={'opaquePerson':report.get('opaquePerson',False),
+            'opaqueBody':report.get('opaqueBody',False),
+            'surfaceFootprint':report.get('surfaceFootprint') is not None,
+            'roomWindowRecovery':report.get('roomWindowRecovery',False)}
+    if any(not isinstance(actual[k],bool) for k in ('opaquePerson','opaqueBody','roomWindowRecovery')):
+        raise ValueError('test_repair_report_flags_invalid')
+    if options is not None:
+        for key,value in actual.items():
+            if value!=options[key]:raise ValueError('test_repair_requested_actual_mismatch:'+key)
+    if actual['opaqueBody']:raise ValueError('test_opaque_body_is_research_only')
+    result={key:{'applied':value} for key,value in actual.items()}
+    if actual['opaquePerson']:
+        file=output/'opaque-interiors.json'
+        if not file.is_file() or digest(file)!=report.get('opaqueInteriorsReceiptSha256'):
+            raise ValueError('test_opaque_interiors_receipt_missing_or_changed')
+        masks=json.loads(file.read_text())
+        if not isinstance(masks,dict) or not masks:
+            raise ValueError('test_opaque_interiors_receipt_empty')
+        result['opaquePerson'].update(scope='head_only',receiptSha256=digest(file),
+            observationCount=len(masks),qualityPassed=False)
+    if actual['surfaceFootprint']:
+        value=report['surfaceFootprint'];file=output/'surface-footprint.json'
+        if not isinstance(value,dict) or not file.is_file() or json.loads(file.read_text())!=value:
+            raise ValueError('test_surface_footprint_receipt_missing_or_changed')
+        domain=report.get('observedFaceDomain') or {}
+        if digest(file)!=domain.get('surfaceFootprintSha256'):
+            raise ValueError('test_surface_footprint_prior_receipt_mismatch')
+        diagnostics=output/'surface-footprint-diagnostics.npz'
+        if not diagnostics.is_file():raise ValueError('test_surface_footprint_diagnostics_missing')
+        if value.get('sourceSha256')!=report.get('sourceSha256') or value.get('priorStage')!='fresh_initialization':
+            raise ValueError('test_surface_footprint_source_or_stage_mismatch')
+        result['surfaceFootprint'].update(receiptSha256=digest(file),
+            diagnosticsSha256=digest(diagnostics),changedCount=value.get('changedCount'),
+            normalVariancePreserved=value.get('normalVariancePreserved'),qualityPassed=False)
+    if actual['roomWindowRecovery']:
+        value=report.get('roomWindowRecoveryReceipt');file=output/'room-window-recovery.json'
+        if not isinstance(value,dict) or not file.is_file() or json.loads(file.read_text())!=value:
+            raise ValueError('test_room_window_recovery_receipt_missing_or_changed')
+        dense=report.get('denseSurfaces') or {}
+        result_value=value.get('result')
+        if not isinstance(result_value,dict) or result_value!=dense.get('roomWindowRecovery'):
+            raise ValueError('test_room_window_recovery_dense_receipt_mismatch')
+        manifest=Path(value.get('manifestPath',''))
+        if not manifest.is_file() or digest(manifest)!=value.get('manifestSha256'):
+            raise ValueError('test_room_window_recovery_manifest_changed')
+        manifest_value=json.loads(manifest.read_text())
+        if (manifest_value.get('sourceSha256')!=report.get('sourceSha256') or
+                manifest_value.get('roomWindowRecovery')!=result_value):
+            raise ValueError('test_room_window_recovery_manifest_identity')
+        result['roomWindowRecovery'].update(receiptSha256=digest(file),
+            manifestSha256=value['manifestSha256'],status=result_value.get('status'),
+            addedCount=result_value.get('addedCount'),
+            originalPrefixBitwiseUnchanged=result_value.get('originalPrefixBitwiseUnchanged'),qualityPassed=False)
+    return result
+
+
 def verified_preparation(profile,source_hash,backend):
     """A same-capture observation cache is reusable, never cross-person data."""
     directory=profile.get("preparedCache")
@@ -267,6 +348,9 @@ def reconstruct_test(path,job,profile,update,extract_frames,prepare_faces,comman
     if hair_steps:argv.extend(('--hair-steps',str(hair_steps)))
     if skin_steps:argv.extend(('--skin-steps',str(skin_steps)))
     if options['observedFaceDomain']:argv.append('--observed-face-domain')
+    for key,flag in (('opaquePerson','--opaque-person'),('surfaceFootprint','--surface-footprint'),
+                     ('roomWindowRecovery','--room-window-recovery')):
+        if options[key]:argv.append(flag)
     def progress(row):
         stage=row.get("stage");step=row.get("step")
         if stage=="surface":
@@ -307,6 +391,7 @@ def reconstruct_test(path,job,profile,update,extract_frames,prepare_faces,comman
             raise ValueError('test_skin_compositing_receipt_changed')
     # Validate before copying any candidate to the transport's asset paths.
     observed_face_execution_receipt(output,report)
+    repair_receipt=repair_execution_receipt(output,report,options)
     manifests={}
     for kind,filename in (("gaussian","portrait.gaussian.ply"),("view","portrait.view.json")):
         src=output/filename;target=path/filename
@@ -326,13 +411,16 @@ def reconstruct_test(path,job,profile,update,extract_frames,prepare_faces,comman
     audit["surfaceStage"]=report.get("surfaceStage")
     audit["denseSurfaces"]=report.get("denseSurfaces")
     audit["executionReceipt"]=training_execution_receipt(output,report)
+    audit["executionReceipt"]['repairs']=repair_receipt
     audit["preparationParentGpu"]=quality.get('preparationParentGpu')
     # Keep recoverable learned parameters/Adam/RNG with the result, while the
     # existing cleanup still deletes the recording and all decoded pixels.
     state_dir=path/"portrait-state";state_dir.mkdir()
     for file in output.glob("*.pt"):shutil.copyfile(file,state_dir/file.name)
     for filename in ("config.json","report.json","portrait-import.json",
-                       "observed-face-domain.json","observed-face-initial-appearance.npz","skin-compositing-training.json"):
+                       "observed-face-domain.json","observed-face-initial-appearance.npz","skin-compositing-training.json",
+                       "opaque-interiors.json","surface-footprint.json","surface-footprint-diagnostics.npz",
+                       "room-window-recovery.json"):
         if (output/filename).is_file():shutil.copyfile(output/filename,state_dir/filename)
     audit['localFitRecovery']=retain_local_fit_state(prepared,state_dir)
     if report.get('denseSurfaces'):
