@@ -87,7 +87,8 @@ async def edit_plans(request: Request):
         raise HTTPException(429, "rate_limit")
     try:
         length = int(request.headers.get("content-length", "0"))
-        if length < 0: raise ValueError()
+        if length < 0:
+            raise ValueError()
     except ValueError:
         raise HTTPException(400, "invalid_content_length") from None
     if length > 11*1024*1024:

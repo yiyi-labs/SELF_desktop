@@ -174,7 +174,8 @@ def validate_plan(plan: Plan, snapshot: Snapshot) -> Plan:
         # The dedicated question is rendered once beside the choices. Remove
         # duplicate question sentences from the acknowledgement, not the plan.
         statement=re.sub(r'[^。！？.!?]*[？?]','',plan.shortMessage).strip()
-        if statement:plan.shortMessage=statement
+        if statement:
+            plan.shortMessage=statement
     plan.choices = [display(choice) for choice in plan.choices]
     if plan.choices and (plan.decision != "clarify" or not plan.question or len(plan.choices)<2 or len(set(plan.choices))!=len(plan.choices) or any(not c.strip() or len(c)>60 for c in plan.choices)):
         raise ValueError("invalid_choices")

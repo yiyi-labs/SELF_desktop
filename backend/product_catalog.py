@@ -12,7 +12,8 @@ def lookup(user_text: str, context_ids: list[str] | None = None) -> list[dict]:
         return exact
     continuation = user_text.strip() in ('1','2','3') or any(word in user_text.lower() for word in ('这款','这个','它','试一下','试试','淡一点','参数','效果','怎么用','用法','成分','还有','为什么','this','it','use'))
     explicit = any(word in user_text.lower() for word in ['olay','玉兰油','产品','护肤','小白瓶','超红瓶','黑管'])
-    if not explicit and not (continuation and context_ids):return []
+    if not explicit and not (continuation and context_ids):
+        return []
     if continuation and context_ids and not explicit:
         joined = contextual_products(context_ids)
         if joined:

@@ -79,7 +79,8 @@ def train(path: Path, steps:int=3000, model_path: Path | None = None,
     if steps < (400 if shared_research else 3000):
         raise ValueError('joint_training_below_fidelity_floor')
     model_path=model_path or path/'sparse'/'0'
-    random.seed(171);torch.manual_seed(171)
+    random.seed(171)
+    torch.manual_seed(171)
     torch.cuda.reset_peak_memory_stats()
     cameras,_,_=load_scene(path,model_path)
     cameras.sort(key=lambda x:x[0].name)
@@ -98,27 +99,42 @@ def train(path: Path, steps:int=3000, model_path: Path | None = None,
     images_by_id = model.images
     observations_by_id = {image_id: image.points2D
                           for image_id, image in images_by_id.items()}
-    xyz=[];rgb=[];semantic=[];transition=0
-    source_ids=[];source_kinds=[]
+    xyz=[]
+    rgb=[]
+    semantic=[]
+    transition=0
+    source_ids=[]
+    source_kinds=[]
     for point_id, point in model.points3D.items():
-        if point.error>3 or point.track.length()<3:continue
+        if point.error>3 or point.track.length()<3:
+            continue
         face=room=0
         for element in point.track.elements:
             im=images_by_id[element.image_id]
-            if not im.has_pose or im.name not in masks:continue
+            if not im.has_pose or im.name not in masks:
+                continue
             u,v=observations_by_id[element.image_id][element.point2D_idx].xy
             mask=masks[im.name]
-            u=int(u);v=int(v)
-            if not (0<=u<mask.shape[1] and 0<=v<mask.shape[0]):continue
-            if mask[v,u]>0:face+=1
-            else:room+=1
-        if face+room<3:continue
-        xyz.append(point.xyz);rgb.append(point.color)
+            u=int(u)
+            v=int(v)
+            if not (0<=u<mask.shape[1] and 0<=v<mask.shape[0]):
+                continue
+            if mask[v,u]>0:
+                face+=1
+            else:
+                room+=1
+        if face+room<3:
+            continue
+        xyz.append(point.xyz)
+        rgb.append(point.color)
         semantic.append(face>=3 and face>room*1.5)
-        source_ids.append(int(point_id));source_kinds.append(0)
-        if face and room:transition+=1
+        source_ids.append(int(point_id))
+        source_kinds.append(0)
+        if face and room:
+            transition+=1
     with np.load(path/'environment_seeds.npz') as seeds:
-        xyz.extend(seeds['xyz']);rgb.extend(seeds['rgb'])
+        xyz.extend(seeds['xyz'])
+        rgb.extend(seeds['rgb'])
         semantic.extend([False]*len(seeds['xyz']))
         source_ids.extend(range(len(seeds['xyz'])))
         source_kinds.extend([1]*len(seeds['xyz']))
@@ -181,16 +197,22 @@ def train(path: Path, steps:int=3000, model_path: Path | None = None,
                              Image.Resampling.NEAREST),dtype=np.uint8,copy=True))
             image,mask=scene_cache[name]
             K[:2,:]*=.5
-            width//=2;height//=2
+            width//=2
+            height//=2
         elif mode=='face':
             x,y,w,h=face_regions[name.name]
-            margin_x=round(w*.35);margin_y=round(h*.35)
-            x0=max(0,x-margin_x);y0=max(0,y-margin_y)
-            x1=min(width,x+w+margin_x);y1=min(height,y+h+margin_y)
+            margin_x=round(w*.35)
+            margin_y=round(h*.35)
+            x0=max(0,x-margin_x)
+            y0=max(0,y-margin_y)
+            x1=min(width,x+w+margin_x)
+            y1=min(height,y+h+margin_y)
             image=image[y0:y1,x0:x1]
             mask=masks[name.name][y0:y1,x0:x1]
-            K[0,2]-=x0;K[1,2]-=y0
-            width=x1-x0;height=y1-y0
+            K[0,2]-=x0
+            K[1,2]-=y0
+            width=x1-x0
+            height=y1-y0
         else:
             mask=masks[name.name]
         target=torch.from_numpy(np.ascontiguousarray(image)).cuda().float()[None]/255
@@ -208,7 +230,8 @@ def train(path: Path, steps:int=3000, model_path: Path | None = None,
                 'sh':colors,
                 'person_mask':params['semantic'].flatten()>.5},
                 pose,face_views[name.name],K,width,height,degree=degree)
-            out=shared['rgb'][None];alpha=shared['alpha'][None,:,:,None]
+            out=shared['rgb'][None]
+            alpha=shared['alpha'][None,:,:,None]
             info=shared['projection']
         else:
             # Historical production baseline alternates hidden groups. It
@@ -225,7 +248,8 @@ def train(path: Path, steps:int=3000, model_path: Path | None = None,
     samples=[]
     for step in range(steps):
         view_index,mode=training_view_and_mode(step,len(training))
-        if mode=='full':mode='scene'
+        if mode=='full':
+            mode='scene'
         entry=training[view_index]
         degree=min(step//900,3)
         out,target,face,alpha,info,shared=render(entry,degree,mode)
@@ -257,9 +281,12 @@ def train(path: Path, steps:int=3000, model_path: Path | None = None,
             # no gradient target across the cut-out silhouette.
             loss = loss + .1 * source_edge_alignment(out, target, face)
         loss=loss+(params['semantic'].sum()+params['source_index'].sum())*0
-        if not torch.isfinite(loss):raise RuntimeError('joint_loss_nonfinite')
+        if not torch.isfinite(loss):
+            raise RuntimeError('joint_loss_nonfinite')
         loss.backward()
-        for opt in opts.values():opt.step();opt.zero_grad(set_to_none=True)
+        for opt in opts.values():
+            opt.step()
+            opt.zero_grad(set_to_none=True)
         scheduler.step()
         strategy.step_post_backward(params,opts,state,step,info,packed=True)
         if step%100==0:
@@ -269,7 +296,9 @@ def train(path: Path, steps:int=3000, model_path: Path | None = None,
         del out,target,face,room,alpha,info,error,face_error,room_error,loss,shared
         if len(params['means'])>500000 or torch.cuda.max_memory_allocated()>7.4*1024**3:
             raise RuntimeError('joint_capacity_exceeded')
-    face_errors=[];room_errors=[];room_alphas=[]
+    face_errors=[]
+    room_errors=[]
+    room_alphas=[]
     with torch.no_grad():
         for entry in validation:
             out,target,face,alpha,_,_=render(entry,3,'face')
@@ -316,7 +345,8 @@ def train(path: Path, steps:int=3000, model_path: Path | None = None,
         initialSourceIndex=source_index.astype(np.int32),
         personPartition=(params['semantic'].detach()[order,0].cpu().numpy()>.5).astype(np.uint8))
     view=json.loads((path/'portrait.view.json').read_text())
-    view['editableSplats']=len(face_ids);view['recordedEnvironmentSplats']=len(room_ids)
+    view['editableSplats']=len(face_ids)
+    view['recordedEnvironmentSplats']=len(room_ids)
     (path/'portrait.view.json').write_text(json.dumps(view,ensure_ascii=False,separators=(',',':')))
     print('output',dest.stat().st_size,flush=True)
 

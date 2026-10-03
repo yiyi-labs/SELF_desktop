@@ -18,9 +18,12 @@ def run(parent, output, steps=180, max_parents=384, rounds=2):
     from live_face_domain import restore_recorded
     from reconstruction_live_face_capacity import select_patch, prepare_targets, train_capacity
     from code_identity import source_identity
-    parent = Path(parent).resolve(); output = Path(output).resolve()
-    if output.exists(): raise FileExistsError('new_run_id_required:'+str(output))
-    if not torch.cuda.is_available(): raise RuntimeError('GPU_unavailable_no_training_claim')
+    parent = Path(parent).resolve()
+    output = Path(output).resolve()
+    if output.exists():
+        raise FileExistsError('new_run_id_required:'+str(output))
+    if not torch.cuda.is_available():
+        raise RuntimeError('GPU_unavailable_no_training_claim')
     config = json.loads((parent/'config.json').read_text())
     if config.get('soft') is not True or config.get('antialiased') is not False:
         raise ValueError('capacity_requires_explicit_soft_classic_full_scene_parent')
@@ -29,9 +32,14 @@ def run(parent, output, steps=180, max_parents=384, rounds=2):
     if not 24 <= steps <= 240 or not 8 <= max_parents <= 512 or rounds not in (1, 2):
         raise ValueError('capacity_budget_outside_finite_reviewed_limits')
     output.mkdir(parents=True, exist_ok=False)
-    torch.set_num_threads(4); torch.manual_seed(280928); np.random.seed(280928); random.seed(280928)
-    torch.cuda.reset_peak_memory_stats(); started = time.perf_counter()
-    prepared = Path(config['prepared']); data = load_prepared(prepared)
+    torch.set_num_threads(4)
+    torch.manual_seed(280928)
+    np.random.seed(280928)
+    random.seed(280928)
+    torch.cuda.reset_peak_memory_stats()
+    started = time.perf_counter()
+    prepared = Path(config['prepared'])
+    data = load_prepared(prepared)
     checkpoint = torch.load(parent/'trained-state.pt', map_location='cuda', weights_only=True)
     restore_recorded(data, parent, config)
     data['reference'] = checkpoint['surfaceContract']['reference']
@@ -48,15 +56,18 @@ def run(parent, output, steps=180, max_parents=384, rounds=2):
     scene.load_state_dict(checkpoint['model'], strict=True)
     scene.portrait.constraint_mode = 'soft'
     person_restore=restore_person_supervision(scene,data,parent,config,checkpoint)
-    identity = source_identity(); files = dict(identity['sourceFiles'])
+    identity = source_identity()
+    files = dict(identity['sourceFiles'])
     for name in ('reconstruction_live_face_capacity.py', 'run_live_face_capacity_trial.py',
                  'person_supervision_state.py'):
         files[name] = digest(Path(__file__).with_name(name))
     files = dict(sorted(files.items()))
     identity = {**identity, 'sourceFiles':files,
         'implementationSha256':hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest()}
-    snapshot = output/'algorithm-source'; snapshot.mkdir()
-    for name in files: shutil.copyfile(Path(__file__).with_name(name), snapshot/name)
+    snapshot = output/'algorithm-source'
+    snapshot.mkdir()
+    for name in files:
+        shutil.copyfile(Path(__file__).with_name(name), snapshot/name)
     cfg = {**config, 'parentRun':str(parent), 'parentCheckpointSha256':digest(parent/'trained-state.pt'),
         'parentAssetSha256':digest(parent/'portrait.gaussian.ply'), 'localSteps':0, 'roomSteps':0,
         'hairCompositeSteps':0, 'faceCapacityStepsPerArm':steps, 'maxParents':max_parents, 'rounds':rounds,
@@ -76,13 +87,16 @@ def run(parent, output, steps=180, max_parents=384, rounds=2):
     for label, capacity in (('Rctrl', False), ('Rcap', True)):
         # Reset the same sampler/RNG before each independent arm. Replacement
         # is deterministic; neither arm gets extra recovery image updates.
-        torch.manual_seed(280928); np.random.seed(280928); random.seed(280928)
+        torch.manual_seed(280928)
+        np.random.seed(280928)
+        random.seed(280928)
         arm = output/label
         report, rollback = train_capacity(scene, data, plan, targets, arm,
             steps=steps, capacity=capacity, rounds=rounds)
         write_json(arm/'config.json', {**cfg, 'variant':label})
         copy_person_supervision_files(parent,arm,config)
-        candidate = arm/'candidate'; candidate.mkdir()
+        candidate = arm/'candidate'
+        candidate.mkdir()
         # Persist the actual candidate before rollback, even if a numerical
         # guard failed. A restored parent must not masquerade as the candidate.
         asset_hash = export_candidate(scene, data, candidate)
@@ -90,7 +104,8 @@ def run(parent, output, steps=180, max_parents=384, rounds=2):
         local = audit_stages(scene, data, arm/'local-final')
         report.update(candidateAssetSha256=asset_hash, fullFinal=full, localFinal=local,
             rollback=rollback(), status='research_candidate_requires_visual_review_not_release')
-        write_json(arm/'report.json', report); arms[label] = report
+        write_json(arm/'report.json', report)
+        arms[label] = report
         # Bitwise full parent state after rollback, including neck selection.
         for key, value in scene.state_dict().items():
             if not torch.equal(value, checkpoint['model'][key]):
@@ -99,7 +114,8 @@ def run(parent, output, steps=180, max_parents=384, rounds=2):
     comparison = {}
     for name, control in arms['Rctrl']['metrics'].items():
         cap = arms['Rcap']['metrics'][name]
-        if control.get('pixels', 0) < 16: continue
+        if control.get('pixels', 0) < 16:
+            continue
         comparison[name] = dict(role=control['role'], rgbControl=control['rgb'], rgbCapacity=cap['rgb'],
             realEdgeControl=control['edge'], realEdgeCapacity=cap['edge'],
             skinHoleControl=control['hole'], skinHoleCapacity=cap['hole'])
@@ -114,7 +130,10 @@ def run(parent, output, steps=180, max_parents=384, rounds=2):
 
 
 if __name__ == '__main__':
-    p = argparse.ArgumentParser(); p.add_argument('parent'); p.add_argument('output')
-    p.add_argument('--steps', type=int, default=180); p.add_argument('--max-parents', type=int, default=384)
+    p = argparse.ArgumentParser()
+    p.add_argument('parent')
+    p.add_argument('output')
+    p.add_argument('--steps', type=int, default=180)
+    p.add_argument('--max-parents', type=int, default=384)
     p.add_argument('--rounds', type=int, default=2)
     run(**vars(p.parse_args()))
