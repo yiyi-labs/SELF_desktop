@@ -135,7 +135,8 @@ def walk_embeddings(vertices, faces, neighbours, ids, bary, max_hops=8):
             edge = int(np.argmin(bary[row]))
             if bary[row, edge] >= -1e-7:
                 break
-            current = int(ids[row]); nxt = int(neighbours[current, edge])
+            current = int(ids[row])
+            nxt = int(neighbours[current, edge])
             if nxt < 0:
                 blocked += 1
                 bary[row] = np.maximum(bary[row], 0)
@@ -146,13 +147,16 @@ def walk_embeddings(vertices, faces, neighbours, ids, bary, max_hops=8):
             edge_vertices = np.delete(old, edge, axis=0)
             origin, end = edge_vertices
             axis = (end-origin)/max(np.linalg.norm(end-origin), 1e-12)
-            old_n = np.cross(old[1]-old[0], old[2]-old[0]); old_n /= max(np.linalg.norm(old_n), 1e-12)
-            new_n = np.cross(new[1]-new[0], new[2]-new[0]); new_n /= max(np.linalg.norm(new_n), 1e-12)
+            old_n = np.cross(old[1]-old[0], old[2]-old[0])
+            old_n /= max(np.linalg.norm(old_n), 1e-12)
+            new_n = np.cross(new[1]-new[0], new[2]-new[0])
+            new_n /= max(np.linalg.norm(new_n), 1e-12)
             angle = np.arctan2(np.dot(axis, np.cross(old_n, new_n)), np.dot(old_n, new_n))
             p = bary[row] @ old-origin
             p = p*np.cos(angle)+np.cross(axis, p)*np.sin(angle)+axis*np.dot(axis, p)*(1-np.cos(angle))
             bary[row] = barycentric_of(p+origin, new)
-            ids[row] = nxt; changed[row] = True
+            ids[row] = nxt
+            changed[row] = True
         if bary[row].min() < 0:
             bary[row] = bary[row].clip(0)
             bary[row] /= max(bary[row].sum(), 1e-12)
@@ -176,7 +180,8 @@ class LocalPortraitModel(torch.nn.Module):
         surface = len(prior["surface_ids"])
         if not np.array_equal(np.flatnonzero(role != 2), np.arange(surface)):
             raise ValueError("surface_prefix_contract_invalid")
-        n = len(role); self.source_hash = str(prior["source_sha256"])
+        n = len(role)
+        self.source_hash = str(prior["source_sha256"])
         self.model_hash = str(prior["model_sha256"])
         tensor = lambda x, dtype=torch.float32: torch.as_tensor(x, dtype=dtype, device=device)
         self.register_buffer("faces", tensor(faces, torch.long))
@@ -243,14 +248,16 @@ class LocalPortraitModel(torch.nn.Module):
         scales=self.log_scales.exp()
         if getattr(self,"observed_hair_surface",False):
             scales=torch.cat((scales[:self.surface_count].clamp(.00045,.018),scales[self.surface_count:]))
-        else:scales=scales.clamp(.00045,.018)
+        else:
+            scales=scales.clamp(.00045,.018)
         return GaussianState(means, functional.normalize(self.quats, dim=-1),
                              scales, self.opacity_logits.sigmoid(),
                              self.sh, torch.where(self.role == 2, 2, 1))
 
     def soft_regularization(self, observed_mesh):
         surface, normal = self.surface(observed_mesh)
-        n = self.surface_count; state = self.local_state(observed_mesh)
+        n = self.surface_count
+        state = self.local_state(observed_mesh)
         covariance = state.covariance()[:n]
         variance = torch.einsum("ni,nij,nj->n", normal, covariance, normal)
         distance = self.normal_offset
@@ -324,10 +331,12 @@ class LocalPortraitModel(torch.nn.Module):
         valid = child_valid[:proposed_count] & child_valid[proposed_count:]
         if not valid.any():
             raise ValueError("split_child_observation_support_failed")
-        selected = selected[valid]; axis = axis[valid]
+        selected = selected[valid]
+        axis = axis[valid]
         children_ids = [v[valid] for v in children_ids]
         children_bary = [v[valid] for v in children_bary]
-        keep_surface = torch.ones(s, dtype=torch.bool, device=selected.device); keep_surface[selected] = False
+        keep_surface = torch.ones(s, dtype=torch.bool, device=selected.device)
+        keep_surface[selected] = False
         rest_surface = torch.where(keep_surface)[0]
         mapping = torch.cat((rest_surface, selected, selected, torch.arange(s, n, device=selected.device)))
         surface_map = mapping[:s+len(selected)]
@@ -335,8 +344,10 @@ class LocalPortraitModel(torch.nn.Module):
         parameter_maps = {"embedding": surface_map, "normal_offset": surface_map,
                           **{key: mapping for key in ("sh", "opacity_logits", "log_scales", "quats")}}
         for key, indices in parameter_maps.items():
-            old = getattr(self, key); values = old.detach()[indices].clone()
-            if key == "embedding": values[start:stop] = torch.cat(children_bary)
+            old = getattr(self, key)
+            values = old.detach()[indices].clone()
+            if key == "embedding":
+                values[start:stop] = torch.cat(children_bary)
             if key == "log_scales":
                 axes = torch.cat((axis, axis))
                 values[torch.arange(start, stop, device=selected.device), axes] += np.log(.8)
@@ -351,7 +362,8 @@ class LocalPortraitModel(torch.nn.Module):
             new_state = {}
             for field, value in state.items():
                 if isinstance(value, torch.Tensor) and value.shape == old.shape:
-                    copied = value[indices].clone(); copied[start:stop] = 0
+                    copied = value[indices].clone()
+                    copied[start:stop] = 0
                     new_state[field] = copied
                 else:
                     new_state[field] = value.clone() if isinstance(value, torch.Tensor) else value
@@ -408,7 +420,8 @@ class CandidateTransaction:
         updates = 0
         if not catastrophic:
             for i in range(recovery_steps):
-                recover(i); updates += 1
+                recover(i)
+                updates += 1
         after = audit()
         accepted = not catastrophic and all(
             after[n]["hole"] <= before[n]["hole"]+.005 and

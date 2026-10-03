@@ -28,7 +28,8 @@ def scheduled_local_name(names, step):
 
 def schedule_receipt(names, steps, *, geometry_start=80, geometry_period=4, geometry_phase=3):
     """Record the actual two phase allocations without touching a model."""
-    if len(set(names))!=len(names):raise ValueError('local_schedule_duplicate_observation')
+    if len(set(names))!=len(names):
+        raise ValueError('local_schedule_duplicate_observation')
     if (geometry_start,geometry_period,geometry_phase)!=(80,4,3):
         raise ValueError('local_schedule_receipt_requires_actual_one_in_four_phase')
     old={name:{'appearance':0,'geometry':0} for name in names}

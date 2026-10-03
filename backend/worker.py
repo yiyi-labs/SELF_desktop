@@ -73,30 +73,46 @@ def command(argv: list[str], timeout: int, *, cwd: Path | None = None,
     if progress is not None:
         process=subprocess.Popen(argv,cwd=cwd,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,
                                  text=True,bufsize=1)
-        lines=queue.Queue();started=time.monotonic();tail=[]
+        lines=queue.Queue()
+        started=time.monotonic()
+        tail=[]
         def reader():
-            for line in process.stdout:lines.put(line)
+            for line in process.stdout:
+                lines.put(line)
             lines.put(None)
         threading.Thread(target=reader,daemon=True).start()
         try:
             while True:
-                if time.monotonic()-started>timeout:raise subprocess.TimeoutExpired(argv,timeout)
-                try:line=lines.get(timeout=1)
-                except queue.Empty:continue
-                if line is None:break
-                tail.append(line);tail=tail[-80:]
+                if time.monotonic()-started>timeout:
+                    raise subprocess.TimeoutExpired(argv,timeout)
+                try:
+                    line=lines.get(timeout=1)
+                except queue.Empty:
+                    continue
+                if line is None:
+                    break
+                tail.append(line)
+                tail=tail[-80:]
                 if diagnostic_file is not None:
-                    with diagnostic_file.open("a",encoding="utf-8") as stream:stream.write(line)
-                try:row=json.loads(line)
-                except json.JSONDecodeError:continue
-                if isinstance(row,dict):progress(row)
-            if process.wait()!=0:raise ReconstructionFailure(f"tool_failed:{Path(argv[0]).name}:{process.returncode}")
+                    with diagnostic_file.open("a",encoding="utf-8") as stream:
+                        stream.write(line)
+                try:
+                    row=json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                if isinstance(row,dict):
+                    progress(row)
+            if process.wait()!=0:
+                raise ReconstructionFailure(f"tool_failed:{Path(argv[0]).name}:{process.returncode}")
             return "".join(tail)
         finally:
             if process.poll() is None:
                 process.terminate()
-                try:process.wait(timeout=5)
-                except subprocess.TimeoutExpired:process.kill();process.wait()
+                try:
+                    process.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    process.kill()
+                    process.wait()
             process.stdout.close()
     result = subprocess.run(argv, cwd=cwd, capture_output=True, text=True,
                             timeout=timeout, check=False)
@@ -581,13 +597,15 @@ def refresh_worker_capability(capability: dict) -> dict:
 
 def dense_tool_preflight(profile: dict) -> dict:
     """Validate pinned files/environment without importing the inference model."""
-    if profile.get('denseSurfaces') is not True:return {'denseToolVerified':False}
+    if profile.get('denseSurfaces') is not True:
+        return {'denseToolVerified':False}
     from live_dense import fixed_tool
     try:
         _,_,lock=fixed_tool()
     except (OSError,ValueError,KeyError) as error:
         label=str(error) if isinstance(error,ValueError) else type(error).__name__
-        if not label.startswith(('dense_','pinned_')):label=type(error).__name__
+        if not label.startswith(('dense_','pinned_')):
+            label=type(error).__name__
         raise ReconstructionFailure('Dense reconstruction tool unavailable: '+label[:90]) from error
     return {'denseToolVerified':True,'denseToolCodeCommit':lock['codeCommit'],
             'denseToolModelCommit':lock['modelCommit']}
@@ -600,7 +618,8 @@ def preflight() -> dict:
     try:
         identity=worker_identity_status(ROOT,_LOADED_IMPLEMENTATION,HERE)
         result.update(identity)
-        if not identity["sourceIdentityVerified"]:return result
+        if not identity["sourceIdentityVerified"]:
+            return result
         profile=engine_profile(ROOT)
         result.update(dense_tool_preflight(profile))
         import cv2
@@ -675,7 +694,8 @@ def main() -> None:
                         finish_cancel(path)
                     elif capability["ready"] and job.get("state") == "queued":
                         capability=refresh_worker_capability(capability)
-                        if capability["ready"]:supervise_job(path)
+                        if capability["ready"]:
+                            supervise_job(path)
                 except OSError as error:
                     # Keep the worker alive and retry terminal cleanup next
                     # pass; expose no capture paths through public status.

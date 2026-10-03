@@ -26,7 +26,8 @@ from scene import supported_static_surfaces
 
 
 def camera_matrix(image):
-    C=np.eye(4,dtype=np.float64);C[:3]=image.cam_from_world().matrix()
+    C=np.eye(4,dtype=np.float64)
+    C[:3]=image.cam_from_world().matrix()
     return C
 
 
@@ -39,7 +40,8 @@ def source_camera(camera):
         raise ValueError("v2_camera_model_not_implemented")
     K=np.asarray(camera.calibration_matrix(),np.float64)
     distortion=np.zeros(5,np.float64)
-    if camera.model.name=="SIMPLE_RADIAL":distortion[0]=camera.params[3]
+    if camera.model.name=="SIMPLE_RADIAL":
+        distortion[0]=camera.params[3]
     return K,distortion
 
 
@@ -48,7 +50,8 @@ def make_masks(source,out,names):
     from probe_portrait_components import (MODEL_DIR,PART_MODEL,HAIR_MODEL,
                                            PART_SHA256,HAIR_SHA256,segmenter)
     for file,expected in ((PART_MODEL,PART_SHA256),(HAIR_MODEL,HAIR_SHA256)):
-        if sha256_file(file)!=expected:raise ValueError("component_model_hash_changed")
+        if sha256_file(file)!=expected:
+            raise ValueError("component_model_hash_changed")
     masks=out/"component_masks"
     for label in COMPONENT_MASK_NAMES+("confidence","labels"):
         (masks/label).mkdir(parents=True,exist_ok=True)
@@ -62,15 +65,18 @@ def make_masks(source,out,names):
                 probability=hair_result.confidence_masks[1].numpy_view().squeeze().copy()
                 labels,classes,certainty=make_component_observations(confidence,probability,marks[name],rgb)
                 for label,mask in labels.items():
-                    if not cv2.imwrite(str(masks/label/(name+".png")),mask):raise OSError("component_mask_write_failed")
+                    if not cv2.imwrite(str(masks/label/(name+".png")),mask):
+                        raise OSError("component_mask_write_failed")
                 cv2.imwrite(str(masks/"labels"/(name+".png")),classes)
                 np.savez_compressed(masks/"confidence"/(name+".npz"),confidence=certainty.astype(np.float16))
-                if number%40==0:print("component-observations",number+1,len(names),flush=True)
+                if number%40==0:
+                    print("component-observations",number+1,len(names),flush=True)
     return masks
 
 
 def rectified_data(source,masks,names,K,distortion):
-    rgb={};labels={}
+    rgb={}
+    labels={}
     for name in names:
         image=cv2.cvtColor(cv2.imread(str(source/"frames"/name)),cv2.COLOR_BGR2RGB)
         height,width=image.shape[:2]
@@ -81,7 +87,8 @@ def rectified_data(source,masks,names,K,distortion):
             raw=cv2.imread(str(masks/label/(name+".png")),cv2.IMREAD_GRAYSCALE)
             labels[name][label]=cv2.remap(raw,mx,my,cv2.INTER_NEAREST)>127
         outside=(mx<0)|(my<0)|(mx>=width)|(my>=height)
-        for label in COMPONENT_MASK_NAMES[:-1]:labels[name][label][outside]=False
+        for label in COMPONENT_MASK_NAMES[:-1]:
+            labels[name][label][outside]=False
         labels[name]["unknown_or_occluded"] |= outside
         from observed_surface import rectified_domains
         labels[name]=rectified_domains(masks,name,K,distortion,labels[name])
@@ -94,7 +101,9 @@ def local_fit_views(source,fit_root,K,distortion,enrich_neighbours=False):
     held=dict(np.load(fit_root/"private-held-local-parameters.npz"))
     train_indices=train["train_frame_indices"].tolist()
     held_indices=held["held_frame_indices"].tolist()
-    faces=model.faces.numpy();data={};audit=[]
+    faces=model.faces.numpy()
+    data={}
+    audit=[]
     with np.load(source/"face_landmarks.npz") as observed:
         for params,indices,role in ((train,train_indices,"train"),(held,held_indices,"development")):
             for row,index in enumerate(indices):
@@ -116,8 +125,10 @@ def local_fit_views(source,fit_root,K,distortion,enrich_neighbours=False):
             available={int(path.stem.split('_')[-1]) for path in (source/"frames").glob("frame_*.png")}
             extra=sorted({i+d for i in train_indices for d in (-3,-2,-1,1,2,3)} & available - set(train_indices+held_indices))
             for index in extra:
-                neighbour=min(train_indices,key=lambda i:abs(i-index));original=data[f"frame_{neighbour:04d}.png"]
-                mesh=original["mesh"].copy();name=f"frame_{index:04d}.png"
+                neighbour=min(train_indices,key=lambda i:abs(i-index))
+                original=data[f"frame_{neighbour:04d}.png"]
+                mesh=original["mesh"].copy()
+                name=f"frame_{index:04d}.png"
                 triangle=mesh[faces[model.landmark_faces.numpy()]]
                 local_marks=(triangle*model.barycentric.numpy()[:,:,None]).sum(1)
                 detection=observed[name][model.landmark_indices.numpy()]
@@ -126,7 +137,8 @@ def local_fit_views(source,fit_root,K,distortion,enrich_neighbours=False):
                           and quality["fitMedianPixels"]<=6.)
                 audit.append({"name":name,"role":"new_neighbour_geometry_and_color_train" if accepted else "rejected_neighbour_pose",
                     "expressionPriorFrom":neighbour,"poseActuallySolved":True,**quality})
-                if not accepted:continue
+                if not accepted:
+                    continue
                 data[name]={"mesh":mesh,"F":refined.astype(np.float32),"role":"train",
                     "marks":cv2.undistortPoints(observed[name].reshape(-1,1,2),K,distortion,P=K).reshape(-1,2)}
     return model,data,audit
@@ -139,15 +151,20 @@ def shared_scene_scale(local,worlds,train_names):
     fitted F_t still supplies bounded head motion. No per-frame scale exists.
     This remains a research connection, never independent calibration.
     """
-    equations=[];targets=[]
+    equations=[]
+    targets=[]
     for name in train_names:
-        C=worlds[name];F=local[name]["F"]
+        C=worlds[name]
+        F=local[name]["F"]
         equations.append(np.column_stack((C[:3,:3],-F[:3,3])))
         targets.append(-C[:3,3])
-    A=np.vstack(equations);b=np.concatenate(targets)
+    A=np.vstack(equations)
+    b=np.concatenate(targets)
     solution,_,_,singular=np.linalg.lstsq(A,b,rcond=None)
-    scale=float(solution[3]);residual=(A@solution-b).reshape(-1,3)
-    if not np.isfinite(scale) or scale<=0:raise ValueError("shared_scene_scale_unobservable_or_negative")
+    scale=float(solution[3])
+    residual=(A@solution-b).reshape(-1,3)
+    if not np.isfinite(scale) or scale<=0:
+        raise ValueError("shared_scene_scale_unobservable_or_negative")
     return scale,{"scale":scale,"stationaryCenterWorld":solution[:3].tolist(),
         "conditionNumber":float(singular[0]/singular[-1]),
         "centerResidualMetricP50":float(np.median(np.linalg.norm(residual,axis=1))/scale),
@@ -171,11 +188,15 @@ def triangulated_component(rgb,labels,local,K,part):
     """
     names=[name for name,row in local.items() if row["role"]=="train"]
     mask_label={"hair":"hair_visible","glasses":"glasses_visible","cloth":"neck_cloth_visible"}[part]
-    features={};parent={};line_support={};sift=cv2.SIFT_create(nfeatures=4500,contrastThreshold=.015)
+    features={}
+    parent={}
+    line_support={}
+    sift=cv2.SIFT_create(nfeatures=4500,contrastThreshold=.015)
     for name in names:
         image=(rgb[name]*255).round().astype(np.uint8)
         mask=labels[name][mask_label].astype(np.uint8)*255
-        if part=="hair":mask=cv2.erode(mask,np.ones((3,3),np.uint8))
+        if part=="hair":
+            mask=cv2.erode(mask,np.ones((3,3),np.uint8))
         kp,desc=sift.detectAndCompute(cv2.cvtColor(image,cv2.COLOR_RGB2GRAY),mask)
         xy=np.asarray([p.pt for p in kp],np.float32).reshape(-1,2)
         if desc is not None:
@@ -186,78 +207,124 @@ def triangulated_component(rgb,labels,local,K,part):
             count=0
             if lsd is not None:
                 for x0,y0,x1,y1 in lsd[:,0]:
-                    x=int((x0+x1)/2);y=int((y0+y1)/2)
-                    if np.hypot(x1-x0,y1-y0)>8 and mask[y,x]>0:count+=1
+                    x=int((x0+x1)/2)
+                    y=int((y0+y1)/2)
+                    if np.hypot(x1-x0,y1-y0)>8 and mask[y,x]>0:
+                        count+=1
             line_support[name]=count
     def find(key):
         parent.setdefault(key,key)
-        if parent[key]!=key:parent[key]=find(parent[key])
+        if parent[key]!=key:
+            parent[key]=find(parent[key])
         return parent[key]
-    matcher=cv2.BFMatcher(cv2.NORM_L2);pair_rows=[]
+    matcher=cv2.BFMatcher(cv2.NORM_L2)
+    pair_rows=[]
     for a_index,a in enumerate(names):
         for b in names[a_index+1:]:
-            A,ad=features[a];B,bd=features[b]
-            if ad is None or bd is None or len(ad)<2 or len(bd)<2:continue
+            A,ad=features[a]
+            B,bd=features[b]
+            if ad is None or bd is None or len(ad)<2 or len(bd)<2:
+                continue
             relative=local[a]["F"][:3,:3]@local[b]["F"][:3,:3].T
             angle=float(np.linalg.norm(cv2.Rodrigues(relative)[0])*180/np.pi)
-            number_a=int(Path(a).stem.split('_')[-1]);number_b=int(Path(b).stem.split('_')[-1])
-            if not 1<=angle<=28 or (abs(number_a-number_b)>9 and angle>12):continue
-            forward=matcher.knnMatch(ad,bd,k=2);reverse=matcher.knnMatch(bd,ad,k=2)
+            number_a=int(Path(a).stem.split('_')[-1])
+            number_b=int(Path(b).stem.split('_')[-1])
+            if not 1<=angle<=28 or (abs(number_a-number_b)>9 and angle>12):
+                continue
+            forward=matcher.knnMatch(ad,bd,k=2)
+            reverse=matcher.knnMatch(bd,ad,k=2)
             backwards={m.queryIdx:m.trainIdx for m,n in reverse if m.distance<.8*n.distance}
             accepted=0
             for m,n in forward:
-                if m.distance>=.8*n.distance or backwards.get(m.trainIdx)!=m.queryIdx:continue
-                fa=local[a]["F"];fb=local[b]["F"]
+                if m.distance>=.8*n.distance or backwards.get(m.trainIdx)!=m.queryIdx:
+                    continue
+                fa=local[a]["F"]
+                fb=local[b]["F"]
                 h=cv2.triangulatePoints(K@fa[:3],K@fb[:3],A[m.queryIdx].reshape(2,1),B[m.trainIdx].reshape(2,1))
-                if abs(h[3,0])<1e-8:continue
+                if abs(h[3,0])<1e-8:
+                    continue
                 xyz=(h[:3,0]/h[3,0])[None]
-                ua,za=project(xyz,fa,K);ub,zb=project(xyz,fb,K)
-                if min(za[0],zb[0])<.05 or max(np.linalg.norm(ua[0]-A[m.queryIdx]),np.linalg.norm(ub[0]-B[m.trainIdx]))>2.2:continue
-                if part!="cloth" and np.linalg.norm(xyz[0])>.4:continue
-                ka=(a,m.queryIdx);kb=(b,m.trainIdx)
-                parent[find(kb)]=find(ka);accepted+=1
+                ua,za=project(xyz,fa,K)
+                ub,zb=project(xyz,fb,K)
+                if min(za[0],zb[0])<.05 or max(np.linalg.norm(ua[0]-A[m.queryIdx]),np.linalg.norm(ub[0]-B[m.trainIdx]))>2.2:
+                    continue
+                if part!="cloth" and np.linalg.norm(xyz[0])>.4:
+                    continue
+                ka=(a,m.queryIdx)
+                kb=(b,m.trainIdx)
+                parent[find(kb)]=find(ka)
+                accepted+=1
             pair_rows.append({"a":a,"b":b,"relativeRotationDegrees":angle,"geometricPairs":accepted})
     tracks={}
-    for key in list(parent):tracks.setdefault(find(key),[]).append(key)
-    xyz_all=[];colors=[];support=[];source_views=[];reproj=[];measurements=[]
+    for key in list(parent):
+        tracks.setdefault(find(key),[]).append(key)
+    xyz_all=[]
+    colors=[]
+    support=[]
+    source_views=[]
+    reproj=[]
+    measurements=[]
     rejected={"shortOrCycleConflict":0,"reprojection":0,"occlusion":0}
     for keys in tracks.values():
         if len(keys)<3 or len(set(k[0] for k in keys))!=len(keys):
-            rejected["shortOrCycleConflict"]+=1;continue
+            rejected["shortOrCycleConflict"]+=1
+            continue
         rows=[]
         for name,index in keys:
-            P=K@local[name]["F"][:3];u,v=features[name][0][index]
+            P=K@local[name]["F"][:3]
+            u,v=features[name][0][index]
             rows.extend((u*P[2]-P[0],v*P[2]-P[1]))
-        _,_,vh=np.linalg.svd(np.stack(rows));h=vh[-1]
-        if abs(h[3])<1e-8:continue
-        xyz=h[:3]/h[3];errors=[];samples=[];bad=False
+        _,_,vh=np.linalg.svd(np.stack(rows))
+        h=vh[-1]
+        if abs(h[3])<1e-8:
+            continue
+        xyz=h[:3]/h[3]
+        errors=[]
+        samples=[]
+        bad=False
         for name,index in keys:
             uv,depth=project(xyz[None],local[name]["F"],K)
-            error=np.linalg.norm(uv[0]-features[name][0][index]);errors.append(error)
+            error=np.linalg.norm(uv[0]-features[name][0][index])
+            errors.append(error)
             u,v=uv[0].round().astype(int)
-            if depth[0]<.05 or not(0<=u<rgb[name].shape[1] and 0<=v<rgb[name].shape[0]):bad=True;break
-            if not labels[name][mask_label][v,u]:bad=True;break
+            if depth[0]<.05 or not(0<=u<rgb[name].shape[1] and 0<=v<rgb[name].shape[0]):
+                bad=True
+                break
+            if not labels[name][mask_label][v,u]:
+                bad=True
+                break
             samples.append(rgb[name][v,u])
         if bad or max(errors,default=999)>2.2:
-            rejected["reprojection"]+=1;continue
+            rejected["reprojection"]+=1
+            continue
         centers=np.stack([-local[name]["F"][:3,:3].T@local[name]["F"][:3,3] for name,_ in keys])
-        rays=xyz-centers;rays/=np.linalg.norm(rays,axis=1,keepdims=True)
+        rays=xyz-centers
+        rays/=np.linalg.norm(rays,axis=1,keepdims=True)
         baseline=np.degrees(np.arccos(np.clip(rays@rays.T,-1,1))).max()
-        if baseline<2:continue
+        if baseline<2:
+            continue
         # Actual local thickness is preserved. A sample deep inside the
         # FLAME skin cannot explain an exterior hair or frame observation.
         distance=cKDTree(local[keys[0][0]]["mesh"]).query(xyz)[0] if part!="cloth" else 0.
         if part=="hair" and not .002<distance<.085:
-            rejected["occlusion"]+=1;continue
+            rejected["occlusion"]+=1
+            continue
         if part=="glasses" and not .001<distance<.045:
-            rejected["occlusion"]+=1;continue
-        xyz_all.append(xyz);colors.append(np.median(samples,axis=0));support.append(len(keys))
-        source_views.append([names.index(name) for name,_ in keys]);reproj.append(max(errors))
+            rejected["occlusion"]+=1
+            continue
+        xyz_all.append(xyz)
+        colors.append(np.median(samples,axis=0))
+        support.append(len(keys))
+        source_views.append([names.index(name) for name,_ in keys])
+        reproj.append(max(errors))
         observed=np.full((len(names),2),np.nan,np.float32)
-        for name,index in keys:observed[names.index(name)]=features[name][0][index]
+        for name,index in keys:
+            observed[names.index(name)]=features[name][0][index]
         measurements.append(observed)
-    n=len(xyz_all);padded=np.full((n,len(names)),-1,np.int16)
-    for i,row in enumerate(source_views):padded[i,:len(row)]=row
+    n=len(xyz_all)
+    padded=np.full((n,len(names)),-1,np.int16)
+    for i,row in enumerate(source_views):
+        padded[i,:len(row)]=row
     result={"xyz":np.asarray(xyz_all,np.float32).reshape(-1,3),
         "rgb":np.asarray(colors,np.float32).reshape(-1,3),"support":np.asarray(support,np.int16),
         "views":padded,"names":np.asarray(names),"reprojection":np.asarray(reproj,np.float32),
@@ -290,21 +357,29 @@ def prepare(source,out,fit_root,appearance,static_map,trust_path,*,enrich_neighb
         raise ValueError("v2_source_or_direction_contract_mismatch")
     model=pycolmap.Reconstruction(static_map)
     images={im.name:im for im in model.images.values() if im.has_pose}
-    trust=json.loads(trust_path.read_text());trusted={r["name"] for r in trust["frames"] if r["researchTrusted"]}
+    trust=json.loads(trust_path.read_text())
+    trusted={r["name"] for r in trust["frames"] if r["researchTrusted"]}
     selected=sorted(path.name for path in (source/"frames").glob("*.png"))
     if masks_from is not None:
         previous=json.loads((masks_from/"preparation.json").read_text())
-        if previous["sourceHash"]!=source_hash:raise ValueError("reused_component_mask_source_mismatch")
-        masks=out/"component_masks";masks.symlink_to((masks_from/"component_masks").resolve(),target_is_directory=True)
-    else:masks=make_masks(source,out,selected)
-    first=next(iter(model.cameras.values()));K,distortion=source_camera(first)
-    if any(not np.allclose(source_camera(c)[0],K) for c in model.cameras.values()):raise ValueError("v2_multiple_camera_intrinsics_require_adapter")
+        if previous["sourceHash"]!=source_hash:
+            raise ValueError("reused_component_mask_source_mismatch")
+        masks=out/"component_masks"
+        masks.symlink_to((masks_from/"component_masks").resolve(),target_is_directory=True)
+    else:
+        masks=make_masks(source,out,selected)
+    first=next(iter(model.cameras.values()))
+    K,distortion=source_camera(first)
+    if any(not np.allclose(source_camera(c)[0],K) for c in model.cameras.values()):
+        raise ValueError("v2_multiple_camera_intrinsics_require_adapter")
     geometry,local,pose_audit=local_fit_views(source,fit_root,K,distortion,enrich_neighbours)
-    names=list(local);rgb,labels=rectified_data(source,masks,names,K,distortion)
+    names=list(local)
+    rgb,labels=rectified_data(source,masks,names,K,distortion)
     worlds={name:camera_matrix(images[name]) for name in names if name in trusted and name in images}
     train_names=[name for name in worlds if local[name]["role"]=="train"]
     development=[name for name in worlds if local[name]["role"]=="development"]
-    if len(train_names)<4 or len(development)<2:raise ValueError("v2_research_static_local_overlap_insufficient")
+    if len(train_names)<4 or len(development)<2:
+        raise ValueError("v2_research_static_local_overlap_insufficient")
     scale,scale_audit=shared_scene_scale(local,worlds,train_names)
     write_json(out/"pose-and-scale-audit.json",{"localRefits":pose_audit,"sharedScale":scale_audit,
         "worldFrames":list(worlds),"localOnlyFrames":[n for n in names if n not in worlds],
@@ -324,12 +399,14 @@ def prepare(source,out,fit_root,appearance,static_map,trust_path,*,enrich_neighb
     room,room_audit=supported_static_surfaces(model,{n:(worlds[n],K) for n in train_names},
         {n:labels[n]["room_visible"] for n in train_names},{n:rgb[n] for n in train_names},out/"static_surface_seeds.npz")
     write_json(out/"static-surface-audit.json",room_audit)
-    seed_data={};component_audit={}
+    seed_data={}
+    component_audit={}
     for part in ("hair","glasses"):
         seed_data[part],component_audit[part]=triangulated_component(rgb,labels,local,K,part)
         np.savez_compressed(out/(part+"_multiview_seeds.npz"),**seed_data[part])
     write_json(out/"component-seed-audit.json",component_audit)
-    cache=out/"rectified_observations";cache.mkdir()
+    cache=out/"rectified_observations"
+    cache.mkdir()
     for name in names:
         cv2.imwrite(str(cache/name),cv2.cvtColor((rgb[name]*255).round().astype(np.uint8),cv2.COLOR_RGB2BGR))
         np.savez_compressed(cache/(name+".npz"),**labels[name])
@@ -352,10 +429,12 @@ def prepare(source,out,fit_root,appearance,static_map,trust_path,*,enrich_neighb
 
 def load_prepared(out):
     metadata=json.loads((out/"preparation.json").read_text())
-    source=Path(metadata["source"]);appearance=Path(metadata["appearance"])
+    source=Path(metadata["source"])
+    appearance=Path(metadata["appearance"])
     if sha256_file(source/"capture.mp4")!=metadata["sourceHash"] or sha256_file(appearance)!=metadata["appearanceHash"]:
         raise ValueError("prepared_input_hash_changed")
-    data=dict(np.load(out/"local_geometry.npz"));names=[str(n) for n in data["names"]]
+    data=dict(np.load(out/"local_geometry.npz"))
+    names=[str(n) for n in data["names"]]
     local={n:{"mesh":data["meshes"][i],"F":data["F"][i],"role":str(data["roles"][i]),"marks":data["marks"][i]} for i,n in enumerate(names)}
     worlds={str(n):data["C"][i] for i,n in enumerate(data["world_names"])}
     rgb={n:cv2.cvtColor(cv2.imread(str(out/"rectified_observations"/n)),cv2.COLOR_BGR2RGB).astype(np.float32)/255 for n in names}
@@ -379,32 +458,58 @@ def supported_cloth(source,static_map,data):
     candidate must reproject into observed garment pixels in >=3 new static
     research views. A poor alignment cannot be hidden by per-frame scale.
     """
-    old=pycolmap.Reconstruction(source/"sparse/0");static=pycolmap.Reconstruction(static_map)
+    old=pycolmap.Reconstruction(source/"sparse/0")
+    static=pycolmap.Reconstruction(static_map)
     alignment=pycolmap.align_reconstructions_via_proj_centers(old,static,.05)
-    if alignment is None:raise ValueError("cloth_map_common_gauge_alignment_failed")
-    R=np.asarray(alignment.rotation.matrix());t=np.asarray(alignment.translation);s=float(alignment.scale)
-    xyz=[];rgb=[];ids=[];counts=[];errors=[]
+    if alignment is None:
+        raise ValueError("cloth_map_common_gauge_alignment_failed")
+    R=np.asarray(alignment.rotation.matrix())
+    t=np.asarray(alignment.translation)
+    s=float(alignment.scale)
+    xyz=[]
+    rgb=[]
+    ids=[]
+    counts=[]
+    errors=[]
     old_images=old.images
     for point_id,point in old.points3D.items():
-        if point.error>2.5 or point.track.length()<3:continue
+        if point.error>2.5 or point.track.length()<3:
+            continue
         world=s*R@np.asarray(point.xyz)+t
-        support=0;color=[];residual=[];conflict=False
+        support=0
+        color=[]
+        residual=[]
+        conflict=False
         for element in point.track.elements:
-            im=old_images[element.image_id];name=im.name
-            if name not in data["train"]:continue
+            im=old_images[element.image_id]
+            name=im.name
+            if name not in data["train"]:
+                continue
             uv,z=project(world[None],data["worlds"][name],data["K"])
-            u,v=uv[0].round().astype(int);h,w=data["rgb"][name].shape[:2]
-            if z[0]<=.01 or not (0<=u<w and 0<=v<h):continue
-            if data["labels"][name]["face_core"][v,u]:conflict=True;break
-            if not data["labels"][name]["neck_cloth_visible"][v,u]:continue
+            u,v=uv[0].round().astype(int)
+            h,w=data["rgb"][name].shape[:2]
+            if z[0]<=.01 or not (0<=u<w and 0<=v<h):
+                continue
+            if data["labels"][name]["face_core"][v,u]:
+                conflict=True
+                break
+            if not data["labels"][name]["neck_cloth_visible"][v,u]:
+                continue
             observed=im.points2D[element.point2D_idx].xy
-            camera=old.cameras[im.camera_id];OK,dist=source_camera(camera)
+            camera=old.cameras[im.camera_id]
+            OK,dist=source_camera(camera)
             rect=cv2.undistortPoints(np.asarray(observed).reshape(1,1,2),OK,dist,P=data["K"])[0,0]
-            error=np.linalg.norm(rect-uv[0]);residual.append(error)
+            error=np.linalg.norm(rect-uv[0])
+            residual.append(error)
             if error<4:
-                support+=1;color.append(data["rgb"][name][v,u])
+                support+=1
+                color.append(data["rgb"][name][v,u])
         if support>=3 and not conflict:
-            xyz.append(world);rgb.append(np.median(color,axis=0));ids.append(int(point_id));counts.append(support);errors.append(max(residual))
+            xyz.append(world)
+            rgb.append(np.median(color,axis=0))
+            ids.append(int(point_id))
+            counts.append(support)
+            errors.append(max(residual))
     return ({"xyz":np.asarray(xyz,np.float32).reshape(-1,3),"rgb":np.asarray(rgb,np.float32).reshape(-1,3),
         "source_id":np.asarray(ids,np.int64),"support":np.asarray(counts,np.int16)},
         {"points":len(xyz),"commonMapScale":s,"method":"one_Sim3_plus_three_static_view_garment_reprojection",

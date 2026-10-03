@@ -26,7 +26,9 @@ def refit_local_pose_same_camera(local_vertices, local_landmarks, observed,
     tvec=np.asarray(initial_F[:3,3],np.float64).reshape(3,1).copy()
     rvec,tvec=cv2.solvePnPRefineLM(np.asarray(local_landmarks[selected],np.float64),
         np.asarray(observed[selected],np.float64),camera_K,distortion,rvec,tvec)
-    result=np.eye(4);result[:3,:3]=cv2.Rodrigues(rvec)[0];result[:3,3]=tvec[:,0]
+    result=np.eye(4)
+    result[:3,:3]=cv2.Rodrigues(rvec)[0]
+    result[:3,3]=tvec[:,0]
     pred=cv2.projectPoints(local_landmarks.astype(np.float64),rvec,tvec,
                            camera_K,distortion)[0][:,0]
     error=np.linalg.norm(pred-observed,axis=1)

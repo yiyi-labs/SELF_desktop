@@ -1,0 +1,47 @@
+HEAD=886f84e PRE=886f84e
+changed=45 expected=45 match=True
+unchanged=23 reformatted=44 problems=0
+app.py                                   closure=False splits=   1 exact                                  sha256 410e13fd383a -> a37199cc4a51
+capture_reference.py                     closure=True  splits=  19 exact                                  sha256 dc6d0dff4c61 -> dc1c95598599
+capture_registration.py                  closure=True  splits=  61 exact                                  sha256 083ddd993d63 -> 4822bcb18253
+components_v2.py                         closure=True  splits= 105 exact                                  sha256 bea206204e49 -> 413504d1b669
+contracts.py                             closure=False splits=   1 eol-only(git blob LF / worktree CRLF)  sha256 c337b52dbdd7 -> 6a1fe9b3eed5
+live_dense.py                            closure=True  splits= 198 exact                                  sha256 4f0d5d831e31 -> 817913f8dbd7
+live_dense_contract.py                   closure=True  splits=  36 exact                                  sha256 e5476cc89a34 -> 6ff70de5bf0a
+live_depth_scale.py                      closure=False splits=  27 exact                                  sha256 b0765879499c -> b3b5d1e1278f
+live_face_domain.py                      closure=True  splits=  19 exact                                  sha256 26ca67729118 -> 3125b76d8e18
+live_fullframe.py                        closure=True  splits=   8 exact                                  sha256 cfead5fea5dc -> ab10f2ef8291
+live_hair_composite.py                   closure=True  splits=  27 exact                                  sha256 03a7b72d2b3e -> 39c69562de8b
+live_hair_motion.py                      closure=True  splits=  30 exact                                  sha256 fe5fa6eacf23 -> c5c175c0e621
+live_neck_appearance.py                  closure=True  splits=  13 exact                                  sha256 638062d13ad6 -> 391d82a656fe
+live_neck_motion.py                      closure=True  splits=  25 exact                                  sha256 4862a0410c10 -> 5ac9e9877351
+live_opaque_person.py                    closure=True  splits=   3 exact                                  sha256 9a65cc43f652 -> ed5405b98b29
+live_prepare.py                          closure=True  splits=  54 exact                                  sha256 6e1fda1a357e -> 4188cdfe8bf3
+live_room_completion.py                  closure=True  splits=  78 exact                                  sha256 eba2854e515f -> f405200d4a84
+live_room_reference.py                   closure=True  splits=  28 exact                                  sha256 424164b0d222 -> 07bca59b862b
+live_room_retry.py                       closure=True  splits=  36 exact                                  sha256 ac7be2b26149 -> fb296fe1e29a
+live_room_self_reference.py              closure=True  splits=  97 exact                                  sha256 9cdfeb9e2773 -> 2ef92e6d0e12
+live_room_window_recovery.py             closure=True  splits= 113 exact                                  sha256 7f4f322123b1 -> 4325ed46dccf
+live_shared_room_surface.py              closure=True  splits= 155 exact                                  sha256 c627b70d7000 -> d46ed44468db
+live_skin_compositing.py                 closure=True  splits=  50 exact                                  sha256 0faf2f8faa55 -> 71d7461da2bd
+live_surface_binding.py                  closure=True  splits=  46 exact                                  sha256 42d8d05c5598 -> 1a06eedef769
+live_surface_footprint.py                closure=True  splits=  83 exact                                  sha256 5c546d802d33 -> e202c9f35bc6
+local_sampling.py                        closure=True  splits=   1 exact                                  sha256 6b68fa34a5d7 -> f5e8405a363e
+observation_domains.py                   closure=True  splits=   2 exact                                  sha256 2cc6b59242ad -> 29fca7435cac
+observed_surface.py                      closure=True  splits=  51 exact                                  sha256 3db775fd5c92 -> a661053bbdb9
+person_supervision_state.py              closure=True  splits=  16 exact                                  sha256 594ee1e87e39 -> aee02849d892
+portrait_model.py                        closure=True  splits=  13 exact                                  sha256 d63b817fc2b3 -> c4d0c3c9dd71
+portrait_pipeline.py                     closure=True  splits= 110 exact                                  sha256 1be95addab7f -> 8d9a3b586c30
+pose.py                                  closure=True  splits=   2 exact                                  sha256 6245271c529d -> 45b5bebc8e09
+product_catalog.py                       closure=False splits=   1 eol-only(git blob LF / worktree CRLF)  sha256 1ec45fc5dfb4 -> c8c9ee9f8d67
+run_live_body_appearance_trial.py        closure=False splits=  23 exact                                  sha256 bbdd1109c69a -> 27b81f100a1f
+run_live_face_capacity_trial.py          closure=False splits=  19 exact                                  sha256 41187a4b7a0b -> 094b41ac0e32
+run_live_skin_compositing_trial.py       closure=False splits=  17 exact                                  sha256 b13ad287e2ac -> 7331e6428c04
+runtime.py                               closure=True  splits=  50 exact                                  sha256 e5451d33732c -> 33c4720e2d73
+scene.py                                 closure=True  splits=  22 exact                                  sha256 7517f2689cb7 -> 8523a1d9e873
+shared_v2.py                             closure=True  splits= 140 exact                                  sha256 0fbc9305dcfe -> d502bd636676
+static_planes.py                         closure=True  splits=  65 exact                                  sha256 cd332946d569 -> c7556d758f32
+surface_density.py                       closure=True  splits=  22 exact                                  sha256 32d0bce35700 -> e2d2d5a397b4
+surface_recovery.py                      closure=True  splits=  88 exact                                  sha256 b53eb1bb9a6c -> f59dc30b5867
+train_joint.py                           closure=False splits=  30 exact                                  sha256 e36f0620b22d -> a4e234c5d6ed
+worker.py                                closure=True  splits=  20 exact                                  sha256 f3ba02108377 -> 9912bfdde0e4

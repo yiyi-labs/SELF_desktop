@@ -1,0 +1,13 @@
+== win ==
+  MATCH ran count: 139 vs 139
+  MATCH final line: 'FAILED (errors=34)' vs 'FAILED (errors=34)'
+  MATCH failing ids: 34 vs 34 blocks
+  MATCH terminal exception lines: 3 vs 3 distinct
+  MATCH normalized blocks: 0 diffs
+== wsl ==
+  MATCH ran count: 295 vs 295
+  MATCH final line: 'FAILED (errors=13)' vs 'FAILED (errors=13)'
+  MATCH failing ids: 13 vs 13 blocks
+  MATCH terminal exception lines: 3 vs 3 distinct
+  MATCH normalized blocks: 0 diffs
+ALL MATCH

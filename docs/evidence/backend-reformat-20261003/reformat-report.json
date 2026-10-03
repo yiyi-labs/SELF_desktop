@@ -1,0 +1,605 @@
+[
+ {
+  "file": "live_dense.py",
+  "splits": 198,
+  "bytes": 51535,
+  "bytes_new": 53136,
+  "lines": 780,
+  "lines_new": 978,
+  "ok": "verified"
+ },
+ {
+  "file": "live_shared_room_surface.py",
+  "splits": 155,
+  "bytes": 36342,
+  "bytes_new": 37575,
+  "lines": 470,
+  "lines_new": 625,
+  "ok": "verified"
+ },
+ {
+  "file": "shared_v2.py",
+  "splits": 140,
+  "bytes": 42546,
+  "bytes_new": 43832,
+  "lines": 642,
+  "lines_new": 782,
+  "ok": "verified"
+ },
+ {
+  "file": "live_room_window_recovery.py",
+  "splits": 113,
+  "bytes": 34149,
+  "bytes_new": 35052,
+  "lines": 438,
+  "lines_new": 551,
+  "ok": "verified"
+ },
+ {
+  "file": "portrait_pipeline.py",
+  "splits": 110,
+  "bytes": 61867,
+  "bytes_new": 62898,
+  "lines": 911,
+  "lines_new": 1021,
+  "ok": "verified"
+ },
+ {
+  "file": "components_v2.py",
+  "splits": 105,
+  "bytes": 25632,
+  "bytes_new": 26745,
+  "lines": 412,
+  "lines_new": 517,
+  "ok": "verified"
+ },
+ {
+  "file": "live_room_self_reference.py",
+  "splits": 97,
+  "bytes": 21563,
+  "bytes_new": 22425,
+  "lines": 269,
+  "lines_new": 366,
+  "ok": "verified"
+ },
+ {
+  "file": "surface_recovery.py",
+  "splits": 88,
+  "bytes": 26424,
+  "bytes_new": 27376,
+  "lines": 388,
+  "lines_new": 476,
+  "ok": "verified"
+ },
+ {
+  "file": "live_surface_footprint.py",
+  "splits": 83,
+  "bytes": 24872,
+  "bytes_new": 25522,
+  "lines": 386,
+  "lines_new": 469,
+  "ok": "verified"
+ },
+ {
+  "file": "live_room_completion.py",
+  "splits": 78,
+  "bytes": 24530,
+  "bytes_new": 25161,
+  "lines": 342,
+  "lines_new": 420,
+  "ok": "verified"
+ },
+ {
+  "file": "static_planes.py",
+  "splits": 65,
+  "bytes": 7547,
+  "bytes_new": 8319,
+  "lines": 116,
+  "lines_new": 181,
+  "ok": "verified"
+ },
+ {
+  "file": "capture_registration.py",
+  "splits": 61,
+  "bytes": 12650,
+  "bytes_new": 13467,
+  "lines": 200,
+  "lines_new": 261,
+  "ok": "verified"
+ },
+ {
+  "file": "live_prepare.py",
+  "splits": 54,
+  "bytes": 18599,
+  "bytes_new": 18995,
+  "lines": 288,
+  "lines_new": 342,
+  "ok": "verified"
+ },
+ {
+  "file": "observed_surface.py",
+  "splits": 51,
+  "bytes": 12453,
+  "bytes_new": 13070,
+  "lines": 203,
+  "lines_new": 254,
+  "ok": "verified"
+ },
+ {
+  "file": "live_skin_compositing.py",
+  "splits": 50,
+  "bytes": 13184,
+  "bytes_new": 13704,
+  "lines": 207,
+  "lines_new": 257,
+  "ok": "verified"
+ },
+ {
+  "file": "runtime.py",
+  "splits": 50,
+  "bytes": 27826,
+  "bytes_new": 28277,
+  "lines": 444,
+  "lines_new": 494,
+  "ok": "verified"
+ },
+ {
+  "file": "live_surface_binding.py",
+  "splits": 46,
+  "bytes": 15510,
+  "bytes_new": 16023,
+  "lines": 237,
+  "lines_new": 283,
+  "ok": "verified"
+ },
+ {
+  "file": "live_dense_contract.py",
+  "splits": 36,
+  "bytes": 6758,
+  "bytes_new": 7000,
+  "lines": 117,
+  "lines_new": 153,
+  "ok": "verified"
+ },
+ {
+  "file": "live_room_retry.py",
+  "splits": 36,
+  "bytes": 9920,
+  "bytes_new": 10241,
+  "lines": 125,
+  "lines_new": 161,
+  "ok": "verified"
+ },
+ {
+  "file": "live_hair_motion.py",
+  "splits": 30,
+  "bytes": 13170,
+  "bytes_new": 13423,
+  "lines": 228,
+  "lines_new": 258,
+  "ok": "verified"
+ },
+ {
+  "file": "train_joint.py",
+  "splits": 30,
+  "bytes": 17799,
+  "bytes_new": 18109,
+  "lines": 330,
+  "lines_new": 360,
+  "ok": "verified"
+ },
+ {
+  "file": "live_room_reference.py",
+  "splits": 28,
+  "bytes": 5959,
+  "bytes_new": 6190,
+  "lines": 84,
+  "lines_new": 112,
+  "ok": "verified"
+ },
+ {
+  "file": "live_depth_scale.py",
+  "splits": 27,
+  "bytes": 7003,
+  "bytes_new": 7182,
+  "lines": 97,
+  "lines_new": 124,
+  "ok": "verified"
+ },
+ {
+  "file": "live_hair_composite.py",
+  "splits": 27,
+  "bytes": 5763,
+  "bytes_new": 6006,
+  "lines": 89,
+  "lines_new": 116,
+  "ok": "verified"
+ },
+ {
+  "file": "live_neck_motion.py",
+  "splits": 25,
+  "bytes": 8591,
+  "bytes_new": 8834,
+  "lines": 158,
+  "lines_new": 183,
+  "ok": "verified"
+ },
+ {
+  "file": "run_live_body_appearance_trial.py",
+  "splits": 23,
+  "bytes": 5940,
+  "bytes_new": 6065,
+  "lines": 92,
+  "lines_new": 115,
+  "ok": "verified"
+ },
+ {
+  "file": "scene.py",
+  "splits": 22,
+  "bytes": 22267,
+  "bytes_new": 22570,
+  "lines": 435,
+  "lines_new": 457,
+  "ok": "verified"
+ },
+ {
+  "file": "surface_density.py",
+  "splits": 22,
+  "bytes": 4445,
+  "bytes_new": 4599,
+  "lines": 73,
+  "lines_new": 95,
+  "ok": "verified"
+ },
+ {
+  "file": "worker.py",
+  "splits": 20,
+  "bytes": 32081,
+  "bytes_new": 32445,
+  "lines": 691,
+  "lines_new": 711,
+  "ok": "verified"
+ },
+ {
+  "file": "capture_reference.py",
+  "splits": 19,
+  "bytes": 6808,
+  "bytes_new": 6964,
+  "lines": 116,
+  "lines_new": 135,
+  "ok": "verified"
+ },
+ {
+  "file": "live_face_domain.py",
+  "splits": 19,
+  "bytes": 7581,
+  "bytes_new": 7718,
+  "lines": 122,
+  "lines_new": 141,
+  "ok": "verified"
+ },
+ {
+  "file": "run_live_face_capacity_trial.py",
+  "splits": 19,
+  "bytes": 7490,
+  "bytes_new": 7587,
+  "lines": 120,
+  "lines_new": 139,
+  "ok": "verified"
+ },
+ {
+  "file": "run_live_skin_compositing_trial.py",
+  "splits": 17,
+  "bytes": 4218,
+  "bytes_new": 4301,
+  "lines": 64,
+  "lines_new": 81,
+  "ok": "verified"
+ },
+ {
+  "file": "person_supervision_state.py",
+  "splits": 16,
+  "bytes": 5909,
+  "bytes_new": 6053,
+  "lines": 104,
+  "lines_new": 120,
+  "ok": "verified"
+ },
+ {
+  "file": "live_neck_appearance.py",
+  "splits": 13,
+  "bytes": 8574,
+  "bytes_new": 8697,
+  "lines": 136,
+  "lines_new": 149,
+  "ok": "verified"
+ },
+ {
+  "file": "portrait_model.py",
+  "splits": 13,
+  "bytes": 22749,
+  "bytes_new": 22895,
+  "lines": 424,
+  "lines_new": 437,
+  "ok": "verified"
+ },
+ {
+  "file": "live_fullframe.py",
+  "splits": 8,
+  "bytes": 2118,
+  "bytes_new": 2150,
+  "lines": 42,
+  "lines_new": 50,
+  "ok": "verified"
+ },
+ {
+  "file": "live_opaque_person.py",
+  "splits": 3,
+  "bytes": 8537,
+  "bytes_new": 8546,
+  "lines": 170,
+  "lines_new": 173,
+  "ok": "verified"
+ },
+ {
+  "file": "observation_domains.py",
+  "splits": 2,
+  "bytes": 2641,
+  "bytes_new": 2659,
+  "lines": 54,
+  "lines_new": 56,
+  "ok": "verified"
+ },
+ {
+  "file": "pose.py",
+  "splits": 2,
+  "bytes": 8143,
+  "bytes_new": 8151,
+  "lines": 161,
+  "lines_new": 163,
+  "ok": "verified"
+ },
+ {
+  "file": "app.py",
+  "splits": 1,
+  "bytes": 5596,
+  "bytes_new": 5608,
+  "lines": 140,
+  "lines_new": 141,
+  "ok": "verified"
+ },
+ {
+  "file": "contracts.py",
+  "splits": 1,
+  "bytes": 16676,
+  "bytes_new": 16690,
+  "lines": 240,
+  "lines_new": 241,
+  "ok": "verified"
+ },
+ {
+  "file": "local_sampling.py",
+  "splits": 1,
+  "bytes": 2589,
+  "bytes_new": 2598,
+  "lines": 47,
+  "lines_new": 48,
+  "ok": "verified"
+ },
+ {
+  "file": "product_catalog.py",
+  "splits": 1,
+  "bytes": 3250,
+  "bytes_new": 3259,
+  "lines": 51,
+  "lines_new": 52,
+  "ok": "verified"
+ },
+ {
+  "file": "appearance_direction_contract.py",
+  "splits": 0,
+  "bytes": 1748,
+  "bytes_new": 1748,
+  "lines": 45,
+  "lines_new": 45,
+  "ok": "unchanged"
+ },
+ {
+  "file": "care_catalog.py",
+  "splits": 0,
+  "bytes": 8136,
+  "bytes_new": 8136,
+  "lines": 128,
+  "lines_new": 128,
+  "ok": "unchanged"
+ },
+ {
+  "file": "checkpoint.py",
+  "splits": 0,
+  "bytes": 2871,
+  "bytes_new": 2871,
+  "lines": 59,
+  "lines_new": 59,
+  "ok": "unchanged"
+ },
+ {
+  "file": "code_identity.py",
+  "splits": 0,
+  "bytes": 1702,
+  "bytes_new": 1702,
+  "lines": 41,
+  "lines_new": 41,
+  "ok": "unchanged"
+ },
+ {
+  "file": "deepseek_client.py",
+  "splits": 0,
+  "bytes": 15089,
+  "bytes_new": 15089,
+  "lines": 169,
+  "lines_new": 169,
+  "ok": "unchanged"
+ },
+ {
+  "file": "face.py",
+  "splits": 0,
+  "bytes": 14666,
+  "bytes_new": 14666,
+  "lines": 284,
+  "lines_new": 284,
+  "ok": "unchanged"
+ },
+ {
+  "file": "flame_open_model.py",
+  "splits": 0,
+  "bytes": 9196,
+  "bytes_new": 9196,
+  "lines": 161,
+  "lines_new": 161,
+  "ok": "unchanged"
+ },
+ {
+  "file": "joint_visibility.py",
+  "splits": 0,
+  "bytes": 9618,
+  "bytes_new": 9618,
+  "lines": 193,
+  "lines_new": 193,
+  "ok": "unchanged"
+ },
+ {
+  "file": "observations.py",
+  "splits": 0,
+  "bytes": 10090,
+  "bytes_new": 10090,
+  "lines": 187,
+  "lines_new": 187,
+  "ok": "unchanged"
+ },
+ {
+  "file": "portrait_preview.py",
+  "splits": 0,
+  "bytes": 11691,
+  "bytes_new": 11691,
+  "lines": 234,
+  "lines_new": 234,
+  "ok": "unchanged"
+ },
+ {
+  "file": "probe_flame_observations.py",
+  "splits": 0,
+  "bytes": 7492,
+  "bytes_new": 7492,
+  "lines": 138,
+  "lines_new": 138,
+  "ok": "unchanged"
+ },
+ {
+  "file": "probe_flame_open_fit.py",
+  "splits": 0,
+  "bytes": 15259,
+  "bytes_new": 15259,
+  "lines": 277,
+  "lines_new": 277,
+  "ok": "unchanged"
+ },
+ {
+  "file": "probe_flame_real_appearance.py",
+  "splits": 0,
+  "bytes": 14902,
+  "bytes_new": 14902,
+  "lines": 269,
+  "lines_new": 269,
+  "ok": "unchanged"
+ },
+ {
+  "file": "probe_gs_contract.py",
+  "splits": 0,
+  "bytes": 4955,
+  "bytes_new": 4955,
+  "lines": 100,
+  "lines_new": 100,
+  "ok": "unchanged"
+ },
+ {
+  "file": "probe_portrait_components.py",
+  "splits": 0,
+  "bytes": 5482,
+  "bytes_new": 5482,
+  "lines": 101,
+  "lines_new": 101,
+  "ok": "unchanged"
+ },
+ {
+  "file": "probe_static_alignment.py",
+  "splits": 0,
+  "bytes": 4409,
+  "bytes_new": 4409,
+  "lines": 82,
+  "lines_new": 82,
+  "ok": "unchanged"
+ },
+ {
+  "file": "product_knowledge.py",
+  "splits": 0,
+  "bytes": 2689,
+  "bytes_new": 2689,
+  "lines": 54,
+  "lines_new": 54,
+  "ok": "unchanged"
+ },
+ {
+  "file": "recon_transfer.py",
+  "splits": 0,
+  "bytes": 15318,
+  "bytes_new": 15318,
+  "lines": 357,
+  "lines_new": 357,
+  "ok": "unchanged"
+ },
+ {
+  "file": "response_quality.py",
+  "splits": 0,
+  "bytes": 966,
+  "bytes_new": 966,
+  "lines": 28,
+  "lines_new": 28,
+  "ok": "unchanged"
+ },
+ {
+  "file": "schedule.py",
+  "splits": 0,
+  "bytes": 794,
+  "bytes_new": 794,
+  "lines": 18,
+  "lines_new": 18,
+  "ok": "unchanged"
+ },
+ {
+  "file": "story_conversation.py",
+  "splits": 0,
+  "bytes": 13757,
+  "bytes_new": 13757,
+  "lines": 214,
+  "lines_new": 214,
+  "ok": "unchanged"
+ },
+ {
+  "file": "train.py",
+  "splits": 0,
+  "bytes": 14787,
+  "bytes_new": 14787,
+  "lines": 287,
+  "lines_new": 287,
+  "ok": "unchanged"
+ },
+ {
+  "file": "view.py",
+  "splits": 0,
+  "bytes": 6038,
+  "bytes_new": 6038,
+  "lines": 126,
+  "lines_new": 126,
+  "ok": "unchanged"
+ }
+]

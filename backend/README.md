@@ -39,7 +39,7 @@ WSL: worker.py（常驻单进程，flock 单实例，心跳写 worker_status.jso
 - **worker 进程**：`worker.py:542` 会把自身按路径再启动为隔离的作业子进程（supervise_job），
   所以同一份代码既是常驻循环也是子进程入口。
 - **算法闭包**：`code_identity.py` 用 AST 导入闭包把 52 个文件钉成一个哈希
-  `e7040005a447ed672a43a6f1dd1d51619b3845c6e8d2e08a4c2def76ad65fcab`。
+  `adb15d15206d565d1543b5d4484d723f42bb3f213b0becabc8d84f6432f167b9`（2026-10-03 换行改写后的现行值）。
   被钉住的文件改一个字节，服务就拒绝产出（`ValueError: test_source_hash_changed`）。
 
 ## 二、命名规则与固定哈希（2026-10-03 改名）
@@ -49,10 +49,16 @@ WSL: worker.py（常驻单进程，flock 单实例，心跳写 worker_status.jso
 历史批次保留旧名，见 `archive/README.md`。
 
 改名改变了闭包的固定哈希（`fa53df8abce1d19d03417ac0e8c2b189f187a6713a2ff508c5b0e0195ca9daef` →
-`e7040005a447ed672a43a6f1dd1d51619b3845c6e8d2e08a4c2def76ad65fcab`），`backend/.data/reconstruction/engine-profile.json` 已同步重钉；
+`e7040005a447ed672a43a6f1dd1d51619b3845c6e8d2e08a4c2def76ad65fcab`），
+同日的换行改写（44 个文件、2005 处断行，仅插入换行不改进 token/AST）再次改变
+（`e7040005…` → `adb15d15206d565d1543b5d4484d723f42bb3f213b0becabc8d84f6432f167b9`），
+`backend/.data/reconstruction/engine-profile.json` 两次均已同步重钉；
 服务重启后 worker 心跳 `loadedImplementationSha256 = currentImplementationSha256 =
 profileImplementationSha256`，`sourceIdentityVerified=true`。改名前后的完整证据（映射表、
-双环境测试 A/B、真实端到端作业）在 `docs/evidence/backend-rename-20261003/`。
+双环境测试 A/B、真实端到端作业）在 `docs/evidence/backend-rename-20261003/`，
+换行改写的等价性证明与验证在 `docs/evidence/backend-reformat-20261003/`。
+本 README 的行号引用（如 `runtime.py:67`）以换行改写前的提交 `886f84e` 为基准；
+改写后 44 个文件的行号有位移，换算表见 `docs/evidence/backend-reformat-20261003/line-map.json`。
 
 **勿动**：第五节的 52 个闭包文件是哈希钉死的；要改必须与 `engine-profile.json` 一起重算重钉。
 
@@ -262,7 +268,7 @@ legacy 引擎链的"人物+房间同一高斯场景"训练器，由 worker 直�
 - **加载方式**：按需（仅 runtime/surface_recovery 的特定分支内导入）；另 仅测试。
 #### `code_identity.py`
 
-计算"当前磁盘上真正会运行的实现"的确定性指纹。source_identity 从固定 ROOTS=(worker.py, runtime.py, live_fullframe.py, live_prepare.py) 加自身出发，用 AST 递归展开每个本地 .py 的全部 import（含函数内嵌套导入，27-33），逐个算 SHA-256，再取 git rev-parse HEAD，返回 {gitCommit, sourceFiles, implementationSha256（对排序后的文件→哈希 JSON 再哈希）}。它是"编辑/移动闭包内任何文件就会失配、必须重启"的机制来源（当前闭包哈希 e7040005…），也被训练审计用来冻结源码快照；不含私有 checkpoint/模型/视频。
+计算"当前磁盘上真正会运行的实现"的确定性指纹。source_identity 从固定 ROOTS=(worker.py, runtime.py, live_fullframe.py, live_prepare.py) 加自身出发，用 AST 递归展开每个本地 .py 的全部 import（含函数内嵌套导入，27-33），逐个算 SHA-256，再取 git rev-parse HEAD，返回 {gitCommit, sourceFiles, implementationSha256（对排序后的文件→哈希 JSON 再哈希）}。它是"编辑/移动闭包内任何文件就会失配、必须重启"的机制来源（当前闭包哈希 adb15d15…），也被训练审计用来冻结源码快照；不含私有 checkpoint/模型/视频。
 
 - **被谁调用**：worker.py:31 顶层导入（进程启动即计算，注释明确"运行中的 worker 绝不静默采用磁盘编辑"，32）；runtime.py:64（pipeline_entry）、runtime.py:97（worker_identity_status）函数内导入；portrait_pipeline.py:836 嵌套导入（保存运行前把 sourceFiles 拷成 algorithm-source 快照）；run_live_body_appearance_trial.py:17 顶层、run_live_skin_compositing_trial.py:12 顶层、run_live_face_capacity_trial.py:20 嵌套导入；其自身 ROOTS/自身文件也被快照。
 - **加载方式**：常驻（worker 主进程顶层 import，启动即加载）；在 runtime/portrait_pipeline/trial 脚本中为 按需；在快照拷贝场景下其输出的 sourceFiles 是 仅快照引用。

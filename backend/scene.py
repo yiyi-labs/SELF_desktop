@@ -237,12 +237,15 @@ def supported_static_surfaces(model, views, masks, rgb_images, output,
             camera=C[:3,:3]@np.asarray(point.xyz)+C[:3,3]
             if camera[2]<=.01:
                 continue
-            pixel=K@camera; pixel=(pixel[:2]/pixel[2]).round().astype(int)
-            u,v=pixel; mask=masks[im.name]
+            pixel=K@camera
+            pixel=(pixel[:2]/pixel[2]).round().astype(int)
+            u,v=pixel
+            mask=masks[im.name]
             if not (0<=u<mask.shape[1] and 0<=v<mask.shape[0]):
                 continue
             if mask[v,u]:
-                support.append(im.name);color.append(rgb_images[im.name][v,u])
+                support.append(im.name)
+                color.append(rgb_images[im.name][v,u])
             else:
                 conflict+=1
         if len(support)>=3 and conflict==0:
@@ -261,29 +264,38 @@ def supported_static_surfaces(model, views, masks, rgb_images, output,
     names=list(views)
     blurred={name:cv2.GaussianBlur(rgb_images[name],(3,3),0) for name in names}
     for name in names:
-        C,K=views[name];mask=masks[name];rgb=rgb_images[name]
+        C,K=views[name]
+        mask=masks[name]
+        rgb=rgb_images[name]
         keys=[key for key,val in candidates.items() if name in val[2]]
         if len(keys)<40:
             continue
         xyz=np.stack([candidates[key][0] for key in keys])
         cam=xyz@C[:3,:3].T+C[:3,3]
-        uv=cam@K.T;uv=uv[:,:2]/uv[:,2:]
+        uv=cam@K.T
+        uv=uv[:,:2]/uv[:,2:]
         triangles=Delaunay(uv).simplices
         for tri in triangles:
-            pix=uv[tri];world=xyz[tri];depth=cam[tri,2]
+            pix=uv[tri]
+            world=xyz[tri]
+            depth=cam[tri,2]
             edge=max(np.linalg.norm(pix[i]-pix[j]) for i,j in ((0,1),(1,2),(2,0)))
             if edge>max_edge_pixels or edge<7:
-                rejected["edge"]+=1;continue
+                rejected["edge"]+=1
+                continue
             if np.ptp(depth)/max(np.median(depth),1e-6)>.06:
-                rejected["depthSpread"]+=1;continue
+                rejected["depthSpread"]+=1
+                continue
             normal=np.cross(world[1]-world[0],world[2]-world[0])
             norm=np.linalg.norm(normal)
             if norm<1e-8:
                 continue
             normal/=norm
-            ray=world.mean(0)-np.linalg.inv(C)[:3,3];ray/=np.linalg.norm(ray)
+            ray=world.mean(0)-np.linalg.inv(C)[:3,3]
+            ray/=np.linalg.norm(ray)
             if abs(normal@ray)<.25:
-                rejected["normal"]+=1;continue
+                rejected["normal"]+=1
+                continue
             # Barycentric samples remain on measured triangles. No fallback
             # to nearest depth across a wall, person, collar or opening.
             divisions=min(10,max(2,int(edge/9)))
@@ -291,15 +303,21 @@ def supported_static_surfaces(model, views, masks, rgb_images, output,
             if not len(bary):
                 continue
             pts=bary@world
-            votes=np.zeros(len(pts),np.int16);conflict=np.zeros(len(pts),np.int16)
-            color_sum=np.zeros((len(pts),3));initial_color=None
+            votes=np.zeros(len(pts),np.int16)
+            conflict=np.zeros(len(pts),np.int16)
+            color_sum=np.zeros((len(pts),3))
+            initial_color=None
             for other in [name]+[n for n in names if n!=name]:
-                O,OK=views[other];om=masks[other];orgb=rgb_images[other]
+                O,OK=views[other]
+                om=masks[other]
+                orgb=rgb_images[other]
                 cp=pts@O[:3,:3].T+O[:3,3]
-                pu=cp@OK.T;xy=np.rint(pu[:,:2]/np.maximum(pu[:,2:],1e-8)).astype(int)
+                pu=cp@OK.T
+                xy=np.rint(pu[:,:2]/np.maximum(pu[:,2:],1e-8)).astype(int)
                 u,v=xy.T
                 valid=(cp[:,2]>.01)&(u>=2)&(v>=2)&(u<om.shape[1]-2)&(v<om.shape[0]-2)
-                ix=u.clip(0,om.shape[1]-1);iy=v.clip(0,om.shape[0]-1)
+                ix=u.clip(0,om.shape[1]-1)
+                iy=v.clip(0,om.shape[0]-1)
                 valid &= om[iy,ix]>0
                 sampled=blurred[other][iy,ix]
                 if initial_color is None:
@@ -314,10 +332,14 @@ def supported_static_surfaces(model, views, masks, rgb_images, output,
             rejected["multiView"]+=int((~keep).sum())
             for idx in np.flatnonzero(keep):
                 identity=surface_sample_identity([keys[i] for i in tri],bary[idx])
-                if identity in accepted_samples:continue
+                if identity in accepted_samples:
+                    continue
                 accepted_samples.add(identity)
-                positions.append(pts[idx]);colors.append(color_sum[idx]/votes[idx]);support.append(int(votes[idx]))
-                source_ids.append(len(source_ids));source_kind.append(1)
+                positions.append(pts[idx])
+                colors.append(color_sum[idx]/votes[idx])
+                support.append(int(votes[idx]))
+                source_ids.append(len(source_ids))
+                source_kind.append(1)
                 lineage.append(tuple(keys[i] for i in tri))
                 sample_bary.append(tuple(bary[idx]))
             if len(positions)>=max_points:

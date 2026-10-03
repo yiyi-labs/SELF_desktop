@@ -23,7 +23,8 @@ def rectified_domains(mask_root, name, K, distortion, existing):
     with np.load(path) as archive:
         certainty = archive['confidence'].astype(np.float32)
     h, w = raw.shape
-    if certainty.shape != raw.shape:raise ValueError('physical_observation_size')
+    if certainty.shape != raw.shape:
+        raise ValueError('physical_observation_size')
     mx, my = cv2.initUndistortRectifyMap(K, distortion, np.eye(3), K, (w,h), cv2.CV_32FC1)
     outside = (mx<0)|(my<0)|(mx>=w)|(my>=h)
     return observation_domains(cv2.remap(raw,mx,my,cv2.INTER_NEAREST),
@@ -32,7 +33,8 @@ def rectified_domains(mask_root, name, K, distortion, existing):
 
 def attach_observation_domains(data, prepared):
     prepared = Path(prepared).resolve()
-    if all('observed_room' in value for value in data['labels'].values()):return
+    if all('observed_room' in value for value in data['labels'].values()):
+        return
     metadata = json.loads((prepared/'preparation.json').read_text())
     root = prepared.parent.parent
     resolve = lambda value: Path(value) if Path(value).is_absolute() else (root/value).resolve()

@@ -38,18 +38,23 @@ def capture_observation_names(names, landmarks, limit=32, neighbours=4):
     thus no usable near-rigid clothing window. These are real named source
     observations, not interpolated cameras. SfM/PnP may still reject any one.
     """
-    names=sorted(names);chosen=set(selected_names(names,limit))
+    names=sorted(names)
+    chosen=set(selected_names(names,limit))
     def score(name):
         m=np.asarray(landmarks[name])
-        if m.ndim!=2 or len(m)<=454 or not np.isfinite(m).all():return -np.inf
+        if m.ndim!=2 or len(m)<=454 or not np.isfinite(m).all():
+            return -np.inf
         return float(np.linalg.norm(m[234]-m[454])/max(np.linalg.norm(m[10]-m[152]),1.))
-    reference=max(names,key=score);at=names.index(reference)
+    reference=max(names,key=score)
+    at=names.index(reference)
     chosen.update(names[max(0,at-neighbours):min(len(names),at+neighbours+1)])
     return [n for n in names if n in chosen],reference
 
 
 def recover_static(source,names,out):
-    database=out/"static.db";sparse=out/"sparse";sparse.mkdir()
+    database=out/"static.db"
+    sparse=out/"sparse"
+    sparse.mkdir()
     reader=pycolmap.ImageReaderOptions(mask_path=source/"static_feature_masks")
     extract=pycolmap.FeatureExtractionOptions(num_threads=6,max_image_size=1600)
     extract.sift.max_num_features=4500
@@ -60,9 +65,11 @@ def recover_static(source,names,out):
         overlap=10,quadratic_overlap=True,num_threads=6),device=pycolmap.Device.cpu)
     options=pycolmap.IncrementalPipelineOptions(num_threads=6,max_runtime_seconds=180)
     models=pycolmap.incremental_mapping(database,source/"frames",sparse,options=options)
-    if not models:raise ValueError("portrait_test_static_map_not_recovered")
+    if not models:
+        raise ValueError("portrait_test_static_map_not_recovered")
     model=max(models.values(),key=lambda m:(m.num_reg_images(),m.num_points3D()))
-    if model.num_reg_images()<6:raise ValueError("portrait_test_static_views_insufficient")
+    if model.num_reg_images()<6:
+        raise ValueError("portrait_test_static_views_insufficient")
     model.write(sparse/"0")
     return model
 
@@ -70,21 +77,27 @@ def recover_static(source,names,out):
 def fit_local(rgb,labels,marks,K,steps=260,checkpoint_path=None,source_hash=None,development_names=None):
     model=FlameOpen(24,12,model_path=MODEL).cuda()
     zeros=torch.zeros(1,5,3,device="cuda")
-    with torch.no_grad():_,neutral=model(torch.zeros(1,24,device="cuda"),torch.zeros(1,12,device="cuda"),zeros)
-    neutral=neutral[0].cpu().numpy();indices=model.landmark_indices.cpu().numpy()
-    fit=np.arange(len(indices))%5!=0;records={};rejected={}
+    with torch.no_grad():
+        _,neutral=model(torch.zeros(1,24,device="cuda"),torch.zeros(1,12,device="cuda"),zeros)
+    neutral=neutral[0].cpu().numpy()
+    indices=model.landmark_indices.cpu().numpy()
+    fit=np.arange(len(indices))%5!=0
+    records={}
+    rejected={}
     for name in rgb:
         observed=marks[name][indices].astype(np.float64)
         ok,r,t,inliers=cv2.solvePnPRansac(neutral[fit].astype(np.float64),observed[fit],K,np.zeros(5),
             iterationsCount=250,reprojectionError=12.,confidence=.999,flags=cv2.SOLVEPNP_EPNP)
         if not ok or inliers is None or len(inliers)<35:
-            rejected[name]="local_landmark_pnp_support";continue
+            rejected[name]="local_landmark_pnp_support"
+            continue
         r,t=cv2.solvePnPRefineLM(neutral[fit][inliers[:,0]].astype(np.float64),observed[fit][inliers[:,0]],K,np.zeros(5),r,t)
         root=(model.joint_regressor@model.template)[0].detach().cpu().numpy()
         translation=t[:,0]+cv2.Rodrigues(r)[0]@root-root
         records[name]=(observed,r[:,0],translation)
     names=list(records)
-    if len(names)<8:raise ValueError("portrait_test_local_views_insufficient")
+    if len(names)<8:
+        raise ValueError("portrait_test_local_views_insufficient")
     development=set(names[3::5] if development_names is None else development_names)&set(names)
     train=[n for n in names if n not in development]
     # Shared shape uses training observations only. All local poses are
@@ -93,21 +106,29 @@ def fit_local(rgb,labels,marks,K,steps=260,checkpoint_path=None,source_hash=None
     expression=torch.nn.Parameter(torch.zeros(len(names),12,device="cuda"))
     pose=torch.nn.Parameter(torch.zeros(len(names),5,3,device="cuda"))
     translation=torch.nn.Parameter(torch.tensor(np.stack([records[n][2] for n in names]),device="cuda",dtype=torch.float32))
-    with torch.no_grad():pose[:,0]=torch.tensor(np.stack([records[n][1] for n in names]),device="cuda")
-    init_pose=pose.detach().clone();init_t=translation.detach().clone()
+    with torch.no_grad():
+        pose[:,0]=torch.tensor(np.stack([records[n][1] for n in names]),device="cuda")
+    init_pose=pose.detach().clone()
+    init_t=translation.detach().clone()
     target=torch.tensor(np.stack([records[n][0] for n in names]),device="cuda",dtype=torch.float32)
     train_rows=torch.tensor([names.index(n) for n in train],device="cuda")
-    subset=torch.tensor(fit,device="cuda");intrinsic=torch.tensor(K,device="cuda",dtype=torch.float32)
+    subset=torch.tensor(fit,device="cuda")
+    intrinsic=torch.tensor(K,device="cuda",dtype=torch.float32)
     opt=torch.optim.Adam([{"params":[shape],"lr":.012},{"params":[expression],"lr":.018},
         {"params":[pose],"lr":.0012},{"params":[translation],"lr":.0007}])
     history=[]
     def save_fit_state(path,completed):
-        if path is None:return
+        if path is None:
+            return
         def cpu(value):
-            if isinstance(value,torch.Tensor):return value.detach().cpu().clone()
-            if isinstance(value,dict):return {key:cpu(item) for key,item in value.items()}
-            if isinstance(value,list):return [cpu(item) for item in value]
-            if isinstance(value,tuple):return tuple(cpu(item) for item in value)
+            if isinstance(value,torch.Tensor):
+                return value.detach().cpu().clone()
+            if isinstance(value,dict):
+                return {key:cpu(item) for key,item in value.items()}
+            if isinstance(value,list):
+                return [cpu(item) for item in value]
+            if isinstance(value,tuple):
+                return tuple(cpu(item) for item in value)
             return value
         torch.save(cpu({"schemaVersion":1,"kind":"capture-local-landmark-fit-state",
             "sourceHash":source_hash,"modelPath":str(MODEL),"modelSha256":model.model_sha256,
@@ -131,17 +152,23 @@ def fit_local(rgb,labels,marks,K,steps=260,checkpoint_path=None,source_hash=None
         held_rows=[i for i,n in enumerate(names) if n in development]
         shapes[held_rows]=shape.detach()
         _,points=model(shapes,expression,pose)
-        cam=points+translation[:,None];uv=cam@intrinsic.T;prediction=uv[...,:2]/uv[...,2:].clamp_min(.05)
+        cam=points+translation[:,None]
+        uv=cam@intrinsic.T
+        prediction=uv[...,:2]/uv[...,2:].clamp_min(.05)
         error=torch.linalg.vector_norm(prediction[:,subset]-target[:,subset],dim=-1)
         loss=fn.smooth_l1_loss(error,torch.zeros_like(error),beta=4.)+.12*shape.square().mean()
         loss+=.08*expression.square().mean()+.4*pose[:,1:].square().mean()
         loss+=.04*(pose[:,0]-init_pose[:,0]).square().mean()+10*(translation-init_t).square().mean()
-        opt.zero_grad();loss.backward();opt.step()
-        if step%50==0:history.append({"step":step+1,"medianPx":float(error.detach().median())})
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
+        if step%50==0:
+            history.append({"step":step+1,"medianPx":float(error.detach().median())})
         if checkpoint_path is not None and step+1==steps//2:
             save_fit_state(checkpoint_path.with_name("local-fit-mid.pt"),step+1)
     save_fit_state(checkpoint_path,steps)
-    local={};audit=[]
+    local={}
+    audit=[]
     for i,n in enumerate(names):
         mesh,F,root_error=root_neutral_contract(model,shape.detach(),expression[i:i+1].detach(),
                                                pose[i:i+1].detach(),translation[i].detach().cpu().numpy())
@@ -153,32 +180,46 @@ def fit_local(rgb,labels,marks,K,steps=260,checkpoint_path=None,source_hash=None
 
 
 def initial_appearance(data,count=20000):
-    model=data["geometry"];faces=model.faces.numpy();train=[n for n,r in data["local"].items() if r["role"]=="train"]
+    model=data["geometry"]
+    faces=model.faces.numpy()
+    train=[n for n,r in data["local"].items() if r["role"]=="train"]
     ids,bary,spacing=barycentric_samples(data["local"][train[0]]["mesh"],faces,count)
-    colors=np.zeros((count,3),np.float64);support=np.zeros(count,np.int32);detail=np.zeros(count,np.int32)
+    colors=np.zeros((count,3),np.float64)
+    support=np.zeros(count,np.int32)
+    detail=np.zeros(count,np.int32)
     for name in train:
-        row=data["local"][name];points,normals=bound_points(row["mesh"],faces,ids,bary)
-        camera=points@row["F"][:3,:3].T+row["F"][:3,3];uv=camera@data["K"].T
-        pixel=np.rint(uv[:,:2]/np.maximum(uv[:,2:],.01)).astype(int);u,v=pixel.T;h,w=data["rgb"][name].shape[:2]
+        row=data["local"][name]
+        points,normals=bound_points(row["mesh"],faces,ids,bary)
+        camera=points@row["F"][:3,:3].T+row["F"][:3,3]
+        uv=camera@data["K"].T
+        pixel=np.rint(uv[:,:2]/np.maximum(uv[:,2:],.01)).astype(int)
+        u,v=pixel.T
+        h,w=data["rgb"][name].shape[:2]
         valid=(camera[:,2]>.05)&(u>=0)&(u<w)&(v>=0)&(v<h)
         valid&=((normals@row["F"][:3,:3].T)*(-camera)).sum(1)>0
-        x=u.clip(0,w-1);y=v.clip(0,h-1)
+        x=u.clip(0,w-1)
+        y=v.clip(0,h-1)
         depth=np.full(((h+1)//2,(w+1)//2),np.inf)
         np.minimum.at(depth,(y[valid]//2,x[valid]//2),camera[valid,2])
         valid&=camera[:,2]<=depth[y//2,x//2]+.0035
         labels=data["labels"][name]
         colour_mask=labels.get('training_face',labels["face_core"]|labels["face_boundary"])
         valid&=colour_mask[y,x]&~labels["hair_visible"][y,x]
-        colors[valid]+=data["rgb"][name][y[valid],x[valid]];support[valid]+=1
+        colors[valid]+=data["rgb"][name][y[valid],x[valid]]
+        support[valid]+=1
         # Generic edge details remain details, never called eyewear geometry.
         detail+=(valid&labels["glasses_visible"][y,x]).astype(int)
     keep=np.flatnonzero(support>0)
-    if len(keep)<1000:raise ValueError("portrait_test_direct_color_support_insufficient")
+    if len(keep)<1000:
+        raise ValueError("portrait_test_direct_color_support_insufficient")
     role=(detail[keep]>0).astype(np.int64)
-    keep=keep[np.argsort(role,kind="stable")];role=(detail[keep]>0).astype(np.int64)
-    hair=data["components"]["hair"];hn=len(hair["xyz"])
+    keep=keep[np.argsort(role,kind="stable")]
+    role=(detail[keep]>0).astype(np.int64)
+    hair=data["components"]["hair"]
+    hn=len(hair["xyz"])
     rgb=np.concatenate((colors[keep]/support[keep,None],hair["rgb"])).astype(np.float32)
-    coeff=np.zeros((len(rgb),4,3),np.float32);coeff[:,0]=(rgb-.5)/C0
+    coeff=np.zeros((len(rgb),4,3),np.float32)
+    coeff[:,0]=(rgb-.5)/C0
     size=np.concatenate((spacing[keep],np.full(hn,.003,np.float32)))
     quats=np.tile(np.array([1.,0.,0.,0.],np.float32),(len(rgb),1))
     return {"color_mode":np.asarray("head-local-sh1"),"source_sha256":np.asarray(data["sourceHash"]),
@@ -192,7 +233,8 @@ def initial_appearance(data,count=20000):
 
 
 def prepare_capture(source,out,frames,faces,*,base_prepared=None):
-    started=time.perf_counter();out.mkdir()
+    started=time.perf_counter()
+    out.mkdir()
     development_names=None
     with np.load(source/'face_landmarks.npz') as available:
         names,capture_reference=capture_observation_names(faces,available)
@@ -210,15 +252,18 @@ def prepare_capture(source,out,frames,faces,*,base_prepared=None):
         shutil.copyfile(base_prepared/'static.db',out/'static.db')
         shutil.copytree(base_prepared/'sparse',out/'sparse')
         static=pycolmap.Reconstruction(out/'sparse/0')
-    if development_names is None:development_names=set(names[3::5])
+    if development_names is None:
+        development_names=set(names[3::5])
     from capture_registration import extend_static_short_windows
     added_worlds,registration_audit=extend_static_short_windows(source,out/'static.db',static,names,
         out/'short-window-registration',development_names=development_names)
     names=sorted(set(names)|set(added_worlds))
-    camera=next(iter(static.cameras.values()));K,distortion=source_camera(camera)
+    camera=next(iter(static.cameras.values()))
+    K,distortion=source_camera(camera)
     if any(not np.allclose(source_camera(c)[0],K) for c in static.cameras.values()):
         raise ValueError("portrait_test_multiple_intrinsics_need_adapter")
-    masks=make_masks(source,out,names);rgb,labels=rectified_data(source,masks,names,K,distortion)
+    masks=make_masks(source,out,names)
+    rgb,labels=rectified_data(source,masks,names,K,distortion)
     with np.load(source/"face_landmarks.npz") as detected:
         marks={n:cv2.undistortPoints(detected[n].reshape(-1,1,2),K,distortion,P=K).reshape(-1,2) for n in names}
     source_hash=sha256_file(source/"capture.mp4")
@@ -227,12 +272,14 @@ def prepare_capture(source,out,frames,faces,*,base_prepared=None):
     fit_audit["stateCheckpoint"]={"file":"local-fit-state.pt",
         "sha256":sha256_file(out/"local-fit-state.pt"),"optimizerRetained":True,
         "sourceHash":source_hash,"stepsCompleted":260}
-    rgb={n:rgb[n] for n in local};labels={n:labels[n] for n in local}
+    rgb={n:rgb[n] for n in local}
+    labels={n:labels[n] for n in local}
     images={im.name:im for im in static.images.values() if im.has_pose}
     worlds={n:camera_matrix(images[n]) for n in local if n in images}
     worlds.update({n:C for n,C in added_worlds.items() if n in local})
     train=[n for n in worlds if local[n]["role"]=="train"]
-    if len(train)<4:raise ValueError("portrait_test_world_local_overlap_insufficient")
+    if len(train)<4:
+        raise ValueError("portrait_test_world_local_overlap_insufficient")
     scale,gauge=shared_scene_scale(local,worlds,train)
     data={"sourceHash":source_hash,"geometry":geometry,"local":local,
           "worlds":worlds,"rgb":rgb,"labels":labels,"K":K,"scale":scale,"train":train,
@@ -251,19 +298,26 @@ def prepare_capture(source,out,frames,faces,*,base_prepared=None):
     components={}
     for part in ("hair","glasses"):
         components[part],audit=triangulated_component(rgb,labels,local,K,part)
-        np.savez_compressed(out/(part+"_multiview_seeds.npz"),**components[part]);write_json(out/(part+"-audit.json"),audit)
-    data["room"]=room;data["components"]=components
+        np.savez_compressed(out/(part+"_multiview_seeds.npz"),**components[part])
+        write_json(out/(part+"-audit.json"),audit)
+    data["room"]=room
+    data["components"]=components
     # Eye-edge tracks are not instantiated as an independent glasses mesh.
     empty=dict(components["glasses"])
     for key,value in empty.items():
-        if isinstance(value,np.ndarray) and value.ndim:empty[key]=value[:0]
+        if isinstance(value,np.ndarray) and value.ndim:
+            empty[key]=value[:0]
     data["components"]["glasses"]=empty
     np.savez_compressed(out/"glasses_multiview_seeds.npz",**empty)
-    prior=initial_appearance(data);appearance=out/"initial-appearance.npz";np.savez_compressed(appearance,**prior)
+    prior=initial_appearance(data)
+    appearance=out/"initial-appearance.npz"
+    np.savez_compressed(appearance,**prior)
     cloth_local={n:{"F":worlds[n],"role":"train","mesh":np.zeros((1,3),np.float32)} for n in train}
     cloth,cloth_audit=triangulated_component(rgb,labels,cloth_local,K,"cloth")
-    cloth["source_id"]=np.arange(len(cloth["xyz"]));np.savez_compressed(out/"cloth_supported_seeds.npz",**cloth)
-    cache=out/"rectified_observations";cache.mkdir()
+    cloth["source_id"]=np.arange(len(cloth["xyz"]))
+    np.savez_compressed(out/"cloth_supported_seeds.npz",**cloth)
+    cache=out/"rectified_observations"
+    cache.mkdir()
     for n in local:
         cv2.imwrite(str(cache/n),cv2.cvtColor((rgb[n]*255).round().astype(np.uint8),cv2.COLOR_RGB2BGR))
         np.savez_compressed(cache/(n+".npz"),**labels[n])

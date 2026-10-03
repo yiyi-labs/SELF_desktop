@@ -27,7 +27,8 @@ class TransportedGaussianState(GaussianState):
 
 def joined_covariant(*states):
     """Join standard export fields and retain every exact covariance graph."""
-    if not states:raise ValueError('neck_empty_scene_join')
+    if not states:
+        raise ValueError('neck_empty_scene_join')
     fields={key:torch.cat([getattr(state,key) for state in states])
             for key in GaussianState.__dataclass_fields__}
     return TransportedGaussianState(**fields,
@@ -64,16 +65,20 @@ class NeckBinding(torch.nn.Module):
         super().__init__()
         if means.ndim!=2 or means.shape[1]!=3 or not torch.isfinite(means).all():
             raise ValueError('neck_invalid_reference_points')
-        if neck.shape!=(len(means),):raise ValueError('neck_layer_count')
-        _rigid(C,'C');_rigid(F,'F')
-        if not np.isfinite(scene_scale) or scene_scale<=0:raise ValueError('neck_scene_scale')
+        if neck.shape!=(len(means),):
+            raise ValueError('neck_layer_count')
+        _rigid(C,'C')
+        _rigid(F,'F')
+        if not np.isfinite(scene_scale) or scene_scale<=0:
+            raise ValueError('neck_scene_scale')
         self.register_buffer('reference_C',C.detach().clone())
         self.register_buffer('reference_F',F.detach().clone())
         self.register_buffer('scene_scale',means.new_tensor(scene_scale))
         self.register_buffer('inverse_head_reference',torch.linalg.inv(
             scaled_head_transform(C,F,float(scene_scale))).detach())
         self.register_buffer('neck',neck.detach().clone())
-        weight=means.new_zeros(len(means));gradient=torch.zeros_like(means)
+        weight=means.new_zeros(len(means))
+        gradient=torch.zeros_like(means)
         camera=means@C[:3,:3].T+C[:3,3]
         if neck.any() and (camera[neck,2]<=0).any():
             raise ValueError('neck_reference_nonpositive_depth')
@@ -81,7 +86,8 @@ class NeckBinding(torch.nn.Module):
         # content is invented, and the field is fixed to reference material.
         if int(neck.sum())>=2:
             y=camera[neck,1]/camera[neck,2]
-            top,bottom=y.min(),y.max();span=bottom-top
+            top,bottom=y.min(),y.max()
+            span=bottom-top
             if float(span)>1e-8:
                 u=((y-top)/span).clamp(0,1)
                 weight[neck]=1-u*u*(3-2*u)
@@ -92,28 +98,36 @@ class NeckBinding(torch.nn.Module):
         self.register_buffer('gradient',gradient.detach())
 
     def relative_head(self,C,F):
-        _rigid(C,'C');_rigid(F,'F')
+        _rigid(C,'C')
+        _rigid(F,'F')
         if torch.equal(C,self.reference_C) and torch.equal(F,self.reference_F):
             return torch.eye(4,device=C.device,dtype=C.dtype)
         return scaled_head_transform(C,F,float(self.scene_scale)) @ self.inverse_head_reference
 
     def transforms(self,state,C,F):
         """Centres and full deformation Jacobian, with no alpha/colour loss."""
-        if len(state.means)!=len(self.weight):raise ValueError('neck_topology_changed')
-        H=self.relative_head(C,F);R=H[:3,:3]
+        if len(state.means)!=len(self.weight):
+            raise ValueError('neck_topology_changed')
+        H=self.relative_head(C,F)
+        R=H[:3,:3]
         eye=torch.eye(3,device=R.device,dtype=R.dtype)
-        head=state.means@R.T+H[:3,3];delta=head-state.means
+        head=state.means@R.T+H[:3,3]
+        delta=head-state.means
         moved=state.means+self.weight[:,None]*delta
         J=eye[None]+self.weight[:,None,None]*(R-eye)[None]+delta[:,:,None]*self.gradient[:,None,:]
         return moved,J
 
     def deform(self,state,C,F):
-        if len(state.means)!=len(self.weight):raise ValueError('neck_topology_changed')
+        if len(state.means)!=len(self.weight):
+            raise ValueError('neck_topology_changed')
         # Exact reference identity includes quaternions/SH, not only centres.
-        if torch.equal(C,self.reference_C) and torch.equal(F,self.reference_F):return state
+        if torch.equal(C,self.reference_C) and torch.equal(F,self.reference_F):
+            return state
         active=self.neck & (self.weight>0)
-        if not active.any():return state
-        moved,J=self.transforms(state,C,F);J=J[active]
+        if not active.any():
+            return state
+        moved,J=self.transforms(state,C,F)
+        J=J[active]
         if not torch.isfinite(J).all() or torch.any(torch.linalg.det(J)<=0):
             raise ValueError('neck_transition_fold_requires_motion_evidence')
         source_covariance=state.covariance()
@@ -122,21 +136,29 @@ class NeckBinding(torch.nn.Module):
         # sigma itself below, so repeated eigenvalues never erase gradients or
         # introduce eigenvector-gradient instability during image training.
         eigenvalues,basis=torch.linalg.eigh(sigma.detach())
-        if torch.any(eigenvalues<=0):raise ValueError('neck_nonpositive_covariance')
+        if torch.any(eigenvalues<=0):
+            raise ValueError('neck_nonpositive_covariance')
         basis=basis.detach().clone()
         basis[:,:,0]*=torch.where(torch.linalg.det(basis)<0,-1.,1.)[:,None]
         q=_matrix_quaternion(basis)
         # Polar rotation transports the one directional field. It is not an
         # average of differently rotated SH and is never a colour correction.
-        U,_,Vh=torch.linalg.svd(J.detach());R=U@Vh
-        sh=state.sh[active];vector=torch.stack((-sh[:,3],-sh[:,1],sh[:,2]),1)
+        U,_,Vh=torch.linalg.svd(J.detach())
+        R=U@Vh
+        sh=state.sh[active]
+        vector=torch.stack((-sh[:,3],-sh[:,1],sh[:,2]),1)
         v=torch.einsum('nij,njc->nic',R,vector)
         transported=torch.stack((sh[:,0],-v[:,1],v[:,2],-v[:,0]),1)
-        means=state.means.clone();means[active]=moved[active]
-        scales=state.scales.clone();scales[active]=eigenvalues.sqrt()
-        quats=state.quats.clone();quats[active]=q
-        colour=state.sh.clone();colour[active]=transported
-        covariance=source_covariance.clone();covariance[active]=sigma
+        means=state.means.clone()
+        means[active]=moved[active]
+        scales=state.scales.clone()
+        scales[active]=eigenvalues.sqrt()
+        quats=state.quats.clone()
+        quats[active]=q
+        colour=state.sh.clone()
+        colour[active]=transported
+        covariance=source_covariance.clone()
+        covariance[active]=sigma
         return TransportedGaussianState(means,quats,scales,state.opacity,colour,state.parts,covariance)
 
     def receipt(self):
@@ -148,10 +170,13 @@ class NeckBinding(torch.nn.Module):
 
 
 def build_neck_binding(means,layers,reference_C,reference_F,scene_scale):
-    if not torch.is_tensor(means):means=torch.as_tensor(means,dtype=torch.float32)
-    if not means.is_floating_point():raise ValueError('neck_float_points_required')
+    if not torch.is_tensor(means):
+        means=torch.as_tensor(means,dtype=torch.float32)
+    if not means.is_floating_point():
+        raise ValueError('neck_float_points_required')
     labels=np.asarray(layers)
-    if labels.shape!=(len(means),):raise ValueError('neck_layer_count')
+    if labels.shape!=(len(means),):
+        raise ValueError('neck_layer_count')
     neck=torch.as_tensor(labels=='neck_skin',device=means.device)
     C=torch.as_tensor(reference_C,device=means.device,dtype=means.dtype)
     F=torch.as_tensor(reference_F,device=means.device,dtype=means.dtype)

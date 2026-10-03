@@ -1,0 +1,20 @@
+{
+  "engine": "portrait-first-soft-surface-test",
+  "userTestingAuthorized": true,
+  "algorithmVersion": "portrait-native-fullframe-20261002-research",
+  "releaseApproved": false,
+  "executionAdapter": "native-fullframe",
+  "localSteps": 900,
+  "roomSteps": 400,
+  "hairCompositeSteps": 180,
+  "skinCompositingSteps": 0,
+  "denseSurfaces": true,
+  "sharedRoomSurface": true,
+  "observedFaceDomain": true,
+  "surfaceRefine": false,
+  "implementationSha256": "e7040005a447ed672a43a6f1dd1d51619b3845c6e8d2e08a4c2def76ad65fcab",
+  "opaquePerson": true,
+  "opaqueBody": false,
+  "surfaceFootprint": false,
+  "roomWindowRecovery": true
+}

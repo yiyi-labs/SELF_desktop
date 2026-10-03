@@ -43,16 +43,19 @@ def point_region_contributions(state,frame,neck,protected,*,unit_scale=1.,antial
     """
     if rasterizer is None:
         from gsplat import rasterization as rasterizer
-    w,h=map(int,frame['fullSize']);device=state.means.device
+    w,h=map(int,frame['fullSize'])
+    device=state.means.device
     if tuple(frame['rectangle'])!=(0,0,w,h) or frame.get('nativeScale')!=1:
         raise ValueError('neck_contribution_requires_full_canvas')
     if not np.isfinite(unit_scale) or unit_scale<=0:
         raise ValueError('neck_contribution_scale')
-    if neck.shape!=(h,w) or protected.shape!=(h,w):raise ValueError('neck_region_shape')
+    if neck.shape!=(h,w) or protected.shape!=(h,w):
+        raise ValueError('neck_region_shape')
     if not torch.allclose(frame['K'],frame['fullK'],atol=1e-5,rtol=0):
         raise ValueError('neck_contribution_intrinsics')
     C=frame['C']
-    if C is None:raise ValueError('neck_contribution_camera_required')
+    if C is None:
+        raise ValueError('neck_contribution_camera_required')
     with torch.enable_grad():
         features=torch.zeros((len(state.means),3),device=device,dtype=state.means.dtype,requires_grad=True)
         image,_,_=rasterizer(state.means.detach(),None,None,state.opacity.detach(),features,
@@ -91,20 +94,27 @@ def select_neck_sh_points(observations,portrait_count,surface_count,*,min_suppor
     veto=torch.zeros(portrait_count,dtype=torch.bool)
     max_protected=torch.zeros(portrait_count,dtype=torch.float64)
     neck_evidence=torch.zeros(portrait_count,dtype=torch.float64)
-    records=[];seen=set();support_names=[]
+    records=[]
+    seen=set()
+    support_names=[]
     for item in observations:
-        frame,state=item['frame'],item['state'];name=str(frame['name'])
-        if name in seen:raise ValueError('neck_duplicate_observation:'+name)
+        frame,state=item['frame'],item['state']
+        name=str(frame['name'])
+        if name in seen:
+            raise ValueError('neck_duplicate_observation:'+name)
         seen.add(name)
         support=bool(item['support'])
         if support and not item.get('full_scene',False):
             raise ValueError('neck_support_requires_full_scene')
-        if len(state.means)<portrait_count:raise ValueError('neck_portrait_prefix_missing')
+        if len(state.means)<portrait_count:
+            raise ValueError('neck_portrait_prefix_missing')
         neck,protected=_masks(frame)
         values=measure(state,frame,neck,protected,unit_scale=float(item['unit_scale']),antialiased=antialiased)
-        if values.shape!=(len(state.means),3):raise ValueError('neck_contribution_shape')
+        if values.shape!=(len(state.means),3):
+            raise ValueError('neck_contribution_shape')
         values=values[:portrait_count].detach().cpu().double()
-        if not torch.isfinite(values).all() or (values<0).any():raise ValueError('neck_contribution_values')
+        if not torch.isfinite(values).all() or (values<0).any():
+            raise ValueError('neck_contribution_values')
         neck_q,protected_q,all_q=values.unbind(-1)
         if (neck_q>all_q+1e-4).any() or (protected_q>all_q+1e-4).any():
             raise ValueError('neck_contribution_not_conservative')
@@ -112,12 +122,15 @@ def select_neck_sh_points(observations,portrait_count,surface_count,*,min_suppor
         max_protected=torch.maximum(max_protected,protected_q)
         qualifies=(neck_q>=min_neck_pixels)&(neck_q>=min_neck_fraction*all_q)
         if support:
-            support_count+=qualifies.long();neck_evidence+=neck_q;support_names.append(name)
+            support_count+=qualifies.long()
+            neck_evidence+=neck_q
+            support_names.append(name)
         records.append({'imageName':name,'supportObservation':support,'fullScene':bool(item['full_scene']),
                         'neckPixels':int(neck.sum()),'protectedPixels':int(protected.sum()),
                         'qualifyingOldSurfacePoints':int(qualifies[:surface_count].sum()) if support else 0,
                         'protectedContributingOldSurfacePoints':int((protected_q[:surface_count]>protected_tolerance).sum())})
-    if len(support_names)<min_support:raise ValueError('neck_insufficient_distinct_support_views')
+    if len(support_names)<min_support:
+        raise ValueError('neck_insufficient_distinct_support_views')
     eligible=torch.arange(portrait_count)<surface_count
     selected=eligible&(support_count>=min_support)&~veto
     ids=torch.where(selected)[0].numpy().astype('<i8')

@@ -50,7 +50,8 @@ def prepare_opaque_interiors(labels, config=DEFAULT_CONFIG):
     exclude = np.logical_or.reduce(protected)
     inputs = {'skin': 'training_skin', 'cloth': 'observed_cloth',
               'body_skin': 'observed_body_skin'}
-    masks = {}; receipt = {}
+    masks = {}
+    receipt = {}
     claimed = np.zeros(shape, bool)
     for name, key in inputs.items():
         observed = _cpu_bool(labels[key]) if key in labels else np.zeros(shape, bool)
@@ -132,14 +133,16 @@ def opaque_person_loss(rendered, frame, *, scope='head', config=DEFAULT_CONFIG):
     the caller's original RGB error plus this coverage loss.
     """
     conditional, contribution = conditional_person_colour(rendered, config)
-    target = frame['rgb']; labels = frame['masks']
+    target = frame['rgb']
+    labels = frame['masks']
     if target.shape != conditional.shape:
         raise ValueError('opaque_person_target_shape')
     if scope not in ('head', 'body', 'person'):
         raise ValueError('opaque_person_unknown_scope')
     names = {'head': ('skin',), 'body': ('cloth', 'body_skin'),
              'person': ('skin', 'cloth', 'body_skin')}[scope]
-    terms = []; details = {}
+    terms = []
+    details = {}
     for name in names:
         key = 'opaque_' + name
         if key not in labels:
