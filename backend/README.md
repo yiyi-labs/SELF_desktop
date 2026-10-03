@@ -8,12 +8,87 @@ PC 端两段式重建：Windows 上的 FastAPI 服务（`app.py`，127.0.0.1:878
 HTTP 服务把上传的采集写成
 `job.json` + `capture.mp4`，worker 轮询目录、建模、把产物写回同一个作业目录。
 
-一篇文档讲清楚三件事：**每个文件是干什么的**（第五节、第六节逐个文件）、
+一篇文档讲清楚三件事：**每个文件是干什么的**（开头速查表一行一个文件；第五节、第六节逐个文件细讲）、
 **它是被谁调用、以什么方式加载的**（每个文件条目的"被谁调用 / 加载方式"两行）、
 **有没有哪个文件其实没人用**（第四节：没有，67 个根模块全部可达）。
 
 服务源码里不做像素处理；浏览器/平板只走 HTTP。风险边界见 `contracts.py` 与 `recon_transfer.py`
 的说明。
+
+## 速查表：每个程序负责什么
+
+67 个根目录程序一行一个（按第五节的分组与顺序排列）。详细职责、"被谁调用"与
+"加载方式"见第五节、第六节逐文件条目。
+
+| 分组 | 文件 | 主要负责 |
+|---|---|---|
+| HTTP 服务链 | `app.py` | FastAPI 服务入口：`/health`、文字对话 `/v1/conversations`、编辑计划 `/v1/edit-plans`，并装配 `/v1/reconstruction` 路由 |
+| HTTP 服务链 | `care_catalog.py` | 有来源的护理选项目录：13 品类通用用法、护理意图与拒绝/反馈识别、按圈选部位推荐品类并生成可选项 |
+| HTTP 服务链 | `contracts.py` | AI 边界协议与确定性校验：严格 Pydantic 线协议；`validate_plan` 承载全部硬约束；导出 `propose_edit_plan` 工具 schema |
+| HTTP 服务链 | `deepseek_client.py` | DeepSeek 编辑计划调用与解析：加载 `.env`、组装上下文与图像、POST `/chat/completions`、解析并至多修复重试一次 |
+| HTTP 服务链 | `product_catalog.py` | 审校过的大陆渠道产品查询：延续词接上下文、关键词命中排序取前 3、"请求产品真实效果"识别 |
+| HTTP 服务链 | `product_knowledge.py` | 74 条产品身份与档案的唯一 join 层：`identity_index`、`product_detail`、名称归一化精确匹配 |
+| HTTP 服务链 | `recon_transfer.py` | `/v1/reconstruction` 采集传输：建作业、1 MiB 分块上传（摘要校验）、封存拼接、心跳健康、资产下载与取消 |
+| HTTP 服务链 | `response_quality.py` | 回复环路检测器：句内/历史重复、相似度 ≥0.84、子串与句子集合判定，只判不改写 |
+| HTTP 服务链 | `story_conversation.py` | 既有肖像上的纯文字对话：五类意图分类、canned 免模型直答、模型对话与措辞红线 |
+| 测试依赖 | `live_depth_scale.py` | 条件深度尺度审计库：按物理点 5 折分窗、每窗单一尺度拟合与验证门限、完整审计入口 |
+| 测试依赖 | `run_live_body_appearance_trial.py` | 人工诊断脚本（非发布）：恢复人物监督后只训 body 外观 120 步，前后审计并导出候选 PLY |
+| 测试依赖 | `run_live_face_capacity_trial.py` | 人工诊断脚本（非发布）：Rctrl/Rcap 面部容量两臂对比（同种子同预算），bitwise 回滚断言与三指标汇总 |
+| 测试依赖 | `run_live_skin_compositing_trial.py` | 人工诊断脚本（非发布）：同几何双背景下只训皮肤外观合成，前后审计并导出候选 PLY |
+| legacy 训练链 | `schedule.py` | 纯函数训练调度器：每步给出 (view, mode)，保证每个视角都被 scene/face 两种模式轮到 |
+| legacy 训练链 | `train_joint.py` | legacy 人物+房间同一高斯场景训练器：掩膜投票打标签、按调度轮换训练、按 lineage 导出 PLY+provenance |
+| 算法闭包 | `appearance_direction_contract.py` | degree-1 SH 头局部颜色 ↔ 冻结 GS PLY 的坐标/方向契约：SH1 基、旋转与系数换算 |
+| 算法闭包 | `capture_reference.py` | 唯一捕获参考挑选：±1.75 s 近时窗口 ≥3 训练视图、真实基线/头距比门槛，失败抛结构化收据 |
+| 算法闭包 | `capture_registration.py` | 近时窗口的有界静态 2D-3D 定位：地图哈希、物理点折分、掩码 SIFT 投票与留出集验收 |
+| 算法闭包 | `checkpoint.py` | 安全 checkpoint 读取/恢复：哈希预检、numpy 白名单反序列化、逐张量 torch.equal 复核 |
+| 算法闭包 | `code_identity.py` | 实现确定性指纹：AST 递归展开 52 文件闭包并逐个 SHA-256，合成 `implementationSha256` |
+| 算法闭包 | `components_v2.py` | 研究用组件观测+支撑几何准备：掩码/矫正观测、局部拟合、尺度对齐、三角化种子与 `load_prepared` |
+| 算法闭包 | `face.py` | 保守头部掩码与面部观测：mediapipe 模型哈希校验、头包络/皮肤掩码、7 类部件标签与数值 QA |
+| 算法闭包 | `flame_open_model.py` | 最小隔离的 FLAME 2023 Open 前向模型：pkl 哈希校验、LBS+姿态修正前向、105 点嵌入 |
+| 算法闭包 | `joint_visibility.py` | 人物+环境 GS 共享可见性诊断：`posed_points`、一次光栅化双贡献通道、守恒误差检查 |
+| 算法闭包 | `live_dense.py` | DA3 深度推理总控：工具源码锁、depth-only 推理、room/hair/body 高斯种子生成与算法快照 |
+| 算法闭包 | `live_dense_contract.py` | 深度研究互操作纯工具库：哈希/刚体与相机工具/参数别名补全（部分函数无调用点） |
+| 算法闭包 | `live_face_domain.py` | 语义观测 → 观测面部域：连通皮肤成分与空域认定、激活重建训练面/肤掩码、恢复重放 |
+| 算法闭包 | `live_fullframe.py` | native-fullframe 兼容转发入口：重导出别名与版本、拒绝 joint_steps≠0、原样转调 `pipeline.run` |
+| 算法闭包 | `live_hair_composite.py` | 冻结场景的观测头发外观标定：只训头发 sh/opacity、掩码梯度限制、其余参数位级不变断言 |
+| 算法闭包 | `live_hair_motion.py` | 参考系相对的关节 1 头发输运：颅骨刚体近似、参考帧单位阵、协方差/SH 完整输运与收据 |
+| 算法闭包 | `live_neck_appearance.py` | 可继承颈部 SH 挑选：全画布光栅化贡献、保护区互斥、≥3 支持视角阈值与选择收据 |
+| 算法闭包 | `live_neck_motion.py` | 头与准静态身体间的颈部皮肤输运：平滑权重与雅可比、完整协方差、极分解 SH 旋转 |
+| 算法闭包 | `live_opaque_person.py` | 不透明人物训练合同：三区互斥腐蚀掩码、条件颜色与结构误差、有界不透明损失 |
+| 算法闭包 | `live_prepare.py` | 逐次拍摄观测准备：真实帧选择、静态相机恢复、FLAME 局部拟合、外观先验与三角化种子 |
+| 算法闭包 | `live_room_completion.py` | 已观测房间有界补全：最多 2 参考贪心选择、共享表面求解、增量导出与验证重放 |
+| 算法闭包 | `live_room_reference.py` | 房间参考资格评估与排序：fit/held 折分、哈希与相机一致性核验、最多取 2 个参考 |
+| 算法闭包 | `live_room_retry.py` | 已失败房间窗口的第二参考重试：严格预算合同、只发起一次求解、收尾不覆盖首轮结果 |
+| 算法闭包 | `live_room_self_reference.py` | 旧自身深度票作负证据的有界重放：默认不动作、显式授权、证据逐位核对 |
+| 算法闭包 | `live_room_window_recovery.py` | 被拒锚定窗口的有界恢复：提案收据、保守重叠验收、未覆盖观测转正 |
+| 算法闭包 | `live_shared_room_surface.py` | 有界 CPU 共享房间表面修正：低维逆深度残差、条件初始化交易、活线适配器 |
+| 算法闭包 | `live_skin_compositing.py` | 冻结几何的观测皮肤合成恢复：黑白底一致性、保护掩码、只训 sh/opacity、失败整体回滚 |
+| 算法闭包 | `live_surface_binding.py` | 表面组件交付适配层：逐字段/逐面证据校验、环境合并、头发先验替换 |
+| 算法闭包 | `live_surface_footprint.py` | 可选新鲜先验皮肤协方差：语义连通区采样密度、切向协方差适配、最多 4 轮回退 |
+| 算法闭包 | `local_sampling.py` | 确定性局部采样器：修复偶数观测的几何相位混叠，附收据模拟与不变量保证 |
+| 算法闭包 | `observation_domains.py` | 逐帧标签 → 矫正物理观测域：置信度门槛、room/cloth/skin 域、幂等挂载 |
+| 算法闭包 | `observations.py` | 每作业帧/脸/世界证据打包：frame_selection 校验、逐帧哈希与相机标注、observation_bundle.json |
+| 算法闭包 | `observed_surface.py` | 观测域+有限表面支撑（--surface-refine）：Delaunay 加密、静态平面候选、去重并入假设 |
+| 算法闭包 | `person_supervision_state.py` | 非 Parameter 训练契约恢复：三方哈希一致、先验证后变异、证据文件逐字节复制 |
+| 算法闭包 | `portrait_model.py` | 可复用照片驱动人像模型：四元数/SH 数学、网格行走、LocalPortraitModel 与候选交易回滚 |
+| 算法闭包 | `portrait_pipeline.py` | 人像优先重建主引擎：场景装配、三档渲染、训练与审计、候选导出与算法源码快照 |
+| 算法闭包 | `portrait_preview.py` | 从 PLY 生成静态预览：256×256 PNG、3D/全场景 LOD 采样、大小上限与原子替换 |
+| 算法闭包 | `pose.py` | 人脸姿态测量：canonical 顶点校验、PnP RANSAC+LM、medoid 参考系与姿态质量报告 |
+| 算法闭包 | `probe_flame_observations.py` | 研究探针：FLAME 局部/世界观测严格分离，"根旋转只应用一次"契约校验 |
+| 算法闭包 | `probe_flame_open_fit.py` | 研究探针：FLAME Open 共享身份拟合到私域 landmark，训练/留出报告 |
+| 算法闭包 | `probe_flame_real_appearance.py` | 研究探针：三角面绑定 GS 外观采样，三重可见性过滤、留出帧像素排除 |
+| 算法闭包 | `probe_gs_contract.py` | 契约探针：gsplat→标准 PLY→解析回 gsplat 的无损往返验证（`read_float_ply` 供生产复用） |
+| 算法闭包 | `probe_portrait_components.py` | 研究探针：2D 六类部件掩码+高分辨率头发掩码，两套掩码分歧测量 |
+| 算法闭包 | `probe_static_alignment.py` | 研究探针：静态 vs 人物混入 SfM 的相机一致性比较（中心/朝向残差统计） |
+| 算法闭包 | `runtime.py` | 测试引擎路由与执行回执：预算与开关校验、源码未变验证、子进程训练组织、心跳身份比对 |
+| 算法闭包 | `scene.py` | 世界坐标房间/衣物观测恢复：环境掩膜、前景净空、实测深度种子与静态表面三角化 |
+| 算法闭包 | `shared_v2.py` | 五部件共享前向试验原型：initialize/boxes/mesh_depth、ComponentStrategy 训练与审计 |
+| 算法闭包 | `static_planes.py` | 测量 track 支撑的静态平面假设：SVD 平面分组、凸包内采样、多视图颜色认同 |
+| 算法闭包 | `surface_density.py` | 有界切向表面分裂（--surface-refine）：父点选择、双子点复制、Adam 状态整体搬移 |
+| 算法闭包 | `surface_recovery.py` | 表面初始化证据留存与迁移：哈希校验复制、证明闭包保留、跨平台路径、checkpoint 反查 |
+| 算法闭包 | `train.py` | 早期单场景 gsplat 训练器：smoke 自检、`load_scene`、`observed_head_splats`、头部掩膜训练与导出 |
+| 算法闭包 | `view.py` | 开场机位推导与覆盖证明：注视中心/fov 反推、前 1/5 帧挑帧、broadSideCoverage 统计 |
+| 算法闭包 | `worker.py` | WSL 常驻重建 worker：轮询作业、SHA-256 校验、引擎选路、隔离子进程、flock 单实例与心跳 |
 
 ## 一、运行拓扑
 
@@ -57,8 +132,9 @@ WSL: worker.py（常驻单进程，flock 单实例，心跳写 worker_status.jso
 profileImplementationSha256`，`sourceIdentityVerified=true`。改名前后的完整证据（映射表、
 双环境测试 A/B、真实端到端作业）在 `docs/evidence/backend-rename-20261003/`，
 换行改写的等价性证明与验证在 `docs/evidence/backend-reformat-20261003/`。
-本 README 的行号引用（如 `runtime.py:67`）以换行改写前的提交 `886f84e` 为基准；
+本 README 对 `backend/*.py` 的行号引用（如 `runtime.py:67`）以换行改写前的提交 `886f84e` 为基准；
 改写后 44 个文件的行号有位移，换算表见 `docs/evidence/backend-reformat-20261003/line-map.json`。
+对 README 自身命令的引用一律用节名（如"第三节"），不随行号变化。
 
 **勿动**：第五节的 52 个闭包文件是哈希钉死的；要改必须与 `engine-profile.json` 一起重算重钉。
 
@@ -585,7 +661,7 @@ capture_reference 采集参考合同：已有合法参考保留并可 preferred 
 
 眼周圈选后问“怎么保养”的回归：校验 RECORDS 与 DOSSIERS 对齐及 74 条身份索引、眼周意图命中 CN008/CN024、图像解剖部位决定护理品类（脸颊/额头/鼻/下巴不得落 eye、痘肌落 cleanser）、用户拒绝或已推荐过则停止推产品、未核实用量/唇色被拒、同答同问判重；ModelQuality 用 httpx.MockTransport 打桩真实 propose/converse（test-only key），验证重复计划补答一次才展示、repeated_response 永不达用户、缺 selectionObservations 时补检而非编造解剖、文字护理路径不夹带图片。
 
-- **被谁调用**：unittest discovery（Test-Backend.ps1:4，WSL 同 README.md:34）
+- **被谁调用**：unittest discovery（Test-Backend.ps1:4，WSL 同 README.md 第三节）
 - **加载方式**：测试
 #### `test_checkpoint.py`
 
@@ -603,7 +679,7 @@ checkpoint 安全读取合同：只放行张量与 NumPy 白名单（含 np.str_
 
 Plan/Snapshot 与 parse_response/validate_plan 的边界合同：多区域试色原子且有界、英文只作展示层不得改区域/预设、明确“只想聊”不得输出编辑、数字回复必须绑定上一轮选项、圈选区域优先于其他登记区、未知/多余字段与伪造引用一律 ModelFailure、上传未授权被拒、图片必须是真实 image_url 块、护理指南产品必须来自已登记 careOptions 且不得宣称产品效果（痘痘护理 CN029 须声明非祛痘治疗）；同时为其他测试导出 snapshot()/plan()/response() 夹具。
 
-- **被谁调用**：unittest discovery（Test-Backend.ps1:4，WSL 同 README.md:34）；作为夹具模块被 test_care_conversation/test_http/test_product_catalog/test_live* 等导入
+- **被谁调用**：unittest discovery（Test-Backend.ps1:4，WSL 同 README.md 第三节）；作为夹具模块被 test_care_conversation/test_http/test_product_catalog/test_live* 等导入
 - **加载方式**：测试
 #### `test_face.py`
 
@@ -669,19 +745,19 @@ live_face_domain 与 portrait_pipeline 联动合同：observed_empty 域排除�
 
 检查 native-fullframe 入口与画布合同：pipeline_entry 要求 live_fullframe/portrait_pipeline/portrait_model/appearance_direction_contract 四个源码哈希完全匹配（改一处即 hash_changed）、native_frame 保留原生像素与裁剪 K、CUDA 下 person 颜色通道与全画布协方差相对参考实现的像素和梯度一致、NativeScene 让人物与房间处于同一合成。
 
-- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md:28；scripts/Test-Backend.ps1:4）自动收集；backend/tests/__init__.py:8-12 注入 tests/ 与 backend/ 到 sys.path
+- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md 第三节；scripts/Test-Backend.ps1:4）自动收集；backend/tests/__init__.py:8-12 注入 tests/ 与 backend/ 到 sys.path
 - **加载方式**：仅测试（unittest discovery 导入；LiveCudaContractTest 无 CUDA 时整套 skip，:43-44）
 #### `test_live_hair_composite.py`
 
 检查 live_hair_composite.masked_parameter_step：真实背景可打破黑底下的不透明度歧义（前景=目标时 logit 梯度为负），且 Adam 每步只更新头发行的参数与动量，非头发参数行必须与非经该函数更新的冻结副本逐位相等。
 
-- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md:28；scripts/Test-Backend.ps1:4）自动收集
+- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md 第三节；scripts/Test-Backend.ps1:4）自动收集
 - **加载方式**：仅测试
 #### `test_live_hair_motion.py`
 
 检查 live_hair_motion 头发运动合同：保存后重新推理的传输只容数值舍入并能识破变换/数组篡改、凭证不匹配即reinfer_required，稠密相机与 SceneAssembly 共用同一参考传输路径，非恒等头姿下关节链/协方差/SH 极旋转精确，根、下巴与非参考表情不拖拽头发而蒙皮（part<=1）前缀保持不变，identity/legacy 行为显式且坏名字报错。
 
-- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md:28）自动收集
+- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md 第三节）自动收集
 - **加载方式**：仅测试（live_dense/portrait_pipeline 在测试方法内按需导入，:44-45）
 #### `test_live_http.py`
 
@@ -699,31 +775,31 @@ live_face_domain 与 portrait_pipeline 联动合同：observed_empty 域排除�
 
 检查 live_neck_appearance 颈部外观点选择：必须有三张互异的原生全画布支撑视图，观察足迹触及受保护区域会被否决且头发不参与，其他视图可只否决不投票；低颈部占比不扩大编辑范围；point_region_contributions 的通道导数是对模型（means/scales/opacity/sh）完全脱离的精确线性累加。
 
-- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md:28）自动收集
+- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md 第三节）自动收集
 - **加载方式**：仅测试
 #### `test_live_neck_motion.py`
 
 检查 live_neck_motion 颈部物理运动：非恒等绝对头姿下参考仍精确、运动只相对头姿；只有前 5 个颈部点变形，布料/房间/alpha/底部颈部逐位不变；解析雅可比与参考场有限差分一致；协方差/导出因子不丢 quats/scales 训练梯度；无或单点颈部不造几何；非法层数/非刚体帧/拓扑变化报错；场景拼接保留两来源协方差与梯度。
 
-- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md:28）自动收集
+- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md 第三节）自动收集
 - **加载方式**：仅测试
 #### `test_live_opaque_person.py`
 
 检查 live_opaque_person 不透明人物损失与掩码：房间 alpha 不得顶替人物不透明度、条件颜色不得拿 alpha 换亮度、部件映射只留皮肤/身体不留房间/头发/镜片；掩码排除头发/眼镜/未知区域并记录原生腐蚀半径；空区域零监督、body 阶段不监督冻结脸、结构误差只看原生边缘而非掩码边缘。
 
-- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md:28）自动收集
+- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md 第三节）自动收集
 - **加载方式**：仅测试
 #### `test_live_room_completion.py`
 
 检查 live_room_completion 房间补全：未覆盖的观察房间不受人物轮廓限制、只去重兼容的新样本、参考遮挡不等于房间/前景；空参考集必须原样保留父资产且额外预算有硬上界（30000）；补全回放只能按已记录的选择与合格证明在受限预算内重放（文件被改、采集/几何不匹配、未入选解、缺证明均被拒），且不改动原文件。
 
-- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md:28）自动收集
+- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md 第三节）自动收集
 - **加载方式**：仅测试
 #### `test_live_room_reference.py`
 
 检查 live_room_reference.choose_reference_candidates：单个 held 轨迹缺口不放宽 held>=12 / fit>=20 阈值也不更换主参考、且不修改输入行；同一参考的多个深度窗口只算一次尝试，去重后保留首个与另一条独立参考。
 
-- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md:28）自动收集
+- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md 第三节）自动收集
 - **加载方式**：仅测试
 #### `test_live_room_retry.py`
 
@@ -747,13 +823,13 @@ live_room_window_recovery 的合同单测（非付费探针）：无合格基础
 
 检查 live_shared_room_surface 共享房间表面：分区基权重与零状态保持原始世界点、跨相机视差与跨格连续性精确、重复观察不改变物理点折叠、一图一票且冲突来源判为歧义、替换预算绝不重选原表面；apply_shared_room_correction 对证据不足/验证不过/编程错误/深度清单变化/回放不匹配分别保留父资产、记未生效收据或直接抛错，并断言 live_dense 的开关默认关闭。
 
-- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md:28）自动收集
+- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md 第三节）自动收集
 - **加载方式**：仅测试（live_dense.augment_prepared 在测试内按需导入，:79）
 #### `test_live_skin_compositing.py`
 
 检查 live_skin_compositing 皮肤合成：被遮挡视图不投票也不全局改标、非激活行保留数值与 Adam 动量、背景一致性用颜色歧义反推不透明度、未知/头发/镜片排除、空观察零损失、单角度退化不能藏在平均值里、椭圆内头发与未监督的脸受保护、无监督的 face 像素不得被改写。
 
-- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md:28）自动收集
+- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md 第三节）自动收集
 - **加载方式**：仅测试
 #### `test_live_surface_binding.py`
 
@@ -765,7 +841,7 @@ live_surface_binding 交接合同（非付费探针）：verify_room_completion 
 
 检查 live_surface_footprint 表面足迹适配：只改 log_scales/local_quats 并保持法向方差与代理覆盖、非蒙皮/无证据/语义屏障内点逐位不动、追加头发不重定向/缩放、退化三角形不产生假协方差、旋转与单位尺度等变；语义适配只读三张全通过训练视图（dev 行不读），并输出原生 sigma 与未接受质量的收据。
 
-- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md:28）自动收集
+- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md 第三节）自动收集
 - **加载方式**：仅测试
 #### `test_live_voice.py`
 
@@ -777,7 +853,7 @@ live_surface_binding 交接合同（非付费探针）：verify_room_completion 
 
 检查 local_sampling 的 900 步局部采样调度：偶数帧数也均摊几何预算（205 几何/695 外观）且不改变外观序列，奇数帧数沿用原非混叠调度，保存的下一步能精确复现余下 900 步序列，非法计数/步号与重名抛 ValueError。
 
-- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md:28）自动收集
+- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md 第三节）自动收集
 - **加载方式**：仅测试
 #### `test_olay_discovery.py`
 
@@ -789,19 +865,19 @@ live_surface_binding 交接合同（非付费探针）：verify_room_completion 
 
 检查 person_supervision_state 的人物监督恢复：只有检查点 flag 与前次收据、掩码、观察名、足迹凭证、prior 字节全部吻合才恢复不透明头/体标志（且失败不在校验前改状态），legacy 状态清除陈旧 opaque_skin 掩码，复制失败不覆盖已有证据；并用 AST 断言三个 run_live_*_trial.py 都是先 restore_person_supervision 再做 audit。
 
-- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md:28；scripts/Test-Backend.ps1:4）自动收集
+- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md 第三节；scripts/Test-Backend.ps1:4）自动收集
 - **加载方式**：仅测试（用 ast 按路径读取 backend 根目录的 run_live_*_trial.py，:112-121）
 #### `test_pipeline_resume.py`
 
 检查 portrait_pipeline.run 的续跑语义：零步恢复不得重新初始化/重读参考/重适配足迹/重恢复房间，必须恢复前次 opaque/soft/足迹/房间凭证并原样带过，resumeKind 记录在 config；改 flag、缺 config、房间凭证变化或检查点监督不一致都在导出前报错；头模型热启动恢复前验但接新房间环境且不载入旧全场景。
 
-- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md:28）自动收集
+- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md 第三节）自动收集
 - **加载方式**：仅测试（GPU 调用全部 mock，torch 顶层导入，:78-98）
 #### `test_portrait_model.py`
 
 检查 portrait_model 可动画像几何：导入不筛选不换色、世界投影保持相机系均值/协方差/SH 方向（含非 1 尺度与旋转）、连通行走按语义屏障阻塞、软带只给蒙皮尺度梯度不压头发、共享表面残差获多视图梯度且被第二表情复用、父子替换与完整 Adam 回滚、被接受子点继承来源谱系、无效子点保留父点、非法父索引报错。
 
-- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md:28）自动收集
+- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md 第三节）自动收集
 - **加载方式**：仅测试
 #### `test_product_catalog.py`
 
@@ -819,61 +895,61 @@ product_catalog 事实与红线合同：“通用数字试色、不是产品效�
 
 检查 runtime/worker 执行路由与身份门：皮肤/头发步骤预算及前置依赖、CLI 参数与进度在 0..N 内钳制、准备缓存释放保留活跃张量、局部拟合字节与清单在像素清理后仍在、测试引擎派发并清理采集且不走 legacy、worker 闭环哈希变化即拒绝就绪并失效缓存、心跳在身份通过后仍保留 GPU 失败原因、训练/观察脸/修复收据只记录实际步骤与缺失计数。
 
-- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md:28；scripts/Test-Backend.ps1:4）自动收集
+- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md 第三节；scripts/Test-Backend.ps1:4）自动收集
 - **加载方式**：仅测试（CUDA 全部 patch，:43-53）
 #### `test_runtime_repairs.py`
 
 检查 runtime 修复开关合同：opaquePerson/opaqueBody/surfaceFootprint/roomWindowRecovery 必须显式布尔且各有前置依赖（body 仅研究、不透明头/足迹需 observed face、房间恢复需共享稠密表面），reconstruct_test 只在请求时下发对应 CLI 标志且 live_fullframe 每个标志有且仅有一个定义，请求的修复若未实际应用即 requested_actual_mismatch，各修复收据与磁盘凭证哈希逐位绑定。
 
-- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md:28）自动收集
+- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md 第三节）自动收集
 - **加载方式**：仅测试（ast 按路径读取 live_fullframe.py，:56）
 #### `test_scene.py`
 
 检查 scene 的房间可见性与服装连续性：前景净空让房间 splat 不能从正面或 65° 斜角穿过头部（后方与远处点保留），make_environment_masks 让头部以下服装区域仍留在房间掩码中而不被排除圈吞掉。
 
-- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md:28）自动收集
+- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md 第三节）自动收集
 - **加载方式**：仅测试（cv2/numpy）
 #### `test_scene_preview.py`
 
 检查场景预览链路：create_scene_lod 的空间采样在限 8000 点时同时保留近端与远端 splat 且文件 <12MB；HTTP 的 scene-preview 必须带令牌（无令牌 401），无源视频也能从已就绪资产回填生成 LOD，重复请求幂等且 scene3d 资产哈希与返回 sha256 一致。
 
-- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md:28）自动收集；使用 fastapi TestClient（:11）
+- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md 第三节）自动收集；使用 fastapi TestClient（:11）
 - **加载方式**：仅测试
 #### `test_shared_reference.py`
 
 检查 shared_v2.initialization_reference：显式指定的受支持第二参考被保留、缺失/开发集/无世界标定的参考被拒，未指定时选择训练集中人脸标记最宽的帧且不改写输入字典。
 
-- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md:28）自动收集
+- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md 第三节）自动收集
 - **加载方式**：仅测试
 #### `test_source_lineage.py`
 
 检查 gsplat 1.5.3 的 split/duplicate/remove 在冻结 source_index 与 semantic 参数上的谱系行为：分裂/克隆让子点继承来源与语义、删除保留剩余来源，Adam 的 exp_avg/exp_avg_sq 与新参数形状同步（先有动量再改拓扑）；这是唯一不导入任何 backend 模块、直接测第三方策略算子的测试。
 
-- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md:28）自动收集；需 gsplat 包，Windows venv 缺 GPU 包时导入即报错
+- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md 第三节）自动收集；需 gsplat 包，Windows venv 缺 GPU 包时导入即报错
 - **加载方式**：仅测试（仅顶层导入 gsplat.strategy.ops，:6；usage-graph 对此外向 0 条边）
 #### `test_story_conversation.py`
 
 检查 story_conversation 的纯文本对话边界：请求拒收 images/snapshot 字段与 base64/file_id 文本及 turns 内媒体、缺令牌 401，试色类请求走 edit_entry 且不下发 operations，真实产品效果请求必须落到 real_effect_boundary 且无可引用证据，发往模型的请求体不含 image_url/file_id/tool，取消语不得触发数字预览。
 
-- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md:28）自动收集；httpx ASGITransport 直连 app（:23-24）
+- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md 第三节）自动收集；httpx ASGITransport 直连 app（:23-24）
 - **加载方式**：仅测试
 #### `test_surface_recovery.py`
 
 检查 surface_recovery 的按字节保留与恢复：清单/组件/头发运动/求解证明拷进恢复目录后即使原路径被清理仍能按原哈希解析，输入被篡改或相对路径逃逸立即拒绝且不留目标目录，原始视频不落盘，runtime 用最终检查点清单合同恢复。
 
-- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md:28）自动收集；并被 test_surface_recovery_window_closure.py:9 以 `import test_surface_recovery as fixtures` 复用其 fixture/proof_fixture
+- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md 第三节）自动收集；并被 test_surface_recovery_window_closure.py:9 以 `import test_surface_recovery as fixtures` 复用其 fixture/proof_fixture
 - **加载方式**：仅测试（同时作为兄弟测试的 fixture 提供模块）
 #### `test_surface_recovery_window_closure.py`
 
 检查房间窗口证明恢复的递归闭包：第二参考决策/首次失败尝试/选择记录会随恢复目录字节保留并在原路径清理后可解析；证明链中嵌套的重叠/点证据缺一项、被篡改、被换成视频/凭据文件、或相对路径逃逸都会被拒（不复制 .mp4 与凭据文件）。
 
-- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md:28）自动收集；模块顶层 `import test_surface_recovery as fixtures`（:9）复用其 fixture 与 proof_fixture
+- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md 第三节）自动收集；模块顶层 `import test_surface_recovery as fixtures`（:9）复用其 fixture 与 proof_fixture
 - **加载方式**：仅测试（同时依赖兄弟测试模块加载）
 #### `test_surface_stage.py`
 
 检查观测-表面-分裂阶段合同：D2 质心与 D3+ 重心坐标一致且样本身份与索引顺序无关、安全护城河不误删真实观察的服装/房间域、三视图有限三角采样需 ≥3 支持且颜色冲突即整面拒绝、分裂退出父点并同步 Adam 与来源谱系。
 
-- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md:28）自动收集
+- **被谁调用**：unittest discover -s backend -p 'test_*.py'（backend/README.md 第三节）自动收集
 - **加载方式**：仅测试
 
 ## 七、其他目录与文件
