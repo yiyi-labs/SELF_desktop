@@ -294,8 +294,11 @@ def prepare_capture(source,out,frames,faces,*,base_prepared=None):
             "reason":fit_audit["rejected"][name]})
     fit_audit["sceneValidFrames"]={r["name"]:{r"headProxy":r["proxy"],
         "pnpRejection":r["reason"]} for r in scene_rows}
-    rgb={n:rgb[n] for n in local}
-    labels={n:labels[n] for n in local}
+    # Keep fitted + scene-valid pixels/labels alive for the rectified cache;
+    # training consumers still select by fitted roles.
+    cached_names=[*local,*(r["name"] for r in scene_rows)]
+    rgb={n:rgb[n] for n in cached_names}
+    labels={n:labels[n] for n in cached_names}
     images={im.name:im for im in static.images.values() if im.has_pose}
     worlds={n:camera_matrix(images[n]) for n in local if n in images}
     worlds.update({n:C for n,C in added_worlds.items() if n in local})
@@ -356,7 +359,10 @@ def prepare_capture(source,out,frames,faces,*,base_prepared=None):
     np.savez_compressed(out/"cloth_supported_seeds.npz",**cloth)
     cache=out/"rectified_observations"
     cache.mkdir()
-    for n in local:
+    # Scene-valid frames ride along through the loader (components_v2 reads
+    # their rectified pixels), so their images must be cached exactly like
+    # fitted observations.
+    for n in [*local,*(r["name"] for r in scene_rows)]:
         cv2.imwrite(str(cache/n),cv2.cvtColor((rgb[n]*255).round().astype(np.uint8),cv2.COLOR_RGB2BGR))
         np.savez_compressed(cache/(n+".npz"),**labels[n])
     ns=list(local)
