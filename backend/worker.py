@@ -381,23 +381,30 @@ def opening_view(path: Path) -> dict:
             "sha256": file_sha256(output)}
 
 
-def portrait_preview(path: Path) -> dict:
+def portrait_preview(path: Path) -> tuple[dict, dict]:
     from portrait_preview import create, create_3d_lod, create_scene_lod
 
-    output = create(path)
-    lod = create_3d_lod(path)
-    scene = create_scene_lod(path)
-    return {"preview": {"file": output.name, "bytes": output.stat().st_size,
-                         "sha256": file_sha256(output)},
-            "preview3d": {"file": lod.name, "bytes": lod.stat().st_size,
-                           "sha256": file_sha256(lod)},
-            "scene3d": {"file": scene.name, "bytes": scene.stat().st_size,
-                        "sha256": file_sha256(scene)}}
+    # Each preview asset is independent: a failing thumbnail must never drop
+    # the working 3D LODs (or vice versa). Failures are reported per asset.
+    assets: dict = {}
+    errors: dict = {}
+    for kind, producer in (("preview", create),
+                           ("preview3d", create_3d_lod),
+                           ("scene3d", create_scene_lod)):
+        try:
+            output = producer(path)
+        except (OSError, ValueError, KeyError, ImportError) as error:
+            errors[kind] = f"{type(error).__name__}: {str(error)[:120]}"
+            continue
+        assets[kind] = {"file": output.name, "bytes": output.stat().st_size,
+                        "sha256": file_sha256(output)}
+    return assets, errors
 
 
 def discard_training_inputs(path: Path, assets: dict) -> None:
     """Keep published result assets and job status, never the source video."""
     keep = {"job.json", "cancel.requested", "frame_selection.json", "failure.log",
+            "preview_error.log",
             "observation_bundle.json", "portrait.provenance.npz", "portrait.algorithm.json", "portrait-state"} | {
                 item["file"] for item in assets.values()}
     for item in path.iterdir():
@@ -475,11 +482,13 @@ def run_one(path: Path) -> None:
         view = {"file": view_file.name, "bytes": view_file.stat().st_size,
                 "sha256": file_sha256(view_file)}
         try:
-            preview = portrait_preview(path)
+            preview, preview_errors = portrait_preview(path)
         except (OSError, ValueError, KeyError, ImportError) as error:
             # A navigation thumbnail must never invalidate a usable 3D model.
-            preview = None
-            (path / "preview_error.log").write_text(type(error).__name__, encoding="utf-8")
+            preview, preview_errors = {}, {"all": f"{type(error).__name__}: {str(error)[:120]}"}
+        if preview_errors:
+            (path / "preview_error.log").write_text(json.dumps(preview_errors, ensure_ascii=False),
+                                                    encoding="utf-8")
         finished_stage("previews")
         # Face splats have a stable editable range; the result is still a GS
         # asset rather than a textured mesh.
@@ -501,6 +510,10 @@ def run_one(path: Path) -> None:
         assets = {"gaussian": gaussian, "view": view}
         if preview:
             assets.update(preview)
+        if preview_errors:
+            # Visible in the transport status, not only in a local file.
+            quality["previews"] = {"generated": sorted(preview),
+                                   "errors": preview_errors}
         discard_training_inputs(path, assets)
         update(path, "gaussian_ready", 85, message,
                assets=assets, viewpointQuality=viewpoint, reconstructionQuality=quality)

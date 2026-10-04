@@ -739,8 +739,14 @@ def export_candidate(scene,data,out):
         C=data["worlds"][reference]
         camera=np.linalg.inv(C)[:3,3]
         target=state.means[:scene.portrait.surface_count].mean(0).cpu().tolist()
+        # The exported view is the viewer's OPENING camera inside the 10-90
+        # transport contract, not a calibration record. Ultra-wide captures
+        # (vertical fov > 90) clamp to the ceiling; only the opening framing
+        # is narrowed, never the reconstruction itself.
+        source_fov=math.degrees(2*math.atan(data["rgb"][reference].shape[0]/(2*data["K"][1,1])))
         view={"schemaVersion":1,"sourceFrame":reference,"target":target,"camera":camera.tolist(),"up":(-C[:3,:3].T[:,1]).tolist(),
-              "fovDegrees":math.degrees(2*math.atan(data["rgb"][reference].shape[0]/(2*data["K"][1,1]))),
+              "fovDegrees":min(90.,max(10.,source_fov)),
+              "sourceFovDegrees":source_fov,
               "targetFaceFraction":.5,"editableSplats":scene.portrait.surface_count,"recordedEnvironmentSplats":n-head_count,
               "reconstructionMethod":ENGINE_VERSION,"surfacePointCount":scene.portrait.surface_count,
               "researchOnly":True,"sourceSha256":data["sourceHash"],"assetSha256":asset_hash}
