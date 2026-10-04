@@ -73,8 +73,13 @@ class ReconstructionInputRetentionTest(unittest.TestCase):
                 worker.run_one(job)
             self.assertEqual(json.loads((job / "job.json").read_text(encoding="utf-8"))["state"],
                              "gaussian_ready")
+            # A failing preview leaves its per-asset evidence behind; the
+            # 3D model still publishes.
             self.assertEqual({item.name for item in job.iterdir()},
-                             {"job.json", "portrait.gaussian.ply", "portrait.view.json"})
+                             {"job.json", "portrait.gaussian.ply", "portrait.view.json",
+                              "preview_error.log"})
+            errors = json.loads((job / "preview_error.log").read_text(encoding="utf-8"))
+            self.assertIn("all", errors)
 
     def test_finished_job_keeps_only_published_assets(self):
         with tempfile.TemporaryDirectory() as directory:
