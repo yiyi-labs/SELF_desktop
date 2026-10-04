@@ -714,6 +714,21 @@ def export_candidate(scene,data,out):
     with torch.no_grad():
         local=scene.portrait_state(frame)
         state=joined_state(local.to_world(frame["C"],frame["F"],data["scale"]),scene.environment_state(frame))
+        # Structural gate before publishing: the baked portrait (t0) and the
+        # recorded body must be one adjacent subject. A displaced body (job
+        # bdc65c2e shipped with skin->body 29 world units at a 10.4 view
+        # distance) must fail loudly, never publish a floating head.
+        body_rows=state.parts==4
+        if bool(body_rows.any()):
+            from scipy.spatial import cKDTree
+            person=state.means[:len(scene.portrait.role)].cpu().numpy()
+            body=state.means[body_rows].cpu().numpy()
+            tree=cKDTree(body)
+            gap,_=tree.query(person)
+            gap=float(np.median(gap[:scene.portrait.surface_count]))
+            radius=float(np.percentile(np.linalg.norm(body-body.mean(0),axis=1),90))
+            if gap>max(.6*radius,2.):
+                raise ValueError(f"portrait_body_displacement_detected:gap={gap:.2f},body_radius={radius:.2f}")
         # The entire retained head is first. Export/source mappings are
         # explicit; no claim that the current Morton loader preserves them.
         n=len(state.means)

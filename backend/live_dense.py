@@ -312,6 +312,85 @@ def mask_at(mask, uv):
     return good&mask[xy[:,1],xy[:,0]]
 
 
+def flame_depth_anchor(depth, conf, names, group, data, K, A, labels):
+    """Re-anchor a person-window depth scale to the fitted FLAME head.
+
+    DA3 recovers depth only up to scale and its own extrinsics are the only
+    metric anchor the extrinsic alignment can use. On person close-ups with
+    little static background that anchor degenerates: measured on job
+    bdc65c2e the body component landed 3-4x too far from its own source
+    cameras while the alignment gate still passed. The per-frame FLAME fit
+    (metric, landmark-validated) is an independent anchor: project its mesh
+    into the window canvas and compare z against DA3 depth on face/neck
+    pixels. A window that cannot be anchored is rejected (its depth is not
+    trustworthy), never published at an arbitrary scale.
+    """
+    geometry=data['geometry']
+    gnames=[str(n) for n in geometry['names']]
+    scale=float(geometry['scale'])
+    true_z=[]
+    da3_z=[]
+    for i,n in enumerate(names):
+        if n not in gnames:
+            continue
+        gi=gnames.index(n)
+        mesh=np.asarray(geometry['meshes'][gi],dtype=np.float64)
+        F=np.asarray(geometry['F'][gi],dtype=np.float64)
+        if group=='head-local':
+            cam=mesh@F[:3,:3].T+F[:3,3]
+        else:
+            world=data['world'].get(n)
+            if world is None:
+                continue
+            C=np.asarray(world,dtype=np.float64)
+            # Same chain as portrait_model.scaled_head_transform/to_world.
+            target=F.copy()
+            target[:3,3]=target[:3,3]*scale
+            H=np.linalg.solve(C,target)
+            world_pts=mesh@H[:3,:3].T*scale+H[:3,3]
+            cam=world_pts@C[:3,:3].T+C[:3,3]
+        front=cam[:,2]>.05
+        Kn=np.asarray(geometry['K'],dtype=np.float64)
+        zn=np.maximum(cam[:,2],1e-9)
+        native=np.c_[Kn[0,0]*cam[:,0]/zn+Kn[0,2],Kn[1,1]*cam[:,1]/zn+Kn[1,2]]
+        lab=labels.get(n)
+        if lab is None:
+            continue
+        face=lab['face_core']|lab['face_boundary']
+        if 'observed_body_skin' in lab:
+            face=face|lab['observed_body_skin']
+        good=front&mask_at(face,native)
+        if not good.any():
+            continue
+        q=np.c_[native[good],np.ones(int(good.sum()))]@np.asarray(A,dtype=np.float64).T
+        pu=q[:,0]/np.maximum(q[:,2],1e-9); pv=q[:,1]/np.maximum(q[:,2],1e-9)
+        h,w=depth[i].shape
+        inside=np.isfinite(pu)&np.isfinite(pv)&(pu>=0)&(pu<w)&(pv>=0)&(pv<h)
+        if not inside.any():
+            continue
+        d=depth[i]
+        samples=d[pv[inside].astype(int),pu[inside].astype(int)]
+        valid=np.isfinite(samples)&(samples>0)&(conf[i][pv[inside].astype(int),pu[inside].astype(int)]>0)
+        true_z.append(cam[good][inside][valid,2])
+        da3_z.append(samples[valid])
+    receipt={'method':'flame_fit_face_neck_pixels','group':group}
+    if not true_z:
+        receipt.update(anchored=False,samples=0,reason='no_flame_pixels')
+        return receipt
+    t=np.concatenate(true_z); s=np.concatenate(da3_z)
+    ratios=t/s
+    factor=float(np.median(ratios))
+    spread=float(np.median(np.abs(ratios-factor))/max(factor,1e-9))
+    receipt.update(samples=int(len(ratios)),factor=round(factor,6),
+        ratioSpread=round(spread,4))
+    anchored=len(ratios)>=120 and spread<.35 and .05<factor<20.
+    receipt['anchored']=bool(anchored)
+    if not anchored:
+        receipt['reason']=('too_few_samples' if len(ratios)<120 else
+                           'inconsistent_ratio' if spread>=.35 else 'factor_out_of_bounds')
+    return receipt
+
+
 def physical_masks(labels):
     # Separate SfM safety masks from observed appearance. Existing confidence
     # masks are kept; low texture is never a reason to omit a room pixel.
@@ -561,8 +640,23 @@ def infer_request(request_path):
                 proposed=np.concatenate((proposed,np.tile([[[0,0,0,1]]],(len(names),1,1))),1)
             scale,alignment=align_camera_scale(proposed,expected)
             depth*=scale
-            valid=alignment['cameraCentreRmsRelative']<=.25
+            # Person close-up windows have little static background, so DA3's
+            # own extrinsics—the only metric anchor the alignment above can
+            # use—degenerate there (measured 3-4x depth overscale on job
+            # bdc65c2e while the RMS gate still passed). The FLAME fit is an
+            # independent metric anchor; a window that cannot be anchored is
+            # rejected instead of published at an arbitrary scale.
+            anchor=None
+            if group in ('body-world','head-local'):
+                anchor=flame_depth_anchor(depth,conf,names,group,data,K,A,labels)
+                if anchor['anchored']:
+                    depth*=anchor['factor']
+                valid=bool(anchor['anchored'])
+            else:
+                valid=alignment['cameraCentreRmsRelative']<=.25
             batch=dict(group=group,window=wi,names=names,alignment=alignment,scaleGatePassed=valid,inputRadius=radius)
+            if anchor is not None:
+                batch['flameDepthAnchor']=anchor
             batches.append(batch)
             folder=out/'depth'/f'{group}-{wi}'
             folder.mkdir(parents=True)
