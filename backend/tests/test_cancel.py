@@ -102,8 +102,13 @@ class ReconstructionInputRetentionTest(unittest.TestCase):
             with patch.object(worker, "verify_capture",
                               side_effect=worker.ReconstructionFailure("invalid_capture")):
                 worker.run_one(job)
-            self.assertEqual({item.name for item in job.iterdir()}, {"job.json"})
+            # A failed job keeps only its tombstone plus the diagnosis evidence;
+            # every private input (capture/frames) must be gone.
+            self.assertEqual({item.name for item in job.iterdir()},
+                             {"job.json", "failure.log"})
             self.assertEqual(json.loads((job / "job.json").read_text())["state"], "failed")
+            self.assertIn("ReconstructionFailure", (job / "failure.log").read_text(encoding="utf-8"))
+            self.assertIn("invalid_capture", (job / "failure.log").read_text(encoding="utf-8"))
 
 
 @unittest.skipUnless(os.name == "posix", "process-group cancellation runs in WSL")
