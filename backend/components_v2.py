@@ -449,8 +449,9 @@ def load_prepared(out):
                 local[name]={"mesh":scene["meshes"][i],"F":scene["F"][i],
                     "marks":scene["marks"][i],"role":"scene",
                     "headProxy":str(scene["proxies"][i])}
-            for i,name in enumerate(map(str,scene["worldNames"])):
-                worlds[name]=scene["worldC"][i]
+            if "worldNames" in scene and "worldC" in scene:
+                for i,name in enumerate(map(str,scene["worldNames"])):
+                    worlds[name]=scene["worldC"][i]
     rgb={n:cv2.cvtColor(cv2.imread(str(out/"rectified_observations"/n)),cv2.COLOR_BGR2RGB).astype(np.float32)/255 for n in names}
     labels={n:dict(np.load(out/"rectified_observations"/(n+".npz"))) for n in names}
     if scene_names:

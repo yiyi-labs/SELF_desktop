@@ -397,7 +397,7 @@ def portrait_preview(path: Path) -> dict:
 
 def discard_training_inputs(path: Path, assets: dict) -> None:
     """Keep published result assets and job status, never the source video."""
-    keep = {"job.json", "cancel.requested", "frame_selection.json",
+    keep = {"job.json", "cancel.requested", "frame_selection.json", "failure.log",
             "observation_bundle.json", "portrait.provenance.npz", "portrait.algorithm.json", "portrait-state"} | {
                 item["file"] for item in assets.values()}
     for item in path.iterdir():
@@ -510,6 +510,18 @@ def run_one(path: Path) -> None:
         if (path / "cancel.requested").exists():
             return
         reason = str(error) if isinstance(error, ReconstructionFailure) else type(error).__name__
+        # Keep the actual traceback for diagnosis; the generic reason above is
+        # all the transport ever shows. failure.log survives input cleanup.
+        try:
+            import traceback
+            details = traceback.format_exc()
+            training_log = path / "portrait-test-training.log"
+            if training_log.is_file():
+                tail = "\n".join(training_log.read_text(encoding="utf-8", errors="replace").splitlines()[-80:])
+                details += "\n--- portrait-test-training.log (tail) ---\n" + tail
+            (path / "failure.log").write_text(details[-65536:], encoding="utf-8")
+        except OSError:
+            pass
         diagnostics = {}
         for label, filename in (("faceMask", "face_mask_quality.json"),
                                 ("geometry", "geometry_quality.json"),

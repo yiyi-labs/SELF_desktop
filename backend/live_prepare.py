@@ -303,15 +303,18 @@ def prepare_capture(source,out,frames,faces,*,base_prepared=None):
         scene_names={r["name"] for r in scene_rows}
         scene_worlds={n:camera_matrix(images[n]) for n in scene_names if n in images}
         scene_worlds.update({n:C for n,C in added_worlds.items() if n in scene_names})
-        np.savez_compressed(out/"scene_observations.npz",
-            names=np.asarray([r["name"] for r in scene_rows]),
-            proxies=np.asarray([r["proxy"] for r in scene_rows]),
-            meshes=np.stack([r["mesh"] for r in scene_rows]),
-            F=np.stack([r["F"] for r in scene_rows]),
-            marks=np.stack([r["marks"] for r in scene_rows]),
-            reasons=np.asarray([r["reason"] for r in scene_rows]),
-            worldNames=np.asarray(sorted(scene_worlds)),
-            worldC=np.stack([scene_worlds[n] for n in sorted(scene_worlds)]))
+        payload={"names":np.asarray([r["name"] for r in scene_rows]),
+            "proxies":np.asarray([r["proxy"] for r in scene_rows]),
+            "meshes":np.stack([r["mesh"] for r in scene_rows]),
+            "F":np.stack([r["F"] for r in scene_rows]),
+            "marks":np.stack([r["marks"] for r in scene_rows]),
+            "reasons":np.asarray([r["reason"] for r in scene_rows])}
+        if scene_worlds:
+            payload["worldNames"]=np.asarray(sorted(scene_worlds))
+            payload["worldC"]=np.stack([scene_worlds[n] for n in sorted(scene_worlds)])
+        # A scene-valid frame without any registered world camera still keeps
+        # its room-mask supervision value as a non-world local observation.
+        np.savez_compressed(out/"scene_observations.npz",**payload)
     train=[n for n in worlds if local[n]["role"]=="train"]
     if len(train)<4:
         raise ValueError("portrait_test_world_local_overlap_insufficient")
