@@ -101,6 +101,33 @@ class RuntimeTest(unittest.TestCase):
             self.assertFalse((job/"capture.mp4").exists())
             legacy.assert_not_called()
 
+    def test_test_engine_publishes_per_asset_preview_results(self):
+        # portrait_preview returns (assets, errors); a swallowed tuple mismatch
+        # once silently dropped every preview from published jobs.
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);job=root/("a"*32);job.mkdir()
+            (root/"engine-profile.json").write_text(json.dumps({"engine":PORTRAIT_TEST,"userTestingAuthorized":True}))
+            (job/"job.json").write_text(json.dumps({"state":"queued","sha256":"a"}))
+            (job/"capture.mp4").write_bytes(b"private capture")
+            (job/"portrait.gaussian.ply").write_bytes(b"test result")
+            (job/"portrait.view.json").write_text("{}")
+            assets={"gaussian":{"file":"portrait.gaussian.ply"},"view":{"file":"portrait.view.json"}}
+            previews=({"preview3d":{"file":"portrait.preview.gaussian.ply"}},
+                      {"preview":"ValueError: synthetic"})
+            with patch.object(worker,"ROOT",root),patch.object(worker,"verify_capture"), \
+                 patch("runtime.reconstruct_test",return_value=(assets,{"releaseApproved":False})), \
+                 patch.object(worker,"portrait_preview",return_value=previews), \
+                 patch.object(worker,"extract_frames"):
+                worker.run_one(job)
+            result=json.loads((job/"job.json").read_text())
+            self.assertEqual(result["state"],"gaussian_ready")
+            self.assertIn("preview3d",result["assets"])
+            self.assertNotIn("preview",result["assets"])
+            self.assertEqual(result["reconstructionQuality"]["previews"]["errors"]["preview"],
+                             "ValueError: synthetic")
+            self.assertEqual(json.loads((job/"preview_error.log").read_text(encoding="utf-8"))
+                             ["preview"],"ValueError: synthetic")
+
     def test_selection_uses_names_not_colmap_ids_and_no_duplicates(self):
         names=[f"frame_{i:04d}.png" for i in range(1,161)]
         result=selected_names(names)

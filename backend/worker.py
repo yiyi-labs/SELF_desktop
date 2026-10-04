@@ -440,9 +440,18 @@ def run_one(path: Path) -> None:
             assets,quality=reconstruct_test(path,job,profile,update,extract_frames,
                 prepare_test_faces,command,file_sha256)
             try:
-                assets.update(portrait_preview(path))
-            except (OSError,ValueError,KeyError,ImportError):
-                pass
+                preview_assets, preview_errors = portrait_preview(path)
+                assets.update(preview_assets)
+                if preview_errors:
+                    quality["previews"] = {"generated": sorted(preview_assets),
+                                           "errors": preview_errors}
+                    (path / "preview_error.log").write_text(
+                        json.dumps(preview_errors, ensure_ascii=False), encoding="utf-8")
+            except (OSError,ValueError,KeyError,ImportError) as error:
+                quality["previews"] = {"generated": [], "errors": {
+                    "all": f"{type(error).__name__}: {str(error)[:120]}"}}
+                (path / "preview_error.log").write_text(
+                    json.dumps(quality["previews"]["errors"], ensure_ascii=False), encoding="utf-8")
             quality["pipelineTimingSeconds"]={"total":round(time.perf_counter()-started,2)}
             discard_training_inputs(path,assets)
             update(path,"gaussian_ready",85,"这颗星辰已为你留好",assets=assets,
