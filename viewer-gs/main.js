@@ -1,5 +1,46 @@
 import { Application, Asset, Entity, FILLMODE_FILL_WINDOW, RESOLUTION_AUTO, WORKBUFFER_UPDATE_ONCE, Color, Vec3 } from 'playcanvas';
-import { selectVisibleSplats, normalizeLasso, selectionSlot, shouldRecordLassoPoint, makeOriginalColors, applyDigitalTint, applyDigitalLayers, applyCareScenario, DIGITAL_PRESETS } from './gs-edit.js';
+import { selectVisibleSplats, normalizeLasso, selectionSlot, shouldRecordLassoPoint, makeOriginalColors, applyDigitalTint, applyDigitalLayers, applyCareScenario, DIGITAL_PRESETS, mortonOrderOf, editableSetFromOrder } from './gs-edit.js';
+
+// The engine Morton-reorders an uncompressed PLY while loading, so the first
+// view.editableSplats rows of the LOADED data are not the portrait points.
+// Compute the exact order the engine will apply from the FILE bytes (the port
+// is element-identical to playcanvas 2.22.4 calcMortonOrder) and keep the
+// editable identity in loaded order. Falls back to the legacy prefix only if
+// the pre-fetch fails; masks stay in the loaded domain either way, so
+// previously saved edits remain valid.
+async function editableSetForUrl(url, editableSplats, numSplatsHint) {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw Error(`status ${response.status}`);
+    const buffer = await response.arrayBuffer();
+    const bytes = new Uint8Array(buffer);
+    let end = 0;
+    while (end < bytes.length) {
+      const nl = bytes.indexOf(10, end);
+      const line = String.fromCharCode(...bytes.subarray(end, nl));
+      end = nl + 1;
+      if (line.trim() === 'end_header') break;
+    }
+    const header = String.fromCharCode(...bytes.subarray(0, end));
+    const count = parseInt(header.match(/element vertex (\d+)/)[1]);
+    const fields = [...header.matchAll(/property float (\S+)/g)].map(m => m[1]);
+    const ix = fields.indexOf('x'), iy = fields.indexOf('y'), iz = fields.indexOf('z');
+    const stride = fields.length * 4;
+    const view = new DataView(buffer);
+    const px = new Float32Array(count), py = new Float32Array(count), pz = new Float32Array(count);
+    for (let i = 0; i < count; i++) {
+      const base = end + i * stride;
+      px[i] = view.getFloat32(base + ix * 4, true);
+      py[i] = view.getFloat32(base + iy * 4, true);
+      pz[i] = view.getFloat32(base + iz * 4, true);
+    }
+    const order = mortonOrderOf({numSplats: count, getProp: n => ({x: px, y: py, z: pz})[n]});
+    return {set: editableSetFromOrder(order, Math.min(editableSplats, count)), order};
+  } catch (error) {
+    report('WARN', 'editable identity pre-fetch failed, legacy prefix in use: ' + String(error));
+    return {set: Uint32Array.from({length: Math.min(editableSplats, numSplatsHint || editableSplats)}, (_, i) => i), order: null};
+  }
+}
 import { upperLeftLuma, createToneTracker } from './tone.js';
 
 const canvas=document.getElementById('portrait'), outline=document.getElementById('lasso'), status=document.getElementById('status');
@@ -83,6 +124,14 @@ async function start(){
     try{
       const model=new Entity('Personal 3DGS');model.addComponent('gsplat',{asset});app.root.addChild(model);
       const resource=asset.resource,data=resource.gsplatData,originalColors=makeOriginalColors(data);
+      // Real editable identity (see editableSetForUrl). Resolved from the
+      // file bytes before the engine's reorder; the selection then scans the
+      // true portrait points instead of an arbitrary Morton prefix.
+      let editableSet=Uint32Array.from({length:Math.min(Number.isInteger(view.editableSplats)?view.editableSplats:data.numSplats,data.numSplats)},(_,i)=>i);
+      editableSetForUrl('https://self.local/portrait.gaussian.ply',
+        Number.isInteger(view.editableSplats)?view.editableSplats:data.numSplats,data.numSplats)
+        .then(result=>{editableSet=result.set;})
+        .catch(()=>{});
       const target=view.target,up=normal(view.up),original=view.camera.map((x,i)=>x-target[i]);
       const radius=Math.hypot(...original);if(!Number.isFinite(radius)||radius<.01)throw Error(t('cameraParams'));
       const recordedFov=Number.isFinite(view.captureHorizontalFovDegrees)&&view.captureHorizontalFovDegrees>=20&&view.captureHorizontalFovDegrees<=120;
@@ -287,7 +336,7 @@ async function start(){
           polygon=normalizeLasso(polygon);
           const r=canvas.getBoundingClientRect();
           const result=selectVisibleSplats({data,polygon,target,cameraPosition:camera.getPosition().toArray(),
-            editableCount:Number.isInteger(view.editableSplats)?view.editableSplats:data.numSplats,
+            editableIndices:editableSet,
             project:(x,y,z)=>camera.camera.worldToScreen(new Vec3(x,y,z)),width:r.width,height:r.height});
           const slot=selectionSlot(selections.length,appendNext);
           const regionId=selections[slot]?.regionId||`gs-selected-${slot+1}`;
