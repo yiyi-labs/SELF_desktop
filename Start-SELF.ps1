@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
   SELF 电脑端一键启动（Windows API + WSL GPU 重建 worker）。
 .DESCRIPTION
@@ -11,7 +11,6 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 $projectRoot = $PSScriptRoot
-$title = if ($Host.UI.RawUI) { $Host.UI.RawUI.WindowTitle } else { $null }
 try { $Host.UI.RawUI.WindowTitle = 'SELF 重建服务' } catch {}
 
 # 已在运行则不重复启动（避免叠多个 worker/API）。
