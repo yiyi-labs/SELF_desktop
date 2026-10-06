@@ -55,6 +55,7 @@ export struct PersonalPortraitEditor {
   onReady:()=>void=()=>{};
   onFailure:(message:string)=>void=()=>{};
   onInteraction:()=>void=()=>{};
+  onCaptionSuppress:(suppressed:boolean)=>void=()=>{};
   onEnableCloud:()=>boolean=()=>false;
   onDeclineCloud:()=>void=()=>{};
   onBackgroundTone:(light:boolean)=>void=()=>{};
@@ -99,7 +100,7 @@ export struct PersonalPortraitEditor {
   private dialogue:DialogueTurn[]=[];
   @State editCommand:string='';
   @State ready:boolean=false;
-  @State tool:string='move';
+  @State @Watch('syncCaptionSuppression') tool:string='move';
   @State toolPressed:boolean=false;
   @State bubble:boolean=false;
   @State selected:boolean=false;
@@ -110,7 +111,7 @@ export struct PersonalPortraitEditor {
   @State applied:boolean=false;
   @State comparing:boolean=false;
   @State keyboardOpen:boolean=false;
-  @State historyOpen:boolean=false;
+  @State @Watch('syncCaptionSuppression') historyOpen:boolean=false;
   @State historyPressed:boolean=false;
   @State libraryOpen:boolean=false;
   @State expandedCareGroup:string='';
@@ -463,6 +464,7 @@ export struct PersonalPortraitEditor {
     this.getUIContext().animateTo({duration:200,curve:Curve.EaseOut},()=>{this.tool='lasso';this.bubble=false;});
     this.command('ARM_APPEND');this.onInteraction();
   }
+  private syncCaptionSuppression():void{this.onCaptionSuppress(this.historyOpen||this.tool==='lasso');}
   private toggleTool():void{
     if(!this.ready||this.waiting)return;
     if(this.comparing)this.previewHistory('');

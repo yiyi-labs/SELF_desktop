@@ -71,6 +71,8 @@ struct SelfMirrorPage {
   @State previewReady:boolean=false;
   @State galaxyDialOpen:boolean=false;
   @State galaxyDeleteId:string='';
+  @State galaxyRenameId:string='';
+  @State galaxyRenameDraft:string='';
   @State galaxyDissolvingId:string='';
   @State galaxyFlight:GalaxyDeleteFlightRequest|undefined=undefined;
   @State galaxyRiseIds:string[]=[];
@@ -118,10 +120,10 @@ struct SelfMirrorPage {
   private cancelledSubmissionId:number=-1;
   private formationTimer:number=-1;
   @State introStage:number=0;
-  @State introLine:string='';
-  @State introCharacters:number=0;
-  @State introDrop:number=-80;
-  @State introBurst:number=0;
+  @State introLines:string[]=[];
+  @State introRevealed:number[]=[];
+  @State introPageOpacity:number=1;
+  @State introOverlayOpacity:number=1;
   @State revealOpacity:number=1;
   @State revealScale:number=1;
   @State musicPulse:number=0;
@@ -135,6 +137,14 @@ struct SelfMirrorPage {
   private storyCueTimer:number=-1;
   private lastInteractionAt:number=Date.now();
   private revealTimer:number=-1;
+  @State previewToolsCollapsed:boolean=false;
+  @State previewCaptionOpacity:number=0;
+  @State previewCaptionY:number=0;
+  @State previewCaptionTyped:boolean=false;
+  @State previewCaptionSuppressed:boolean=false;
+  @State previewCaptionSub:number=0;
+  private previewToolsTimer:number=-1;
+  private previewFresh:boolean=true;
   private introTimers:number[]=[];
   private introCharacterTimer:number=-1;
   private sparks:number[]=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
@@ -147,9 +157,22 @@ struct SelfMirrorPage {
   private readonly detailTop:number=110;
   private tr(value:string):string{return UiText.get(value,this.language);}
   private panelWidth():number{return Math.min(this.surfaceWidth-32,this.detail==='氛围'?360:this.detail==='留一句话'?470:520);}
+  private detailParent():string{
+    if(this.detail==='云端理解'||this.detail==='采集记录'||this.detail==='作品与记录'||this.detail==='关于 SELF')return '设置';
+    if(this.detail==='留一句话')return '作品与记录';
+    return '';
+  }
+  private captureTime(name:string):string{
+    const match=name.match(/^capture-(\d+)\.mp4$/);
+    if(!match)return name;
+    const date=new Date(Number(match[1])),pad=(v:number)=>v<10?'0'+v:String(v);
+    return pad(date.getMonth()+1)+'-'+pad(date.getDate())+' '+pad(date.getHours())+':'+pad(date.getMinutes());
+  }
   private panelPreferredHeight():number{
     if(this.detail==='氛围')return 552;
-    if(this.detail==='设置')return 610;
+    if(this.detail==='设置')return 525;
+    if(this.detail==='关于 SELF')return 430;
+    if(this.detail==='云端理解')return 420;
     if(this.detail==='留一句话')return 438;
     if(this.detail==='作品与记录')return Math.min(570,310+this.workItems.length*62+this.bill.length*24+(this.note.length>0?90:0));
     return 560;
@@ -163,6 +186,16 @@ struct SelfMirrorPage {
     return Math.max(top,Math.min(this.surfaceHeight-this.panelHeight()-20,this.anchorY<top?top:this.anchorY-this.panelHeight()-58));
   }
   private panelFromTop():boolean{return this.anchorY<this.progressAwareTop();}
+  private panelDark():boolean{return this.detail==='设置'||this.detail==='关于 SELF'||this.detail==='采集记录'||this.detail==='云端理解';}
+  private dustAge:number=0;
+  private dustFrac(index:number):number{return (this.panelDust+index*.061)%1;}
+  private dustY(index:number):number{
+    const span=Math.max(62,this.panelHeight()-75);
+    return 5+(index%4)*3+this.dustFrac(index)*(48+(index*19)%span);
+  }
+  private dustOpacity(index:number):number{
+    return Math.max(0,(.62-this.dustFrac(index)*.67)*(index%3===0?1:.72));
+  }
   private panelEntranceY():number{return this.panelFromTop()?-17:22;}
   private saveUi():void{UiPreference.save(this.context,{language:this.language,accent:this.accent,palette:this.palette,motion:this.motion,followChat:this.followChat,stylusHints:this.stylusHints});}
   private setLanguage(value:string):void{
@@ -257,10 +290,15 @@ struct SelfMirrorPage {
   private reconJob:string='';
   private reconChecking:boolean=false;
   private personalActive():boolean{return !this.legacyEditorOpen&&!this.originMode&&!this.skyOpen&&this.showPersonal&&!!this.personalGaussianPath&&!!this.personalViewPath;}
-  private introStory():string[]{
-    if(this.language==='en')return ['Every side of you belongs here.','Follow one small light. Find yourself.','Stay just as you are, or discover more.'];
-    const zh=['每一种模样，都值得被看见。','循着一粒微光，慢慢遇见自己。','不必藏起任何一面。'];
-    return this.language==='zh'?zh:zh.map((s:string)=>this.tr(s));}
+  private introStory():string[][]{
+    const zh=[
+    ['星河深处，住着本来的你。','循光而行，看见独特之美。','从此学会爱自己。'],
+    ['慢一点，星星会等你。','在无人注视的夜空里，你自有光。','把这份温柔，留给自己。'],
+    ['深呼吸，你听见自己的心跳。','那节奏，和远方星光一样。','它在提醒：爱自己，从此刻开始。'],
+    ['别急着赶路。','夜空里的每一粒光，都在陪你长大。','慢慢来，直到爱上此刻的自己。'],
+    ['有些光，只为你亮着。','它不催促，也不评判。','愿你，一天比一天更爱自己。']];
+    if(this.language==='zh')return zh;
+    return zh.map((set:string[])=>set.map((s:string)=>this.tr(s)));}
   private story():string[]{
     if(this.language==='en')return [
     'Every side of you belongs here.','The lights you passed are still here.','Turn gently. Meet another side of yourself.',
@@ -297,14 +335,14 @@ struct SelfMirrorPage {
     this.revealStory();
   }
   private markInteraction():void{this.lastInteractionAt=Date.now();}
-  private revealStory():void{
+  private revealStory(onComplete?:()=>void):void{
     if(this.characterTimer>=0)clearTimeout(this.characterTimer);
     this.characterTimer=-1;this.visibleCharacters=0;
     const line=this.currentStoryLine(),length=line.length;
-    if(!this.motion){this.visibleCharacters=length;return;}
+    if(!this.motion){this.visibleCharacters=length;if(onComplete)onComplete();return;}
     const next=():void=>{
       this.visibleCharacters=Math.min(length,this.visibleCharacters+1);
-      if(this.visibleCharacters>=length){this.characterTimer=-1;return;}
+      if(this.visibleCharacters>=length){this.characterTimer=-1;if(onComplete)onComplete();return;}
       const last=line[this.visibleCharacters-1];
       const delay=last==='，'||last==='。'||last==='.'?250:72+(this.visibleCharacters%4)*23;
       this.characterTimer=setTimeout(next,delay);
@@ -322,28 +360,53 @@ struct SelfMirrorPage {
   }
   private startIntro(force:boolean=false):void{
     if(!force&&fs.accessSync(this.context.filesDir+'/self-intro-seen'))return;
-    this.introStage=1;this.showIntroLine(this.introStory()[0]);
-    this.introTimers.push(setTimeout(()=>this.showIntroLine(this.introStory()[1]),1900));
-    this.introTimers.push(setTimeout(()=>this.showIntroLine(this.introStory()[2]),3700));
-    this.introTimers.push(setTimeout(()=>{this.introStage=2;this.introLine='';this.getUIContext().animateTo({duration:this.motion?900:0,curve:Curve.EaseIn},()=>this.introDrop=this.surfaceHeight*.34);},5300));
-    this.introTimers.push(setTimeout(()=>{this.introStage=3;this.getUIContext().animateTo({duration:this.motion?800:0,curve:Curve.EaseOut},()=>this.introBurst=1);},6300));
-    this.introTimers.push(setTimeout(()=>this.finishIntro(),7350));
+    this.clearIntroTimers();
+    const sets=this.introStory();
+    const story=sets[Math.floor(Math.random()*sets.length)];
+    this.introStage=1;this.introLines=story;this.introRevealed=story.map((_line:string)=>0);
+    this.introPageOpacity=1;this.introOverlayOpacity=1;
+    if(!this.motion){
+      this.introRevealed=story.map((line:string)=>line.length);
+      this.introTimers.push(setTimeout(()=>this.fadeIntroText(),1200));
+      return;
+    }
+    this.introCharacterTimer=setTimeout(()=>this.revealIntroText(0,0),420);
   }
-  private showIntroLine(line:string):void{
+  private clearIntroTimers():void{
+    this.introTimers.forEach((timer:number)=>clearTimeout(timer));this.introTimers=[];
     if(this.introCharacterTimer>=0)clearTimeout(this.introCharacterTimer);
-    this.introLine=line;this.introCharacters=0;
-    if(!this.motion){this.introCharacters=line.length;return;}
-    const reveal=():void=>{
-      this.introCharacters=Math.min(line.length,this.introCharacters+1);
-      if(this.introCharacters>=line.length){this.introCharacterTimer=-1;return;}
-      this.introCharacterTimer=setTimeout(reveal,78+(this.introCharacters%3)*20);
-    };
-    this.introCharacterTimer=setTimeout(reveal,160);
+    this.introCharacterTimer=-1;
+  }
+  private revealIntroText(lineIndex:number,charIndex:number):void{
+    if(this.introStage!==1||lineIndex>=this.introLines.length)return;
+    const line=this.introLines[lineIndex],length=line.length;
+    if(charIndex>=length){
+      if(lineIndex+1<this.introLines.length)this.introCharacterTimer=setTimeout(()=>this.revealIntroText(lineIndex+1,0),850);
+      else this.introCharacterTimer=setTimeout(()=>this.fadeIntroText(),1500);
+      return;
+    }
+    this.introRevealed[lineIndex]=charIndex+1;
+    const last=line[charIndex];
+    const delay=last==='，'||last==='。'||last==='、'||last==='.'||last===','?360:last===' '?150:100+(charIndex%3)*24;
+    this.introCharacterTimer=setTimeout(()=>this.revealIntroText(lineIndex,charIndex+1),delay);
+  }
+  private fadeIntroText():void{
+    if(this.introStage!==1)return;
+    if(this.introCharacterTimer>=0){clearTimeout(this.introCharacterTimer);this.introCharacterTimer=-1;}
+    this.getUIContext().animateTo({duration:this.motion?760:0,curve:Curve.EaseInOut},()=>{this.introPageOpacity=0;});
+    this.introTimers.push(setTimeout(()=>this.fadeIntroOverlay(),this.motion?560:120));
+  }
+  private fadeIntroOverlay():void{
+    if(this.introStage!==1)return;
+    this.introStage=2;
+    this.getUIContext().animateTo({duration:this.motion?1500:0,curve:Curve.EaseInOut},()=>{this.introOverlayOpacity=0;});
+    this.introTimers.push(setTimeout(()=>this.finishIntro(),this.motion?1620:60));
   }
   private finishIntro():void{
-    this.introTimers.forEach((timer:number)=>clearTimeout(timer));this.introTimers=[];
-    if(this.introCharacterTimer>=0)clearTimeout(this.introCharacterTimer);this.introCharacterTimer=-1;
-    this.introStage=0;this.assets.writeAtomic(this.context.filesDir+'/self-intro-seen','1');this.revealStory();
+    this.clearIntroTimers();
+    this.introStage=0;this.introLines=[];this.introRevealed=[];
+    this.introPageOpacity=1;this.introOverlayOpacity=1;
+    this.assets.writeAtomic(this.context.filesDir+'/self-intro-seen','1');this.revealStory();
   }
 
   private activateGaussian(saved:SavedReconstruction,showNow:boolean=true):boolean{
@@ -391,7 +454,7 @@ struct SelfMirrorPage {
   private returnOrigin():void{
     this.flushGalaxyDelete();
     if(this.journey==='forming'){this.minimizeReconstruction();return;}
-    this.markInteraction();
+    this.markInteraction();this.clearPreviewToolsTimer();
     this.clearGalaxyCaption();this.galaxyDeleteId='';
     if(this.skyMounted){
       this.clearSkyTimers();this.skyTransition='leaving';this.galaxyTravelId='';this.galaxyDialOpen=false;
@@ -410,7 +473,7 @@ struct SelfMirrorPage {
   }
   private enterSky():void{
     if(this.skyTransition!=='idle')return;
-    this.markInteraction();this.refreshStars();
+    this.markInteraction();this.refreshStars();this.clearPreviewToolsTimer();
     this.clearSkyTimers();this.skyTransition='entering';this.skyMounted=true;this.skyOpacity=0;this.skyVeil=0;
     this.galaxyStatus='';this.galaxyTravelId='';this.galaxyDialOpen=false;this.galaxyDeleteId='';this.previewReady=false;
     this.clearGalaxyCaption();this.galaxyCaptionChangedAt=Date.now();
@@ -479,7 +542,7 @@ struct SelfMirrorPage {
     this.clearSkyTimers();this.skyTransition='arriving';
     this.getUIContext().animateTo({duration:this.motion?1150:0,curve:Curve.EaseInOut},()=>this.skyOpacity=0);
     this.afterSky(this.motion?1180:0,()=>{
-      this.skyMounted=false;this.galaxyTravelId='';this.skyTransition='idle';this.audio.setScene('personal');this.cueStory(2,120);
+      this.skyMounted=false;this.galaxyTravelId='';this.skyTransition='idle';this.audio.setScene('personal');this.cueStory(2,120);this.resetPreviewTools();
     });
   }
   private requestGalaxyScene(id:string):void{
@@ -510,7 +573,7 @@ struct SelfMirrorPage {
   }
   private setGalaxyDial(open:boolean):void{
     this.markInteraction();
-    if(!open){this.flushGalaxyDelete();this.galaxyDeleteId='';}
+    if(!open){this.flushGalaxyDelete();this.galaxyDeleteId='';this.galaxyRenameId='';this.galaxyRenameDraft='';}
     this.getUIContext().animateTo({duration:this.motion?420:0,
       curve:this.motion?'spring(0,1,390,34)':Curve.EaseOut},()=>this.galaxyDialOpen=open);
   }
@@ -523,7 +586,28 @@ struct SelfMirrorPage {
   private setGalaxyDelete(id:string):void{
     if(this.galaxyDissolvingId||this.galaxyRiseIds.length||!this.skyOpen||this.skyTransition!=='idle'||(id&&!this.starItems.some((star:PortraitStar)=>star.jobId===id)))return;
     this.markInteraction();
-    this.getUIContext().animateTo({duration:this.motion?220:0,curve:Curve.EaseInOut},()=>this.galaxyDeleteId=id);
+    this.getUIContext().animateTo({duration:this.motion?220:0,curve:Curve.EaseInOut},()=>{this.galaxyDeleteId=id;this.galaxyRenameId='';});
+  }
+  private setGalaxyRename(id:string):void{
+    if(this.galaxyDissolvingId||this.galaxyRiseIds.length||!this.skyOpen||this.skyTransition!=='idle')return;
+    if(id){
+      const star=this.starItems.find((item:PortraitStar)=>item.jobId===id);
+      if(!star)return;
+      if(this.galaxyRenameId!==id)this.galaxyRenameDraft=star.name;
+    }
+    this.markInteraction();
+    this.getUIContext().animateTo({duration:this.motion?220:0,curve:Curve.EaseInOut},()=>{this.galaxyRenameId=id;this.galaxyDeleteId='';});
+  }
+  private saveGalaxyRename(id:string):void{
+    if(this.galaxyRenameId!==id||this.galaxyDissolvingId||this.galaxyRiseIds.length)return;
+    const name=PortraitStarStore.cleanName(this.galaxyRenameDraft);
+    try{
+      this.stars.upsert(id,name);
+      this.refreshStars();
+      this.galaxyRenameDraft='';
+      this.getUIContext().animateTo({duration:this.motion?220:0,curve:Curve.EaseInOut},()=>{this.galaxyRenameId='';});
+      if(this.previewStarId===id)this.scheduleGalaxyCaption();
+    }catch(error){console.warn('SELF_STAR_RENAME_FAILED '+String(error));}
   }
   private removeGalaxy(id:string):void{
     if(this.galaxyDissolvingId||this.galaxyRiseIds.length||!this.skyOpen||this.skyTransition!=='idle'||this.galaxyDeleteId!==id)return;
@@ -598,7 +682,7 @@ struct SelfMirrorPage {
     }
     if(!this.activateGaussian({jobId:id,gaussian:paths.gaussian,view:paths.view}))return;
     this.markInteraction();this.journey='revealing';this.revealOpacity=1;this.revealScale=.35;this.audio.setScene('personal');
-    this.cueStory(2,1200);
+    this.cueStory(2,1200);this.resetPreviewTools();
     console.info('SELF_STAR_OPEN '+id);
   }
   private saveStarName():void{
@@ -747,7 +831,7 @@ struct SelfMirrorPage {
           this.reconstructionReadyId=jobId;this.reconstructionOutcome='ready';
         }else{
           this.activateGaussian(saved);this.cueStory(2,1800);
-          this.journey='revealing';this.revealOpacity=1;this.revealScale=.35;this.audio.setScene('personal');
+          this.journey='revealing';this.revealOpacity=1;this.revealScale=.35;this.audio.setScene('personal');this.resetPreviewTools();
         }
         this.captureStatus=result.viewpointQuality?.broadSideCoverage===false?
           '星辰已构建。想看更清楚的侧面，下次可让镜头再多绕一点。':this.waitingMinimized?'你的星辰已构建完成，轻触即可走近。':'你的立体面容正在打开…';
@@ -851,6 +935,60 @@ struct SelfMirrorPage {
     if(this.reconstructionActive)this.pollReconstruction();
   }
   private hasProgressCapsule():boolean{return this.waitingMinimized&&(this.reconstructionActive||!!this.reconstructionOutcome);}
+  private previewBarY():number{return this.hasProgressCapsule()?(this.wide?104:164):(this.wide?42:105);}
+  private previewCaptionBaseY():number{return Math.max(this.surfaceHeight*(this.skyOpen?.145:this.wide?.22:.18),this.hasProgressCapsule()&&!this.wide?(this.personalActive()?224:178):0);}
+  private clearPreviewToolsTimer():void{if(this.previewToolsTimer>=0){clearTimeout(this.previewToolsTimer);this.previewToolsTimer=-1;}}
+  private resetPreviewTools():void{
+    this.clearPreviewToolsTimer();
+    this.previewCaptionY=this.previewCaptionBaseY();
+    this.previewToolsCollapsed=false;this.previewCaptionOpacity=0;
+    this.previewCaptionTyped=false;this.previewFresh=true;this.previewCaptionSub=0;
+    this.previewToolsTimer=setTimeout(()=>{this.previewToolsTimer=-1;this.collapsePreviewTools();},2100);
+  }
+  private collapsePreviewTools():void{
+    if(this.previewToolsCollapsed||!this.personalActive())return;
+    this.previewCaptionY=this.wide?112:this.previewBarY();
+    const ui=this.getUIContext();
+    if(this.motion)ui.animateTo({curve:'spring(0,1,420,32)'},()=>{this.previewToolsCollapsed=true;});
+    else this.previewToolsCollapsed=true;
+    if(this.previewFresh){
+      this.previewFresh=false;this.visibleCharacters=0;
+      const typeIn=():void=>{
+        if(!this.previewToolsCollapsed||!this.personalActive())return;
+        this.previewCaptionTyped=true;this.previewCaptionOpacity=1;
+        this.revealStory(()=>{
+          if(!this.previewCaptionTyped)return;
+          if(this.motion)this.getUIContext().animateTo({duration:420,curve:Curve.EaseOut},()=>{this.previewCaptionSub=1;});
+          else this.previewCaptionSub=1;
+        });
+      };
+      if(this.motion)setTimeout(typeIn,300);
+      else typeIn();
+    }else if(this.motion){
+      ui.animateTo({duration:360,curve:Curve.EaseOut,delay:120},()=>{this.previewCaptionOpacity=1;});
+    }else{
+      this.previewCaptionOpacity=1;
+    }
+  }
+  private expandPreviewTools():void{
+    if(!this.previewToolsCollapsed)return;
+    if(this.previewCaptionTyped){this.previewCaptionOpacity=1;this.previewCaptionTyped=false;}
+    const ui=this.getUIContext();
+    if(this.motion){
+      ui.animateTo({curve:'spring(0,1,320,20)'},()=>{this.previewToolsCollapsed=false;});
+      ui.animateTo({duration:200,curve:Curve.EaseIn},()=>{this.previewCaptionOpacity=0;});
+    }else{
+      this.previewToolsCollapsed=false;this.previewCaptionOpacity=0;
+    }
+    this.clearPreviewToolsTimer();
+    this.previewToolsTimer=setTimeout(()=>{this.previewToolsTimer=-1;this.collapsePreviewTools();},2600);
+  }
+  private setPreviewCaptionSuppressed(suppressed:boolean):void{
+    if(this.previewCaptionSuppressed===suppressed)return;
+    const ui=this.getUIContext();
+    if(suppressed){ui.animateTo({duration:220,curve:Curve.EaseIn},()=>{this.previewCaptionSuppressed=true;});}
+    else{ui.animateTo({duration:340,curve:Curve.EaseOut,delay:100},()=>{this.previewCaptionSuppressed=false;});}
+  }
   private progressAwareTop():number{return this.hasProgressCapsule()&&!this.wide?170:this.detailTop;}
   private progressCapsuleWidth():number{return Math.min(360,this.windowWidth-44);}
   private progressCapsuleY():number{
@@ -1053,14 +1191,11 @@ struct SelfMirrorPage {
     if(!this.detail)this.previousTool=this.tool;
     if(this.panelOpenTimer>=0){clearTimeout(this.panelOpenTimer);this.panelOpenTimer=-1;}
     const reveal=():void=>{
-      if(this.dustTimer>=0){clearTimeout(this.dustTimer);this.dustTimer=-1;}
+      if(this.dustTimer>=0){clearInterval(this.dustTimer);this.dustTimer=-1;}
       this.panelDust=this.motion?0:1;
       this.getUIContext().animateTo({duration:this.motion?380:0,
         curve:this.motion?'spring(0,1,330,37)':Curve.EaseOut},()=>this.detail=name);
-      if(this.motion){this.dustTimer=setTimeout(()=>{
-        this.dustTimer=-1;
-        this.getUIContext().animateTo({duration:580,curve:Curve.EaseInOut},()=>this.panelDust=1);
-      },18);}
+      if(this.motion){this.dustAge=0;this.dustTimer=setInterval(()=>{this.dustAge+=.033;this.panelDust=(this.panelDust+.012*(.58+.42*Math.exp(-this.dustAge/9)))%1;},33);}
     };
     if(!this.detail&&['氛围','设置','作品与记录','留一句话'].includes(name)&&this.motion){
       this.pulseButton(name);
@@ -1069,7 +1204,7 @@ struct SelfMirrorPage {
     if(this.legacyEditorOpen&&this.bridge.ready)this.bridge.send('SET_TOOL',{tool:'DETAIL'});this.workItems=this.works.list();this.note=this.works.readNote();
     if(name==='采集记录'){this.selectedCapture='';this.captures=new CaptureService(this.context).list();}
   }
-  private close():void{this.markInteraction();if(this.panelOpenTimer>=0){clearTimeout(this.panelOpenTimer);this.panelOpenTimer=-1;}if(this.dustTimer>=0){clearTimeout(this.dustTimer);this.dustTimer=-1;}this.panelDust=1;this.buttonPulse='';this.cameraLive=false;this.bridge.foreground(this.foreground&&this.legacyEditorOpen);if(this.timer>=0)clearInterval(this.timer);this.timer=-1;this.playing=false;this.getUIContext().animateTo({duration:this.motion?260:0,curve:Curve.EaseInOut},()=>this.detail='');this.tool=this.previousTool;if(this.legacyEditorOpen&&this.bridge.ready)this.bridge.send('SET_TOOL',{tool:this.tool});this.audio.setScene(this.skyOpen?'sky':this.personalActive()?'personal':this.journey==='forming'?'forming':'origin');}
+  private close():void{this.markInteraction();if(this.panelOpenTimer>=0){clearTimeout(this.panelOpenTimer);this.panelOpenTimer=-1;}if(this.dustTimer>=0){clearInterval(this.dustTimer);this.dustTimer=-1;}this.panelDust=1;this.buttonPulse='';this.cameraLive=false;this.bridge.foreground(this.foreground&&this.legacyEditorOpen);if(this.timer>=0)clearInterval(this.timer);this.timer=-1;this.playing=false;this.getUIContext().animateTo({duration:this.motion?260:0,curve:Curve.EaseInOut},()=>this.detail='');this.tool=this.previousTool;if(this.legacyEditorOpen&&this.bridge.ready)this.bridge.send('SET_TOOL',{tool:this.tool});this.audio.setScene(this.skyOpen?'sky':this.personalActive()?'personal':this.journey==='forming'?'forming':'origin');}
   private protect(current:boolean,persistent:boolean):void{
     try{this.session.protect(this.selected,current,persistent);this.sendSnapshot();this.labels();this.close();
       if(persistent)this.works.savePreference(this.session).then(()=>{this.subtitle=this.tr('已明确保存长期偏好');this.labels();}).catch((e:Error)=>this.fail(e.message));
@@ -1101,29 +1236,70 @@ struct SelfMirrorPage {
       this.works.loadPreference(this.session);this.bridge.assetId=this.session.assetId;this.bridge.assetVersion=this.session.assetVersion;this.bridge.revision=0;this.identity='示例面容';this.selected='';this.candidate='';this.ready=false;this.close();this.labels();this.bridge.send('INIT',{});this.subtitle=this.tr('已删除这张照片的应用内源文件、作品、蒙版和私有导出；私密文字保留');
     }catch(e){this.fail(String(e));}
   }
-  aboutToDisappear():void{this.resetGalaxyRise();this.clearGalaxyCaption();this.clearSkyTimers();this.planner.cancel();if(this.timer>=0)clearInterval(this.timer);if(this.storyCueTimer>=0)clearTimeout(this.storyCueTimer);if(this.characterTimer>=0)clearTimeout(this.characterTimer);if(this.formationTimer>=0)clearInterval(this.formationTimer);if(this.introCharacterTimer>=0)clearTimeout(this.introCharacterTimer);if(this.revealTimer>=0)clearTimeout(this.revealTimer);if(this.panelOpenTimer>=0)clearTimeout(this.panelOpenTimer);if(this.pulseTimer>=0)clearTimeout(this.pulseTimer);if(this.dustTimer>=0)clearTimeout(this.dustTimer);this.introTimers.forEach((timer:number)=>clearTimeout(timer));if(this.reconTimer>=0)clearInterval(this.reconTimer);this.reconTimer=-1;this.audio.dispose();this.bridge.dispose();this.assets.cleanupTemporary();}
+  aboutToDisappear():void{this.resetGalaxyRise();this.clearGalaxyCaption();this.clearSkyTimers();this.planner.cancel();if(this.timer>=0)clearInterval(this.timer);if(this.storyCueTimer>=0)clearTimeout(this.storyCueTimer);if(this.characterTimer>=0)clearTimeout(this.characterTimer);if(this.formationTimer>=0)clearInterval(this.formationTimer);if(this.introCharacterTimer>=0)clearTimeout(this.introCharacterTimer);if(this.revealTimer>=0)clearTimeout(this.revealTimer);if(this.panelOpenTimer>=0)clearTimeout(this.panelOpenTimer);if(this.pulseTimer>=0)clearTimeout(this.pulseTimer);if(this.dustTimer>=0)clearInterval(this.dustTimer);this.introTimers.forEach((timer:number)=>clearTimeout(timer));if(this.reconTimer>=0)clearInterval(this.reconTimer);this.reconTimer=-1;this.audio.dispose();this.bridge.dispose();this.assets.cleanupTemporary();}
   onBackPress():boolean{if(this.journey==='forming'){this.minimizeReconstruction();return true;}if(this.galaxyTravelId){this.recoverGalaxy();return true;}if(this.introStage>0){this.finishIntro();return true;}if(this.cameraLive){this.close();return true;}if(this.detail){this.close();return true;}if(this.skyMounted||this.skyOpen||this.personalActive()){this.returnOrigin();return true;}if(this.productOpen){this.productOpen=false;return true;}if(this.legacyEditorOpen){this.legacyEditorOpen=false;this.ready=false;return true;}if(this.tool!=='NAVIGATE'){this.switchTool(this.tool);return true;}return false;}
   @Builder ambienceTile(mode:string,label:string,color:string){
     Button(){Column({space:8}){Stack(){Circle().width(48).height(48).fill(color);Circle().width(26).height(26).fill('#BBFFFFFF').blur(7).offset({x:8,y:-4})}.width(62).height(60);Text(this.tr(label)).fontSize(13).fontColor('#3B4665')}}.id('palette-'+mode).layoutWeight(1).height(102).backgroundColor(this.palette===mode?'#B9E1EAF8':'#72D1DDEF').border({width:this.palette===mode?1.5:1,color:this.palette===mode?'#CDEBFA':'#88E5F0FF'}).borderRadius(22).stateStyles({pressed:{.scale({x:.96,y:.96})},normal:{.scale({x:1,y:1})}}).animation({duration:this.motion?180:0,curve:Curve.EaseOut}).onClick(()=>this.chooseAtmosphere(mode))
   }
+  @Builder settingsEntry(id:string,icon:string,label:string,action:(event:ClickEvent)=>void){
+    Button(){
+      Row({space:12}){
+        Row(){Image($rawfile('ui/'+icon)).width(19).height(19)}
+          .width(32).height(32).borderRadius(11).backgroundColor('#4E6E96')
+          .justifyContent(FlexAlign.Center)
+        Text(this.tr(label)).fontSize(15).fontColor('#E6EEF7').fontWeight(FontWeight.Medium).layoutWeight(1)
+        Text('›').fontSize(17).fontColor('#7E93AD')
+      }.width('100%').padding({left:12,right:12})
+    }.id(id).height(48).backgroundColor('#27374E').border({width:1,color:'#3C5170'}).borderRadius(16)
+      .shadow({radius:8,color:'#00000040',offsetY:3})
+      .stateStyles({pressed:{.scale({x:.97,y:.95})},normal:{.scale({x:1,y:1})}})
+      .animation({duration:this.motion?170:0,curve:Curve.EaseOut})
+      .onClick(action)
+  }
+  @Builder aboutFeature(textKey:string){
+    Row({space:10}){
+      Text('✦').fontSize(11).fontColor('#7E93AD').margin({top:2})
+      Text(this.tr(textKey)).fontSize(13).fontColor('#C6D4E4').lineHeight(20).layoutWeight(1)
+    }.width('100%')
+  }
   @Builder
   details(){
     Scroll(){Column({space:12}){
-      Row({space:10}){
-        Stack(){Circle().width(28).height(28).fill('#355574').opacity(.16);Text(this.panelFromTop()?'✧':'✦').fontSize(21).fontColor('#425E89')}.width(32).height(32)
+      Row(){
+        if(this.detailParent()){
+          Button(){Text('‹').fontSize(19).fontWeight(FontWeight.Medium).fontColor(this.panelDark()?'#C6D4E4':'#425E89')}
+            .width(28).height(28).padding(0).borderRadius(14)
+            .backgroundColor(this.panelDark()?'#27374E':'#35557424')
+            .border({width:1,color:this.panelDark()?'#3C5170':'#00000000'})
+            .stateStyles({pressed:{.scale({x:.88,y:.88})},normal:{.scale({x:1,y:1})}})
+            .animation({duration:this.motion?170:0,curve:Curve.EaseOut})
+            .accessibilityText(this.tr('返回'))
+            .onClick(()=>{this.detail=this.detailParent()})
+        }
         Text(this.detail==='作品与记录'?(this.tr('足迹')):this.tr(this.detail))
-          .fontSize(22).fontWeight(FontWeight.Medium).fontColor('#263951').layoutWeight(1)
-        StarCloseButton({diameter:38,label:this.tr('关闭'),onClose:()=>this.close()})
-      }.width('100%').height(44)
-      Rect().width('100%').height(1).fill('#768FAFC0').opacity(.52)
+          .fontSize(16).fontWeight(FontWeight.Medium).fontColor(this.panelDark()?'#E6EEF7':'#263951').layoutWeight(1).textAlign(TextAlign.Center)
+        Button(){
+          Stack(){
+            Rect().width(11).height(1.6).fill(this.panelDark()?'#C6D4E4':'#425E89').rotate({angle:45})
+            Rect().width(11).height(1.6).fill(this.panelDark()?'#C6D4E4':'#425E89').rotate({angle:-45})
+          }.width(26).height(26)
+        }.width(26).height(26).borderRadius(13)
+          .backgroundColor(this.panelDark()?'#27374E':'#35557424')
+          .border({width:1,color:this.panelDark()?'#3C5170':'#00000000'})
+          .stateStyles({pressed:{.scale({x:.88,y:.88})},normal:{.scale({x:1,y:1})}})
+          .animation({duration:this.motion?170:0,curve:Curve.EaseOut})
+          .accessibilityText(this.tr('关闭'))
+          .onClick(()=>this.close())
+      }.width('100%').height(34)
+      Rect().width('100%').height(1).fill(this.panelDark()?'#FFFFFF':'#768FAF').opacity(this.panelDark()?.14:.42)
       if(this.detail==='完整回复'){Text(this.tr(this.subtitle)).fontSize(17).lineHeight(28)}
       if(this.detail==='云端理解'){
-        Text(CloudConsentStore.introduction(this.language)).fontSize(16).fontColor('#665A72')
-        Text(this.tr('服务端不保留面容画面；第三方的处理与留存依其条款。')).fontSize(14).fontColor('#766C80')
+        Text(CloudConsentStore.introduction(this.language)).fontSize(16).fontColor('#C6D4E4')
+        Text(this.tr('服务端不保留面容画面；第三方的处理与留存依其条款。')).fontSize(14).fontColor('#8FA3BC')
         Toggle({type:ToggleType.Switch,isOn:this.cloudSessionEnabled}).id('cloud-session-toggle').onChange((v:boolean)=>{
           if(this.setCloudConsent(v)&&v&&this.pendingCloudText)this.requestCloud();})
-        TextInput({text:this.backendAddress,placeholder:this.tr('自己的后端地址')}).onChange((v:string)=>this.backendAddress=v)
-        TextInput({text:this.backendToken,placeholder:this.tr('后端访问口令（不是 DeepSeek 密钥）')}).type(InputType.Password).onChange((v:string)=>this.backendToken=v)
+        TextInput({text:this.backendAddress,placeholder:this.tr('自己的后端地址')}).backgroundColor('#27374E').fontColor('#E6EEF7').placeholderColor('#7E93AD').onChange((v:string)=>this.backendAddress=v)
+        TextInput({text:this.backendToken,placeholder:this.tr('后端访问口令（不是 DeepSeek 密钥）')}).type(InputType.Password).backgroundColor('#27374E').fontColor('#E6EEF7').placeholderColor('#7E93AD').onChange((v:string)=>this.backendToken=v)
       }
       if(this.detail==='氛围'){
         Row({space:10}){
@@ -1141,46 +1317,92 @@ struct SelfMirrorPage {
         if(this.legacyEditorOpen&&this.bridge.ready&&this.session.sourceKind==='MESH'){Button(this.tr('缓慢转动人像')).softButton().onClick(()=>{this.close();this.bridge.send('VIEW_ORBIT',{});})}
       }
       if(this.detail==='设置'){
-        Text(this.tr('语言 / Language')).fontSize(14).fontColor('#81758D')
+        Text(this.tr('语言 / Language')).fontSize(12).letterSpacing(2).fontColor('#7E93AD').fontWeight(FontWeight.Medium)
         Column({space:10}){
           Row({space:10}){
-            Button(this.tr('中文')).id('language-zh').softButton().layoutWeight(1).backgroundColor(this.language==='zh'?'#B9E2EAF6':'#79CDD9EA').onClick(()=>this.setLanguage('zh'))
-            Button('English').id('language-en').softButton().layoutWeight(1).backgroundColor(this.language==='en'?'#B9E2EAF6':'#79CDD9EA').onClick(()=>this.setLanguage('en'))
+            Button(this.tr('中文')).id('language-zh').layoutWeight(1).height(44).fontSize(14).fontColor(this.language==='zh'?'#FFFFFF':'#C6D4E4')
+              .backgroundColor(this.language==='zh'?'#4E6E96':'#27374E').border({width:1,color:this.language==='zh'?'#6E8CB4':'#3C5170'}).borderRadius(22)
+              .stateStyles({pressed:{.opacity(.75).scale({x:.96,y:.96})},normal:{.opacity(1).scale({x:1,y:1})}})
+              .animation({duration:150,curve:Curve.EaseOut})
+              .onClick(()=>this.setLanguage('zh'))
+            Button('English').id('language-en').layoutWeight(1).height(44).fontSize(14).fontColor(this.language==='en'?'#FFFFFF':'#C6D4E4')
+              .backgroundColor(this.language==='en'?'#4E6E96':'#27374E').border({width:1,color:this.language==='en'?'#6E8CB4':'#3C5170'}).borderRadius(22)
+              .stateStyles({pressed:{.opacity(.75).scale({x:.96,y:.96})},normal:{.opacity(1).scale({x:1,y:1})}})
+              .animation({duration:150,curve:Curve.EaseOut})
+              .onClick(()=>this.setLanguage('en'))
           }.width('100%')
           Row({space:10}){
-            Button(this.tr('日本語')).id('language-ja').softButton().layoutWeight(1).backgroundColor(this.language==='ja'?'#B9E2EAF6':'#79CDD9EA').onClick(()=>this.setLanguage('ja'))
-            Button('한국어').id('language-ko').softButton().layoutWeight(1).backgroundColor(this.language==='ko'?'#B9E2EAF6':'#79CDD9EA').onClick(()=>this.setLanguage('ko'))
+            Button(this.tr('日本語')).id('language-ja').layoutWeight(1).height(44).fontSize(14).fontColor(this.language==='ja'?'#FFFFFF':'#C6D4E4')
+              .backgroundColor(this.language==='ja'?'#4E6E96':'#27374E').border({width:1,color:this.language==='ja'?'#6E8CB4':'#3C5170'}).borderRadius(22)
+              .stateStyles({pressed:{.opacity(.75).scale({x:.96,y:.96})},normal:{.opacity(1).scale({x:1,y:1})}})
+              .animation({duration:150,curve:Curve.EaseOut})
+              .onClick(()=>this.setLanguage('ja'))
+            Button('한국어').id('language-ko').layoutWeight(1).height(44).fontSize(14).fontColor(this.language==='ko'?'#FFFFFF':'#C6D4E4')
+              .backgroundColor(this.language==='ko'?'#4E6E96':'#27374E').border({width:1,color:this.language==='ko'?'#6E8CB4':'#3C5170'}).borderRadius(22)
+              .stateStyles({pressed:{.opacity(.75).scale({x:.96,y:.96})},normal:{.opacity(1).scale({x:1,y:1})}})
+              .animation({duration:150,curve:Curve.EaseOut})
+              .onClick(()=>this.setLanguage('ko'))
           }.width('100%')
         }.width('100%')
-        Row(){Text(this.tr('使用手写笔')).layoutWeight(1);Toggle({type:ToggleType.Switch,isOn:this.stylusHints}).id('stylus-hints-toggle').selectedColor(this.accent).onChange((value:boolean)=>{this.stylusHints=value;this.saveUi();})}.height(48)
-        Text(this.tr('可用手写笔或触控在个人立体面容上圈选；先从小范围开始。')).fontSize(12).fontColor('#81758D')
-        Button(this.tr('重温最初的微光')).id('replay-intro').softButton().backgroundColor('#8ED4E1F0').width('100%').onClick(()=>{this.close();this.returnOrigin();this.startIntro(true);})
-        Button(this.tr('隐私与云端')).softButton().backgroundColor('#8ED4E1F0').width('100%').onClick((event:ClickEvent)=>this.open('云端理解',event))
-        Button(this.tr('采集记录')).id('open-captures').softButton().backgroundColor('#8ED4E1F0').width('100%').onClick((event:ClickEvent)=>this.open('采集记录',event))
-        Button(this.tr('作品与记录')).softButton().backgroundColor('#8ED4E1F0').width('100%').onClick((event:ClickEvent)=>this.open('作品与记录',event))
-        Button(this.tr('关于 SELF')).softButton().backgroundColor('#8ED4E1F0').width('100%').onClick((event:ClickEvent)=>this.open('关于 SELF',event))
+        Row(){Text(this.tr('使用手写笔')).fontSize(15).fontColor('#E6EEF7').layoutWeight(1);Toggle({type:ToggleType.Switch,isOn:this.stylusHints}).id('stylus-hints-toggle').selectedColor(this.accent).onChange((value:boolean)=>{this.stylusHints=value;this.saveUi();})}.height(44)
+        Text(this.tr('可用手写笔或触控在个人立体面容上圈选；先从小范围开始。')).fontSize(12).fontColor('#7E93AD')
+        this.settingsEntry('replay-intro','star_light.svg','重温最初的微光',()=>{this.close();this.returnOrigin();this.startIntro(true);})
+        this.settingsEntry('open-cloud','cloud_lock_light.svg','隐私与云端',(event:ClickEvent)=>this.open('云端理解',event))
+        this.settingsEntry('open-captures','camera_light.svg','采集记录',(event:ClickEvent)=>this.open('采集记录',event))
+        this.settingsEntry('open-about','info_light.svg','关于 SELF',(event:ClickEvent)=>this.open('关于 SELF',event))
       }
       if(this.detail==='关于 SELF'){
-        Text(this.tr('每一种样子，都值得被看见')).fontSize(19).fontColor(this.accent)
-        Text(this.tr('不抹去你的特点。保留现在，或尝试一点不同，都由你决定。')).fontSize(15).lineHeight(24)
-        Text(this.tr(this.personalGaussianPath?'这里显示你的立体面容。圈选可跟随模型转动；数字试色不代表护肤品的真实效果。':'可以从一次轻轻的拍摄开始。只有完成重建并通过显示核验后，立体面容才会出现在这里。')).fontSize(13).fontColor('#81758D')
-        Text(this.tr('SELF · API 26')).fontSize(12).fontColor('#81758D')
+        Column({space:0}){
+          Stack(){Image($rawfile('ui/star_light.svg')).width(40).height(40)}
+            .width(80).height(80).borderRadius(22).backgroundColor('#3D5A7E')
+            .shadow({radius:18,color:'#4E6E9680',offsetY:6})
+          Text('SELF').fontSize(22).letterSpacing(8).fontWeight(FontWeight.Bold).fontColor('#EAF1F8').margin({top:14})
+          Text('v0.1.0 · API 26').fontSize(12).fontColor('#8FA3BC').margin({top:4})
+          Rect().width('100%').height(1).fill('#FFFFFF').opacity(.16).margin({top:18,bottom:18})
+          Text(this.tr('每一种样子，都值得被看见')).fontSize(17).fontColor(this.accent).fontWeight(FontWeight.Medium)
+          Text(this.tr('不抹去你的特点。保留现在，或尝试一点不同，都由你决定。')).fontSize(13).fontColor('#A9BCD2').lineHeight(21).textAlign(TextAlign.Center)
+          Column({space:10}).margin({top:16}).width('100%'){
+            this.aboutFeature('关于·拍摄')
+            this.aboutFeature('关于·圈选')
+            this.aboutFeature('关于·私密')
+          }
+          Text(this.tr('循光，遇见自己')).fontSize(11).letterSpacing(4).fontColor('#7E93AD').margin({top:20})
+        }.width('100%')
       }
       if(this.detail==='采集记录'){
-        if(this.selectedCapture){Video({src:fileUri.getUriFromPath(this.context.filesDir+'/captures/'+this.selectedCapture)}).id('capture-playback').onStart(()=>console.info('SELF_CAPTURE_PLAYBACK_STARTED')).onError(()=>console.info('SELF_CAPTURE_PLAYBACK_ERROR')).width('100%').height(230).autoPlay(true).controls(true).objectFit(ImageFit.Contain).borderRadius(18)}
-          Text(this.tr('原片留在这里；完成后会显示建模进度。')).fontSize(14).fontColor('#81758D')
-        Text(this.tr('想再拍一次？返回主页，循着那粒光继续。')).fontSize(13).fontColor('#81758D')
-        if(this.captureStatus){Text(this.tr(this.captureStatus)).fontSize(14)}
-        Button(this.tr('检查设备重建能力')).softButton().onClick(()=>this.checkReconstruction())
-          ForEach(this.captures,(clip:CaptureRecord)=>{
-            Column({space:6}){
-              Row(){Text(this.tr('私密视频')+' · '+Math.round(clip.bytes/1024)+' KB').fontSize(14).layoutWeight(1);Button('▶').id('play-'+clip.name).softButton().width(48).accessibilityText(this.tr('播放视频')).onClick(()=>this.selectedCapture=clip.name)}.width('100%')
-              Row({space:8}){
-                Button(this.reconJob||this.reconSubmitting?this.tr('正在寻找中'):this.tr('开始建模')).id('model-'+clip.name).softButton().layoutWeight(1).enabled(!this.reconJob&&!this.reconSubmitting).onClick(()=>this.submitCapture(clip.name))
-                Button(this.tr('删除原片')).id('delete-'+clip.name).softButton().layoutWeight(1).onClick(()=>{if(this.selectedCapture===clip.name)this.selectedCapture='';new CaptureService(this.context).delete(clip.name);this.captures=new CaptureService(this.context).list();})
-              }.width('100%')
-            }.padding(10).width('100%').backgroundColor('#B8FFFFFF').borderRadius(18)
-          },(clip:CaptureRecord)=>clip.name)
+        if(this.selectedCapture){Video({src:fileUri.getUriFromPath(this.context.filesDir+'/captures/'+this.selectedCapture)}).id('capture-playback').onStart(()=>console.info('SELF_CAPTURE_PLAYBACK_STARTED')).onError(()=>console.info('SELF_CAPTURE_PLAYBACK_ERROR')).width('100%').height(210).autoPlay(true).controls(true).objectFit(ImageFit.Contain).borderRadius(16)}
+        if(this.captureStatus){Text(this.tr(this.captureStatus)).fontSize(14).fontColor('#9AB2CC')}
+        if(this.captures.length===0){
+          Column({space:6}){
+            Text('✧').fontSize(22).fontColor('#8FA9C9')
+            Text(this.tr('还没有采集的原片。')).fontSize(14).fontColor('#8FA9C9')
+          }.width('100%').padding({top:26,bottom:26})
+        }
+        ForEach(this.captures,(clip:CaptureRecord)=>{
+          Row({space:8}){
+            Text(this.captureTime(clip.name)).fontSize(14).fontColor('#2E4460').fontWeight(FontWeight.Medium).layoutWeight(1)
+            Button(this.tr('预览')).id('play-'+clip.name).fontSize(12).fontColor('#3D5A7C')
+              .height(32).padding({left:12,right:12}).backgroundColor('#C4EAF5F8')
+              .border({width:1,color:'#93DEF0FF'}).borderRadius(16)
+              .stateStyles({pressed:{.scale({x:.93,y:.93})},normal:{.scale({x:1,y:1})}})
+              .animation({duration:150,curve:Curve.EaseOut})
+              .accessibilityText(this.tr('播放视频'))
+              .onClick(()=>this.selectedCapture=clip.name)
+            Button(this.reconJob||this.reconSubmitting?this.tr('正在寻找中'):this.tr('建模')).id('model-'+clip.name).fontSize(12).fontColor('#3D5A7C')
+              .height(32).padding({left:12,right:12}).backgroundColor('#C4EAF5F8')
+              .border({width:1,color:'#93DEF0FF'}).borderRadius(16)
+              .stateStyles({pressed:{.scale({x:.93,y:.93})},normal:{.scale({x:1,y:1})}})
+              .animation({duration:150,curve:Curve.EaseOut})
+              .enabled(!this.reconJob&&!this.reconSubmitting)
+              .onClick(()=>this.submitCapture(clip.name))
+            Button(this.tr('删除')).id('delete-'+clip.name).fontSize(12).fontColor('#8A4A56')
+              .height(32).padding({left:12,right:12}).backgroundColor('#F2D9DEF8')
+              .border({width:1,color:'#EBC4CDFF'}).borderRadius(16)
+              .stateStyles({pressed:{.scale({x:.93,y:.93})},normal:{.scale({x:1,y:1})}})
+              .animation({duration:150,curve:Curve.EaseOut})
+              .onClick(()=>{if(this.selectedCapture===clip.name)this.selectedCapture='';new CaptureService(this.context).delete(clip.name);this.captures=new CaptureService(this.context).list();})
+          }.padding({left:14,right:10,top:6,bottom:6}).width('100%').backgroundColor('#B8FFFFFF').borderRadius(16)
+        },(clip:CaptureRecord)=>clip.name)
       }
       if(this.detail==='工具'){
         Button(this.tr('拍摄面容视频')).softButton().onClick(()=>{this.open('拍摄面容');})
@@ -1254,24 +1476,27 @@ struct SelfMirrorPage {
           .fontSize(12).fontColor('#4B5F79')
       }
     }.padding(22).width('100%').alignItems(HorizontalAlign.Start)}.align(Alignment.TopStart).width('100%').height('100%')
-      .backgroundColor(this.panelFromTop()?'#D0A6B7D2':'#CCAFA9C7')
-      .backgroundBlurStyle(BlurStyle.COMPONENT_ULTRA_THIN,{colorMode:ThemeColorMode.LIGHT})
-      .linearGradient({angle:150,colors:this.panelFromTop()?
+      .scrollBar(BarState.Off)
+      .edgeEffect(EdgeEffect.Spring)
+      .backgroundColor(this.panelDark()?'#E01B2536':(this.panelFromTop()?'#D0A6B7D2':'#CCAFA9C7'))
+      .backgroundBlurStyle(BlurStyle.COMPONENT_ULTRA_THIN,{colorMode:this.panelDark()?ThemeColorMode.DARK:ThemeColorMode.LIGHT})
+      .linearGradient({angle:150,colors:this.panelDark()?
+        [['#202C3FEB',0],['#182233EB',.55],['#1E2A3DEB',1]]:
+        (this.panelFromTop()?
         [['#C7B7C9E1',0],['#C0A5B8D5',.58],['#C8BAC9E0',1]]:
-        [['#C9C0B9D8',0],['#C2B3AACE',.56],['#C8CABDE1',1]]})
-      .border({width:1,color:this.panelFromTop()?'#A0DFEAF7':'#A5E6DDF5'})
+        [['#C9C0B9D8',0],['#C2B3AACE',.56],['#C8CABDE1',1]])})
+      .border({width:1,color:this.panelDark()?'#4E6486':(this.panelFromTop()?'#A0DFEAF7':'#A5E6DDF5')})
       .shadow({radius:22,color:'#61405477',offsetY:10}).borderRadius(this.panelFromTop()?28:32)
   }
   @Builder
   panelCard(){
     Stack(){
       this.details()
-      ForEach(this.sparks.slice(0,24),(index:number)=>{
+      ForEach(this.sparks.slice(0,32),(index:number)=>{
         Circle().width(index%5===0?4.5:3).height(index%5===0?4.5:3)
           .fill(index%3===0?'#F5F6FF':this.panelFromTop()?'#C7E4F8':'#E8D9F8')
-          .opacity(Math.max(0,(.62-this.panelDust*.67)*(index%3===0?1:.72)))
-          .position({x:index%2===0?10+(index%4)*4:this.panelWidth()-16-(index%4)*4,
-            y:5+(index%4)*3+this.panelDust*(48+(index*19)%Math.max(62,this.panelHeight()-75))})
+          .opacity(this.dustOpacity(index))
+          .position({x:index%2===0?10+(index%4)*4:this.panelWidth()-16-(index%4)*4,y:this.dustY(index)})
           .hitTestBehavior(HitTestMode.None)
       },(index:number)=>index.toString())
     }.width('100%').height('100%').clip(true).borderRadius(this.panelFromTop()?28:32)
@@ -1335,21 +1560,31 @@ struct SelfMirrorPage {
   }
   @Builder introOverlay(){
     Stack(){
-      if(this.introStage===1){Flex({wrap:FlexWrap.Wrap,justifyContent:FlexAlign.Center}){
-        ForEach(this.introLine.split(''),(letter:string,index:number)=>{
-          Text(letter).fontSize(this.wide?30:23).letterSpacing(3).fontColor('#F2F2FF')
-            .opacity(index<this.introCharacters?1:0).blur(index<this.introCharacters?0:8)
-            .animation({duration:this.motion?300:0,curve:Curve.EaseOut})
-        },(_letter:string,index:number)=>index.toString())
-      }.width(Math.min(this.surfaceWidth-48,680))}
-      if(this.introStage===3){
-        NightSkySurface({formation:this.introBurst,musicPulse:0,motion:this.motion,active:true,phaseMode:'intro'}).width('100%').height('100%')
-      }
-      if(this.introStage===2){
-        Circle().width(48).height(48).fill('#548FA8DC').stroke('#E5E9FF').strokeWidth(1.5).shadow({radius:44,color:'#729BC9F2'}).position({x:this.surfaceWidth*.5-24,y:this.surfaceHeight*.47+this.introDrop})
+      if(this.introStage===1){
+        Column(){
+          ForEach(this.introLines,(line:string,lineIndex:number)=>{
+            Flex({wrap:FlexWrap.Wrap,justifyContent:FlexAlign.Start}){
+              ForEach(line.split(''),(letter:string,index:number)=>{
+                Text(letter).fontSize(this.wide?26:this.language==='zh'?18:16)
+                  .lineHeight(this.wide?44:this.language==='zh'?34:29)
+                  .letterSpacing(1.6).fontColor('#F2F2FF')
+                  .opacity(index<(this.introRevealed[lineIndex]||0)?1:0)
+                  .blur(index<(this.introRevealed[lineIndex]||0)?0:8)
+                  .animation({duration:this.motion?360:0,curve:Curve.EaseOut})
+              },(_letter:string,index:number)=>lineIndex.toString()+'-'+index.toString())
+            }.width('100%')
+          },(_line:string,lineIndex:number)=>lineIndex.toString())
+        }.width(Math.min(this.surfaceWidth-56,this.wide?520:340))
+          .alignItems(HorizontalAlign.Start)
+          .justifyContent(FlexAlign.SpaceEvenly)
+          .position({x:this.wide?56:28,y:Math.max(72,this.surfaceHeight*.08)})
+          .height(this.surfaceHeight*2/3-Math.max(72,this.surfaceHeight*.08))
+          .opacity(this.introPageOpacity)
+          .animation({duration:this.motion?760:0,curve:Curve.EaseInOut})
       }
       Button(this.tr('跳过')).id('skip-intro').softButton().width(72).height(40).position({x:Math.max(16,this.surfaceWidth-92),y:42}).onClick(()=>this.finishIntro())
-    }.width('100%').height('100%').backgroundColor('#080B17').zIndex(50)
+    }.width('100%').height('100%').backgroundColor('#080B17').opacity(this.introOverlayOpacity)
+      .animation({duration:this.motion?1500:0,curve:Curve.EaseInOut}).zIndex(50)
   }
   @Builder galaxyHistoryRow(star:PortraitStar,index:number){
   Column({space:6}){
@@ -1365,6 +1600,15 @@ struct SelfMirrorPage {
       }.id('star-'+star.jobId).layoutWeight(1).height(52).padding({left:11,right:7})
         .backgroundColor('#00000000').borderRadius(14)
         .onClick(()=>{this.selectStarPreview(star.jobId);this.setGalaxyDial(false);})
+      Button({type:ButtonType.Normal,stateEffect:false}){
+        Image($rawfile('ui/star_edit.svg')).width(19).height(19)
+      }.id('rename-star-'+star.jobId).width(40).height(44).padding(0)
+        .backgroundColor(this.galaxyRenameId===star.jobId?'#3E4E6E80':'#19293E3E')
+        .border({width:1,color:this.galaxyRenameId===star.jobId?'#8FA9CFA6':'#35506E64'}).borderRadius(13)
+        .stateStyles({pressed:{.opacity(.7).scale({x:.94,y:.94})},normal:{.opacity(1).scale({x:1,y:1})}})
+        .animation({duration:this.motion?180:0,curve:Curve.EaseOut})
+        .accessibilityText((this.tr('重命名星辰：'))+star.name)
+        .onClick(()=>this.setGalaxyRename(this.galaxyRenameId===star.jobId?'':star.jobId))
       Button({type:ButtonType.Normal,stateEffect:false}){
         Image($rawfile('ui/star_delete.svg')).width(19).height(19)
       }.id('delete-star-'+star.jobId).width(40).height(44).padding(0)
@@ -1392,6 +1636,30 @@ struct SelfMirrorPage {
         }.width('100%')
       }.id('star-delete-confirmation').padding(12).margin({left:5,right:5,bottom:6})
         .backgroundColor('#71332940').border({width:1,color:'#5A725069'}).borderRadius(16)
+        .transition({opacity:0,translate:{y:-4}})
+    }
+    if(this.galaxyRenameId===star.jobId){
+      Column({space:10}){
+        Text(this.tr('为这颗星辰起个名字'))
+          .fontSize(13).fontColor('#DCE7F8').width('100%')
+        TextInput({text:this.galaxyRenameDraft,placeholder:this.tr('星辰的名字')})
+          .id('star-rename-input').fontSize(14).fontColor('#F2F6FF')
+          .placeholderColor('#7E93B4').caretColor('#AFC9EE')
+          .backgroundColor('#1B2A4566').border({width:1,color:'#5F7BA466'}).borderRadius(12)
+          .padding({left:12,right:12}).height(38).width('100%')
+          .onChange((value:string)=>{this.galaxyRenameDraft=value;})
+          .onSubmit(()=>{this.saveGalaxyRename(star.jobId);})
+        Row({space:8}){
+          Button(this.tr('取消')).id('cancel-rename-star').layoutWeight(1).height(36)
+            .fontSize(12).fontColor('#C9D8EC').backgroundColor('#2C3B5666').borderRadius(12)
+            .onClick(()=>this.setGalaxyRename(''))
+          Button(this.tr('保存')).id('confirm-rename-star').layoutWeight(1).height(36)
+            .fontSize(12).fontColor('#F2F7FF').backgroundColor('#3D5A8566')
+            .border({width:1,color:'#7E9CC4A6'}).borderRadius(12)
+            .onClick(()=>this.saveGalaxyRename(star.jobId))
+        }.width('100%')
+      }.id('star-rename-editor').padding(12).margin({left:5,right:5,bottom:6})
+        .backgroundColor('#1A274280').border({width:1,color:'#5F7BA473'}).borderRadius(16)
         .transition({opacity:0,translate:{y:-4}})
     }
   }.width('100%')
@@ -1424,7 +1692,7 @@ struct SelfMirrorPage {
                   onDissolved:(id:string,height:number)=>this.finishGalaxyDelete(id,height)})
                   .translate({y:this.galaxyRiseIds.includes(star.jobId)?this.galaxyRiseOffset:0})
                   .enabled(!this.galaxyDissolvingId&&this.galaxyRiseIds.length===0)
-              },(star:PortraitStar)=>star.jobId)
+              },(star:PortraitStar)=>star.jobId+'-'+star.name)
             }
           }.scrollBar(BarState.Off).width('100%').height(Math.min(this.surfaceHeight*.46,290))
         }.padding(13).width(Math.min(290,this.surfaceWidth*.78))
@@ -1479,6 +1747,7 @@ struct SelfMirrorPage {
           cloudConsentDecision:this.cloudConsentDecision,
           backendAddress:this.backendAddress,backendToken:this.backendToken,
           viewportWidth:this.surfaceWidth,viewportHeight:this.surfaceHeight,
+          onCaptionSuppress:(suppressed:boolean)=>{this.setPreviewCaptionSuppressed(suppressed);},
           onBackgroundTone:(light:boolean)=>{if(this.personalBackdropLight!==light){
             this.getUIContext().animateTo({duration:this.motion?650:0,curve:Curve.EaseInOut},()=>{this.personalBackdropLight=light;});}},
           onEnableCloud:()=>this.setCloudConsent(true),onDeclineCloud:()=>{this.setCloudConsent(false);},
@@ -1489,7 +1758,7 @@ struct SelfMirrorPage {
             this.revealTimer=setTimeout(()=>{this.journey='idle';this.revealTimer=-1;},this.motion?1380:50);
           }},onFailure:(message:string)=>{
             if(this.galaxyTravelId){this.recoverGalaxy(this.tr('这段记忆暂时未能展开，可以稍后再试。'));return;}
-            this.personalReady=false;this.captureStatus=message;this.journey='failed';},onInteraction:()=>this.markInteraction()}).width('100%').height('100%')
+            this.personalReady=false;this.captureStatus=message;this.journey='failed';},onInteraction:()=>{this.markInteraction();this.collapsePreviewTools();}}).width('100%').height('100%')
       }
       if(this.journey==='revealing'){
         Stack(){Circle().width(72).height(72).fill('#B6C8EC').shadow({radius:80,color:'#A7C7EE'}).scale({x:this.revealScale,y:this.revealScale})}.width('100%').height('100%').backgroundColor('#080C1B').opacity(this.revealOpacity).hitTestBehavior(HitTestMode.None)
@@ -1516,20 +1785,6 @@ struct SelfMirrorPage {
           .animation({duration:this.motion?170:0,curve:Curve.EaseOut})
           .onTouch((event:TouchEvent)=>{this.navPressed=event.type===TouchType.Down?'music':'';})
           .accessibilityText(this.tr(this.musicOn?'音乐开':'音乐关')).onClick(()=>this.toggleMusic(!this.musicOn))
-        Button({type:ButtonType.Circle,stateEffect:false}){
-          Image($rawfile('ui/nav_ambience.svg')).width(28).height(28)
-            .rotate({angle:this.buttonPulse==='氛围'?10:0})
-            .scale({x:this.buttonPulse==='氛围'?1.1:1,y:this.buttonPulse==='氛围'?1.1:1})
-            .animation({duration:this.motion?230:0,curve:Curve.EaseOut})
-        }.id('open-ambience').width(48).height(48).padding(0).borderRadius(24)
-          .backgroundColor(this.navPressed==='ambience'?'#EDEDF0FA':'#D6DFE6F2')
-          .backgroundBlurStyle(BlurStyle.COMPONENT_ULTRA_THIN)
-          .border({width:1,color:'#B5F8FAFF'})
-          .shadow({radius:6,color:'#3C405878',offsetY:2})
-          .stateStyles({pressed:{.scale({x:.9,y:.9})},normal:{.scale({x:1,y:1})}})
-          .animation({duration:this.motion?190:0,curve:Curve.EaseOut})
-          .onTouch((event:TouchEvent)=>{this.navPressed=event.type===TouchType.Down?'ambience':'';})
-          .accessibilityText(this.tr('氛围')).onClick((event:ClickEvent)=>this.open('氛围',event))
         Button({type:ButtonType.Capsule,stateEffect:false}){
           Image($rawfile('ui/nav_settings.svg')).width(28).height(28)
             .scale({x:this.buttonPulse==='设置'?1.1:1,y:this.buttonPulse==='设置'?1.1:1})
@@ -1547,33 +1802,51 @@ struct SelfMirrorPage {
         .opacity(this.galaxyTravelId?0:1).enabled(!this.galaxyTravelId)
         .animation({duration:this.motion?650:0,curve:Curve.EaseInOut})
       if(this.personalActive()&&!this.detail&&this.journey!=='forming'&&this.skyTransition==='idle'){
-        Row({space:0}){
-          Button({type:ButtonType.Normal,stateEffect:false}){
-            Row({space:8}){
-              Text('✦').fontSize(16).fontColor('#C5D7F5')
-              Text(this.tr('我的星辰')).fontSize(13)
-                .fontWeight(FontWeight.Medium).fontColor('#F4F7FF')
-            }.justifyContent(FlexAlign.Center)
-          }.id('open-star-sky').width(132).height(44).padding(0)
-            .backgroundColor('#00000000').borderRadius(22)
-            .stateStyles({pressed:{.scale({x:.95,y:.94})},normal:{.scale({x:1,y:1})}})
-            .animation({duration:this.motion?170:0,curve:Curve.EaseOut}).onClick(()=>this.enterSky())
-          Rect().width(1).height(20).fill('#587593')
-          Button({type:ButtonType.Normal,stateEffect:false}){
-            Row({space:8}){
-              Circle().width(12).height(12).fill('#00000000').stroke('#C5D7F5').strokeWidth(1.5)
-              Text(this.tr('回到原点')).fontSize(13)
-                .fontWeight(FontWeight.Medium).fontColor('#F4F7FF')
-            }.justifyContent(FlexAlign.Center)
-          }.id('return-origin').width(132).height(44).padding(0)
-            .backgroundColor('#00000000').borderRadius(22)
-            .stateStyles({pressed:{.scale({x:.95,y:.94})},normal:{.scale({x:1,y:1})}})
-            .animation({duration:this.motion?170:0,curve:Curve.EaseOut}).onClick(()=>this.returnOrigin())
-        }.width(277).height(46).justifyContent(FlexAlign.Center)
-          .backgroundColor('#CE1B2D47').backgroundBlurStyle(BlurStyle.COMPONENT_ULTRA_THIN)
-          .border({width:1,color:'#7E9EBE'}).borderRadius(23)
+        Stack({alignContent:Alignment.Center}){
+          Row({space:0}){
+            Button({type:ButtonType.Normal,stateEffect:false}){
+              Row({space:7}){
+                Image($rawfile('ui/island_star.svg')).width(15).height(15)
+                Text(this.tr('我的星辰')).fontSize(13)
+                  .fontWeight(FontWeight.Medium).fontColor('#F4F7FF')
+              }.justifyContent(FlexAlign.Center)
+            }.id('open-star-sky').width(132).height(44).padding(0)
+              .backgroundColor('#00000000').borderRadius(22)
+              .stateStyles({pressed:{.scale({x:.95,y:.94})},normal:{.scale({x:1,y:1})}})
+              .animation({duration:this.motion?170:0,curve:Curve.EaseOut}).onClick(()=>this.enterSky())
+            Rect().width(1).height(20).fill('#587593')
+            Button({type:ButtonType.Normal,stateEffect:false}){
+              Row({space:7}){
+                Image($rawfile('ui/island_origin.svg')).width(15).height(15)
+                Text(this.tr('回到原点')).fontSize(13)
+                  .fontWeight(FontWeight.Medium).fontColor('#F4F7FF')
+              }.justifyContent(FlexAlign.Center)
+            }.id('return-origin').width(132).height(44).padding(0)
+              .backgroundColor('#00000000').borderRadius(22)
+              .stateStyles({pressed:{.scale({x:.95,y:.94})},normal:{.scale({x:1,y:1})}})
+              .animation({duration:this.motion?170:0,curve:Curve.EaseOut}).onClick(()=>this.returnOrigin())
+          }.width(277).height(46).justifyContent(FlexAlign.Center)
+            .opacity(this.previewToolsCollapsed?0:1)
+            .scale({x:this.previewToolsCollapsed?.6:1,y:this.previewToolsCollapsed?.6:1})
+            .hitTestBehavior(this.previewToolsCollapsed?HitTestMode.None:HitTestMode.Default)
+          Row({space:4}){
+            Image($rawfile('ui/island_star.svg')).width(13).height(13)
+            Image($rawfile('ui/island_chevron.svg')).width(11).height(11)
+          }.justifyContent(FlexAlign.Center)
+            .opacity(this.previewToolsCollapsed?1:0)
+            .scale({x:this.previewToolsCollapsed?1:.4,y:this.previewToolsCollapsed?1:.4})
+            .hitTestBehavior(this.previewToolsCollapsed?HitTestMode.Default:HitTestMode.None)
+            .onClick(()=>this.expandPreviewTools())
+        }.width(this.previewToolsCollapsed?54:277).height(this.previewToolsCollapsed?32:46)
+          .position({x:(this.surfaceWidth-(this.previewToolsCollapsed?54:277))/2,
+            y:this.previewToolsCollapsed?49:this.previewBarY()})
+          .backgroundColor(this.previewToolsCollapsed?'#D91B2D47':'#CE1B2D47')
+          .backgroundBlurStyle(BlurStyle.COMPONENT_ULTRA_THIN)
+          .border({width:1,color:'#7E9EBE'})
+          .borderRadius(this.previewToolsCollapsed?16:23)
           .shadow({radius:9,color:'#42101B31',offsetY:2})
-          .position({x:Math.max(14,(this.surfaceWidth-277)/2),y:this.hasProgressCapsule()?(this.wide?104:164):(this.wide?42:105)}).zIndex(31)
+          .zIndex(31)
+          .onClick(()=>{if(this.previewToolsCollapsed)this.expandPreviewTools();})
       }
       if(this.journey==='idle'&&!this.detail&&!this.galaxyTravelId){
         Column({space:12}){
@@ -1595,10 +1868,12 @@ struct SelfMirrorPage {
           }
           if(!this.skyOpen){Text(this.personalActive()?(this.tr('轻轻转动，看看每一面的自己。')):this.originTitles()[this.originScene])
             .fontSize(13).letterSpacing(2).fontColor(this.personalActive()&&this.personalBackdropLight?'#40516B':'#BAC9E0')
+            .opacity(this.personalActive()&&this.previewCaptionTyped?this.previewCaptionSub:1)
             .textShadow({radius:5,color:'#7D101528',offsetY:2})}
         }.alignItems(HorizontalAlign.Start).width(Math.min(this.surfaceWidth-48,this.wide?460:340))
-          .position({x:this.wide?50:26,y:Math.max(this.surfaceHeight*(this.skyOpen?.145:this.wide?.22:.18),
+          .position({x:this.wide?50:26,y:this.personalActive()?this.previewCaptionY:Math.max(this.surfaceHeight*(this.skyOpen?.145:this.wide?.22:.18),
             this.hasProgressCapsule()&&!this.wide?(this.personalActive()?224:178):0)})
+          .opacity(this.personalActive()?(this.previewCaptionSuppressed?0:this.previewCaptionOpacity):1)
           .hitTestBehavior(HitTestMode.None).zIndex(5)
       }
       if(this.skyOpen&&!this.detail&&!this.galaxyTravelId){

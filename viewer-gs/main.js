@@ -42,6 +42,7 @@ async function editableSetForUrl(url, editableSplats, numSplatsHint) {
   }
 }
 import { upperLeftLuma, createToneTracker } from './tone.js';
+import { add, twoFingerPanDelta, composeOrbitCamera } from './portrait-camera-math.js';
 
 const canvas=document.getElementById('portrait'), outline=document.getElementById('lasso'), status=document.getElementById('status');
 const preview=document.body.dataset.preview==='true';
@@ -132,7 +133,9 @@ async function start(){
         Number.isInteger(view.editableSplats)?view.editableSplats:data.numSplats,data.numSplats)
         .then(result=>{editableSet=result.set;})
         .catch(()=>{});
-      const target=view.target,up=normal(view.up),original=view.camera.map((x,i)=>x-target[i]);
+      let target=view.target.slice();
+      let pivotGoal=target.slice();
+      const up=normal(view.up),original=view.camera.map((x,i)=>x-target[i]);
       const radius=Math.hypot(...original);if(!Number.isFinite(radius)||radius<.01)throw Error(t('cameraParams'));
       const recordedFov=Number.isFinite(view.captureHorizontalFovDegrees)&&view.captureHorizontalFovDegrees>=20&&view.captureHorizontalFovDegrees<=120;
       const hasYawBounds=Array.isArray(view.safeYawDegrees)&&view.safeYawDegrees.length===2&&view.safeYawDegrees.every(Number.isFinite)&&view.safeYawDegrees[0]<=0&&view.safeYawDegrees[1]>=0;
@@ -141,8 +144,8 @@ async function start(){
       // Pitch is a viewing control, not a claim that unrecorded surfaces were reconstructed.
       // Keep the source coverage as metadata, but allow looking above and below the face.
       const pitchBounds=hasPitchBounds?
-        [Math.min(-30,view.safePitchDegrees[0])*Math.PI/180,
-          Math.max(30,view.safePitchDegrees[1])*Math.PI/180]:[-Math.PI/6,Math.PI/6];
+        [Math.min(-85,view.safePitchDegrees[0])*Math.PI/180,
+          Math.max(85,view.safePitchDegrees[1])*Math.PI/180]:[-85*Math.PI/180,85*Math.PI/180];
       let openingZoom=preview?.9:view.targetFaceFraction===.5?1:1.36;
       let yaw=0,pitch=0,zoom=openingZoom,targetYaw=0,targetPitch=0,targetZoom=openingZoom;
       // Keep the face sharp when still; reduce fill rate only during camera motion.
@@ -168,7 +171,8 @@ async function start(){
           motionFrames=0;motionStarted=now;
         }
       });
-      const clampZoom=value=>Math.max(.35,Math.min(recordedFov?openingZoom*1.2:4,value));
+      const zoomMax=recordedFov?openingZoom*1.2:Math.max(4,Number.isFinite(view.sceneRadius)?view.sceneRadius/Math.max(.01,radius)*2.2:4);
+      const clampZoom=value=>Math.max(.04,Math.min(zoomMax,value));
       const adjustRecordedFraming=()=>{if(!recordedFov)return;
         const rect=canvas.getBoundingClientRect(),aspect=rect.width/Math.max(1,rect.height);
         const horizontal=Math.min(58,view.captureHorizontalFovDegrees*1.12);
@@ -180,7 +184,7 @@ async function start(){
         camera.camera.fov=nextFov;app.renderNextFrame=true;};
       adjustRecordedFraming();
       let mode='move',touching=false,lastX=0,lastY=0,polygon=[],selectedPolygon=[],selectionYaw=0,selectionPitch=0,
-        selectionWidth=0,selectionHeight=0,mask=null,selected=0,appendNext=false;
+        selectionWidth=0,selectionHeight=0,selectionTarget=target.slice(),selectionZoom=zoom,mask=null,selected=0,appendNext=false;
       let appliedRecipe=null,historyLayers=[],selections=[],carePreviewActive=false;
       const decodeMask=value=>{
         const decoded=atob(value||'');
@@ -244,7 +248,8 @@ async function start(){
         const r=canvas.getBoundingClientRect();ctx.save();ctx.scale(devicePixelRatio,devicePixelRatio);
         const colors=['rgba(204,226,255,.88)','rgba(221,197,255,.88)','rgba(177,240,225,.86)','rgba(255,220,190,.86)'];
         selections.forEach((entry,index)=>{
-          const sameView=Math.abs(yaw-entry.yaw)<.055&&Math.abs(pitch-entry.pitch)<.055&&
+          const sameView=entry.target.every((value,i)=>Math.abs(value-target[i])<radius*1e-6)&&
+            Math.abs(zoom-entry.zoom)<1e-6&&Math.abs(yaw-entry.yaw)<.055&&Math.abs(pitch-entry.pitch)<.055&&
             Math.abs(r.width-entry.width)<1&&Math.abs(r.height-entry.height)<1;
           const points=sameView?entry.polygon:projectedContour(entry,r.width,r.height);
           trace(ctx,points,colors[index],true);
@@ -270,14 +275,43 @@ async function start(){
       };
       const dissolveSelections=()=>{for(const entry of selections){
         const r=canvas.getBoundingClientRect();
-        const points=Math.abs(yaw-entry.yaw)<.055&&Math.abs(pitch-entry.pitch)<.055&&
+        const points=entry.target.every((value,i)=>Math.abs(value-target[i])<radius*1e-6)&&
+          Math.abs(zoom-entry.zoom)<1e-6&&Math.abs(yaw-entry.yaw)<.055&&Math.abs(pitch-entry.pitch)<.055&&
           Math.abs(r.width-entry.width)<1&&Math.abs(r.height-entry.height)<1?
           entry.polygon:projectedContour(entry,r.width,r.height);
         for(let i=0;i<points.length;i+=Math.max(1,Math.floor(points.length/8)))addSparks(points[i]);
       }};
       let firstCamera=true,lastOverlay=0,aimPoint=target;
+      const movePointers=new Map();let twoFinger=null;
       const update=(dt=1/60)=>{if(preview&&!touching)targetYaw=Math.max(yawBounds[0],Math.min(yawBounds[1],Math.sin(performance.now()*.00027)*.23));
-        const settling=Math.abs(targetYaw-yaw)>.002||Math.abs(targetPitch-pitch)>.002||Math.abs(targetZoom-zoom)>.002;
+        // Two-finger gestures are consumed ONCE per rendered frame from the
+        // latest pointer table (never per pointermove event): the two arrival
+        // orders of the fingers cannot produce transient zoom/pan jumps.
+        if(twoFinger&&twoFinger.dirty){
+          twoFinger.dirty=false;
+          const pts=twoFinger.ids.map(id=>movePointers.get(id)).filter(Boolean);
+          if(pts.length===2){
+            const rectNow=canvas.getBoundingClientRect();
+            const gapNow=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);
+            const nextZoom=clampZoom(twoFinger.zoom0*twoFinger.gap0/Math.max(1,gapNow));
+            // Logical camera under the GOAL state (pivotGoal/yaw/pitch/next r):
+            // pan rays must use the full composed camera, never the world up.
+            const logical=composeOrbitCamera(pivotGoal,original,up,targetYaw,targetPitch,radius*nextZoom);
+            if(logical){
+              const delta=twoFingerPanDelta({
+                mPrev:{x:twoFinger.mPrev.x-rectNow.left,y:twoFinger.mPrev.y-rectNow.top},
+                mNow:{x:(pts[0].x+pts[1].x)/2-rectNow.left,y:(pts[0].y+pts[1].y)/2-rectNow.top},
+                camBasis:logical.basis,fovY:camera.camera.fov,
+                aspect:rectNow.width/Math.max(1,rectNow.height),
+                width:rectNow.width,height:rectNow.height,pivot:pivotGoal});
+              if(delta&&delta.every(Number.isFinite))pivotGoal=add(pivotGoal,delta);
+            }
+            targetZoom=nextZoom;
+            twoFinger.mPrev={x:(pts[0].x+pts[1].x)/2,y:(pts[0].y+pts[1].y)/2};
+          }
+        }
+        const pivotMoving=pivotGoal?Math.abs(pivotGoal[0]-target[0])+Math.abs(pivotGoal[1]-target[1])+Math.abs(pivotGoal[2]-target[2])>.001*Math.max(.01,radius):false;
+        const settling=Math.abs(targetYaw-yaw)>.002||Math.abs(targetPitch-pitch)>.002||Math.abs(targetZoom-zoom)>.002||pivotMoving;
         setMotionResolution(touching||settling);
         if(!firstCamera&&!settling)return;
         firstCamera=false;
@@ -285,12 +319,12 @@ async function start(){
         const elapsed=Number.isFinite(dt)?Math.max(0,Math.min(dt,.05)):1/60;
         const blend=1-Math.pow(.8,elapsed*60);
         yaw+=(targetYaw-yaw)*blend;pitch+=(targetPitch-pitch)*blend;zoom+=(targetZoom-zoom)*blend;
+        if(pivotGoal)target=target.map((value,i)=>value+(pivotGoal[i]-value)*blend);
         const afterYaw=rotate(original,up,yaw),forward=normal(afterYaw.map(x=>-x));
         const right=normal([forward[1]*up[2]-forward[2]*up[1],forward[2]*up[0]-forward[0]*up[2],forward[0]*up[1]-forward[1]*up[0]]);
         const offset=rotate(afterYaw,right,pitch);
         camera.setPosition(...offset.map((x,i)=>target[i]+x*zoom));
-        // The triangulated target sits near the upper face. Aim a little
-        // lower so the chin, neck and recorded room stay in one frame.
+        // Preserve the destination recorded-FOV framing while panning.
         aimPoint=recordedFov?target.map((value,i)=>value-up[i]*radius*zoom*.075):target;
         camera.lookAt(...aimPoint,...up);cameraRevision++;app.renderNextFrame=true;
         if(selections.length&&performance.now()-lastOverlay>32){lastOverlay=performance.now();drawOutline();}};
@@ -300,12 +334,23 @@ async function start(){
       let lastInteraction=-2000;
       const interaction=()=>{if(performance.now()-lastInteraction>1800){lastInteraction=performance.now();console.log('SELF_GS_VIEWER_INTERACTION');}};
       const pointer=event=>{const r=canvas.getBoundingClientRect();return {x:event.clientX-r.left,y:event.clientY-r.top};};
-      const movePointers=new Map();let pinchDistance=0;
-      const pointerGap=()=>{const points=[...movePointers.values()];return Math.hypot(points[0].x-points[1].x,points[0].y-points[1].y);};
+      const endTwoFinger=()=>{twoFinger=null;};
+      const freezeOnRelease=()=>{ // last finger gone: stop exactly where the screen is
+        targetYaw=yaw;targetPitch=pitch;targetZoom=zoom;
+        if(pivotGoal)pivotGoal=target.slice();
+      };
       canvas.addEventListener('pointerdown',event=>{interaction();touching=true;lastX=event.clientX;lastY=event.clientY;canvas.setPointerCapture(event.pointerId);
         if(mode==='move'){
           movePointers.set(event.pointerId,{x:event.clientX,y:event.clientY});
-          if(movePointers.size===2)pinchDistance=pointerGap();
+          // Two-finger start: rebase the gesture to the CURRENT live state and
+          // freeze rotation targets; the third+ finger never disturbs the
+          // tracked pair (fixed earliest two IDs).
+          if(movePointers.size>=2&&!twoFinger){
+            const ids=[...movePointers.keys()].slice(0,2);
+            const pts=ids.map(id=>movePointers.get(id));
+            twoFinger={ids,dirty:false,gap0:Math.max(1,Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y)),
+              zoom0:targetZoom,mPrev:{x:(pts[0].x+pts[1].x)/2,y:(pts[0].y+pts[1].y)/2}};
+          }
           return;
         }
         if(mode==='lasso'){polygon=[pointer(event)];drawOutline();}});
@@ -316,19 +361,22 @@ async function start(){
         else{
           if(!movePointers.has(event.pointerId))return;
           movePointers.set(event.pointerId,{x:event.clientX,y:event.clientY});
-          if(movePointers.size>=2){
-            const distance=pointerGap();
-            if(pinchDistance>4&&distance>4)targetZoom=clampZoom(targetZoom*pinchDistance/distance);
-            pinchDistance=distance;
-          }else{
+          if(twoFinger){
+            // Two-finger state is only marked dirty here; the update loop
+            // consumes the LATEST pair once per rendered frame.
+            if(twoFinger.ids.includes(event.pointerId))twoFinger.dirty=true;
+          }else if(movePointers.size===1){
             targetYaw=Math.max(yawBounds[0],Math.min(yawBounds[1],targetYaw+(event.clientX-lastX)*.008));
             targetPitch=Math.max(pitchBounds[0],Math.min(pitchBounds[1],targetPitch+(event.clientY-lastY)*.008));
           }
         }
         lastX=event.clientX;lastY=event.clientY;});
       canvas.addEventListener('pointerup',event=>{if(mode==='move'){
-        movePointers.delete(event.pointerId);touching=movePointers.size>0;pinchDistance=0;
-        if(touching){const remaining=movePointers.values().next().value;lastX=remaining.x;lastY=remaining.y;}
+        movePointers.delete(event.pointerId);
+        if(twoFinger&&twoFinger.ids.includes(event.pointerId))endTwoFinger(); // 2->1: rebase the survivor's orbit anchor
+        touching=movePointers.size>0;
+        if(!touching)freezeOnRelease(); // stop exactly where the screen is
+        else if(movePointers.size===1){const remaining=movePointers.values().next().value;lastX=remaining.x;lastY=remaining.y;}
         return;
       }if(!touching)return;touching=false;if(mode!=='lasso')return;
         try{const first=polygon[0],last=polygon[polygon.length-1];
@@ -341,8 +389,8 @@ async function start(){
           const slot=selectionSlot(selections.length,appendNext);
           const regionId=selections[slot]?.regionId||`gs-selected-${slot+1}`;
           mask=result.mask;selected=result.selected;selectedPolygon=polygon.slice();selectionYaw=yaw;selectionPitch=pitch;
-          selectionWidth=r.width;selectionHeight=r.height;
-          const entry={regionId,mask:mask.slice(),polygon:polygon.slice(),yaw,pitch,width:r.width,height:r.height,
+          selectionWidth=r.width;selectionHeight=r.height;selectionTarget=target.slice();selectionZoom=zoom;
+          const entry={regionId,mask:mask.slice(),polygon:polygon.slice(),yaw,pitch,target:target.slice(),zoom,width:r.width,height:r.height,
             samples:sampleMask(mask)};
           if(slot===selections.length)selections.push(entry);else selections[slot]=entry;
           appendNext=false;
@@ -352,8 +400,12 @@ async function start(){
           report('SELECTED',t('selected',selections.length));
         }catch(error){send('GS_FAILED',{message:String(error)});report('SELECTION_FAILED',String(error));}
         polygon=[];drawOutline();});
-      canvas.addEventListener('pointercancel',event=>{movePointers.delete(event.pointerId);touching=movePointers.size>0;pinchDistance=0;
-        if(touching){const remaining=movePointers.values().next().value;lastX=remaining.x;lastY=remaining.y;}
+      canvas.addEventListener('pointercancel',event=>{
+        movePointers.delete(event.pointerId);
+        if(twoFinger&&twoFinger.ids.includes(event.pointerId))endTwoFinger();
+        touching=movePointers.size>0;
+        if(!touching)freezeOnRelease();
+        else if(movePointers.size===1){const remaining=movePointers.values().next().value;lastX=remaining.x;lastY=remaining.y;}
         polygon=[];drawOutline();});
       canvas.addEventListener('wheel',event=>{targetZoom=clampZoom(targetZoom*Math.exp(event.deltaY*.001));event.preventDefault();},{passive:false});
       command=payload=>{
@@ -444,7 +496,8 @@ async function start(){
               ctx.restore();
             }
           }
-          if(selectedPolygon.length>=3&&Math.abs(yaw-selectionYaw)<.04&&Math.abs(pitch-selectionPitch)<.04&&
+          if(selectedPolygon.length>=3&&selectionTarget.every((value,i)=>Math.abs(value-target[i])<radius*1e-6)&&
+            Math.abs(zoom-selectionZoom)<1e-6&&Math.abs(yaw-selectionYaw)<.04&&Math.abs(pitch-selectionPitch)<.04&&
             Math.abs(r.width-selectionWidth)<1&&Math.abs(r.height-selectionHeight)<1){ctx.save();ctx.scale(image.width/r.width,image.height/r.height);ctx.beginPath();ctx.moveTo(selectedPolygon[0].x,selectedPolygon[0].y);
             for(let i=1;i<selectedPolygon.length;i++)ctx.lineTo(selectedPolygon[i].x,selectedPolygon[i].y);ctx.closePath();ctx.strokeStyle='#D7EAFF';ctx.lineWidth=3;ctx.stroke();ctx.restore();}
           sendBytes('gs-annotated',pngBytes(image.toDataURL('image/png')));return;}

@@ -14,6 +14,8 @@ function cameraHarness(){
   const state={preview:false,touching:false,yaw:0,pitch:0,zoom:1,
     targetYaw:.4,targetPitch:-.2,targetZoom:1.6,firstCamera:true,
     setMotionResolution:()=>{},original:[0,0,3],up:[0,1,0],target:[0,0,0],
+    twoFinger:null,pivotGoal:null,portrait2:false,userTouched:false,aimPoint:null,
+    canvas:{getBoundingClientRect:()=>({width:720,height:1280,left:0,top:0})},
     rotate:v=>v,normal:v=>{const n=Math.hypot(...v);return v.map(x=>x/n);},
     camera:{setPosition:()=>{},lookAt:()=>{}},radius:3,recordedFov:false,
     app:{renderNextFrame:false},cameraRevision:0,selections:[]};
@@ -49,11 +51,13 @@ test('initial call and invalid dt stay finite; resumed frames are bounded withou
 function pointerHarness(){
   const events={};
   const state={mode:'move',touching:false,lastX:0,lastY:0,movePointers:new Map(),
-    pinchDistance:0,polygon:[],targetYaw:0,targetPitch:0,targetZoom:1,
+    polygon:[],targetYaw:0,targetPitch:0,targetZoom:1,twoFinger:null,userTouched:false,
     yawBounds:[-Math.PI,Math.PI],pitchBounds:[-1,1],
     canvas:{addEventListener:(type,handler)=>{events[type]=handler;},setPointerCapture:()=>{}},
     interaction:()=>{},drawOutline:()=>{},clampZoom:v=>v};
   state.pointerGap=()=>{const p=[...state.movePointers.values()];return Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);};
+  state.endTwoFinger=()=>{state.twoFinger=null;};
+  state.freezeOnRelease=()=>{};
   vm.createContext(state);
   vm.runInContext(section("canvas.addEventListener('pointerdown'","      canvas.addEventListener('wheel'"),state);
   return {state,events};
@@ -67,7 +71,7 @@ for(const cancelledId of [1,2])test(`cancelling pointer ${cancelledId} rebases t
   events.pointermove({pointerId:cancelledId,clientX:initial.x,clientY:initial.y});
   events.pointercancel({pointerId:cancelledId});
   const remainingId=cancelledId===1?2:1,remaining=h.movePointers.get(remainingId);
-  assert.equal(h.touching,true);assert.equal(h.pinchDistance,0);
+  assert.equal(h.touching,true);assert.equal(h.twoFinger,null);
   assert.equal(h.lastX,remaining.x);assert.equal(h.lastY,remaining.y);
   events.pointermove({pointerId:remainingId,clientX:remaining.x+5,clientY:remaining.y+2});
   close(h.targetYaw,.04,'small remaining yaw delta');close(h.targetPitch,.016,'small remaining pitch delta');
