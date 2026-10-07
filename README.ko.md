@@ -60,6 +60,7 @@ npm ci
 DevEco Studio에서 저장소 루트를 열고 `entry` 모듈과 대상 기기를 선택해 실행합니다. 로컬 빌드 스크립트도 제공됩니다.
 
 ```powershell
+New-Item -ItemType Directory -Force artifacts | Out-Null
 .\scripts\Build-Hap.ps1
 ```
 

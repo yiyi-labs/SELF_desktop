@@ -60,6 +60,7 @@ npm ci
 Open the repository root in DevEco Studio, select the `entry` module and run on your target device. A local build script is also provided:
 
 ```powershell
+New-Item -ItemType Directory -Force artifacts | Out-Null
 .\scripts\Build-Hap.ps1
 ```
 

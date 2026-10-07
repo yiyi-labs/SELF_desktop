@@ -60,6 +60,7 @@ npm ci
 在 DevEco Studio 中打开仓库根目录，选择 `entry` 模块与目标设备运行。项目也提供本机构建脚本：
 
 ```powershell
+New-Item -ItemType Directory -Force artifacts | Out-Null
 .\scripts\Build-Hap.ps1
 ```
 

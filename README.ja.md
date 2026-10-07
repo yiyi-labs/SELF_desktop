@@ -60,6 +60,7 @@ npm ci
 DevEco Studio でリポジトリのルートを開き、`entry` モジュールと対象デバイスを選んで実行します。ローカルのビルドスクリプトも利用できます。
 
 ```powershell
+New-Item -ItemType Directory -Force artifacts | Out-Null
 .\scripts\Build-Hap.ps1
 ```
 
