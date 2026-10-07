@@ -1,0 +1,11 @@
+✔ live camera preserves actual quaternion orientation, pan, pitch, roll, zoom and FOV (1.2198ms)
+✔ saved front uses production projected fit on both portrait and landscape screens without face analysis (1.194ms)
+✔ applying arrival leaves durable front untouched; next open recovers saved front (0.2413ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 866.003

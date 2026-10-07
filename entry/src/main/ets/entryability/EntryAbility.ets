@@ -16,6 +16,10 @@ export default class EntryAbility extends UIAbility {
   onCreate(want:Want):void{this.openWaiting(want);}
   onNewWant(want:Want,_launchParam:AbilityConstant.LaunchParam):void{this.openWaiting(want);}
   private openWaiting(want:Want):void{
+    const transferProbe=want.parameters?.selfTransferProbe;
+    if(typeof transferProbe==='number')this.selfTransfer?.probeSend(transferProbe);
+    const transferDiagnostic=want.parameters?.selfTransferDiagnostic;
+    if(typeof transferDiagnostic==='number')this.selfTransfer?.writeDiagnostics(transferDiagnostic);
     this.handleTransferWant(want);
     if(want.parameters?.reconstructionWaiting===true)
       AppStorage.setOrCreate('selfReconstructionOpen',(AppStorage.get<number>('selfReconstructionOpen')||0)+1);

@@ -69,7 +69,8 @@ const imports = {
   '@kit.AbilityKit': { bundleManager: { BundleFlag: { GET_BUNDLE_INFO_DEFAULT: 0 }, getBundleInfoForSelfSync: () => ({ versionName: '0.1.0' }) } },
   '@kit.CoreFileKit': { fileIo, hash: { hash: async filename => sha(filename) }, statfs: { getFreeSize: async () => freeBytes },
     fileUri: { getUriFromPath: value => pathToFileURL(value).href, FileUri: class { constructor(value) { this.path = fileURLToPath(value).replaceAll('\\', '/'); } } } },
-  '@kit.ArkTS': { util: { generateRandomUUID: () => crypto.randomUUID(), TextEncoder: class { encodeInto(value) { return new TextEncoder().encode(value); } } } },
+  '@kit.ArkTS': { util: { generateRandomUUID: () => crypto.randomUUID(), TextEncoder: class { encodeInto(value) { return new TextEncoder().encode(value); } },
+    Base64Helper: class { decodeSync(value) { return new Uint8Array(Buffer.from(value, 'base64')); } encodeToStringSync(value) { return Buffer.from(value).toString('base64'); } } } },
   '@kit.BasicServicesKit': { deviceInfo: sdk, zlib }, '@kit.MediaLibraryKit': {},
   '@kit.ShareKit': { harmonyShare: share, systemShare: { SharedData, getSharedData: async want => want.data } },
   '@kit.ArkData': { uniformTypeDescriptor: { getTypeDescriptor: value => ({ belongsTo: target => target === 'general.file' && value === 'general.zip-archive' }) } }
@@ -188,18 +189,19 @@ test('bridge uses real window identity, exact callback off, exclusive directions
   sdk.deviceType = 'tablet'; bridge.clear();
 });
 
-test('official receive callback waits for BOTH data and success; cancellation never publishes', async () => {
-  for (const order of ['data-first', 'result-first', 'cancel']) {
+test('official receive callback waits for BOTH data and success; accepts native sandbox paths; cancellation never publishes', async () => {
+  for (const order of ['data-first', 'result-first', 'local-path', 'cancel']) {
     const ctx = context('receive-order-' + order), bridge = new HarmonyShareBridge(ctx.cacheDir + '/self_transfer', 851);
     let delivered = 0, failures = 0, callbacks, directory;
-    bridge.listenReceive(() => { bridge.clear(); return true; }, () => delivered++, () => failures++);
+    bridge.listenReceive(() => true, () => delivered++, () => failures++);
     const listener = share.receive.get(851);
-    listener({ reject: async () => {}, receive: async (uri, cb) => { directory = fileURLToPath(uri); callbacks = cb; } });
+    listener({ reject: async () => {}, receive: async (uri, cb) => { assert.ok(share.receive.has(851), 'sandbox receiver must remain registered'); directory = fileURLToPath(uri); callbacks = cb; } });
     await flush(); assert.ok(callbacks);
     const filename = path.join(directory, 'model.self3d.zip'); fs.writeFileSync(filename, 'zip-fixture');
-    const data = new SharedData({ utd: 'general.zip-archive', uri: pathToFileURL(filename).href });
+    const data = new SharedData({ utd: order === 'local-path' ? 'general.object' : 'general.zip-archive', uri: order === 'local-path' ? filename.replaceAll('\\', '/') : pathToFileURL(filename).href });
     if (order === 'data-first') { callbacks.onDataReceived(data); assert.equal(delivered, 0); callbacks.onResult(0); }
     if (order === 'result-first') { callbacks.onResult(0); assert.equal(delivered, 0); callbacks.onDataReceived(data); }
+    if (order === 'local-path') { callbacks.onResult(0); callbacks.onDataReceived(data); }
     if (order === 'cancel') { callbacks.onResult(2); callbacks.onDataReceived(data); assert.equal(delivered, 0); assert.equal(failures, 1); assert.equal(fs.existsSync(directory), false); }
     else { assert.equal(delivered, 1); assert.equal(failures, 0); callbacks.onResult(0); assert.equal(delivered, 1); }
     bridge.clear();
@@ -207,6 +209,16 @@ test('official receive callback waits for BOTH data and success; cancellation ne
 });
 
 const senderContext = context('sender-harmony'), senderModel = seed(senderContext), senderPackages = new SelfTransferPackage(senderContext);
+test('sandbox reception rejects files outside its isolated directory without touching them', async () => {
+  const ctx = context('sandbox-outside'), bridge = new HarmonyShareBridge(ctx.cacheDir + '/self_transfer', 853);
+  const outside = ctx.filesDir + '/untouched.zip'; fs.writeFileSync(outside, 'existing-user-file');
+  let delivered = 0, failures = 0, callbacks, directory;
+  bridge.listenReceive(() => true, () => delivered++, () => failures++);
+  share.receive.get(853)({ reject: async () => {}, receive: async (uri, cb) => { directory = fileURLToPath(uri); callbacks = cb; } });
+  await flush(); callbacks.onDataReceived(new SharedData({ utd: 'general.object', uri: outside.replaceAll('\\', '/') })); callbacks.onResult(0);
+  assert.equal(delivered, 0); assert.equal(failures, 1); assert.equal(fs.existsSync(directory), false);
+  assert.equal(fs.readFileSync(outside, 'utf8'), 'existing-user-file'); bridge.clear();
+});
 let prepared;
 test('create standard package, manifest, immutable PLY, cache reuse and optional camera', async () => {
   prepared = await senderPackages.prepare(senderModel.id, 'revision1');
@@ -222,6 +234,44 @@ test('atomic repository import, new local ID, duplicate package, no overwrite', 
   assert.equal(sha(`${ctx.filesDir}/models/${result.modelId}/portrait.gaussian.ply`), sha(senderModel.path));
   assert.equal((await packages.importPackage(incoming(ctx, prepared.path), () => false)).modelId, result.modelId);
   assert.equal(fs.readdirSync(ctx.filesDir + '/models').length, 2); assert.equal(fs.readdirSync(ctx.cacheDir + '/self_transfer/staging').length, 0);
+});
+test('system sandbox listener survives acceptance through file completion, then imports and opens the same named star', async () => {
+  const ctx = context('sandbox-coordinator'), packages = new SelfTransferPackage(ctx);
+  const bridge = new HarmonyShareBridge(packages.root, 852), coordinator = new TransferCoordinator(bridge, packages);
+  let callbacks, directory, opened;
+  coordinator.onImported = value => { opened = value; };
+  coordinator.setForeground(true); coordinator.setSurface({ kind: 'HOME', modelId: '', revision: '' });
+  const listener = share.receive.get(852);
+  const target = { reject: async () => { throw Error('ready receiver rejected'); }, receive: async (uri, cb) => {
+    assert.equal(share.receive.get(852), listener, 'off before receive causes system fallback');
+    directory = fileURLToPath(uri); callbacks = cb;
+  } };
+  listener(target); await flush(); assert.ok(callbacks);
+  let duplicates = 0; listener({ reject: async () => { duplicates++; }, receive: async () => { throw Error('duplicate accepted'); } });
+  assert.equal(duplicates, 1); assert.equal(coordinator.diagnostic().phase, 'TRANSFERRING');
+  const filename = path.join(directory, 'named.self3d.zip'); fs.copyFileSync(prepared.path, filename);
+  callbacks.onDataReceived(new SharedData({ utd: 'general.zip-archive', uri: pathToFileURL(filename).href }));
+  assert.equal(share.receive.get(852), listener); callbacks.onResult(0);
+  for (let attempt = 0; attempt < 200 && !opened; attempt++) await new Promise(resolve => setTimeout(resolve, 5));
+  assert.ok(opened, 'automatic receive must invoke original model-open callback'); assert.equal(opened.name, '测试星辰');
+  assert.equal(sha(`${ctx.filesDir}/models/${opened.modelId}/portrait.gaussian.ply`), sha(senderModel.path));
+  const index = JSON.parse(fs.readFileSync(ctx.filesDir + '/portrait-stars.json', 'utf8'));
+  assert.equal(index.stars.find(star => star.jobId === opened.modelId).name, '测试星辰'); coordinator.dispose();
+});
+test('renaming a star refreshes package metadata without changing its PLY; repeated reception preserves its name', async () => {
+  const ctx = context('rename-sender'), model = seed(ctx), packages = new SelfTransferPackage(ctx);
+  const first = await packages.prepare(model.id, 'same-ply'), digest = sha(model.path);
+  const index = JSON.parse(fs.readFileSync(ctx.filesDir + '/portrait-stars.json', 'utf8'));
+  index.stars[0].name = '晚风与星光 ✦'; json(ctx.filesDir + '/portrait-stars.json', index);
+  const renamed = await packages.prepare(model.id, 'same-ply');
+  assert.notEqual(renamed.packageId, first.packageId); assert.equal(renamed.displayName, index.stars[0].name);
+  assert.equal(sha(model.path), digest);
+  const receiver = context('rename-receiver'), target = new SelfTransferPackage(receiver);
+  const received = await target.importPackage(incoming(receiver, renamed.path), () => false);
+  assert.equal(received.name, index.stars[0].name);
+  const duplicate = await target.importPackage(incoming(receiver, renamed.path), () => false);
+  assert.equal(duplicate.modelId, received.modelId); assert.equal(duplicate.name, received.name);
+  const roundtrip = await target.prepare(received.modelId, 'received'); assert.equal(roundtrip.displayName, received.name);
 });
 for (const mode of ['missing-manifest', 'missing-model', 'bad-sha', 'unsupported-version', 'unknown-required', 'invalid-zip', 'traversal', 'backslash', 'absolute', 'drive', 'duplicate-entry', 'local-central-mismatch', 'local-unicode-path', 'local-size-mismatch', 'unsupported-ply', 'bad-length']) {
   test(`reject ${mode} without publishing partial model; remove staging and incoming`, async () => {
@@ -288,7 +338,61 @@ test('cancelled import and insufficient space never register a model', async () 
 test('saved visual edits cannot silently send the original PLY', async () => {
   const ctx = context('edits'), model = seed(ctx), packages = new SelfTransferPackage(ctx);
   json(model.directory + '/portrait.edit.v2.json', { groups: [{ groupId: 'colour-change' }] });
-  await assert.rejects(packages.prepare(model.id, '1'), /恢复原始模型/);
+  await assert.rejects(packages.prepare(model.id, '1'), /试色记录不完整/);
+});
+const maskChecksum = bytes => { let value = 2166136261; for (const byte of bytes) value = Math.imul(value ^ byte, 16777619) >>> 0; return value.toString(16); };
+const savedHistory = model => {
+  const mask = Buffer.alloc(32); mask.fill(255, 4, 18); mask[4] = 64;
+  return { schemaVersion: 2, assetId: model.id, assetBytes: fs.statSync(model.path).size, splatCount: 32,
+    groups: [{ groupId: 'lipstick', label: '涂成红色口红', createdAt: 1,
+      careGuide: { privatePlannerContext: 'must-not-transfer' }, layers: [{ layerId: 'rose-1', regionId: 'selected-1', preset: 'rose', strength: 0.32,
+        maskBase64: mask.toString('base64'), maskChecksum: maskChecksum(mask) }] }] };
+};
+test('all four directions preserve saved colour layers and name with remapped local IDs and unchanged PLY', async () => {
+  for (const source of ['olay', 'olay_harmony']) for (const target of ['olay', 'olay_harmony']) {
+    const a = context('colour-source-' + source + target), b = context('colour-target-' + source + target), model = seed(a);
+    const history = savedHistory(model); json(model.directory + '/portrait.edit.v2.json', history);
+    const Source = loader(project + '/../' + source)('SelfTransferPackage').SelfTransferPackage;
+    const Target = loader(project + '/../' + target)('SelfTransferPackage').SelfTransferPackage;
+    const packages = new Source(a), first = await packages.prepare(model.id, 'same-ply');
+    const received = await new Target(b).importPackage(incoming(b, first.path), () => false);
+    const restored = JSON.parse(fs.readFileSync(`${b.filesDir}/models/${received.modelId}/portrait.edit.v2.json`, 'utf8'));
+    assert.equal(restored.assetId, received.modelId); assert.notEqual(restored.assetId, model.id);
+    assert.equal(received.name, '测试星辰'); assert.equal(restored.groups[0].label, history.groups[0].label);
+    assert.deepEqual(restored.groups[0].layers, history.groups[0].layers); assert.equal('careGuide' in restored.groups[0], false);
+    assert.equal(sha(`${b.filesDir}/models/${received.modelId}/portrait.gaussian.ply`), sha(model.path));
+    const replay = async (root, groups) => {
+      const { applyDigitalLayers } = await import(pathToFileURL(path.resolve(root, 'viewer-gs/gs-edit.js')).href);
+      const channels = [new Float32Array(32), new Float32Array(32), new Float32Array(32)];
+      const data = { numSplats: 32, getProp: name => channels[Number(name.slice(-1))] };
+      const layers = groups.flatMap(group => group.layers.map(layer => ({ preset: layer.preset, strength: layer.strength,
+        mask: new Uint8Array(Buffer.from(layer.maskBase64, 'base64')) })));
+      applyDigitalLayers({ gsplatData: data, updateColorData: () => {} }, channels.map(channel => channel.slice()), layers);
+      return channels;
+    };
+    const before = await replay(project + '/../' + source, history.groups), after = await replay(project + '/../' + target, restored.groups);
+    assert.deepEqual(after, before, 'actual source and receiver tint replays must produce identical float32 colours');
+    assert.notEqual(after[1][8], 0);
+    history.groups[0].layers[0].strength = .5; json(model.directory + '/portrait.edit.v2.json', history);
+    const changed = await packages.prepare(model.id, 'same-ply'); assert.notEqual(changed.packageId, first.packageId);
+  }
+});
+test('legacy saved colour masks migrate to reloadable history; corrupt saved masks never publish', async () => {
+  const a = context('legacy-colour'), model = seed(a), mask = Buffer.alloc(32, 1), packages = new SelfTransferPackage(a);
+  fs.writeFileSync(model.directory + '/portrait.edit.mask', mask);
+  json(model.directory + '/portrait.edit.json', { schemaVersion: 1, assetId: model.id, assetBytes: fs.statSync(model.path).size,
+    splatCount: 32, maskChecksum: maskChecksum(mask), preset: 'terracotta', strength: .18 });
+  const prepared = await packages.prepare(model.id, 'legacy'), b = context('legacy-colour-target');
+  const result = await new SelfTransferPackage(b).importPackage(incoming(b, prepared.path), () => false);
+  const restored = JSON.parse(fs.readFileSync(`${b.filesDir}/models/${result.modelId}/portrait.edit.v2.json`, 'utf8'));
+  assert.equal(restored.groups[0].layers[0].maskBase64, mask.toString('base64'));
+  const { validateEdits } = load('SelfTransferEdits'), history = savedHistory(model);
+  const portable = { schema: 'self.transfer.edits', version: 1, plySha256: sha(model.path), assetBytes: history.assetBytes, splatCount: 32, groups: history.groups };
+  for (const change of [v => v.splatCount++, v => v.plySha256 = '0'.repeat(64), v => v.groups[0].layers[0].maskChecksum = 'bad',
+    v => v.groups[0].layers[0].maskBase64 = Buffer.alloc(31).toString('base64'), v => v.groups[0].layers[0].preset = 'unknown',
+    v => v.groups[0].layers[0].strength = 1]) {
+    const invalid = structuredClone(portable); change(invalid); assert.throws(() => validateEdits(invalid, history.assetBytes, sha(model.path), 32));
+  }
 });
 test('four code/protocol directions use the receiver adapter independent of producer.variant', async () => {
   for (const source of ['olay', 'olay_harmony']) for (const target of ['olay', 'olay_harmony']) {
@@ -315,10 +419,12 @@ test('saved PLY cross-app roundtrips, actual PlayCanvas parser and bounded file 
     const Source = loader(sourceRoot)('SelfTransferPackage').SelfTransferPackage, Target = loader(targetRoot)('SelfTransferPackage').SelfTransferPackage;
     const inspect = loader(sourceRoot)('SelfTransferPly').inspectPly;
     const a = context('real-source-' + label), b = context('real-target-' + label), model = seed(a, real), before = await inspect(real);
-    const start = performance.now(), prepared = await new Source(a).prepare(model.id, 'saved'), packedAt = performance.now();
+    const packages=new Source(a);
+    const start = performance.now(), base = await packages.prepare(model.id, 'saved'), readyAt = performance.now();
+    const prepared=await packages.prepareArrival(base,{schema:'self.transfer.viewer',version:1,camera:[2,1,3],target:[0,0,0],up:[0,1,0],fovDegrees:45}), packedAt = performance.now();
     const result = await new Target(b).importPackage(incoming(b, prepared.path), () => false), importedAt = performance.now();
     const received = `${b.filesDir}/models/${result.modelId}/portrait.gaussian.ply`, after = await inspect(received);
-    assert.deepEqual(after, before); assert.equal(sha(real), sha(received));
+    assert.deepEqual(after, before); assert.equal(sha(real), sha(received));assert.deepEqual(result.arrivalView.camera,[2,1,3]);
     // Expose the unmodified viewer parser's internal readPly for host parsing only; no GPU resource is created.
     const parserFile = targetRoot + '/node_modules/playcanvas/build/playcanvas/src/framework/parsers/ply.js';
     let parserSource = fs.readFileSync(parserFile, 'utf8').replace(/from "(\.[^"]+)"/g, (_, relative) => 'from "' + pathToFileURL(path.resolve(path.dirname(parserFile), relative)).href + '"');
@@ -330,7 +436,7 @@ test('saved PLY cross-app roundtrips, actual PlayCanvas parser and bounded file 
     for (const axis of ['x', 'y', 'z', 'opacity', 'scale_0', 'rot_0', 'f_dc_0']) assert.equal(data.getProp(axis).length, before.vertexCount);
     const entry = { source, target, sample: label, sourcePath: path.relative(sourceRoot, real).replaceAll('\\', '/'), bytes: fs.statSync(real).size,
       sourceSha256: sha(real), receivedSha256: sha(received), match: true, vertexCount: before.vertexCount, min: before.min, max: before.max,
-      packMs: Math.round(packedAt - start), importMs: Math.round(importedAt - packedAt), viewerParser: 'PlayCanvas 2.22.4 readPly passed; GPU/visual appearance not tested',
+      packMs: Math.round(readyAt - start), capturePackageMs:Math.round(packedAt-readyAt), importMs: Math.round(importedAt - packedAt), viewerParser: 'PlayCanvas 2.22.4 readPly passed; GPU/visual appearance not tested',
       hostPeakRssBytes: process.resourceUsage().maxRSS * 1024, codec: 'Python zipfile desktop double; real official zlib tested separately on devices' };
     evidence.push(entry); console.info('SELF_REAL_MODEL_EVIDENCE ' + JSON.stringify(entry));
   }
@@ -339,3 +445,139 @@ test('saved PLY cross-app roundtrips, actual PlayCanvas parser and bounded file 
 });
 
 test.after(() => fs.rmSync(temporary, { recursive: true, force: true }));
+
+const cameraModules = load('SelfTransferCamera');
+const liveCamera = { schema: 'self.transfer.viewer', version: 1, camera: [2, 1, 3], target: [.2, .1, 0], up: [0, 1, 0], fovDegrees: 52, nearClip: .001, farClip: 10000 };
+const frontProfile = model => ({ version: 2, resolverVersion: 2, verified: true,
+  configHash: cameraModules.PORTRAIT_CONFIG, modelTransformHash: 'identity-ply-v1', renderContractId: 'pc2.22.4-texread-top-down-m0px',
+  assetHash: sha(model.path), sourceKind: 'capture-reference', inputVersion: 'private-source-input', referenceFrameKey: 'private-source-frame',
+  framingSource: 'face-only', pivot: [0, 0, 0], front: [0, 0, 1], up: [0, 1, 0], headHalf: { x: .3, u: .4, f: .2 },
+  fitDistance: 1.8, fitFovY: 60, fitAspect: .5, sceneR: 3 });
+test('four directions preserve current view once, durable verified front, saved edits and name independently', async () => {
+  for (const source of ['olay', 'olay_harmony']) for (const target of ['olay', 'olay_harmony']) {
+    const a = context('camera-source-' + source + target), b = context('camera-target-' + source + target), model = seed(a);
+    const originalView = JSON.parse(fs.readFileSync(model.directory + '/portrait.view.json', 'utf8'));
+    originalView.assetSha256 = sha(model.path); originalView.portraitView = frontProfile(model);
+    json(model.directory + '/portrait.view.json', originalView); json(model.directory + '/portrait.edit.v2.json', savedHistory(model));
+    const Source = loader(project + '/../' + source)('SelfTransferPackage').SelfTransferPackage;
+    const targetLoader = loader(project + '/../' + target), Target = targetLoader('SelfTransferPackage').SelfTransferPackage;
+    const packages = new Source(a), base = await packages.prepare(model.id, 'same'), baseHash = sha(base.path);
+    const outgoing = await packages.prepareArrival(base, liveCamera);
+    assert.notEqual(outgoing.packageId, base.packageId); assert.equal(sha(base.path), baseHash, 'published base archive stays immutable');
+    assert.equal(fs.existsSync(base.exportDirectory + '/viewer/arrival_view.json'), false);
+    const recipient = new Target(b), received = await recipient.importPackage(incoming(b, outgoing.path), () => false);
+    assert.deepEqual(received.arrivalView, liveCamera); assert.equal(received.name, '测试星辰');
+    const stored = JSON.parse(fs.readFileSync(`${b.filesDir}/models/${received.modelId}/portrait.view.json`, 'utf8'));
+    assert.deepEqual(stored.camera, [0, 0, 1.8]); assert.notDeepEqual(stored.camera, liveCamera.camera);
+    assert.equal(stored.portraitView.sourceKind, 'self-transfer'); assert.equal('inputVersion' in stored.portraitView, false);
+    assert.equal('referenceFrameKey' in stored.portraitView, false); assert.equal('transferArrivalView' in stored, false);
+    const session = targetLoader('SelfTransferCamera').SelfTransferCameraSession;
+    session.arrive(received.modelId, received.arrivalView);
+    assert.deepEqual(session.take(received.modelId), liveCamera); assert.equal(session.take(received.modelId), undefined, 'later open uses only durable view');
+    const duplicate = await recipient.importPackage(incoming(b, outgoing.path), () => false);
+    assert.equal(duplicate.modelId, received.modelId); assert.deepEqual(duplicate.arrivalView, liveCamera);
+    const reexported = await recipient.prepare(received.modelId, 'again');
+    const onward = context('camera-onward-' + source + target);
+    const next = await new Source(onward).importPackage(incoming(onward, reexported.path), () => false);
+    assert.equal(next.arrivalView, undefined, 'previous arrival cannot leak into re-export');
+    const nextView = JSON.parse(fs.readFileSync(`${onward.filesDir}/models/${next.modelId}/portrait.view.json`, 'utf8'));
+    assert.deepEqual(nextView.portraitView, stored.portraitView);
+    const second = await packages.prepareArrival(base, { ...liveCamera, camera: [4, 1, 3] });
+    const secondReceived = await recipient.importPackage(incoming(b, second.path), () => false);
+    assert.deepEqual(secondReceived.arrivalView.camera, [4, 1, 3]);
+  }
+});
+test('capture provider identity and lifetime prevent sending another model camera', async () => {
+  const { SelfTransferCameraSession: session } = cameraModules;
+  const provider = async () => liveCamera;
+  session.register('rendered-model', provider); assert.deepEqual(await session.capture('rendered-model'), liveCamera);
+  await assert.rejects(session.capture('other-model'));
+  let resolve; const pending = () => new Promise(r => { resolve = r; }); session.register('rendered-model', pending);
+  const captured = session.capture('rendered-model'); session.unregister('rendered-model', pending); resolve(liveCamera);
+  await assert.rejects(captured, /页面已改变/);
+  session.register('rendered-model', provider); session.unregister('rendered-model', pending);
+  assert.deepEqual(await session.capture('rendered-model'), liveCamera); session.unregister('rendered-model', provider);
+});
+test('corrupt or mismatched verified front cannot publish; profile changes invalidate prepared cameras', async () => {
+  const a = context('camera-corrupt'), model = seed(a), profile = frontProfile(model), packages = new SelfTransferPackage(a);
+  const view = JSON.parse(fs.readFileSync(model.directory + '/portrait.view.json', 'utf8')); view.assetSha256 = sha(model.path); view.portraitView = profile;
+  json(model.directory + '/portrait.view.json', view);
+  const first = await packages.prepare(model.id, 'same');
+  profile.fitDistance = 2.4; json(model.directory + '/portrait.view.json', view);
+  await assert.rejects(packages.prepareArrival(first, liveCamera), /记录已改变/);
+  const second = await packages.prepare(model.id, 'same'); assert.notEqual(first.packageId, second.packageId);
+  for (const change of [p => p.assetHash = '0'.repeat(64), p => p.up = [0, 0, 1], p => p.headHalf.u = -1, p => p.fitFovY = 190, p => p.fitAspect = NaN]) {
+    const damaged = structuredClone(profile); change(damaged);
+    assert.throws(() => cameraModules.validateFrontView({ schema: 'self.transfer.front-view', version: 1, plySha256: sha(model.path), portraitView: damaged }, sha(model.path)));
+  }
+  for (const change of [v => v.up = [0, 0, 0], v => v.target = v.camera.slice(), v => v.farClip = .0001]) {
+    const damaged = structuredClone(liveCamera); change(damaged); await assert.rejects(packages.prepareArrival(second, damaged));
+  }
+});
+test('sender shares the new current camera package and retains its listener until native submission', async () => {
+  const a = context('camera-native-sender'), model = seed(a), packages = new SelfTransferPackage(a);
+  const bridge = new HarmonyShareBridge(packages.root, 942), coordinator = new TransferCoordinator(bridge, packages);
+  bridge.prepareSend = prepared => packages.prepareArrival(prepared, liveCamera);
+  coordinator.setForeground(true); coordinator.setSurface({ kind: 'VIEWER', modelId: model.id, revision: 'one' });
+  for (let i = 0; i < 200 && coordinator.diagnostic().phase !== 'SEND_READY'; i++) await new Promise(r => setTimeout(r, 5));
+  const listener = share.send.get(942); assert.ok(listener); let outgoing;
+  let resolveShare; const submitted = new Promise(r => { resolveShare = r; });
+  listener({ reject: async () => { throw Error('ready sender rejected'); }, share: async data => { outgoing = data.record; assert.equal(share.send.get(942), listener); await submitted; } });
+  for (let i = 0; i < 200 && !outgoing; i++) await new Promise(r => setTimeout(r, 5));
+  assert.ok(outgoing); assert.equal(coordinator.diagnostic().phase, 'TRANSFERRING');
+  const b = context('camera-native-receiver'), received = await new SelfTransferPackage(b).importPackage(incoming(b, fileURLToPath(outgoing.uri)), () => false);
+  assert.deepEqual(received.arrivalView, liveCamera); assert.equal(received.packageId, outgoing.extraData.packageId);
+  resolveShare(); await flush(); coordinator.dispose();
+});
+test('both engineering trees keep identical transfer contracts and camera helpers', () => {
+  const counterpart=path.resolve(project,'..',path.basename(project)==='olay'?'olay_harmony':'olay').replaceAll('\\','/');
+  for (const name of fs.readdirSync(project + '/entry/src/main/ets/transfer').filter(n => n.endsWith('.ets'))) {
+    assert.equal(fs.readFileSync(project + '/entry/src/main/ets/transfer/' + name, 'utf8').replaceAll('\r\n', '\n'),
+      fs.readFileSync(counterpart + '/entry/src/main/ets/transfer/' + name, 'utf8').replaceAll('\r\n', '\n'), name);
+  }
+  for (const name of ['transfer-camera.js', 'transfer-camera-math.js']) assert.equal(fs.readFileSync(project + '/viewer-gs/' + name, 'utf8'), fs.readFileSync(counterpart + '/viewer-gs/' + name, 'utf8'));
+});
+
+test('recorded pitch-limited front keeps its status and persists without repeating analysis', async () => {
+  const a=context('camera-pitch-sender'), b=context('camera-pitch-receiver'), model=seed(a), profile=frontProfile(model);
+  profile.verified=false;profile.pitchLimited=true;profile.confidence='visible-face-pitch-limited';profile.attemptVersion='source-reference-r4-pitch-fallback-20261006';
+  json(model.directory+'/portrait.fallback.json',profile);
+  const packages=new SelfTransferPackage(a), base=await packages.prepare(model.id,'fallback'), outgoing=await packages.prepareArrival(base,liveCamera);
+  const result=await new SelfTransferPackage(b).importPackage(incoming(b,outgoing.path),()=>false);
+  const directory=b.filesDir+'/models/'+result.modelId, stored=JSON.parse(fs.readFileSync(directory+'/portrait.view.json','utf8'));
+  assert.equal(stored.portraitView,undefined);assert.equal(stored.portraitFallback.verified,false);assert.equal(stored.portraitFallback.pitchLimited,true);
+  assert.equal(stored.portraitFallback.attemptVersion,profile.attemptVersion);assert.equal(stored.portraitFallback.assetHash,sha(model.path));
+  assert.equal(JSON.parse(fs.readFileSync(directory+'/portrait.fallback.json','utf8')).sourceKind,'self-transfer');
+  assert.deepEqual(result.arrivalView,liveCamera);
+});
+
+test('ArkWeb JSON-encoded string result yields the same validated camera as an object result',()=>{
+  const {parseWebCameraResult,cameraReadDiagnostic}=cameraModules;
+  assert.deepEqual(parseWebCameraResult(JSON.stringify(JSON.stringify(liveCamera))),liveCamera);
+  assert.equal(cameraReadDiagnostic().encoding,'json-string');assert.equal(cameraReadDiagnostic().valid,true);
+  assert.deepEqual(parseWebCameraResult(JSON.stringify(liveCamera)),liveCamera);
+  assert.equal(cameraReadDiagnostic().encoding,'json-object');
+  for(const value of ['null','undefined','"null"','"undefined"','{}',JSON.stringify(JSON.stringify({...liveCamera,up:[0,0,0]}))])assert.throws(()=>parseWebCameraResult(value));
+});
+test('failed touch preparation restores the native sender for a second touch on the same model',async()=>{
+  const ctx=context('camera-failure-recovery'),model=seed(ctx),packages=new SelfTransferPackage(ctx);
+  const bridge=new HarmonyShareBridge(packages.root,954),coordinator=new TransferCoordinator(bridge,packages);
+  let attempts=0;bridge.prepareSend=async prepared=>{if(++attempts===1)throw new contract.PackageValidationError('当前视角读取失败');return packages.prepareArrival(prepared,liveCamera);};
+  coordinator.setForeground(true);coordinator.setSurface({kind:'VIEWER',modelId:model.id,revision:'same'});
+  const ready=async()=>{for(let i=0;i<200&&coordinator.diagnostic().phase!=='SEND_READY';i++)await new Promise(r=>setTimeout(r,5));assert.equal(coordinator.diagnostic().phase,'SEND_READY');};
+  await ready();let rejected=0,shared=0;
+  const target={reject:async()=>{rejected++;},share:async()=>{shared++;}};
+  share.send.get(954)(target);await flush();await ready();
+  assert.equal(rejected,1);assert.equal(shared,0);assert.equal(bridge.diagnostic().sendRegistered,true);
+  assert.match(bridge.diagnostic().lastSendError,/当前视角读取失败/);
+  share.send.get(954)(target);
+  for(let i=0;i<200&&shared===0;i++)await new Promise(r=>setTimeout(r,5));
+  assert.equal(shared,1);await flush();await ready();assert.equal(bridge.diagnostic().sendRegistered,true);coordinator.dispose();
+});
+test('leaving the model during failed camera preparation rearms reception, not the obsolete sender',async()=>{
+  const port=fakeTransport(),coordinator=new TransferCoordinator(port,fakeModels());
+  coordinator.setForeground(true);coordinator.setSurface({kind:'VIEWER',modelId:'one',revision:'same'});await flush();
+  const fail=port.error;assert.equal(port.begin(),true);
+  coordinator.setSurface({kind:'HOME',modelId:'',revision:''});fail(new Error('model changed'));
+  await flush();assert.equal(coordinator.diagnostic().phase,'RECEIVE_READY');assert.equal(port.mode,'RECEIVE');coordinator.dispose();
+});

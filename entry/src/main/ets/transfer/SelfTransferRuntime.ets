@@ -1,11 +1,18 @@
+import { SelfTransferCameraSession,cameraReadDiagnostic,CameraReadDiagnostic } from './SelfTransferCamera';
 import { common, Want } from '@kit.AbilityKit';
 import { fileIo as fs, picker } from '@kit.CoreFileKit';
 import { deviceInfo } from '@kit.BasicServicesKit';
-import { HarmonyShareBridge } from './HarmonyShareBridge';
+import { HarmonyShareBridge, ShareDiagnostic } from './HarmonyShareBridge';
 import { SelfTransferPackage } from './SelfTransferPackage';
 import { TransferCoordinator } from './TransferCoordinator';
-import { TransferSurface } from './TransferState';
+import { PreparedTransfer } from './SelfTransferContract';
+import { TransferSurface, TransferDiagnostic } from './TransferState';
 import { removeTransferTree } from './TransferFiles';
+import { writeText } from './TransferFiles';
+import { hilog } from '@kit.PerformanceAnalysisKit';
+
+interface RuntimeDiagnostic {requestId:number;coordinator:TransferDiagnostic;share:ShareDiagnostic;sendPreparation:SendPreparationDiagnostic;cameraRead:CameraReadDiagnostic;}
+interface SendPreparationDiagnostic {stage:string;error:string;}
 
 /** A window-scoped facade; Ability and pages reuse the same instance. */
 export class SelfTransferRuntime {
@@ -18,6 +25,7 @@ export class SelfTransferRuntime {
   private foreground:boolean=false;
   private handling:boolean=false;
   private disposed:boolean=false;
+  private sendPreparation:SendPreparationDiagnostic={stage:'idle',error:''};
   static bind(context:common.UIAbilityContext,windowId:number):SelfTransferRuntime{
     const existing=SelfTransferRuntime.windows.get(windowId);if(existing)return existing;
     const runtime=new SelfTransferRuntime(context,windowId);SelfTransferRuntime.windows.set(windowId,runtime);return runtime;
@@ -27,9 +35,33 @@ export class SelfTransferRuntime {
   private constructor(context:common.UIAbilityContext,windowId:number){
     this.context=context;this.windowId=windowId;
     this.packages=new SelfTransferPackage(context);this.bridge=new HarmonyShareBridge(this.packages.root,windowId);
+    this.bridge.prepareSend=(prepared:PreparedTransfer)=>this.prepareOutgoing(prepared);
     this.coordinator=new TransferCoordinator(this.bridge,this.packages);
   }
   supported():boolean{return this.bridge.supported();}
+  writeDiagnostics(requestId:number):void{
+    // Explicit debug-only readout. No model path/content/account identifiers and no product UI.
+    if(!this.context.applicationInfo.debug)return;
+    const diagnostic:RuntimeDiagnostic={requestId,coordinator:this.coordinator.diagnostic(),share:this.bridge.diagnostic(),sendPreparation:this.sendPreparation,cameraRead:cameraReadDiagnostic()};
+    const text=JSON.stringify(diagnostic);
+    writeText(this.packages.root+'/diagnostics.json',text);hilog.info(0x0000,'SELFTransfer','%{public}s',text);
+  }
+  private async prepareOutgoing(prepared:PreparedTransfer):Promise<PreparedTransfer>{
+    this.sendPreparation={stage:'capture',error:''};
+    try{
+      const view=await SelfTransferCameraSession.capture(prepared.modelId);
+      this.sendPreparation.stage='native-zip';
+      const outgoing=await this.packages.prepareArrival(prepared,view);
+      this.sendPreparation.stage='ready';return outgoing;
+    }catch(error){this.sendPreparation.error=(error as Error).name+': '+(error as Error).message;throw error as Error;}
+  }
+  async probeSend(requestId:number):Promise<void>{
+    // Explicit debug request exercises real ArkWeb + native ZIP without sharing or changing model data.
+    if(!this.context.applicationInfo.debug||this.disposed||this.surface.kind!=='VIEWER'||this.coordinator.diagnostic().active)return;
+    try{await this.prepareOutgoing(await this.packages.prepare(this.surface.modelId,this.surface.revision));}
+    catch(error){console.error('SELF_TRANSFER_PROBE '+String(error));}
+    finally{this.writeDiagnostics(requestId);}
+  }
   setForeground(value:boolean):void{this.foreground=value;this.coordinator.setForeground(value);this.processWant();}
   setSurface(surface:TransferSurface):void{this.surface=surface;this.coordinator.setSurface(surface);this.processWant();}
   handleWant(want:Want):void{

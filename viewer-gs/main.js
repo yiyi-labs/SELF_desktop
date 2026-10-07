@@ -1,3 +1,4 @@
+import { snapshotCamera,applyTransferCamera,validTransferCamera,savedFrontCamera } from './transfer-camera.js';
 import { Application, Asset, Entity, FILLMODE_FILL_WINDOW, RESOLUTION_AUTO, WORKBUFFER_UPDATE_ONCE, Color, Vec3 } from 'playcanvas';
 import { selectVisibleSplats, normalizeLasso, selectionSlot, shouldRecordLassoPoint, makeOriginalColors, applyDigitalTint, applyDigitalLayers, applyCareScenario, DIGITAL_PRESETS, mortonOrderOf, editableSetFromOrder } from './gs-edit.js';
 
@@ -99,7 +100,7 @@ window.addEventListener('message',event=>{
   port.onmessage=e=>{if(typeof e.data!=='string')return;
     try{const frame=JSON.parse(e.data);
       if(frame.schemaVersion!==1)return;
-      if(frame.type==='INIT'){identity={sessionId:frame.sessionId,assetId:frame.assetId,assetVersion:frame.assetVersion,revision:frame.revision};return;}
+      if(frame.type==='INIT'){identity={sessionId:frame.sessionId,assetId:frame.assetId,assetVersion:frame.assetVersion,revision:frame.revision};window.__selfTransferPresent?.();return;}
       if(!identity||frame.sessionId!==identity.sessionId||frame.assetId!==identity.assetId)return;
       if(frame.type==='GS_COMMAND')command(frame.payload);
     }catch(error){send('GS_FAILED',{message:String(error)});}};
@@ -112,12 +113,17 @@ async function start(){
   const response=await fetch('https://self.local/portrait.view.json');
   if(!response.ok)throw Error(t('viewMissing'));
   const view=await response.json();
+  const rect=canvas.getBoundingClientRect(),front=savedFrontCamera(view,rect.width,rect.height);
+  if(front)applyTransferCamera(view,front);
+  if(!preview&&applyTransferCamera(view,view.transferArrivalView))console.info('SELF_TRANSFER_ARRIVAL_CAMERA_APPLIED');
   if(view.schemaVersion!==1||!finite3(view.target)||!finite3(view.camera)||!finite3(view.up)||
     !Number.isFinite(view.fovDegrees)||view.fovDegrees<10||view.fovDegrees>90)throw Error(t('viewInvalid'));
   const app=new Application(canvas,{graphicsDeviceOptions:{antialias:false,alpha:true,preserveDrawingBuffer:true}});
   app.setCanvasFillMode(FILLMODE_FILL_WINDOW);app.setCanvasResolution(RESOLUTION_AUTO);app.scene.ambientLight=new Color(1,1,1);app.start();
   const camera=new Entity('Portrait camera');
   camera.addComponent('camera',{clearColor:new Color(.04,.06,.11,0),fov:view.fovDegrees,nearClip:.01,farClip:10000});
+  if(Number.isFinite(view.transferNearClip))camera.camera.nearClip=view.transferNearClip;
+  if(Number.isFinite(view.transferFarClip))camera.camera.farClip=view.transferFarClip;
   app.root.addChild(camera);
   const asset=new Asset('Personal 3DGS','gsplat',{url:'https://self.local/portrait.gaussian.ply'});
   app.assets.add(asset);asset.on('error',error=>report('ERROR',t('openFail')+String(error)));
@@ -198,7 +204,11 @@ async function start(){
           yaw,pitch,distance:Math.hypot(pos.x-target[0],pos.y-target[1],pos.z-target[2]),
           fovDegrees:camera.camera.fov,nearClip:camera.camera.nearClip,farClip:camera.camera.farClip,
           viewportWidth:rect.width,viewportHeight:rect.height,mirrored:false,crop:'fill-window'};};
-      app.on('postrender',()=>{renderFrame++;lastRenderedView=viewSnapshot();});
+      let transferPresented=false;
+      const presentTransferView=()=>{if(transferPresented||!lastRenderedView||!port||!identity)return;transferPresented=true;send('GS_PRESENTABLE');};
+      window.__selfTransferPresent=presentTransferView;
+      app.on('postrender',()=>{renderFrame++;lastRenderedView=viewSnapshot();presentTransferView();});
+      window.selfTransferCurrentView=()=>snapshotCamera(lastRenderedView);
       const drawHistory=layers=>{applyDigitalLayers(resource,originalColors,layers);editRevision++;
         model.gsplat.workBufferUpdate=WORKBUFFER_UPDATE_ONCE;app.renderNextFrame=true;};
       const toneTracker=createToneTracker(),toneCanvas=document.createElement('canvas');
@@ -394,7 +404,9 @@ async function start(){
             samples:sampleMask(mask)};
           if(slot===selections.length)selections.push(entry);else selections[slot]=entry;
           appendNext=false;
-          send('GS_SELECTION',{regionId,count:selected,total:data.numSplats,x:polygon.reduce((s,p)=>s+p.x,0)/polygon.length/r.width,
+          const selectionBounds={left:Math.min(...polygon.map(p=>p.x))/r.width,top:Math.min(...polygon.map(p=>p.y))/r.height,
+            right:Math.max(...polygon.map(p=>p.x))/r.width,bottom:Math.max(...polygon.map(p=>p.y))/r.height};
+          send('GS_SELECTION',{regionId,count:selected,total:data.numSplats,selectionBounds,x:polygon.reduce((s,p)=>s+p.x,0)/polygon.length/r.width,
             y:polygon.reduce((s,p)=>s+p.y,0)/polygon.length/r.height});
           sendBytes('gs-mask',mask);if(last)addSparks(last,true);
           report('SELECTED',t('selected',selections.length));

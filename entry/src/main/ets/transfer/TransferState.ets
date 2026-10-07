@@ -5,6 +5,7 @@ export enum TransferPhase { IDLE='IDLE', PREPARING_SEND='PREPARING_SEND', SEND_R
   RECEIVE_READY='RECEIVE_READY', TRANSFERRING='TRANSFERRING', IMPORTING='IMPORTING', ERROR='ERROR' }
 export interface TransferSurface {kind:string;modelId:string;revision:string;}
 export interface TransferSnapshot {intent:TransferIntent;phase:TransferPhase;policy:TransferPolicy;message:string;}
+export interface TransferDiagnostic extends TransferSnapshot {foreground:boolean;surface:string;modelSelected:boolean;active:boolean;prepared:boolean;}
 export interface TransferTransport {
   supported():boolean;
   automaticReceive():boolean;

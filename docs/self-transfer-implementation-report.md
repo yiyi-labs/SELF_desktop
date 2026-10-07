@@ -115,8 +115,34 @@ Python 优先 SELF_TRANSFER_TEST_PYTHON，其次本机 bundled runtime，最后 
 
 构建日志：各仓库 artifacts/self-transfer-build.log、self-transfer-native-build.log。测试日志：self-transfer-tests.log、self-transfer-existing-tests.log、self-transfer-viewer-tests.log、self-transfer-viewer-baseline.log、self-transfer-star-tests.log、self-transfer-star-baseline.log、self-transfer-native-device.log。受审计证据与原生测试日志另外存入 docs/evidence；原有 docs/evidence/hap-build.log 未被本任务改写或提交。
 
-## 尚待人工最终验收
+## 初版人工验收记录（后续结果见末尾）
 
-已连接 phone 与 tablet，各自官方 ZIP/SHA 接口测试通过，且新版已安装启动。实际设备顶部碰触、系统卡片与上滑发送、两方向无线传输、手机「用 SELF 打开」、收到模型的 GPU 加载/朝向/颜色仍需人工实操。双方 Viewer 时需在一端设置里选择接收；双方 Home 时不应发送。现场没有第二台对应版本设备，未宣称同版本双真机验收。
+已连接 phone 与 tablet，各自官方 ZIP/SHA 接口测试通过，且新版已安装启动。手机轻碰平板屏幕（手机间才是顶部轻碰）、系统卡片与上滑发送、两方向无线传输、手机「用 SELF 打开」、收到模型的 GPU 加载/朝向/颜色仍需人工实操。双方 Viewer 时需在一端设置里选择接收；双方 Home 时不应发送。现场没有第二台对应版本设备，未宣称同版本双真机验收。
 
 代码、协议、构建和自动测试已落实；最终 Git commit hash 见任务最终回复。完整产品验收仍以上述人工结果为准。
+
+## 碰屏幕无响应现场诊断
+
+两端已确认 API 26，手机 VIEWER 打包完成并注册发送，平板 HOME 注册自动接收，物理碰触回调均为 0。用户确认两端不是同一华为账号；当时记录官方手机与 PC/2in1 的同账号条件作为排查线索；之后用户已确认传输成功，不能将账号差异当作已证实的唯一原因。完整证据和本轮验证见 `docs/evidence/self-transfer-trigger-diagnostic.md`。该阶段尚未传通，后续用户确认成功。
+
+## 应用内接收、原名和保存试色接续修订
+
+现场用户随后确认无线传输成功，但平板原来跳入文件管理器。修复自动接受后过早 off 接收监听；用户复验确认留在 SELF，设备回调 data/SHARE_SUCCESS 均到达。进一步修正沙箱文件记录解析，保留专有目录和内容校验。用户更换的模型有已保存的口红记录，旧逻辑因此标为 BUSY；现已加入两端共同的保存试色扩展与缓存修订，未保存预览仍禁止发送。星辰原名写入 manifest、原索引和系统卡片，改名或保存试色后重新打包。接收流程自动解压、原子登记、刷新并调用原模型打开入口。
+
+最终两端正式 API 26 HAP 构建并覆盖安装成功；完整专项各 35/35（含真实 PLY、四方向试色记录、实际两端颜色函数、legacy mask、名称/改名缓存和沙箱目录边界）。renderer-web 各 24/24；原试色算法专项平板 9/9、手机见证据。早期 runtime 诊断 suite 各 1/1；本次最后安装后未再通过测试安装打断用户。真实读数手机 knockCallbacks=1/SEND_READY，平板 receiveCallbacks=1/VIEWER/SEND_READY，说明已接收并进入可发送模型页；用户随后明确反馈“成功了”，确认平板自动打开、名称和口红颜色接续成功；这是双视角修订之前的已安装版本。
+
+
+## 当前发送视角与长期正脸修订
+
+接收后的第一次完整打开采用碰触时实际已渲染的相机位姿，包括平移、旋转/俯仰、距离、FOV及裁剪面；之后重开采用长期保存的正脸记录。两者分别登记为SHA校验资产，一次性视角只进入接收流程与进程内查看器，不覆盖本地正脸。正脸携带经过筛选并与原始 PLY 绑定的几何/渲染契约，接收端直接应用，不重新做人脸分析；有限俯仰记录保留原有状态。手机与平板继续沿用自己的渲染/编辑实现，平板补齐读取已传正脸及同屏幕拟合语义；切换模型时重建对应查看器，防止相机绑定上一个模型。默认打开仍需读取模型并绘制GPU，不宣称所有加载都消失。
+
+应用层 transfer/*.ets、transfer-camera.js 和投影拟合模块在两仓库逐文件一致验证。系统能力差异仍遵守官方文档：手机手动“用SELF打开”接收，平板/二合一自动沙箱接收。未加左上角分享提示、浮层或自定义传输对话框，继续使用API26原生碰屏幕卡片与上滑。
+
+本轮桌面完整专项两仓库均41/41、0失败、0跳过，包含4个实际保存PLY样本及实际PlayCanvas解析、4组合相机/正脸/试色/原名互传、同包重复接收、新视角重复发送、正脸重新导出与后续打开、旧临时视角不再导出、损坏正脸/退化相机/源记录更新、provider离页/模型身份隔离、官方发送回调监听存续。相机数学专项各3/3，对比实际PlayCanvas四元数方向和不同屏幕的投影拟合。证据：artifacts/self-transfer-camera-tests.log、self-transfer-camera-renderer-tests.log、self-transfer-camera-build.log；真实样本证据增加capturePackageMs，测量仅为电脑测试替身，不冒充真机系统卡片耗时。
+
+两端正式API26签名HAP最终构建成功。用户明确要求暂不安装平板，因为正在录屏；本轮双视角版本两端均留在电脑，未安装或重启设备、未运行真机测试打断录屏。双视角的实际无线传输与首次/再次打开画面仍待录屏结束后安装复验，既有已安装版本继续可用。源码保留在工作树，未混入或提交既有FreckleDemo、tablet selection/renderer等用户改动。
+
+
+## 双视角真机返回值与失败恢复修复
+
+双视角初次安装后发现手机已触发knock回调，但相机返回被误判，发送失败又永久注销监听。已统一解包ArkWeb的JSON字符串返回、保存具体发送准备错误并在单次操作失败后恢复当前页面监听。真实手机确认cameraRead.encoding=json-string/valid=true、准备ready、SEND_READY/监听开启，平板收到2次回调。两仓库完整回归各44/44，API26签名HAP构建并覆盖安装成功；用户确认“卡片、传输和首次视角都正常”。详见docs/evidence/self-transfer-camera-recovery.md。本节取代上一阶段“暂不安装/待双视角首次实测”的当前状态。

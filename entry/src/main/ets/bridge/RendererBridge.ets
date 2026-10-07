@@ -1,5 +1,6 @@
 import { webview } from '@kit.ArkWeb';
 import { SceneView } from '../domain/EditPlan';
+import { SelectionBounds } from '../domain/SelectionConversationLayout';
 export interface GsViewSnapshot {
   snapshotId:string;assetId:string;capturedAt:number;frame:number;cameraRevision:number;editRevision:number;
   position:number[];rotation:number[];target:number[];yaw:number;pitch:number;distance:number;
@@ -15,6 +16,7 @@ export interface MessagePayload {
   total?:number;
   x?:number;
   y?:number;
+  selectionBounds?:SelectionBounds;
   images?:number;
   maskBase64?:string;
   regionId?:string;

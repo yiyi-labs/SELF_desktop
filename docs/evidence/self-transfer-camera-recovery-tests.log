@@ -1,0 +1,249 @@
+
+> self-harmonyos@0.1.0 test:transfer
+> node --test scripts/test-self-transfer.mjs
+
+SELF_TRANSFER_Error cancelled
+SELF_MODEL_IMPORTED received digest
+SELF_TRANSFER_Error cancelled
+SELF_SHARE_RECEIVE_REGISTERED windowId=739
+SELF_SHARE_SEND_REGISTERED windowId=739
+SELF_SHARE_RECEIVE_REGISTERED windowId=739
+SELF_SHARE_SEND_REGISTERED windowId=739
+SELF_SHARE_RECEIVE_REGISTERED windowId=739
+SELF_SHARE_SEND_REGISTERED windowId=739
+SELF_SHARE_RECEIVE_REGISTERED windowId=739
+SELF_SHARE_SEND_REGISTERED windowId=739
+SELF_SHARE_RECEIVE_REGISTERED windowId=739
+SELF_SHARE_SEND_REGISTERED windowId=739
+SELF_SHARE_RECEIVE_REGISTERED windowId=739
+SELF_SHARE_SEND_REGISTERED windowId=739
+SELF_SHARE_RECEIVE_REGISTERED windowId=739
+SELF_SHARE_SEND_REGISTERED windowId=739
+SELF_SHARE_RECEIVE_REGISTERED windowId=739
+SELF_SHARE_SEND_REGISTERED windowId=739
+SELF_SHARE_RECEIVE_REGISTERED windowId=739
+SELF_SHARE_SEND_REGISTERED windowId=739
+SELF_SHARE_RECEIVE_REGISTERED windowId=739
+SELF_SHARE_SEND_REGISTERED windowId=739
+SELF_SHARE_RECEIVE_REGISTERED windowId=739
+SELF_SHARE_SEND_REGISTERED windowId=739
+SELF_SHARE_RECEIVE_REGISTERED windowId=739
+SELF_SHARE_SEND_REGISTERED windowId=739
+SELF_SHARE_RECEIVE_REGISTERED windowId=739
+SELF_SHARE_SEND_REGISTERED windowId=739
+SELF_SHARE_RECEIVE_REGISTERED windowId=739
+SELF_SHARE_SEND_REGISTERED windowId=739
+SELF_SHARE_RECEIVE_REGISTERED windowId=739
+SELF_SHARE_SEND_REGISTERED windowId=739
+SELF_SHARE_RECEIVE_REGISTERED windowId=739
+SELF_SHARE_SEND_REGISTERED windowId=739
+SELF_SHARE_RECEIVE_REGISTERED windowId=739
+SELF_SHARE_SEND_REGISTERED windowId=739
+SELF_SHARE_RECEIVE_REGISTERED windowId=739
+SELF_SHARE_SEND_REGISTERED windowId=739
+SELF_SHARE_RECEIVE_REGISTERED windowId=739
+SELF_SHARE_SEND_REGISTERED windowId=739
+SELF_SHARE_RECEIVE_REGISTERED windowId=739
+SELF_SHARE_SEND_REGISTERED windowId=739
+SELF_SHARE_RECEIVE_REGISTERED windowId=851
+SELF_SHARE_RECEIVE_CALLBACK 1
+SELF_SHARE_SANDBOX_RECEIVE_REQUESTED
+SELF_SHARE_SANDBOX_DATA
+SELF_SHARE_SANDBOX_RESULT 0
+SELF_SHARE_SANDBOX_RECORD utd=general.zip-archive localPath=false
+SELF_PACKAGE_RECEIVED 11
+SELF_SHARE_SANDBOX_RESULT 0
+SELF_SHARE_RECEIVE_REGISTERED windowId=851
+SELF_SHARE_RECEIVE_CALLBACK 1
+SELF_SHARE_SANDBOX_RECEIVE_REQUESTED
+SELF_SHARE_SANDBOX_RESULT 0
+SELF_SHARE_SANDBOX_DATA
+SELF_SHARE_SANDBOX_RECORD utd=general.zip-archive localPath=false
+SELF_PACKAGE_RECEIVED 11
+SELF_SHARE_SANDBOX_RESULT 0
+SELF_SHARE_RECEIVE_REGISTERED windowId=851
+SELF_SHARE_RECEIVE_CALLBACK 1
+SELF_SHARE_SANDBOX_RECEIVE_REQUESTED
+SELF_SHARE_SANDBOX_RESULT 0
+SELF_SHARE_SANDBOX_DATA
+SELF_SHARE_SANDBOX_RECORD utd=general.object localPath=false
+SELF_PACKAGE_RECEIVED 11
+SELF_SHARE_SANDBOX_RESULT 0
+SELF_SHARE_RECEIVE_REGISTERED windowId=851
+SELF_SHARE_RECEIVE_CALLBACK 1
+SELF_SHARE_SANDBOX_RECEIVE_REQUESTED
+SELF_SHARE_SANDBOX_RESULT 2
+SELF_SHARE_SANDBOX_DATA
+SELF_SHARE_RECEIVE_REGISTERED windowId=853
+SELF_SHARE_RECEIVE_CALLBACK 1
+SELF_SHARE_SANDBOX_RECEIVE_REQUESTED
+SELF_SHARE_SANDBOX_DATA
+SELF_SHARE_SANDBOX_RESULT 0
+SELF_SHARE_SANDBOX_RECORD utd=general.object localPath=false
+✔ page intent, override, background, busy and exact-once lifecycle (1.1384ms)
+✔ late package preparation cannot register after page exit (0.1442ms)
+✔ receive started before background cannot publish after foreground resumes (0.4973ms)
+✔ manual receive restores AUTO and reports duplicate import separately (0.2583ms)
+✔ manual copy reservation excludes automatic receipt and cancels publication after navigation (0.1406ms)
+✔ bridge uses real window identity, exact callback off, exclusive directions, and API<20 guard (2.412ms)
+✔ official receive callback waits for BOTH data and success; accepts native sandbox paths; cancellation never publishes (14.7988ms)
+✔ sandbox reception rejects files outside its isolated directory without touching them (4.057ms)
+SELF_PACKAGE_PREPARED 6c3e9dcf-8edb-48b3-bd47-92e4c048a9bf a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+✔ create standard package, manifest, immutable PLY, cache reuse and optional camera (209.2239ms)
+SELF_PACKAGE_VALIDATED 6c3e9dcf-8edb-48b3-bd47-92e4c048a9bf a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_VALIDATED 6c3e9dcf-8edb-48b3-bd47-92e4c048a9bf a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_SHARE_RECEIVE_REGISTERED windowId=852
+SELF_SHARE_RECEIVE_CALLBACK 1
+SELF_SHARE_SANDBOX_RECEIVE_REQUESTED
+SELF_SHARE_RECEIVE_CALLBACK 2
+SELF_SHARE_RECEIVE_REJECTED_NOT_READY
+SELF_SHARE_SANDBOX_DATA
+SELF_SHARE_SANDBOX_RESULT 0
+SELF_SHARE_SANDBOX_RECORD utd=general.zip-archive localPath=false
+SELF_PACKAGE_RECEIVED 10414
+✔ atomic repository import, new local ID, duplicate package, no overwrite (232.1637ms)
+SELF_PACKAGE_VALIDATED 6c3e9dcf-8edb-48b3-bd47-92e4c048a9bf a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_MODEL_IMPORTED d94bb5d5b3244699bec97de0041beee0 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_SHARE_RECEIVE_REGISTERED windowId=852
+✔ system sandbox listener survives acceptance through file completion, then imports and opens the same named star (121.042ms)
+SELF_PACKAGE_PREPARED b52ca089-22eb-49c4-9fc7-518d2f0e2c16 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_PREPARED 8d23dfce-b603-432b-9d4a-92bedcf9ae13 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_VALIDATED 8d23dfce-b603-432b-9d4a-92bedcf9ae13 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_VALIDATED 8d23dfce-b603-432b-9d4a-92bedcf9ae13 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_PREPARED 65b4b5d5-dcaa-4a4d-b34e-ebe7e918a6ea a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+✔ renaming a star refreshes package metadata without changing its PLY; repeated reception preserves its name (565.4095ms)
+✔ reject missing-manifest without publishing partial model; remove staging and incoming (104.8336ms)
+✔ reject missing-model without publishing partial model; remove staging and incoming (84.1853ms)
+✔ reject bad-sha without publishing partial model; remove staging and incoming (192.6883ms)
+✔ reject unsupported-version without publishing partial model; remove staging and incoming (206.169ms)
+✔ reject unknown-required without publishing partial model; remove staging and incoming (192.564ms)
+✔ reject invalid-zip without publishing partial model; remove staging and incoming (91.3138ms)
+✔ reject traversal without publishing partial model; remove staging and incoming (86.0797ms)
+✔ reject backslash without publishing partial model; remove staging and incoming (89.9788ms)
+✔ reject absolute without publishing partial model; remove staging and incoming (90.2487ms)
+✔ reject drive without publishing partial model; remove staging and incoming (85.3824ms)
+✔ reject duplicate-entry without publishing partial model; remove staging and incoming (93.4002ms)
+✔ reject local-central-mismatch without publishing partial model; remove staging and incoming (98.6712ms)
+✔ reject local-unicode-path without publishing partial model; remove staging and incoming (101.4953ms)
+✔ reject local-size-mismatch without publishing partial model; remove staging and incoming (102.351ms)
+SELF_PACKAGE_VALIDATED 6c3e9dcf-8edb-48b3-bd47-92e4c048a9bf 9336f457f4ab884daadc22e8cc1176fbe3ad4a6b59dfa12138aaba43c3ddac84
+✔ reject unsupported-ply without publishing partial model; remove staging and incoming (200.4862ms)
+✔ reject bad-length without publishing partial model; remove staging and incoming (201.879ms)
+SELF_PACKAGE_VALIDATED 6c3e9dcf-8edb-48b3-bd47-92e4c048a9bf a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+✔ unknown optional feature is ignored and missing optional asset remains optional (201.5886ms)
+✔ cancelled import and insufficient space never register a model (9.9845ms)
+✔ saved visual edits cannot silently send the original PLY (17.7545ms)
+SELF_PACKAGE_PREPARED 42ec0a58-052c-432e-84de-e6e163370cca a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_VALIDATED 42ec0a58-052c-432e-84de-e6e163370cca a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_PREPARED 0e1ac607-24d7-4502-a12a-b5b2fc589ec6 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_PREPARED 5e18e303-97c7-435a-9e4e-02a55fe38e75 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_VALIDATED 5e18e303-97c7-435a-9e4e-02a55fe38e75 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_PREPARED 011e004c-a177-4b89-89e6-27c66fdea050 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_PREPARED 5606b920-f1ef-4ff8-a014-37538dba84ce a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_VALIDATED 5606b920-f1ef-4ff8-a014-37538dba84ce a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_PREPARED d399cd06-4faf-4123-bc54-debe5c9161da a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_PREPARED db885d32-a03e-4ef1-8883-6c856d6d6864 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_VALIDATED db885d32-a03e-4ef1-8883-6c856d6d6864 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_PREPARED 51ef89f5-c81c-41fc-8f55-8f1cd0097b6d a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+✔ all four directions preserve saved colour layers and name with remapped local IDs and unchanged PLY (1612.054ms)
+SELF_PACKAGE_PREPARED 10d68045-0e09-4c20-a2bc-3588dfee62a3 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_VALIDATED 10d68045-0e09-4c20-a2bc-3588dfee62a3 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+✔ legacy saved colour masks migrate to reloadable history; corrupt saved masks never publish (248.1672ms)
+SELF_PACKAGE_PREPARED 1818569d-967c-45ac-9425-79e3501bf441 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_VALIDATED 1818569d-967c-45ac-9425-79e3501bf441 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_PREPARED db81e547-f372-492a-9180-5a955aa79ebe a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_VALIDATED db81e547-f372-492a-9180-5a955aa79ebe a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_PREPARED b5f7ba47-6825-4684-abe8-2003ece0eb23 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_VALIDATED b5f7ba47-6825-4684-abe8-2003ece0eb23 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_PREPARED 1e156f75-1a53-444b-a659-8345718ab138 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_VALIDATED 1e156f75-1a53-444b-a659-8345718ab138 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+✔ four code/protocol directions use the receiver adapter independent of producer.variant (1015.6564ms)
+SELF_PACKAGE_PREPARED da8fca02-b94c-4239-aae9-548884474328 d0cd64a70d99d55fcff037766030e138aff7a193cb801d39b43fb31d2fe8873a
+SELF_CAMERA_PACKAGE_PREPARED 662349d3-89e1-4b6c-b5c9-a183ec26aac4
+SELF_PACKAGE_VALIDATED 662349d3-89e1-4b6c-b5c9-a183ec26aac4 d0cd64a70d99d55fcff037766030e138aff7a193cb801d39b43fb31d2fe8873a
+SELF_REAL_MODEL_EVIDENCE {"source":"olay","target":"olay_harmony","sample":"tablet-representative","sourcePath":"backend/.data/reconstruction/0670b3d5554e4a456926d09f85ef7553/portrait.gaussian.ply","bytes":54784393,"sourceSha256":"d0cd64a70d99d55fcff037766030e138aff7a193cb801d39b43fb31d2fe8873a","receivedSha256":"d0cd64a70d99d55fcff037766030e138aff7a193cb801d39b43fb31d2fe8873a","match":true,"vertexCount":232131,"min":[-12.563310623168945,-66.02261352539062,-2.1470959186553955],"max":[82.4373779296875,13.665623664855957,98.11013793945312],"packMs":437,"capturePackageMs":200,"importMs":306,"viewerParser":"PlayCanvas 2.22.4 readPly passed; GPU/visual appearance not tested","hostPeakRssBytes":233701376,"codec":"Python zipfile desktop double; real official zlib tested separately on devices"}
+SELF_PACKAGE_PREPARED 4f0f37ea-8c67-416a-8ef2-ba1602c9ecfb 44f7f814ee61231843e2c500b76d35e42fd01157cbdb562d234c794eebe95540
+SELF_CAMERA_PACKAGE_PREPARED a9dedf6f-b3b2-44c1-8027-036a5f7bac68
+SELF_PACKAGE_VALIDATED a9dedf6f-b3b2-44c1-8027-036a5f7bac68 44f7f814ee61231843e2c500b76d35e42fd01157cbdb562d234c794eebe95540
+SELF_REAL_MODEL_EVIDENCE {"source":"olay_harmony","target":"olay","sample":"phone-representative","sourcePath":"backend/.data/reconstruction/07483aca583bd94566a4c115eb87636d/portrait.gaussian.ply","bytes":18746720,"sourceSha256":"44f7f814ee61231843e2c500b76d35e42fd01157cbdb562d234c794eebe95540","receivedSha256":"44f7f814ee61231843e2c500b76d35e42fd01157cbdb562d234c794eebe95540","match":true,"vertexCount":79429,"min":[-6.916996955871582,-28.711925506591797,3.703190803527832],"max":[65.16455078125,26.127174377441406,64.97215270996094],"packMs":224,"capturePackageMs":139,"importMs":194,"viewerParser":"PlayCanvas 2.22.4 readPly passed; GPU/visual appearance not tested","hostPeakRssBytes":233701376,"codec":"Python zipfile desktop double; real official zlib tested separately on devices"}
+SELF_PACKAGE_PREPARED afe21394-db3d-48fa-b72a-dd207cec9d63 3c3495d42f4fd0bd9875a9431ec5af64f883074af6c64581d65e9359f78be053
+SELF_CAMERA_PACKAGE_PREPARED 73f38b30-a14b-46b5-9a59-8a3616838899
+SELF_PACKAGE_VALIDATED 73f38b30-a14b-46b5-9a59-8a3616838899 3c3495d42f4fd0bd9875a9431ec5af64f883074af6c64581d65e9359f78be053
+SELF_REAL_MODEL_EVIDENCE {"source":"olay_harmony","target":"olay_harmony","sample":"smallest-saved","sourcePath":"backend/.data/reconstruction/f3a01a5c738d40a00c80d4142c473d06/portrait.gaussian.ply","bytes":6759572,"sourceSha256":"3c3495d42f4fd0bd9875a9431ec5af64f883074af6c64581d65e9359f78be053","receivedSha256":"3c3495d42f4fd0bd9875a9431ec5af64f883074af6c64581d65e9359f78be053","match":true,"vertexCount":28636,"min":[-21.765562057495117,-9.646573066711426,-2.2155656814575195],"max":[4.314305305480957,6.4843645095825195,14.734667778015137],"packMs":166,"capturePackageMs":114,"importMs":163,"viewerParser":"PlayCanvas 2.22.4 readPly passed; GPU/visual appearance not tested","hostPeakRssBytes":233701376,"codec":"Python zipfile desktop double; real official zlib tested separately on devices"}
+SELF_PACKAGE_PREPARED 92f4c993-60c9-44b6-8a50-8a4497d6464e 53fd1ac282cb7d9287b55b611e9fd3deca5607c7db203646e1eeb930dad8a8c8
+SELF_CAMERA_PACKAGE_PREPARED 126fbf2f-8c29-49f1-aeee-3836dd59fdde
+SELF_PACKAGE_VALIDATED 126fbf2f-8c29-49f1-aeee-3836dd59fdde 53fd1ac282cb7d9287b55b611e9fd3deca5607c7db203646e1eeb930dad8a8c8
+SELF_REAL_MODEL_EVIDENCE {"source":"olay_harmony","target":"olay","sample":"largest-saved","sourcePath":"backend/.data/reconstruction/a2cef3813f8864dae0bc9c6f45ea9a81/portrait.gaussian.ply","bytes":73848473,"sourceSha256":"53fd1ac282cb7d9287b55b611e9fd3deca5607c7db203646e1eeb930dad8a8c8","receivedSha256":"53fd1ac282cb7d9287b55b611e9fd3deca5607c7db203646e1eeb930dad8a8c8","match":true,"vertexCount":312911,"min":[-23.206464767456055,-47.60917282104492,1.8893038034439087],"max":[45.732460021972656,17.09868049621582,53.0191535949707],"packMs":520,"capturePackageMs":278,"importMs":356,"viewerParser":"PlayCanvas 2.22.4 readPly passed; GPU/visual appearance not tested","hostPeakRssBytes":237625344,"codec":"Python zipfile desktop double; real official zlib tested separately on devices"}
+✔ saved PLY cross-app roundtrips, actual PlayCanvas parser and bounded file processing (4503.8735ms)
+SELF_PACKAGE_PREPARED 9280179f-6c93-4bc6-a8a7-cd8f379c1dd4 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_CAMERA_PACKAGE_PREPARED e7406f54-8ca1-4350-acdb-770635aa4837
+SELF_PACKAGE_VALIDATED e7406f54-8ca1-4350-acdb-770635aa4837 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_VALIDATED e7406f54-8ca1-4350-acdb-770635aa4837 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_PREPARED 5678faef-cd07-40cc-9299-c90cee7618d9 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_VALIDATED 5678faef-cd07-40cc-9299-c90cee7618d9 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_CAMERA_PACKAGE_PREPARED 2009f2bc-16d5-41bc-8bff-128c994f761c
+SELF_PACKAGE_VALIDATED 2009f2bc-16d5-41bc-8bff-128c994f761c a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_PREPARED 5077d8a1-0340-4cb6-a76a-cec55c590ee0 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_CAMERA_PACKAGE_PREPARED e4b36697-366c-470f-9a03-683613cd3776
+SELF_PACKAGE_VALIDATED e4b36697-366c-470f-9a03-683613cd3776 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_VALIDATED e4b36697-366c-470f-9a03-683613cd3776 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_PREPARED 4e8b02ec-2c15-4a5c-a5b1-a1f3ae0d211c a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_VALIDATED 4e8b02ec-2c15-4a5c-a5b1-a1f3ae0d211c a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_CAMERA_PACKAGE_PREPARED 4cbac565-d2a7-497e-aa15-ee785662d566
+SELF_PACKAGE_VALIDATED 4cbac565-d2a7-497e-aa15-ee785662d566 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_PREPARED aeed6a24-1c3a-443a-8eef-2bac859e4620 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_CAMERA_PACKAGE_PREPARED 8b55f310-34a8-4fe7-ac8a-b88bbff8b0f0
+SELF_PACKAGE_VALIDATED 8b55f310-34a8-4fe7-ac8a-b88bbff8b0f0 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_VALIDATED 8b55f310-34a8-4fe7-ac8a-b88bbff8b0f0 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_PREPARED e608776c-cf81-423b-8317-99e43d958c52 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_VALIDATED e608776c-cf81-423b-8317-99e43d958c52 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_CAMERA_PACKAGE_PREPARED 593c46c3-6c2e-4ab5-9c0a-1b90742b415e
+SELF_PACKAGE_VALIDATED 593c46c3-6c2e-4ab5-9c0a-1b90742b415e a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_PREPARED 433302bf-b246-4116-bc6f-2eaade3d17c3 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_CAMERA_PACKAGE_PREPARED e1cfc89f-f79d-4b31-ac5b-eff618e14a5f
+SELF_PACKAGE_VALIDATED e1cfc89f-f79d-4b31-ac5b-eff618e14a5f a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_VALIDATED e1cfc89f-f79d-4b31-ac5b-eff618e14a5f a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_PREPARED 121861e8-09be-4ca8-bbf1-f98dac962fb1 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_VALIDATED 121861e8-09be-4ca8-bbf1-f98dac962fb1 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_CAMERA_PACKAGE_PREPARED be62fae0-1af8-4b4b-b7ee-a16795b8fab4
+SELF_PACKAGE_VALIDATED be62fae0-1af8-4b4b-b7ee-a16795b8fab4 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+✔ four directions preserve current view once, durable verified front, saved edits and name independently (3979.9091ms)
+✔ capture provider identity and lifetime prevent sending another model camera (0.5229ms)
+SELF_PACKAGE_PREPARED 7c5965d8-397e-4805-8fb2-2f93f261f257 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_PACKAGE_PREPARED be1fe278-33ea-4565-8331-ebc58a497b2b a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+✔ corrupt or mismatched verified front cannot publish; profile changes invalidate prepared cameras (260.8177ms)
+SELF_PACKAGE_PREPARED 99c88f44-d3e6-49e8-bac0-f4d7429bfb92 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_SHARE_SEND_REGISTERED windowId=942
+SELF_SHARE_KNOCK_CALLBACK 1
+SELF_CAMERA_PACKAGE_PREPARED 23f1529b-0d80-49b7-8d7a-fa37c6269585
+SELF_PACKAGE_VALIDATED 23f1529b-0d80-49b7-8d7a-fa37c6269585 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_SHARE_SUBMITTED 99c88f44-d3e6-49e8-bac0-f4d7429bfb92
+SELF_SHARE_SEND_REGISTERED windowId=942
+✔ sender shares the new current camera package and retains its listener until native submission (340.3009ms)
+✔ both engineering trees keep identical transfer contracts and camera helpers (6.7618ms)
+SELF_PACKAGE_PREPARED 02f52abb-42ec-48ab-aeaf-adf7806875dd a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_CAMERA_PACKAGE_PREPARED 8a22b5e5-e106-4036-bcec-0acd8db8a577
+SELF_PACKAGE_VALIDATED 8a22b5e5-e106-4036-bcec-0acd8db8a577 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+✔ recorded pitch-limited front keeps its status and persists without repeating analysis (359.3182ms)
+✔ ArkWeb JSON-encoded string result yields the same validated camera as an object result (0.3465ms)
+SELF_PACKAGE_PREPARED ccd4435c-ea0a-448f-9426-8105ee7b6420 a2a113aa024481c0bf826221f5dd82450fe80137728bf17d3038d7abad506468
+SELF_SHARE_SEND_REGISTERED windowId=954
+SELF_SHARE_KNOCK_CALLBACK 1
+SELF_SHARE_SEND undefined PackageValidationError: 当前视角读取失败
+SELF_TRANSFER_PackageValidationError 当前视角读取失败
+SELF_SHARE_SEND_REGISTERED windowId=954
+SELF_SHARE_KNOCK_CALLBACK 2
+SELF_CAMERA_PACKAGE_PREPARED 3a5514cc-2c53-4dac-9a35-1e00d27a2af6
+SELF_SHARE_SUBMITTED ccd4435c-ea0a-448f-9426-8105ee7b6420
+SELF_SHARE_SEND_REGISTERED windowId=954
+SELF_TRANSFER_Error model changed
+✔ failed touch preparation restores the native sender for a second touch on the same model (237.2556ms)
+✔ leaving the model during failed camera preparation rearms reception, not the obsolete sender (0.3018ms)
+ℹ tests 44
+ℹ suites 0
+ℹ pass 44
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16570.0449

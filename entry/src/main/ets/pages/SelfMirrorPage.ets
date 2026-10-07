@@ -1,8 +1,10 @@
+import { SelfTransferCameraSession,cameraFileRevision } from '../transfer/SelfTransferCamera';
 import { fileUri, fileIo as fs } from '@kit.CoreFileKit';
 import { window } from '@kit.ArkUI';
 import { SelfTransferRuntime } from '../transfer/SelfTransferRuntime';
 import { TransferSnapshot, TransferPolicy } from '../transfer/TransferState';
 import { ImportedTransfer } from '../transfer/SelfTransferContract';
+import { savedEditRevision } from '../transfer/SelfTransferEdits';
 import { NativeMirrorSurface } from './NativeMirrorSurface';
 import { GaussianPortraitSurface } from './GaussianPortraitSurface';
 import { PersonalPortraitEditor } from './PersonalPortraitEditor';
@@ -64,7 +66,7 @@ struct SelfMirrorPage {
       this.transfer.coordinator.onChanged=(state:TransferSnapshot)=>{
         this.transferPhase=state.phase;this.transferReceiving=state.policy===TransferPolicy.FORCE_RECEIVE;
       };
-      this.transfer.coordinator.onImported=(model:ImportedTransfer)=>{this.refreshStars();this.close();this.openStar(model.modelId);console.info('SELF_MODEL_OPEN_REQUESTED '+model.modelId);};
+      this.transfer.coordinator.onImported=(model:ImportedTransfer)=>{SelfTransferCameraSession.arrive(model.modelId,model.arrivalView);this.refreshStars();this.close();this.openStar(model.modelId);console.info('SELF_MODEL_OPEN_REQUESTED '+model.modelId);};
       this.transfer.setForeground(this.foreground);this.syncTransferIntent();
     }).catch((error:Error)=>console.error('SELF_TRANSFER_WINDOW '+error.message));
   }
@@ -78,7 +80,9 @@ struct SelfMirrorPage {
     if(viewing){
       try{
         const stat=fs.statSync(this.personalGaussianPath),view=fs.statSync(this.personalViewPath);
-        this.transfer.setSurface({kind:'VIEWER',modelId:this.activeStarId,revision:stat.size+':'+stat.mtime+':'+view.mtime});
+        const name=this.starItems.find((star:PortraitStar)=>star.jobId===this.activeStarId)?.name||'';
+        const edits=savedEditRevision(this.personalGaussianPath.substring(0,this.personalGaussianPath.lastIndexOf('/')));
+        this.transfer.setSurface({kind:'VIEWER',modelId:this.activeStarId,revision:stat.size+':'+stat.mtime+':'+view.mtime+':'+name+':'+edits+':'+cameraFileRevision(this.personalGaussianPath.substring(0,this.personalGaussianPath.lastIndexOf('/')))});
       }catch(_){this.transfer.setSurface({kind:'NONE',modelId:'',revision:''});}
     }else this.transfer.setSurface({kind:this.skyOpen?'LIST':'HOME',modelId:'',revision:''});
   }
@@ -485,7 +489,7 @@ struct SelfMirrorPage {
 
   private refreshStars():void{
     if(this.galaxyDissolvingId)return;
-    this.starItems=this.stars.list();
+    this.starItems=this.stars.list();this.syncTransferIntent();
     this.galaxySceneItems=this.starItems.map((star:PortraitStar)=>({jobId:star.jobId,name:star.name,
       viewPath:this.stars.modelPaths(star.jobId).view,scenePath:star.scene3dPath} as GalaxyScene));
   }
@@ -1794,8 +1798,9 @@ struct SelfMirrorPage {
           .hitTestBehavior(this.skyOpen&&this.skyTransition==='idle'?HitTestMode.Default:HitTestMode.None)
       }
       if(this.personalActive()&&this.journey!=='forming'){
+        ForEach([this.activeStarId],(_modelId:string)=>{
         PersonalPortraitEditor({gaussianPath:this.personalGaussianPath,viewPath:this.personalViewPath,
-          onTransferAvailability:(allowed:boolean)=>{this.transferEditorSafe=allowed;},
+          onTransferAvailability:(allowed:boolean)=>{this.transferEditorSafe=allowed;this.syncTransferIntent();},
           assetId:this.activeStarId,language:this.language,cloudEnabled:this.cloudSessionEnabled,
           cloudConsentDecision:this.cloudConsentDecision,
           backendAddress:this.backendAddress,backendToken:this.backendToken,
@@ -1812,6 +1817,7 @@ struct SelfMirrorPage {
           }},onFailure:(message:string)=>{
             if(this.galaxyTravelId){this.recoverGalaxy(this.tr('这段记忆暂时未能展开，可以稍后再试。'));return;}
             this.personalReady=false;this.captureStatus=message;this.journey='failed';},onInteraction:()=>{this.markInteraction();this.collapsePreviewTools();}}).width('100%').height('100%')
+        },(modelId:string)=>modelId)
       }
       if(this.journey==='revealing'){
         Stack(){Circle().width(72).height(72).fill('#B6C8EC').shadow({radius:80,color:'#A7C7EE'}).scale({x:this.revealScale,y:this.revealScale})}.width('100%').height('100%').backgroundColor('#080C1B').opacity(this.revealOpacity).hitTestBehavior(HitTestMode.None)

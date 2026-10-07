@@ -70,13 +70,13 @@ extensions/...                可选扩展资产，必须在 assets 登记
 {"schema":"self.transfer.viewer","version":1,"camera":[0,0,3],"target":[0,0,0],"up":[0,1,0],"fovDegrees":45}
 ```
 
-只包含有限的三维向量与 10–90 度视角，camera 与 target 不重合，up 非零。特性名 `viewer.camera.v1`。接收适配器生成自身的 `portrait.view.json`；无有效 viewer 状态时根据模型包围盒产生默认视角。该状态不包含发送端私有 metadata 或编辑 recipe。
+只包含有限的三维向量与 10–90 度视角，camera 与 target 不重合，up 非零。特性名 `viewer.camera.v1`。接收适配器生成自身的 `portrait.view.json`；无有效 viewer 状态时根据模型包围盒产生默认视角。该相机状态不包含发送端私有 metadata。
 
 ## 方向、能力与生命周期
 
-角色由当前页面决定：有效且已保存的当前模型 Viewer 为 SEND；主页/列表为 RECEIVE；拍摄、重建、保存、导入、不可中断编辑为 NONE。只发送明确打开的 modelId，绝不回退到最近模型。Viewer 可临时 FORCE_RECEIVE，完成/取消/退出恢复 AUTO。原有试色是独立 recipe，无法表示为已保存 PLY 时禁止发送，避免收到不同外观。
+角色由当前页面决定：有效且已保存的当前模型 Viewer 为 SEND；主页/列表为 RECEIVE；拍摄、重建、保存、导入、不可中断编辑为 NONE。只发送明确打开的 modelId，绝不回退到最近模型。Viewer 可临时 FORCE_RECEIVE，完成/取消/退出恢复 AUTO。已保存试色通过 extensions/saved_edits.json 接续；正在预览、比较或尚未保存的变化禁止发送。
 
-每个真实前台 windowId 一个 TransferCoordinator，稳定 callback 引用，切换方向先 off 旧监听，再 on 新监听。后台/窗口销毁/页面失效清理监听。手动文件复制与自动接收互斥，生命周期 generation 使迟到任务无法发布模型。发送包提前准备，并按当前模型 revision、mtime、size 复用；触碰回调只提交已经准备好的文件。
+每个真实前台 windowId 一个 TransferCoordinator，稳定 callback 引用，切换方向先 off 旧监听，再 on 新监听。后台/窗口销毁/页面失效清理监听。手动文件复制与自动接收互斥，生命周期 generation 使迟到任务无法发布模型。发送包提前准备，并按当前模型 revision、名字、试色记录 revision、mtime、size 复用；触碰回调只提交已经准备好的文件。
 
 按用户最终界面要求，不显示左上角传输提示栏，也不显示自定义准备/发送进度文字或自制发送弹窗。触碰后的卡片、滑动动作、发送反馈由鸿蒙系统处理，具体呈现由设备系统版本决定。必要的「接收模型」「取消接收」「导入模型文件」动作置于原有设置菜单，导入成功刷新原列表并请求打开收到的模型；错误详情仅记录日志，可在设置重试。
 
@@ -109,3 +109,27 @@ ZIP 不支持官方指定应用自动拉起，因此不伪造 shareBundleName �
 - [系统分享接入](https://developer.huawei.com/consumer/cn/doc/doccenter-capabilities/share-interface-description.md)
 
 真实签名以安装的 API 26 `@hms.collaboration.harmonyShare.d.ts`、`@hms.collaboration.systemShare.d.ts` 与 `@ohos.zlib.d.ts` 为准。禁止旧 Android OneHop、自定义 NFC/蓝牙/Wi-Fi 协议、云端或 Windows Backend 中转。
+
+## 已保存试色扩展（本次现场修订）
+
+两端现有 SET_HISTORY 均支持 rose/terracotta 和 .18/.32/.5 的相同颜色重放语义，已用实际 applyDigitalLayers 对比 float32 颜色数组。已保存且非预览状态允许发送。在 extensions/saved_edits.json 写入 self.transfer.edits/version=1、原 PLY SHA-256/字节数/点数、按原顺序的分组和图层（名称、时间、颜色、强度、base64 mask、FNV-1a checksum）。不带发送端 modelId、账号、planner 或对话数据。文件登记为 saved-edits required asset，requiredFeatures 加 viewer.edits.v1；原始无试色包仍只需 model.ply。旧版本接收端必须拒绝无法恢复的外观，不能静默丢掉颜色。
+
+源 v2 history 经过严格核验与字段筛选，legacy recipe/mask 转为同一 v2 重放语义；原 PLY 不烘焙、不修改。接收端校验扩展与 PLY 的绑定、最多 12 组/16 层、mask 实际长度和摘要、已支持的颜色与强度，写入新 modelId 的 portrait.edit.v2.json，交给原查看器恢复。沿用现有 history 的 4 MiB 元数据读取边界，此限制不限制 PLY 文件大小。
+
+自动沙箱接收必须保留 dataReceive 监听直到收到 data 与 SHARE_SUCCESS；active 防止重复接受。官方文件记录中的本地路径或归一化 UTD 不沿用外部文件打开的 URI 类型假设，但任何文件都必须直接位于本次专有 incoming session，经过 ZIP/manifest/资产 SHA/PLY/试色校验后才发布到 models 并请求打开。
+
+
+## 双视角接续（API 26 互传修订）
+
+碰一碰回调触发后，从当前完整模型的实际已渲染相机帧读取 position/quaternion/FOV/clip。四元数转换成相机朝向的 target/up，包含旋转、俯仰、平移和缩放；不把视角当作模型变换，不改 PLY。当前视角登记在 viewer/arrival_view.json（self.transfer.viewer/version=1），单独资产 SHA-256。每次真实发送使用新 packageId，以便同一模型连续两次发送不同视角和正确去重。PLY/试色校验与复制在页面就绪时预先完成；触碰时只读取小视角数据并由官方 zlib 流式生成最终包，不重做 PLY 解析/摘要。已发布基础 ZIP 保持不可变，保留的原始打包目录归 outgoing 缓存管理。
+
+已记录正脸单独登记在 viewer/front_view.json（self.transfer.front-view/version=1），绑定完整 PLY SHA-256；携带 pivot/front/up、头部尺寸、fitDistance/fitFovY/fitAspect/sceneR、resolver/config/render contract。仅允许符合现有 render-contract 的 verified v2 正脸，或保留真实 pitch-limited 标记的已保存有限俯仰记录。剔除原设备 sourceFrame、输入图片引用、inputVersion 和文件路径，来源改记 self-transfer，避免接收端用缺失的原始拍摄输入否定已验证的几何记录。有限俯仰结果仍保持 verified=false，不能升级宣称为完整正脸。正脸/当前视角登记为 required camera asset 并声明 viewer.camera-pair.v1，旧接收端应明确拒绝，不静默忽略用户要求的视角。
+
+接收端长期写入 models/<新本地ID>/portrait.view.json 及 portrait.profile.json 或 portrait.fallback.json，默认保存正脸，而非发送时的临时角度。arrivalView 随导入结果送给原页面，使用进程内一次性 Map，在完整查看器第一次读取 view 时取走；列表/预览不消费它，后续正常打开也不从磁盘或旧传输包读取它。页面模型ID作为查看器实例键，接收另一模型时释放旧相机绑定与编辑器。两端均支持这套持久/一次性语义；平板通过同一投影拟合函数适配新屏幕，手机沿用已有正脸应用函数。复用正脸时不重新调用人脸分析；正常 PLY 读取与GPU绘制仍然需要。
+
+没有已保存正脸的旧模型保留已有默认 camera/target/up/FOV，不伪造正脸分析结果。相机向量、退化方向、FOV/clip、正脸哈希、版本、正交性、头部尺寸均校验；正脸/试色在准备或发送期间改变则拒绝陈旧包。手机仍按华为官方 API 26 的设备能力限制，由系统收文件后用 SELF 手动打开；应用层的模型包、校验、相机和试色收发代码一致。
+
+
+## ArkWeb相机结果与操作失败恢复
+
+runJavaScript执行JSON.stringify返回的结果可能再包一层JSON字符串，视角读取应解析该层再校验SelfViewerState，兼容直接对象JSON并拒绝null/undefined/退化相机。单次触碰的视角/系统操作失败后恢复当前页面监听，让下一次物理触碰可重试；不自动再次调用target.share。离页后的旧操作错误应按当前页面恢复角色，不注册原模型。真实错误与准备阶段记录在debug诊断，不添加产品UI。

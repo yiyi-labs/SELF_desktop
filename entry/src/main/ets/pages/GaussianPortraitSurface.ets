@@ -1,8 +1,12 @@
+import { SelfTransferCameraSession,parseWebCameraResult } from '../transfer/SelfTransferCamera';
+import { SelfViewerState } from '../transfer/SelfTransferContract';
+import { util } from '@kit.ArkTS';
 import { fileIo as fs } from '@kit.CoreFileKit';
 import { webview } from '@kit.ArkWeb';
 import { RendererBridge, Envelope, MessagePayload, GsViewSnapshot } from '../bridge/RendererBridge';
+import { SelectionBounds } from '../domain/SelectionConversationLayout';
 
-export interface GsSelection {regionId:string;count:number;total:number;x:number;y:number;}
+export interface GsSelection {regionId:string;count:number;total:number;x:number;y:number;bounds?:SelectionBounds;}
 export interface GsCapture {width:number;height:number;images:number;view?:GsViewSnapshot;}
 
 /** App-private 3DGS bytes served only to the bundled, offline viewer. */
@@ -28,7 +32,16 @@ export struct GaussianPortraitSurface {
   private capture:GsCapture|undefined=undefined;
   private clean:ArrayBuffer|undefined=undefined;
   private lastCommand:string='';
-  aboutToDisappear():void{this.bridge.dispose();this.clean=undefined;this.selection=undefined;this.capture=undefined;}
+  private arrivalTaken:boolean=false;
+  private arrivalView:SelfViewerState|undefined=undefined;
+  private transferCapture=async ():Promise<SelfViewerState>=>{
+    let timer:number=-1;
+    try{return await Promise.race([
+      this.controller.runJavaScript('JSON.stringify(window.selfTransferCurrentView())').then((text:string)=>parseWebCameraResult(text)),
+      new Promise<SelfViewerState>((_resolve,reject)=>{timer=setTimeout(()=>reject(new Error('视角读取超时')),1500);})
+    ]);}finally{if(timer>=0)clearTimeout(timer);}
+  };
+  aboutToDisappear():void{SelfTransferCameraSession.unregister(this.bridge.assetId,this.transferCapture);this.bridge.dispose();this.clean=undefined;this.selection=undefined;this.capture=undefined;}
 
   private commandChanged():void {
     if(!this.bridge.ready||!this.editCommand||this.editCommand===this.lastCommand)return;
@@ -44,12 +57,14 @@ export struct GaussianPortraitSurface {
     if(!match){this.onFailure('个人模型路径不正确');return;}
     this.bridge.assetId=match[1];this.bridge.assetVersion=match[1];
     this.lastCommand='';
+    SelfTransferCameraSession.register(this.bridge.assetId,this.transferCapture);
     this.bridge.onMessage=(message:Envelope)=>{
-      if(message.type==='READY'){this.onReady();this.commandChanged();}
+      if(message.type==='READY'){this.commandChanged();}
+      if(message.type==='GS_PRESENTABLE'){this.onReady();this.commandChanged();}
       if(message.type==='GS_FAILED')this.onEditFailure(message.payload.message||'圈选暂时不可用');
       if(message.type==='GS_SELECTION'&&message.payload.count!==undefined&&message.payload.total!==undefined&&
         message.payload.x!==undefined&&message.payload.y!==undefined)
-        this.selection={regionId:message.payload.regionId||'gs-selected',count:message.payload.count,total:message.payload.total,x:message.payload.x,y:message.payload.y};
+        this.selection={regionId:message.payload.regionId||'gs-selected',count:message.payload.count,total:message.payload.total,x:message.payload.x,y:message.payload.y,bounds:message.payload.selectionBounds};
       if(message.type==='GS_CAPTURE'&&message.payload.width!==undefined&&message.payload.height!==undefined&&message.payload.images!==undefined)
         this.capture={width:message.payload.width,height:message.payload.height,images:message.payload.images,view:message.payload.gsView};
       if(message.type==='GS_VIEW'&&message.payload.gsView)this.onViewSnapshot(message.payload.gsView);
@@ -86,6 +101,14 @@ export struct GaussianPortraitSurface {
         bytes=new ArrayBuffer(size);
         if(fs.readSync(file.fd,bytes,{length:size})!==size)throw new Error('个人立体资产读取不完整');
       } finally {fs.closeSync(file);}
+      if(isView&&!this.previewMode){
+        const modelId=/\/models\/([a-f0-9]{32})\//.exec(this.gaussianPath.replace(/\\/g,'/'));
+        if(!this.arrivalTaken&&modelId){this.arrivalTaken=true;this.arrivalView=SelfTransferCameraSession.take(modelId[1]);}
+        if(this.arrivalView){
+          const view=JSON.parse(fs.readTextSync(path)) as Record<string,Object>;view['transferArrivalView']=this.arrivalView;
+          bytes=new util.TextEncoder().encodeInto(JSON.stringify(view)).buffer as ArrayBuffer;
+        }
+      }
       const response=new WebResourceResponse();
       response.setResponseData(bytes);
       response.setResponseMimeType(isView?'application/json':'application/octet-stream');

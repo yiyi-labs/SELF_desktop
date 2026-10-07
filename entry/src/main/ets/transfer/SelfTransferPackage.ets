@@ -1,3 +1,4 @@
+import { FRONT_ENTRY,ARRIVAL_ENTRY,CAMERA_FEATURE,TransferFrontView,exportFrontView,validateFrontView,cameraFileRevision } from './SelfTransferCamera';
 import { common, bundleManager } from '@kit.AbilityKit';
 import { fileIo as fs } from '@kit.CoreFileKit';
 import { util } from '@kit.ArkTS';
@@ -10,6 +11,7 @@ import { SELF_SCHEMA, SELF_PROTOCOL, SELF_PLY_CONTRACT, MODEL_ENTRY, VIEW_ENTRY,
 import { makeDir, fileSha256, ensureSpace, boundedText, writeText, removeTransferTree } from './TransferFiles';
 import { inspectZip } from './SelfTransferZipGuard';
 import { inspectPly } from './SelfTransferPly';
+import { EDIT_ENTRY,EDIT_FEATURE,TransferEdits,exportSavedEdits,validateEdits,savedEditRevision } from './SelfTransferEdits';
 
 export class SelfTransferPackage implements TransferModels {
   readonly root:string;
@@ -48,10 +50,10 @@ export class SelfTransferPackage implements TransferModels {
   }
   private async create(modelId:string,revision:string):Promise<PreparedTransfer>{
     const source=this.exporter.source(modelId),stat=fs.statSync(source.plyPath);
-    if(this.cached?.modelId===modelId&&this.cached.revision===revision&&this.cached.sourceMtime===stat.mtime&&
+    if(this.cached?.modelId===modelId&&this.cached.revision===revision&&this.cached.displayName===source.name&&this.cached.editsRevision===source.editsRevision&&this.cached.cameraRevision===cameraFileRevision(source.directory)&&this.cached.sourceMtime===stat.mtime&&
       this.cached.sourceSize===stat.size&&fs.accessSync(this.cached.path))return this.cached;
     await ensureSpace(this.root,stat.size*2+1024*1024);
-    await inspectPly(source.plyPath);
+    const ply=await inspectPly(source.plyPath);
     const sourceHash=await fileSha256(source.plyPath),packageId=util.generateRandomUUID(true);
     const working=this.root+'/staging/export-'+packageId,bundle=this.root+'/outgoing/'+packageId;
     makeDir(working+'/model');makeDir(bundle);
@@ -60,7 +62,17 @@ export class SelfTransferPackage implements TransferModels {
       const model=await this.asset('model',MODEL_ENTRY,working+'/'+MODEL_ENTRY,true),after=fs.statSync(source.plyPath);
       if(model.sha256!==sourceHash||model.byteLength!==stat.size||after.size!==stat.size||after.mtime!==stat.mtime)
         throw new PackageValidationError('模型正在保存，请完成保存后重试');
-      const assets:TransferAsset[]=[model],optionalFeatures:string[]=[];
+      const assets:TransferAsset[]=[model],optionalFeatures:string[]=[],requiredFeatures:string[]=['model.ply'];
+      const cameraRevision=cameraFileRevision(source.directory),front=exportFrontView(source.directory,sourceHash);
+      if(front){
+        makeDir(working+'/viewer');writeText(working+'/'+FRONT_ENTRY,JSON.stringify(front));
+        assets.push(await this.asset('camera',FRONT_ENTRY,working+'/'+FRONT_ENTRY,true));requiredFeatures.push(CAMERA_FEATURE);
+      }
+      const edits=exportSavedEdits(source.directory,modelId,stat.size,sourceHash,ply.vertexCount);
+      if(edits){
+        makeDir(working+'/extensions');writeText(working+'/'+EDIT_ENTRY,JSON.stringify(edits));
+        assets.push(await this.asset('saved-edits',EDIT_ENTRY,working+'/'+EDIT_ENTRY,true));requiredFeatures.push(EDIT_FEATURE);
+      }
       if(source.previewPath&&fs.accessSync(source.previewPath)){
         makeDir(working+'/preview');await fs.copyFile(source.previewPath,working+'/preview/preview.png');
         assets.push(await this.asset('preview','preview/preview.png',working+'/preview/preview.png',false));optionalFeatures.push('preview.png');
@@ -71,18 +83,51 @@ export class SelfTransferPackage implements TransferModels {
         producer:{appFamily:'SELF',variant:this.context.applicationInfo.name==='com.self.mirror.harmony'?'olay_harmony':'olay',
           appVersion:bundleManager.getBundleInfoForSelfSync(bundleManager.BundleFlag.GET_BUNDLE_INFO_DEFAULT).versionName,bundleName:this.context.applicationInfo.name},
         model:{kind:'gaussian-splatting',format:'ply',formatContract:SELF_PLY_CONTRACT,entry:MODEL_ENTRY,byteLength:model.byteLength,sha256:model.sha256},
-        displayName:source.name,assets,requiredFeatures:['model.ply'],optionalFeatures};
+        displayName:source.name,assets,requiredFeatures,optionalFeatures};
       validateManifest(manifest);writeText(working+'/manifest.json',JSON.stringify(manifest));
       const name=source.name.replace(/[\u0000-\u001f<>:"/\\|?*]/g,'_').slice(0,24)||'Model';
       const finalPath=bundle+'/SELF_'+name+'_'+packageId+'.self3d.zip',temporary=bundle+'/package.partial.zip';
       await zlib.compressFile(working,temporary,{level:zlib.CompressLevel.COMPRESS_LEVEL_NO_COMPRESSION,keepTopLevelFolder:false});
       const inspection=await inspectZip(temporary);
       if(inspection.entries.find((entry)=>entry.path===MODEL_ENTRY)?.size!==model.byteLength)throw new PackageValidationError('模型包生成不完整');
+      if(savedEditRevision(source.directory)!==source.editsRevision)throw new PackageValidationError('试色正在保存，请完成后重试');
+      if(cameraFileRevision(source.directory)!==cameraRevision)throw new PackageValidationError('正脸记录正在保存，请稍后重试');
       fs.renameSync(temporary,finalPath);
-      this.cached={path:finalPath,packageId,modelId,revision,sourcePath:source.plyPath,sourceSize:stat.size,sourceMtime:stat.mtime};
+      const exportDirectory=bundle+'/content';fs.renameSync(working,exportDirectory);
+      this.cached={path:finalPath,packageId,modelId,revision,sourcePath:source.plyPath,sourceSize:stat.size,sourceMtime:stat.mtime,displayName:source.name,editsRevision:source.editsRevision,cameraRevision,exportDirectory};
       console.info('SELF_PACKAGE_PREPARED '+packageId+' '+sourceHash);return this.cached;
     }catch(error){removeTransferTree(bundle,this.root);throw error as Error;}
-    finally{removeTransferTree(working,this.root);}
+    finally{if(fs.accessSync(working))removeTransferTree(working,this.root);}
+  }
+  /** PLY and saved edits were validated/prepared before touch. Only capture metadata and stream the native ZIP here. */
+  async prepareArrival(prepared:PreparedTransfer,arrival:SelfViewerState):Promise<PreparedTransfer>{
+    if(!validViewer(arrival)||!prepared.exportDirectory||!fs.accessSync(prepared.exportDirectory))throw new PackageValidationError('发送视角尚未准备好');
+    const directory=prepared.sourcePath.substring(0,prepared.sourcePath.lastIndexOf('/'));
+    if(savedEditRevision(directory)!==prepared.editsRevision||cameraFileRevision(directory)!==prepared.cameraRevision)
+      throw new PackageValidationError('模型记录已改变，请重新打开模型后发送');
+    const working=prepared.exportDirectory,original=boundedText(working+'/manifest.json');
+    const manifest=JSON.parse(original) as SelfTransferManifest,packageId=util.generateRandomUUID(true);
+    const bundle=this.root+'/outgoing/'+packageId;makeDir(bundle);
+    try{
+      await ensureSpace(this.root,prepared.sourceSize+1024*1024);
+      makeDir(working+'/viewer');writeText(working+'/'+ARRIVAL_ENTRY,JSON.stringify(arrival));
+      manifest.assets.push(await this.asset('camera',ARRIVAL_ENTRY,working+'/'+ARRIVAL_ENTRY,true));
+      if(!manifest.requiredFeatures.includes(CAMERA_FEATURE))manifest.requiredFeatures.push(CAMERA_FEATURE);
+      manifest.packageId=packageId;manifest.createdAt=new Date().toISOString();validateManifest(manifest);
+      writeText(working+'/manifest.json',JSON.stringify(manifest));
+      const filename=prepared.path.substring(prepared.path.lastIndexOf('/')+1).replace(prepared.packageId,packageId);
+      const partial=bundle+'/package.partial.zip',path=bundle+'/'+filename;
+      await zlib.compressFile(working,partial,{level:zlib.CompressLevel.COMPRESS_LEVEL_NO_COMPRESSION,keepTopLevelFolder:false});
+      await inspectZip(partial);
+      const stat=fs.statSync(prepared.sourcePath);
+      if(stat.size!==prepared.sourceSize||stat.mtime!==prepared.sourceMtime||savedEditRevision(directory)!==prepared.editsRevision||cameraFileRevision(directory)!==prepared.cameraRevision)
+        throw new PackageValidationError('发送期间模型记录改变，请重试');
+      fs.renameSync(partial,path);
+      console.info('SELF_CAMERA_PACKAGE_PREPARED '+packageId);
+      return {path,packageId,modelId:prepared.modelId,revision:prepared.revision,sourcePath:prepared.sourcePath,
+        sourceSize:prepared.sourceSize,sourceMtime:prepared.sourceMtime,displayName:prepared.displayName,editsRevision:prepared.editsRevision,cameraRevision:prepared.cameraRevision};
+    }catch(error){removeTransferTree(bundle,this.root);throw error as Error;}
+    finally{writeText(working+'/manifest.json',original);if(fs.accessSync(working+'/'+ARRIVAL_ENTRY))fs.unlinkSync(working+'/'+ARRIVAL_ENTRY);}
   }
   async importPackage(path:string,cancelled:()=>boolean):Promise<ImportedTransfer>{
     // Every incoming path is first copied/resolved by the bridge into a session owned by this app.
@@ -108,12 +153,21 @@ export class SelfTransferPackage implements TransferModels {
       }
       console.info('SELF_PACKAGE_VALIDATED '+manifest.packageId+' '+manifest.model.sha256);
       const ply=await inspectPly(stage+'/'+MODEL_ENTRY,cancelled);
+      let edits:TransferEdits|undefined=undefined;
+      if(manifest.requiredFeatures.includes(EDIT_FEATURE))
+        edits=validateEdits(JSON.parse(boundedText(stage+'/'+EDIT_ENTRY,4*1024*1024)) as TransferEdits,manifest.model.byteLength,manifest.model.sha256,ply.vertexCount);
       let viewer:SelfViewerState|undefined=undefined;
       if(manifest.assets.some((asset)=>asset.path===VIEW_ENTRY)&&fs.accessSync(stage+'/'+VIEW_ENTRY)){
         const parsed=JSON.parse(boundedText(stage+'/'+VIEW_ENTRY)) as SelfViewerState;if(validViewer(parsed))viewer=parsed;
       }
+      let front:TransferFrontView|undefined=undefined,arrival:SelfViewerState|undefined=undefined;
+      if(manifest.assets.some((asset)=>asset.path===FRONT_ENTRY))front=validateFrontView(JSON.parse(boundedText(stage+'/'+FRONT_ENTRY)) as TransferFrontView,manifest.model.sha256);
+      if(manifest.assets.some((asset)=>asset.path===ARRIVAL_ENTRY)){
+        arrival=JSON.parse(boundedText(stage+'/'+ARRIVAL_ENTRY)) as SelfViewerState;
+        if(!validViewer(arrival))throw new PackageValidationError('模型包当前视角损坏');
+      }
       await ensureSpace(this.root,1024*1024);
-      return await this.importer.importValidated(stage,manifest,ply,viewer,cancelled);
+      return await this.importer.importValidated(stage,manifest,ply,viewer,cancelled,edits,front,arrival);
     }catch(error){
       if(error instanceof PackageValidationError||error instanceof Error&&error.name==='ModelImportError')throw error;
       console.error('SELF_PACKAGE_FAILURE '+String(error));throw new PackageValidationError('模型包损坏或无法读取');

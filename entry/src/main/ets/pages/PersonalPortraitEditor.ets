@@ -173,7 +173,7 @@ export struct PersonalPortraitEditor {
     return this.keyboardTopVp>0?Math.min(this.viewportHeight-10,this.keyboardTopVp-12):this.viewportHeight-20;
   }
   private syncTransferAvailability():void{
-    this.onTransferAvailability(this.ready&&!this.applied&&!this.candidateReady&&!this.waiting&&!this.comparing&&!this.pendingHistory);
+    this.onTransferAvailability(this.ready&&!this.candidateReady&&!this.waiting&&!this.comparing&&!this.pendingHistory);
   }
   aboutToAppear():void{
     this.previousKeyboardAvoidMode=this.getUIContext().getKeyboardAvoidMode();
@@ -437,7 +437,7 @@ export struct PersonalPortraitEditor {
   }
   private viewerReady():void{
     this.ready=true;this.restore();this.storyObservations=this.observationStore.list(this.assetId);
-    this.revealStoryHint();this.onReady();
+    this.revealStoryHint();this.onReady();this.syncTransferAvailability();
   }
   private selectedRegion(info:GsSelection,mask:ArrayBuffer):void{
     console.info('SELF_GS_SELECTION_READY '+info.count+' '+info.total+' '+mask.byteLength);

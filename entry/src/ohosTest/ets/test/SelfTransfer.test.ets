@@ -1,5 +1,6 @@
 import { describe,it,expect } from '@ohos/hypium';
 import { abilityDelegatorRegistry } from '@kit.TestKit';
+import { common } from '@kit.AbilityKit';
 import { fileIo as fs } from '@kit.CoreFileKit';
 import { util } from '@kit.ArkTS';
 import { zlib,deviceInfo } from '@kit.BasicServicesKit';
@@ -7,9 +8,42 @@ import { SELF_SCHEMA,SELF_PLY_CONTRACT,SelfTransferManifest,validateManifest,saf
 import { inspectZip } from '../../../main/ets/transfer/SelfTransferZipGuard';
 import { inspectPly } from '../../../main/ets/transfer/SelfTransferPly';
 import { makeDir,writeText,fileSha256,removeTransferTree } from '../../../main/ets/transfer/TransferFiles';
+import { TransferDiagnostic } from '../../../main/ets/transfer/TransferState';
+import { ShareDiagnostic } from '../../../main/ets/transfer/HarmonyShareBridge';
+
+interface RuntimeDiagnostic {requestId:number;coordinator:TransferDiagnostic;share:ShareDiagnostic;}
 
 /** Uses real device filesystem, official zlib and SHA-256. Isolated cache fixtures only; no user model index changes. */
 export default function selfTransferSuite(){
+  describe('SELFTransferDiagnostics',()=>{
+    it('readActualForegroundWindowRegistration',0,async()=>{
+      const delegator=abilityDelegatorRegistry.getAbilityDelegator(),context=delegator.getAppContext();
+      await delegator.startAbility({bundleName:context.applicationInfo.name,abilityName:'EntryAbility'});
+      let hostContext:common.UIAbilityContext|undefined=undefined;
+      for(let attempt=0;attempt<50;attempt++){
+        try{hostContext=(await delegator.getCurrentTopAbility()).context;break;}catch(_){
+          await new Promise<void>((resolve)=>setTimeout(resolve,100));
+        }
+      }
+      if(!hostContext)throw new Error('Host window did not enter foreground');
+      const path=hostContext.cacheDir+'/self_transfer/diagnostics.json';
+      const requestId=Date.now();
+      await delegator.startAbility({bundleName:context.applicationInfo.name,abilityName:'EntryAbility',parameters:{selfTransferDiagnostic:requestId}});
+      let value:RuntimeDiagnostic|undefined=undefined;
+      for(let attempt=0;attempt<50;attempt++){
+        if(fs.accessSync(path)){
+          const candidate=JSON.parse(fs.readTextSync(path)) as RuntimeDiagnostic;
+          if(candidate.requestId===requestId){value=candidate;break;}
+        }
+        await new Promise<void>((resolve)=>setTimeout(resolve,100));
+      }
+      if(!value)throw new Error('No fresh runtime diagnostic received');
+      await delegator.print('SELF_TRANSFER_RUNTIME_DIAGNOSTIC '+JSON.stringify(value));
+      expect(value.share.api).assertEqual(deviceInfo.sdkApiVersion);
+      expect(value.share.windowId>0).assertTrue();
+      expect(!(value.share.sendRegistered&&value.share.receiveRegistered)).assertTrue();
+    });
+  });
   describe('SELFTransferNative',()=>{
     it('officialZipAndPlyRoundTripPreservesSha256',0,async()=>{
       const context=abilityDelegatorRegistry.getAbilityDelegator().getAppContext();
