@@ -14,6 +14,10 @@ import { OlayDiscoveryRepository,OlayDiscoveryItem } from '../services/OlayDisco
 import { OlayPhotoRepository } from '../services/OlayPhotoRepository';
 import { StarCloseButton } from './StarCloseButton';
 import { UiText } from '../services/UiText';
+import { SelectionBounds, SelectionConversationFrame, selectionConversationFrame } from '../domain/SelectionConversationLayout';
+import { deviceInfo } from '@kit.BasicServicesKit';
+import { FreckleDemo } from '../domain/FreckleDemo';
+import { FreckleDemoContent } from './FreckleDemoContent';
 
 interface SavedGsEdit {
   schemaVersion:number;
@@ -65,6 +69,7 @@ export struct PersonalPortraitEditor {
   private planner:PlannerClient=new PlannerClient();
   private storyClient:StoryConversationClient=new StoryConversationClient();
   private storyInputController:TextInputController=new TextInputController();
+  private selectionInputController:TextInputController=new TextInputController();
   private observationStore:StoryObservationStore=new StoryObservationStore(this.context);
   private storySessionId:string='session-'+Date.now()+'-'+Math.floor(Math.random()*1000000);
   private storyGeneration:number=0;
@@ -85,7 +90,7 @@ export struct PersonalPortraitEditor {
   private lastProductIds:string[]=[];
   private selectionObservations:SelectionObservation[]=[];
   private requestChoice:string='';
-  private productsDismissed:boolean=false;
+  @State productsDismissed:boolean=false;
   @State libraryProductId:string='';
   @State storyProductIds:string[]=[];
   @State replyProductIds:string[]=[];
@@ -124,6 +129,7 @@ export struct PersonalPortraitEditor {
   @State visibleReplyLines:number=0;
   @State replyBloom:boolean=false;
   private replyToken:number=0;
+  private demoReplyToken:number=0;
   private carePreviewToken:number=0;
   @State careProductId:string='';
   @State careWhy:string='';
@@ -133,8 +139,11 @@ export struct PersonalPortraitEditor {
   @State question:string='';
   @State choices:string[]=[];
   @State input:string='';
-  @State anchorX:number=.5;
-  @State anchorY:number=.5;
+  @State freckleDemo:boolean=false;
+  @State demoLook:string='';
+  @State demoNotice:string='';
+  @State conversationFrame:SelectionConversationFrame={x:18,y:58,width:330,maxHeight:320};
+  @State conversationContentHeight:number=168;
   @State storyOpen:boolean=false;
   @State storyWaiting:boolean=false;
   @State storyInput:string='';
@@ -209,6 +218,9 @@ export struct PersonalPortraitEditor {
   }
   private sendStory(value:string):void{
     const text=value.trim();if(!text||this.storyWaiting)return;
+    if(this.selected&&FreckleDemo.enabled(deviceInfo.deviceType)){
+      this.enterExistingEdit(text);this.submit(text);return;
+    }
     if(text.length>500){this.storyReply=this.tr('这一段稍长，分成两次说也可以。');return;}
     if(/(?:不要|不用|不想|别).{0,8}(?:推荐|产品|商品|买)|no products|don.t recommend/i.test(text))this.productsDismissed=true;
     else if(/推荐|哪款|想买|recommend/i.test(text))this.productsDismissed=false;
@@ -327,6 +339,12 @@ export struct PersonalPortraitEditor {
     this.replyLines=lines;this.visibleReplyLines=0;
     this.revealReply(++this.replyToken);
   }
+  private resizeConversation(height:number):void{
+    if(!Number.isFinite(height)||height<=0||Math.abs(height-this.conversationContentHeight)<1)return;
+    this.getUIContext().animateTo({duration:190,curve:Curve.EaseOut},()=>{
+      this.conversationContentHeight=height;
+    });
+  }
   private revealReply(token:number):void{
     if(token!==this.replyToken||this.visibleReplyLines>=this.replyLines.length)return;
     setTimeout(()=>{if(token!==this.replyToken)return;
@@ -339,13 +357,13 @@ export struct PersonalPortraitEditor {
   private historyPanelWidth():number{return Math.min(this.viewportWidth-24,this.viewportHeight>this.viewportWidth?420:360);}
   private historyPanelHeight():number{return this.viewportHeight>this.viewportWidth?
     Math.min(this.viewportHeight*.69,820):Math.min(this.viewportHeight*.62,520);}
-  private bubbleLeft():number {
-    const width=Math.min(330,this.viewportWidth-36);
-    if(this.keyboardOpen&&this.viewportWidth>=840)return 24;
-    if(this.viewportWidth>=840)return this.anchorX<.5?
-      Math.min(this.viewportWidth-width-24,Math.max(this.viewportWidth*.66,this.anchorX*this.viewportWidth+100)):
-      28;
-    return Math.max(18,Math.min(this.viewportWidth-width-18,this.anchorX*this.viewportWidth-width/2));
+  private focusSelectionInput():void{
+    this.getUIContext().setKeyboardAvoidMode(KeyboardAvoidMode.NONE);
+    this.keyboardOpen=true;
+  }
+  private blurSelectionInput():void{
+    this.keyboardOpen=false;
+    this.getUIContext().setKeyboardAvoidMode(this.previousKeyboardAvoidMode);
   }
   private directory():string{return this.context.filesDir+'/models/'+this.assetId;}
   private command(action:string,tool:string='',preset:string='',strength:number=0,maskBase64:string=''):void{
@@ -442,6 +460,7 @@ export struct PersonalPortraitEditor {
   private selectedRegion(info:GsSelection,mask:ArrayBuffer):void{
     console.info('SELF_GS_SELECTION_READY '+info.count+' '+info.total+' '+mask.byteLength);
     this.planner.cancel();this.pending=undefined;this.pendingSnapshot=undefined;
+    this.demoReplyToken++;this.freckleDemo=false;this.demoLook='';this.demoNotice='';this.waiting=false;
     this.carePreviewToken++;
     if(this.careWeek>0)this.command('CARE_PREVIEW','','',0);
     this.careWeek=0;this.careProductId='';this.careWhy='';this.careHow='';
@@ -453,7 +472,8 @@ export struct PersonalPortraitEditor {
     this.dialogue=[];this.lastProductIds=[];this.selectionObservations=[];this.requestChoice='';
     this.selected=true;this.candidateReady=false;
     this.storyPhase='act';this.revealStoryHint();
-    this.anchorX=Math.max(.1,Math.min(.9,info.x));this.anchorY=Math.max(.15,Math.min(.7,info.y));
+    const bounds:SelectionBounds=info.bounds||{left:info.x,top:info.y,right:info.x,bottom:info.y};
+    this.conversationFrame=selectionConversationFrame(this.viewportWidth,this.viewportHeight,bounds);
     const firstPrompts=['这一处已留下。再画可重选，也可以说说想法。',
       '光落在这里了。想换一处，直接再画一圈。','这处会跟着你的面容；想微调，还可以重画。'];
     this.bubble=true;this.responseText=existing>=0?
@@ -465,6 +485,7 @@ export struct PersonalPortraitEditor {
   }
   private appendSelection():void{
     if(!this.ready||this.waiting||this.selectionCount>=4)return;
+    this.selectionInputController.stopEditing();
     this.getUIContext().animateTo({duration:200,curve:Curve.EaseOut},()=>{this.tool='lasso';this.bubble=false;});
     this.command('ARM_APPEND');this.onInteraction();
   }
@@ -499,6 +520,20 @@ export struct PersonalPortraitEditor {
     this.carePreviewToken++;
     if(this.careWeek>0)this.command('CARE_PREVIEW','','',0);
     this.careWeek=0;this.careProductId='';this.careWhy='';this.careHow='';
+    this.freckleDemo=false;this.demoLook='';this.demoNotice='';
+    if(FreckleDemo.enabled(deviceInfo.deviceType)){
+      // Every tablet model uses the same presentation question/answer. No asset or AI dependency.
+      this.planner.cancel();this.consentOffer=false;this.consentIntent='';this.replyProductIds=[];
+      this.beginSelectionReply();
+      const token=++this.demoReplyToken,revision=this.revision,assetId=this.assetId;
+      setTimeout(()=>{
+        if(token!==this.demoReplyToken||revision!==this.revision||assetId!==this.assetId||
+          !this.selected||!this.bubble||!this.waiting)return;
+        this.waiting=false;this.freckleDemo=true;
+        this.responseText='✧ '+FreckleDemo.answer;
+      },2400);
+      this.selectionInputController.stopEditing();this.onInteraction();return;
+    }
     if(!this.cloudEnabled){
       if(this.cloudConsentDecision==='denied'){
         this.responseText=this.tr('云端对话已关闭。想再继续时，可以在设置里开启。');return;
@@ -507,11 +542,18 @@ export struct PersonalPortraitEditor {
     }
     this.capture();
   }
+  private tryFreckleLook(id:string):void{
+    if(!FreckleDemo.enabled(deviceInfo.deviceType)||!this.freckleDemo||!this.ready||
+      !this.selected||this.waiting||this.pendingHistory||!FreckleDemo.validLook(id))return;
+    this.demoLook=id;this.demoNotice='已选好这份风格，试色功能稍后开放。';this.onInteraction();
+  }
+  private beginSelectionReply():void{
+    this.waiting=true;this.responseText=this.tr('我陪你看看这些地方…');
+  }
   private capture():void{
     this.consentOffer=false;this.consentIntent='';
     if(!CloudConsentStore.allowed(this.context))return;
-    this.waiting=true;
-    this.responseText=this.tr('我陪你看看这些地方…');
+    this.beginSelectionReply();
     this.command('CAPTURE');
   }
   private async captured(clean:ArrayBuffer,annotated:ArrayBuffer,width:number,height:number,gsView?:GsViewSnapshot):Promise<void>{
@@ -604,7 +646,7 @@ export struct PersonalPortraitEditor {
         this.comparisonTarget=this.pendingComparison;this.comparing=!!this.comparisonTarget;
         this.pendingComparison=undefined;
       }
-      console.info('SELF_GS_HISTORY_APPLIED '+this.history?.groups.length);
+      this.syncTransferAvailability();console.info('SELF_GS_HISTORY_APPLIED '+this.history?.groups.length);
     }catch(error){this.pendingHistory=undefined;this.syncTransferAvailability();this.responseText=this.tr('变化未能稳妥保存，已回到上一次记录。');console.warn('SELF_GS_EDIT_SAVE_FAILED '+String(error));}
   }
   private undo():void{
@@ -636,7 +678,9 @@ export struct PersonalPortraitEditor {
       splatCount:this.history.splatCount,groups});
   }
   private clearSelection():void{
+    this.selectionInputController.stopEditing();
     this.planner.cancel();this.pending=undefined;this.pendingSnapshot=undefined;this.candidateReady=false;
+    this.demoReplyToken++;this.freckleDemo=false;this.demoLook='';this.demoNotice='';
     this.carePreviewToken++;
     this.selections=[];this.selectionCount=0;this.selected=false;
     this.dialogue=[];this.lastProductIds=[];this.selectionObservations=[];
@@ -645,7 +689,7 @@ export struct PersonalPortraitEditor {
     this.command('CLEAR_SELECTION');this.bubble=false;this.revision++;
   }
   aboutToDisappear():void{this.planner.cancel();this.storyClient.cancel();this.storyGeneration++;
-    this.storyHintToken++;this.replyToken++;this.composerDustToken++;
+    this.storyHintToken++;this.replyToken++;this.demoReplyToken++;this.composerDustToken++;
     if(this.appWindow){this.appWindow.off('keyboardHeightChange',this.keyboardHeightListener);this.appWindow=undefined;}
     this.getUIContext().setKeyboardAvoidMode(this.previousKeyboardAvoidMode);
   }
@@ -666,7 +710,7 @@ export struct PersonalPortraitEditor {
         onViewSnapshot:(view:GsViewSnapshot)=>this.receivedView(view),
         onApplied:(action:string)=>this.appliedResult(action)}).width('100%').height('100%')
       if(this.bubble){
-        Column({space:8}){
+        Scroll(){Column({space:8}){
           Row(){Text('✦ SELF').fontSize(12).letterSpacing(2).fontColor('#BFD8F3').layoutWeight(1);
             StarCloseButton({diameter:30,label:this.tr('关闭'),onClose:()=>this.clearSelection()})}
           Column({space:1}){
@@ -677,6 +721,12 @@ export struct PersonalPortraitEditor {
                 .animation({duration:190,curve:Curve.EaseOut})
             },(_line:string,index:number)=>index.toString())
           }.alignItems(HorizontalAlign.Start).width('100%')
+          if(this.freckleDemo&&!this.waiting&&!this.replyBloom&&this.replyLines.length>0&&this.visibleReplyLines>=this.replyLines.length){
+            FreckleDemoContent({activeLook:this.demoLook,notice:this.demoNotice,showCare:!this.productsDismissed,
+              onTry:(id:string)=>this.tryFreckleLook(id),
+              onProduct:(id:string)=>{this.libraryProductId=id;this.libraryOpen=true;},
+              onDismissCare:()=>{this.productsDismissed=true;this.demoNotice='好，我们先看看光色。';}})
+          }
           if(this.careProductId&&this.careProduct(this.careProductId)){
             Column({space:5}){
               Row({space:9}){
@@ -718,10 +768,11 @@ export struct PersonalPortraitEditor {
                 .onClick(()=>this.declineCloudIntroduction())
             }
           }else{
-            TextInput({text:this.input,placeholder:this.tr(this.selectionCount>1?'例如：第一处淡一些，第二处暖一点':'想对这里说些什么？')})
+            TextInput({text:this.input,controller:this.selectionInputController,placeholder:this.tr(this.selectionCount>1?'例如：第一处淡一些，第二处暖一点':'想对这里说些什么？')})
+              .id('selection-conversation-input')
               .fontSize(14).fontColor('#F4F7FF').placeholderColor('#AFC2D7').backgroundColor('#233A55DD')
               .borderRadius(17).height(42).onChange((value:string)=>this.input=value)
-              .onFocus(()=>this.keyboardOpen=true).onBlur(()=>this.keyboardOpen=false)
+              .onFocus(()=>this.focusSelectionInput()).onBlur(()=>this.blurSelectionInput())
             Row({space:8}){
               Button(this.waiting?this.tr('在想…'):this.tr('发送')).enabled(!this.waiting)
                 .fontSize(13).fontColor('#F5F8FF').backgroundColor('#496581').borderRadius(17).onClick(()=>this.submit(this.input))
@@ -735,12 +786,14 @@ export struct PersonalPortraitEditor {
                 .backgroundColor('#243D59').borderRadius(15).onClick(()=>this.clearSelection())
             }}
           }
-        }.padding(14).width(Math.min(330,this.viewportWidth-36)).backgroundColor('#D91A2D47')
+        }.padding(14).width('100%')
+          .onAreaChange((_old:Area,current:Area)=>this.resizeConversation(Number(current.height)))
+        }.id('selection-conversation')
+          .align(Alignment.TopStart).scrollBar(BarState.Off)
+          .width(this.conversationFrame.width).height(Math.min(this.conversationContentHeight,this.conversationFrame.maxHeight))
+          .backgroundColor('#D91A2D47')
           .border({width:1,color:'#657F9D'}).borderRadius(23)
-          .position({x:this.bubbleLeft(),y:Math.max(58,Math.min(this.viewportHeight-
-            (this.careProductId?260:168)-this.replyLines.length*22-(this.careExpanded?42:0)-
-             (this.question?52:0)-(this.choices.length?40:0)-
-             (this.consentOffer&&this.consentIntent==='edit'?145:0),this.anchorY*this.viewportHeight-92))})
+          .position({x:this.conversationFrame.x,y:this.conversationFrame.y})
           .transition({opacity:0,scale:{x:.92,y:.92},translate:{y:12}}).zIndex(8)
       }
       if(this.ready&&this.tool!=='lasso'){
