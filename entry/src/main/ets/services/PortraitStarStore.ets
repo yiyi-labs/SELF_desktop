@@ -90,7 +90,7 @@ export class PortraitStarStore {
     const directory=this.directory(id);let complete=true;
     // Only known files belonging to this memory; never follow an arbitrary path or recurse.
     for(const name of ['portrait.gaussian.ply','portrait.view.json','portrait.preview.png',
-      'portrait.preview.gaussian.ply','portrait.scene-v3.gaussian.ply','portrait.glb']){
+      'portrait.preview.gaussian.ply','portrait.scene-v3.gaussian.ply','portrait.glb','self-transfer.json']){
       const path=directory+'/'+name;
       try{if(fs.accessSync(path))fs.unlinkSync(path);}
       catch(error){console.warn('SELF_STAR_DELETE_FILE_FAILED '+id+' '+String(error));}

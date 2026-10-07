@@ -1,3 +1,4 @@
+import selfTransferSuite from './SelfTransfer.test';
 import cameraPipelineSuite from './CameraPipeline.test';
 import spatialReconSuite from './SpatialRecon.test';
 import { describe, it, expect } from '@ohos/hypium';
@@ -41,6 +42,7 @@ function session():SessionStore{
   return s;
 }
 export default function testsuite(){
+  selfTransferSuite();
   spatialReconSuite();cameraPipelineSuite();stressSuite();liveModelSuite();experienceSuite();productSuite();cameraSuite();
   describe('SELFNativePolicy',()=>{
     it('localNewEffectCannotBypassModelButRestoreRemainsLocal',0,()=>{

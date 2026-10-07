@@ -1,0 +1,352 @@
+{
+  "auditOnly": true,
+  "project": "olay",
+  "git": {
+    "branch": "master",
+    "head": "c4a826249280efa390b22bcb170013de839ce924",
+    "recent": [
+      "c4a8262 功能：我的星辰栏目支持重命名并即时刷新；3D预览字幕随历史/圈选联动淡出；新增灵动岛相关交互与图标",
+      "e9d298b 修复：圈选身份——引擎 Morton 重排后可编辑前缀合同失效（'立体细节较少'根因）",
+      "28543f2 修复：Start-SELF 纳入手机 USB 连接建立与保活（此前停掉守护任务后 HDC 反向转发无人负责，手机端 127.0.0.1:8787 无法到达电脑）",
+      "7038e97 证据：头身分离根因链（DA3人物窗口深度尺度失控）与修复验证（skin→cloth 29.1→1.66，全 5 资产发布）",
+      "aae97f0 修复：测试引擎分支的预览调用点适配元组签名（842b971 只改了 legacy 分支导致所有作业静默丢预览）+ 回归测试"
+    ],
+    "status": [
+      "M docs/evidence/hap-build.log",
+      " M entry/src/main/ets/bridge/RendererBridge.ets",
+      " M entry/src/main/ets/pages/GaussianPortraitSurface.ets",
+      " M entry/src/main/ets/pages/PersonalPortraitEditor.ets",
+      " M entry/src/main/resources/rawfile/gs-viewer.js",
+      " M viewer-gs/gs-edit.js",
+      " M viewer-gs/main.js",
+      "?? assets-src/freckle-demo/",
+      "?? docs/evidence/freckle-demo-20261006.md",
+      "?? entry/src/main/ets/domain/FreckleDemo.ets",
+      "?? entry/src/main/ets/domain/SelectionConversationLayout.ets",
+      "?? entry/src/main/ets/pages/FreckleDemoContent.ets",
+      "?? entry/src/main/resources/rawfile/licenses/freckle-demo-CC-BY-SA-4.0.md",
+      "?? entry/src/main/resources/rawfile/ui/freckle-airy.png",
+      "?? entry/src/main/resources/rawfile/ui/freckle-natural.png",
+      "?? entry/src/main/resources/rawfile/ui/freckle-warm.png",
+      "?? migration/",
+      "?? scripts/audit-self-transfer.mjs",
+      "?? scripts/prepare-freckle-demo.mjs",
+      "?? tmp/",
+      "?? viewer-gs/tests/freckle-demo.test.mjs",
+      "?? viewer-gs/tests/selection-conversation.test.mjs"
+    ]
+  },
+  "sdk": {
+    "apiVersion": "26",
+    "displayName": "HarmonyOS 26.0.0",
+    "path": "HarmonyOS-26.0.0",
+    "platformVersion": "26.0.0",
+    "releaseType": "Release",
+    "version": "26.0.0.105",
+    "stage": "Release"
+  },
+  "targetSdkVersion": "26.0.0",
+  "compatibleSdkVersion": "5.1.1(19)",
+  "compileSdkVersion": "not explicitly set; resolved by Hvigor target/default SDK",
+  "stage": "stageMode",
+  "bundleName": "com.self.mirror",
+  "appVersion": "0.1.0",
+  "moduleName": "entry",
+  "mainElement": "EntryAbility",
+  "mainWindowSource": "entry/src/main/ets/entryability/EntryAbility.ets:onWindowStageCreate",
+  "harmonyShareSignatures": [
+    "share(data: systemShare.SharedData): Promise<void>;",
+    "receive(receiveUri: string, callback: ReceiveCallback): Promise<void>;",
+    "function on(event: 'knockShare', callback: Callback<SharableTarget>): void;",
+    "function off(event: 'knockShare', callback?: Callback<SharableTarget>): void;",
+    "function on(event: 'knockShare', capability: SendCapabilityRegistry, callback: Callback<SharableTarget>): void;",
+    "function off(event: 'knockShare', capability: SendCapabilityRegistry, callback?: Callback<SharableTarget>): void;",
+    "function on(event: 'dataReceive', capability: RecvCapabilityRegistry, callback: Callback<ReceivableTarget>): void;",
+    "function off(event: 'dataReceive', capability: RecvCapabilityRegistry, callback?: Callback<ReceivableTarget>): void;"
+  ],
+  "sourceHashes": [
+    {
+      "file": "viewer-gs/main.js",
+      "sha256": "4bc992ebdc55ad13b231f4b213693321a6f4bd0bb3c8502f0cfb9d071c2765d6"
+    },
+    {
+      "file": "node_modules/playcanvas/package.json",
+      "sha256": "3d0dab61cc05cc2b5c1966a75dcf805889cc6c65ef738d179d8702fa3e1ca06b"
+    },
+    {
+      "file": "node_modules/playcanvas/build/playcanvas/src/framework/parsers/ply.js",
+      "sha256": "c889f0710a6f48113ef0f0c76669048fc470612d83c2068f7bb31c23cf1c7d71"
+    },
+    {
+      "file": "node_modules/playcanvas/build/playcanvas/src/scene/gsplat/gsplat-data.js",
+      "sha256": "a2c617444c2d50f89ff51218671d123ea46cfc11122f54623f50bd380672e835"
+    }
+  ],
+  "ply": {
+    "sample": "backend/.data/reconstruction/0670b3d5554e4a456926d09f85ef7553/portrait.gaussian.ply",
+    "bytes": 54784393,
+    "sha256": "d0cd64a70d99d55fcff037766030e138aff7a193cb801d39b43fb31d2fe8873a",
+    "header": "ply\nformat binary_little_endian 1.0\nelement vertex 232131\nproperty float x\nproperty float y\nproperty float z\nproperty float f_dc_0\nproperty float f_dc_1\nproperty float f_dc_2\nproperty float f_rest_0\nproperty float f_rest_1\nproperty float f_rest_2\nproperty float f_rest_3\nproperty float f_rest_4\nproperty float f_rest_5\nproperty float f_rest_6\nproperty float f_rest_7\nproperty float f_rest_8\nproperty float f_rest_9\nproperty float f_rest_10\nproperty float f_rest_11\nproperty float f_rest_12\nproperty float f_rest_13\nproperty float f_rest_14\nproperty float f_rest_15\nproperty float f_rest_16\nproperty float f_rest_17\nproperty float f_rest_18\nproperty float f_rest_19\nproperty float f_rest_20\nproperty float f_rest_21\nproperty float f_rest_22\nproperty float f_rest_23\nproperty float f_rest_24\nproperty float f_rest_25\nproperty float f_rest_26\nproperty float f_rest_27\nproperty float f_rest_28\nproperty float f_rest_29\nproperty float f_rest_30\nproperty float f_rest_31\nproperty float f_rest_32\nproperty float f_rest_33\nproperty float f_rest_34\nproperty float f_rest_35\nproperty float f_rest_36\nproperty float f_rest_37\nproperty float f_rest_38\nproperty float f_rest_39\nproperty float f_rest_40\nproperty float f_rest_41\nproperty float f_rest_42\nproperty float f_rest_43\nproperty float f_rest_44\nproperty float opacity\nproperty float scale_0\nproperty float scale_1\nproperty float scale_2\nproperty float rot_0\nproperty float rot_1\nproperty float rot_2\nproperty float rot_3\nend_header\n",
+    "encoding": "binary_little_endian",
+    "vertexCount": 232131,
+    "properties": [
+      {
+        "type": "float",
+        "name": "x"
+      },
+      {
+        "type": "float",
+        "name": "y"
+      },
+      {
+        "type": "float",
+        "name": "z"
+      },
+      {
+        "type": "float",
+        "name": "f_dc_0"
+      },
+      {
+        "type": "float",
+        "name": "f_dc_1"
+      },
+      {
+        "type": "float",
+        "name": "f_dc_2"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_0"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_1"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_2"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_3"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_4"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_5"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_6"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_7"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_8"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_9"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_10"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_11"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_12"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_13"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_14"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_15"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_16"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_17"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_18"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_19"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_20"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_21"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_22"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_23"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_24"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_25"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_26"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_27"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_28"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_29"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_30"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_31"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_32"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_33"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_34"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_35"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_36"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_37"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_38"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_39"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_40"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_41"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_42"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_43"
+      },
+      {
+        "type": "float",
+        "name": "f_rest_44"
+      },
+      {
+        "type": "float",
+        "name": "opacity"
+      },
+      {
+        "type": "float",
+        "name": "scale_0"
+      },
+      {
+        "type": "float",
+        "name": "scale_1"
+      },
+      {
+        "type": "float",
+        "name": "scale_2"
+      },
+      {
+        "type": "float",
+        "name": "rot_0"
+      },
+      {
+        "type": "float",
+        "name": "rot_1"
+      },
+      {
+        "type": "float",
+        "name": "rot_2"
+      },
+      {
+        "type": "float",
+        "name": "rot_3"
+      }
+    ],
+    "shRestProperties": 45,
+    "shDegree": 3,
+    "bounds": {
+      "min": [
+        -12.563310623168945,
+        -66.02261352539062,
+        -2.1470959186553955
+      ],
+      "max": [
+        82.4373779296875,
+        13.665623664855957,
+        98.11013793945312
+      ]
+    },
+    "nonFinitePositions": 0
+  },
+  "verification": {
+    "packageRoundTrip": "not implemented",
+    "import": "not implemented",
+    "viewerVisualInterop": "not run",
+    "deviceTransfer": "not run"
+  }
+}

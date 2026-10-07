@@ -1,4 +1,8 @@
 import { fileUri, fileIo as fs } from '@kit.CoreFileKit';
+import { window } from '@kit.ArkUI';
+import { SelfTransferRuntime } from '../transfer/SelfTransferRuntime';
+import { TransferSnapshot, TransferPolicy } from '../transfer/TransferState';
+import { ImportedTransfer } from '../transfer/SelfTransferContract';
 import { NativeMirrorSurface } from './NativeMirrorSurface';
 import { GaussianPortraitSurface } from './GaussianPortraitSurface';
 import { PersonalPortraitEditor } from './PersonalPortraitEditor';
@@ -44,6 +48,40 @@ function softButton(){
 @Entry
 @Component
 struct SelfMirrorPage {
+  private transferPageActive:boolean=true;
+  private transfer:SelfTransferRuntime|undefined=undefined;
+  @State transferEnabled:boolean=false;
+  @State transferPhase:string='IDLE';
+  @State transferReceiving:boolean=false;
+  @State @Watch('syncTransferIntent') transferEditorSafe:boolean=true;
+  private transferNotice=(message:string):void=>{console.warn('SELF_TRANSFER_NOTICE '+message);};
+  private attachTransfer():void{
+    this.context.getApplicationContext().eventHub.on('selfTransferNotice',this.transferNotice);
+    window.getLastWindow(this.context).then((main:window.Window)=>{
+      if(!this.transferPageActive)return;
+      this.transfer=SelfTransferRuntime.bind(this.context,main.getWindowProperties().id);
+      this.transferEnabled=this.transfer.supported();
+      this.transfer.coordinator.onChanged=(state:TransferSnapshot)=>{
+        this.transferPhase=state.phase;this.transferReceiving=state.policy===TransferPolicy.FORCE_RECEIVE;
+      };
+      this.transfer.coordinator.onImported=(model:ImportedTransfer)=>{this.refreshStars();this.close();this.openStar(model.modelId);console.info('SELF_MODEL_OPEN_REQUESTED '+model.modelId);};
+      this.transfer.setForeground(this.foreground);this.syncTransferIntent();
+    }).catch((error:Error)=>console.error('SELF_TRANSFER_WINDOW '+error.message));
+  }
+  private syncTransferIntent():void{
+    if(!this.transfer)return;
+    if(!this.transferPageActive){this.transfer.setSurface({kind:'NONE',modelId:'',revision:''});return;}
+    const viewing=this.personalActive()&&!!this.activeStarId;
+    const busy=this.cameraLive||this.reconstructionActive||this.reconSubmitting||this.busy||
+      this.journey==='forming'||viewing&&(!this.personalReady||!this.transferEditorSafe);
+    if(busy){this.transfer.setSurface({kind:'BUSY',modelId:'',revision:''});return;}
+    if(viewing){
+      try{
+        const stat=fs.statSync(this.personalGaussianPath),view=fs.statSync(this.personalViewPath);
+        this.transfer.setSurface({kind:'VIEWER',modelId:this.activeStarId,revision:stat.size+':'+stat.mtime+':'+view.mtime});
+      }catch(_){this.transfer.setSurface({kind:'NONE',modelId:'',revision:''});}
+    }else this.transfer.setSurface({kind:this.skyOpen?'LIST':'HOME',modelId:'',revision:''});
+  }
   @State @Watch('replyChanged') subtitle: string = '先陪自己待一会儿。想聊聊，或试一点不同，都听你的。';
   @State windowWidth:number=400;
   @State surfaceWidth:number=400;
@@ -55,15 +93,15 @@ struct SelfMirrorPage {
   @State captureStatus:string='';
   @State captures:CaptureRecord[]=[];
   @State selectedCapture:string='';
-  @State cameraLive:boolean=false;
-  @State personalGaussianPath:string='';
-  @State personalViewPath:string='';
-  @State showPersonal:boolean=true;
-  @State legacyEditorOpen:boolean=false;
-  @State personalReady:boolean=false;
+  @State @Watch('syncTransferIntent') cameraLive:boolean=false;
+  @State @Watch('syncTransferIntent') personalGaussianPath:string='';
+  @State @Watch('syncTransferIntent') personalViewPath:string='';
+  @State @Watch('syncTransferIntent') showPersonal:boolean=true;
+  @State @Watch('syncTransferIntent') legacyEditorOpen:boolean=false;
+  @State @Watch('syncTransferIntent') personalReady:boolean=false;
   @State personalBackdropLight:boolean=false;
-  @State originMode:boolean=true;
-  @State skyOpen:boolean=false;
+  @State @Watch('syncTransferIntent') originMode:boolean=true;
+  @State @Watch('syncTransferIntent') skyOpen:boolean=false;
   @State starItems:PortraitStar[]=[];
   @State galaxySceneItems:GalaxyScene[]=[];
   @State previewStarId:string='';
@@ -101,15 +139,15 @@ struct SelfMirrorPage {
   @State starNameError:string='';
   private starNameController:TextInputController=new TextInputController();
   private starNameFocusTimer:number=-1;
-  @State activeStarId:string='';
-  @State journey:string='idle';
+  @State @Watch('syncTransferIntent') activeStarId:string='';
+  @State @Watch('syncTransferIntent') journey:string='idle';
   @State @Watch('syncReconstructionActivity') reconProgress:number=0;
-  @State reconstructionActive:boolean=false;
+  @State @Watch('syncTransferIntent') reconstructionActive:boolean=false;
   @State waitingMinimized:boolean=false;
   @State reconstructionOutcome:string='';
   @State reconstructionReadyId:string='';
   @StorageLink('selfReconstructionOpen') @Watch('openReconstructionProgress') reconstructionOpen:number=0;
-  @State reconSubmitting:boolean=false;
+  @State @Watch('syncTransferIntent') reconSubmitting:boolean=false;
   @State reconCanRetry:boolean=false;
   @State reconCancelling:boolean=false;
   @State formationLine:string='';
@@ -233,7 +271,7 @@ struct SelfMirrorPage {
   @State ready: boolean = false;
   @State selected: string = '';
   @State applied: boolean = false;
-  @State busy: boolean = false;
+  @State @Watch('syncTransferIntent') busy: boolean = false;
   @State tool: string = 'NAVIGATE';
   @State detail: string = '';
   @State text: string = '';
@@ -996,6 +1034,7 @@ struct SelfMirrorPage {
   }
 
   aboutToAppear(): void {
+    this.transferPageActive=true;this.attachTransfer();
     const ui=UiPreference.load(this.context);this.language=ui.language;this.accent=ui.accent;this.palette=ui.palette;this.motion=ui.motion;this.followChat=ui.followChat;this.stylusHints=ui.stylusHints;UiText.current=ui.language;AppStorage.setOrCreate('selfLanguage',ui.language);
     this.cloudConsentDecision=CloudConsentStore.load(this.context);
     this.cloudSessionEnabled=this.cloudConsentDecision==='allowed';
@@ -1163,7 +1202,7 @@ struct SelfMirrorPage {
   private toggleMusic(enabled:boolean):void{this.markInteraction();this.pulseButton('music');this.musicOn=enabled;this.audio.configure(enabled,this.palette);}
   private setAtmosphere():void{if(this.bridge.ready)this.bridge.send('SET_ATMOSPHERE',{motion:this.motion&&this.foreground,palette:this.palette});}
   private chooseAtmosphere(mode:string):void{this.getUIContext().animateTo({duration:this.motion?280:0},()=>this.palette=mode);this.setAtmosphere();this.saveUi();if(this.musicOn)this.audio.configure(true,mode);}
-  private foregroundChanged():void{this.bridge.foreground(this.foreground&&!this.cameraLive);this.audio.visibility(this.foreground);this.setAtmosphere();if(this.foreground&&this.reconstructionActive)this.pollReconstruction();if(!this.foreground&&this.timer>=0){clearInterval(this.timer);this.timer=-1;this.playing=false;}}
+  private foregroundChanged():void{this.transfer?.setForeground(this.foreground);this.syncTransferIntent();this.bridge.foreground(this.foreground&&!this.cameraLive);this.audio.visibility(this.foreground);this.setAtmosphere();if(this.foreground&&this.reconstructionActive)this.pollReconstruction();if(!this.foreground&&this.timer>=0){clearInterval(this.timer);this.timer=-1;this.playing=false;}}
   private replyChanged():void{if(!this.motion)return;this.replyScale=.98;this.replyOpacity=.75;this.getUIContext().animateTo({duration:320,curve:Curve.EaseOut},()=>{this.replyScale=1;this.replyOpacity=1;});}
   private undo(direction:number):void{this.lastModelProductIds=[];this.productOpen=false;this.replySources=[];try{this.session.replay(direction);this.busy=true;this.sendSnapshot();}catch(e){this.fail(String(e));}}
   private reset():void{this.lastModelProductIds=[];this.productOpen=false;this.replySources=[];try{this.session.reset();this.busy=true;this.sendSnapshot();}catch(e){this.fail(String(e));}}
@@ -1236,7 +1275,7 @@ struct SelfMirrorPage {
       this.works.loadPreference(this.session);this.bridge.assetId=this.session.assetId;this.bridge.assetVersion=this.session.assetVersion;this.bridge.revision=0;this.identity='示例面容';this.selected='';this.candidate='';this.ready=false;this.close();this.labels();this.bridge.send('INIT',{});this.subtitle=this.tr('已删除这张照片的应用内源文件、作品、蒙版和私有导出；私密文字保留');
     }catch(e){this.fail(String(e));}
   }
-  aboutToDisappear():void{this.resetGalaxyRise();this.clearGalaxyCaption();this.clearSkyTimers();this.planner.cancel();if(this.timer>=0)clearInterval(this.timer);if(this.storyCueTimer>=0)clearTimeout(this.storyCueTimer);if(this.characterTimer>=0)clearTimeout(this.characterTimer);if(this.formationTimer>=0)clearInterval(this.formationTimer);if(this.introCharacterTimer>=0)clearTimeout(this.introCharacterTimer);if(this.revealTimer>=0)clearTimeout(this.revealTimer);if(this.panelOpenTimer>=0)clearTimeout(this.panelOpenTimer);if(this.pulseTimer>=0)clearTimeout(this.pulseTimer);if(this.dustTimer>=0)clearInterval(this.dustTimer);this.introTimers.forEach((timer:number)=>clearTimeout(timer));if(this.reconTimer>=0)clearInterval(this.reconTimer);this.reconTimer=-1;this.audio.dispose();this.bridge.dispose();this.assets.cleanupTemporary();}
+  aboutToDisappear():void{this.transferPageActive=false;this.syncTransferIntent();if(this.transfer){this.transfer.coordinator.onChanged=()=>{};this.transfer.coordinator.onImported=()=>{};}this.context.getApplicationContext().eventHub.off('selfTransferNotice',this.transferNotice);this.resetGalaxyRise();this.clearGalaxyCaption();this.clearSkyTimers();this.planner.cancel();if(this.timer>=0)clearInterval(this.timer);if(this.storyCueTimer>=0)clearTimeout(this.storyCueTimer);if(this.characterTimer>=0)clearTimeout(this.characterTimer);if(this.formationTimer>=0)clearInterval(this.formationTimer);if(this.introCharacterTimer>=0)clearTimeout(this.introCharacterTimer);if(this.revealTimer>=0)clearTimeout(this.revealTimer);if(this.panelOpenTimer>=0)clearTimeout(this.panelOpenTimer);if(this.pulseTimer>=0)clearTimeout(this.pulseTimer);if(this.dustTimer>=0)clearInterval(this.dustTimer);this.introTimers.forEach((timer:number)=>clearTimeout(timer));if(this.reconTimer>=0)clearInterval(this.reconTimer);this.reconTimer=-1;this.audio.dispose();this.bridge.dispose();this.assets.cleanupTemporary();}
   onBackPress():boolean{if(this.journey==='forming'){this.minimizeReconstruction();return true;}if(this.galaxyTravelId){this.recoverGalaxy();return true;}if(this.introStage>0){this.finishIntro();return true;}if(this.cameraLive){this.close();return true;}if(this.detail){this.close();return true;}if(this.skyMounted||this.skyOpen||this.personalActive()){this.returnOrigin();return true;}if(this.productOpen){this.productOpen=false;return true;}if(this.legacyEditorOpen){this.legacyEditorOpen=false;this.ready=false;return true;}if(this.tool!=='NAVIGATE'){this.switchTool(this.tool);return true;}return false;}
   @Builder ambienceTile(mode:string,label:string,color:string){
     Button(){Column({space:8}){Stack(){Circle().width(48).height(48).fill(color);Circle().width(26).height(26).fill('#BBFFFFFF').blur(7).offset({x:8,y:-4})}.width(62).height(60);Text(this.tr(label)).fontSize(13).fontColor('#3B4665')}}.id('palette-'+mode).layoutWeight(1).height(102).backgroundColor(this.palette===mode?'#B9E1EAF8':'#72D1DDEF').border({width:this.palette===mode?1.5:1,color:this.palette===mode?'#CDEBFA':'#88E5F0FF'}).borderRadius(22).stateStyles({pressed:{.scale({x:.96,y:.96})},normal:{.scale({x:1,y:1})}}).animation({duration:this.motion?180:0,curve:Curve.EaseOut}).onClick(()=>this.chooseAtmosphere(mode))
@@ -1349,6 +1388,19 @@ struct SelfMirrorPage {
         this.settingsEntry('replay-intro','star_light.svg','重温最初的微光',()=>{this.close();this.returnOrigin();this.startIntro(true);})
         this.settingsEntry('open-cloud','cloud_lock_light.svg','隐私与云端',(event:ClickEvent)=>this.open('云端理解',event))
         this.settingsEntry('open-captures','camera_light.svg','采集记录',(event:ClickEvent)=>this.open('采集记录',event))
+          if(this.transferEnabled){
+            if(this.personalActive()&&(this.transferPhase==='SEND_READY'||this.transferReceiving)){
+              this.settingsEntry('transfer-receive','star_light.svg',this.transferReceiving?'取消接收':'接收模型',()=>{
+                this.transfer?.coordinator.forceReceive(!this.transferReceiving);this.close();
+              })
+            }
+            if(this.transferPhase==='RECEIVE_READY'){
+              this.settingsEntry('transfer-import','star_light.svg','导入模型文件',()=>{this.close();this.transfer?.pickPackage();})
+            }
+            if(this.transferPhase==='ERROR'){
+              this.settingsEntry('transfer-retry','star_light.svg','重试模型交接',()=>{this.transfer?.coordinator.retry();this.close();})
+            }
+          }
         this.settingsEntry('open-about','info_light.svg','关于 SELF',(event:ClickEvent)=>this.open('关于 SELF',event))
       }
       if(this.detail==='关于 SELF'){
@@ -1743,6 +1795,7 @@ struct SelfMirrorPage {
       }
       if(this.personalActive()&&this.journey!=='forming'){
         PersonalPortraitEditor({gaussianPath:this.personalGaussianPath,viewPath:this.personalViewPath,
+          onTransferAvailability:(allowed:boolean)=>{this.transferEditorSafe=allowed;},
           assetId:this.activeStarId,language:this.language,cloudEnabled:this.cloudSessionEnabled,
           cloudConsentDecision:this.cloudConsentDecision,
           backendAddress:this.backendAddress,backendToken:this.backendToken,

@@ -52,6 +52,7 @@ export struct PersonalPortraitEditor {
   @Prop backendToken:string='';
   @Prop viewportWidth:number=400;
   @Prop viewportHeight:number=600;
+  onTransferAvailability:(allowed:boolean)=>void=()=>{};
   onReady:()=>void=()=>{};
   onFailure:(message:string)=>void=()=>{};
   onInteraction:()=>void=()=>{};
@@ -99,17 +100,17 @@ export struct PersonalPortraitEditor {
   private requestText:string='';
   private dialogue:DialogueTurn[]=[];
   @State editCommand:string='';
-  @State ready:boolean=false;
+  @State @Watch('syncTransferAvailability') ready:boolean=false;
   @State @Watch('syncCaptionSuppression') tool:string='move';
   @State toolPressed:boolean=false;
   @State bubble:boolean=false;
   @State selected:boolean=false;
-  @State waiting:boolean=false;
+  @State @Watch('syncTransferAvailability') waiting:boolean=false;
   @State consentOffer:boolean=false;
   @State consentIntent:string='';
-  @State candidateReady:boolean=false;
-  @State applied:boolean=false;
-  @State comparing:boolean=false;
+  @State @Watch('syncTransferAvailability') candidateReady:boolean=false;
+  @State @Watch('syncTransferAvailability') applied:boolean=false;
+  @State @Watch('syncTransferAvailability') comparing:boolean=false;
   @State keyboardOpen:boolean=false;
   @State @Watch('syncCaptionSuppression') historyOpen:boolean=false;
   @State historyPressed:boolean=false;
@@ -170,6 +171,9 @@ export struct PersonalPortraitEditor {
   }
   private composerBottom():number{
     return this.keyboardTopVp>0?Math.min(this.viewportHeight-10,this.keyboardTopVp-12):this.viewportHeight-20;
+  }
+  private syncTransferAvailability():void{
+    this.onTransferAvailability(this.ready&&!this.applied&&!this.candidateReady&&!this.waiting&&!this.comparing&&!this.pendingHistory);
   }
   aboutToAppear():void{
     this.previousKeyboardAvoidMode=this.getUIContext().getKeyboardAvoidMode();
@@ -423,11 +427,11 @@ export struct PersonalPortraitEditor {
     this.editCommand=JSON.stringify({action:'SET_HISTORY',layers,serial:++this.serial});
   }
   private stageHistory(next:GsHistory):void{
-    this.pendingHistory=next;this.renderHistory(next);
+    this.pendingHistory=next;this.syncTransferAvailability();this.renderHistory(next);
   }
   private editFailed(message:string):void{
     this.waiting=false;
-    if(this.pendingHistory){this.pendingHistory=undefined;if(this.history)this.renderHistory(this.history);}
+    if(this.pendingHistory){this.pendingHistory=undefined;this.syncTransferAvailability();if(this.history)this.renderHistory(this.history);}
     this.pendingComparison=undefined;
     this.responseText=message;this.bubble=true;
   }
@@ -588,7 +592,7 @@ export struct PersonalPortraitEditor {
       if(action!=='SET_HISTORY')return;
       if(this.pendingHistory){
         const previous=this.history;
-        this.history=this.pendingHistory;this.pendingHistory=undefined;
+        this.history=this.pendingHistory;this.pendingHistory=undefined;this.syncTransferAvailability();
         try{this.save();}
         catch(error){this.history=previous;if(previous)this.renderHistory(previous);throw new Error(String(error));}
         this.applied=this.history.groups.length>0;this.comparing=false;this.comparisonTarget='';this.refreshHistoryDisplay();
@@ -601,7 +605,7 @@ export struct PersonalPortraitEditor {
         this.pendingComparison=undefined;
       }
       console.info('SELF_GS_HISTORY_APPLIED '+this.history?.groups.length);
-    }catch(error){this.pendingHistory=undefined;this.responseText=this.tr('变化未能稳妥保存，已回到上一次记录。');console.warn('SELF_GS_EDIT_SAVE_FAILED '+String(error));}
+    }catch(error){this.pendingHistory=undefined;this.syncTransferAvailability();this.responseText=this.tr('变化未能稳妥保存，已回到上一次记录。');console.warn('SELF_GS_EDIT_SAVE_FAILED '+String(error));}
   }
   private undo():void{
     this.planner.cancel();this.waiting=false;this.candidateReady=false;this.pending=undefined;

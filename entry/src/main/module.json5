@@ -1,9 +1,87 @@
 {
- "module":{
-  "name":"entry","type":"entry","description":"$string:module_desc","mainElement":"EntryAbility",
-  "deviceTypes":["phone","tablet","2in1"],"deliveryWithInstall":true,"installationFree":false,"pages":"$profile:main_pages",
-  "requestPermissions":[{"name":"ohos.permission.INTERNET"},{"name":"ohos.permission.CAMERA","reason":"$string:camera_reason","usedScene":{"abilities":["EntryAbility"],"when":"inuse"}}],
-  "abilities":[{"name":"EntryAbility","srcEntry":"./ets/entryability/EntryAbility.ets","description":"$string:module_desc","icon":"$media:app_icon","label":"$string:app_name","startWindowIcon":"$media:app_icon","startWindowBackground":"$color:start_window_background","exported":true,"skills":[{"entities":["entity.system.home"],"actions":["ohos.want.action.home"]}]},
-   {"name":"NativeProbeAbility","srcEntry":"./ets/entryability/NativeProbeAbility.ets","icon":"$media:app_icon","label":"$string:app_name","startWindowIcon":"$media:app_icon","startWindowBackground":"$color:start_window_background","exported":true}]
- }
+  "module": {
+    "name": "entry",
+    "type": "entry",
+    "description": "$string:module_desc",
+    "mainElement": "EntryAbility",
+    "deviceTypes": [
+      "phone",
+      "tablet",
+      "2in1"
+    ],
+    "deliveryWithInstall": true,
+    "installationFree": false,
+    "pages": "$profile:main_pages",
+    "requestPermissions": [
+      {
+        "name": "ohos.permission.INTERNET"
+      },
+      {
+        "name": "ohos.permission.CAMERA",
+        "reason": "$string:camera_reason",
+        "usedScene": {
+          "abilities": [
+            "EntryAbility"
+          ],
+          "when": "inuse"
+        }
+      }
+    ],
+    "abilities": [
+      {
+        "name": "EntryAbility",
+        "srcEntry": "./ets/entryability/EntryAbility.ets",
+        "description": "$string:module_desc",
+        "icon": "$media:app_icon",
+        "label": "$string:app_name",
+        "startWindowIcon": "$media:app_icon",
+        "startWindowBackground": "$color:start_window_background",
+        "exported": true,
+        "skills": [
+          {
+            "entities": [
+              "entity.system.home"
+            ],
+            "actions": [
+              "ohos.want.action.home"
+            ]
+          },
+          {
+            "actions": [
+              "ohos.want.action.viewData"
+            ],
+            "uris": [
+              {
+                "scheme": "file",
+                "type": "general.zip-archive",
+                "linkFeature": "FileOpen",
+                "maxFileSupported": 1
+              }
+            ]
+          },
+          {
+            "actions": [
+              "ohos.want.action.sendData"
+            ],
+            "uris": [
+              {
+                "scheme": "file",
+                "utd": "general.file",
+                "maxFileSupported": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "NativeProbeAbility",
+        "srcEntry": "./ets/entryability/NativeProbeAbility.ets",
+        "icon": "$media:app_icon",
+        "label": "$string:app_name",
+        "startWindowIcon": "$media:app_icon",
+        "startWindowBackground": "$color:start_window_background",
+        "exported": true
+      }
+    ]
+  }
 }

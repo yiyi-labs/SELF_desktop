@@ -1,0 +1,58 @@
+{
+  "sdk": {
+    "api": 26,
+    "version": "26.0.0.105",
+    "compatibleSdkVersion": "5.1.1(19)"
+  },
+  "productionBuild": true,
+  "testBuild": true,
+  "transfer": {
+    "tests": 30,
+    "pass": 30,
+    "fail": 0,
+    "realSavedPlyEnabled": true
+  },
+  "renderer": {
+    "tests": 24,
+    "pass": 24,
+    "fail": 0
+  },
+  "viewer": {
+    "tests": 84,
+    "pass": 66,
+    "fail": 18,
+    "unchangedOnGitHeadBaseline": true
+  },
+  "starNaming": {
+    "passed": false,
+    "unchangedOnGitHeadBaseline": true,
+    "error": "TypeError: this.tr is not a function"
+  },
+  "native": {
+    "evidence": {
+      "api": 26,
+      "deviceType": "tablet",
+      "sourceSha256": "8fccedf36ad9e9147cd5447fd8b56edbf97ae53e59da1b83af4352d36645bfba",
+      "receivedSha256": "8fccedf36ad9e9147cd5447fd8b56edbf97ae53e59da1b83af4352d36645bfba",
+      "vertexCount": 96,
+      "match": true
+    },
+    "hypiumPassed": true
+  },
+  "actualTapAndSlide": "NOT_PERFORMED",
+  "gpuVisualOrientationAndColour": "NOT_PERFORMED",
+  "productionInstalledWithDataPreserved": true,
+  "customTransferOverlay": "REMOVED at user request",
+  "displayName": "SELF",
+  "logs": {
+    "self-transfer-build.log": "a99c0b4c48066a81f55af1c91bb7f35d47a603705178ddb00108280f13777af7",
+    "self-transfer-native-build.log": "afd9d4498d7ecd2982fc5c18a98f37a5f8d452ee4954804fee41fd0704678a95",
+    "self-transfer-tests.log": "bb4dcd8a51765b491403bac27113e8b3df1ff3cd282722bfefe7bb3c506bb3da",
+    "self-transfer-existing-tests.log": "681d4dfc5ea492276e9fc97004c774c9dcc88532b8b8f1438f2fd64847ec42a1",
+    "self-transfer-viewer-tests.log": "21e23dba37b4a4905a20286756e9ea18699b39f1284ebbbbc99d3e0beb289502",
+    "self-transfer-viewer-baseline.log": "223a15310ac2b715b859825fc12d0b982c78f3704116170a4108261a7c6f73c8",
+    "self-transfer-star-tests.log": "d26de9a0b1961ba75ff2a15d56fc7d685caf980f169643282ce2a4ab60dea5a1",
+    "self-transfer-star-baseline.log": "d26de9a0b1961ba75ff2a15d56fc7d685caf980f169643282ce2a4ab60dea5a1",
+    "self-transfer-native-device.log": "293b6261674374a9947a5fca0be803deebca8865a7325ae30cf2c863ab484731"
+  }
+}

@@ -9,6 +9,7 @@
     "assets:validate": "node scripts/validate-assets.mjs",
     "build": "node scripts/build.mjs",
     "test": "node --experimental-strip-types --test renderer-web/tests/*.test.ts",
+    "test:transfer": "node --test scripts/test-self-transfer.mjs",
     "test:camera-guidance": "node scripts/test-camera-guidance.mjs",
     "test:star-naming": "node scripts/test-star-naming.mjs",
     "test:reconstruction-progress": "node scripts/test-reconstruction-progress.mjs",
