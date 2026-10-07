@@ -13,6 +13,7 @@ import { OlayLibrary } from './OlayLibrary';
 import { OlayDiscoveryRepository,OlayDiscoveryItem } from '../services/OlayDiscoveryRepository';
 import { OlayPhotoRepository } from '../services/OlayPhotoRepository';
 import { StarCloseButton } from './StarCloseButton';
+import { DeepSeekError } from '../services/DeepSeekTypes';
 import { UiText } from '../services/UiText';
 import { SelectionBounds, SelectionConversationFrame, selectionConversationFrame } from '../domain/SelectionConversationLayout';
 import { deviceInfo } from '@kit.BasicServicesKit';
@@ -66,8 +67,8 @@ export struct PersonalPortraitEditor {
   onBackgroundTone:(light:boolean)=>void=()=>{};
   private context:common.UIAbilityContext=this.getUIContext().getHostContext() as common.UIAbilityContext;
   private assets:AssetStore=new AssetStore(this.context);
-  private planner:PlannerClient=new PlannerClient();
-  private storyClient:StoryConversationClient=new StoryConversationClient();
+  private planner:PlannerClient=new PlannerClient(this.context);
+  private storyClient:StoryConversationClient=new StoryConversationClient(this.context);
   private storyInputController:TextInputController=new TextInputController();
   private selectionInputController:TextInputController=new TextInputController();
   private observationStore:StoryObservationStore=new StoryObservationStore(this.context);
@@ -258,7 +259,6 @@ export struct PersonalPortraitEditor {
     const input:StoryRequest={schemaVersion:1,requestId,sessionId:this.storySessionId,assetId:this.assetId,
       userText:text,responseLanguage:this.language,turns:this.storyTurns.slice(-4),dismissedProducts:this.productsDismissed,
       productContextIds:this.storyProductIds.slice()};
-    this.storyClient.endpoint=this.backendAddress.trim();this.storyClient.token=this.backendToken.trim();
     try{
       const result:StoryResponse=await this.storyClient.ask(input);
       if(generation!==this.storyGeneration||!this.storyOpen||result.assetId!==this.assetId||
@@ -274,8 +274,13 @@ export struct PersonalPortraitEditor {
       this.revealStoryHint();
     }catch(error){
       if(generation===this.storyGeneration&&this.storyOpen){
-        console.warn('SELF_STORY_REQUEST_FAILED '+String(error));
-        this.storyReply=this.tr('这次没有接上对话。你仍可以转动、观察，稍后再说。');
+        if(error instanceof DeepSeekError){
+          console.warn('SELF_STORY_REQUEST_FAILED '+error.category);
+          this.storyReply=this.tr(error.message);
+        }else{
+          console.warn('SELF_STORY_REQUEST_FAILED '+String(error));
+          this.storyReply=this.tr('这次没有接上对话。你仍可以转动、观察，稍后再说。');
+        }
       }
     }finally{if(generation===this.storyGeneration)this.storyWaiting=false;}
   }
@@ -580,7 +585,7 @@ export struct PersonalPortraitEditor {
       dialogue:this.dialogue.slice(-3),resolvedChoice:this.requestChoice,responseLanguage:this.language,
       careAdviceRequested:true,dismissedProducts:this.productsDismissed
     };
-    this.planner.endpoint=this.backendAddress.trim();this.planner.token=this.backendToken.trim();
+    this.planner.cancel();
     try{
       const reply=await this.planner.propose(snapshot,[clean,annotated]);
       if(!this.waiting||this.revision!==rev||!CloudConsentStore.allowed(this.context))return;
@@ -600,8 +605,13 @@ export struct PersonalPortraitEditor {
       this.dialogue=this.dialogue.slice(-3);
       if(reply.plan.decision==='edit'){this.pending=reply;this.pendingSnapshot=snapshot;this.candidateReady=true;}
     }catch(error){
-      console.warn('SELF_GS_PLAN_FAILED '+String(error));
-      this.responseText=this.tr('这次护理建议没有接上，请再试一次。产品资料仍可在护理星图查看。');
+      if(error instanceof DeepSeekError){
+        console.warn('SELF_GS_PLAN_FAILED '+error.category);
+        this.responseText=this.tr(error.message);
+      }else{
+        console.warn('SELF_GS_PLAN_FAILED '+String(error));
+        this.responseText=this.tr('这次护理建议没有接上，请再试一次。产品资料仍可在护理星图查看。');
+      }
     }finally{this.waiting=false;}
   }
   private confirm():void{

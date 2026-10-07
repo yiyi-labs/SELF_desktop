@@ -108,7 +108,7 @@ struct NativeEsProbe {
    // This automatic connectivity probe sends only the original color-block fixture and never sends a face.
    // Paid vision capability tests remain the separately invoked two-image backend test.
    if(health.modelConfigured){console.info('SELF_NETWORKKIT '+JSON.stringify({healthStatus:200,modelConfigured:true,paidCall:'not attempted in connectivity probe'}));return;}
-   const session=new SessionStore(),client=new PlannerClient();let failedSafely=false;
+   const session=new SessionStore(),client=new PlannerClient(this.context);let failedSafely=false;
    try{await client.propose(client.snapshot(session,'原创彩色块网络探针，无个人图像。'),[fixture]);}catch(e){failedSafely=String(e).includes('502');}
    if(!failedSafely)throw new Error('Missing-key response was not rejected');
    console.info('SELF_NETWORKKIT '+JSON.stringify({healthStatus:200,modelConfigured:false,missingKeyRejected:true,operationsAfterFailure:session.operations.length,paidCall:'not sent'}));

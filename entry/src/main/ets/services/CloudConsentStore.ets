@@ -40,7 +40,7 @@ export class CloudConsentStore {
   }
   static introduction(language:string):string {
     if(language==='en')
-      return 'Before our first conversation: your words and recent replies go to the configured service and DeepSeek. Asking about a portrait or editing a selection also sends its current still view. Camera video and 3D model files stay here. Your choice is remembered; turn it off in Settings at any time. Each edit still needs your approval.';
-    return UiText.get('开始对话前，先由你决定一次：文字和最近的对话会经配置的服务交给 DeepSeek；针对面容画面提问或圈选修改时，还会附上当前静态画面。相机视频和立体模型文件不会随对话发送。选择会保留，可随时在设置中关闭；每次修改仍由你确认。',language);
+      return 'Before our first conversation: your words and recent replies go from this device directly to DeepSeek’s official service. Asking about a portrait or editing a selection also sends its current still view. Camera video and 3D model files stay here, and no computer relays anything. Your choice is remembered; turn it off in Settings at any time. Each edit still needs your approval.';
+    return UiText.get('开始对话前，先由你决定一次：文字和最近的对话会由本设备直接发送给 DeepSeek 官方服务；针对面容画面提问或圈选修改时，还会附上当前静态画面。相机视频和立体模型文件不会随对话发送，也不经过任何电脑中转。选择会保留，可随时在设置中关闭；每次修改仍由你确认。',language);
   }
 }

@@ -36,6 +36,8 @@ import { PortraitStarStore, PortraitStar } from '../services/PortraitStarStore';
 import { ReconstructionTransportClient, ReconstructionView } from '../services/ReconstructionTransportClient';
 import { UiPreference, UiSettings } from '../services/UiPreference';
 import { CloudConsentStore, CloudConsentDecision } from '../services/CloudConsentStore';
+import { DeepSeekCredentialStore } from '../services/DeepSeekCredentialStore';
+import { DeepSeekError } from '../services/DeepSeekTypes';
 import { UiText } from '../services/UiText';
 import { AmbiencePreference } from '../services/AmbiencePreference';
 
@@ -292,7 +294,6 @@ struct SelfMirrorPage {
   private bubbleX():number{const x=this.focusX*this.surfaceWidth,r=this.focusHalfWidth*this.surfaceWidth;return Math.max(20,Math.min(this.surfaceWidth-380,x+r+24<this.surfaceWidth-360?x+r+24:x-r-384));}
   private bubbleY():number{return Math.max(20,Math.min(this.surfaceHeight-420,this.focusY*this.surfaceHeight-80));}
   private phoneBubbleHeight():number{return Math.min(this.candidate||this.applied?280:220,Math.max(180,this.surfaceHeight-140));}
-  private planner:PlannerClient=new PlannerClient();
   @State cloudWaiting:boolean=false;
   @State cloudSessionEnabled:boolean=false;
   @State cloudConsentDecision:CloudConsentDecision='unknown';
@@ -304,6 +305,10 @@ struct SelfMirrorPage {
   private cloudGeneration:number=0;
   @State backendAddress:string='http://127.0.0.1:8787';
   @State backendToken:string='';
+  @State deepSeekKeyMasked:string='';
+  @State deepSeekKeyInput:string='';
+  @State deepSeekKeyBusy:boolean=false;
+  @State deepSeekKeyStatus:string='';
   private pendingCloudText:string='';
   private setCloudConsent(allowed:boolean):boolean{
     const decision:CloudConsentDecision=allowed?'allowed':'denied';
@@ -315,6 +320,29 @@ struct SelfMirrorPage {
     }
     return true;
   }
+  private refreshDeepSeekKey():void{this.deepSeekKeyMasked=DeepSeekCredentialStore.masked(this.context);}
+  private async saveDeepSeekKey():Promise<void>{
+    if(this.deepSeekKeyBusy)return;const key=this.deepSeekKeyInput.trim();if(!key)return;
+    this.deepSeekKeyBusy=true;this.deepSeekKeyStatus=this.tr('正在加密保存并验证…');
+    try{
+      await DeepSeekCredentialStore.save(this.context,key);
+      await DeepSeekCredentialStore.verify(key);
+      this.deepSeekKeyInput='';this.refreshDeepSeekKey();
+      this.deepSeekKeyStatus=this.tr('密钥已加密保存，验证通过。');
+    }catch(e){
+      if(e instanceof DeepSeekError&&(e.category==='invalid_key'||e.category==='payment_required')){
+        await DeepSeekCredentialStore.delete(this.context);this.refreshDeepSeekKey();
+        this.deepSeekKeyStatus=this.tr(e.message);
+      }else if(e instanceof DeepSeekError)this.deepSeekKeyStatus=this.tr(e.message);
+      else this.deepSeekKeyStatus=this.tr('保存失败，请稍后再试。');
+    }finally{this.deepSeekKeyBusy=false;}
+  }
+  private async deleteDeepSeekKey():Promise<void>{
+    if(this.deepSeekKeyBusy)return;this.deepSeekKeyBusy=true;
+    try{await DeepSeekCredentialStore.delete(this.context);this.refreshDeepSeekKey();this.deepSeekKeyInput='';this.deepSeekKeyStatus=this.tr('已删除；AI 功能会先提示配置密钥。');}
+    catch(_){this.deepSeekKeyStatus=this.tr('删除失败，请稍后再试。');}
+    finally{this.deepSeekKeyBusy=false;}
+  }
   private lastModelProductIds:string[]=[];
   private bridge: NativeRendererPort = new NativeRendererPort();
   private context: common.UIAbilityContext = this.getUIContext().getHostContext() as common.UIAbilityContext;
@@ -323,6 +351,7 @@ struct SelfMirrorPage {
   private stars:PortraitStarStore=new PortraitStarStore(this.context,this.assets);
   private audio:AmbientAudio=new AmbientAudio(this.context);
   private session: SessionStore = new SessionStore();
+  private planner:PlannerClient=new PlannerClient(this.context);
   private previousTool: string = 'NAVIGATE';
   private timer: number = -1;
   private restoreRequest: string = '';
@@ -1042,6 +1071,7 @@ struct SelfMirrorPage {
     const ui=UiPreference.load(this.context);this.language=ui.language;this.accent=ui.accent;this.palette=ui.palette;this.motion=ui.motion;this.followChat=ui.followChat;this.stylusHints=ui.stylusHints;UiText.current=ui.language;AppStorage.setOrCreate('selfLanguage',ui.language);
     this.cloudConsentDecision=CloudConsentStore.load(this.context);
     this.cloudSessionEnabled=this.cloudConsentDecision==='allowed';
+    this.refreshDeepSeekKey();
     this.bridge.onSelectionAnchor=(x:number,y:number,halfWidth:number)=>{this.focusX=x;this.focusY=y;this.focusHalfWidth=halfWidth;};
     this.bridge.onToolChanged=(name:string)=>{this.tool=name;this.focusOpen=false;};
     this.audio.onStatus=(state:string)=>{this.audioState=state;if(state!=='playing')this.musicPulse=0;if(this.context.applicationInfo.debug)console.info('SELF_AUDIO_STATE '+state);if(state==='error'){this.musicOn=false;this.subtitle=this.tr('音乐暂时无法播放，你可以继续安静地使用镜面。');}};
@@ -1082,7 +1112,7 @@ struct SelfMirrorPage {
   private fail(message:string):void{this.busy=false;this.subtitle=message;console.error('SELF_ERROR '+message);}
   private async requestCloud():Promise<void>{
     if(this.cloudWaiting||!this.pendingCloudText||!this.cloudSessionEnabled||!CloudConsentStore.allowed(this.context))return;
-    const generation=++this.cloudGeneration;const input=this.pendingCloudText;this.pendingCloudText='';this.planner.endpoint=this.backendAddress.trim();this.planner.token=this.backendToken.trim();
+    const generation=++this.cloudGeneration;const input=this.pendingCloudText;this.pendingCloudText='';
     if(this.detail)this.close();this.uploadOffer=false;this.cloudWaiting=true;this.subtitle=this.tr('让我想想，怎么更贴近你的想法…');
     const snapshot=this.planner.snapshot(this.session,input);snapshot.productContextIds=this.lastModelProductIds.slice();snapshot.responseLanguage=this.language;
     snapshot.careAdviceRequested=true;
@@ -1115,7 +1145,7 @@ struct SelfMirrorPage {
         // A precise adjustment to an existing authorized layer needs no repeated confirmation.
         if(op.operation==='set_effect_level'&&op.layerId&&!this.session.protection&&/淡一点|浅一点|降低|深一点|浓一点/.test(input))this.applyCandidate();
       }
-    }catch(e){if(generation!==this.cloudGeneration)return;console.warn('SELF_CLOUD_FAILED '+String(e));this.subtitle=this.tr('这次没能准备好建议，我们稍后再试。画面还好好地留着。');}
+    }catch(e){if(generation!==this.cloudGeneration)return;console.warn('SELF_CLOUD_FAILED '+((e instanceof DeepSeekError&&e.category)||String(e)));this.subtitle=(e instanceof DeepSeekError&&['missing_key','invalid_key','payment_required','rate_limited','network','timeout','server_unavailable','background','invalid_plan'].includes(e.category))?this.tr(e.message):this.tr('这次没能准备好建议，我们稍后再试。画面还好好地留着。');}
     finally{if(generation===this.cloudGeneration)this.cloudWaiting=false;}
   }
   private receive(m:Envelope):void{
@@ -1338,9 +1368,23 @@ struct SelfMirrorPage {
       if(this.detail==='完整回复'){Text(this.tr(this.subtitle)).fontSize(17).lineHeight(28)}
       if(this.detail==='云端理解'){
         Text(CloudConsentStore.introduction(this.language)).fontSize(16).fontColor('#C6D4E4')
-        Text(this.tr('服务端不保留面容画面；第三方的处理与留存依其条款。')).fontSize(14).fontColor('#8FA3BC')
+        Text(this.tr('对话与画面只发送给 DeepSeek 官方服务，由本设备直接连接，不经过任何电脑。')).fontSize(14).fontColor('#8FA3BC')
         Toggle({type:ToggleType.Switch,isOn:this.cloudSessionEnabled}).id('cloud-session-toggle').onChange((v:boolean)=>{
           if(this.setCloudConsent(v)&&v&&this.pendingCloudText)this.requestCloud();})
+        Text(this.tr('DeepSeek API Key')).fontSize(12).letterSpacing(2).fontColor('#7E93AD').fontWeight(FontWeight.Medium).margin({top:6})
+        if(this.deepSeekKeyMasked)Text(this.deepSeekKeyMasked).fontSize(14).fontColor('#8FA3BC')
+        TextInput({text:this.deepSeekKeyInput,placeholder:this.deepSeekKeyMasked?this.tr('输入新的 Key 以替换'):this.tr('sk-…')})
+          .id('deepseek-key-input').type(InputType.Password).backgroundColor('#27374E').fontColor('#E6EEF7').placeholderColor('#7E93AD')
+          .onChange((v:string)=>this.deepSeekKeyInput=v)
+        Row({space:10}){
+          Button(this.tr('保存并验证')).id('deepseek-key-save').enabled(!this.deepSeekKeyBusy&&this.deepSeekKeyInput.trim().length>0)
+            .height(40).fontSize(13).fontColor('#FFFFFF').backgroundColor('#4E6E96').borderRadius(20)
+            .onClick(()=>this.saveDeepSeekKey())
+          if(this.deepSeekKeyMasked)Button(this.tr('删除密钥')).id('deepseek-key-delete').enabled(!this.deepSeekKeyBusy)
+            .height(40).fontSize(13).fontColor('#C6D4E4').backgroundColor('#27374E').border({width:1,color:'#3C5170'}).borderRadius(20)
+            .onClick(()=>this.deleteDeepSeekKey())
+        }.width('100%')
+        if(this.deepSeekKeyStatus)Text(this.deepSeekKeyStatus).fontSize(13).fontColor('#8FA3BC')
         TextInput({text:this.backendAddress,placeholder:this.tr('自己的后端地址')}).backgroundColor('#27374E').fontColor('#E6EEF7').placeholderColor('#7E93AD').onChange((v:string)=>this.backendAddress=v)
         TextInput({text:this.backendToken,placeholder:this.tr('后端访问口令（不是 DeepSeek 密钥）')}).type(InputType.Password).backgroundColor('#27374E').fontColor('#E6EEF7').placeholderColor('#7E93AD').onChange((v:string)=>this.backendToken=v)
       }

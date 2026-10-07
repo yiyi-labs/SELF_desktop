@@ -4,6 +4,7 @@ import { deviceInfo } from '@kit.BasicServicesKit';
 import { window } from '@kit.ArkUI';
 import { Want, AbilityConstant } from '@kit.AbilityKit';
 import { ReconstructionLiveActivity } from '../services/ReconstructionLiveActivity';
+import { DeepSeekRuntimeState } from '../services/DeepSeekRuntimeState';
 export default class EntryAbility extends UIAbility {
   private selfTransfer:SelfTransferRuntime|undefined=undefined;
   private selfTransferForeground:boolean=false;
@@ -24,8 +25,8 @@ export default class EntryAbility extends UIAbility {
     if(want.parameters?.reconstructionWaiting===true)
       AppStorage.setOrCreate('selfReconstructionOpen',(AppStorage.get<number>('selfReconstructionOpen')||0)+1);
   }
-  onForeground():void{this.selfTransferForeground=true;this.selfTransfer?.setForeground(true);AppStorage.setOrCreate('selfForeground',true);ReconstructionLiveActivity.shared().setForeground(true);}
-  onBackground():void{this.selfTransferForeground=false;this.selfTransfer?.setForeground(false);AppStorage.setOrCreate('selfForeground',false);ReconstructionLiveActivity.shared().setForeground(false);}
+  onForeground():void{this.selfTransferForeground=true;this.selfTransfer?.setForeground(true);AppStorage.setOrCreate('selfForeground',true);ReconstructionLiveActivity.shared().setForeground(true);DeepSeekRuntimeState.setForeground(true);}
+  onBackground():void{this.selfTransferForeground=false;this.selfTransfer?.setForeground(false);AppStorage.setOrCreate('selfForeground',false);ReconstructionLiveActivity.shared().setForeground(false);DeepSeekRuntimeState.setForeground(false);}
   onDestroy():void{this.selfTransfer?.dispose();this.selfTransfer=undefined;ReconstructionLiveActivity.shared().dispose();}
   onWindowStageCreate(stage: window.WindowStage): void {
     const main=stage.getMainWindowSync();
