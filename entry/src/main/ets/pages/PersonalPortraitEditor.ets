@@ -219,7 +219,7 @@ export struct PersonalPortraitEditor {
   }
   private sendStory(value:string):void{
     const text=value.trim();if(!text||this.storyWaiting)return;
-    if(this.selected&&FreckleDemo.enabled(deviceInfo.deviceType)){
+    if(this.selected&&FreckleDemo.enabled(deviceInfo.deviceType)&&text===FreckleDemo.question){
       this.enterExistingEdit(text);this.submit(text);return;
     }
     if(text.length>500){this.storyReply=this.tr('这一段稍长，分成两次说也可以。');return;}
@@ -526,8 +526,8 @@ export struct PersonalPortraitEditor {
     if(this.careWeek>0)this.command('CARE_PREVIEW','','',0);
     this.careWeek=0;this.careProductId='';this.careWhy='';this.careHow='';
     this.freckleDemo=false;this.demoLook='';this.demoNotice='';
-    if(FreckleDemo.enabled(deviceInfo.deviceType)){
-      // Every tablet model uses the same presentation question/answer. No asset or AI dependency.
+    if(FreckleDemo.enabled(deviceInfo.deviceType)&&text===FreckleDemo.question){
+      // Only the specified tablet presentation question uses the local demo answer.
       this.planner.cancel();this.consentOffer=false;this.consentIntent='';this.replyProductIds=[];
       this.beginSelectionReply();
       const token=++this.demoReplyToken,revision=this.revision,assetId=this.assetId;
