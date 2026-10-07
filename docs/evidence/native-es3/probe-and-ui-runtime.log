@@ -1,5 +1,0 @@
-09-22 14:34:26.755  3754  3754 I A03d00/JSAPP: SELF_EVENT {"schemaVersion":1,"sessionId":"native-1790058866498","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":0,"type":"RENDER_FAILED","payload":{"message":"Shader: ERROR: 0:? : 'pre-mature EOF' : syntax error syntax error\n\n"}}
-09-22 14:34:26.758  3754  3754 E A03d00/JSAPP: SELF_ERROR Shader: ERROR: 0:? : 'pre-mature EOF' : syntax error syntax error
-09-22 14:34:41.851  3852  3852 I A03d00/JSAPP: [a92ab121810ae83, 37fdd89, 2ab0de9] SELF_EVENT {"schemaVersion":1,"sessionId":"native-1790058881742","assetId":"sample-lee","assetVersion":"lee-r186-self2","requestId":"","revision":0,"type":"RENDER_FAILED","payload":{"message":"Shader: ERROR: 0:? : 'pre-mature EOF' : syntax error syntax error\n\n"}}
-09-22 14:34:41.855  3852  3852 E A03d00/JSAPP: [a92ab121810ae83, 37fdd89, 2ab0de9] SELF_ERROR Shader: ERROR: 0:? : 'pre-mature EOF' : syntax error syntax error
-09-22 14:35:29.288  4223  4223 I A03d00/JSAPP: SELF_ES_EVENT {"message":"Shader: ERROR: 0:? : 'pre-mature EOF' : syntax error syntax error\n\n","type":"ERROR"}
